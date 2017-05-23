@@ -122,6 +122,10 @@ public class MahjongSystem : CommandReceiver
 	{
 		return mPlayerPositionList[pos];
 	}
+	public Dictionary<int, Character> getAllPlayer()
+	{
+		return mPlayerIDList;
+	}
 	public int[] getDice()
 	{
 		return mDice;

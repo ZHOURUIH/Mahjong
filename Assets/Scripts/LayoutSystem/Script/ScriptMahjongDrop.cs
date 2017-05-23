@@ -8,7 +8,6 @@ public class ScriptMahjongDrop : LayoutScript
 {
 	protected txUIObject[] mRootList;
 	protected List<txUIStaticSprite>[] mDropList;
-	protected string[] mDropMahjongPreName;
 	protected int mMaxDropCount = 30;
 	public ScriptMahjongDrop(LAYOUT_TYPE type, string name, GameLayout layout)
 		:
@@ -20,7 +19,6 @@ public class ScriptMahjongDrop : LayoutScript
 		{
 			mDropList[i] = new List<txUIStaticSprite>();
 		}
-		mDropMahjongPreName = new string[CommonDefine.MAX_PLAYER_COUNT] { "Drop_My_", "Drop_Side_", "Drop_Opposite_", "Drop_Side_"};
 	}
 	public override void assignWindow()
 	{
@@ -68,7 +66,7 @@ public class ScriptMahjongDrop : LayoutScript
 		int preCount = droppedMahjong.Count - 1;
 		if(preCount < mDropList[(int)pos].Count)
 		{
-			string mahjongSpriteName = mDropMahjongPreName[(int)pos] + CommonDefine.MAHJONG_NAME[(int)mahjong];
+			string mahjongSpriteName = CommonDefine.mDropMahjongPreName[(int)pos] + CommonDefine.MAHJONG_NAME[(int)mahjong];
 			mDropList[(int)pos][preCount].setSpriteName(mahjongSpriteName);
 			LayoutTools.ACTIVE_WINDOW(mDropList[(int)pos][preCount]);
 		}
@@ -93,7 +91,7 @@ public class ScriptMahjongDrop : LayoutScript
 			LayoutTools.ACTIVE_WINDOW(mDropList[(int)pos][i], i < showCount);
 			if(i < showCount)
 			{
-				mDropList[(int)pos][i].setSpriteName(mDropMahjongPreName[(int)pos] + CommonDefine.MAHJONG_NAME[(int)droppedMahjong[showStartIndex + i]]);
+				mDropList[(int)pos][i].setSpriteName(CommonDefine.mDropMahjongPreName[(int)pos] + CommonDefine.MAHJONG_NAME[(int)droppedMahjong[showStartIndex + i]]);
 			}
 		}
 	}

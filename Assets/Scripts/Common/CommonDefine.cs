@@ -368,9 +368,10 @@ public class CommonDefine
 		"Tiao0", "Tiao1", "Tiao2", "Tiao3", "Tiao4", "Tiao5", "Tiao6", "Tiao7", "Tiao8",
 		"Wan0", "Wan1", "Wan2", "Wan3", "Wan4", "Wan5", "Wan6", "Wan7", "Wan8"
 	};
-	public static string[] mHandInRootName = new string[MAX_PLAYER_COUNT] { "MyMahjongRoot", "LeftMahjongRoot", "OppositeMahjongRoot", "RightMahjongRoot" };
+	public static string[] mHandInRootName = new string[MAX_PLAYER_COUNT] { "MyHandInRoot", "LeftHandInRoot", "OppositeHandInRoot", "RightHandInRoot" };
+	public static string[] mPengGangRootName = new string[MAX_PLAYER_COUNT] { "MyPengGangRoot", "LeftPengGangRoot", "OppositePengGangRoot", "RightPengGangRoot" };
 	public static string[] mShowRootName = new string[MAX_PLAYER_COUNT] { "MyShowRoot", "LeftShowRoot", "OppositeShowRoot", "RightShowRoot" };
-	public static string[] mShowPreName = new string[MAX_PLAYER_COUNT] { "Drop_My_", "Drop_Side_", "Drop_Opposite_", "Drop_Side_" };
+	public static string[] mDropMahjongPreName = new string[MAX_PLAYER_COUNT] { "Drop_My_", "Drop_Side_", "Drop_Opposite_", "Drop_Side_" };
 	//------------------------------------------------------------------------------------------------------------------------
 	// 常量数字
 	// 每名玩家手里最多有14张牌,不包含碰,吃,杠

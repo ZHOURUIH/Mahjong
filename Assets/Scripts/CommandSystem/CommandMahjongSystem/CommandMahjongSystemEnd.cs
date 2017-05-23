@@ -14,14 +14,22 @@ public class CommandMahjongSystemEnd : Command
 	{ }
 	public override void execute()
 	{
+		MahjongSystem mahjongSystem = mReceiver as MahjongSystem;
 		// 先设置结果
 		GameScene gameScene = mGameSceneManager.getCurScene();
 		MahjongSceneEnding ending = gameScene.getSceneProcedure(PROCEDURE_TYPE.PT_MAHJONG_ENDING) as MahjongSceneEnding;
 		ending.setResult(mHuList);
 		// 切换流程
-		CommandGameSceneChangeProcedure cmd = new CommandGameSceneChangeProcedure();
-		cmd.mProcedure = PROCEDURE_TYPE.PT_MAHJONG_ENDING;
-		mCommandSystem.pushCommand(cmd, gameScene);
+		CommandGameSceneChangeProcedure cmdProcedure = new CommandGameSceneChangeProcedure();
+		cmdProcedure.mProcedure = PROCEDURE_TYPE.PT_MAHJONG_ENDING;
+		mCommandSystem.pushCommand(cmdProcedure, gameScene);
+		// 通知所有玩家本局结束
+		Dictionary<int, Character> playerList = mahjongSystem.getAllPlayer();
+		foreach(var player in playerList)
+		{
+			CommandCharacterNotifyEnd cmdEnd = new CommandCharacterNotifyEnd();
+			mCommandSystem.pushCommand(cmdEnd, player.Value);
+		}
 	}
 	public override string showDebugInfo()
 	{

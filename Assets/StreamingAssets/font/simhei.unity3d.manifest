@@ -1,0 +1,27 @@
+ManifestFileVersion: 0
+CRC: 4107247373
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 30884b8d2766bede8c6bbc4d33648c32
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 6cb1feaa788df534b69fc4c7b5d9d21b
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 0b4eb3a400afab046abb8471a9d746d6, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 128
+  Script: {instanceID: 0}
+Assets:
+- Assets/Resources/Font/simhei.prefab
+Dependencies:
+- Assets/StreamingAssets/font.unity3d

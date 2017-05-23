@@ -1,0 +1,35 @@
+ManifestFileVersion: 0
+CRC: 2144945900
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 3ed0fb312078e51b6fc16f2d551151f8
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 20d2a047ae4e99a3eaf853982df4d9aa
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+Assets:
+- Assets/Resources/Atlas/GameAtlas/AtlasGameEnding.mat
+- Assets/Resources/Atlas/GameAtlas/AtlasMahjongDrop.mat
+- Assets/Resources/Atlas/GameAtlas/AtlasPlayerAction.png
+- Assets/Resources/Atlas/GameAtlas/AtlasMainFrame.png
+- Assets/Resources/Atlas/GameAtlas/AtlasMahjongDrop.png
+- Assets/Resources/Atlas/GameAtlas/AtlasMahjongHandIn.mat
+- Assets/Resources/Atlas/GameAtlas/AtlasGameEnding.png
+- Assets/Resources/Atlas/GameAtlas/AtlasMainFrame.mat
+- Assets/Resources/Atlas/GameAtlas/AtlasMahjongHandIn.png
+- Assets/Resources/Atlas/GameAtlas/AtlasPlayerAction.mat
+- Assets/Resources/Atlas/GameAtlas/AtlasRoomMenu.mat
+- Assets/Resources/Atlas/GameAtlas/AtlasHead.png
+- Assets/Resources/Atlas/GameAtlas/AtlasCommon.png
+- Assets/Resources/Atlas/GameAtlas/AtlasRoomMenu.png
+- Assets/Resources/Atlas/GameAtlas/AtlasCommon.mat
+- Assets/Resources/Atlas/GameAtlas/AtlasHead.mat
+Dependencies: []

@@ -1,0 +1,21 @@
+ManifestFileVersion: 0
+CRC: 756487986
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 5c2e375c8ca70b446cf56e22c2cb4cd6
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 20d2a047ae4e99a3eaf853982df4d9aa
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+Assets:
+- Assets/Resources/Skybox/Assets_By_Unluck_Activeden/skyboxes/skyboxBlueNebula/materials/SkyboxBlueNebula_Material.mat
+Dependencies:
+- Assets/StreamingAssets/skybox/assets_by_unluck_activeden/skyboxes/skyboxbluenebula/images.unity3d

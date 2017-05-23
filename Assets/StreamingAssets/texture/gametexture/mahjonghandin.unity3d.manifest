@@ -1,0 +1,63 @@
+ManifestFileVersion: 0
+CRC: 3410201408
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 6b8a12c7af24fa497c04ad5058e817d9
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 6759894fca659e2049f05064db45ce61
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+Assets:
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Wan3.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Tiao0.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Tong3.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Tiao2.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Tiao8.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Wan0.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Tong2.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Tiao6.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Wan2.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/State4.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Hua6.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Feng2.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Feng5.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Wan1.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Tiao1.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Tong4.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/State1.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Wan5.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/State0.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Tong6.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Wan8.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Hua4.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Tiao7.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Wan7.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Tong7.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Hua2.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Hua5.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Feng4.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Tiao5.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Wan6.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Tong5.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Feng1.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Tiao4.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Hua3.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Tong1.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Wan4.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Feng3.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Tong8.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Tiao3.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Tong0.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Hua1.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Feng0.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Hua0.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Feng6.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/State5.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/State2.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/Hua7.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/State3.png
+Dependencies: []

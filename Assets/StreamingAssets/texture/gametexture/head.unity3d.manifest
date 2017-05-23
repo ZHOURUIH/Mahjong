@@ -1,0 +1,49 @@
+ManifestFileVersion: 0
+CRC: 97547799
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: e2cfa1def8ed5f5b0745717986223c34
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 6759894fca659e2049f05064db45ce61
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+Assets:
+- Assets/Resources/Texture/GameTexture/Head/Head12.png
+- Assets/Resources/Texture/GameTexture/Head/Head18.png
+- Assets/Resources/Texture/GameTexture/Head/Head15.png
+- Assets/Resources/Texture/GameTexture/Head/Head10.png
+- Assets/Resources/Texture/GameTexture/Head/Head33.png
+- Assets/Resources/Texture/GameTexture/Head/Head5.png
+- Assets/Resources/Texture/GameTexture/Head/Head29.png
+- Assets/Resources/Texture/GameTexture/Head/Head9.png
+- Assets/Resources/Texture/GameTexture/Head/Head17.png
+- Assets/Resources/Texture/GameTexture/Head/Head8.png
+- Assets/Resources/Texture/GameTexture/Head/Head0.png
+- Assets/Resources/Texture/GameTexture/Head/Head2.png
+- Assets/Resources/Texture/GameTexture/Head/Head22.png
+- Assets/Resources/Texture/GameTexture/Head/Head11.png
+- Assets/Resources/Texture/GameTexture/Head/Head1.png
+- Assets/Resources/Texture/GameTexture/Head/Head26.png
+- Assets/Resources/Texture/GameTexture/Head/Head20.png
+- Assets/Resources/Texture/GameTexture/Head/Head23.png
+- Assets/Resources/Texture/GameTexture/Head/Head16.png
+- Assets/Resources/Texture/GameTexture/Head/Head27.png
+- Assets/Resources/Texture/GameTexture/Head/Head32.png
+- Assets/Resources/Texture/GameTexture/Head/Head14.png
+- Assets/Resources/Texture/GameTexture/Head/Head25.png
+- Assets/Resources/Texture/GameTexture/Head/Head24.png
+- Assets/Resources/Texture/GameTexture/Head/Head7.png
+- Assets/Resources/Texture/GameTexture/Head/Head28.png
+- Assets/Resources/Texture/GameTexture/Head/Head31.png
+- Assets/Resources/Texture/GameTexture/Head/Head30.png
+- Assets/Resources/Texture/GameTexture/Head/Head6.png
+- Assets/Resources/Texture/GameTexture/Head/Head21.png
+- Assets/Resources/Texture/GameTexture/Head/Head3.png
+- Assets/Resources/Texture/GameTexture/Head/Head4.png
+- Assets/Resources/Texture/GameTexture/Head/Head13.png
+- Assets/Resources/Texture/GameTexture/Head/Head19.png
+Dependencies: []

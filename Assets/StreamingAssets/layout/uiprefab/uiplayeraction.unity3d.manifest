@@ -1,0 +1,33 @@
+ManifestFileVersion: 0
+CRC: 1251019317
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 19a4ca0db1e1307e9cef0cfdbff9d5b7
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: bb374b56d7cb386846c70365e65b5f46
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1d983fd05b915f448b13659ebe4e90c1, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1fdca5042b1d12a4890ec1bd4f04290d, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4d0c51bb0b6e93049af5e88f93826e3b, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+Assets:
+- Assets/Resources/Layout/UIPrefab/UIPlayerAction.prefab
+Dependencies:
+- Assets/StreamingAssets/atlas/gameatlas/atlasplayeraction.unity3d

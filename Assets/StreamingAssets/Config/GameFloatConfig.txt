@@ -1,0 +1,55 @@
+// 注意
+// 该文件中可使用双斜杠来对单行进行注释
+// 可以添加任意的换行和空格
+// 变量命名应与代码中枚举命名相同
+
+// 超时未操作踢出玩家的时限					
+GDF_KICK_OUT_TIME = 5.0
+
+// 游戏开始倒计时			
+GDF_RUNNING_COUNT_DOWN = 4.0
+
+// http端口
+GDF_HTTP_PORT = 8080
+
+// socket端口
+GDF_SOCKET_PORT = 60060
+
+// 广播端口
+GDF_BROADCAST_PORT = 5000
+
+// 车轮转的圈数
+GDF_CIRCLE_COUNT = 0.4
+
+// 教练的超时踢出时间
+GDF_COACH_KICK_OUT_TIME = 60.0
+
+// 全部匹配的持续时间,当达到这个持续时间时才会出现全部匹配字样
+GDF_ALL_MATCH_MAX_LAST_TIME = 1.0
+
+// 是否输出显示命令调试信息,0为不显示,1为显示
+GDF_SHOW_COMMAND_DEBUG_INFO = 1
+
+// 阻力包的发送间隔
+GDF_SEND_FRICTION_INTERVAL = 0.5
+
+// 硬件速度改变的最小速度差,当速度差小于该值时,直接设置为硬件速度值,大于时,则向硬件速度逐渐变化
+GDF_MIN_DELTA_SPEED = 0.1
+
+// 速度变化的固定时间
+GDF_SPEED_ELAPSED_TIME = 0.5
+
+// 是否读取功率来计算速度,不为0则读取速度包中的功率字节,为0则读取速度字节
+GDF_READ_POWER = 1
+
+// 游戏整体音量
+GDF_VOLUMN = 0.7
+
+// 匹配模式下计时器旋转一圈的时间
+GDF_TIMER_CIRCLE_TIME_COMBAT = 10
+
+// 默认阻力值
+GDF_DEFAULT_FRICTION = 1
+
+// -1表示优先从AssetBundle加载,找不到再去Resources加载,0表示从AssetBundle加载,1表示从Resources加载
+GDF_LOAD_RESOURCES = 0

@@ -1,0 +1,35 @@
+ManifestFileVersion: 0
+CRC: 1607844343
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 187dfa2850e03633df72e670b5a8c5ab
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 79064ebe7c3fc4ce4548630c079479c7
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1d983fd05b915f448b13659ebe4e90c1, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4d0c51bb0b6e93049af5e88f93826e3b, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 128
+  Script: {instanceID: 0}
+Assets:
+- Assets/Resources/Layout/UIPrefab/UIBillboard.prefab
+Dependencies:
+- Assets/StreamingAssets/atlas/gameatlas/atlascommon.unity3d
+- Assets/StreamingAssets/atlas/gameatlas/atlasroommenu.unity3d
+- Assets/StreamingAssets/font.unity3d

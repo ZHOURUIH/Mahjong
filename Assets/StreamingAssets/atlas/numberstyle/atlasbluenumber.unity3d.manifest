@@ -1,0 +1,25 @@
+ManifestFileVersion: 0
+CRC: 3748863264
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: b2b8d9e1b280ddda067b4b25272b02eb
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 7a8becec1d197c8ad30ef65e4815a480
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4d0c51bb0b6e93049af5e88f93826e3b, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+Assets:
+- Assets/Resources/Atlas/NumberStyle/AtlasBlueNumber.prefab
+Dependencies:
+- Assets/StreamingAssets/atlas/numberstyle.unity3d

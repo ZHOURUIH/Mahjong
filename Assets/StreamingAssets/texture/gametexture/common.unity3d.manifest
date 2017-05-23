@@ -1,0 +1,29 @@
+ManifestFileVersion: 0
+CRC: 3350996889
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 7ebdb32dfa999ea34b0010aaded96a7d
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 6759894fca659e2049f05064db45ce61
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+Assets:
+- Assets/Resources/Texture/GameTexture/Common/GameBackground.png
+- Assets/Resources/Texture/GameTexture/Common/D_bt_youukedenglu1.png
+- Assets/Resources/Texture/GameTexture/Common/Background.png
+- Assets/Resources/Texture/GameTexture/Common/Dice1.png
+- Assets/Resources/Texture/GameTexture/Common/Dice4.png
+- Assets/Resources/Texture/GameTexture/Common/Dice5.png
+- Assets/Resources/Texture/GameTexture/Common/gonggao.png
+- Assets/Resources/Texture/GameTexture/Common/banker.png
+- Assets/Resources/Texture/GameTexture/Common/Dice2.png
+- Assets/Resources/Texture/GameTexture/Common/Dice3.png
+- Assets/Resources/Texture/GameTexture/Common/img_gonggao_title_words.png
+- Assets/Resources/Texture/GameTexture/Common/Dice0.png
+- Assets/Resources/Texture/GameTexture/Common/vipicon1.png
+- Assets/Resources/Texture/GameTexture/Common/game_btn_zhunbei.png
+Dependencies: []

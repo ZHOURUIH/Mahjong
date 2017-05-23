@@ -1,0 +1,33 @@
+// 注意
+// 该文件中可使用双斜杠来对单行进行注释
+// 可以添加任意的换行和空格
+// 变量命名应与代码中枚举命名相同
+
+// 视频播放速度的计算公式,其中使用i来代替实际速度
+GDS_REAL_SPEED_TO_VIDEO_SPEED = -0.003 * i * i + 0.1765 * i + 0.5
+
+// 硬件速度转换为实际速度,其中使用i来代替硬件速度
+GDS_HARDWARE_SPEED_TO_REAL_SPEED = 478 / (450 - i)
+
+// 实际速度转换为硬件速度,其中使用i来代替实际速度
+GDS_REAL_SPEED_TO_HARDWARE_SPEED = 450 - 478 / i
+
+// 发送到网页的视频列表中需要忽略的视频名,可写多个视频名,中间用逗号隔开
+GDS_IGNORE_VIDEO = LogoVideo.mp4
+
+// 各个速度等级下计时器旋转一圈的时间,单位秒
+GDS_TIMER_CIRCLE_TIME_MATCH = 120, 60, 30, 15
+
+// 各个速度等级的速度区间,第一速度区间为第0个数字到第1个数字之间,后面依次
+GDS_SPEED_LEVEL_RANGE = 45, 67, 90
+
+// 组一机器号
+GDS_TEAM_MACHINE_ONE = 2,3,4,5,6
+// 组二机器号
+GDS_TEAM_MACHINE_TWO = 7,8,9,10,11 
+
+// 组一机器号
+GDS_COACH_MACHINE_ONE = 0
+
+// 第一个播放的视频
+GDS_FIRST_VIDEO = 1.mp4

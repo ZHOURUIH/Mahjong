@@ -1,0 +1,18 @@
+ManifestFileVersion: 0
+CRC: 335024562
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: fa888acdf5253a84290db173f11a2f37
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 1094ce4a8b63a0cc7870d736bb694a93
+HashAppended: 0
+ClassTypes:
+- Class: 48
+  Script: {instanceID: 0}
+Assets:
+- Assets/Resources/Shader/HSLOffsetLinearDodge.shader
+- Assets/Resources/Shader/HSLOffset.shader
+- Assets/Resources/Shader/Gray.shader
+Dependencies: []

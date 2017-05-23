@@ -1,0 +1,19 @@
+ManifestFileVersion: 0
+CRC: 1974887398
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 22433af014a5126f9ccd90f73749f633
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 6759894fca659e2049f05064db45ce61
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+Assets:
+- Assets/Resources/Texture/GameTexture/PlayerAction/ActionGang.png
+- Assets/Resources/Texture/GameTexture/PlayerAction/ActionHu.png
+- Assets/Resources/Texture/GameTexture/PlayerAction/ActionPass.png
+- Assets/Resources/Texture/GameTexture/PlayerAction/ActionPeng.png
+Dependencies: []

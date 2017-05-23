@@ -1,0 +1,25 @@
+ManifestFileVersion: 0
+CRC: 3384555746
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 885a40ecdf75e74feefde93ed82036dd
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 32a6e303fb7c4ecd313b5e3754a6133b
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 0b4eb3a400afab046abb8471a9d746d6, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 128
+  Script: {instanceID: 0}
+Assets:
+- Assets/Resources/Font/FZZYJW.prefab
+Dependencies:
+- Assets/StreamingAssets/font.unity3d

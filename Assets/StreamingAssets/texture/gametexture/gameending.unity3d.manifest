@@ -1,0 +1,17 @@
+ManifestFileVersion: 0
+CRC: 514289190
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 3756c909f8a239d29c1963155130b850
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 6759894fca659e2049f05064db45ce61
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+Assets:
+- "Assets/Resources/Texture/GameTexture/GameEnding/jiesuan_title_\u5E73\u5C40.png"
+- Assets/Resources/Texture/GameTexture/GameEnding/HuMahjong.png
+Dependencies: []

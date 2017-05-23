@@ -1,0 +1,21 @@
+ManifestFileVersion: 0
+CRC: 1587417629
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: f60eab032703c84c12aefb1cbf64e37e
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 20d2a047ae4e99a3eaf853982df4d9aa
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+Assets:
+- Assets/Resources/Atlas/TextureAnim/Dice.mat
+- Assets/Resources/Atlas/TextureAnim/Dice.png
+Dependencies: []

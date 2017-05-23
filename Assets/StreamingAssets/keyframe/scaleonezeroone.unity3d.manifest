@@ -1,0 +1,22 @@
+ManifestFileVersion: 0
+CRC: 940867392
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 0ad039b502785f58aff05a5ffc754a69
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: df34d79de4fbc43863e699fdd4439a15
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 75e7459110b9666449485c40f25362a5, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+Assets:
+- Assets/Resources/KeyFrame/ScaleOneZeroOne.prefab
+Dependencies: []

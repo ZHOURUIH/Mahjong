@@ -1,0 +1,42 @@
+ManifestFileVersion: 0
+CRC: 1507271876
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 335049d3fc7a8b7edc0bd21aebf28e91
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 6759894fca659e2049f05064db45ce61
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+Assets:
+- Assets/Resources/Texture/TextureAnim/Dice/Dice_5.png
+- Assets/Resources/Texture/TextureAnim/Dice/Dice_16.png
+- Assets/Resources/Texture/TextureAnim/Dice/Dice_20.png
+- Assets/Resources/Texture/TextureAnim/Dice/Dice_17.png
+- Assets/Resources/Texture/TextureAnim/Dice/Dice_6.png
+- Assets/Resources/Texture/TextureAnim/Dice/Dice_8.png
+- Assets/Resources/Texture/TextureAnim/Dice/Dice_25.png
+- Assets/Resources/Texture/TextureAnim/Dice/Dice_3.png
+- Assets/Resources/Texture/TextureAnim/Dice/Dice_10.png
+- Assets/Resources/Texture/TextureAnim/Dice/Dice_1.png
+- Assets/Resources/Texture/TextureAnim/Dice/Dice_11.png
+- Assets/Resources/Texture/TextureAnim/Dice/Dice_2.png
+- Assets/Resources/Texture/TextureAnim/Dice/Dice_26.png
+- Assets/Resources/Texture/TextureAnim/Dice/Dice_13.png
+- Assets/Resources/Texture/TextureAnim/Dice/Dice_9.png
+- Assets/Resources/Texture/TextureAnim/Dice/Dice_21.png
+- Assets/Resources/Texture/TextureAnim/Dice/Dice_23.png
+- Assets/Resources/Texture/TextureAnim/Dice/Dice_7.png
+- Assets/Resources/Texture/TextureAnim/Dice/Dice_18.png
+- Assets/Resources/Texture/TextureAnim/Dice/Dice_4.png
+- Assets/Resources/Texture/TextureAnim/Dice/Dice_22.png
+- Assets/Resources/Texture/TextureAnim/Dice/Dice_15.png
+- Assets/Resources/Texture/TextureAnim/Dice/Dice_19.png
+- Assets/Resources/Texture/TextureAnim/Dice/Dice_12.png
+- Assets/Resources/Texture/TextureAnim/Dice/Dice_27.png
+- Assets/Resources/Texture/TextureAnim/Dice/Dice_24.png
+- Assets/Resources/Texture/TextureAnim/Dice/Dice_14.png
+Dependencies: []

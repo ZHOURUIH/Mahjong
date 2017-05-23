@@ -1,0 +1,21 @@
+ManifestFileVersion: 0
+CRC: 1615695217
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 12427517a14993cd3809d7e343d66048
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 6759894fca659e2049f05064db45ce61
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+Assets:
+- Assets/Resources/Skybox/Assets_By_Unluck_Activeden/skyboxes/skyboxBlueNebula/images/BlueNebula2048_bottom.tif
+- Assets/Resources/Skybox/Assets_By_Unluck_Activeden/skyboxes/skyboxBlueNebula/images/BlueNebula2048_top.tif
+- Assets/Resources/Skybox/Assets_By_Unluck_Activeden/skyboxes/skyboxBlueNebula/images/BlueNebula2048_right.tif
+- Assets/Resources/Skybox/Assets_By_Unluck_Activeden/skyboxes/skyboxBlueNebula/images/BlueNebula2048_back.tif
+- Assets/Resources/Skybox/Assets_By_Unluck_Activeden/skyboxes/skyboxBlueNebula/images/BlueNebula2048_front.tif
+- Assets/Resources/Skybox/Assets_By_Unluck_Activeden/skyboxes/skyboxBlueNebula/images/BlueNebula2048_left.tif
+Dependencies: []

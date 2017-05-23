@@ -1,0 +1,29 @@
+ManifestFileVersion: 0
+CRC: 2214313186
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: e91fa3cd7719d10dabf15b963c981e6b
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: c096059f4805b7084f5ddea7fee8488a
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1d983fd05b915f448b13659ebe4e90c1, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4d0c51bb0b6e93049af5e88f93826e3b, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+Assets:
+- Assets/Resources/Layout/UIPrefab/UIGameEnding.prefab
+Dependencies:
+- Assets/StreamingAssets/atlas/gameatlas/atlasgameending.unity3d

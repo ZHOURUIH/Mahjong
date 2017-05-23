@@ -1,0 +1,30 @@
+ManifestFileVersion: 0
+CRC: 2535596634
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: bac396162be933fcaa37b369eb1b1054
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 6759894fca659e2049f05064db45ce61
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+Assets:
+- Assets/Resources/Texture/GameTexture/MainFrame/boy2.head_pic.png
+- Assets/Resources/Texture/GameTexture/MainFrame/backpack_safeboxJindouBG.png
+- Assets/Resources/Texture/GameTexture/MainFrame/img_sigin_baoxiang.png
+- Assets/Resources/Texture/GameTexture/MainFrame/GuiZe_AnNiu.png
+- Assets/Resources/Texture/GameTexture/MainFrame/hall_roulette_beijing.jpg
+- Assets/Resources/Texture/GameTexture/MainFrame/tuichuanniu.png
+- Assets/Resources/Texture/GameTexture/MainFrame/saichang.png
+- Assets/Resources/Texture/GameTexture/MainFrame/btn_youjian.png
+- Assets/Resources/Texture/GameTexture/MainFrame/Icon_Ox.png
+- Assets/Resources/Texture/GameTexture/MainFrame/shezhianniu.png
+- Assets/Resources/Texture/GameTexture/MainFrame/gir2.head_pic.png
+- Assets/Resources/Texture/GameTexture/MainFrame/chengjizi.png
+- Assets/Resources/Texture/GameTexture/MainFrame/btn_fenxiang_up.png
+- Assets/Resources/Texture/GameTexture/MainFrame/BUTTON_Activity02.png
+- Assets/Resources/Texture/GameTexture/MainFrame/caidan_tubiao_kefu.png
+Dependencies: []

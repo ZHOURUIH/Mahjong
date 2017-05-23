@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 5702d371f8abdaa4a97cabb5de64ae01
+timeCreated: 1492604544
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 3
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 1
+  characterPadding: 0
+  includeFontData: 1
+  fontNames: []
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: font.unity3d
+  assetBundleVariant: 

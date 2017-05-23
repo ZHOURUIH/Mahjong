@@ -93,7 +93,7 @@ public class ScriptMahjongDrop : LayoutScript
 			LayoutTools.ACTIVE_WINDOW(mDropList[(int)pos][i], i < showCount);
 			if(i < showCount)
 			{
-				mDropList[(int)pos][i].setSpriteName(mDropMahjongPreName[(int)pos] + CommonDefine.MAHJONG_NAME[(int)droppedMahjong[showStartIndex]]);
+				mDropList[(int)pos][i].setSpriteName(mDropMahjongPreName[(int)pos] + CommonDefine.MAHJONG_NAME[(int)droppedMahjong[showStartIndex + i]]);
 			}
 		}
 	}

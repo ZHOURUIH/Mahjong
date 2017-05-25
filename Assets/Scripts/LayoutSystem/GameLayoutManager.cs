@@ -199,6 +199,7 @@ public class GameLayoutManager : CommandReceiver
 		registerLayout(typeof(ScriptMahjongGameFrame), LAYOUT_TYPE.LT_MAHJONG_GAME_FRAME, "UIMahjongGameFrame");
 		registerLayout(typeof(ScriptPlayerAction), LAYOUT_TYPE.LT_PLAYER_ACTION, "UIPlayerAction");
 		registerLayout(typeof(ScriptGameEnding), LAYOUT_TYPE.LT_GAME_ENDING, "UIGameEnding");
+		registerLayout(typeof(ScriptAddPlayer), LAYOUT_TYPE.LT_ADD_PLAYER, "UIAddPlayer");
 		if (mLayoutTypeToName.Count < (int)LAYOUT_TYPE.LT_MAX)
 		{
 			Debug.LogError("error : not all script added! max count : " + (int)LAYOUT_TYPE.LT_MAX + ", added count :" + mLayoutTypeToName.Count);

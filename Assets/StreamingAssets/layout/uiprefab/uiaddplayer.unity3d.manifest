@@ -1,37 +1,33 @@
 ManifestFileVersion: 0
-CRC: 1837591434
+CRC: 2185196050
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: db5b9f894c51320564d7e0b081d52640
+    Hash: 540e9b2fdd6a1bb4e225c0b996f514e8
   TypeTreeHash:
     serializedVersion: 2
-    Hash: c9465731b4f2b7075676ca886116528a
+    Hash: dae55fcbe8b7b3738e936545c8a5ba91
 HashAppended: 0
 ClassTypes:
 - Class: 1
   Script: {instanceID: 0}
 - Class: 4
   Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
 - Class: 114
   Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 1d983fd05b915f448b13659ebe4e90c1, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
+  Script: {fileID: 11500000, guid: 1fdca5042b1d12a4890ec1bd4f04290d, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 4d0c51bb0b6e93049af5e88f93826e3b, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
 - Class: 115
   Script: {instanceID: 0}
-- Class: 128
-  Script: {instanceID: 0}
 Assets:
-- Assets/Resources/Layout/UIPrefab/UIAllCharacterInfo.prefab
+- Assets/Resources/Layout/UIPrefab/UIAddPlayer.prefab
 Dependencies:
 - Assets/StreamingAssets/atlas/gameatlas/atlascommon.unity3d
-- Assets/StreamingAssets/atlas/gameatlas/atlashead.unity3d
-- Assets/StreamingAssets/atlas/gameatlas/atlasmainframe.unity3d
-- Assets/StreamingAssets/atlas/numberstyle/atlaswhitenumber.unity3d
-- Assets/StreamingAssets/font.unity3d

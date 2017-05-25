@@ -95,8 +95,9 @@ public class txUIVideo : txUIObject
 		}
 		notifyVideoReady(false);
 		mFileName = StringUtility.getFileName(ref file);
-		mMediaPlayer.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToDataFolder, file, false);
 		mMediaPlayer.Events.RemoveAllListeners();
+		mTexture.mainTexture = null;
+		mMediaPlayer.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToDataFolder, file, false);
 		mMediaPlayer.Events.AddListener(onVideoEvent);
 	}
 	public string getFileName()

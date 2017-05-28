@@ -12,23 +12,31 @@ public class AsyncLoadInfo
 	public AssetLoadDoneCallback mCallback;
 }
 
+public enum LOAD_STATE
+{
+	LS_UNLOAD,
+	LS_LOADING,
+	LS_LOADED,
+}
+
 public class AssetBundleInfo : GameBase
 {
-	public bool mLoaded;
+	public LOAD_STATE mLoaded;
 	public string mBundleName;					// 资源所在的AssetBundle名,相对于StreamingAsset,不含后缀
 	public AssetBundle mAssetBundle;
 	public Dictionary<string, AssetBundleInfo> mParents;	// 依赖的AssetBundle列表
 	public Dictionary<string, AssetBundleInfo> mChildren;	// 依赖自己的AssetBundle列表
 	public Dictionary<string, AssetInfo> mAssetList;			// 资源包中已加载的所有资源
-	public Dictionary<string, AsyncLoadInfo> mLoadAsyncList;	// 需要异步加载的资源列表
+	public int mLoadedCount;
+	public AssetBundleLoadDoneCallback mAssetBundleLoadCallback;
 	public AssetBundleInfo(string bundleName)
 	{
 		mBundleName = bundleName;
-		mLoaded = false;
+		mLoaded = LOAD_STATE.LS_UNLOAD;
 		mParents = new Dictionary<string, AssetBundleInfo>();
 		mChildren = new Dictionary<string, AssetBundleInfo>();
-		mLoadAsyncList = new Dictionary<string, AsyncLoadInfo>();
 		mAssetList = new Dictionary<string, AssetInfo>();
+		mLoadedCount = 0;
 	}
 	public void unload(bool unloadAllLoadedObjects)
 	{
@@ -91,7 +99,7 @@ public class AssetBundleInfo : GameBase
 		{
 			foreach (var dep in mParents)
 			{
-				if (!dep.Value.mLoaded || !dep.Value.isAllDependenceDone())
+				if (dep.Value.mLoaded != LOAD_STATE.LS_LOADED || !dep.Value.isAllDependenceDone())
 				{
 					return false;
 				}
@@ -107,7 +115,7 @@ public class AssetBundleInfo : GameBase
 		{
 			foreach (var dep in mChildren)
 			{
-				if (!dep.Value.mLoaded || !dep.Value.isAllChildrenLoadedDone())
+				if (dep.Value.mLoaded != LOAD_STATE.LS_LOADED || !dep.Value.isAllChildrenLoadedDone())
 				{
 					return false;
 				}
@@ -115,70 +123,23 @@ public class AssetBundleInfo : GameBase
 		}
 		return true;
 	}
-	// 同步加载资源
-	public T loadAsset<T>(ref string fileNameWithSuffix) where T : UnityEngine.Object
+	// 获得资源,只能在加载后才能获得
+	public T getAsset<T>(string fileNameWithSuffix) where T : UnityEngine.Object
 	{
 		if (!mAssetList.ContainsKey(fileNameWithSuffix))
 		{
 			return null;
 		}
-		// 如果AssetBundle还没有加载,则先加载AssetBundle
-		if (!mLoaded)
+		if (mLoaded != LOAD_STATE.LS_LOADED)
 		{
-			loadAssetBundle();
+			return null;
 		}
 		return mAssetList[fileNameWithSuffix].mAssetObject as T;
 	}
-	// 异步加载资源
-	public bool loadAssetAsync(ref string fileNameWithSuffix, AssetLoadDoneCallback callback)
-	{
-		if (!mAssetList.ContainsKey(fileNameWithSuffix))
-		{
-			return false;
-		}
-		// 如果当前资源包还未加载,则需要等待资源包加载完以后才能加载资源
-		if (!mLoaded)
-		{
-			// 记录下需要异步加载的资源名
-			if (!mLoadAsyncList.ContainsKey(fileNameWithSuffix))
-			{
-				AsyncLoadInfo loadInfo = new AsyncLoadInfo();
-				loadInfo.mAssetInfo = mAssetList[fileNameWithSuffix];
-				loadInfo.mCallback = callback;
-				mLoadAsyncList.Add(fileNameWithSuffix, loadInfo);
-			}
-			else
-			{
-				UnityUtility.logError("asset is loading, can not load asset async again! name : " + fileNameWithSuffix);
-				return false;
-			}
-			loadAssetBundleAsync();
-		}
-		// 如果资源包已经加载,则可以直接异步加载资源
-		else
-		{
-			callback(mAssetList[fileNameWithSuffix].mAssetObject);
-		}
-		return true;
-	}
-	public void notifyAssetBundleAsyncLoadedDone(AssetBundle assetBundle)
-	{
-		mLoaded = true;
-		mAssetBundle = assetBundle;
-		// 异步加载其中所有的资源
-		foreach (var assetInfo in mLoadAsyncList)
-		{
-			assetInfo.Value.mAssetInfo.mLoadDoneCallback = assetInfo.Value.mCallback;
-			// 通知AssetBundleLoader请求异步加载Asset
-			mResourceManager.mAssetBundleLoader.requestLoadAsset(assetInfo.Value.mAssetInfo, mAssetBundle);
-		}
-		mLoadAsyncList.Clear();
-	}
-	//-----------------------------------------------------------------------------
 	// 同步加载资源包
-	protected void loadAssetBundle()
+	public void loadAssetBundle()
 	{
-		if (mLoaded)
+		if (mLoaded != LOAD_STATE.LS_UNLOAD)
 		{
 			return;
 		}
@@ -195,37 +156,48 @@ public class AssetBundleInfo : GameBase
 			return;
 		}
 		// 加载其中的所有资源
-		List<string> assetNameList = new List<string>(mAssetList.Keys);
-		int assetCount = assetNameList.Count;
-		for (int i = 0; i < assetCount; ++i)
-		{
-			UnityEngine.Object obj = mAssetBundle.LoadAsset(CommonDefine.P_RESOURCE_PATH + assetNameList[i]);
-			mAssetList[assetNameList[i]].mAssetObject = obj;
-		}
-		mLoaded = true;
-		notifyAssetBundleLoaded(this);
-	}
-	static protected void notifyAssetBundleLoaded(AssetBundleInfo info)
-	{
-		// 如果所有子节点已经加载完毕,则可以卸载资源镜像
-		if (info.isAllChildrenLoadedDone())
-		{
-			info.unload(false);
-		}
+		loadAllAsset();
+		mLoaded = LOAD_STATE.LS_LOADED;
 	}
 	// 异步加载资源包
-	protected void loadAssetBundleAsync()
+	public void loadAssetBundleAsync(AssetBundleLoadDoneCallback doneCallback)
 	{
-		if (mLoaded)
+		if (mLoaded != LOAD_STATE.LS_UNLOAD)
 		{
 			return;
 		}
 		// 先确保所有依赖项已经加载
 		foreach (var info in mParents)
 		{
-			info.Value.loadAssetBundleAsync();
+			info.Value.loadAssetBundleAsync(null);
 		}
+		mLoaded = LOAD_STATE.LS_LOADING;
 		// 通知AssetBundleLoader请求异步加载AssetBundle
 		mResourceManager.mAssetBundleLoader.requestLoadAssetBundle(this);
+		mAssetBundleLoadCallback = doneCallback;
+	}
+	// 通知资源包已经异步加载完成
+	public void notifyAssetBundleAsyncLoadedDone(AssetBundle assetBundle)
+	{
+		mLoaded = LOAD_STATE.LS_LOADED;
+		mAssetBundle = assetBundle;
+		List<UnityEngine.Object> resList = new List<UnityEngine.Object>();
+		foreach(var item in mAssetList)
+		{
+			resList.Add(item.Value.mAssetObject);
+		}
+		if (mAssetBundleLoadCallback != null)
+		{
+			mAssetBundleLoadCallback(resList);
+		}
+	}
+	//-----------------------------------------------------------------------------
+	protected void loadAllAsset()
+	{
+		foreach (var item in mAssetList)
+		{
+			UnityEngine.Object obj = mAssetBundle.LoadAsset(CommonDefine.P_RESOURCE_PATH + item.Key);
+			mAssetList[item.Key].mAssetObject = obj;
+		}
 	}
 }

@@ -78,10 +78,8 @@ public class UnityUtility : GameBase
 		}
 		return go;
 	}
-	// parent为实例化后挂接的父节点
-	// prefabName为预设名,带Resources下相对路径
-	// name为实例化后的名字
-	// 其他三个是实例化后本地的变换
+
+	// 根据预设名实例化
 	public static GameObject instantiatePrefab(GameObject parent, string prefabName, string name, Vector3 scale, Vector3 rot, Vector3 pos)
 	{
 		GameObject prefab = mResourceManager.loadResource<GameObject>(prefabName, true);
@@ -90,25 +88,33 @@ public class UnityUtility : GameBase
 			logError("error : can not find prefab : " + prefabName);
 			return null;
 		}
-		GameObject obj = instantiatePrefab(prefab);
-		setNormalProperty(ref obj, parent, name, scale, rot, pos);
+		GameObject obj = instantiatePrefab(parent, prefab, name, scale, rot, pos);
 		return obj;
 	}
 	// prefabName为Resource下的相对路径
 	public static GameObject instantiatePrefab(GameObject parent, string prefabName)
 	{
-		string name = StringUtility.getFileName(ref prefabName);
+		string name = StringUtility.getFileName(prefabName);
 		return instantiatePrefab(parent, prefabName, name, Vector3.one, Vector3.zero, Vector3.zero);
 	}
-	public static GameObject instantiatePrefab(GameObject prefab)
+
+	// 根据预设对象实例化
+	public static GameObject instantiatePrefab(GameObject parent, GameObject prefab)
 	{
-		return GameObject.Instantiate(prefab);
+		string name = StringUtility.getFileName(prefab.name);
+		return instantiatePrefab(parent, prefab, name, Vector3.one, Vector3.zero, Vector3.zero);
 	}
-	public static bool instantiatePrefabAsync(string prefabName, AssetLoadDoneCallback callback)
+	// parent为实例化后挂接的父节点
+	// prefabName为预设名,带Resources下相对路径
+	// name为实例化后的名字
+	// 其他三个是实例化后本地的变换
+	public static GameObject instantiatePrefab(GameObject parent, GameObject prefab, string name, Vector3 scale, Vector3 rot, Vector3 pos)
 	{
-		bool ret = mResourceManager.loadResourceAsync<GameObject>(prefabName, callback, true);
-		return ret;
+		GameObject obj = GameObject.Instantiate(prefab);
+		setNormalProperty(ref obj, parent, name, scale, rot, pos);
+		return obj;
 	}
+
 	public static void setNormalProperty(ref GameObject obj, GameObject parent, string name, Vector3 scale, Vector3 rot, Vector3 pos)
 	{
 		obj.transform.parent = parent.transform;

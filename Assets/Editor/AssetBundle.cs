@@ -251,7 +251,7 @@ public class AssetBundleBuild
 			int fileCount = files.Length;
 			for(int i = 0; i < fileCount; ++i)
 			{
-				if (!isKeepFolderOrMeta(StringUtility.getFileName(ref files[i])))
+				if (!isKeepFolderOrMeta(StringUtility.getFileName(files[i])))
 				{
 					File.Delete(files[i]);
 				}

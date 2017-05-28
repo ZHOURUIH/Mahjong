@@ -21,6 +21,7 @@ public class GameBase
 	public static CameraManager		mCameraManager		= null;
 	public static GameConfig		mGameConfig = null;
 	public static LayoutPrefabManager mLayoutPrefabManager = null;
+	public static MaterialManager	mMaterialManager	= null;
 	public static void notifyConstructDone()
 	{
 		if (mGameFramework == null)
@@ -41,6 +42,7 @@ public class GameBase
 			mCameraManager = mGameFramework.getCameraManager();
 			mLayoutPrefabManager = mGameFramework.getLayoutPrefabManager();
 			mGameConfig = mGameFramework.getGameConfig();
+			mMaterialManager = mGameFramework.getMaterialManager();
 		}
 	}
 }

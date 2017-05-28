@@ -19,16 +19,15 @@ public class AudioManager : GameBase
 	}
 	public virtual void update(float elapsedTime)
 	{}
-	// 参数为Sound下的相对路径,并且不带后缀
-	public void createAudio(string fileName)
+	// path为Sound下相对路径,不以/结尾,name为音效名,不带后缀
+	public void createAudio(string path, string name)
 	{
-		if (mAudioClipList.ContainsKey(fileName))
+		if (mAudioClipList.ContainsKey(name))
 		{
-			UnityUtility.logError("error : audio has already loaded! file name : " + fileName);
+			UnityUtility.logError("error : audio has already loaded! file name : " + name);
 			return;
 		}
-		AudioClip audioClip = mResourceManager.loadResource<AudioClip>(CommonDefine.R_SOUND_PATH + fileName, false);
-		mAudioClipList.Add(fileName, audioClip);
+		mResourceManager.loadResourceAsync<AudioClip>(CommonDefine.R_SOUND_PATH + path + "/" + name, onAudioLoaded, false);
 	}
 	// volume范围0-1
 	public void playClip(AudioSource source, string name, bool loop, float volume)
@@ -76,5 +75,10 @@ public class AudioManager : GameBase
 			return;
 		}
 		source.loop = loop;
+	}
+	//------------------------------------------------------------------------------------------------------------
+	protected void onAudioLoaded(UnityEngine.Object res)
+	{
+		mAudioClipList.Add(res.name, res as AudioClip);
 	}
 }

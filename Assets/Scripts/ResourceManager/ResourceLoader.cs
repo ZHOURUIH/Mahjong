@@ -24,14 +24,72 @@ public class ResourceLoader : MonoBehaviour
 	{
 		;
 	}
-	// name为Resources下的相对路径,不带后缀
-	public UnityEngine.Object loadResources(string name)
+	public List<string> getFileList(string path)
+	{
+		List<string> fileList = new List<string>();
+		FileUtility.findFiles(CommonDefine.RESOURCES + "/" + path, ref fileList, null);
+		// 去除meta文件
+		List<string> newFileList = new List<string>();
+		int fileCount = fileList.Count;
+		for(int i = 0; i < fileCount; ++i)
+		{
+			if(!fileList[i].EndsWith(".meta"))
+			{
+				newFileList.Add(fileList[i]);
+			}
+		}
+		return newFileList;
+	}
+	public bool isResourceLoaded(string name)
 	{
 		string path = StringUtility.getFilePath(name);
-		// 如果文件夹还未加载,则先加载文件夹
 		if (!mLoadedPath.ContainsKey(path))
 		{
-			Dictionary<string, UnityEngine.Object> loadedResource = new Dictionary<string,UnityEngine.Object>();
+			return mLoadedPath[path].ContainsKey(name);
+		}
+		return false;
+	}
+	public UnityEngine.Object getResource(string name)
+	{
+		string path = StringUtility.getFilePath(name);
+		if (!mLoadedPath.ContainsKey(path))
+		{
+			return null;
+		}
+		if (!mLoadedPath[path].ContainsKey(name))
+		{
+			return null;
+		}
+		else
+		{
+			return mLoadedPath[path][name];
+		}
+	}
+	// 同步加载资源,name为Resources下的相对路径,不带后缀
+	public UnityEngine.Object loadResource(string name)
+	{
+		string path = StringUtility.getFilePath(name);
+		// 如果文件夹还未加载,则先加载指定文件夹
+		if (!mLoadedPath.ContainsKey(path))
+		{
+			loadPath(path);
+		}
+		// 如果加载完以后仍然不存在,则返回null
+		if (!mLoadedPath[path].ContainsKey(name))
+		{
+			return null;
+		}
+		else
+		{
+			return mLoadedPath[path][name];
+		}
+	}
+	// 同步加载整个文件夹
+	public List<UnityEngine.Object> loadPath(string path)
+	{
+		if (!mLoadedPath.ContainsKey(path))
+		{
+			Dictionary<string, UnityEngine.Object> loadedResource = new Dictionary<string, UnityEngine.Object>();
 			mLoadedPath.Add(path, loadedResource);
 			UnityEngine.Object[] resList = Resources.LoadAll(path);
 			string tempPath = path;
@@ -51,25 +109,29 @@ public class ResourceLoader : MonoBehaviour
 				}
 			}
 		}
-		// 如果加载完以后仍然不存在,则返回null
-		if (!mLoadedPath[path].ContainsKey(name))
+		return new List<UnityEngine.Object>(mLoadedPath[path].Values);
+	}
+	// 异步加载整个文件夹
+	public void loadPathAsync(string path, AssetBundleLoadDoneCallback callback)
+	{
+		if (mLoadedPath.ContainsKey(path))
 		{
-			return null;
+			callback(new List<UnityEngine.Object>(mLoadedPath[path].Values));
 		}
 		else
 		{
-			return mLoadedPath[path][name];
+			mLoadedPath.Add(path, new Dictionary<string, UnityEngine.Object>());
+			StartCoroutine(loadPathCoroutine(path, callback));
 		}
 	}
-	// name为Resources下的相对路径,不带后缀
+	// 异步加载资源,name为Resources下的相对路径,不带后缀
 	public bool loadResourcesAsync<T>(string name, AssetLoadDoneCallback doneCallback) where T : UnityEngine.Object
 	{
 		string path = StringUtility.getFilePath(name);
 		// 如果文件夹还未加载,则先加载文件夹
 		if (!mLoadedPath.ContainsKey(path))
 		{
-			Dictionary<string, UnityEngine.Object> loadedResource = new Dictionary<string, UnityEngine.Object>();
-			mLoadedPath.Add(path, loadedResource);
+			mLoadedPath.Add(path, new Dictionary<string, UnityEngine.Object>());
 		}
 		// 已经加载,则返回true
 		if (mLoadedPath[path].ContainsKey(name))
@@ -78,20 +140,36 @@ public class ResourceLoader : MonoBehaviour
 		}
 		else
 		{
-			StartCoroutine(loadResourceAsyncCoroutine<T>(name, doneCallback));
+			StartCoroutine(loadResourceCoroutine<T>(name, doneCallback));
 		}
 		return true;
 	}
 	//---------------------------------------------------------------------------------------------------------------------------------------
-	protected IEnumerator loadResourceAsyncCoroutine<T>(string name, AssetLoadDoneCallback doneCallback) where T : UnityEngine.Object
+	protected IEnumerator loadResourceCoroutine<T>(string resName, AssetLoadDoneCallback doneCallback) where T : UnityEngine.Object
 	{
-		ResourceRequest request = Resources.LoadAsync<T>(name);
-		while (!request.isDone)
-		{
-			yield return null;
-		}
-		string path = StringUtility.getFilePath(name);
-		mLoadedPath[path].Add(name, request.asset);
+		ResourceRequest request = Resources.LoadAsync<T>(resName);
+		yield return request;
+		string path = StringUtility.getFilePath(resName);
+		mLoadedPath[path].Add(resName, request.asset);
 		doneCallback(request.asset);
+	}
+	protected IEnumerator loadPathCoroutine(string path, AssetBundleLoadDoneCallback callback)
+	{
+		// 查找文件夹
+		List<string> fileList = new List<string>();
+		FileUtility.findFiles(path, ref fileList, null);
+		int fileCount = fileList.Count;
+		List<UnityEngine.Object> resList = new List<UnityEngine.Object>();
+		for (int i = 0; i < fileCount; ++i)
+		{
+			if(fileList[i].EndsWith(".meta"))
+			{
+				continue;
+			}
+			ResourceRequest assetRequest = Resources.LoadAsync(path + "/" + fileList[i]);
+			yield return assetRequest;
+			mLoadedPath[path].Add(path + "/" + fileList[i], assetRequest.asset);
+		}
+		callback(resList);
 	}
 }

@@ -39,7 +39,7 @@ public class ComponentAudio : GameComponent
 			{
 				DataGameSound soundData = mDataBase.queryData(DATA_TYPE.DT_GAME_SOUND, i) as DataGameSound;
 				string soundName = StringUtility.charArrayToString(soundData.mSoundFileName);
-				createAudio(soundName, soundData.mSoundType, (SOUND_DEFINE)(soundData.mSoundID));
+				createAudio("", soundName, soundData.mSoundType, (SOUND_DEFINE)(soundData.mSoundID));
 			}
 		}
 
@@ -140,10 +140,10 @@ public class ComponentAudio : GameComponent
 		mAudioManager.stopClip(mAudioSource);
 	}
 	//---------------------------------------------------------------------------------------------------------------
-	protected void createAudio(string name, int type, SOUND_DEFINE define)
+	protected void createAudio(string path, string name, int type, SOUND_DEFINE define)
 	{
 		mAudioTypeMap.Add(name, type);
 		mSoundDefineMap.Add(define, name);
-		mAudioManager.createAudio(name);
+		mAudioManager.createAudio(path, name);
 	}
 }

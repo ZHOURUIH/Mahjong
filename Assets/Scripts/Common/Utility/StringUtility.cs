@@ -204,7 +204,7 @@ public class StringUtility : GameBase
 		}
 		return fileName;
 	}
-	public static string getFileName(ref string str)
+	public static string getFileName(string str)
 	{
 		rightToLeft(ref str);
 		int dotPos = str.LastIndexOf('/');
@@ -214,7 +214,7 @@ public class StringUtility : GameBase
 		}
 		return str;
 	}
-	public static string getFileNameNoSuffix(ref string str, bool removeDir = false)
+	public static string getFileNameNoSuffix(string str, bool removeDir = false)
 	{
 		rightToLeft(ref str);
 		int namePos = str.LastIndexOf('/');

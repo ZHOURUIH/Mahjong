@@ -126,7 +126,8 @@ public class GameLayoutManager : CommandReceiver
 			info.mLayoutObject = null;
 			info.mCallback = callback;
 			mLayoutAsyncList.Add(info.mName, info);
-			bool ret = UnityUtility.instantiatePrefabAsync(CommonDefine.R_UI_PREFAB_PATH + name, onLayoutPrefabAsyncDone);
+			// 首先加载资源
+			bool ret = mResourceManager.loadResourceAsync<GameObject>(CommonDefine.R_UI_PREFAB_PATH + name, onLayoutPrefabAsyncDone, true);
 			if(!ret)
 			{
 				UnityUtility.logError("can not find layout : " + name);

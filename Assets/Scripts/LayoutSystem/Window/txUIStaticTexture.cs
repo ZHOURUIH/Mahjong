@@ -48,12 +48,11 @@ public class txUIStaticTexture : txUIObject
 		Material mat = null;
 		if (newMaterial)
 		{
-			mat = new Material(mResourceManager.loadResource<Material>(CommonDefine.R_MATERIAL_PATH + materialName, true));
-			mat.name = materialName + mID;
+			mat = mMaterialManager.copyMaterial(materialName, materialName + mID);
 		}
 		else
 		{
-			mat = mResourceManager.loadResource<Material>(CommonDefine.R_MATERIAL_PATH + materialName, true);
+			mat = mMaterialManager.tryGetMaterial(materialName);
 		}
 		mTexture.material = mat;
 	}
@@ -67,18 +66,6 @@ public class txUIStaticTexture : txUIObject
 		{
 			mTexture.shader = null;
 			mTexture.shader = shader;
-		}
-	}
-	public void setTextureName(string name)
-	{
-		if (name != "")
-		{
-			Texture tex = mResourceManager.loadResource<Texture>(name, true);
-			setTexture(tex);
-		}
-		else
-		{
-			setTexture(null);
 		}
 	}
 	public string getTextureName()

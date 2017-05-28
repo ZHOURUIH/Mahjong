@@ -94,7 +94,7 @@ public class txUIVideo : txUIObject
 			file = CommonDefine.A_VIDEO_PATH + file;
 		}
 		notifyVideoReady(false);
-		mFileName = StringUtility.getFileName(ref file);
+		mFileName = StringUtility.getFileName(file);
 		mMediaPlayer.Events.RemoveAllListeners();
 		mTexture.mainTexture = null;
 		mMediaPlayer.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToDataFolder, file, false);

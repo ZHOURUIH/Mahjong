@@ -72,6 +72,11 @@ public class FileUtility : GameBase
 	public static void findFiles(string path, ref List<string> fileList, List<string> pattern)
 	{
 		path = CommonDefine.F_ASSETS_PATH + path;
+		if(!isDirExist(path))
+		{
+			UnityUtility.logError("path is invalid! path : " + path);
+			return;
+		}
 		DirectoryInfo folder = new DirectoryInfo(path);
 		FileInfo[] fileInfoList = folder.GetFiles();
 		int fileCount = fileInfoList.Length;

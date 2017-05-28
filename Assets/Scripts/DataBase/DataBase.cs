@@ -67,7 +67,7 @@ public class DataBase : CommandReceiver
 	public void loadData(string filePath, bool forceCover)
 	{
 		// 根据文件名查找工厂类型
-		string fileName = StringUtility.getFileNameNoSuffix(ref filePath);
+		string fileName = StringUtility.getFileNameNoSuffix(filePath);
 		DATA_TYPE type = getDataTypeByDataName(fileName);
 		if (type == DATA_TYPE.DT_MAX)
 		{

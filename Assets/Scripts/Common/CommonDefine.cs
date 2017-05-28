@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 // 游戏枚举定义-----------------------------------------------------------------------------------------------
 // 界面布局定义
@@ -286,6 +287,7 @@ public delegate void BoxColliderClickCallback(txUIButton obj);
 public delegate void BoxColliderHoverCallback(txUIButton obj, bool hover);
 public delegate void BoxColliderPressCallback(txUIButton obj, bool press);
 public delegate void AssetLoadDoneCallback(UnityEngine.Object res);
+public delegate void AssetBundleLoadDoneCallback(List<UnityEngine.Object> resList);
 public delegate void LayoutAsyncDone(GameLayout layout);
 public delegate void VideoPlayEndCallback(string videoName, bool isBreak);
 

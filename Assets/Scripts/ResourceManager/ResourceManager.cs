@@ -9,7 +9,7 @@ public class ResourceManager : GameBase
 	protected GameObject mManagerObject;
 	public AssetBundleLoader mAssetBundleLoader;
 	public ResourceLoader mResourceLoader;
-	protected int mLoadSource;
+	public int mLoadSource;
 	public ResourceManager()
 	{
 		;
@@ -42,40 +42,78 @@ public class ResourceManager : GameBase
 	public void unload(string name, bool unloadAllLoadedObjects)
 	{
 		// 只能用AssetBundleLoader卸载
-		if (mLoadSource == -1 || mLoadSource == 1)
+		if (mLoadSource == 1)
 		{
-			if (mAssetBundleLoader != null)
-			{
-				mAssetBundleLoader.unload(name, unloadAllLoadedObjects);
-			}
+			mAssetBundleLoader.unload(name, unloadAllLoadedObjects);
+		}
+	}
+	// 指定资源是否已经加载
+	public bool isResourceLoaded<T>(string name) where T : UnityEngine.Object
+	{
+		bool ret = false;
+		if (mLoadSource == 0)
+		{
+			ret = mResourceLoader.isResourceLoaded(name);
+		}
+		else if (mLoadSource == 1)
+		{
+			ret = mAssetBundleLoader.isAssetLoaded<T>(name);
+		}
+		return ret;
+	}
+	// 获得资源
+	public T getResource<T>(string name, bool errorIfNull) where T : UnityEngine.Object
+	{
+		T res = null;
+		if (mLoadSource == 0)
+		{
+			res = mResourceLoader.getResource(name) as T;
+		}
+		else if (mLoadSource == 1)
+		{
+			res = mAssetBundleLoader.getAsset<T>(name);
+		}
+		if (res == null && errorIfNull)
+		{
+			UnityUtility.logError("can not find resource : " + name);
+		}
+		return res;
+	}
+	public List<string> getFileOrBundleList(string path)
+	{
+		if (mLoadSource == 0)
+		{
+			return mResourceLoader.getFileList(path);
+		}
+		else if (mLoadSource == 1)
+		{
+			return mAssetBundleLoader.getBundleNameList(path);
+		}
+		return null;
+	}
+	// 异步加载指定的资源包
+	public void loadPathOrBundleAsync(string path, AssetBundleLoadDoneCallback callback)
+	{
+		if (mLoadSource == 0)
+		{
+			mResourceLoader.loadPathAsync(path, callback);
+		}
+		else if (mLoadSource == 1)
+		{
+			mAssetBundleLoader.loadAssetBundleAsync(path, callback);
 		}
 	}
 	// name是Resources下的相对路径,errorIfNull表示当找不到资源时是否报错提示
 	public T loadResource<T>(string name, bool errorIfNull) where T : UnityEngine.Object
 	{
 		T res = null;
-		// 先从AssetBundle中加载
-		if (mLoadSource == -1)
+		if (mLoadSource == 0)
 		{
-			if (mAssetBundleLoader != null)
-			{
-				res = mAssetBundleLoader.loadAsset<T>(name);
-			}
-			else
-			{
-				res = mResourceLoader.loadResources(name) as T;
-			}
-		}
-		else if (mLoadSource == 0)
-		{
-			res = mResourceLoader.loadResources(name) as T;
+			res = mResourceLoader.loadResource(name) as T;
 		}
 		else if (mLoadSource == 1)
 		{
-			if (mAssetBundleLoader != null)
-			{
-				res = mAssetBundleLoader.loadAsset<T>(name);
-			}
+			res = mAssetBundleLoader.loadAsset<T>(name);
 		}
 		if (res == null && errorIfNull)
 		{
@@ -87,28 +125,13 @@ public class ResourceManager : GameBase
 	public bool loadResourceAsync<T>(string name, AssetLoadDoneCallback doneCallback, bool errorIfNull) where T : UnityEngine.Object
 	{
 		bool ret = false;
-		// 先从AssetBundle中加载
-		if (mLoadSource == -1)
-		{
-			if (mAssetBundleLoader != null)
-			{
-				ret = mAssetBundleLoader.loadAssetAsync<T>(name, doneCallback);
-			}
-			else
-			{
-				ret = mResourceLoader.loadResourcesAsync<T>(name, doneCallback);
-			}
-		}
-		else if (mLoadSource == 0)
+		if (mLoadSource == 0)
 		{
 			ret = mResourceLoader.loadResourcesAsync<T>(name, doneCallback);
 		}
 		else if (mLoadSource == 1)
 		{
-			if (mAssetBundleLoader != null)
-			{
-				ret = mAssetBundleLoader.loadAssetAsync<T>(name, doneCallback);
-			}
+			ret = mAssetBundleLoader.loadAssetAsync<T>(name, doneCallback);
 		}
 		if (!ret && errorIfNull)
 		{

@@ -51,5 +51,5 @@ GDF_TIMER_CIRCLE_TIME_COMBAT = 10
 // 默认阻力值
 GDF_DEFAULT_FRICTION = 1
 
-// -1表示优先从AssetBundle加载,找不到再去Resources加载,0表示从AssetBundle加载,1表示从Resources加载
-GDF_LOAD_RESOURCES = 0
+// 0表示从Resources加载,1表示从AssetBundle加载
+GDF_LOAD_RESOURCES = 1

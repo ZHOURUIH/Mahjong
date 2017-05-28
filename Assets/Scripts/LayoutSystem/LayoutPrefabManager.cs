@@ -20,31 +20,17 @@ public class LayoutPrefabManager : GameBase
 			UnityUtility.logError("error: can not find LayoutPrefabManager!");
 			return;
 		}
-		List<string> fileList = new List<string>();
-		List<string> patterns = new List<string>();
-		patterns.Add(".prefab");
-		patterns.Add(CommonDefine.ASSET_BUNDLE_SUFFIX);
-		string filePath = "";
-		string prefabPath = "";
-		// 如果在Resources文件夹中找不到,则需要到StreamingAssets中找
-		if (FileUtility.isDirExist(CommonDefine.F_ASSETS_PATH + CommonDefine.A_LAYOUT_PREFAB_PATH))
+		string path = CommonDefine.R_LAYOUT_PREFAB_PATH;
+		if (mResourceManager.mLoadSource == 1)
 		{
-			filePath = CommonDefine.A_LAYOUT_PREFAB_PATH;
-			prefabPath = CommonDefine.R_LAYOUT_PREFAB_PATH;
+			path = path.ToLower();
 		}
-		else
-		{
-			filePath = CommonDefine.A_BUNDLE_LAYOUT_PREFAB_PATH;
-			prefabPath = CommonDefine.R_LAYOUT_PREFAB_PATH.ToLower();
-		}
-		FileUtility.findFiles(filePath, ref fileList, patterns);
+		List<string> fileList = mResourceManager.getFileOrBundleList(path);
 		int fileCount = fileList.Count;
 		for (int i = 0; i < fileCount; ++i)
 		{
-			string fileName = fileList[i];
-			string prefabName = StringUtility.getFileNameNoSuffix(ref fileName);
-			GameObject prefabObject = mResourceManager.loadResource<GameObject>(prefabPath + prefabName, true);
-			mPrefabList.Add(prefabName, prefabObject);
+			string fileNameNoSuffix = StringUtility.getFileNameNoSuffix(fileList[i]);
+			mResourceManager.loadResourceAsync<GameObject>(path + "/" + fileNameNoSuffix, onLayoutPrefabLoaded, true);
 		}
 	}
 	public void destroy()
@@ -63,14 +49,14 @@ public class LayoutPrefabManager : GameBase
 	{
 		if (mPrefabList.ContainsKey(prefabName))
 		{
-			GameObject obj = UnityUtility.instantiatePrefab(mPrefabList[prefabName]);
-			obj.name = objectName != "" ? objectName : prefabName;
-			obj.transform.parent = parent.transform;
-			obj.transform.localPosition = Vector3.zero;
-			obj.transform.localEulerAngles = Vector3.zero;
-			obj.transform.localScale = Vector3.one;
-			return obj;
+			string name = objectName != "" ? objectName : prefabName;
+			return UnityUtility.instantiatePrefab(parent, mPrefabList[prefabName], name, Vector3.one, Vector3.zero, Vector3.zero);
 		}
 		return null;
+	}
+	//---------------------------------------------------------------------------------------------------------
+	protected void onLayoutPrefabLoaded(UnityEngine.Object res)
+	{
+		mPrefabList.Add(res.name, res as GameObject);
 	}
 };

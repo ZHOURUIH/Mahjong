@@ -11,8 +11,9 @@ public class LogoSceneRunning : SceneProcedure
 	{}
 	protected override void onInit(SceneProcedure lastProcedure, string intent)
     {
-		;
-    }
+		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_START);
+		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_GLOBAL_TOUCH);
+	}
 	protected override void onUpdate(float elapsedTime)
     {
 		;

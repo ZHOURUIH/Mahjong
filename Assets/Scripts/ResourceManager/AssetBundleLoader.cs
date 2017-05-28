@@ -262,6 +262,17 @@ public class AssetBundleLoader : MonoBehaviour
 	protected IEnumerator loadAssetBundleCoroutine(AssetBundleInfo bundleInfo, bool loadFromWWW = false)
 	{
 		// 先确保依赖项全部已经加载完成,才能开始加载当前请求的资源包
+		// 异步加载所有未加载的依赖项
+		foreach (var item in bundleInfo.mParents)
+		{
+			if (item.Value.mLoaded == LOAD_STATE.LS_UNLOAD)
+			{
+				item.Value.mLoaded = LOAD_STATE.LS_LOADING;
+				yield return StartCoroutine(loadAssetBundleCoroutine(item.Value, loadFromWWW));
+			}
+		}
+		// 为了避免异步加载的对象依赖相同的依赖项时造成错误(因为上面只是加载了未加载的依赖项,而正在加载的依赖项没有判断)
+		// 所以此处仍然需要等待所有依赖项都加载完毕
 		while (!bundleInfo.isAllDependenceDone())
 		{
 			yield return null;

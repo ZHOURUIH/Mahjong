@@ -13,6 +13,7 @@ public class LayoutAsyncInfo
 	public GameLayout mLayout;
 	public GameObject mLayoutObject;
 	public LayoutAsyncDone mCallback;
+	public LOAD_STATE mState = LOAD_STATE.LS_UNLOAD;
 }
 
 public class GameLayoutManager : CommandReceiver
@@ -22,8 +23,9 @@ public class GameLayoutManager : CommandReceiver
 	protected Dictionary<string, LAYOUT_TYPE>		mLayoutNameToType;
 	protected Dictionary<LAYOUT_TYPE, GameLayout>	mLayoutTypeList;
 	protected Dictionary<string, GameLayout>		mLayoutNameList;
-	protected txUIObject							mUIRoot = null;
-	protected Dictionary<string, LayoutAsyncInfo> mLayoutAsyncList;
+	protected txUIObject							mUIRoot;
+	protected List<LayoutAsyncInfo>					mLayoutAsyncList;
+	protected bool									mLoadingLayout;		// 是否有布局正在加载
 	public GameLayoutManager()
 		:
 		base(typeof(GameLayoutManager).ToString())
@@ -33,8 +35,8 @@ public class GameLayoutManager : CommandReceiver
 		mLayoutNameToType = new Dictionary<string, LAYOUT_TYPE>();
 		mLayoutTypeList = new Dictionary<LAYOUT_TYPE, GameLayout>();
 		mLayoutNameList = new Dictionary<string, GameLayout>();
-		mLayoutAsyncList = new Dictionary<string, LayoutAsyncInfo>();
-		mUIRoot = null;
+		mLayoutAsyncList = new List<LayoutAsyncInfo>();
+		mLoadingLayout = false;
 	}
 	public void init()
 	{
@@ -47,19 +49,23 @@ public class GameLayoutManager : CommandReceiver
 			return;
 		}
 	}
-	public GameObject getUIRootObject()
-	{
-		return mUIRoot.mObject;
-	}
-	public txUIObject getUIRoot()
-	{
-		return mUIRoot;
-	}
+	public GameObject getUIRootObject(){return mUIRoot.mObject;}
+	public txUIObject getUIRoot(){return mUIRoot;}
 	public void update(float fElapsedTime)
 	{
 		foreach (var layout in mLayoutTypeList)
 		{
 			layout.Value.update(fElapsedTime);
+		}
+		// 如果没有正在加载的布局,则加载异步列表中的布局
+		if(!mLoadingLayout && mLayoutAsyncList.Count > 0)
+		{
+			mLoadingLayout = true;
+			bool ret = mResourceManager.loadResourceAsync<GameObject>(CommonDefine.R_UI_PREFAB_PATH + mLayoutAsyncList[0].mName, onLayoutPrefabAsyncDone, true);
+			if (!ret)
+			{
+				UnityUtility.logError("can not find layout : " + mLayoutAsyncList[0].mName);
+			}
 		}
 	}
 	public override void destroy()
@@ -125,13 +131,7 @@ public class GameLayoutManager : CommandReceiver
 			info.mLayout = null;
 			info.mLayoutObject = null;
 			info.mCallback = callback;
-			mLayoutAsyncList.Add(info.mName, info);
-			// 首先加载资源
-			bool ret = mResourceManager.loadResourceAsync<GameObject>(CommonDefine.R_UI_PREFAB_PATH + name, onLayoutPrefabAsyncDone, true);
-			if(!ret)
-			{
-				UnityUtility.logError("can not find layout : " + name);
-			}
+			mLayoutAsyncList.Add(info);
 			return null;
 		}
 		else
@@ -139,18 +139,34 @@ public class GameLayoutManager : CommandReceiver
 			GameObject layoutObject = UnityUtility.instantiatePrefab(getUIRootObject(), CommonDefine.R_UI_PREFAB_PATH + name);
 			GameLayout layout = layoutObject.GetComponent<GameLayout>();
 			addLayoutToList(layout, name, type);
-			layout.init(type, name, renderOrder, false, null);
+			layout.init(type, name, renderOrder);
 			return layout;
 		}
 	}
 	protected void onLayoutPrefabAsyncDone(UnityEngine.Object res)
 	{
-		LayoutAsyncInfo info = mLayoutAsyncList[res.name];
-		info.mLayoutObject = GameObject.Instantiate(res) as GameObject;
+		LayoutAsyncInfo info = null;
+		// 在列表中找到加载的布局
+		int curCount = mLayoutAsyncList.Count;
+		for (int i = 0; i < curCount; ++i)
+		{
+			if(mLayoutAsyncList[i].mName == res.name)
+			{
+				info = mLayoutAsyncList[i];
+				// 从列表中移除
+				mLayoutAsyncList.RemoveAt(i);
+				break;
+			}
+		}
+		// 标记为当前没有布局正在加载
+		mLoadingLayout = false;
+		// 初始化布局
+		info.mLayoutObject = UnityUtility.instantiatePrefab(getUIRootObject(), res as GameObject);
 		info.mLayout = info.mLayoutObject.GetComponent<GameLayout>();
 		addLayoutToList(info.mLayout, info.mName, info.mType);
 		UnityUtility.setNormalProperty(ref info.mLayoutObject, getUIRootObject(), info.mName, Vector3.one, Vector3.zero, Vector3.zero);
-		info.mLayout.init(info.mType, info.mName, info.mRenderOrder, true, info.mCallback);
+		info.mLayout.init(info.mType, info.mName, info.mRenderOrder);
+		info.mCallback(info.mLayout);
 	}
 	public void destroyLayout(LAYOUT_TYPE type)
 	{

@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
 public class LogoSceneLoading : SceneProcedure
 {
+	protected int mLastVSync;
+	protected int mLastTargetFrameRate;
 	protected Dictionary<LAYOUT_TYPE, LayoutLoadInfo> mLoadInfo;
 	protected int mLoadedCount;
 	public LogoSceneLoading()
@@ -18,8 +21,11 @@ public class LogoSceneLoading : SceneProcedure
 	}
 	protected override void onInit(SceneProcedure lastProcedure, string intent)
 	{
+		mLastVSync = QualitySettings.vSyncCount;
+		mLastTargetFrameRate = Application.targetFrameRate;
+		QualitySettings.vSyncCount = 0;
+		Application.targetFrameRate = 30;
 		mLoadedCount = 0;
-		// 加载所有布局
 		foreach (var item in mLoadInfo)
 		{
 			LayoutTools.LOAD_LAYOUT_ASYNC(item.Key, item.Value.mOrder, onLayoutLoaded);
@@ -50,6 +56,8 @@ public class LogoSceneLoading : SceneProcedure
 	}
 	protected void allLayoutLoaded()
 	{
+		QualitySettings.vSyncCount = mLastVSync;
+		Application.targetFrameRate = mLastTargetFrameRate;
 		CommandGameSceneChangeProcedure cmd = new CommandGameSceneChangeProcedure(true, true);
 		cmd.mProcedure = PROCEDURE_TYPE.PT_START_RUNNING;
 		mCommandSystem.pushDelayCommand(cmd, mGameScene);

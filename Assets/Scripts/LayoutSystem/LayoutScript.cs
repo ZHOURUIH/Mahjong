@@ -25,8 +25,6 @@ public abstract class LayoutScript : CommandReceiver
 	protected GameLayout						   mLayout;
 	protected txUIObject						   mRoot;
 	protected LAYOUT_TYPE						   mType;
-	protected bool								   mAsync;
-	protected Dictionary<txUIObject, AssignInfo>   mAsyncAssignInfo;
 	protected Dictionary<string, List<WindowInfo>> mAllWindowList;
 	public LayoutScript(LAYOUT_TYPE type, string name, GameLayout layout)
 		:
@@ -35,16 +33,12 @@ public abstract class LayoutScript : CommandReceiver
 		mType = type;
 		mLayout = layout;
 		mDelayCmdList = new Dictionary<Command, float>();
-		mAsyncAssignInfo = new Dictionary<txUIObject, AssignInfo>();
 		mAllWindowList = new Dictionary<string, List<WindowInfo>>();
 	}
 	public LAYOUT_TYPE getType() { return mType; }
 	public GameLayout getLayout() { return mLayout; }
-	public void setAsync(bool async) {mAsync = async;}
-	public bool getAsync() { return mAsync; }
 	public void setRoot(txUIObject root) { mRoot = root; }
 	public txUIObject getRoot() { return mRoot; }
-	public Dictionary<txUIObject, AssignInfo> getAsyncAssignInfo() { return mAsyncAssignInfo; }
 	public void findAllWindow()
 	{
 		findWindow(null, mRoot.mObject, ref mAllWindowList);
@@ -116,43 +110,29 @@ public abstract class LayoutScript : CommandReceiver
 	// active为-1则表示不设置active,0表示false,1表示true
 	public T newObject<T>(txUIObject parent, string name, int active = -1) where T : txUIObject, new()
 	{
-		if(mAsync)
+		GameObject parentObj = (parent != null) ? parent.mObject : null;
+		GameObject gameObject = getObjectFromList(parentObj, name);
+		// 先在全部子窗口列表中查找,查找不到,再去场景中查找
+		if (gameObject == null)
 		{
-			AssignInfo info = new AssignInfo();
-			info.mName = name;
-			info.mParent = parent;
-			info.mActive = active;
-			info.mAttachedPrefab = "";
-			info.mObject = new T();
-			mAsyncAssignInfo.Add(info.mObject, info);
-			return info.mObject as T;
+			gameObject = UnityUtility.getGameObject(parentObj, name);
 		}
-		else
+		if (gameObject == null)
 		{
-			GameObject parentObj = (parent != null) ? parent.mObject : null;
-			GameObject gameObject = getObjectFromList(parentObj, name);
-			// 先在全部子窗口列表中查找,查找不到,再去场景中查找
-			if (gameObject == null)
-			{
-				gameObject = UnityUtility.getGameObject(parentObj, name);
-			}
-			if (gameObject == null)
-			{
-				UnityUtility.logError("object is null, name : " + name);
-				return null;
-			}
-			T obj = new T();
-			obj.init(mLayout, gameObject);
-			if (active == 0)
-			{
-				obj.setActive(false);
-			}
-			else if (active == 1)
-			{
-				obj.setActive(true);
-			}
-			return obj;
+			UnityUtility.logError("object is null, name : " + name);
+			return null;
 		}
+		T obj = new T();
+		obj.init(mLayout, gameObject);
+		if (active == 0)
+		{
+			obj.setActive(false);
+		}
+		else if (active == 1)
+		{
+			obj.setActive(true);
+		}
+		return obj;
 	}
 	public T newObject<T>(string name, int active = -1) where T : txUIObject, new()
 	{
@@ -160,16 +140,8 @@ public abstract class LayoutScript : CommandReceiver
 	}
 	public void instantiateObject(txUIObject parent, string name)
 	{
-		if (mAsync)
-		{
-			// 找到父物体
-			mAsyncAssignInfo[parent].mAttachedPrefab = name;
-		}
-		else
-		{
-			GameObject gameObject = UnityUtility.instantiatePrefab(parent.mObject, CommonDefine.R_LAYOUT_PREFAB_PATH + name);
-			findWindow(parent.mObject, gameObject, ref mAllWindowList);
-		}
+		GameObject gameObject = UnityUtility.instantiatePrefab(parent.mObject, CommonDefine.R_LAYOUT_PREFAB_PATH + name);
+		findWindow(parent.mObject, gameObject, ref mAllWindowList);
 	}
 	//----------------------------------------------------------------------------------------------------
 	protected void onCmdStarted(object userdata, Command cmd)

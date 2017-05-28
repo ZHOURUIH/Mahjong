@@ -22,7 +22,7 @@ public class UnityUtility : GameBase
 	}
 	public static void logInfo(string info)
 	{
-		Debug.Log(info);
+		Debug.Log(getTime() + " : " + info);
 	}
 	public static string getTime()
 	{

@@ -15,7 +15,6 @@ public class GameLayout : MonoBehaviour
 	protected int			mRenderOrder;		// 渲染顺序,越大则渲染优先级越高
 	protected bool			mScriptInited;		// 脚本是否已经初始化
 	protected bool			mScriptControlHide;	// 是否由脚本来控制隐藏
-	protected bool			mAsync;
 	protected Dictionary<int, txUIObject> mObjectList;
 	protected Dictionary<GameObject, txUIObject> mGameObjectSearchList;
 	protected Dictionary<int, GameObject> mGameObjectList;
@@ -63,36 +62,27 @@ public class GameLayout : MonoBehaviour
 		}
 		return script;
 	}
-	public void init(LAYOUT_TYPE type, string name, int renderOrder, bool async, LayoutAsyncDone callback)
+	public void init(LAYOUT_TYPE type, string name, int renderOrder)
 	{
 		mName = name;
 		mType = type;
-		mAsync = async;
 		mScript = createLayoutScript();
-		if (mAsync)
+		// 初始化布局脚本
+		if (mScript != null)
 		{
-			setRenderOrder(renderOrder);
-			StartCoroutine(initScriptCoroutine(callback));
-		}
-		else
-		{
-			// 初始化布局脚本
-			if (mScript != null)
+			mLayoutObject = mScript.newObject<txUIObject>(mLayoutManager.getUIRoot(), mName, -1);
+			mRootPanel = mLayoutObject.mObject.GetComponent<UIPanel>();
+			if (mRootPanel == null)
 			{
-				mLayoutObject = mScript.newObject<txUIObject>(mLayoutManager.getUIRoot(), mName, -1);
-				mRootPanel = mLayoutObject.mObject.GetComponent<UIPanel>();
-				if (mRootPanel == null)
-				{
-					UnityUtility.logError("error : layout root window must has a panel component!, name : " + mName);
-				}
-				setRenderOrder(renderOrder);
-				mRoot = mScript.newObject<txUIObject>(mLayoutObject, "Root", -1);
-				mScript.setRoot(mRoot);
-				mScript.findAllWindow();
-				mScript.assignWindow();
-				mScript.init();
-				mScriptInited = true;
+				UnityUtility.logError("error : layout root window must has a panel component!, name : " + mName);
 			}
+			setRenderOrder(renderOrder);
+			mRoot = mScript.newObject<txUIObject>(mLayoutObject, "Root", -1);
+			mScript.setRoot(mRoot);
+			mScript.findAllWindow();
+			mScript.assignWindow();
+			mScript.init();
+			mScriptInited = true;
 		}
 	}
 	public void update(float elapsedTime)
@@ -190,76 +180,6 @@ public class GameLayout : MonoBehaviour
 		if(mGameObjectSearchList.ContainsKey(uiObj.mObject))
 		{
 			mGameObjectSearchList.Remove(uiObj.mObject);
-		}
-	}
-	//--------------------------------------------------------------------------------------------------
-	protected IEnumerator initScriptCoroutine(LayoutAsyncDone callback)
-	{
-		// 获得布局预设物体
-		mLayoutObject = mScript.newObject<txUIObject>(mLayoutManager.getUIRoot(), mName, -1);
-		mRootPanel = mLayoutObject.mObject.GetComponent<UIPanel>();
-		if (mRootPanel == null)
-		{
-			UnityUtility.logError("error : layout root window must has a panel component!, name : " + mName);
-		}
-		else
-		{
-			setRenderOrder(mRenderOrder);
-		}
-		// 获得布局预设根窗口,并且将根窗口隐藏,在加载过程中不允许显示布局
-		mRoot = mScript.newObject<txUIObject>(mLayoutObject, "Root", -1);
-		mRoot.setActive(false);
-
-		mScript.setRoot(mRoot);
-		mScript.setAsync(true);
-		mScript.assignWindow();
-		mScript.setAsync(false);
-		Dictionary<txUIObject, AssignInfo> assignInfo = mScript.getAsyncAssignInfo();
-		List<txUIObject> keyList = new List<txUIObject>(assignInfo.Keys);
-		int keyCount = keyList.Count;
-		for (int i = 0; i < keyCount; ++i)
-		{
-			AssignInfo info = assignInfo[keyList[i]];
-			GameObject parentObj = null;
-			if (info.mParent != null)
-			{
-				parentObj = info.mParent.mObject;
-			}
-			if(parentObj == null)
-			{
-				parentObj = mScript.getRoot().mObject;
-			}
-			GameObject gameObject = UnityUtility.getGameObject(parentObj, info.mName);
-			if (gameObject == null)
-			{
-				UnityUtility.logError("object is null, name : " + info.mName);
-				break;
-			}
-			txUIObject obj = info.mObject;
-			obj.init(mScript.getLayout(), gameObject);
-			if (info.mActive == 0)
-			{
-				obj.setActive(false);
-			}
-			else if (info.mActive == 1)
-			{
-				obj.setActive(true);
-			}
-			// 如果该物体下有需要实例化的预设,则实例化
-			if(info.mAttachedPrefab != "")
-			{
-				GameObject go = GameFramework.instance.getLayoutPrefabManager().instantiate(info.mAttachedPrefab, info.mObject.mObject, info.mAttachedPrefab);
-				go.SetActive(false);
-			}
-			yield return null;
-		}
-		mScript.init();
-		// 如果布局加载完了,则需要显示根窗口
-		mRoot.setActive(true);
-		mScriptInited = true;
-		if (callback != null)
-		{
-			callback(this);
 		}
 	}
 }

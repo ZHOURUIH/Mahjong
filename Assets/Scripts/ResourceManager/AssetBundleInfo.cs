@@ -166,13 +166,8 @@ public class AssetBundleInfo : GameBase
 		{
 			return;
 		}
-		// 先确保所有依赖项已经加载
-		foreach (var info in mParents)
-		{
-			info.Value.loadAssetBundleAsync(null);
-		}
 		mLoaded = LOAD_STATE.LS_LOADING;
-		// 通知AssetBundleLoader请求异步加载AssetBundle
+		// 通知AssetBundleLoader请求异步加载AssetBundle,在协程中会判断依赖项的加载
 		mResourceManager.mAssetBundleLoader.requestLoadAssetBundle(this);
 		mAssetBundleLoadCallback = doneCallback;
 	}

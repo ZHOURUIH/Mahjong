@@ -433,7 +433,7 @@ public class MahjongSystem : CommandReceiver
 	{
 		if(!mWaitList.ContainsKey(player))
 		{
-			UnityUtility.logInfo("player has no action : name : " + player.getName() + ", action : " + type);
+			UnityUtility.logError("player has no action : name : " + player.getName() + ", action : " + type);
 		}
 		MahjongAction action = null;
 		List<MahjongAction> actionList = mWaitList[player].mActionList;

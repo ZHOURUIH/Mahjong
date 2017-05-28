@@ -15,6 +15,7 @@ public class GameFramework : MonoBehaviour
 {
 	public static GameFramework		instance			= null;
 	protected GameObject            mGameFrameObject    = null;
+	protected ApplicationConfig		mApplicationConfig	= null;
 	protected GameConfig			mGameConfig			= null;
 	protected GameUtility			mGameUtility		= null;
 	protected BinaryUtility			mBinaryUtility		= null;
@@ -45,6 +46,7 @@ public class GameFramework : MonoBehaviour
 		Screen.SetResolution(1920, 1080, true);
 		instance = this;
 		mGameFrameObject = this.transform.gameObject;
+		mApplicationConfig = new ApplicationConfig();
 		mGameConfig = new GameConfig();
 		mGameUtility = new GameUtility();
 		mBinaryUtility = new BinaryUtility();
@@ -73,6 +75,12 @@ public class GameFramework : MonoBehaviour
 		// 所有类都构造完成后通知GameBase
 		GameBase.notifyConstructDone();
 
+		// 必须先初始化配置文件
+		mApplicationConfig.init();
+		int width = (int)mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SCREEN_WIDTH);
+		int height = (int)mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SCREEN_HEIGHT);
+		bool fullscreen = (int)mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_FULL_SCREEN) != 0;
+		Screen.SetResolution(width, height, fullscreen);
 		mGameConfig.init();
 		mResourcesManager.init();
 		mShaderManager.init();
@@ -150,6 +158,7 @@ public class GameFramework : MonoBehaviour
 		mCameraManager.destroy();
 		mResourcesManager.destroy();
 		mMaterialManager.destroy();
+		mApplicationConfig.destory();
 		mLayoutPrefabManager = null;
 		mMahjongSystem = null;
 		mGameConfig = null;
@@ -173,6 +182,7 @@ public class GameFramework : MonoBehaviour
 		mCameraManager = null;
 		mResourcesManager = null;
 		mMaterialManager = null;
+		mApplicationConfig = null;
 	}
 	public void stop()
 	{

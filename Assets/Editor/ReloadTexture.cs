@@ -8,6 +8,7 @@ public class ReloadTexture
 	[MenuItem("Reload/Texture")]
 	static public void reloadDitherTexture()
 	{
+		Dither.generateDitherList();
 		List<string> reloadList = Dither.getDitherList();
 		string prePath = CommonDefine.A_RESOURCE_PATH + "Texture/TextureAnim/";
 		int pathCount = reloadList.Count;
@@ -15,6 +16,7 @@ public class ReloadTexture
 		{
 			reloadPath(prePath + reloadList[i] + "/");
 		}
+		Dither.clearDitherList();
 	}
 	//----------------------------------------------------------------------------------------------------------------------------
 	static protected void reloadPath(string path)

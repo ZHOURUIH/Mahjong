@@ -6,42 +6,47 @@ using System.Collections.Generic;
 public class Dither
 {
 	static protected List<string> mDitherList;
+	static public void generateDitherList()
+	{
+		mDitherList = new List<string>();
+		mDitherList.Add("Amazing");
+		mDitherList.Add("AtmosphereLight");
+		mDitherList.Add("AttackBlue1");
+		mDitherList.Add("AttackBlue2");
+		mDitherList.Add("AttackBlue3");
+		mDitherList.Add("AttackGreen1");
+		mDitherList.Add("AttackGreen2");
+		mDitherList.Add("AttackGreen3");
+		mDitherList.Add("AttackRed1");
+		mDitherList.Add("AttackRed2");
+		mDitherList.Add("AttackRed3");
+		mDitherList.Add("AttackYellow1");
+		mDitherList.Add("AttackYellow2");
+		mDitherList.Add("AttackYellow3");
+		mDitherList.Add("Cool");
+		mDitherList.Add("Crazy");
+		mDitherList.Add("CompletelyMatch");
+		mDitherList.Add("DataItem");
+		mDitherList.Add("Excellent");
+		mDitherList.Add("Great");
+		mDitherList.Add("HeartRateBackground");
+		mDitherList.Add("HeartRateCoachShow");
+		mDitherList.Add("Smoke");
+		mDitherList.Add("SpeedLevelMark0");
+		mDitherList.Add("SpeedLevelMark1");
+		mDitherList.Add("SpeedLevelMark2");
+		mDitherList.Add("SpeedLevelMark3");
+		mDitherList.Add("SprintLight");
+		mDitherList.Add("SwitchVideo");
+		mDitherList.Add("UphillWing");
+	}
+	static public void clearDitherList()
+	{
+		mDitherList.Clear();
+		mDitherList = null;
+	}
 	static public List<string> getDitherList()
 	{
-		if (mDitherList == null)
-		{
-			mDitherList = new List<string>();
-			mDitherList.Add("Amazing");
-			mDitherList.Add("AtmosphereLight");
-			mDitherList.Add("AttackBlue1");
-			mDitherList.Add("AttackBlue2");
-			mDitherList.Add("AttackBlue3");
-			mDitherList.Add("AttackGreen1");
-			mDitherList.Add("AttackGreen2");
-			mDitherList.Add("AttackGreen3");
-			mDitherList.Add("AttackRed1");
-			mDitherList.Add("AttackRed2");
-			mDitherList.Add("AttackRed3");
-			mDitherList.Add("AttackYellow1");
-			mDitherList.Add("AttackYellow2");
-			mDitherList.Add("AttackYellow3");
-			mDitherList.Add("Cool");
-			mDitherList.Add("Crazy");
-			mDitherList.Add("CompletelyMatch");
-			mDitherList.Add("DataItem");
-			mDitherList.Add("Excellent");
-			mDitherList.Add("Great");
-			mDitherList.Add("HeartRateBackground");
-			mDitherList.Add("HeartRateCoachShow");
-			mDitherList.Add("Smoke");
-			mDitherList.Add("SpeedLevelMark0");
-			mDitherList.Add("SpeedLevelMark1");
-			mDitherList.Add("SpeedLevelMark2");
-			mDitherList.Add("SpeedLevelMark3");
-			mDitherList.Add("SprintLight");
-			mDitherList.Add("SwitchVideo");
-			mDitherList.Add("UphillWing");
-		}
 		return mDitherList;
 	}
 	static public bool isDither(string textureName)

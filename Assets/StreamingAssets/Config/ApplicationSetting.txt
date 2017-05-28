@@ -1,34 +1,19 @@
-// ×¢Òâ
-// ¸ÃÎÄ¼þÖÐ¿ÉÊ¹ÓÃË«Ð±¸ÜÀ´¶Ôµ¥ÐÐ½øÐÐ×¢ÊÍ
-// ¿ÉÒÔÌí¼ÓÈÎÒâµÄ»»ÐÐºÍ¿Õ¸ñ
-// ±äÁ¿ÃüÃûÓ¦Óë´úÂëÖÐÃ¶¾ÙÃüÃûÏàÍ¬
+ï»¿// æ³¨æ„
+// è¯¥æ–‡ä»¶ä¸­å¯ä½¿ç”¨åŒæ–œæ æ¥å¯¹å•è¡Œè¿›è¡Œæ³¨é‡Š
+// å¯ä»¥æ·»åŠ ä»»æ„çš„æ¢è¡Œå’Œç©ºæ ¼
+// å˜é‡å‘½ååº”ä¸Žä»£ç ä¸­æžšä¸¾å‘½åç›¸åŒ
 
-// ÊÇ·ñÈ«ÆÁÏÔÊ¾,0Îª²»È«ÆÁ,1ÎªÈ«ÆÁ,2ÎªÎÞ±ß¿ò´°¿Ú,Èç¹ûÈ«ÆÁÏÔÊ¾,ÔòÄ¬ÈÏÎª×î´ó·Ö±æÂÊ
-AS_FULL_SCREEN = 0
+// æ˜¯å¦å…¨å±æ˜¾ç¤º,0ä¸ºä¸å…¨å±,1ä¸ºå…¨å±
+GDF_FULL_SCREEN = 1
 
-// ´°¿Ú¿í¶È
-AS_WINDOW_WIDTH = 1920
+// çª—å£å®½åº¦
+GDF_SCREEN_WIDTH = 1920
 
-// ´°¿Ú¸ß¶È
-AS_WINDOW_HEIGHT = 1080
+// çª—å£é«˜åº¦
+GDF_SCREEN_HEIGHT = 1080
 
-// ÊÇ·ñËøÖ¡
-AS_LOCK_FRAME = 1
+// æ˜¯å¦å°†æ¯å¸§çš„æ—¶é—´å›ºå®šä¸‹æ¥
+GDF_USE_FIXED_TIME = 0
 
-// Ëø¶¨µÄ×î´óÖ¡ÂÊ
-AS_MAX_FRAME = 100
-
-// ÑÕÉ«Î»Êý
-AS_COLOUR_BITS = 32
-
-// ÊÇ·ñ½«Ã¿Ö¡µÄÊ±¼ä¹Ì¶¨ÏÂÀ´
-AS_USE_FIXED_TIME = 0
-
-// Ã¿Ö¡µÄ¹Ì¶¨Ê±¼ä,µ¥Î»Ãë
-AS_FIXED_TIME = 0.015
-
-// µ±²»Ê¹ÓÃ¹Ì¶¨Ê±¼äÊ±,Ã¿Ö¡Ê±¼äµÄÉÏÏÞ,µ¥Î»Ãë
-AS_MAX_FRAME_TIME = 0.15
-
-// ´¹Ö±Í¬²½
-AS_VERTICLE_SYNC = 0
+// æ¯å¸§çš„å›ºå®šæ—¶é—´,å•ä½ç§’
+GDF_FIXED_TIME = 0.015

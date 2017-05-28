@@ -125,17 +125,34 @@ public enum PROCEDURE_TYPE
 // 游戏中的公共变量定义
 public enum GAME_DEFINE_FLOAT
 {
+	GDF_NONE,
+	// 应用程序配置参数
+	GDF_APPLICATION_MIN,
+	GDF_FULL_SCREEN,				// 是否全屏
+	GDF_SCREEN_WIDTH,				// 分辨率的宽
+	GDF_SCREEN_HEIGHT,				// 分辨率的高
+	GDF_USE_FIXED_TIME,				// 是否将每帧的时间固定下来
+	GDF_FIXED_TIME,					// 每帧的固定时间,单位秒
+	GDF_APPLICATION_MAX,
+
+	GDF_GAME_MIN,
 	GDF_HTTP_PORT,					// http端口
 	GDF_SOCKET_PORT,				// socket端口
 	GDF_BROADCAST_PORT,				// 广播端口
 	GDF_SHOW_COMMAND_DEBUG_INFO,    // 是否输出显示命令调试信息,0为不显示,1为显示
 	GDF_LOAD_RESOURCES,             // -1表示优先从AssetBundle加载,找不到再去Resources加载,0表示从AssetBundle加载,1表示从Resources加载
 	GDF_LOAD_ASYNC,					// 是否异步加载,0表示同步,1表示异步
-	GDF_MAX,
+	GDF_GAME_MAX,
 };
 public enum GAME_DEFINE_STRING
 {
-	GDS_MAX,
+	GDS_NONE,
+	// 应用程序配置参数
+	GDS_APPLICATION_MIN,
+	GDS_APPLICATION_MAX,
+
+	GDS_GAME_MIN,
+	GDS_GAME_MAX,
 };
 // 组件属性的类型
 public enum PROPERTY_TYPE

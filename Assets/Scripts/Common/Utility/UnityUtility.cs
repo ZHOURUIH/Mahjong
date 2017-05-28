@@ -24,6 +24,11 @@ public class UnityUtility : GameBase
 	{
 		Debug.Log(info);
 	}
+	public static string getTime()
+	{
+		DateTime time = DateTime.Now;
+		return time.Hour + ":" + time.Minute + ":" + time.Second + ":" + time.Millisecond;
+	}
 	public static void messageBox(string info, bool errorOrInfo)
 	{
 		string title = errorOrInfo ? "错误" : "提示";

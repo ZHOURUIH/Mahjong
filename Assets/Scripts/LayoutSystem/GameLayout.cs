@@ -225,6 +225,10 @@ public class GameLayout : MonoBehaviour
 			{
 				parentObj = info.mParent.mObject;
 			}
+			if(parentObj == null)
+			{
+				parentObj = mScript.getRoot().mObject;
+			}
 			GameObject gameObject = UnityUtility.getGameObject(parentObj, info.mName);
 			if (gameObject == null)
 			{

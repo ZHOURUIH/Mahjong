@@ -52,12 +52,15 @@ public class Dither
 	static public bool isDither(string textureName)
 	{
 		List<string> ditherList = getDitherList();
-		int listSize = ditherList.Count;
-		for (int i = 0; i < listSize; ++i)
+		if(ditherList != null)
 		{
-			if (textureName.Contains(ditherList[i]))
+			int listSize = ditherList.Count;
+			for (int i = 0; i < listSize; ++i)
 			{
-				return true;
+				if (textureName.Contains(ditherList[i]))
+				{
+					return true;
+				}
 			}
 		}
 		return false;

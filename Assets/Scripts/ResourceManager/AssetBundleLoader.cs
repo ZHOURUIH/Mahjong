@@ -256,10 +256,16 @@ public class AssetBundleLoader : MonoBehaviour
 			return;
 		}
 		mBundleRequestList.Add(bundleInfo, false);
-		StartCoroutine(loadAssetBundleCoroutine(bundleInfo));
+
+#if UNITY_EDITOR || UNITY_STANDALONE_WIN || UNITY_IPHONE || UNITY_IOS
+		bool loadFromWWW = false;
+#elif UNITY_ANDROID
+		bool loadFromWWW = true;
+#endif
+		StartCoroutine(loadAssetBundleCoroutine(bundleInfo, loadFromWWW));
 	}
 	//-----------------------------------------------------------------------------------------------
-	protected IEnumerator loadAssetBundleCoroutine(AssetBundleInfo bundleInfo, bool loadFromWWW = false)
+	protected IEnumerator loadAssetBundleCoroutine(AssetBundleInfo bundleInfo, bool loadFromWWW)
 	{
 		// 先确保依赖项全部已经加载完成,才能开始加载当前请求的资源包
 		// 异步加载所有未加载的依赖项

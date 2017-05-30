@@ -5,7 +5,10 @@ using System.Collections.Generic;
 public class SCLoginRet : SocketPacket
 {
 	protected byte mLoginRet;  // -1表示已经在其他地方登陆,0表示账号密码错误,1表示登陆成功
-	protected int mRetGUID;		// 登录成功后返回的玩家的guid
+	protected byte[] mName = new byte[16];
+	protected int mMoney;
+	protected short mHead;
+	protected int mGUID;
 	public SCLoginRet(PACKET_TYPE type)
 		:
 		base(type)
@@ -16,20 +19,38 @@ public class SCLoginRet : SocketPacket
 	{
 		int index = 0;
 		mLoginRet = BinaryUtility.readByte(data, ref index);
-		mRetGUID = BinaryUtility.readInt(data, ref index);
+		BinaryUtility.readBytes(data, ref index, -1, mName, -1, -1);
+		mMoney = BinaryUtility.readInt(data, ref index);
+		mHead = BinaryUtility.readShort(data, ref index);
+		mGUID = BinaryUtility.readInt(data, ref index);
 	}
 	public override void write(byte[] data)
 	{
 		int index = 0;
 		BinaryUtility.writeByte(data, ref index, mLoginRet);
-		BinaryUtility.writeInt(data, ref index, mRetGUID);
+		BinaryUtility.writeBytes(data, ref index, -1, mName, -1, -1);
+		BinaryUtility.writeInt(data, ref index, mMoney);
+		BinaryUtility.writeShort(data, ref index, mHead);
+		BinaryUtility.writeInt(data, ref index, mGUID);
 	}
 	public override int getSize()
 	{
-		return sizeof(byte) + sizeof(int);
+		return sizeof(byte) + mName.Length * sizeof(byte) + sizeof(int) + sizeof(short) + sizeof(int);
 	}
 	public override void execute()
 	{
+		// 创建玩家
+		CommandCharacterManagerCreateCharacter cmdCreate = new CommandCharacterManagerCreateCharacter();
+		cmdCreate.mCharacterType = CHARACTER_TYPE.CT_MYSELF;
+		cmdCreate.mName = BinaryUtility.byteArrayToString(mName);
+		mCommandSystem.pushCommand(cmdCreate, mCharacterManager);
+		// 设置角色数据
+		CharacterMyself myself = cmdCreate.mResultCharacter as CharacterMyself;
+		CharacterData data = myself.getCharacterData();
+		data.mGUID = mGUID;
+		data.mMoney = mMoney;
+		data.mHead = mHead;
+
 		CommandGameSceneChangeProcedure cmd = new CommandGameSceneChangeProcedure();
 		cmd.mProcedure = PROCEDURE_TYPE.PT_START_EXIT;
 		mCommandSystem.pushCommand(cmd, mGameSceneManager.getCurScene());

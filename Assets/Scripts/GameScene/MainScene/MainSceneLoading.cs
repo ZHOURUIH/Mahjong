@@ -75,16 +75,5 @@ public class MainSceneLoading : SceneProcedure
 		CommandGameSceneChangeProcedure cmd = new CommandGameSceneChangeProcedure(true, true);
 		cmd.mProcedure = PROCEDURE_TYPE.PT_MAIN_RUNNING;
 		mCommandSystem.pushDelayCommand(cmd, mGameScene);
-
-		// 创建玩家自己
-		CommandCharacterManagerCreateCharacter cmdCreate = new CommandCharacterManagerCreateCharacter();
-		cmdCreate.mCharacterType = CHARACTER_TYPE.CT_MYSELF;
-		cmdCreate.mName = "自己";
-		mCommandSystem.pushCommand(cmdCreate, mCharacterManager);
-		CharacterMyself myself = cmdCreate.mResultCharacter as CharacterMyself;
-		CharacterData data = myself.getCharacterData();
-		data.mGUID = 0;
-		data.mMoney = 100;
-		data.mHead = 0;
 	}
 }

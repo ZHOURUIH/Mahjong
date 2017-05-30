@@ -16,6 +16,15 @@ public class MainSceneRunning : SceneProcedure
 		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_CHARACTER);
 		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_BILLBOARD);
 		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_ROOM_MENU);
+
+		// 显示角色信息
+		CharacterMyself myself = mCharacterManager.getMyself();
+		if (myself != null)
+		{
+			CharacterData data = myself.getCharacterData();
+			ScriptCharacter scriptChar = mLayoutManager.getScript(LAYOUT_TYPE.LT_CHARACTER) as ScriptCharacter;
+			scriptChar.setCharacterInfo(data.mHead, data.mName, data.mGUID, data.mMoney);
+		}
 	}
 	protected override void onUpdate(float elapsedTime)
 	{

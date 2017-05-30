@@ -387,6 +387,16 @@ public class BinaryUtility : GameBase
 	}
 	public static string byteArrayToString(byte[] array)
 	{
-		return System.BitConverter.ToString(array);
+		string str = "";
+		int arrayLen = array.Length;
+		for(int i = 0; i < arrayLen; ++i)
+		{
+			if(array[i] == 0)
+			{
+				break;
+			}
+			str += (char)array[i];
+		}
+		return str;
 	}
 }

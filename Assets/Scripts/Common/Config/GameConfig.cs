@@ -17,11 +17,9 @@ public class GameConfig : ConfigBase
 	protected override void addFloat()
 	{
 		addFloatParam(GAME_DEFINE_FLOAT.GDF_HTTP_PORT);
-		addFloatParam(GAME_DEFINE_FLOAT.GDF_SOCKET_PORT);
-		addFloatParam(GAME_DEFINE_FLOAT.GDF_BROADCAST_PORT);
+		addFloatParam(GAME_DEFINE_FLOAT.GDF_SOCKET_TCP_PORT);
 		addFloatParam(GAME_DEFINE_FLOAT.GDF_LOAD_RESOURCES);
 		addFloatParam(GAME_DEFINE_FLOAT.GDF_SHOW_COMMAND_DEBUG_INFO);
-		addFloatParam(GAME_DEFINE_FLOAT.GDF_LOAD_ASYNC);
 		if (mFloatNameToDefine.Count != (int)GAME_DEFINE_FLOAT.GDF_GAME_MAX - (int)GAME_DEFINE_FLOAT.GDF_GAME_MIN - 1)
 		{
 			UnityUtility.logError("not all float parameter added!");
@@ -29,6 +27,9 @@ public class GameConfig : ConfigBase
 	}
 	protected override void addString()
 	{
+		addStringParam(GAME_DEFINE_STRING.GDS_TCP_SERVER_IP);
+		addStringParam(GAME_DEFINE_STRING.GDS_ACCOUNT);
+		addStringParam(GAME_DEFINE_STRING.GDS_PASSWORD);
 		if (mStringNameToDefine.Count != (int)GAME_DEFINE_STRING.GDS_GAME_MAX - (int)GAME_DEFINE_STRING.GDS_GAME_MIN - 1)
 		{
 			UnityUtility.logError("not all string parameter added!");

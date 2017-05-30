@@ -43,9 +43,13 @@ public class ScriptStart : LayoutScript
 	//---------------------------------------------------------------------------------------------------------------------
 	protected void onStartButtonClick(txUIButton obj)
 	{
-		CommandGameSceneChangeProcedure cmd = new CommandGameSceneChangeProcedure();
-		cmd.mProcedure = PROCEDURE_TYPE.PT_START_EXIT;
-		mCommandSystem.pushCommand(cmd, mGameSceneManager.getCurScene());
+		//CommandGameSceneChangeProcedure cmd = new CommandGameSceneChangeProcedure();
+		//cmd.mProcedure = PROCEDURE_TYPE.PT_START_EXIT;
+		//mCommandSystem.pushCommand(cmd, mGameSceneManager.getCurScene());
+		CSLogin login = mSocketNetManager.createPacket(PACKET_TYPE.PT_CS_LOGIN) as CSLogin;
+		login.setAccount(mGameConfig.getStringParam(GAME_DEFINE_STRING.GDS_ACCOUNT));
+		login.setPassword(mGameConfig.getStringParam(GAME_DEFINE_STRING.GDS_PASSWORD));
+		mSocketNetManager.sendMessage(login);
 	}
 	protected void onStartPress(txUIButton obj, bool press)
 	{

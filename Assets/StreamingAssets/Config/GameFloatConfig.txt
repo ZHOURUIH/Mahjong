@@ -1,55 +1,16 @@
-// ×¢Òâ
-// ¸ÃÎÄ¼þÖÐ¿ÉÊ¹ÓÃË«Ð±¸ÜÀ´¶Ôµ¥ÐÐ½øÐÐ×¢ÊÍ
-// ¿ÉÒÔÌí¼ÓÈÎÒâµÄ»»ÐÐºÍ¿Õ¸ñ
-// ±äÁ¿ÃüÃûÓ¦Óë´úÂëÖÐÃ¶¾ÙÃüÃûÏàÍ¬
+ï»¿// æ³¨æ„
+// è¯¥æ–‡ä»¶ä¸­å¯ä½¿ç”¨åŒæ–œæ æ¥å¯¹å•è¡Œè¿›è¡Œæ³¨é‡Š
+// å¯ä»¥æ·»åŠ ä»»æ„çš„æ¢è¡Œå’Œç©ºæ ¼
+// å˜é‡å‘½ååº”ä¸Žä»£ç ä¸­æžšä¸¾å‘½åç›¸åŒ
 
-// ³¬Ê±Î´²Ù×÷Ìß³öÍæ¼ÒµÄÊ±ÏÞ					
-GDF_KICK_OUT_TIME = 5.0
-
-// ÓÎÏ·¿ªÊ¼µ¹¼ÆÊ±			
-GDF_RUNNING_COUNT_DOWN = 4.0
-
-// http¶Ë¿Ú
+// httpç«¯å£
 GDF_HTTP_PORT = 8080
 
-// socket¶Ë¿Ú
-GDF_SOCKET_PORT = 60060
+// socketç«¯å£
+GDF_SOCKET_TCP_PORT = 60777
 
-// ¹ã²¥¶Ë¿Ú
-GDF_BROADCAST_PORT = 5000
-
-// ³µÂÖ×ªµÄÈ¦Êý
-GDF_CIRCLE_COUNT = 0.4
-
-// ½ÌÁ·µÄ³¬Ê±Ìß³öÊ±¼ä
-GDF_COACH_KICK_OUT_TIME = 60.0
-
-// È«²¿Æ¥ÅäµÄ³ÖÐøÊ±¼ä,µ±´ïµ½Õâ¸ö³ÖÐøÊ±¼äÊ±²Å»á³öÏÖÈ«²¿Æ¥Åä×ÖÑù
-GDF_ALL_MATCH_MAX_LAST_TIME = 1.0
-
-// ÊÇ·ñÊä³öÏÔÊ¾ÃüÁîµ÷ÊÔÐÅÏ¢,0Îª²»ÏÔÊ¾,1ÎªÏÔÊ¾
+// æ˜¯å¦è¾“å‡ºæ˜¾ç¤ºå‘½ä»¤è°ƒè¯•ä¿¡æ¯,0ä¸ºä¸æ˜¾ç¤º,1ä¸ºæ˜¾ç¤º
 GDF_SHOW_COMMAND_DEBUG_INFO = 1
 
-// ×èÁ¦°üµÄ·¢ËÍ¼ä¸ô
-GDF_SEND_FRICTION_INTERVAL = 0.5
-
-// Ó²¼þËÙ¶È¸Ä±äµÄ×îÐ¡ËÙ¶È²î,µ±ËÙ¶È²îÐ¡ÓÚ¸ÃÖµÊ±,Ö±½ÓÉèÖÃÎªÓ²¼þËÙ¶ÈÖµ,´óÓÚÊ±,ÔòÏòÓ²¼þËÙ¶ÈÖð½¥±ä»¯
-GDF_MIN_DELTA_SPEED = 0.1
-
-// ËÙ¶È±ä»¯µÄ¹Ì¶¨Ê±¼ä
-GDF_SPEED_ELAPSED_TIME = 0.5
-
-// ÊÇ·ñ¶ÁÈ¡¹¦ÂÊÀ´¼ÆËãËÙ¶È,²»Îª0Ôò¶ÁÈ¡ËÙ¶È°üÖÐµÄ¹¦ÂÊ×Ö½Ú,Îª0Ôò¶ÁÈ¡ËÙ¶È×Ö½Ú
-GDF_READ_POWER = 1
-
-// ÓÎÏ·ÕûÌåÒôÁ¿
-GDF_VOLUMN = 0.7
-
-// Æ¥ÅäÄ£Ê½ÏÂ¼ÆÊ±Æ÷Ðý×ªÒ»È¦µÄÊ±¼ä
-GDF_TIMER_CIRCLE_TIME_COMBAT = 10
-
-// Ä¬ÈÏ×èÁ¦Öµ
-GDF_DEFAULT_FRICTION = 1
-
-// 0±íÊ¾´ÓResources¼ÓÔØ,1±íÊ¾´ÓAssetBundle¼ÓÔØ
+// 0è¡¨ç¤ºä»ŽResourcesåŠ è½½,1è¡¨ç¤ºä»ŽAssetBundleåŠ è½½
 GDF_LOAD_RESOURCES = 1

@@ -15,9 +15,12 @@ public class UnityUtility : GameBase
 		mForeEffectCamera = mCameraManager.getCamera("UIForeEffectCamera");
 		mBackEffectCamera = mCameraManager.getCamera("UIBackEffectCamera");
 	}
-	public static void logError(string info)
+	public static void logError(string info, bool isMainThread = true)
 	{
-		messageBox(info, true);
+		if(isMainThread)
+		{
+			messageBox(info, true);
+		}
 		Debug.LogError("error : " + info);
 	}
 	public static void logInfo(string info)

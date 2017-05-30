@@ -1,33 +1,13 @@
-// ×¢Òâ
-// ¸ÃÎÄ¼þÖÐ¿ÉÊ¹ÓÃË«Ð±¸ÜÀ´¶Ôµ¥ÐÐ½øÐÐ×¢ÊÍ
-// ¿ÉÒÔÌí¼ÓÈÎÒâµÄ»»ÐÐºÍ¿Õ¸ñ
-// ±äÁ¿ÃüÃûÓ¦Óë´úÂëÖÐÃ¶¾ÙÃüÃûÏàÍ¬
+ï»¿// æ³¨æ„
+// è¯¥æ–‡ä»¶ä¸­å¯ä½¿ç”¨åŒæ–œæ æ¥å¯¹å•è¡Œè¿›è¡Œæ³¨é‡Š
+// å¯ä»¥æ·»åŠ ä»»æ„çš„æ¢è¡Œå’Œç©ºæ ¼
+// å˜é‡å‘½ååº”ä¸Žä»£ç ä¸­æžšä¸¾å‘½åç›¸åŒ
 
-// ÊÓÆµ²¥·ÅËÙ¶ÈµÄ¼ÆËã¹«Ê½,ÆäÖÐÊ¹ÓÃiÀ´´úÌæÊµ¼ÊËÙ¶È
-GDS_REAL_SPEED_TO_VIDEO_SPEED = -0.003 * i * i + 0.1765 * i + 0.5
+// æœåŠ¡å™¨IP
+GDS_TCP_SERVER_IP = 127.0.0.1
 
-// Ó²¼þËÙ¶È×ª»»ÎªÊµ¼ÊËÙ¶È,ÆäÖÐÊ¹ÓÃiÀ´´úÌæÓ²¼þËÙ¶È
-GDS_HARDWARE_SPEED_TO_REAL_SPEED = 478 / (450 - i)
+// è´¦å·
+GDS_ACCOUNT = zhourui
 
-// Êµ¼ÊËÙ¶È×ª»»ÎªÓ²¼þËÙ¶È,ÆäÖÐÊ¹ÓÃiÀ´´úÌæÊµ¼ÊËÙ¶È
-GDS_REAL_SPEED_TO_HARDWARE_SPEED = 450 - 478 / i
-
-// ·¢ËÍµ½ÍøÒ³µÄÊÓÆµÁÐ±íÖÐÐèÒªºöÂÔµÄÊÓÆµÃû,¿ÉÐ´¶à¸öÊÓÆµÃû,ÖÐ¼äÓÃ¶ººÅ¸ô¿ª
-GDS_IGNORE_VIDEO = LogoVideo.mp4
-
-// ¸÷¸öËÙ¶ÈµÈ¼¶ÏÂ¼ÆÊ±Æ÷Ðý×ªÒ»È¦µÄÊ±¼ä,µ¥Î»Ãë
-GDS_TIMER_CIRCLE_TIME_MATCH = 120, 60, 30, 15
-
-// ¸÷¸öËÙ¶ÈµÈ¼¶µÄËÙ¶ÈÇø¼ä,µÚÒ»ËÙ¶ÈÇø¼äÎªµÚ0¸öÊý×Öµ½µÚ1¸öÊý×ÖÖ®¼ä,ºóÃæÒÀ´Î
-GDS_SPEED_LEVEL_RANGE = 45, 67, 90
-
-// ×éÒ»»úÆ÷ºÅ
-GDS_TEAM_MACHINE_ONE = 2,3,4,5,6
-// ×é¶þ»úÆ÷ºÅ
-GDS_TEAM_MACHINE_TWO = 7,8,9,10,11 
-
-// ×éÒ»»úÆ÷ºÅ
-GDS_COACH_MACHINE_ONE = 0
-
-// µÚÒ»¸ö²¥·ÅµÄÊÓÆµ
-GDS_FIRST_VIDEO = 1.mp4
+// å¯†ç 
+GDS_PASSWORD = 1234567

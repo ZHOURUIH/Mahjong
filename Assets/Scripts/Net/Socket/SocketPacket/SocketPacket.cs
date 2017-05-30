@@ -3,21 +3,23 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 
-public class SocketPacket : GameBase
+public abstract class SocketPacket : GameBase
 {
-	public SocketPacket(SOCKET_PACKET type, int dataCount)
+	protected PACKET_TYPE mType;
+	public SocketPacket()
+	{
+		;
+	}
+	public SocketPacket(PACKET_TYPE type)
 	{
 		mType = type;
-		mDataCount = dataCount;
 	}
-	public virtual void fillData() { }
-	public virtual void readData(byte[] data, int dataSize) { }
-	public SOCKET_PACKET getPacketType() { return mType; }
-	public byte[] getData() { return mData; }
-	public int getSize() { return mDataCount; }
+	public PACKET_TYPE getPacketType() { return mType; }
+	// 如果是服务器向客户端发送的消息,则需要重写该函数
 	public virtual void execute() { }
-
-	protected SOCKET_PACKET mType;
-	protected byte[] mData;
-	protected int mDataCount;
+	// 从data中读取消息参数
+	public abstract void read(byte[] data);
+	// 将消息参数写入data
+	public abstract void write(byte[] data);
+	public abstract int getSize();
 }

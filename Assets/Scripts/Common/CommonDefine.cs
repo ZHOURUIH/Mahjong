@@ -137,11 +137,9 @@ public enum GAME_DEFINE_FLOAT
 
 	GDF_GAME_MIN,
 	GDF_HTTP_PORT,					// http端口
-	GDF_SOCKET_PORT,				// socket端口
-	GDF_BROADCAST_PORT,				// 广播端口
+	GDF_SOCKET_TCP_PORT,			// socket端口
 	GDF_SHOW_COMMAND_DEBUG_INFO,    // 是否输出显示命令调试信息,0为不显示,1为显示
 	GDF_LOAD_RESOURCES,             // -1表示优先从AssetBundle加载,找不到再去Resources加载,0表示从AssetBundle加载,1表示从Resources加载
-	GDF_LOAD_ASYNC,					// 是否异步加载,0表示同步,1表示异步
 	GDF_GAME_MAX,
 };
 public enum GAME_DEFINE_STRING
@@ -152,6 +150,9 @@ public enum GAME_DEFINE_STRING
 	GDS_APPLICATION_MAX,
 
 	GDS_GAME_MIN,
+	GDS_TCP_SERVER_IP,
+	GDS_ACCOUNT,
+	GDS_PASSWORD,
 	GDS_GAME_MAX,
 };
 // 组件属性的类型
@@ -178,12 +179,30 @@ public enum SOUND_OWNER
 	SO_CHARACTER,
 };
 // 作为客户端时接收以及发送的类型
-public enum SOCKET_PACKET
+public enum PACKET_TYPE
 {
-	SP_CARD_DATA,
-	SP_FRICTION,
-	SP_FRICTION_RET,
-	SP_MAX,
+	PT_MIN,
+	// CS表示Client->Server
+	PT_CS_MIN = 10000,
+	PT_CS_HEART_BEAT,                       // 客户端向服务器发送的心跳
+	PT_CS_REGISTER,                         // 客户端向服务器发送注册账号
+	PT_CS_LOGIN,                            // 客户端向服务器发送登录请求
+	PT_CS_CHECK_NAME,                       // 客户端向服务器请求判断名字是否已经存在
+	PT_CS_CHECK_ACCOUNT,                    // 客户端向服务器请求判断账号是否已经存在
+	PT_CS_MAX,
+
+	// SC表示Server->Client
+	PT_SC_MIN = 20000,
+	PT_SC_HEART_BEAT_RET,                   // 服务器向客户端发回的心跳结果
+	PT_SC_START_GAME,                       // 服务器向客户端发送的可以开始游戏的消息
+	PT_SC_REGISTER_RET,                     // 服务器向客户端发回的注册账号的结果
+	PT_SC_LOGIN_RET,                        // 服务器向客户端发回的登录结果	
+	PT_SC_PLAYER_OFFLINE,                   // 服务器通知客户端有玩家掉线
+	PT_SC_CHECK_NAME,                       // 服务器向客户端返回的检测名字的结果
+	PT_SC_CHECK_ACCOUNT,                    // 服务器向客户端返回的检测账号的结果
+	PT_SC_MAX,
+
+	PT_MAX,
 };
 // HTTP协议消息包类型
 public enum HTTP_PACKET

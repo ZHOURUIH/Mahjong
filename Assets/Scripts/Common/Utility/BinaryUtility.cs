@@ -38,7 +38,7 @@ public class BinaryUtility : GameBase
 		char byte0 = (char)(0xff & buffer[curIndex++]);
 		return byte0;
 	}
-	public static short readShort(byte[] buffer, ref int curIndex)
+	public static short readShort(byte[] buffer, ref int curIndex, bool inverse = false)
 	{
 		if (buffer.Length < 2)
 		{
@@ -46,10 +46,18 @@ public class BinaryUtility : GameBase
 		}
 		int byte0 = (int)(0xff & buffer[curIndex++]);
 		int byte1 = (int)(0xff & buffer[curIndex++]);
-		short finalValue = (short)((byte1 << (8 * 1)) | (byte0 << (8 * 0)));
-		return finalValue;
+		if(inverse)
+		{
+			short finalValue = (short)((byte1 << (8 * 0)) | (byte0 << (8 * 1)));
+			return finalValue;
+		}
+		else
+		{
+			short finalValue = (short)((byte1 << (8 * 1)) | (byte0 << (8 * 0)));
+			return finalValue;
+		}
 	}
-	public static int readInt(byte[] buffer, ref int curIndex)
+	public static int readInt(byte[] buffer, ref int curIndex, bool inverse = false)
 	{
 		if (buffer.Length < 4)
 		{
@@ -59,29 +67,84 @@ public class BinaryUtility : GameBase
 		int byte1 = (int)(0xff & buffer[curIndex++]);
 		int byte2 = (int)(0xff & buffer[curIndex++]);
 		int byte3 = (int)(0xff & buffer[curIndex++]);
-		int finalInt = (int)((byte3 << (8 * 3)) | (byte2 << (8 * 2)) | (byte1 << (8 * 1)) | (byte0 << (8 * 0)));
-		return finalInt;
+		if (inverse)
+		{
+			int finalInt = (int)((byte3 << (8 * 0)) | (byte2 << (8 * 1)) | (byte1 << (8 * 2)) | (byte0 << (8 * 3)));
+			return finalInt;
+		}
+		else
+		{
+			int finalInt = (int)((byte3 << (8 * 3)) | (byte2 << (8 * 2)) | (byte1 << (8 * 1)) | (byte0 << (8 * 0)));
+			return finalInt;
+		}
 	}
-	public static float readFloat(byte[] buffer, ref int curIndex)
+	public static float readFloat(byte[] buffer, ref int curIndex, bool inverse = false)
 	{
 		if (buffer.Length < 4)
 		{
 			return 0.0f;
 		}
 		byte[] floatBuffer = new byte[4];
-		floatBuffer[0] = buffer[curIndex++];
-		floatBuffer[1] = buffer[curIndex++];
-		floatBuffer[2] = buffer[curIndex++];
-		floatBuffer[3] = buffer[curIndex++];
+		if(inverse)
+		{
+			floatBuffer[3] = buffer[curIndex++];
+			floatBuffer[2] = buffer[curIndex++];
+			floatBuffer[1] = buffer[curIndex++];
+			floatBuffer[0] = buffer[curIndex++];
+		}
+		else
+		{
+			floatBuffer[0] = buffer[curIndex++];
+			floatBuffer[1] = buffer[curIndex++];
+			floatBuffer[2] = buffer[curIndex++];
+			floatBuffer[3] = buffer[curIndex++];
+		}
 		return System.BitConverter.ToSingle(floatBuffer, 0);
 	}
 	public static bool readBytes(byte[] buffer, ref int index, int bufferSize, byte[] destBuffer, int destBufferSize, int readSize)
 	{
+		if (bufferSize == -1)
+		{
+			bufferSize = buffer.Length;
+		}
+		if (destBufferSize == -1)
+		{
+			destBufferSize = destBuffer.Length;
+		}
+		if (readSize == -1)
+		{
+			readSize = destBuffer.Length;
+		}
 		if (destBufferSize < readSize || readSize + index > bufferSize)
 		{
 			return false;
 		}
 		Array.Copy(buffer, index, destBuffer, 0, readSize);
+		index += readSize;
+		return true;
+	}
+	public static bool readChars(byte[] buffer, ref int index, int bufferSize, char[] destBuffer, int destBufferSize, int readSize)
+	{
+		if(bufferSize == -1)
+		{
+			bufferSize = buffer.Length;
+		}
+		if(destBufferSize == -1)
+		{
+			destBufferSize = destBuffer.Length;
+		}
+		if(readSize == -1)
+		{
+			readSize = destBuffer.Length;
+		}
+		if (destBufferSize < readSize || readSize + index > bufferSize)
+		{
+			return false;
+		}
+		for(int i = 0; i < readSize; ++i)
+		{
+			destBuffer[i] = (char)buffer[i + index];
+		}
 		index += readSize;
 		return true;
 	}
@@ -141,11 +204,48 @@ public class BinaryUtility : GameBase
 	}
 	public static bool writeBytes(byte[] buffer, ref int index, int bufferSize, byte[] sourceBuffer, int sourceBufferSize, int writeSize)
 	{
+		if (bufferSize == -1)
+		{
+			bufferSize = buffer.Length;
+		}
+		if (sourceBufferSize == -1)
+		{
+			sourceBufferSize = sourceBuffer.Length;
+		}
+		if (writeSize == -1)
+		{
+			writeSize = sourceBuffer.Length;
+		}
 		if (writeSize > sourceBufferSize || writeSize + index > bufferSize)
 		{
 			return false;
 		}
 		Array.Copy(sourceBuffer, 0, buffer, index, writeSize);
+		index += writeSize;
+		return true;
+	}
+	public static bool writeChars(byte[] buffer, ref int index, int bufferSize, char[] sourceBuffer, int sourceBufferSize, int writeSize)
+	{
+		if(bufferSize == -1)
+		{
+			bufferSize = buffer.Length;
+		}
+		if(sourceBufferSize == -1)
+		{
+			sourceBufferSize = sourceBuffer.Length;
+		}
+		if(writeSize == -1)
+		{
+			writeSize = sourceBuffer.Length;
+		}
+		if (writeSize > sourceBufferSize || writeSize + index > bufferSize)
+		{
+			return false;
+		}
+		for(int i = 0; i < writeSize; ++i)
+		{
+			buffer[index + i] = (byte)sourceBuffer[i];
+		}
 		index += writeSize;
 		return true;
 	}
@@ -230,8 +330,12 @@ public class BinaryUtility : GameBase
 			}
 		}
 	}
-	public static void memset<T>(T[] p, T value, int length)
+	public static void memset<T>(T[] p, T value, int length = -1)
 	{
+		if(length == -1)
+		{
+			length = p.Length;
+		}
 		for (int i = 0; i < length; ++i)
 		{
 			p[i] = value;

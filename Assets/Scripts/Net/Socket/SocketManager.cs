@@ -6,99 +6,112 @@ using System.Threading;
 using System.Text;
 using System.Collections.Generic;
 
-public class OUTPUT_STREAM
+public class OUTPUT_ELEMENT
 {
-	public OUTPUT_STREAM(byte[] data, int dataSize)
+	public OUTPUT_ELEMENT(byte[] data, int dataSize, PACKET_TYPE type)
 	{
 		mData = data;
 		mDataSize = dataSize;
+		mType = type;
 	}
 	public byte[] mData;
 	public int mDataSize;
+	public PACKET_TYPE mType;
 };
+
+public class SEND_ELEMENT : OUTPUT_ELEMENT
+{
+	public SEND_ELEMENT(byte[] data, int dataSize, PACKET_TYPE type)
+		:
+		base(data, dataSize, type)
+	{ }
+}
 
 public class INPUT_ELEMENT
 {
-	public INPUT_ELEMENT(SOCKET_PACKET type, byte[] data, int dataSize)
+	public INPUT_ELEMENT(PACKET_TYPE type, byte[] data)
 	{
 		mType = type;
 		mData = data;
-		mDataSize = dataSize;
 	}
-	public SOCKET_PACKET mType;
+	public PACKET_TYPE mType;
 	public byte[] mData;
-	public int mDataSize;
 };
 
 public class SocketManager : GameBase
 {
-	protected const int				mMaxReceiveCount	= 1024;
-	protected IPAddress				mIP					= null;
-	protected int					mPort				= -1;
-	protected IPEndPoint			mRecieveIPE			= null;   // 侦听端口
-	protected Socket				mServerSoket		= null;
-	protected Socket				mBroadcastSocket	= null;
-	protected EndPoint				mBraodCastEP		= null;    // 广播端
-	protected int					mBroadcastPort		= -1;
-	protected Thread				mReceiveThread		= null;
-	protected Thread				mOutputTread		= null;
-	protected List<OUTPUT_STREAM>	mOutputList			= new List<OUTPUT_STREAM>();
-	protected List<INPUT_ELEMENT>	mInputList			= new List<INPUT_ELEMENT>();
-	protected List<INPUT_ELEMENT>	mRecieveList		= new List<INPUT_ELEMENT>();
-	protected SocketFactory			mSocketFactory		= new SocketFactory();
-	protected bool					mRun				= true;
+	protected int mMaxReceiveCount;
+	protected Socket mServerSocket;
+	protected Thread mReceiveThread;
+	protected Thread mSendThread;
+	protected List<OUTPUT_ELEMENT> mOutputList;
+	protected List<INPUT_ELEMENT> mRecieveList;
+	protected List<SEND_ELEMENT> mSendList;
+	protected SocketFactoryManager mSocketFactoryManager;
+	protected bool mRun;
+	public SocketManager()
+	{
+		mMaxReceiveCount = 1024;
+		mOutputList = new List<OUTPUT_ELEMENT>();
+		mRecieveList = new List<INPUT_ELEMENT>();
+		mSendList = new List<SEND_ELEMENT>();
+		mSocketFactoryManager = new SocketFactoryManager();
+		mRun = true;
+	}
 	public void init()
 	{
-		mSocketFactory.init();
+		mSocketFactoryManager.init();
 
-		mPort = (int)mGameConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SOCKET_PORT);
-		mBroadcastPort = (int)mGameConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_BROADCAST_PORT);
-		mIP = IPAddress.Any;
-
-		mRecieveIPE = new IPEndPoint(mIP, mPort);
+		int port = (int)mGameConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SOCKET_TCP_PORT);
+		IPAddress serverIP = IPAddress.Parse(mGameConfig.getStringParam(GAME_DEFINE_STRING.GDS_TCP_SERVER_IP));
 		// 创建socket  
-		mServerSoket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-		// 绑定地址  
-		mServerSoket.Bind(mRecieveIPE);
-		mBroadcastSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-		mBroadcastSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, 1);
-		// 广播端
-		mBraodCastEP = new IPEndPoint(IPAddress.Broadcast, mBroadcastPort);
-		mReceiveThread = new Thread(updateUdpServer);
+		mServerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+		mServerSocket.Connect(serverIP, port);
+		mReceiveThread = new Thread(receiveSocket);
 		mReceiveThread.Start();
-		mOutputTread = new Thread(updateOutput);
-		mOutputTread.Start();
+		mSendThread = new Thread(sendSocket);
+		mSendThread.Start();
 	}
 	public void update(float elapsedTime)
 	{
 		processInput();
+		processOutput();
 	}
 	public void destroy()
 	{
 		mRun = false;
+		mSendThread.Abort();
+		mSendThread = null;
 		mReceiveThread.Abort();
 		mReceiveThread = null;
-		mOutputTread.Abort();
-		mOutputTread = null;
-		mServerSoket.Close();
-		mServerSoket = null;
-		mBroadcastSocket.Close();
-		mBroadcastSocket = null;
+		mServerSocket.Close();
+		mServerSocket = null;
 	}
-	public SocketPacket createPacket(SOCKET_PACKET type)
+	public SocketPacket createPacket(PACKET_TYPE type)
 	{
-		return mSocketFactory.createPacket(type);
+		return mSocketFactoryManager.createPacket(type);
 	}
 	public void sendMessage(SocketPacket packet)
 	{
 		// 将消息包中的数据准备好,然后放入发送列表中
-		packet.fillData();
+		// 前四个字节分别是两个short,代表消息类型和消息内容长度
+		byte[] packetData = new byte[sizeof(short) + sizeof(short) + packet.getSize()];
+		int index = 0;
+		// 消息类型
+		BinaryUtility.writeShort(packetData, ref index, (short)(packet.getPacketType()));
+		// 消息长度
+		BinaryUtility.writeShort(packetData, ref index, (short)(packet.getSize()));
+		byte[] realData = new byte[packet.getSize()];
+		packet.write(realData);
+		// 消息内容
+		BinaryUtility.writeBytes(packetData, ref index, -1, realData, -1, -1);
 		lock (mOutputList)
 		{
-			mOutputList.Add(new OUTPUT_STREAM(packet.getData(), packet.getSize()));
+			mOutputList.Add(new OUTPUT_ELEMENT(packetData, packet.getSize(), packet.getPacketType()));
 		}
 	}
 	//-------------------------------------------------------------------------------------------------------------------------
+	// 处理接收到的所有消息
 	protected void processInput()
 	{
 		// 等待解锁接收流的读写,并锁定接收流
@@ -107,56 +120,115 @@ public class SocketManager : GameBase
 			int receiveCount = mRecieveList.Count;
 			for (int i = 0; i < receiveCount; ++i)
 			{
-				mInputList.Add(mRecieveList[i]);
+				INPUT_ELEMENT element = mRecieveList[i];
+				SocketPacket packetReply = createPacket(element.mType);
+				packetReply.read(element.mData);
+				packetReply.execute();
 			}
 			mRecieveList.Clear();
 		}
-
-		int streamCount = mInputList.Count;
-		for (int i = 0; i < streamCount; ++i)
-		{
-			INPUT_ELEMENT element = mInputList[i];
-			SocketPacket packetReply = createPacket(element.mType);
-			packetReply.readData(element.mData, element.mDataSize);
-			packetReply.execute();
-		}
-		mInputList.Clear();
 	}
-	protected void updateOutput()
+	// 发送这一帧中所有的消息
+	protected void processOutput()
 	{
-		while(mRun)
+		;
+	}
+	// 发送Socket消息
+	protected void sendSocket()
+	{
+		while (mRun)
 		{
-			lock (mOutputList)
+			lock(mOutputList)
 			{
-				int outputCount = mOutputList.Count;
-				for (int i = 0; i < outputCount; ++i)
+				int dataCount = mOutputList.Count;
+				for (int i = 0; i < dataCount; ++i)
 				{
-					mBroadcastSocket.SendTo(mOutputList[i].mData, mBraodCastEP);
+					if (mOutputList[i].mDataSize > 0)
+					{
+						mServerSocket.Send(mOutputList[i].mData);
+						PACKET_TYPE type = mOutputList[i].mType;
+						UnityUtility.logInfo("send socket : type : " + type + ", size : " + mOutputList[i].mDataSize);
+					}
 				}
 				mOutputList.Clear();
 			}
+			Thread.Sleep(10);
 		}
 	}
-	protected void receivePacket(SOCKET_PACKET type, byte[] data, int dataSize)
-	{
-		lock (mRecieveList)
-		{
-			mRecieveList.Add(new INPUT_ELEMENT(type, data, dataSize));
-		}
-	}
-	protected void updateUdpServer()
+	// 接收Socket消息
+	protected void receiveSocket()
 	{
 		IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, 0);
 		EndPoint ep = (EndPoint)endpoint;
 		while (mRun)
 		{
-			byte[] recBuff = new byte[mMaxReceiveCount];
-			int intReceiveLength = mServerSoket.ReceiveFrom(recBuff, ref ep);
-			if (intReceiveLength > 0)
+			byte[] recvBuff = new byte[mMaxReceiveCount];
+			int nRecv = mServerSocket.ReceiveFrom(recvBuff, ref ep);
+			if (nRecv < 0)
 			{
-				SOCKET_PACKET spType = mSocketFactory.getSocketType(recBuff, intReceiveLength);
-				receivePacket(spType, recBuff, intReceiveLength);
+				UnityUtility.logInfo("网络连接中断!");
+				return;
 			}
+			else if (nRecv == 0)
+			{
+				UnityUtility.logInfo("已与服务器断开连接!");
+				return;
+			}
+			int index = 0;
+			while (true)
+			{
+				if (index + sizeof(short) > nRecv)
+				{
+					break;
+				}
+				// 读取包类型(short)
+				PACKET_TYPE type = (PACKET_TYPE)BinaryUtility.readShort(recvBuff, ref index);
+				// 客户端接收到的必须是SC类型的
+				if (type <= PACKET_TYPE.PT_SC_MIN || type >= PACKET_TYPE.PT_SC_MAX)
+				{
+					UnityUtility.logInfo("packet type error : " + type);
+					break;
+				}
+				int packetSize = mSocketFactoryManager.getPacketSize(type);
+				if (packetSize >= 0)
+				{
+					// 读取消息长度(short)
+					short realDataSize = BinaryUtility.readShort(recvBuff, ref index);
+					if(realDataSize != packetSize)
+					{
+						UnityUtility.logError("error : wrong packet size! readed : " + realDataSize + ", packet size : " + packetSize);
+						break;
+					}
+					if (packetSize > nRecv - sizeof(short))
+					{
+						UnityUtility.logError("error : wrong packet data! packet : " + type + ", need size : " + packetSize + ", receive size : " + (nRecv - sizeof(PACKET_TYPE)));
+						break;
+					}
+					else
+					{
+						UnityUtility.logInfo("receive : client : " + endpoint.Address.ToString() + ", type : " + type + ", size : " + packetSize);
+					}
+					lock (mRecieveList)
+					{
+						byte[] recvData = new byte[packetSize];
+						// 读取消息内容(byte[])
+						BinaryUtility.readBytes(recvBuff, ref index, -1, recvData, -1, -1);
+						mRecieveList.Add(new INPUT_ELEMENT(type, recvData));
+						UnityUtility.logInfo("receive : type : " + type + ", count : " + nRecv + ", client ip : " + endpoint.Address.ToString());
+					}
+					// 该段消息内存已经解析完了
+					if (index == nRecv)
+					{
+						break;
+					}
+				}
+				// 如果消息解析发生错误,则不再解析
+				else
+				{
+					break;
+				}
+			}
+			Thread.Sleep(10);
 		}
 	}
 }

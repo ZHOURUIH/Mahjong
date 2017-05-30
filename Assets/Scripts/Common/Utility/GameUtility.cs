@@ -70,11 +70,7 @@ public class GameUtility : GameBase
 	// 得到指定牌的花色
 	public static MAHJONG_HUASE getHuaSe(MAHJONG mah)
 	{
-		if(mah >= MAHJONG.M_HUA_CHUN && mah <= MAHJONG.M_HUA_JU)
-		{
-			return MAHJONG_HUASE.MH_HUA;
-		}
-		else if(mah >= MAHJONG.M_FENG_DONG && mah <= MAHJONG.M_FENG_BAI)
+		if(mah >= MAHJONG.M_FENG_DONG && mah <= MAHJONG.M_FENG_BAI)
 		{
 			return MAHJONG_HUASE.MH_FENG;
 		}
@@ -88,13 +84,6 @@ public class GameUtility : GameBase
 	public static bool isShunzi(List<MahInfo> mahjongList, int startIndex)
 	{
 		if (mahjongList.Count <= startIndex + 2)
-		{
-			return false;
-		}
-		// 不能包含花牌和风牌
-		if (getHuaSe(mahjongList[startIndex].mMah) == MAHJONG_HUASE.MH_HUA ||
-			getHuaSe(mahjongList[startIndex + 1].mMah) == MAHJONG_HUASE.MH_HUA ||
-			getHuaSe(mahjongList[startIndex + 2].mMah) == MAHJONG_HUASE.MH_HUA)
 		{
 			return false;
 		}
@@ -120,7 +109,7 @@ public class GameUtility : GameBase
 		return true;
 	}
 
-	public static SortedDictionary<MAHJONG_HUASE, List<MAHJONG>> getHuaseList(List<MahInfo> mahjongList, bool includeHuaFeng = false)
+	public static SortedDictionary<MAHJONG_HUASE, List<MAHJONG>> getHuaseList(List<MahInfo> mahjongList, bool includeFeng = false)
 	{
 		SortedDictionary<MAHJONG_HUASE, List<MAHJONG>> huaseList = new SortedDictionary<MAHJONG_HUASE, List<MAHJONG>>();
 		int size = mahjongList.Count;
@@ -129,7 +118,7 @@ public class GameUtility : GameBase
 			MAHJONG_HUASE huase = getHuaSe(mahjongList[i].mMah);
 			if (!huaseList.ContainsKey(huase))
 			{
-				if(includeHuaFeng || huase != MAHJONG_HUASE.MH_HUA && huase != MAHJONG_HUASE.MH_FENG)
+				if(includeFeng || huase != MAHJONG_HUASE.MH_FENG)
 				{
 					List<MAHJONG> temp = new List<MAHJONG>();
 					temp.Add(mahjongList[i].mMah);

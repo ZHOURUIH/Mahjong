@@ -234,15 +234,6 @@ public enum ACTION_TYPE
 }
 public enum MAHJONG
 {
-	// 8种花
-	M_HUA_CHUN,
-	M_HUA_XIA,
-	M_HUA_QIU,
-	M_HUA_DONG,
-	M_HUA_MEI,
-	M_HUA_LAN,
-	M_HUA_ZHU,
-	M_HUA_JU,
 	// 7个风
 	M_FENG_DONG,
 	M_FENG_NAN,
@@ -286,7 +277,6 @@ public enum MAHJONG
 }
 public enum MAHJONG_HUASE
 {
-	MH_HUA,		// 花牌
 	MH_FENG,	// 风牌
 	MH_TONG,	// 筒
 	MH_TIAO,	// 条
@@ -401,7 +391,6 @@ public class CommonDefine
 	// 所有麻将的资源名字
 	public static string[] MAHJONG_NAME = new string[(int)MAHJONG.M_MAX]
 	{
-		"Hua0", "Hua1", "Hua2", "Hua3", "Hua4","Hua5", "Hua6", "Hua7",
 		"Feng0", "Feng1", "Feng2", "Feng3", "Feng4", "Feng5", "Feng6",
 		"Tong0", "Tong1", "Tong2", "Tong3", "Tong4", "Tong5", "Tong6", "Tong7", "Tong8",
 		"Tiao0", "Tiao1", "Tiao2", "Tiao3", "Tiao4", "Tiao5", "Tiao6", "Tiao7", "Tiao8",

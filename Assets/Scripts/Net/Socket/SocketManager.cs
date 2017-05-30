@@ -61,16 +61,24 @@ public class SocketManager : GameBase
 	public void init()
 	{
 		mSocketFactoryManager.init();
-
-		int port = (int)mGameConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SOCKET_TCP_PORT);
-		IPAddress serverIP = IPAddress.Parse(mGameConfig.getStringParam(GAME_DEFINE_STRING.GDS_TCP_SERVER_IP));
 		// 创建socket  
 		mServerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-		mServerSocket.Connect(serverIP, port);
-		mReceiveThread = new Thread(receiveSocket);
-		mReceiveThread.Start();
+		try
+		{
+			int port = (int)mGameConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SOCKET_TCP_PORT);
+			IPAddress serverIP = IPAddress.Parse(mGameConfig.getStringParam(GAME_DEFINE_STRING.GDS_TCP_SERVER_IP));
+			mServerSocket.Connect(serverIP, port);
+		}
+		catch
+		{
+			UnityUtility.logInfo("can not connect server!");
+			mServerSocket = null;
+			return;
+		}
 		mSendThread = new Thread(sendSocket);
 		mSendThread.Start();
+		mReceiveThread = new Thread(receiveSocket);
+		mReceiveThread.Start();
 	}
 	public void update(float elapsedTime)
 	{
@@ -80,12 +88,21 @@ public class SocketManager : GameBase
 	public void destroy()
 	{
 		mRun = false;
-		mSendThread.Abort();
-		mSendThread = null;
-		mReceiveThread.Abort();
-		mReceiveThread = null;
-		mServerSocket.Close();
-		mServerSocket = null;
+		if (mSendThread != null)
+		{
+			mSendThread.Abort();
+			mSendThread = null;
+		}
+		if (mReceiveThread != null)
+		{
+			mReceiveThread.Abort();
+			mReceiveThread = null;
+		}
+		if (mServerSocket != null)
+		{
+			mServerSocket.Close();
+			mServerSocket = null;
+		}
 	}
 	public SocketPacket createPacket(PACKET_TYPE type)
 	{

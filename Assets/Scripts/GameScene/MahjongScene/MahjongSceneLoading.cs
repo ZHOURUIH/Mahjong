@@ -53,9 +53,7 @@ public class MahjongSceneLoading : SceneProcedure
 	protected void onLayoutLoaded(GameLayout layout)
 	{
 		mLoadInfo[layout.getType()].mLayout = layout;
-		LayoutTools.HIDE_LAYOUT(layout.getType());
-		++mLoadedCount;
-		if (mLoadedCount == mLoadInfo.Count)
+		if (++mLoadedCount == mLoadInfo.Count)
 		{
 			allLayoutLoaded();
 		}

@@ -68,22 +68,20 @@ public class GameLayout : MonoBehaviour
 		mType = type;
 		mScript = createLayoutScript();
 		// 初始化布局脚本
-		if (mScript != null)
+		mLayoutObject = mScript.newObject<txUIObject>(mLayoutManager.getUIRoot(), mName, -1);
+		mRootPanel = mLayoutObject.mObject.GetComponent<UIPanel>();
+		if (mRootPanel == null)
 		{
-			mLayoutObject = mScript.newObject<txUIObject>(mLayoutManager.getUIRoot(), mName, -1);
-			mRootPanel = mLayoutObject.mObject.GetComponent<UIPanel>();
-			if (mRootPanel == null)
-			{
-				UnityUtility.logError("error : layout root window must has a panel component!, name : " + mName);
-			}
-			setRenderOrder(renderOrder);
-			mRoot = mScript.newObject<txUIObject>(mLayoutObject, "Root", -1);
-			mScript.setRoot(mRoot);
-			mScript.findAllWindow();
-			mScript.assignWindow();
-			mScript.init();
-			mScriptInited = true;
+			UnityUtility.logError("error : layout root window must has a panel component!, name : " + mName);
 		}
+		setRenderOrder(renderOrder);
+		mRoot = mScript.newObject<txUIObject>(mLayoutObject, "Root", -1);
+		mScript.setRoot(mRoot);
+		mScript.findAllWindow();
+		mScript.assignWindow();
+		mScript.init();
+		mScriptInited = true;
+		setVisibleForce(false);
 	}
 	public void update(float elapsedTime)
 	{

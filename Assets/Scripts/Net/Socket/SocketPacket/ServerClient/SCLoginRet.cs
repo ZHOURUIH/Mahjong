@@ -51,8 +51,9 @@ public class SCLoginRet : SocketPacket
 		data.mMoney = mMoney;
 		data.mHead = mHead;
 
-		CommandGameSceneChangeProcedure cmd = new CommandGameSceneChangeProcedure();
-		cmd.mProcedure = PROCEDURE_TYPE.PT_START_EXIT;
-		mCommandSystem.pushCommand(cmd, mGameSceneManager.getCurScene());
+		// 进入到主场景
+		CommandGameSceneManagerEnter cmdEnterMain = new CommandGameSceneManagerEnter(true, true);
+		cmdEnterMain.mSceneType = GAME_SCENE_TYPE.GST_MAIN;
+		mCommandSystem.pushDelayCommand(cmdEnterMain, mGameSceneManager);
 	}
 }

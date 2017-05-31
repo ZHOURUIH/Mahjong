@@ -14,6 +14,5 @@ public class StartScene : GameScene
 	{
 		addProcedure<LogoSceneLoading>(PROCEDURE_TYPE.PT_START_LOADING);
 		addProcedure<LogoSceneRunning>(PROCEDURE_TYPE.PT_START_RUNNING);
-		addProcedure<LogoSceneExit>(PROCEDURE_TYPE.PT_START_EXIT);
 	}
 }

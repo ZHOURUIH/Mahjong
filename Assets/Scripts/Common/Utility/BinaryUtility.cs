@@ -20,6 +20,15 @@ public class BinaryUtility : GameBase
 		}
 		return count;
 	}
+	public static bool readBool(byte[] buffer, ref int curIndex)
+	{
+		if (buffer.Length < 1)
+		{
+			return false;
+		}
+		bool value = (0xff & buffer[curIndex++]) != 0;
+		return value;
+	}
 	public static byte readByte(byte[] buffer, ref int curIndex)
 	{
 		if (buffer.Length < 1)
@@ -146,6 +155,15 @@ public class BinaryUtility : GameBase
 			destBuffer[i] = (char)buffer[i + index];
 		}
 		index += readSize;
+		return true;
+	}
+	public static bool writeBool(byte[] buffer, ref int index, bool value)
+	{
+		if (buffer.Length < 1)
+		{
+			return false;
+		}
+		buffer[index++] = (byte)(value ? 1 : 0);
 		return true;
 	}
 	public static bool writeByte(byte[] buffer, ref int index, byte value)

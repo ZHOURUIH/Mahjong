@@ -32,7 +32,10 @@ public class MainSceneRunning : SceneProcedure
 	}
 	protected override void onExit(SceneProcedure nextProcedure)
 	{
-		;
+		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_MAIN_FRAME);
+		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_CHARACTER);
+		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_BILLBOARD);
+		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_ROOM_MENU);
 	}
 	protected override void onKeyProcess(float elapsedTime)
 	{

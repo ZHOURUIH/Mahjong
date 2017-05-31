@@ -227,10 +227,18 @@ public class SocketManager : GameBase
 					}
 					lock (mRecieveList)
 					{
-						byte[] recvData = new byte[packetSize];
-						// 读取消息内容(byte[])
-						BinaryUtility.readBytes(recvBuff, ref index, -1, recvData, -1, -1);
-						mRecieveList.Add(new INPUT_ELEMENT(type, recvData));
+						if(packetSize != 0)
+						{
+							byte[] recvData = new byte[packetSize];
+							// 读取消息内容(byte[])
+							BinaryUtility.readBytes(recvBuff, ref index, -1, recvData, -1, -1);
+							mRecieveList.Add(new INPUT_ELEMENT(type, recvData));
+						}
+						else
+						{
+							byte[] recvData = null;
+							mRecieveList.Add(new INPUT_ELEMENT(type, recvData));
+						}
 						UnityUtility.logInfo("receive : type : " + type + ", count : " + nRecv + ", client ip : " + endpoint.Address.ToString());
 					}
 					// 该段消息内存已经解析完了

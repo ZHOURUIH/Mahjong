@@ -15,8 +15,17 @@ public class SocketFactoryManager
 		// 注册所有消息
 		// 客户端->服务器
 		registerFactory(typeof(CSLogin), PACKET_TYPE.PT_CS_LOGIN);
+		registerFactory(typeof(CSCreateRoom), PACKET_TYPE.PT_CS_CREATE_ROOM);
+		registerFactory(typeof(CSJoinRoom), PACKET_TYPE.PT_CS_JOIN_ROOM);
 		// 服务器->客户端
 		registerFactory(typeof(SCLoginRet), PACKET_TYPE.PT_SC_LOGIN_RET);
+		registerFactory(typeof(SCCreateRoomRet), PACKET_TYPE.PT_SC_CREATE_ROOM_RET);
+		registerFactory(typeof(SCNotifyBanker), PACKET_TYPE.PT_SC_NOTIFY_BANKER);
+		registerFactory(typeof(SCJoinRoomRet), PACKET_TYPE.PT_SC_JOIN_ROOM_RET);
+		registerFactory(typeof(SCOtherPlayerJoinRoom), PACKET_TYPE.PT_SC_OTHER_PLAYER_JOIN_ROOM);
+		registerFactory(typeof(SCOtherPlayerLeaveRoom), PACKET_TYPE.PT_SC_OTHER_PLAYER_LEAVE_ROOM);
+		registerFactory(typeof(SCOtherPlayerOffline), PACKET_TYPE.PT_SC_OTHER_PLAYER_OFFLINE);
+		registerFactory(typeof(SCStartGame), PACKET_TYPE.PT_SC_START_GAME);
 	}
 	public SocketFactory getFactory(PACKET_TYPE type)
 	{

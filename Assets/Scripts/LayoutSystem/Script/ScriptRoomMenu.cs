@@ -52,15 +52,13 @@ public class ScriptRoomMenu : LayoutScript
 	//-----------------------------------------------------------------------------------
 	protected void onCreateClicked(txUIButton obj)
 	{
-		CommandGameSceneChangeProcedure cmd = new CommandGameSceneChangeProcedure();
-		cmd.mProcedure = PROCEDURE_TYPE.PT_MAIN_EXIT;
-		mCommandSystem.pushCommand(cmd, mGameSceneManager.getCurScene());
+		// 向服务器发送创建房间的消息
+		CSCreateRoom createRoom = mSocketNetManager.createPacket(PACKET_TYPE.PT_CS_CREATE_ROOM) as CSCreateRoom;
+		mSocketNetManager.sendMessage(createRoom);
 	}
 	protected void onJoinClicked(txUIButton obj)
 	{
-		CommandGameSceneChangeProcedure cmd = new CommandGameSceneChangeProcedure();
-		cmd.mProcedure = PROCEDURE_TYPE.PT_MAIN_EXIT;
-		mCommandSystem.pushCommand(cmd, mGameSceneManager.getCurScene());
+		;
 	}
 	protected void onButtonPress(txUIButton obj, bool press)
 	{

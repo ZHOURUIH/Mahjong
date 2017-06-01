@@ -87,7 +87,7 @@ public class ResourceManager : GameBase
 		}
 		else if (mLoadSource == 1)
 		{
-			return mAssetBundleLoader.getBundleNameList(path);
+			return mAssetBundleLoader.getBundleNameList(path.ToLower());
 		}
 		return null;
 	}

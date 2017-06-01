@@ -69,20 +69,37 @@ public class ResourceLoader : MonoBehaviour
 	public UnityEngine.Object loadResource(string name)
 	{
 		string path = StringUtility.getFilePath(name);
-		// 如果文件夹还未加载,则先加载指定文件夹
+		// 如果文件夹还未加载,则先加载文件夹
 		if (!mLoadedPath.ContainsKey(path))
 		{
-			loadPath(path);
+			mLoadedPath.Add(path, new Dictionary<string, UnityEngine.Object>());
 		}
-		// 如果加载完以后仍然不存在,则返回null
+		// 已经加载,则返回true
 		if (!mLoadedPath[path].ContainsKey(name))
 		{
-			return null;
+			mLoadedPath[path][name] = Resources.Load(name);
+		}
+		return mLoadedPath[path][name];
+	}
+	// 异步加载资源,name为Resources下的相对路径,不带后缀
+	public bool loadResourcesAsync<T>(string name, AssetLoadDoneCallback doneCallback) where T : UnityEngine.Object
+	{
+		string path = StringUtility.getFilePath(name);
+		// 如果文件夹还未加载,则先加载文件夹
+		if (!mLoadedPath.ContainsKey(path))
+		{
+			mLoadedPath.Add(path, new Dictionary<string, UnityEngine.Object>());
+		}
+		// 已经加载,则返回true
+		if (mLoadedPath[path].ContainsKey(name))
+		{
+			doneCallback(mLoadedPath[path][name]);
 		}
 		else
 		{
-			return mLoadedPath[path][name];
+			StartCoroutine(loadResourceCoroutine<T>(name, doneCallback));
 		}
+		return true;
 	}
 	// 同步加载整个文件夹
 	public List<UnityEngine.Object> loadPath(string path)
@@ -124,34 +141,16 @@ public class ResourceLoader : MonoBehaviour
 			StartCoroutine(loadPathCoroutine(path, callback));
 		}
 	}
-	// 异步加载资源,name为Resources下的相对路径,不带后缀
-	public bool loadResourcesAsync<T>(string name, AssetLoadDoneCallback doneCallback) where T : UnityEngine.Object
-	{
-		string path = StringUtility.getFilePath(name);
-		// 如果文件夹还未加载,则先加载文件夹
-		if (!mLoadedPath.ContainsKey(path))
-		{
-			mLoadedPath.Add(path, new Dictionary<string, UnityEngine.Object>());
-		}
-		// 已经加载,则返回true
-		if (mLoadedPath[path].ContainsKey(name))
-		{
-			doneCallback(mLoadedPath[path][name]);
-		}
-		else
-		{
-			StartCoroutine(loadResourceCoroutine<T>(name, doneCallback));
-		}
-		return true;
-	}
 	//---------------------------------------------------------------------------------------------------------------------------------------
 	protected IEnumerator loadResourceCoroutine<T>(string resName, AssetLoadDoneCallback doneCallback) where T : UnityEngine.Object
 	{
+		UnityUtility.logInfo(resName + " start load!");
 		ResourceRequest request = Resources.LoadAsync<T>(resName);
 		yield return request;
 		string path = StringUtility.getFilePath(resName);
 		mLoadedPath[path].Add(resName, request.asset);
 		doneCallback(request.asset);
+		UnityUtility.logInfo(resName + " load done!");
 	}
 	protected IEnumerator loadPathCoroutine(string path, AssetBundleLoadDoneCallback callback)
 	{

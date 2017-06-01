@@ -108,7 +108,7 @@ public abstract class LayoutScript : CommandReceiver
 	}
 	// 创建txUIObject,并且在布局中查找GameObject分配到txUIObject
 	// active为-1则表示不设置active,0表示false,1表示true
-	public T newObject<T>(txUIObject parent, string name, int active = -1) where T : txUIObject, new()
+	public T newObject<T>(txUIObject parent, string name, int active) where T : txUIObject, new()
 	{
 		GameObject parentObj = (parent != null) ? parent.mObject : null;
 		GameObject gameObject = getObjectFromList(parentObj, name);
@@ -134,13 +134,14 @@ public abstract class LayoutScript : CommandReceiver
 		}
 		return obj;
 	}
-	public T newObject<T>(string name, int active = -1) where T : txUIObject, new()
+	public T newObject<T>(string name, int active) where T : txUIObject, new()
 	{
 		return newObject<T>(mLayout.getRoot(), name, active);
 	}
 	public void instantiateObject(txUIObject parent, string name)
 	{
-		GameObject gameObject = UnityUtility.instantiatePrefab(parent.mObject, CommonDefine.R_LAYOUT_PREFAB_PATH + name);
+		GameObject gameObject = GameFramework.instance.getLayoutPrefabManager().instantiate(name, parent.mObject, name);
+		gameObject.SetActive(false);
 		findWindow(parent.mObject, gameObject, ref mAllWindowList);
 	}
 	//----------------------------------------------------------------------------------------------------

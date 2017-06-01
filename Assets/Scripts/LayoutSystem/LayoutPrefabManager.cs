@@ -8,9 +8,11 @@ public class LayoutPrefabManager : GameBase
 {
 	protected GameObject mManagerObject;
 	protected Dictionary<string, GameObject> mPrefabList;
+	protected int mLoadedCount;	// 已加载的布局使用的预设数量
 	public LayoutPrefabManager()
 	{
 		mPrefabList = new Dictionary<string, GameObject>();
+		mLoadedCount = 0;
 	}
 	public void init()
 	{
@@ -20,17 +22,24 @@ public class LayoutPrefabManager : GameBase
 			UnityUtility.logError("error: can not find LayoutPrefabManager!");
 			return;
 		}
+		bool async = true;
 		string path = CommonDefine.R_LAYOUT_PREFAB_PATH;
-		if (mResourceManager.mLoadSource == 1)
-		{
-			path = path.ToLower();
-		}
 		List<string> fileList = mResourceManager.getFileOrBundleList(path);
 		int fileCount = fileList.Count;
 		for (int i = 0; i < fileCount; ++i)
 		{
-			string fileNameNoSuffix = StringUtility.getFileNameNoSuffix(fileList[i]);
-			mResourceManager.loadResourceAsync<GameObject>(path + "/" + fileNameNoSuffix, onLayoutPrefabLoaded, true);
+			string fileNameNoSuffix = StringUtility.getFileNameNoSuffix(fileList[i], true);
+			mPrefabList.Add(fileNameNoSuffix.ToLower(), null);
+			if(async)
+			{
+				mResourceManager.loadResourceAsync<GameObject>(path + fileNameNoSuffix, onLayoutPrefabLoaded, true);
+			}
+			else
+			{
+				GameObject go = mResourceManager.loadResource<GameObject>(path + fileNameNoSuffix, true);
+				mPrefabList[go.name.ToLower()] = go;
+				++mLoadedCount;
+			}
 		}
 	}
 	public void destroy()
@@ -39,24 +48,36 @@ public class LayoutPrefabManager : GameBase
 	}
 	public UnityEngine.Object getPrefab(string name)
 	{
-		if(mPrefabList.ContainsKey(name))
+		name = name.ToLower();
+		if (mPrefabList.ContainsKey(name))
 		{
 			return mPrefabList[name];
 		}
 		return null;
 	}
-	public GameObject instantiate(string prefabName, GameObject parent, string objectName = "")
+	public GameObject instantiate(string prefabName, GameObject parent, string objectName)
 	{
+		prefabName = prefabName.ToLower();
 		if (mPrefabList.ContainsKey(prefabName))
 		{
-			string name = objectName != "" ? objectName : prefabName;
-			return UnityUtility.instantiatePrefab(parent, mPrefabList[prefabName], name, Vector3.one, Vector3.zero, Vector3.zero);
+			if (objectName == "")
+			{
+				UnityUtility.logError("instantiate object's name can not be empty!");
+				return null;
+			}
+			return UnityUtility.instantiatePrefab(parent, mPrefabList[prefabName], objectName, Vector3.one, Vector3.zero, Vector3.zero);
 		}
 		return null;
+	}
+	public bool isLoadDone()
+	{
+		return mLoadedCount == mPrefabList.Count;
 	}
 	//---------------------------------------------------------------------------------------------------------
 	protected void onLayoutPrefabLoaded(UnityEngine.Object res)
 	{
-		mPrefabList.Add(res.name, res as GameObject);
+		GameObject prefab = res as GameObject;
+		mPrefabList[prefab.name.ToLower()] = prefab;
+		++mLoadedCount;
 	}
 };

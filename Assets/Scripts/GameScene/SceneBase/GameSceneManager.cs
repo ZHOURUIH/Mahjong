@@ -1,15 +1,13 @@
 ﻿using UnityEngine;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 
 public class GameSceneManager : CommandReceiver
 {
+	public GameScene			mCurScene;
+	public List<GameScene>		mLastSceneList;
+	public GameObject			mManagerObject;
 	protected SceneFactoryManager	mSceneFactoryManager;
-	protected GameScene				mCurScene;
-	protected List<GameScene>		mLastSceneList;
-	protected GameObject			mManagerObject;
-
 	public GameSceneManager()
 	:
 	base(typeof(GameSceneManager).ToString())
@@ -42,6 +40,7 @@ public class GameSceneManager : CommandReceiver
 		if (mCurScene != null)
 		{
 			mLastSceneList.Add(mCurScene);
+			mCurScene.exit();
 			mCurScene = null;
 		}
 		mCurScene = pScene;

@@ -12,15 +12,12 @@ public class AssetBundleLoader : MonoBehaviour
 	protected Dictionary<string, AssetBundleInfo> mAssetBundleInfoList;
 	protected Dictionary<string, AssetInfo> mAssetToBundleInfo;
 	protected static Dictionary<Type, string> mTypeSuffixList;		// 资源类型对应的后缀名
-	protected Dictionary<AssetBundleInfo, bool> mBundleRequestList; // 已经请求过异步加载的资源包列表,value表示是否已经加载完毕
-	protected Dictionary<string, AssetLoadDoneCallback> mAssetLoadCallback;
-
+	protected Dictionary<AssetBundleInfo, bool> mBundleRequestList;	// 已经请求过异步加载的资源包列表,value表示是否已经加载完毕
 	public AssetBundleLoader()
 	{
 		mAssetBundleInfoList = new Dictionary<string, AssetBundleInfo>();
 		mAssetToBundleInfo = new Dictionary<string, AssetInfo>();
 		mBundleRequestList = new Dictionary<AssetBundleInfo, bool>();
-		mAssetLoadCallback = new Dictionary<string, AssetLoadDoneCallback>();
 		if (mTypeSuffixList == null)
 		{
 			mTypeSuffixList = new Dictionary<Type, string>();
@@ -45,7 +42,7 @@ public class AssetBundleLoader : MonoBehaviour
 		{
 			AssetBundleInfo bundleInfo = null;
 			string bundleName = xe.SelectSingleNode("bundleName").InnerText;		// 资源所在的AssetBundle名
-			bundleName = StringUtility.getFileNameNoSuffix(bundleName);			// 移除后缀名
+			bundleName = StringUtility.getFileNameNoSuffix(bundleName);				// 移除后缀名
 			string assetName = xe.SelectSingleNode("assetName").InnerText;			// 资源文件名,带后缀,没有重复
 			string fileNameWithSuffix = assetName.Substring(CommonDefine.P_RESOURCE_PATH.Length);	// 需要移除前缀
 			if (mAssetBundleInfoList.ContainsKey(bundleName))
@@ -110,9 +107,9 @@ public class AssetBundleLoader : MonoBehaviour
 	public List<string> getBundleNameList(string path)
 	{
 		List<string> bundleNameList = new List<string>();
-		foreach(var item in mAssetBundleInfoList)
+		foreach (var item in mAssetBundleInfoList)
 		{
-			if(item.Key.StartsWith(path))
+			if (item.Key.StartsWith(path))
 			{
 				bundleNameList.Add(item.Key);
 			}
@@ -130,7 +127,7 @@ public class AssetBundleLoader : MonoBehaviour
 			return false;
 		}
 		AssetBundleInfo bundleInfo = mAssetToBundleInfo[fileNameWithSuffix].mParentAssetBundle;
-		if(bundleInfo.mLoaded != LOAD_STATE.LS_LOADED)
+		if (bundleInfo.mLoaded != LOAD_STATE.LS_LOADED)
 		{
 			return false;
 		}
@@ -155,7 +152,7 @@ public class AssetBundleLoader : MonoBehaviour
 	// 同步加载资源包
 	public List<UnityEngine.Object> loadAssetBundle(string bundleName)
 	{
-		if(mAssetBundleInfoList.ContainsKey(bundleName))
+		if (mAssetBundleInfoList.ContainsKey(bundleName))
 		{
 			AssetBundleInfo bundleInfo = mAssetBundleInfoList[bundleName];
 			if (bundleInfo.mLoaded == LOAD_STATE.LS_LOADING)
@@ -172,7 +169,7 @@ public class AssetBundleLoader : MonoBehaviour
 			if (bundleInfo.mLoaded == LOAD_STATE.LS_LOADED)
 			{
 				List<UnityEngine.Object> assetList = new List<UnityEngine.Object>();
-				foreach(var item in bundleInfo.mAssetList)
+				foreach (var item in bundleInfo.mAssetList)
 				{
 					assetList.Add(item.Value.mAssetObject);
 				}
@@ -198,55 +195,33 @@ public class AssetBundleLoader : MonoBehaviour
 		bundleInfo.loadAssetBundleAsync(doneCallback);
 		return true;
 	}
-	// 同步加载动更资源,文件名称,不带后缀,Resources下的相对路径
+	// 同步加载资源,文件名称,不带后缀,Resources下的相对路径
 	public T loadAsset<T>(string fileName) where T : UnityEngine.Object
 	{
 		string fileNameWithSuffix = fileName;
 		adjustResourceName<T>(ref fileNameWithSuffix);
+		// 找不到资源则直接返回
 		if (!mAssetToBundleInfo.ContainsKey(fileNameWithSuffix))
 		{
 			return null;
 		}
 		AssetBundleInfo bundleInfo = mAssetToBundleInfo[fileNameWithSuffix].mParentAssetBundle;
-		if (bundleInfo.mLoaded == LOAD_STATE.LS_LOADING)
-		{
-			UnityUtility.logError("asset bundle is loading! can not load asset! asset name : " + fileName);
-			return null;
-		}
-		// 如果资源包还未加载,则先加载资源包
-		if (bundleInfo.mLoaded == LOAD_STATE.LS_UNLOAD)
-		{
-			loadAssetBundle(bundleInfo.mBundleName);
-		}
-		return bundleInfo.getAsset<T>(fileNameWithSuffix);
+		T res = bundleInfo.loadAsset<T>(ref fileNameWithSuffix);
+		return res;
 	}
 	// 异步加载资源
-	public bool loadAssetAsync<T>(string fileName, AssetLoadDoneCallback callback) where T : UnityEngine.Object
+	public bool loadAssetAsync<T>(string fileName, AssetLoadDoneCallback doneCallback) where T : UnityEngine.Object
 	{
 		string fileNameWithSuffix = fileName;
 		adjustResourceName<T>(ref fileNameWithSuffix);
+		// 找不到资源则直接返回
 		if (!mAssetToBundleInfo.ContainsKey(fileNameWithSuffix))
 		{
 			return false;
 		}
 		AssetBundleInfo bundleInfo = mAssetToBundleInfo[fileNameWithSuffix].mParentAssetBundle;
-		if (bundleInfo.mLoaded == LOAD_STATE.LS_LOADING)
-		{
-			UnityUtility.logError("asset bundle is loading! can not load asset! asset name : " + fileName);
-			return false;
-		}
-		// 如果资源包还未加载,则先加载资源包
-		if (bundleInfo.mLoaded == LOAD_STATE.LS_UNLOAD)
-		{
-			mAssetLoadCallback.Add(fileNameWithSuffix, callback);
-			loadAssetBundleAsync(bundleInfo.mBundleName, null);
-		}
-		// 如果已经加载,则直接回调
-		else if(bundleInfo.mLoaded == LOAD_STATE.LS_LOADED)
-		{
-			callback(bundleInfo.mAssetList[fileNameWithSuffix].mAssetObject);
-		}
-		return true;
+		bool ret = bundleInfo.loadAssetAsync(ref fileNameWithSuffix, doneCallback);
+		return ret;
 	}
 	// 请求异步加载资源包
 	public void requestLoadAssetBundle(AssetBundleInfo bundleInfo)
@@ -267,22 +242,13 @@ public class AssetBundleLoader : MonoBehaviour
 	//-----------------------------------------------------------------------------------------------
 	protected IEnumerator loadAssetBundleCoroutine(AssetBundleInfo bundleInfo, bool loadFromWWW)
 	{
+		UnityUtility.logInfo(bundleInfo.mBundleName + " start load bundld");
 		// 先确保依赖项全部已经加载完成,才能开始加载当前请求的资源包
-		// 异步加载所有未加载的依赖项
-		foreach (var item in bundleInfo.mParents)
-		{
-			if (item.Value.mLoaded == LOAD_STATE.LS_UNLOAD)
-			{
-				item.Value.mLoaded = LOAD_STATE.LS_LOADING;
-				yield return StartCoroutine(loadAssetBundleCoroutine(item.Value, loadFromWWW));
-			}
-		}
-		// 为了避免异步加载的对象依赖相同的依赖项时造成错误(因为上面只是加载了未加载的依赖项,而正在加载的依赖项没有判断)
-		// 所以此处仍然需要等待所有依赖项都加载完毕
 		while (!bundleInfo.isAllDependenceDone())
 		{
 			yield return null;
 		}
+
 		AssetBundle assetBundle = null;
 		// 通过www加载
 		if (loadFromWWW)
@@ -303,10 +269,12 @@ public class AssetBundleLoader : MonoBehaviour
 			if (request == null)
 			{
 				UnityUtility.logError("can not load asset bundle async : " + bundleInfo.mBundleName);
+				yield break;
 			}
 			yield return request;
 			assetBundle = request.assetBundle;
 		}
+
 		// 异步加载其中所有的资源
 		foreach (var item in bundleInfo.mAssetList)
 		{
@@ -314,23 +282,16 @@ public class AssetBundleLoader : MonoBehaviour
 			if (assetRequest == null)
 			{
 				UnityUtility.logError("can not load asset async : " + item.Value.mAssetName);
+				yield break;
 			}
 			yield return assetRequest;
 			item.Value.mAssetObject = assetRequest.asset;
 		}
-		// 加载完成后进行通知
+		UnityUtility.logInfo(bundleInfo.mBundleName + " load bundld done");
+
+		// 加载完成后记录下来并且通知AssetBundleInfo
 		mBundleRequestList[bundleInfo] = true;
 		bundleInfo.notifyAssetBundleAsyncLoadedDone(assetBundle);
-
-		// 然后通知所有的资源回调
-		foreach(var item in bundleInfo.mAssetList)
-		{
-			if(mAssetLoadCallback.ContainsKey(item.Key))
-			{
-				mAssetLoadCallback[item.Key](item.Value.mAssetObject);
-				mAssetLoadCallback.Remove(item.Key);
-			}
-		}
 	}
 	protected void adjustResourceName<T>(ref string fileName) where T : UnityEngine.Object
 	{

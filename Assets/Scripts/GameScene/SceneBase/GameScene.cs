@@ -5,15 +5,15 @@ using System.Collections.Generic;
 
 public class GameScene : ComponentOwner
 {
-	protected Dictionary<PROCEDURE_TYPE, SceneProcedure> mSceneProcedureList;
-	protected GAME_SCENE_TYPE	mType;
-	protected PROCEDURE_TYPE	mFirstProcedure;
-	protected PROCEDURE_TYPE	mLastProcedureType;
-	protected SceneProcedure	mCurProcedure;
-	protected bool				mDestroyEngineScene;
-	protected List<PROCEDURE_TYPE> mLastProcedureList;	// 所进入过的所有流程
-	protected GameObject		mSceneObject;
-	protected AudioSource		mAudioSource;
+	protected Dictionary<PROCEDURE_TYPE, SceneProcedure>	mSceneProcedureList;
+	protected GAME_SCENE_TYPE								mType;
+	protected PROCEDURE_TYPE								mFirstProcedure;
+	protected PROCEDURE_TYPE								mLastProcedureType;
+	protected SceneProcedure								mCurProcedure;
+	protected bool											mDestroyEngineScene;
+	protected List<PROCEDURE_TYPE>							mLastProcedureList;	// 所进入过的所有流程
+	protected GameObject									mSceneObject;
+	protected AudioSource									mAudioSource;
     public GameScene(GAME_SCENE_TYPE type, string name) 
         :
         base(name)
@@ -34,16 +34,14 @@ public class GameScene : ComponentOwner
 			mAudioSource = mSceneObject.AddComponent<AudioSource>();
 		}
     }
+	// 进入场景时初始化
     public virtual void init()
     {
         initComponents();
-
         // 创建出所有的场景流程
         createSceneProcedure();
-
         // 设置起始流程名
         setFirstProcedureName();
-
         // 开始执行起始流程
         CommandGameSceneChangeProcedure cmd  = new CommandGameSceneChangeProcedure(false, false);
         cmd.mProcedure = mFirstProcedure;
@@ -60,6 +58,27 @@ public class GameScene : ComponentOwner
 		base.destroyAllComponents();
 		GameObject.DestroyObject(mSceneObject);
 		mSceneObject = null;
+	}
+	public virtual void update(float elapsedTime)
+	{
+		// 更新组件
+		base.updateComponents(elapsedTime);
+
+		// 更新当前流程
+		if (mCurProcedure != null)
+		{
+			mCurProcedure.keyProcess(elapsedTime);
+			mCurProcedure.update(elapsedTime);
+		}
+	}
+	// 退出场景
+	public virtual void exit()
+	{
+		if(mCurProcedure != null)
+		{
+			mCurProcedure.exit(null, null);
+			mCurProcedure = null;
+		}
 	}
 	public AudioSource getAudioSource()
 	{
@@ -81,7 +100,6 @@ public class GameScene : ComponentOwner
 		{
 			return;
 		}
-
 		// 获得上一次进入的流程
 		PROCEDURE_TYPE lastType = mLastProcedureList[mLastProcedureList.Count - 1];
 		if (mSceneProcedureList.ContainsKey(lastType))
@@ -134,18 +152,6 @@ public class GameScene : ComponentOwner
         }
         return false;
     }
-    public virtual void update(float elapsedTime)
-    {
-        // 更新组件
-        base.updateComponents(elapsedTime);
-
-        // 更新当前流程
-        if (mCurProcedure != null)
-        {
-            mCurProcedure.keyProcess(elapsedTime);
-            mCurProcedure.update(elapsedTime);
-        }
-    }
     public virtual void notifySceneObjectDestroy(string objectName) { } // 通知场景一个场景物体被销毁了
     public bool getDestroyEngineScene() { return mDestroyEngineScene; }
     public void setDestroyEngineScene(bool value) { mDestroyEngineScene = value; }
@@ -155,7 +161,6 @@ public class GameScene : ComponentOwner
         {
             return mSceneProcedureList[type];
         }
-
         return null;
     }
     public SceneProcedure getCurSceneProcedure() { return mCurProcedure; }

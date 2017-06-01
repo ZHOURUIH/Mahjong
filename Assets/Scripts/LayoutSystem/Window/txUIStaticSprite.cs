@@ -68,4 +68,12 @@ public class txUIStaticSprite : txUIObject
 		}
 		return mSprite.alpha;
 	}
+	public void setFillPercent(float percent)
+	{
+		if (mSprite == null)
+		{
+			return;
+		}
+		mSprite.fillAmount = percent;
+	}
 }

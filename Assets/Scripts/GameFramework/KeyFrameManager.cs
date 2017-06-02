@@ -17,6 +17,7 @@ public class KeyFrameManager : GameBase
 	}
 	public AnimationCurve getKeyFrame(string name)
 	{
+		name = name.ToLower();
 		if (mCurveList.ContainsKey(name))
 		{
 			return mCurveList[name];
@@ -45,7 +46,7 @@ public class KeyFrameManager : GameBase
 		for(int i = 0; i < fileCount; ++i)
 		{
 			string fileNameNoSuffix = StringUtility.getFileNameNoSuffix(fileList[i], true);
-			mCurveList.Add(fileNameNoSuffix, null);
+			mCurveList.Add(fileNameNoSuffix.ToLower(), null);
 			mResourceManager.loadResourceAsync<GameObject>(path + fileNameNoSuffix, onKeyFrameLoaded, true);
 		}
 	}
@@ -60,26 +61,23 @@ public class KeyFrameManager : GameBase
 	//------------------------------------------------------------------------------------------------------------------
 	protected void onKeyFrameLoaded(UnityEngine.Object res)
 	{
-		if(mCurveList.ContainsKey(res.name))
+		GameObject keyFrameObject = UnityUtility.instantiatePrefab(mManagerObject, res as GameObject);
+		// 查找关键帧曲线,加入列表中
+		TweenScale tweenScale = keyFrameObject.GetComponent<TweenScale>();
+		if (tweenScale == null)
 		{
-			GameObject keyFrameObject = UnityUtility.instantiatePrefab(mManagerObject, res as GameObject);
-			// 查找关键帧曲线,加入列表中
-			TweenScale tweenScale = keyFrameObject.GetComponent<TweenScale>();
-			if (tweenScale == null)
-			{
-				UnityUtility.logError("object in KeyFrame folder must has TweenScale!");
-				return;
-			}
-			AnimationCurve curve = tweenScale.animationCurve;
-			if (curve != null)
-			{
-				mCurveList[res.name] = curve;
-				++mLoadedCount;
-			}
-			else
-			{
-				UnityUtility.logError("object in KeyFrame folder must has TweenScale and AnimationCurve!");
-			}
+			UnityUtility.logError("object in KeyFrame folder must has TweenScale!");
+			return;
+		}
+		AnimationCurve curve = tweenScale.animationCurve;
+		if (curve != null)
+		{
+			mCurveList[res.name.ToLower()] = curve;
+			++mLoadedCount;
+		}
+		else
+		{
+			UnityUtility.logError("object in KeyFrame folder must has TweenScale and AnimationCurve!");
 		}
 	}
 }

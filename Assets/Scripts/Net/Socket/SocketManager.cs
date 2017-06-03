@@ -213,12 +213,12 @@ public class SocketManager : GameBase
 					short realDataSize = BinaryUtility.readShort(recvBuff, ref index);
 					if(realDataSize != packetSize)
 					{
-						UnityUtility.logError("error : wrong packet size! readed : " + realDataSize + ", packet size : " + packetSize);
+						UnityUtility.logError("error : wrong packet size! readed : " + realDataSize + ", packet size : " + packetSize, false);
 						break;
 					}
 					if (packetSize > nRecv - sizeof(short))
 					{
-						UnityUtility.logError("error : wrong packet data! packet : " + type + ", need size : " + packetSize + ", receive size : " + (nRecv - sizeof(PACKET_TYPE)));
+						UnityUtility.logError("error : wrong packet data! packet : " + type + ", need size : " + packetSize + ", receive size : " + (nRecv - sizeof(PACKET_TYPE)), false);
 						break;
 					}
 					else

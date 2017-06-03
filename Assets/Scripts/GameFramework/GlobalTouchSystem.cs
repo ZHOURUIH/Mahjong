@@ -13,11 +13,11 @@ public class ColliderCallBack
 
 public class GlobalTouchSystem : GameBase
 {
-	Dictionary<txUIButton, ColliderCallBack> mButtonCallbackList;
-	Dictionary<BoxCollider, ColliderCallBack> mBoxColliderCallbackList;
-	List<BoxCollider> mBoxColliderList;
-	Vector3 mLastMousePosition;
-	txUIButton mHoverButton;
+	protected Dictionary<txUIButton, ColliderCallBack> mButtonCallbackList;
+	protected Dictionary<BoxCollider, ColliderCallBack> mBoxColliderCallbackList;
+	protected List<BoxCollider> mBoxColliderList;
+	protected Vector3 mLastMousePosition;
+	protected txUIButton mHoverButton;
 	public GlobalTouchSystem()
 	{
 		mButtonCallbackList = new Dictionary<txUIButton, ColliderCallBack>();

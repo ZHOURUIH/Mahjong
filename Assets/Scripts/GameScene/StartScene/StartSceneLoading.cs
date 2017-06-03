@@ -16,7 +16,9 @@ public class LogoSceneLoading : SceneProcedure
 	base(type, gameScene)
 	{
 		mLoadInfo = new Dictionary<LAYOUT_TYPE, LayoutLoadInfo>();
-		mLoadInfo.Add(LAYOUT_TYPE.LT_START, new LayoutLoadInfo(LAYOUT_TYPE.LT_START, 0));
+		mLoadInfo.Add(LAYOUT_TYPE.LT_LOGIN, new LayoutLoadInfo(LAYOUT_TYPE.LT_LOGIN, 0));
+		mLoadInfo.Add(LAYOUT_TYPE.LT_REGISTER, new LayoutLoadInfo(LAYOUT_TYPE.LT_REGISTER, 0));
+		// 由于使用了较多的NGUI控件,所以禁用全局触摸检测,只加载不显示
 		mLoadInfo.Add(LAYOUT_TYPE.LT_GLOBAL_TOUCH, new LayoutLoadInfo(LAYOUT_TYPE.LT_GLOBAL_TOUCH, 100));
 	}
 	protected override void onInit(SceneProcedure lastProcedure, string intent)
@@ -56,8 +58,9 @@ public class LogoSceneLoading : SceneProcedure
 	{
 		QualitySettings.vSyncCount = mLastVSync;
 		Application.targetFrameRate = mLastTargetFrameRate;
+		// 加载结束后进入登录流程
 		CommandGameSceneChangeProcedure cmd = new CommandGameSceneChangeProcedure(true, true);
-		cmd.mProcedure = PROCEDURE_TYPE.PT_START_RUNNING;
+		cmd.mProcedure = PROCEDURE_TYPE.PT_START_LOGIN;
 		mCommandSystem.pushDelayCommand(cmd, mGameScene);
 	}
 }

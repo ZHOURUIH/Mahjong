@@ -1,18 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class LogoSceneRunning : SceneProcedure
+public class LogoSceneLogin : SceneProcedure
 {
-    public LogoSceneRunning()
+    public LogoSceneLogin()
     { }
-	public LogoSceneRunning(PROCEDURE_TYPE type, GameScene gameScene)
+	public LogoSceneLogin(PROCEDURE_TYPE type, GameScene gameScene)
 		:
 		base(type, gameScene)
 	{}
 	protected override void onInit(SceneProcedure lastProcedure, string intent)
     {
-		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_START);
-		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_GLOBAL_TOUCH);
+		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_LOGIN);
 	}
 	protected override void onUpdate(float elapsedTime)
     {
@@ -20,7 +19,7 @@ public class LogoSceneRunning : SceneProcedure
     }
 	protected override void onExit(SceneProcedure nextProcedure)
     {
-		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_START);
+		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_LOGIN);
 	}
 	protected override void onKeyProcess(float elapsedTime)
 	{

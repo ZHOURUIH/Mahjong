@@ -17,6 +17,7 @@ public class SocketFactoryManager
 		registerFactory(typeof(CSLogin), PACKET_TYPE.PT_CS_LOGIN);
 		registerFactory(typeof(CSCreateRoom), PACKET_TYPE.PT_CS_CREATE_ROOM);
 		registerFactory(typeof(CSJoinRoom), PACKET_TYPE.PT_CS_JOIN_ROOM);
+		registerFactory(typeof(CSRegister), PACKET_TYPE.PT_CS_REGISTER);
 		// 服务器->客户端
 		registerFactory(typeof(SCLoginRet), PACKET_TYPE.PT_SC_LOGIN_RET);
 		registerFactory(typeof(SCCreateRoomRet), PACKET_TYPE.PT_SC_CREATE_ROOM_RET);
@@ -26,6 +27,7 @@ public class SocketFactoryManager
 		registerFactory(typeof(SCOtherPlayerLeaveRoom), PACKET_TYPE.PT_SC_OTHER_PLAYER_LEAVE_ROOM);
 		registerFactory(typeof(SCOtherPlayerOffline), PACKET_TYPE.PT_SC_OTHER_PLAYER_OFFLINE);
 		registerFactory(typeof(SCStartGame), PACKET_TYPE.PT_SC_START_GAME);
+		registerFactory(typeof(SCRegisterRet), PACKET_TYPE.PT_SC_REGISTER_RET);
 	}
 	public SocketFactory getFactory(PACKET_TYPE type)
 	{

@@ -8,7 +8,8 @@ using System.Collections.Generic;
 public enum LAYOUT_TYPE
 {
 	LT_GLOBAL_TOUCH,
-	LT_START,
+	LT_LOGIN,
+	LT_REGISTER,
 	LT_MAIN_FRAME,
 	LT_CHARACTER,
 	LT_BILLBOARD,
@@ -37,7 +38,8 @@ public enum UI_OBJECT_TYPE
 	UBT_SLIDER,			// 滑动条
 	UBT_SCROLL_VIEW,	// 包含多个按钮的滚动条
 	UBT_VIDEO,			// 用于播放视频的窗口
-	UBT_TEXT,			// 文本窗口
+	UBT_TEXT,           // 文本窗口
+	UBT_EDITBOX,		// 文本输入框
 }
 // 停靠位置
 public enum DOCKING_POSITION
@@ -101,7 +103,8 @@ public enum PROCEDURE_TYPE
 
 	PT_START_MIN,
 	PT_START_LOADING,
-	PT_START_RUNNING,
+	PT_START_LOGIN,
+	PT_START_REGISTER,
 	PT_START_MAX,
 
 	PT_MAIN_MIN,

@@ -13,6 +13,7 @@ public class StartScene : GameScene
 	public override void createSceneProcedure()
 	{
 		addProcedure<LogoSceneLoading>(PROCEDURE_TYPE.PT_START_LOADING);
-		addProcedure<LogoSceneRunning>(PROCEDURE_TYPE.PT_START_RUNNING);
+		addProcedure<LogoSceneLogin>(PROCEDURE_TYPE.PT_START_LOGIN);
+		addProcedure<LogoSceneRegister>(PROCEDURE_TYPE.PT_START_REGISTER);
 	}
 }

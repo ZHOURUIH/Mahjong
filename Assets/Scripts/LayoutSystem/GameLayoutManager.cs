@@ -204,7 +204,8 @@ public class GameLayoutManager : CommandReceiver
 	protected void addLayoutNameType()
 	{
 		registerLayout(typeof(ScriptGlobalTouch), LAYOUT_TYPE.LT_GLOBAL_TOUCH, "UIGlobalTouch");
-		registerLayout(typeof(ScriptStart), LAYOUT_TYPE.LT_START, "UIStart");
+		registerLayout(typeof(ScriptLogin), LAYOUT_TYPE.LT_LOGIN, "UILogin");
+		registerLayout(typeof(ScriptRegister), LAYOUT_TYPE.LT_REGISTER, "UIRegister");
 		registerLayout(typeof(ScriptMainFrame), LAYOUT_TYPE.LT_MAIN_FRAME, "UIMainFrame");
 		registerLayout(typeof(ScriptBillboard), LAYOUT_TYPE.LT_BILLBOARD, "UIBillboard");
 		registerLayout(typeof(ScriptCharacter), LAYOUT_TYPE.LT_CHARACTER, "UICharacter");

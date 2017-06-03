@@ -12,6 +12,7 @@ public class UITooltip : MonoBehaviour
 
 	public Camera uiCamera;
 	public UILabel text;
+	public GameObject tooltipRoot;
 	public UISprite background;
 	public float appearSpeed = 10f;
 	public bool scalingTransitions = true;
@@ -153,7 +154,6 @@ public class UITooltip : MonoBehaviour
 				mPos = mTrans.localPosition;
 				mPos.x = Mathf.Round(mPos.x);
 				mPos.y = Mathf.Round(mPos.y);
-				mTrans.localPosition = mPos;
 			}
 			else
 			{
@@ -165,6 +165,12 @@ public class UITooltip : MonoBehaviour
 				mPos.x -= Screen.width * 0.5f;
 				mPos.y -= Screen.height * 0.5f;
 			}
+
+			mTrans.localPosition = mPos;
+
+			// Force-update all anchors below the tooltip
+			if (tooltipRoot != null) tooltipRoot.BroadcastMessage("UpdateAnchors");
+			else text.BroadcastMessage("UpdateAnchors");
 		}
 		else
 		{

@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2015 Tasharen Entertainment
+// Copyright © 2011-2016 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -36,6 +36,7 @@ public class EventDelegateDrawer : PropertyDrawer
 		if (ps != null)
 		{
 			paramArrayProp.arraySize = ps.Length;
+
 			for (int i = 0; i < ps.Length; i++)
 			{
 				lines += lineHeight;
@@ -44,21 +45,14 @@ public class EventDelegateDrawer : PropertyDrawer
 				SerializedProperty objProp = paramProp.FindPropertyRelative("obj");
 				UnityEngine.Object obj = objProp.objectReferenceValue;
 
-				if (obj == null)
-					continue;
-
-				System.Type type = obj.GetType();
-
-				GameObject selGO = null;
-				if (type == typeof(GameObject)) selGO = obj as GameObject;
-				else if (type.IsSubclassOf(typeof(Component))) selGO = (obj as Component).gameObject;
-
-				if (selGO != null)
-					lines += lineHeight;
-
-				//				EventDelegate.Parameter param = ps[i];
-				//				if (param.obj != null)
-				//					lines += lineHeight;
+				if (obj != null)
+				{
+					System.Type type = obj.GetType();
+					GameObject selGO = null;
+					if (type == typeof(GameObject)) selGO = obj as GameObject;
+					else if (type.IsSubclassOf(typeof(Component))) selGO = (obj as Component).gameObject;
+					if (selGO != null) lines += lineHeight;
+				}
 			}
 		}
 		return lines;

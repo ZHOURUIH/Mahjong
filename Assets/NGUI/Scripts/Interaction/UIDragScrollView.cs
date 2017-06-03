@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2015 Tasharen Entertainment
+// Copyright © 2011-2016 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -75,6 +75,19 @@ public class UIDragScrollView : MonoBehaviour
 			mAutoFind = true;
 		}
 		mScroll = scrollView;
+	}
+
+	/// <summary>
+	/// Stop the active dragging operation.
+	/// </summary>
+
+	void OnDisable ()
+	{
+		if (mScroll != null && mScroll.GetComponentInChildren<UIWrapContent>() == null)
+		{
+			mScroll.Press(false);
+			mScroll = null;
+		}
 	}
 
 	/// <summary>

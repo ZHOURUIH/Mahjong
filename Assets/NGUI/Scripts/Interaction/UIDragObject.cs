@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2015 Tasharen Entertainment
+// Copyright © 2011-2016 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -249,12 +249,31 @@ public class UIDragObject : MonoBehaviour
 		if (panelRegion != null)
 		{
 			mTargetPos += worldDelta;
-			target.position = mTargetPos;
+			Transform parent = target.parent;
+			Rigidbody rb = target.GetComponent<Rigidbody>();
 
-			Vector3 after = target.localPosition;
-			after.x = Mathf.Round(after.x);
-			after.y = Mathf.Round(after.y);
-			target.localPosition = after;
+			if (parent != null)
+			{
+				Vector3 after = parent.worldToLocalMatrix.MultiplyPoint3x4(mTargetPos);
+				after.x = Mathf.Round(after.x);
+				after.y = Mathf.Round(after.y);
+
+				if (rb != null)
+				{
+					// With a lot of colliders under the rigidbody, moving the transform causes some crazy overhead.
+					// Moving the rigidbody is much cheaper, but it does seem to have a side effect of causing
+					// widgets to detect movement relative to the panel, when in fact they should not be moving.
+					// This is why it's best to keep the panel as 'static' if at all possible.
+					after = parent.localToWorldMatrix.MultiplyPoint3x4(after);
+					rb.position = after;
+				}
+				else target.localPosition = after;
+			}
+			else if (rb != null)
+			{
+				rb.position = mTargetPos;
+			}
+			else target.position = mTargetPos;
 
 			UIScrollView ds = panelRegion.GetComponent<UIScrollView>();
 			if (ds != null) ds.UpdateScrollbars(true);

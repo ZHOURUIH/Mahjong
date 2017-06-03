@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2015 Tasharen Entertainment
+// Copyright © 2011-2016 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -47,10 +47,11 @@ public class UIProgressBar : UIWidgetContainer
 	[HideInInspector][SerializeField] protected float mValue = 1f;
 	[HideInInspector][SerializeField] protected FillDirection mFill = FillDirection.LeftToRight;
 
-	protected Transform mTrans;
-	protected bool mIsDirty = false;
-	protected Camera mCam;
-	protected float mOffset = 0f;
+	[System.NonSerialized] protected bool mStarted = false;
+	[System.NonSerialized] protected Transform mTrans;
+	[System.NonSerialized] protected bool mIsDirty = false;
+	[System.NonSerialized] protected Camera mCam;
+	[System.NonSerialized] protected float mOffset = 0f;
 
 	/// <summary>
 	/// Number of steps the slider should be divided into. For example 5 means possible values of 0, 0.25, 0.5, 0.75, and 1.0.
@@ -103,7 +104,7 @@ public class UIProgressBar : UIWidgetContainer
 			if (mFill != value)
 			{
 				mFill = value;
-				ForceUpdate();
+				if (mStarted) ForceUpdate();
 			}
 		}
 	}
@@ -119,32 +120,7 @@ public class UIProgressBar : UIWidgetContainer
 			if (numberOfSteps > 1) return Mathf.Round(mValue * (numberOfSteps - 1)) / (numberOfSteps - 1);
 			return mValue;
 		}
-		set
-		{
-			float val = Mathf.Clamp01(value);
-
-			if (mValue != val)
-			{
-				float before = this.value;
-				mValue = val;
-
-				if (before != this.value)
-				{
-					ForceUpdate();
-
-					if (NGUITools.GetActive(this) && EventDelegate.IsValid(onChange))
-					{
-						current = this;
-						EventDelegate.Execute(onChange);
-						current = null;
-					}
-				}
-#if UNITY_EDITOR
-				if (!Application.isPlaying)
-					NGUITools.SetDirty(this);
-#endif
-			}
-		}
+		set { Set(value); }
 	}
 
 	/// <summary>
@@ -161,7 +137,7 @@ public class UIProgressBar : UIWidgetContainer
 		}
 		set
 		{
-#if UNITY_4_3 || UNITY_4_5 || UNITY_4_6
+#if UNITY_4_3 || UNITY_4_5 || UNITY_4_6 || UNITY_4_7
 			if (mFG != null)
 			{
 				mFG.alpha = value;
@@ -230,11 +206,44 @@ public class UIProgressBar : UIWidgetContainer
 	protected bool isInverted { get { return (mFill == FillDirection.RightToLeft || mFill == FillDirection.TopToBottom); } }
 
 	/// <summary>
+	/// Set the progress bar's value. If setting the initial value, call Start() first.
+	/// </summary>
+
+	public void Set (float val, bool notify = true)
+	{
+		val = Mathf.Clamp01(val);
+
+		if (mValue != val)
+		{
+			float before = value;
+			mValue = val;
+
+			if (mStarted && before != value)
+			{
+				ForceUpdate();
+
+				if (notify && NGUITools.GetActive(this) && EventDelegate.IsValid(onChange))
+				{
+					current = this;
+					EventDelegate.Execute(onChange);
+					current = null;
+				}
+			}
+#if UNITY_EDITOR
+			if (!Application.isPlaying)
+				NGUITools.SetDirty(this);
+#endif
+		}
+	}
+
+	/// <summary>
 	/// Register the event listeners.
 	/// </summary>
 
-	protected void Start ()
+	public void Start ()
 	{
+		if (mStarted) return;
+		mStarted = true;
 		Upgrade();
 
 		if (Application.isPlaying)

@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2015 Tasharen Entertainment
+// Copyright © 2011-2016 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -328,8 +328,8 @@ public class UI2DSprite : UIBasicSprite
 			if (tex != null)
 			{
 				Rect rect = mSprite.rect;
-				int w = Mathf.RoundToInt(rect.width);
-				int h = Mathf.RoundToInt(rect.height);
+				int w = Mathf.RoundToInt(pixelSize * rect.width);
+				int h = Mathf.RoundToInt(pixelSize * rect.height);
 
 				if ((w & 1) == 1) ++w;
 				if ((h & 1) == 1) ++h;
@@ -344,7 +344,7 @@ public class UI2DSprite : UIBasicSprite
 	/// Virtual function called by the UIPanel that fills the buffers.
 	/// </summary>
 
-	public override void OnFill (BetterList<Vector3> verts, BetterList<Vector2> uvs, BetterList<Color32> cols)
+	public override void OnFill (BetterList<Vector3> verts, BetterList<Vector2> uvs, BetterList<Color> cols)
 	{
 		Texture tex = mainTexture;
 		if (tex == null) return;

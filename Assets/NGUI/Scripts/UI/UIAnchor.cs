@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2015 Tasharen Entertainment
+// Copyright © 2011-2016 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -73,10 +73,10 @@ public class UIAnchor : MonoBehaviour
 	UIRoot mRoot;
 	bool mStarted = false;
 
-	void Awake ()
+	void OnEnable ()
 	{
 		mTrans = transform;
-#if UNITY_4_3 || UNITY_4_5 || UNITY_4_6
+#if UNITY_4_3 || UNITY_4_5 || UNITY_4_6 || UNITY_4_7
 		mAnim = animation;
 #else
 		mAnim = GetComponent<Animation>();
@@ -84,7 +84,7 @@ public class UIAnchor : MonoBehaviour
 		UICamera.onScreenResize += ScreenSizeChanged;
 	}
 
-	void OnDestroy () { UICamera.onScreenResize -= ScreenSizeChanged; }
+	void OnDisable () { UICamera.onScreenResize -= ScreenSizeChanged; }
 
 	void ScreenSizeChanged () { if (mStarted && runOnlyOnce) Update(); }
 
@@ -224,7 +224,7 @@ public class UIAnchor : MonoBehaviour
 		}
 
 		// Wrapped in an 'if' so the scene doesn't get marked as 'edited' every frame
-#if UNITY_4_3 || UNITY_4_5 || UNITY_4_6
+#if UNITY_4_3 || UNITY_4_5 || UNITY_4_6 || UNITY_4_7
 		if (useCamera && uiCamera.isOrthoGraphic && mTrans.parent != null)
 #else
 		if (useCamera && uiCamera.orthographic && mTrans.parent != null)

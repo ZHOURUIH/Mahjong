@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2015 Tasharen Entertainment
+// Copyright © 2011-2016 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -72,7 +72,7 @@ public class UIDragDropItem : MonoBehaviour
 	protected virtual void Awake ()
 	{
 		mTrans = transform;
-#if UNITY_4_3 || UNITY_4_5 || UNITY_4_6
+#if UNITY_4_3 || UNITY_4_5 || UNITY_4_6 || UNITY_4_7
 		mCollider = collider;
 		mCollider2D = collider2D;
 #else
@@ -196,6 +196,7 @@ public class UIDragDropItem : MonoBehaviour
 				item.mPressed = true;
 				item.mDragging = true;
 				item.Start();
+				item.OnClone(gameObject);
 				item.OnDragDropStart();
 
 				if (UICamera.currentTouch == null)
@@ -215,6 +216,12 @@ public class UIDragDropItem : MonoBehaviour
 	}
 
 	/// <summary>
+	/// Called on the cloned object when it was duplicated.
+	/// </summary>
+
+	protected virtual void OnClone (GameObject original) { }
+
+	/// <summary>
 	/// Perform the dragging.
 	/// </summary>
 
@@ -222,7 +229,8 @@ public class UIDragDropItem : MonoBehaviour
 	{
 		if (!interactable) return;
 		if (!mDragging || !enabled || mTouch != UICamera.currentTouch) return;
-		OnDragDropMove(delta * mRoot.pixelSizeAdjustment);
+		if (mRoot != null) OnDragDropMove(delta * mRoot.pixelSizeAdjustment);
+		else OnDragDropMove(delta);
 	}
 
 	/// <summary>
@@ -341,18 +349,18 @@ public class UIDragDropItem : MonoBehaviour
 
 			// Re-enable the drag scroll view script
 			if (mDragScrollView != null)
-				StartCoroutine(EnableDragScrollView());
+				Invoke("EnableDragScrollView", 0.001f);
 
 			// Notify the widgets that the parent has changed
 			NGUITools.MarkParentAsChanged(gameObject);
 
 			if (mTable != null) mTable.repositionNow = true;
 			if (mGrid != null) mGrid.repositionNow = true;
-
-			// We're now done
-			OnDragDropEnd();
 		}
 		else NGUITools.Destroy(gameObject);
+
+		// We're now done
+		OnDragDropEnd();
 	}
 
 	/// <summary>
@@ -366,9 +374,9 @@ public class UIDragDropItem : MonoBehaviour
 	/// Reason: http://www.tasharen.com/forum/index.php?topic=10203.0
 	/// </summary>
 
-	protected IEnumerator EnableDragScrollView ()
+	protected void EnableDragScrollView ()
 	{
-		yield return new WaitForEndOfFrame();
-		if (mDragScrollView != null) mDragScrollView.enabled = true;
+		if (mDragScrollView != null)
+			mDragScrollView.enabled = true;
 	}
 }

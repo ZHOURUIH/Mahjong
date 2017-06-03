@@ -48,7 +48,7 @@ Shader "Hidden/Unlit/Transparent Masked 1"
 
 			struct v2f
 			{
-				float4 vertex : POSITION;
+				float4 vertex : SV_POSITION;
 				float2 texcoord : TEXCOORD0;
 				float2 texcoord1 : TEXCOORD1;
 				float2 worldPos : TEXCOORD2;
@@ -67,7 +67,7 @@ Shader "Hidden/Unlit/Transparent Masked 1"
 				return o;
 			}
 
-			half4 frag (v2f IN) : COLOR
+			half4 frag (v2f IN) : SV_Target
 			{
 				// Softness factor
 				float2 factor = (float2(1.0, 1.0) - abs(IN.worldPos)) * _ClipArgs0;

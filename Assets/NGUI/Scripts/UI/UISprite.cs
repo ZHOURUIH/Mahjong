@@ -1,10 +1,9 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2015 Tasharen Entertainment
+// Copyright © 2011-2016 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
-using System.Collections.Generic;
 
 /// <summary>
 /// Sprite is a textured element in the UI hierarchy.
@@ -134,6 +133,66 @@ public class UISprite : UIBasicSprite
 	}
 
 	/// <summary>
+	/// Whether a gradient will be applied.
+	/// </summary>
+
+	public bool applyGradient
+	{
+		get
+		{
+			return mApplyGradient;
+		}
+		set
+		{
+			if (mApplyGradient != value)
+			{
+				mApplyGradient = value;
+				MarkAsChanged();
+			}
+		}
+	}
+
+	/// <summary>
+	/// Top gradient color.
+	/// </summary>
+
+	public Color gradientTop
+	{
+		get
+		{
+			return mGradientTop;
+		}
+		set
+		{
+			if (mGradientTop != value)
+			{
+				mGradientTop = value;
+				if (mApplyGradient) MarkAsChanged();
+			}
+		}
+	}
+
+	/// <summary>
+	/// Bottom gradient color.
+	/// </summary>
+
+	public Color gradientBottom
+	{
+		get
+		{
+			return mGradientBottom;
+		}
+		set
+		{
+			if (mGradientBottom != value)
+			{
+				mGradientBottom = value;
+				if (mApplyGradient) MarkAsChanged();
+			}
+		}
+	}
+
+	/// <summary>
 	/// Sliced sprites generally have a border. X = left, Y = bottom, Z = right, W = top.
 	/// </summary>
 
@@ -186,11 +245,12 @@ public class UISprite : UIBasicSprite
 		{
 			if (type == Type.Sliced || type == Type.Advanced)
 			{
+				float ps = pixelSize;
 				Vector4 b = border * pixelSize;
 				int min = Mathf.RoundToInt(b.y + b.w);
 
 				UISpriteData sp = GetAtlasSprite();
-				if (sp != null) min += sp.paddingTop + sp.paddingBottom;
+				if (sp != null) min += Mathf.RoundToInt(ps * (sp.paddingTop + sp.paddingBottom));
 
 				return Mathf.Max(base.minHeight, ((min & 1) == 1) ? min + 1 : min);
 			}
@@ -222,14 +282,17 @@ public class UISprite : UIBasicSprite
 				int padRight = mSprite.paddingRight;
 				int padTop = mSprite.paddingTop;
 
-				float ps = pixelSize;
-
-				if (ps != 1f)
+				if (mType != Type.Simple)
 				{
-					padLeft = Mathf.RoundToInt(ps * padLeft);
-					padBottom = Mathf.RoundToInt(ps * padBottom);
-					padRight = Mathf.RoundToInt(ps * padRight);
-					padTop = Mathf.RoundToInt(ps * padTop);
+					float ps = pixelSize;
+
+					if (ps != 1f)
+					{
+						padLeft = Mathf.RoundToInt(ps * padLeft);
+						padBottom = Mathf.RoundToInt(ps * padBottom);
+						padRight = Mathf.RoundToInt(ps * padRight);
+						padTop = Mathf.RoundToInt(ps * padTop);
+					}
 				}
 
 				int w = mSprite.width + padLeft + padRight;
@@ -413,7 +476,7 @@ public class UISprite : UIBasicSprite
 	/// Virtual function called by the UIPanel that fills the buffers.
 	/// </summary>
 
-	public override void OnFill (BetterList<Vector3> verts, BetterList<Vector2> uvs, BetterList<Color32> cols)
+	public override void OnFill (BetterList<Vector3> verts, BetterList<Vector2> uvs, BetterList<Color> cols)
 	{
 		Texture tex = mainTexture;
 		if (tex == null) return;

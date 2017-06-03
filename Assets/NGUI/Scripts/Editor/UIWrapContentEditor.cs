@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2015 Tasharen Entertainment
+// Copyright © 2011-2016 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -48,6 +48,8 @@ public class UIWrapContentEditor : Editor
 		NGUIEditorTools.SetLabelWidth(90f);
 		if (sp1.intValue == sp2.intValue) GUILayout.Label("unlimited");
 		GUILayout.EndHorizontal();
+
+		serializedObject.DrawProperty("hideInactive");
 
 		NGUIEditorTools.DrawProperty("Cull Content", serializedObject, "cullContent");
 

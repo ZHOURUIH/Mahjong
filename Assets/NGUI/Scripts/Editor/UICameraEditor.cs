@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2015 Tasharen Entertainment
+// Copyright © 2011-2016 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -36,6 +36,16 @@ public class UICameraEditor : Editor
 			if (val != et.intValue) et.intValue = val;
 		}
 
+		SerializedProperty ev = serializedObject.FindProperty("eventsGoToColliders");
+
+		if (ev != null)
+		{
+			bool val = ev.boolValue;
+			bool newVal = EventsGo.Colliders == (EventsGo)EditorGUILayout.EnumPopup("Events go to...",
+				ev.boolValue ? EventsGo.Colliders : EventsGo.Rigidbodies);
+			if (val != newVal) ev.boolValue = newVal;
+		}
+
 		if (UICamera.eventHandler != cam)
 		{
 			EditorGUILayout.PropertyField(serializedObject.FindProperty("eventReceiverMask"), new GUIContent("Event Mask"));
@@ -50,23 +60,14 @@ public class UICameraEditor : Editor
 		}
 		else
 		{
+			serializedObject.DrawProperty("processEventsIn");
+
 			SerializedProperty mouse = serializedObject.FindProperty("useMouse");
 			SerializedProperty touch = serializedObject.FindProperty("useTouch");
 			SerializedProperty keyboard = serializedObject.FindProperty("useKeyboard");
 			SerializedProperty controller = serializedObject.FindProperty("useController");
 
 			EditorGUILayout.PropertyField(serializedObject.FindProperty("eventReceiverMask"), new GUIContent("Event Mask"));
-
-			SerializedProperty ev = serializedObject.FindProperty("eventsGoToColliders");
-
-			if (ev != null)
-			{
-				bool val = ev.boolValue;
-				bool newVal = EventsGo.Colliders == (EventsGo)EditorGUILayout.EnumPopup("Events go to...",
-					ev.boolValue ? EventsGo.Colliders : EventsGo.Rigidbodies);
-				if (val != newVal) ev.boolValue = newVal;
-			}
-
 			EditorGUILayout.PropertyField(serializedObject.FindProperty("debug"));
 
 			GUILayout.BeginHorizontal();
@@ -77,6 +78,12 @@ public class UICameraEditor : Editor
 			EditorGUI.BeginDisabledGroup(!mouse.boolValue && !touch.boolValue);
 			{
 				EditorGUILayout.PropertyField(serializedObject.FindProperty("allowMultiTouch"));
+			}
+			EditorGUI.EndDisabledGroup();
+
+			EditorGUI.BeginDisabledGroup(!(mouse.boolValue && (touch.boolValue || controller.boolValue)));
+			{
+				EditorGUILayout.PropertyField(serializedObject.FindProperty("autoHideCursor"));
 			}
 			EditorGUI.EndDisabledGroup();
 

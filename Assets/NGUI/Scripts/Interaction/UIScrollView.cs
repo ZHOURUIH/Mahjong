@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2015 Tasharen Entertainment
+// Copyright © 2011-2016 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -58,6 +58,13 @@ public class UIScrollView : MonoBehaviour
 	/// </summary>
 
 	public bool restrictWithinPanel = true;
+
+	/// <summary>
+	/// Whether the scroll view will execute its constrain within bounds logic on every drag operation.
+	/// </summary>
+
+	[Tooltip("Whether the scroll view will execute its constrain within bounds logic on every drag operation")]
+	public bool constrainOnDrag = false;
 
 	/// <summary>
 	/// Whether dragging will be disabled if the contents fit.
@@ -386,7 +393,7 @@ public class UIScrollView : MonoBehaviour
 		}
 	}
 
-	void OnDisable () { list.Remove(this); }
+	void OnDisable () { list.Remove(this); mPressed = false; }
 
 	/// <summary>
 	/// Restrict the scroll view's contents to be within the scroll view's bounds.
@@ -416,7 +423,7 @@ public class UIScrollView : MonoBehaviour
 				Vector3 pos = mTrans.localPosition + constraint;
 				pos.x = Mathf.Round(pos.x);
 				pos.y = Mathf.Round(pos.y);
-				SpringPanel.Begin(mPanel.gameObject, pos, 13f).strength = 8f;
+				SpringPanel.Begin(mPanel.gameObject, pos, 8f);
 			}
 			else
 			{
@@ -776,7 +783,7 @@ public class UIScrollView : MonoBehaviour
 			}
 			else
 			{
-				if (restrictWithinPanel && mPanel.clipping != UIDrawCall.Clipping.None)
+				if (mDragStarted && restrictWithinPanel && mPanel.clipping != UIDrawCall.Clipping.None)
 					RestrictWithinBounds(dragEffect == DragEffect.None, canMoveHorizontally, canMoveVertically);
 
 				if (mDragStarted && onDragFinished != null) onDragFinished();
@@ -792,7 +799,7 @@ public class UIScrollView : MonoBehaviour
 
 	public void Drag ()
 	{
-		if (UICamera.currentScheme == UICamera.ControlScheme.Controller) return;
+		if (!mPressed || UICamera.currentScheme == UICamera.ControlScheme.Controller) return;
 
 		if (enabled && NGUITools.GetActive(gameObject) && mShouldMove)
 		{
@@ -857,19 +864,30 @@ public class UIScrollView : MonoBehaviour
 				{
 					Vector3 constraint = mPanel.CalculateConstrainOffset(bounds.min, bounds.max);
 
+					if (movement == Movement.Horizontal)
+					{
+						constraint.y = 0f;
+					}
+					else if (movement == Movement.Vertical)
+					{
+						constraint.x = 0f;
+					}
+					else if (movement == Movement.Custom)
+					{
+						constraint.x *= customMovement.x;
+						constraint.y *= customMovement.y;
+					}
+
 					if (constraint.magnitude > 1f)
 					{
 						MoveAbsolute(offset * 0.5f);
 						mMomentum *= 0.5f;
 					}
-					else
-					{
-						MoveAbsolute(offset);
-					}
+					else MoveAbsolute(offset);
 				}
 
 				// We want to constrain the UI to be within bounds
-				if (restrictWithinPanel &&
+				if (constrainOnDrag && restrictWithinPanel &&
 					mPanel.clipping != UIDrawCall.Clipping.None &&
 					dragEffect != DragEffect.MomentumAndSpring)
 				{
@@ -940,7 +958,7 @@ public class UIScrollView : MonoBehaviour
 		// Apply momentum
 		if (!mPressed)
 		{
-			if (mMomentum.magnitude > 0.0001f || mScroll != 0f)
+			if (mMomentum.magnitude > 0.0001f || Mathf.Abs(mScroll) > 0.0001f)
 			{
 				if (movement == Movement.Horizontal)
 				{
@@ -1019,8 +1037,8 @@ public class UIScrollView : MonoBehaviour
 
 		if (horizontalScrollBar == null && verticalScrollBar == null)
 		{
-			if (scale.x != 0f) Scroll(delta.x);
-			else if (scale.y != 0f) Scroll(delta.y);
+			if (canMoveHorizontally) Scroll(delta.x);
+			else if (canMoveVertically) Scroll(delta.y);
 		}
 	}
 

@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2015 Tasharen Entertainment
+// Copyright © 2011-2016 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -232,6 +232,8 @@ public class UIKeyNavigation : MonoBehaviour
 		return go.transform.position;
 	}
 
+	static public int mLastFrame = 0;
+
 	/// <summary>
 	/// React to navigation.
 	/// </summary>
@@ -239,6 +241,8 @@ public class UIKeyNavigation : MonoBehaviour
 	public virtual void OnNavigate (KeyCode key)
 	{
 		if (UIPopupList.isOpen) return;
+		if (mLastFrame == Time.frameCount) return;
+		mLastFrame = Time.frameCount;
 
 		GameObject go = null;
 
@@ -259,6 +263,10 @@ public class UIKeyNavigation : MonoBehaviour
 
 	public virtual void OnKey (KeyCode key)
 	{
+		if (UIPopupList.isOpen) return;
+		if (mLastFrame == Time.frameCount) return;
+		mLastFrame = Time.frameCount;
+
 		if (key == KeyCode.Tab)
 		{
 			GameObject go = onTab;
@@ -281,7 +289,13 @@ public class UIKeyNavigation : MonoBehaviour
 				}
 			}
 
-			if (go != null) UICamera.selectedObject = go;
+			if (go != null)
+			{
+				UICamera.currentScheme = UICamera.ControlScheme.Controller;
+				UICamera.hoveredObject = go;
+				UIInput inp = go.GetComponent<UIInput>();
+				if (inp != null) inp.isSelected = true;
+			}
 		}
 	}
 

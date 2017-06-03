@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2015 Tasharen Entertainment
+// Copyright © 2011-2016 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -23,7 +23,7 @@ public class UIImageButton : MonoBehaviour
 	{
 		get
 		{
-#if UNITY_4_3 || UNITY_4_5 || UNITY_4_6
+#if UNITY_4_3 || UNITY_4_5 || UNITY_4_6 || UNITY_4_7
 			Collider col = collider;
 #else
 			Collider col = gameObject.GetComponent<Collider>();
@@ -32,7 +32,7 @@ public class UIImageButton : MonoBehaviour
 		}
 		set
 		{
-#if UNITY_4_3 || UNITY_4_5 || UNITY_4_6
+#if UNITY_4_3 || UNITY_4_5 || UNITY_4_6 || UNITY_4_7
 			Collider col = collider;
 #else
 			Collider col = gameObject.GetComponent<Collider>();

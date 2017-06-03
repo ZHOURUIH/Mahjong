@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2015 Tasharen Entertainment
+// Copyright © 2011-2016 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -13,13 +13,8 @@ using UnityEngine;
 [AddComponentMenu("NGUI/Tween/Tween Volume")]
 public class TweenVolume : UITweener
 {
-#if UNITY_3_5
-	public float from = 1f;
-	public float to = 1f;
-#else
 	[Range(0f, 1f)] public float from = 1f;
 	[Range(0f, 1f)] public float to = 1f;
-#endif
 
 	AudioSource mSource;
 
@@ -84,6 +79,13 @@ public class TweenVolume : UITweener
 		TweenVolume comp = UITweener.Begin<TweenVolume>(go, duration);
 		comp.from = comp.value;
 		comp.to = targetVolume;
+
+		if (targetVolume > 0f)
+		{
+			var s = comp.audioSource;
+			s.enabled = true;
+			s.Play();
+		}
 		return comp;
 	}
 

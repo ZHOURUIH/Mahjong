@@ -44,7 +44,7 @@ Shader "Hidden/Unlit/Text (TextureClip)"
 
 			struct v2f
 			{
-				float4 vertex : POSITION;
+				float4 vertex : SV_POSITION;
 				float2 texcoord : TEXCOORD0;
 				float2 clipUV : TEXCOORD1;
 				half4 color : COLOR;
@@ -60,7 +60,7 @@ Shader "Hidden/Unlit/Text (TextureClip)"
 				return o;
 			}
 
-			half4 frag (v2f IN) : COLOR
+			half4 frag (v2f IN) : SV_Target
 			{
 				half4 col = IN.color;
 				col.a *= tex2D(_MainTex, IN.texcoord).a * tex2D(_ClipTex, IN.clipUV).a;

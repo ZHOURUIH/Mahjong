@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2015 Tasharen Entertainment
+// Copyright © 2011-2016 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -182,7 +182,7 @@ public class UIPlayAnimation : MonoBehaviour
 	void OnPress (bool isPressed)
 	{
 		if (!enabled) return;
-		if (UICamera.currentTouchID < -1 && UICamera.currentScheme != UICamera.ControlScheme.Controller) return;
+		if (UICamera.currentTouchID == -2 || UICamera.currentTouchID == -3) return;
 		if ( trigger == Trigger.OnPress ||
 			(trigger == Trigger.OnPressTrue && isPressed) ||
 			(trigger == Trigger.OnPressFalse && !isPressed))
@@ -191,13 +191,13 @@ public class UIPlayAnimation : MonoBehaviour
 
 	void OnClick ()
 	{
-		if (UICamera.currentTouchID < -1 && UICamera.currentScheme != UICamera.ControlScheme.Controller) return;
+		if (UICamera.currentTouchID == -2 || UICamera.currentTouchID == -3) return;
 		if (enabled && trigger == Trigger.OnClick) Play(true, false);
 	}
 
 	void OnDoubleClick ()
 	{
-		if (UICamera.currentTouchID < -1 && UICamera.currentScheme != UICamera.ControlScheme.Controller) return;
+		if (UICamera.currentTouchID == -2 || UICamera.currentTouchID == -3) return;
 		if (enabled && trigger == Trigger.OnDoubleClick) Play(true, false);
 	}
 

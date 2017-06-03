@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2015 Tasharen Entertainment
+// Copyright © 2011-2016 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -261,14 +261,8 @@ public class UIAtlasInspector : Editor
 
 					if (GUILayout.Button("Save As..."))
 					{
-#if UNITY_3_5
 						string path = EditorUtility.SaveFilePanel("Save As",
 							NGUISettings.currentPath, sprite.name + ".png", "png");
-#else
-						string path = EditorUtility.SaveFilePanelInProject("Save As",
-							sprite.name + ".png", "png",
-							"Extract sprite into which file?", NGUISettings.currentPath);
-#endif
 
 						if (!string.IsNullOrEmpty(path))
 						{

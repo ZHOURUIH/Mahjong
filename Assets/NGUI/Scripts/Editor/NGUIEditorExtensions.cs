@@ -1,6 +1,6 @@
 ﻿//----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2015 Tasharen Entertainment
+// Copyright © 2011-2016 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -82,3 +82,28 @@ public static class NGUIEditorExtensions
 		return true;
 	}
 }
+
+#if !UNITY_4_3 && !UNITY_4_5 && !UNITY_4_6 && !UNITY_4_7
+// Unity 5 bug fix. Source: http://www.tasharen.com/forum/index.php?topic=13231.0
+internal class Unity5DynamicLabelWorkAround : UnityEditor.AssetModificationProcessor
+{
+	static string[] OnWillSaveAssets (string[] paths)
+	{
+		// Older versions: UnityEditor.EditorApplication.currentScene
+#if UNITY_5_0 || UNITY_5_1 || UNITY_5_2
+		string current = UnityEditor.EditorApplication.currentScene;
+#else
+		string current = UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene().path;
+#endif
+		foreach (var path in paths)
+		{
+			if (path == current)
+			{
+				UILabel[] labels = Object.FindObjectsOfType<UILabel>();
+				for (int i = 0, imax = labels.Length; i < imax; ++i) labels[i].MarkAsChanged();
+			}
+		}
+		return paths;
+	}
+}
+#endif

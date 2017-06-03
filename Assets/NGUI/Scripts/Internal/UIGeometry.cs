@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2015 Tasharen Entertainment
+// Copyright © 2011-2016 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -35,7 +35,7 @@ public class UIGeometry
 	/// Array of colors for the geometry's vertices.
 	/// </summary>
 
-	public BetterList<Color32> cols = new BetterList<Color32>();
+	public BetterList<Color> cols = new BetterList<Color>();
 
 	// Relative-to-panel vertices, normal, and tangent
 	BetterList<Vector3> mRtpVerts = new BetterList<Vector3>();
@@ -92,7 +92,7 @@ public class UIGeometry
 	/// Step 3: Fill the specified buffer using the transformed values.
 	/// </summary>
 
-	public void WriteToBuffers (BetterList<Vector3> v, BetterList<Vector2> u, BetterList<Color32> c, BetterList<Vector3> n, BetterList<Vector4> t)
+	public void WriteToBuffers (BetterList<Vector3> v, BetterList<Vector2> u, BetterList<Color> c, BetterList<Vector3> n, BetterList<Vector4> t)
 	{
 		if (mRtpVerts != null && mRtpVerts.size > 0)
 		{

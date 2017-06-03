@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2015 Tasharen Entertainment
+// Copyright © 2011-2016 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -117,10 +117,12 @@ public abstract class UITweener : MonoBehaviour
 	{
 		get
 		{
+			if (duration == 0f) return 1000f;
+
 			if (mDuration != duration)
 			{
 				mDuration = duration;
-				mAmountPerDelta = Mathf.Abs((duration > 0f) ? 1f / duration : 1000f) * Mathf.Sign(mAmountPerDelta);
+				mAmountPerDelta = Mathf.Abs(1f / duration) * Mathf.Sign(mAmountPerDelta);
 			}
 			return mAmountPerDelta;
 		}
@@ -168,6 +170,7 @@ public abstract class UITweener : MonoBehaviour
 
 		if (!mStarted)
 		{
+			delta = 0;
 			mStarted = true;
 			mStartTime = time + delay;
 		}
@@ -175,7 +178,7 @@ public abstract class UITweener : MonoBehaviour
 		if (time < mStartTime) return;
 
 		// Advance the sampling factor
-		mFactor += amountPerDelta * delta;
+		mFactor += (duration == 0f) ? 1f : amountPerDelta * delta;
 
 		// Loop style simply resets the play factor after it exceeds 1.
 		if (style == Style.Loop)
@@ -208,7 +211,7 @@ public abstract class UITweener : MonoBehaviour
 			Sample(mFactor, true);
 			enabled = false;
 
-			if (current == null)
+			if (current != this)
 			{
 				UITweener before = current;
 				current = this;

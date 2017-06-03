@@ -45,7 +45,7 @@ Shader "Unlit/Transparent Colored (Packed) (TextureClip)"
 
 			struct v2f
 			{
-				float4 vertex : POSITION;
+				float4 vertex : SV_POSITION;
 				half4 color : COLOR;
 				float2 texcoord : TEXCOORD0;
 				float2 worldPos : TEXCOORD1;
@@ -61,7 +61,7 @@ Shader "Unlit/Transparent Colored (Packed) (TextureClip)"
 				return o;
 			}
 
-			half4 frag (v2f IN) : COLOR
+			half4 frag (v2f IN) : SV_Target
 			{
 				half alpha = tex2D(_ClipTex, IN.worldPos * 0.5 + float2(0.5, 0.5)).a;
 				half4 mask = tex2D(_MainTex, IN.texcoord);

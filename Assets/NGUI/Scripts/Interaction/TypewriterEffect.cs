@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2015 Tasharen Entertainment
+// Copyright © 2011-2016 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -211,6 +211,10 @@ public class TypewriterEffect : MonoBehaviour
 		if (mCurrentOffset >= mFullText.Length)
 		{
 			mLabel.text = mFullText;
+			current = this;
+			EventDelegate.Execute(onFinished);
+			current = null;
+			mActive = false;
 		}
 		else if (mFade.size != 0)
 		{
@@ -262,13 +266,6 @@ public class TypewriterEffect : MonoBehaviour
 
 				mLabel.text = sb.ToString();
 			}
-		}
-		else if (mCurrentOffset >= mFullText.Length)
-		{
-			current = this;
-			EventDelegate.Execute(onFinished);
-			current = null;
-			mActive = false;
 		}
 	}
 }

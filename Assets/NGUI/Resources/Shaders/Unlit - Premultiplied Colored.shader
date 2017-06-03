@@ -44,7 +44,7 @@ Shader "Unlit/Premultiplied Colored"
 
 			struct v2f
 			{
-				float4 vertex : POSITION;
+				float4 vertex : SV_POSITION;
 				float2 texcoord : TEXCOORD0;
 				half4 color : COLOR;
 			};
@@ -58,7 +58,7 @@ Shader "Unlit/Premultiplied Colored"
 				return o;
 			}
 
-			half4 frag (v2f IN) : COLOR
+			half4 frag (v2f IN) : SV_Target
 			{
 				half4 col = tex2D(_MainTex, IN.texcoord) * IN.color;
 				return col;

@@ -1,11 +1,13 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2015 Tasharen Entertainment
+// Copyright © 2011-2016 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
+using UnityEditorInternal;
+using System.Reflection;
 
 /// <summary>
 /// Editor class used to view panels.
@@ -74,7 +76,7 @@ public class UIPanelInspector : UIRectEditor
 		if (Selection.objects.Length > 1) return;
 
 		UICamera cam = UICamera.FindCameraForLayer(mPanel.gameObject.layer);
-#if UNITY_4_3 || UNITY_4_5 || UNITY_4_6
+#if UNITY_4_3 || UNITY_4_5 || UNITY_4_6 || UNITY_4_7
 		if (cam == null || !cam.cachedCamera.isOrthoGraphic) return;
 #else
 		if (cam == null || !cam.cachedCamera.orthographic) return;
@@ -457,6 +459,40 @@ public class UIPanelInspector : UIRectEditor
 			mPanel.clipping = clipping;
 			EditorUtility.SetDirty(mPanel);
 		}
+
+		// Contributed by Benzino07: http://www.tasharen.com/forum/index.php?topic=6956.15
+		GUILayout.BeginHorizontal();
+		{
+			EditorGUILayout.PrefixLabel("Sorting Layer");
+
+			// Get the names of the Sorting layers
+			System.Type internalEditorUtilityType = typeof(InternalEditorUtility);
+			PropertyInfo sortingLayersProperty = internalEditorUtilityType.GetProperty("sortingLayerNames", BindingFlags.Static | BindingFlags.NonPublic);
+			string[] names = (string[])sortingLayersProperty.GetValue(null, new object[0]);
+
+			int index = 0;
+			if (!string.IsNullOrEmpty(mPanel.sortingLayerName))
+			{
+				for (int i = 0; i < names.Length; i++)
+				{
+					if (mPanel.sortingLayerName == names[i])
+					{
+						index = i;
+						break;
+					}
+				}
+			}
+
+			// Get the selected index and update the panel sorting layer if it has changed
+			int selectedIndex = EditorGUILayout.Popup(index, names);
+
+			if (index != selectedIndex)
+			{
+				mPanel.sortingLayerName = names[selectedIndex];
+				EditorUtility.SetDirty(mPanel);
+			}
+		}
+		GUILayout.EndHorizontal();
 
 		if (mPanel.clipping != UIDrawCall.Clipping.None)
 		{

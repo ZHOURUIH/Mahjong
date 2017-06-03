@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+#if UNITY_STANDALONE_WIN
 using System.Windows.Forms;
+#endif
 using UnityEngine;
 
 public class UnityUtility : GameBase
@@ -38,7 +40,7 @@ public class UnityUtility : GameBase
 		// 在编辑器中显示对话框
 #if UNITY_EDITOR
 		UnityEditor.EditorUtility.DisplayDialog(title, info, "确认");
-#else
+#elif UNITY_STANDALONE_WIN
 		// 游戏运行过程中显示窗口提示框
 		MessageBox.Show(info, title, MessageBoxButtons.OK, errorOrInfo ? MessageBoxIcon.Error : MessageBoxIcon.Information);
 #endif

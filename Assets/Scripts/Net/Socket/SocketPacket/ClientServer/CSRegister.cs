@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 
 public class CSRegister : SocketPacket
 {
@@ -27,7 +28,8 @@ public class CSRegister : SocketPacket
 	public void setName(string name)
 	{
 		BinaryUtility.memset<byte>(mName, 0);
-		BinaryUtility.memcpy(mName, name.ToCharArray(), 0, 0, MathUtility.getMin(mName.Length, name.Length));
+		byte[] nameByte = BinaryUtility.UTF8StringToByteArray(name);
+		BinaryUtility.memcpy(mName, nameByte, 0, 0, MathUtility.getMin(mName.Length, nameByte.Length));
 	}
 	public void setHead(int head)
 	{

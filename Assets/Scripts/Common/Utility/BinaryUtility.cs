@@ -5,7 +5,7 @@ using System.Text;
 
 public class BinaryUtility : GameBase
 {
-	public void init() { }
+	public void init(){}
 	// 计算 16进制的c中1的个数
 	public static int crc_check(byte c)
 	{
@@ -108,7 +108,7 @@ public class BinaryUtility : GameBase
 			floatBuffer[2] = buffer[curIndex++];
 			floatBuffer[3] = buffer[curIndex++];
 		}
-		return System.BitConverter.ToSingle(floatBuffer, 0);
+		return byteArrayToFloat(floatBuffer);
 	}
 	public static bool readBytes(byte[] buffer, ref int index, int bufferSize, byte[] destBuffer, int destBufferSize, int readSize)
 	{
@@ -213,7 +213,7 @@ public class BinaryUtility : GameBase
 		{
 			return false;
 		}
-		byte[] valueByte = System.BitConverter.GetBytes(value);
+		byte[] valueByte = toByteArray(value);
 		for (int i = 0; i < 4; ++i)
 		{
 			buffer[index++] = valueByte[i];
@@ -361,23 +361,23 @@ public class BinaryUtility : GameBase
 	}
 	public static byte[] toByteArray(char value)
 	{
-		return System.BitConverter.GetBytes(value);
+		return BitConverter.GetBytes(value);
 	}
 	public static byte[] toByteArray(byte value)
 	{
-		return System.BitConverter.GetBytes(value);
+		return BitConverter.GetBytes(value);
 	}
 	public static byte[] toByteArray(short value)
 	{
-		return System.BitConverter.GetBytes(value);
+		return BitConverter.GetBytes(value);
 	}
 	public static byte[] toByteArray(int value)
 	{
-		return System.BitConverter.GetBytes(value);
+		return BitConverter.GetBytes(value);
 	}
 	public static byte[] toByteArray(float value)
 	{
-		return System.BitConverter.GetBytes(value);
+		return BitConverter.GetBytes(value);
 	}
 	public static byte[] toByteArray(string value)
 	{
@@ -389,19 +389,19 @@ public class BinaryUtility : GameBase
 	}
 	public static char byteArrayToChar(byte[] array)
 	{
-		return System.BitConverter.ToChar(array, 0);
+		return BitConverter.ToChar(array, 0);
 	}
 	public static short byteArrayToShort(byte[] array)
 	{
-		return System.BitConverter.ToInt16(array, 0);
+		return BitConverter.ToInt16(array, 0);
 	}
 	public static int byteArrayToInt(byte[] array)
 	{
-		return System.BitConverter.ToInt32(array, 0);
+		return BitConverter.ToInt32(array, 0);
 	}
 	public static float byteArrayToFloat(byte[] array)
 	{
-		return System.BitConverter.ToSingle(array, 0);
+		return BitConverter.ToSingle(array, 0);
 	}
 	public static string byteArrayToString(byte[] array)
 	{
@@ -416,5 +416,31 @@ public class BinaryUtility : GameBase
 			str += (char)array[i];
 		}
 		return str;
+	}
+	// 将字节数组转换为utf8编码的字符串,用于包含中文的字符串
+	public static string byteArrayToUTF8String(byte[] array)
+	{
+		return Encoding.UTF8.GetString(array);
+	}
+	// 将字节数组转换为unicode编码的字符串
+	public static string byteArrayToUnicodeString(byte[] array)
+	{
+		return Encoding.Unicode.GetString(array);
+	}
+	public static byte[] UTF8StringToByteArray(string str)
+	{
+		return Encoding.UTF8.GetBytes(str);
+	}
+	public static byte[] UnicodeStringToByteArray(string str)
+	{
+		return Encoding.Unicode.GetBytes(str);
+	}
+	public static string UTF8ToUnicode(string str)
+	{
+		return byteArrayToUnicodeString(UTF8StringToByteArray(str));
+	}
+	public static string UnicodeToUTF8(string str)
+	{
+		return byteArrayToUTF8String(UnicodeStringToByteArray(str));
 	}
 }

@@ -42,7 +42,7 @@ public class SCLoginRet : SocketPacket
 		// 创建玩家
 		CommandCharacterManagerCreateCharacter cmdCreate = new CommandCharacterManagerCreateCharacter();
 		cmdCreate.mCharacterType = CHARACTER_TYPE.CT_MYSELF;
-		cmdCreate.mName = BinaryUtility.byteArrayToString(mName);
+		cmdCreate.mName = BinaryUtility.byteArrayToUTF8String(mName);
 		mCommandSystem.pushCommand(cmdCreate, mCharacterManager);
 		// 设置角色数据
 		CharacterMyself myself = cmdCreate.mResultCharacter as CharacterMyself;

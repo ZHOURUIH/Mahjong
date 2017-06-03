@@ -14,11 +14,13 @@ public class SocketFactoryManager
 	{
 		// 注册所有消息
 		// 客户端->服务器
+		registerFactory(typeof(CSHeartBeat), PACKET_TYPE.PT_CS_HEART_BEAT);
 		registerFactory(typeof(CSLogin), PACKET_TYPE.PT_CS_LOGIN);
 		registerFactory(typeof(CSCreateRoom), PACKET_TYPE.PT_CS_CREATE_ROOM);
 		registerFactory(typeof(CSJoinRoom), PACKET_TYPE.PT_CS_JOIN_ROOM);
 		registerFactory(typeof(CSRegister), PACKET_TYPE.PT_CS_REGISTER);
 		// 服务器->客户端
+		registerFactory(typeof(SCHeartBeatRet), PACKET_TYPE.PT_SC_HEART_BEAT_RET);
 		registerFactory(typeof(SCLoginRet), PACKET_TYPE.PT_SC_LOGIN_RET);
 		registerFactory(typeof(SCCreateRoomRet), PACKET_TYPE.PT_SC_CREATE_ROOM_RET);
 		registerFactory(typeof(SCNotifyBanker), PACKET_TYPE.PT_SC_NOTIFY_BANKER);

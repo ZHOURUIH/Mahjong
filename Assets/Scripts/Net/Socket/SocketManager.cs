@@ -49,6 +49,9 @@ public class SocketManager : GameBase
 	protected List<SEND_ELEMENT> mSendList;
 	protected SocketFactoryManager mSocketFactoryManager;
 	protected bool mRun;
+	protected int mHeartBeatTimes;
+	protected float mHeartBeatTimeCount = 0.0f;
+	protected float mHeartBeatMaxTime = 5.0f;
 	public SocketManager()
 	{
 		mMaxReceiveCount = 1024;
@@ -82,6 +85,16 @@ public class SocketManager : GameBase
 	}
 	public void update(float elapsedTime)
 	{
+		if(mHeartBeatTimeCount >= 0.0f)
+		{
+			mHeartBeatTimeCount += elapsedTime;
+			if(mHeartBeatTimeCount >= mHeartBeatMaxTime)
+			{
+				heartBeat();
+				// 停止计时,等待服务器确认心跳后再开始计时
+				mHeartBeatTimeCount = -1.0f;
+			}
+		}
 		processInput();
 		processOutput();
 	}
@@ -125,6 +138,17 @@ public class SocketManager : GameBase
 		lock (mOutputList)
 		{
 			mOutputList.Add(new OUTPUT_ELEMENT(packetData, packet.getSize(), packet.getPacketType()));
+		}
+	}
+	public void notifyHeartBeatRet(int heartBeatTimes)
+	{
+		if(heartBeatTimes != mHeartBeatTimes)
+		{
+			UnityUtility.logError("心跳错误!");
+		}
+		else
+		{
+			mHeartBeatTimeCount = 0.0f;
 		}
 	}
 	//-------------------------------------------------------------------------------------------------------------------------
@@ -255,5 +279,11 @@ public class SocketManager : GameBase
 			}
 			Thread.Sleep(10);
 		}
+	}
+	protected void heartBeat()
+	{
+		CSHeartBeat beat = createPacket(PACKET_TYPE.PT_CS_HEART_BEAT) as CSHeartBeat;
+		beat.mHeartBeatTimes = ++mHeartBeatTimes;
+		sendMessage(beat);
 	}
 }

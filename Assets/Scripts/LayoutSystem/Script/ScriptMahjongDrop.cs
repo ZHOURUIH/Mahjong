@@ -22,10 +22,6 @@ public class ScriptMahjongDrop : LayoutScript
 	}
 	public override void assignWindow()
 	{
-		;
-	}
-	public override void init()
-	{
 		string[] rootName = new string[] { "MyDropRoot", "LeftDropRoot", "OppositeDropRoot", "RightDropRoot"};
 		for (int i = 0; i < CommonDefine.MAX_PLAYER_COUNT; ++i)
 		{
@@ -36,6 +32,10 @@ public class ScriptMahjongDrop : LayoutScript
 				mDropList[i].Add(newObject<txUIStaticSprite>(mRootList[i], name, 0));
 			}
 		}
+	}
+	public override void init()
+	{
+		;
 	}
 	public override void onReset()
 	{

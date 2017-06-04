@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 public class ScriptPlayerAction : LayoutScript
 {
@@ -22,11 +23,11 @@ public class ScriptPlayerAction : LayoutScript
 	}
 	public override void init()
 	{
-		BoxColliderClickCallback[] callbackArray = new BoxColliderClickCallback[] { onHuClicked, onGangClicked, onPengClicked, onPassClicked };
+		UIEventListener.VoidDelegate[] callbackArray = new UIEventListener.VoidDelegate[] { onHuClicked, onGangClicked, onPengClicked, onPassClicked };
 		int count = mAction.Length;
 		for (int i = 0; i < count; ++i)
 		{
-			mGlobalTouchSystem.registerBoxCollider(mAction[i], callbackArray[i], null, null);
+			mAction[i].setClickCallback(callbackArray[i]);
 		}
 	}
 	public override void onReset()
@@ -64,7 +65,7 @@ public class ScriptPlayerAction : LayoutScript
 		}
 	}
 	//------------------------------------------------------------------------------------------------------
-	protected void onHuClicked(txUIButton obj)
+	protected void onHuClicked(GameObject obj)
 	{
 		// 请求麻将系统自己要胡牌
 		CommandMahjongSystemRequestHu cmd = new CommandMahjongSystemRequestHu();
@@ -72,21 +73,21 @@ public class ScriptPlayerAction : LayoutScript
 		mCommandSystem.pushCommand(cmd, mMahjongSystem);
 		afterActionSelected();
 	}
-	protected void onGangClicked(txUIButton obj)
+	protected void onGangClicked(GameObject obj)
 	{
 		CommandMahjongSystemRequestGang cmd = new CommandMahjongSystemRequestGang();
 		cmd.mCharacter = mCharacterManager.getMyself();
 		mCommandSystem.pushCommand(cmd, mMahjongSystem);
 		afterActionSelected();
 	}
-	protected void onPengClicked(txUIButton obj)
+	protected void onPengClicked(GameObject obj)
 	{
 		CommandMahjongSystemRequestPeng cmd = new CommandMahjongSystemRequestPeng();
 		cmd.mCharacter = mCharacterManager.getMyself();
 		mCommandSystem.pushCommand(cmd, mMahjongSystem);
 		afterActionSelected();
 	}
-	protected void onPassClicked(txUIButton obj)
+	protected void onPassClicked(GameObject obj)
 	{
 		CommandMahjongSystemRequestPass cmd = new CommandMahjongSystemRequestPass();
 		cmd.mCharacter = mCharacterManager.getMyself();

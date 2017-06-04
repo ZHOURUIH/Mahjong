@@ -33,6 +33,13 @@ public class SCJoinRoomRet : SocketPacket
 		if(mResult == 0)
 		{
 			UnityUtility.logInfo("加入房间成功, 房间ID:" + mRoomID);
+			// 设置房间号
+			CharacterMyself myself = mCharacterManager.getMyself();
+			myself.getCharacterData().mRoomID = mRoomID;
+			// 进入麻将场景
+			CommandGameSceneManagerEnter cmd = new CommandGameSceneManagerEnter();
+			cmd.mSceneType = GAME_SCENE_TYPE.GST_MAHJONG;
+			mCommandSystem.pushCommand(cmd, mGameSceneManager);
 		}
 		else
 		{

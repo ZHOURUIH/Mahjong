@@ -17,13 +17,13 @@ public class ScriptDice : LayoutScript
 	}
 	public override void assignWindow()
 	{
-		;
-	}
-	public override void init()
-	{
 		mDiceAnim = newObject<txUISpriteAnim>("DiceAnim");
 		mDice0 = newObject<txUIStaticSprite>("Dice0", 0);
 		mDice1 = newObject<txUIStaticSprite>("Dice1", 0);
+	}
+	public override void init()
+	{
+		;
 	}
 	public override void onReset()
 	{

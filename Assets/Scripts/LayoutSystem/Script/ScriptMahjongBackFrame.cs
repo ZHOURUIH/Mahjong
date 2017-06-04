@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class ScriptMahjongGameFrame : LayoutScript
+public class ScriptMahjongBackFrame : LayoutScript
 {
 	protected txUIStaticTexture mBackground;
-	public ScriptMahjongGameFrame(LAYOUT_TYPE type, string name, GameLayout layout)
+	public ScriptMahjongBackFrame(LAYOUT_TYPE type, string name, GameLayout layout)
 		:
 		base(type, name, layout)
 	{

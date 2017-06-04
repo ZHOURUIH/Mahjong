@@ -40,4 +40,5 @@ public class CharacterData
 	public PengGangInfo[]	mPengGangList;
 	public List<MAHJONG>	mHandIn;
 	public List<MAHJONG>	mDropList;
+	public int				mRoomID;	// 房间号
 }

@@ -13,8 +13,9 @@ public class MahjongSceneWaiting : SceneProcedure
 	protected override void onInit(SceneProcedure lastProcedure, string intent)
 	{
 		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_ALL_CHARACTER_INFO);
-		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_MAHJONG_GAME_FRAME);
+		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_MAHJONG_BACK_FRAME);
 		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_ADD_PLAYER);
+		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_MAHJONG_FRAME);
 		// 通知麻将系统开始新的一局
 		CommandMahjongSystemState cmdState = new CommandMahjongSystemState();
 		cmdState.mPlayState = MAHJONG_PLAY_STATE.MPS_WAITING;
@@ -25,6 +26,10 @@ public class MahjongSceneWaiting : SceneProcedure
 		CommandMahjongSystemJoin cmdJoin = new CommandMahjongSystemJoin();
 		cmdJoin.mCharacter = myself;
 		mCommandSystem.pushCommand(cmdJoin, mMahjongSystem);
+
+		// 设置显示房间号
+		ScriptMahjongFrame mahjongFrame = mLayoutManager.getScript(LAYOUT_TYPE.LT_MAHJONG_FRAME) as ScriptMahjongFrame;
+		mahjongFrame.setRoomID(myself.getCharacterData().mRoomID);
 	}
 	protected override void onUpdate(float elapsedTime)
 	{

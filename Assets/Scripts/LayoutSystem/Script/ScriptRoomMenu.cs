@@ -19,18 +19,18 @@ public class ScriptRoomMenu : LayoutScript
 	}
 	public override void assignWindow()
 	{
-		;
-	}
-	public override void init()
-	{
 		mBackground = newObject<txUIStaticSprite>("Background");
 		mCreateRoomButton = newObject<txUIButton>(mBackground, "CreateRoomButton");
 		mCreateLabel = newObject<txUIStaticSprite>(mCreateRoomButton, "CreateLabel");
 		mJoinRoomButton = newObject<txUIButton>(mBackground, "JoinRoomButton");
 		mJoinLabel = newObject<txUIStaticSprite>(mJoinRoomButton, "JoinLabel");
-
-		mGlobalTouchSystem.registerBoxCollider(mCreateRoomButton, onCreateClicked, null, onButtonPress);
-		mGlobalTouchSystem.registerBoxCollider(mCreateRoomButton, onCreateClicked, null, onButtonPress);
+	}
+	public override void init()
+	{
+		mCreateRoomButton.setClickCallback(onCreateClicked);
+		mCreateRoomButton.setPressCallback(onButtonPress);
+		mJoinRoomButton.setClickCallback(onJoinClicked);
+		mJoinRoomButton.setPressCallback(onButtonPress);
 	}
 	public override void onReset()
 	{
@@ -50,18 +50,19 @@ public class ScriptRoomMenu : LayoutScript
 		;
 	}
 	//-----------------------------------------------------------------------------------
-	protected void onCreateClicked(txUIButton obj)
+	protected void onCreateClicked(GameObject obj)
 	{
 		// 向服务器发送创建房间的消息
 		CSCreateRoom createRoom = mSocketNetManager.createPacket(PACKET_TYPE.PT_CS_CREATE_ROOM) as CSCreateRoom;
 		mSocketNetManager.sendMessage(createRoom);
 	}
-	protected void onJoinClicked(txUIButton obj)
+	protected void onJoinClicked(GameObject obj)
 	{
 		;
 	}
-	protected void onButtonPress(txUIButton obj, bool press)
+	protected void onButtonPress(GameObject obj, bool press)
 	{
-		LayoutTools.SCALE_WINDOW(obj, obj.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
+		txUIObject button = mLayout.getUIObject(obj);
+		LayoutTools.SCALE_WINDOW(button, button.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
 	}
 }

@@ -29,6 +29,7 @@ public class MahjongSceneEnding : SceneProcedure
 		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_MAHJONG_DROP);
 		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_PLAYER_ACTION);
 		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_GAME_ENDING);
+		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_MAHJONG_FRAME);
 	}
 	protected override void onKeyProcess(float elapsedTime)
 	{

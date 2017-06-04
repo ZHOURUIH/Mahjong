@@ -17,13 +17,14 @@ public class MahjongSceneLoading : SceneProcedure
 	{
 		mLoadInfo = new Dictionary<LAYOUT_TYPE, LayoutLoadInfo>();
 		mLoadInfo.Add(LAYOUT_TYPE.LT_ALL_CHARACTER_INFO, new LayoutLoadInfo(LAYOUT_TYPE.LT_ALL_CHARACTER_INFO, 2));
-		mLoadInfo.Add(LAYOUT_TYPE.LT_MAHJONG_GAME_FRAME, new LayoutLoadInfo(LAYOUT_TYPE.LT_MAHJONG_GAME_FRAME, 0));
+		mLoadInfo.Add(LAYOUT_TYPE.LT_MAHJONG_BACK_FRAME, new LayoutLoadInfo(LAYOUT_TYPE.LT_MAHJONG_BACK_FRAME, 0));
 		mLoadInfo.Add(LAYOUT_TYPE.LT_MAHJONG_DROP, new LayoutLoadInfo(LAYOUT_TYPE.LT_MAHJONG_DROP, 1));
 		mLoadInfo.Add(LAYOUT_TYPE.LT_MAHJONG_HAND_IN, new LayoutLoadInfo(LAYOUT_TYPE.LT_MAHJONG_HAND_IN, 1));
 		mLoadInfo.Add(LAYOUT_TYPE.LT_DICE, new LayoutLoadInfo(LAYOUT_TYPE.LT_DICE, 3));
 		mLoadInfo.Add(LAYOUT_TYPE.LT_PLAYER_ACTION, new LayoutLoadInfo(LAYOUT_TYPE.LT_PLAYER_ACTION, 2));
 		mLoadInfo.Add(LAYOUT_TYPE.LT_GAME_ENDING, new LayoutLoadInfo(LAYOUT_TYPE.LT_GAME_ENDING, 2));
 		mLoadInfo.Add(LAYOUT_TYPE.LT_ADD_PLAYER, new LayoutLoadInfo(LAYOUT_TYPE.LT_ADD_PLAYER, 4));
+		mLoadInfo.Add(LAYOUT_TYPE.LT_MAHJONG_FRAME, new LayoutLoadInfo(LAYOUT_TYPE.LT_MAHJONG_FRAME, 4));
 	}
 	protected override void onInit(SceneProcedure lastProcedure, string intent)
 	{

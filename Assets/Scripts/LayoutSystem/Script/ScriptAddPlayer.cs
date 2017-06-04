@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 public class ScriptAddPlayer : LayoutScript
 {
@@ -30,11 +31,11 @@ public class ScriptAddPlayer : LayoutScript
 	}
 	public override void init()
 	{
-		mGlobalTouchSystem.registerBoxCollider(mAdd, onAdd);
-		mGlobalTouchSystem.registerBoxCollider(mLeftReady, onLeftReady);
-		mGlobalTouchSystem.registerBoxCollider(mOppositeReady, onOppositeReady);
-		mGlobalTouchSystem.registerBoxCollider(mRightReady, onRightReady);
-		mGlobalTouchSystem.registerBoxCollider(mMyselfReady, onMyselfReady);
+		mAdd.setClickCallback(onAdd);
+		mLeftReady.setClickCallback(onLeftReady);
+		mOppositeReady.setClickCallback(onOppositeReady);
+		mRightReady.setClickCallback(onRightReady);
+		mMyselfReady.setClickCallback(onMyselfReady);
 	}
 	public override void onReset()
 	{
@@ -53,7 +54,7 @@ public class ScriptAddPlayer : LayoutScript
 		;
 	}
 	//-------------------------------------------------------------------------------------------------------
-	protected void onAdd(txUIButton button)
+	protected void onAdd(GameObject button)
 	{
 		int nameCount = mNameList.Count;
 		for (int i = 0; i < nameCount; ++i)
@@ -77,7 +78,7 @@ public class ScriptAddPlayer : LayoutScript
 			}
 		}
 	}
-	protected void onLeftReady(txUIButton button)
+	protected void onLeftReady(GameObject button)
 	{
 		Character character = mCharacterManager.getCharacter(mNameList[0]);
 		if (character != null)
@@ -86,7 +87,7 @@ public class ScriptAddPlayer : LayoutScript
 			mCommandSystem.pushCommand(cmd, character);
 		}
 	}
-	protected void onOppositeReady(txUIButton button)
+	protected void onOppositeReady(GameObject button)
 	{
 		Character character = mCharacterManager.getCharacter(mNameList[1]);
 		if (character != null)
@@ -95,7 +96,7 @@ public class ScriptAddPlayer : LayoutScript
 			mCommandSystem.pushCommand(cmd, character);
 		}
 	}
-	protected void onRightReady(txUIButton button)
+	protected void onRightReady(GameObject button)
 	{
 		Character character = mCharacterManager.getCharacter(mNameList[2]);
 		if (character != null)
@@ -104,7 +105,7 @@ public class ScriptAddPlayer : LayoutScript
 			mCommandSystem.pushCommand(cmd, character);
 		}
 	}
-	protected void onMyselfReady(txUIButton button)
+	protected void onMyselfReady(GameObject button)
 	{
 		Character character = mCharacterManager.getMyself();
 		if (character != null)

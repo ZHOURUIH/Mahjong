@@ -27,10 +27,6 @@ public class ScriptMainFrame : LayoutScript
 	}
 	public override void assignWindow()
 	{
-		;
-	}
-	public override void init()
-	{
 		mBackground = newObject<txUIStaticSprite>("Background");
 		mBottomButtonRoot = newObject<txUIObject>(mBackground, "BottomButtonRoot");
 		mLeftTopButtonRoot = newObject<txUIObject>(mBackground, "LeftTopButtonRoot");
@@ -44,16 +40,27 @@ public class ScriptMainFrame : LayoutScript
 		mRechargeButton = newObject<txUIButton>(mLeftTopButtonRoot, "RechargeButton");
 		mSettingButton = newObject<txUIButton>(mLeftTopButtonRoot, "SettingButton");
 		mQuitButton = newObject<txUIButton>(mLeftTopButtonRoot, "QuitButton");
-
-		mGlobalTouchSystem.registerBoxCollider(mMailButton, onMailButton, null, onButtonPress);
-		mGlobalTouchSystem.registerBoxCollider(mCompetitionButton, onCompetitionButton, null, onButtonPress);
-		mGlobalTouchSystem.registerBoxCollider(mShareButton, onShareButton, null, onButtonPress);
-		mGlobalTouchSystem.registerBoxCollider(mStandingButton, onStandingButton, null, onButtonPress);
-		mGlobalTouchSystem.registerBoxCollider(mRuleButton, onRuleButton, null, onButtonPress);
-		mGlobalTouchSystem.registerBoxCollider(mContactButton, onContactButton, null, onButtonPress);
-		mGlobalTouchSystem.registerBoxCollider(mRechargeButton, onRechargeButton, null, onButtonPress);
-		mGlobalTouchSystem.registerBoxCollider(mSettingButton, onSettingButton, null, onButtonPress);
-		mGlobalTouchSystem.registerBoxCollider(mQuitButton, onQuitButton, null, onButtonPress);
+	}
+	public override void init()
+	{
+		mMailButton.setClickCallback(onMailButton);
+		mMailButton.setPressCallback(onButtonPress);
+		mCompetitionButton.setClickCallback(onCompetitionButton);
+		mCompetitionButton.setPressCallback(onButtonPress);
+		mShareButton.setClickCallback(onShareButton);
+		mShareButton.setPressCallback(onButtonPress);
+		mStandingButton.setClickCallback(onStandingButton);
+		mStandingButton.setPressCallback(onButtonPress);
+		mRuleButton.setClickCallback(onRuleButton);
+		mRuleButton.setPressCallback(onButtonPress);
+		mContactButton.setClickCallback(onContactButton);
+		mContactButton.setPressCallback(onButtonPress);
+		mRechargeButton.setClickCallback(onRechargeButton);
+		mRechargeButton.setPressCallback(onButtonPress);
+		mSettingButton.setClickCallback(onSettingButton);
+		mSettingButton.setPressCallback(onButtonPress);
+		mQuitButton.setClickCallback(onQuitButton);
+		mQuitButton.setPressCallback(onButtonPress);
 	}
 	public override void onReset()
 	{
@@ -80,44 +87,45 @@ public class ScriptMainFrame : LayoutScript
 		;
 	}
 	//-------------------------------------------------------------------------------------------------------------------------
-	protected void onMailButton(txUIButton obj)
+	protected void onMailButton(GameObject obj)
 	{
 		;
 	}
-	protected void onCompetitionButton(txUIButton obj)
+	protected void onCompetitionButton(GameObject obj)
 	{
 		;
 	}
-	protected void onShareButton(txUIButton obj)
+	protected void onShareButton(GameObject obj)
 	{
 		;
 	}
-	protected void onStandingButton(txUIButton obj)
+	protected void onStandingButton(GameObject obj)
 	{
 		;
 	}
-	protected void onRuleButton(txUIButton obj)
+	protected void onRuleButton(GameObject obj)
 	{
 		;
 	}
-	protected void onContactButton(txUIButton obj)
+	protected void onContactButton(GameObject obj)
 	{
 		;
 	}
-	protected void onRechargeButton(txUIButton obj)
+	protected void onRechargeButton(GameObject obj)
 	{
 		;
 	}
-	protected void onSettingButton(txUIButton obj)
+	protected void onSettingButton(GameObject obj)
 	{
 		;
 	}
-	protected void onQuitButton(txUIButton obj)
+	protected void onQuitButton(GameObject obj)
 	{
 		;
 	}
-	protected void onButtonPress(txUIButton obj, bool press)
+	protected void onButtonPress(GameObject obj, bool press)
 	{
-		LayoutTools.SCALE_WINDOW(obj, obj.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
+		txUIObject button = mLayout.getUIObject(obj);
+		LayoutTools.SCALE_WINDOW(button, button.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
 	}
 }

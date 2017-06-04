@@ -218,7 +218,7 @@ public class HandInMahjong : GameBase
 			{
 				mHandInPosition.Add(mHandInMahjong[i].mWindow.getPosition());
 				mHandInTargetPosition.Add(mHandInPosition[i] + targetOffset);
-				mGlobalTouchSystem.registerBoxCollider(mHandInMahjong[i].mWindow, onMahjongClicked, null, null);
+				mHandInMahjong[i].mWindow.setClickCallback(onMahjongClicked);
 			}
 		}
 		else
@@ -328,12 +328,13 @@ public class HandInMahjong : GameBase
 			}
 		}
 	}
-	protected void onMahjongClicked(txUIButton button)
+	protected void onMahjongClicked(GameObject go)
 	{
 		if(!mCanDrop)
 		{
 			return;
 		}
+		txUIObject button = mScript.getLayout().getUIObject(go);
 		int index = StringUtility.getLastNumber(button.getName());
 		// 点击手里的牌,则将牌设置为准备打出的状态
 		if(mHandInMahjong[index].mState == HANDIN_STATE.HS_SAVED)

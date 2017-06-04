@@ -131,10 +131,13 @@ public class SocketManager : GameBase
 		BinaryUtility.writeShort(packetData, ref index, (short)(packet.getPacketType()));
 		// 消息长度
 		BinaryUtility.writeShort(packetData, ref index, (short)(packet.getSize()));
-		byte[] realData = new byte[packet.getSize()];
-		packet.write(realData);
-		// 消息内容
-		BinaryUtility.writeBytes(packetData, ref index, -1, realData, -1, -1);
+		if(packet.getSize() > 0)
+		{
+			byte[] realData = new byte[packet.getSize()];
+			packet.write(realData);
+			// 消息内容
+			BinaryUtility.writeBytes(packetData, ref index, -1, realData, -1, -1);
+		}
 		lock (mOutputList)
 		{
 			mOutputList.Add(new OUTPUT_ELEMENT(packetData, packet.getSize(), packet.getPacketType()));
@@ -184,12 +187,9 @@ public class SocketManager : GameBase
 				int dataCount = mOutputList.Count;
 				for (int i = 0; i < dataCount; ++i)
 				{
-					if (mOutputList[i].mDataSize > 0)
-					{
-						mServerSocket.Send(mOutputList[i].mData);
-						PACKET_TYPE type = mOutputList[i].mType;
-						UnityUtility.logInfo("send socket : type : " + type + ", size : " + mOutputList[i].mDataSize);
-					}
+					mServerSocket.Send(mOutputList[i].mData);
+					PACKET_TYPE type = mOutputList[i].mType;
+					UnityUtility.logInfo("send socket : type : " + type + ", size : " + mOutputList[i].mDataSize);
 				}
 				mOutputList.Clear();
 			}

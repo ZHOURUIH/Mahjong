@@ -96,23 +96,23 @@ public class GlobalTouchSystem : GameBase
 		}
 	}
 	// 注册碰撞器,只有注册了的碰撞器才会进行检测
-	public void registerBoxCollider(txUIButton button, BoxColliderClickCallback clickCallback, 
-		BoxColliderHoverCallback hoverCallback = null, BoxColliderPressCallback pressCallback = null)
-	{
-		if (!mButtonCallbackList.ContainsKey(button))
-		{
-			BoxCollider box = button.getBoxCollider();
-			ColliderCallBack colliderCallback = new ColliderCallBack();
-			colliderCallback.mButton = button;
-			colliderCallback.mCollider = box;
-			colliderCallback.mClickCallback = clickCallback;
-			colliderCallback.mHoverCallback = hoverCallback;
-			colliderCallback.mPressCallback = pressCallback;
-			mButtonCallbackList.Add(button, colliderCallback);
-			mBoxColliderCallbackList.Add(box, colliderCallback);
-			mBoxColliderList.Add(box);
-		}
-	}
+	//public void registerBoxCollider(txUIButton button, BoxColliderClickCallback clickCallback, 
+	//	BoxColliderHoverCallback hoverCallback = null, BoxColliderPressCallback pressCallback = null)
+	//{
+	//	if (!mButtonCallbackList.ContainsKey(button))
+	//	{
+	//		BoxCollider box = button.getBoxCollider();
+	//		ColliderCallBack colliderCallback = new ColliderCallBack();
+	//		colliderCallback.mButton = button;
+	//		colliderCallback.mCollider = box;
+	//		colliderCallback.mClickCallback = clickCallback;
+	//		colliderCallback.mHoverCallback = hoverCallback;
+	//		colliderCallback.mPressCallback = pressCallback;
+	//		mButtonCallbackList.Add(button, colliderCallback);
+	//		mBoxColliderCallbackList.Add(box, colliderCallback);
+	//		mBoxColliderList.Add(box);
+	//	}
+	//}
 	// 注销碰撞器
 	public void unregisterBoxCollider(txUIButton button)
 	{

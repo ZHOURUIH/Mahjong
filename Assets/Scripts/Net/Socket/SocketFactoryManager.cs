@@ -21,6 +21,11 @@ public class SocketFactoryManager
 		registerFactory(typeof(CSRegister), PACKET_TYPE.PT_CS_REGISTER);
 		registerFactory(typeof(CSCheckName), PACKET_TYPE.PT_CS_CHECK_NAME);
 		registerFactory(typeof(CSCheckAccount), PACKET_TYPE.PT_CS_CHECK_ACCOUNT);
+		int needCSCount = PACKET_TYPE.PT_CS_MAX - PACKET_TYPE.PT_CS_MIN - 1;
+		if (mFactoryList.Count != needCSCount)
+		{
+			UnityUtility.logError("not all CS packet registered! cur count : " + mFactoryList.Count + ", need count : " + needCSCount);
+		}
 		// 服务器->客户端
 		registerFactory(typeof(SCHeartBeatRet), PACKET_TYPE.PT_SC_HEART_BEAT_RET);
 		registerFactory(typeof(SCLoginRet), PACKET_TYPE.PT_SC_LOGIN_RET);
@@ -34,6 +39,11 @@ public class SocketFactoryManager
 		registerFactory(typeof(SCRegisterRet), PACKET_TYPE.PT_SC_REGISTER_RET);
 		registerFactory(typeof(SCCheckNameRet), PACKET_TYPE.PT_SC_CHECK_NAME_RET);
 		registerFactory(typeof(SCCheckAccountRet), PACKET_TYPE.PT_SC_CHECK_ACCOUNT_RET);
+		int needSCCount = PACKET_TYPE.PT_SC_MAX - PACKET_TYPE.PT_SC_MIN - 1;
+		if (mFactoryList.Count - needCSCount != needSCCount)
+		{
+			UnityUtility.logError("not all CS packet registered! cur count : " + (mFactoryList.Count - needCSCount) + ", need count : " + needSCCount);
+		}
 	}
 	public SocketFactory getFactory(PACKET_TYPE type)
 	{

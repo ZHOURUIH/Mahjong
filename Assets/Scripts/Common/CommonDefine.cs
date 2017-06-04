@@ -394,4 +394,6 @@ public class CommonDefine
 	public const int MAX_DICE_VALUE = 5;
 	// 开局时发每一张牌的时间间隔
 	public const float ASSIGN_MAHJONG_INTERVAL = 0.1f;
+	// 无效ID值
+	public const int INVALID_ID = ~0;
 }

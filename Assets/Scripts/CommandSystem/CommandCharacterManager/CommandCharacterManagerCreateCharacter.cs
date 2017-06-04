@@ -6,7 +6,7 @@ public class CommandCharacterManagerCreateCharacter : Command
 	public CHARACTER_TYPE	mCharacterType;
 	public string			mName;
 	public Character		mResultCharacter;
-
+	public int				mGUID;
 	public CommandCharacterManagerCreateCharacter(bool showInfo = true, bool delay = false)
 		:
 		base(showInfo, delay)
@@ -19,9 +19,10 @@ public class CommandCharacterManagerCreateCharacter : Command
 	{
 		CharacterManager characterManager = mReceiver as CharacterManager;
 		mResultCharacter = characterManager.createCharacter(mName, mCharacterType, GameUtility.makeID());
+		mResultCharacter.getCharacterData().mGUID = mGUID;
 	}
 	public override string showDebugInfo()
 	{
-		return this.GetType().ToString() + " : mName : " + mName + "mCharacterType" + (int)mCharacterType;
+		return this.GetType().ToString() + " : Name : " + mName + ", CharacterType : " + mCharacterType + ", GUID : " + mGUID;
 	}
 }

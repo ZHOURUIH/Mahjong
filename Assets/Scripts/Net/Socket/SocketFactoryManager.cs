@@ -42,7 +42,7 @@ public class SocketFactoryManager
 		int needSCCount = PACKET_TYPE.PT_SC_MAX - PACKET_TYPE.PT_SC_MIN - 1;
 		if (mFactoryList.Count - needCSCount != needSCCount)
 		{
-			UnityUtility.logError("not all CS packet registered! cur count : " + (mFactoryList.Count - needCSCount) + ", need count : " + needSCCount);
+			UnityUtility.logError("not all SC packet registered! cur count : " + (mFactoryList.Count - needCSCount) + ", need count : " + needSCCount);
 		}
 	}
 	public SocketFactory getFactory(PACKET_TYPE type)

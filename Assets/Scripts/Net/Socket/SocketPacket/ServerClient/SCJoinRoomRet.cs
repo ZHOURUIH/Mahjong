@@ -36,14 +36,27 @@ public class SCJoinRoomRet : SocketPacket
 			// 设置房间号
 			CharacterMyself myself = mCharacterManager.getMyself();
 			myself.getCharacterData().mRoomID = mRoomID;
+
 			// 进入麻将场景
 			CommandGameSceneManagerEnter cmd = new CommandGameSceneManagerEnter();
 			cmd.mSceneType = GAME_SCENE_TYPE.GST_MAHJONG;
+			cmd.addEndCommandCallback(onEnterMahjongScene, null);
 			mCommandSystem.pushCommand(cmd, mGameSceneManager);
 		}
 		else
 		{
 			UnityUtility.logInfo("加入房间失败, 原因:" + mResult);
 		}
+	}
+	protected void onEnterMahjongScene(object user_data, Command cmd)
+	{
+		// 进入麻将场景后,创建房间
+		CharacterMyself myself = mCharacterManager.getMyself();
+		MahjongScene mahjongScene = mGameSceneManager.getCurScene() as MahjongScene;
+		Room room = mahjongScene.createRoom(myself.getCharacterData().mRoomID);
+		// 将自己加入房间
+		CommandRoomJoin cmdJoin = new CommandRoomJoin();
+		cmdJoin.mCharacter = myself;
+		mCommandSystem.pushCommand(cmdJoin, room);
 	}
 }

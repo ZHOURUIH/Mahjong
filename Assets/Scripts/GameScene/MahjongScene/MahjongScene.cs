@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class MahjongScene : GameScene
 {
+	protected Room mRoom;
 	public MahjongScene(GAME_SCENE_TYPE type, string name)
 		:
 		base(type, name)
@@ -30,5 +31,14 @@ public class MahjongScene : GameScene
 	public override void update(float elapsedTime)
 	{ 
 		base.update(elapsedTime); 
+	}
+	public Room getRoom()
+	{
+		return mRoom;
+	}
+	public Room createRoom(int id)
+	{
+		mRoom = new Room(id);
+		return mRoom;
 	}
 }

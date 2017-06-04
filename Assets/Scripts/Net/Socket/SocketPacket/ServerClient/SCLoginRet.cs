@@ -45,11 +45,11 @@ public class SCLoginRet : SocketPacket
 			CommandCharacterManagerCreateCharacter cmdCreate = new CommandCharacterManagerCreateCharacter();
 			cmdCreate.mCharacterType = CHARACTER_TYPE.CT_MYSELF;
 			cmdCreate.mName = BinaryUtility.byteArrayToUTF8String(mName);
+			cmdCreate.mGUID = mGUID;
 			mCommandSystem.pushCommand(cmdCreate, mCharacterManager);
 			// 设置角色数据
 			CharacterMyself myself = cmdCreate.mResultCharacter as CharacterMyself;
 			CharacterData data = myself.getCharacterData();
-			data.mGUID = mGUID;
 			data.mMoney = mMoney;
 			data.mHead = mHead;
 

@@ -30,12 +30,10 @@ public class SCCreateRoomRet : SocketPacket
 	}
 	public override void execute()
 	{
-		// 创建房间成功,进入麻将场景
+		// 创建房间成功,等待服务器通知进入房间
 		if(mResult == 0)
 		{
-			CommandGameSceneManagerEnter cmd = new CommandGameSceneManagerEnter();
-			cmd.mSceneType = GAME_SCENE_TYPE.GST_MAHJONG;
-			mCommandSystem.pushDelayCommand(cmd, mGameSceneManager);
+			;
 		}
 		else
 		{

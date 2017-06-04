@@ -414,4 +414,15 @@ public class GameUtility : GameBase
 		}
 		return true;
 	}
+
+	// 服务器中的位置转换为客户端的位置
+	public static PLAYER_POSITION serverPositionToClientPosition(PLAYER_POSITION serverPosition, PLAYER_POSITION myselfSererPosition)
+	{
+		int interval = serverPosition - myselfSererPosition;
+		if(interval < 0)
+		{
+			interval += CommonDefine.MAX_PLAYER_COUNT;
+		}
+		return (PLAYER_POSITION)(interval);
+	}
 }

@@ -31,11 +31,7 @@ public class ScriptAddPlayer : LayoutScript
 	}
 	public override void init()
 	{
-		mAdd.setClickCallback(onAdd);
-		mLeftReady.setClickCallback(onLeftReady);
-		mOppositeReady.setClickCallback(onOppositeReady);
-		mRightReady.setClickCallback(onRightReady);
-		mMyselfReady.setClickCallback(onMyselfReady);
+		;
 	}
 	public override void onReset()
 	{
@@ -52,66 +48,5 @@ public class ScriptAddPlayer : LayoutScript
 	public override void update(float elapsedTime)
 	{
 		;
-	}
-	//-------------------------------------------------------------------------------------------------------
-	protected void onAdd(GameObject button)
-	{
-		int nameCount = mNameList.Count;
-		for (int i = 0; i < nameCount; ++i)
-		{
-			string name = mNameList[i];
-			Character character = mCharacterManager.getCharacter(name);
-			if (character == null)
-			{
-				CommandCharacterManagerCreateCharacter cmdCreate = new CommandCharacterManagerCreateCharacter();
-				cmdCreate.mName = name;
-				cmdCreate.mCharacterType = CHARACTER_TYPE.CT_OTHER;
-				mCommandSystem.pushCommand(cmdCreate, mCharacterManager);
-				character = cmdCreate.mResultCharacter;
-				CharacterData data = character.getCharacterData();
-				data.mGUID = i + 1;
-				data.mMoney = 200;
-				data.mHead = i + 1;
-				CommandMahjongSystemJoin cmdJoin = new CommandMahjongSystemJoin();
-				cmdJoin.mCharacter = character;
-				mCommandSystem.pushCommand(cmdJoin, mMahjongSystem);
-			}
-		}
-	}
-	protected void onLeftReady(GameObject button)
-	{
-		Character character = mCharacterManager.getCharacter(mNameList[0]);
-		if (character != null)
-		{
-			CommandCharacterReady cmd = new CommandCharacterReady();
-			mCommandSystem.pushCommand(cmd, character);
-		}
-	}
-	protected void onOppositeReady(GameObject button)
-	{
-		Character character = mCharacterManager.getCharacter(mNameList[1]);
-		if (character != null)
-		{
-			CommandCharacterReady cmd = new CommandCharacterReady();
-			mCommandSystem.pushCommand(cmd, character);
-		}
-	}
-	protected void onRightReady(GameObject button)
-	{
-		Character character = mCharacterManager.getCharacter(mNameList[2]);
-		if (character != null)
-		{
-			CommandCharacterReady cmd = new CommandCharacterReady();
-			mCommandSystem.pushCommand(cmd, character);
-		}
-	}
-	protected void onMyselfReady(GameObject button)
-	{
-		Character character = mCharacterManager.getMyself();
-		if (character != null)
-		{
-			CommandCharacterReady cmd = new CommandCharacterReady();
-			mCommandSystem.pushCommand(cmd, character);
-		}
 	}
 }

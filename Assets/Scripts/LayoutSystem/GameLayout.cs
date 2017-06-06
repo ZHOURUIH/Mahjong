@@ -63,7 +63,7 @@ public class GameLayout : MonoBehaviour
 		return script;
 	}
 	public void init(LAYOUT_TYPE type, string name, int renderOrder)
-	{
+	{	
 		mName = name;
 		mType = type;
 		mScript = createLayoutScript();
@@ -81,6 +81,7 @@ public class GameLayout : MonoBehaviour
 		mScript.assignWindow();
 		mScript.init();
 		mScriptInited = true;
+		// 加载完布局后强制隐藏
 		setVisibleForce(false);
 	}
 	public void update(float elapsedTime)

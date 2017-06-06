@@ -142,6 +142,7 @@ public enum GAME_DEFINE_FLOAT
 	GDF_SOCKET_TCP_PORT,			// socket端口
 	GDF_SHOW_COMMAND_DEBUG_INFO,    // 是否输出显示命令调试信息,0为不显示,1为显示
 	GDF_LOAD_RESOURCES,             // -1表示优先从AssetBundle加载,找不到再去Resources加载,0表示从AssetBundle加载,1表示从Resources加载
+	GDF_OUTPUT_LOG,					// 是否启用所有日志输出
 	GDF_GAME_MAX,
 };
 public enum GAME_DEFINE_STRING

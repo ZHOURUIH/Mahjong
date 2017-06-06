@@ -34,7 +34,6 @@ public class ReloadTexture
 	static protected void reloadTexture(string name)
 	{
 		// 重新导入图片,触发DitherTexture中的处理函数
-		TextureImporter texture = AssetImporter.GetAtPath(name) as TextureImporter;
 		AssetDatabase.ImportAsset(name);
 	}
 }

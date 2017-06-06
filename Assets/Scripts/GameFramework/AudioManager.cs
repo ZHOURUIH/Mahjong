@@ -5,10 +5,12 @@ using System.Collections.Generic;
 public class AudioManager : GameBase
 {
 	protected Dictionary<string, AudioClip> mAudioClipList;	// 音效资源列表
+	protected List<string> mAudioFlieName;
 	protected int mLoadedCount;
 	public AudioManager()
 	{
 		mAudioClipList = new Dictionary<string, AudioClip>();
+		mAudioFlieName = new List<string>();
 	}
 	public virtual void init()
 	{
@@ -21,25 +23,30 @@ public class AudioManager : GameBase
 	public virtual void update(float elapsedTime)
 	{}
 	// 参数为Sound下的相对路径,并且不带后缀
-	public void createAudio(string fileName)
+	public void createAudio(string fileName, bool load = true, bool async = true)
 	{
 		if (mAudioClipList.ContainsKey(fileName))
 		{
 			UnityUtility.logError("error : audio has already loaded! file name : " + fileName);
 			return;
-		}
-		fileName = StringUtility.getFileNameNoSuffix(fileName, true);
+		}		
 		mAudioClipList.Add(fileName, null);
-		bool async = true;
-		if (async)
+		mAudioFlieName.Add(fileName);
+		if(load)
 		{
-			mResourceManager.loadResourceAsync<AudioClip>(CommonDefine.R_SOUND_PATH + fileName, onAudioLoaded, false);
+			loadAudio(fileName, async);
 		}
-		else
+	}
+	// 加载所有已经注册的音效
+	public void loadAll(bool async)
+	{
+		int audioClipCount = mAudioClipList.Count;
+		for (int i = 0; i < audioClipCount; i++)
 		{
-			AudioClip audio = mResourceManager.loadResource<AudioClip>(CommonDefine.R_SOUND_PATH + fileName, false);
-			mAudioClipList[audio.name] = audio;
-			++mLoadedCount;
+			if (mAudioClipList[mAudioFlieName[i]] == null)
+			{
+				loadAudio(mAudioFlieName[i], async);
+			}
 		}
 	}
 	// volume范围0-1
@@ -93,10 +100,28 @@ public class AudioManager : GameBase
 	{
 		return mLoadedCount == mAudioClipList.Count;
 	}
+	public float getLoadedPercent()
+	{
+		return (float)mLoadedCount / (float)mAudioClipList.Count;
+	}
 	//--------------------------------------------------------------------------------------------------------------------------------------
 	protected void onAudioLoaded(UnityEngine.Object res)
 	{
 		mAudioClipList[res.name] = res as AudioClip;
 		++mLoadedCount;
+	}
+	// name为Sound下相对路径,不带后缀
+	protected void loadAudio(string name, bool async)
+	{
+		if (async)
+		{
+			mResourceManager.loadResourceAsync<AudioClip>(CommonDefine.R_SOUND_PATH + name, onAudioLoaded, false);
+		}
+		else
+		{
+			AudioClip audio = mResourceManager.loadResource<AudioClip>(CommonDefine.R_SOUND_PATH + name, false);
+			mAudioClipList[audio.name] = audio;
+			++mLoadedCount;
+		}
 	}
 }

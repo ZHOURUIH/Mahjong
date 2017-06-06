@@ -5,8 +5,6 @@ using System.Collections.Generic;
 
 public class LogoSceneLoading : SceneProcedure
 {
-	protected int mLastVSync;
-	protected int mLastTargetFrameRate;
 	protected Dictionary<LAYOUT_TYPE, LayoutLoadInfo> mLoadInfo;
 	protected int mLoadedCount;
 	public LogoSceneLoading()
@@ -23,19 +21,25 @@ public class LogoSceneLoading : SceneProcedure
 	}
 	protected override void onInit(SceneProcedure lastProcedure, string intent)
 	{
-		mLastVSync = QualitySettings.vSyncCount;
-		mLastTargetFrameRate = Application.targetFrameRate;
-		QualitySettings.vSyncCount = 0;
-		Application.targetFrameRate = 30;
 		mLoadedCount = 0;
 		foreach (var item in mLoadInfo)
 		{
 			LayoutTools.LOAD_LAYOUT_ASYNC(item.Key, item.Value.mOrder, onLayoutLoaded);
 		}
+		// 开始加载关键帧资源,音效资源,布局使用预设资源
+		mKeyFrameManager.loadAll(true);
+		mAudioManager.loadAll(true);
+		mLayoutPrefabManager.loadAll(true);
 	}
 	protected override void onUpdate(float elapsedTime)
 	{
-		;
+		if (mLoadedCount == mLoadInfo.Count && mKeyFrameManager.isLoadDone() && mAudioManager.isLoadDone() && mLayoutPrefabManager.isLoadDone())
+		{
+			// 加载结束后进入登录流程
+			CommandGameSceneChangeProcedure cmd = new CommandGameSceneChangeProcedure(true, true);
+			cmd.mProcedure = PROCEDURE_TYPE.PT_START_LOGIN;
+			mCommandSystem.pushDelayCommand(cmd, mGameScene);
+		}
 	}
 	protected override void onExit(SceneProcedure nextProcedure)
 	{
@@ -49,18 +53,6 @@ public class LogoSceneLoading : SceneProcedure
 	protected void onLayoutLoaded(GameLayout layout)
 	{
 		mLoadInfo[layout.getType()].mLayout = layout;
-		if (++mLoadedCount == mLoadInfo.Count)
-		{
-			allLayoutLoaded();
-		}
-	}
-	protected void allLayoutLoaded()
-	{
-		QualitySettings.vSyncCount = mLastVSync;
-		Application.targetFrameRate = mLastTargetFrameRate;
-		// 加载结束后进入登录流程
-		CommandGameSceneChangeProcedure cmd = new CommandGameSceneChangeProcedure(true, true);
-		cmd.mProcedure = PROCEDURE_TYPE.PT_START_LOGIN;
-		mCommandSystem.pushDelayCommand(cmd, mGameScene);
+		++mLoadedCount;
 	}
 }

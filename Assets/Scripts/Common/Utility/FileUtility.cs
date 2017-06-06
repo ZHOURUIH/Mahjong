@@ -111,7 +111,7 @@ public class FileUtility : GameBase
 		int count = ret.Length;
 		for (int i = 0; i < count; ++i)
 		{
-			dirList.Add(StringUtility.getFolderName(ref ret[i]));
+			dirList.Add(StringUtility.getFolderName(ret[i]));
 		}
 		return true;
 	}

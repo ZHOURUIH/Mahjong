@@ -79,7 +79,9 @@ public class ResourceManager : GameBase
 		}
 		return res;
 	}
-	public List<string> getFileOrBundleList(string path)
+	// path为resources下相对路径,返回的列表中文件名不带路径不带后缀
+	// 如果从Resource中加载,则区分大小写,如果从AssetBundle中加载,传入的路径不区分大小写,返回的文件列表全部为小写
+	public List<string> getFileList(string path)
 	{
 		if (mLoadSource == 0)
 		{
@@ -87,7 +89,7 @@ public class ResourceManager : GameBase
 		}
 		else if (mLoadSource == 1)
 		{
-			return mAssetBundleLoader.getBundleNameList(path.ToLower());
+			return mAssetBundleLoader.getFileList(path.ToLower());
 		}
 		return null;
 	}

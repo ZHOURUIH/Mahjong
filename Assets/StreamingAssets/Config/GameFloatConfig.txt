@@ -14,3 +14,6 @@ GDF_SHOW_COMMAND_DEBUG_INFO = 1
 
 // 0表示从Resources加载,1表示从AssetBundle加载
 GDF_LOAD_RESOURCES = 0
+
+// 是否启用所有日志输出
+GDF_OUTPUT_LOG = 1

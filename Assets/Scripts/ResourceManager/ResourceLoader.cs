@@ -35,7 +35,7 @@ public class ResourceLoader : MonoBehaviour
 		{
 			if(!fileList[i].EndsWith(".meta"))
 			{
-				newFileList.Add(fileList[i]);
+				newFileList.Add(StringUtility.getFileNameNoSuffix(fileList[i], true));
 			}
 		}
 		return newFileList;

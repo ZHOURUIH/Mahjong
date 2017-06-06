@@ -24,6 +24,7 @@ public class AssetBundleInfo : GameBase
 	public LOAD_STATE mLoaded;
 	public string mBundleName;					// 资源所在的AssetBundle名,相对于StreamingAsset,不含后缀
 	public AssetBundle mAssetBundle;
+	public int mLoadedParentCount;
 	public Dictionary<string, AssetBundleInfo> mParents;	// 依赖的AssetBundle列表
 	public Dictionary<string, AssetBundleInfo> mChildren;	// 依赖自己的AssetBundle列表
 	public Dictionary<string, AssetInfo> mAssetList;			// 资源包中已加载的所有资源
@@ -32,6 +33,7 @@ public class AssetBundleInfo : GameBase
 	public AssetBundleInfo(string bundleName)
 	{
 		mBundleName = bundleName;
+		mLoadedParentCount = 0;
 		mLoaded = LOAD_STATE.LS_UNLOAD;
 		mParents = new Dictionary<string, AssetBundleInfo>();
 		mChildren = new Dictionary<string, AssetBundleInfo>();
@@ -71,7 +73,7 @@ public class AssetBundleInfo : GameBase
 		}
 	}
 	// 通知有其他的AssetBundle依赖了自己
-	public void notifyChild(AssetBundleInfo other)
+	public void addChild(AssetBundleInfo other)
 	{
 		if (!mChildren.ContainsKey(other.mBundleName))
 		{
@@ -87,41 +89,13 @@ public class AssetBundleInfo : GameBase
 			// 找到自己的父节点
 			mParents[depName] = mResourceManager.mAssetBundleLoader.getAssetBundleInfo(depName);
 			// 并且通知父节点添加自己为子节点
-			mParents[depName].notifyChild(this);
+			mParents[depName].addChild(this);
 		}
 	}
 	// 所有依赖项是否都已经加载完成
-	public bool isAllDependenceDone()
+	public bool isAllParentDone()
 	{
-		// 如果没有依赖项,则直接返回依赖项已加载
-		// 有依赖项,则判断依赖项是否已经加载以及依赖项的依赖项是否已经加载
-		if (mParents.Count > 0)
-		{
-			foreach (var dep in mParents)
-			{
-				if (dep.Value.mLoaded != LOAD_STATE.LS_LOADED || !dep.Value.isAllDependenceDone())
-				{
-					return false;
-				}
-			}
-		}
-		return true;
-	}
-	// 依赖于自己的AssetBundle是否已经全部加载完毕
-	public bool isAllChildrenLoadedDone()
-	{
-		// 如果有依赖自己的AssetBundle
-		if (mChildren.Count > 0)
-		{
-			foreach (var dep in mChildren)
-			{
-				if (dep.Value.mLoaded != LOAD_STATE.LS_LOADED || !dep.Value.isAllChildrenLoadedDone())
-				{
-					return false;
-				}
-			}
-		}
-		return true;
+		return mLoadedParentCount == mParents.Count;
 	}
 	// 获得资源,只能在加载后才能获得
 	public T getAsset<T>(string fileNameWithSuffix) where T : UnityEngine.Object
@@ -212,8 +186,12 @@ public class AssetBundleInfo : GameBase
 			UnityEngine.Object obj = mAssetBundle.LoadAsset(CommonDefine.P_RESOURCE_PATH + assetNameList[i]);
 			mAssetList[assetNameList[i]].mAssetObject = obj;
 		}
-		notifyAssetBundleLoaded(this);
 		mLoaded = LOAD_STATE.LS_LOADED;
+		// 通知自己的所有子节点,自己已经加载完了
+		foreach (var item in mChildren)
+		{
+			item.Value.notifyParentLoaded(this);
+		}
 	}
 	// 异步加载资源包
 	public void loadAssetBundleAsync(AssetBundleLoadDoneCallback callback)
@@ -246,15 +224,16 @@ public class AssetBundleInfo : GameBase
 			}
 		}
 		mLoadAsyncList.Clear();
-		notifyAssetBundleLoaded(this);
+		// 通知自己的所有子节点,自己已经加载完了
+		foreach(var item in mChildren)
+		{
+			item.Value.notifyParentLoaded(this);
+		}
 	}
 	//-----------------------------------------------------------------------------
-	static protected void notifyAssetBundleLoaded(AssetBundleInfo info)
+	// 通知自己有一个父节点已经加载完毕
+	protected void notifyParentLoaded(AssetBundleInfo parent)
 	{
-		// 如果所有子节点已经加载完毕,则可以卸载资源镜像
-		if (info.isAllChildrenLoadedDone())
-		{
-			info.unload(false);
-		}
+		++mLoadedParentCount;
 	}
 }

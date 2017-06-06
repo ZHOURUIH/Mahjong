@@ -27,7 +27,7 @@ class AssetBuildBundleInfo
 public class AssetBundleBuild
 {
 	// 清理时需要保留的目录和目录的meta
-	protected static string[] mKeepFolder = new string[] {"Config", "GameDataFile", "Video", "DataTemplate" };
+	protected static string[] mKeepFolder = new string[] {"Config", "GameDataFile", "Video", "DataTemplate"};
 	protected const string mAssetMenuRoot = "AssetBundle/";
 	private static string RES_SRC_PATH = "Assets/Resources/";
 	// 打包输出目录
@@ -241,7 +241,7 @@ public class AssetBundleBuild
 			for (int i = 0; i < dirCount; ++i)
 			{
 				// 只删除不需要保留的目录
-				if (!isKeepFolderOrMeta(StringUtility.getFolderName(ref dirList[i])))
+				if (!isKeepFolderOrMeta(StringUtility.getFolderName(dirList[i])))
 				{
 					Directory.Delete(dirList[i], true);
 				}

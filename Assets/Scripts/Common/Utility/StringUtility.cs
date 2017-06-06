@@ -164,7 +164,7 @@ public class StringUtility : GameBase
 			str += "\r\n";
 		}
 	}
-	public static string removeSuffix(ref string str)
+	public static string removeSuffix(string str)
 	{
 		int dotPos = str.IndexOf('.');
 		if (dotPos != -1)
@@ -174,7 +174,7 @@ public class StringUtility : GameBase
 		return str;
 	}
 	// 从文件路径中得到最后一级的文件夹名
-	public static string getFolderName(ref string str)
+	public static string getFolderName(string str)
 	{
 		rightToLeft(ref str);
 		string ret = str;
@@ -240,10 +240,33 @@ public class StringUtility : GameBase
 	{
 		str = str.Replace('/', '\\');
 	}
+	public static string[] split(string str, params char[] keyword)
+	{
+		// 去除所有空白字符
+		str = Regex.Replace(str, @"\s", "");
+		string[] strList = str.Split(keyword);
+		return strList;
+	}
+	public static void split(string str, ref List<string> strList, params char[] keyword)
+	{
+		string[] strArray = split(str, keyword);
+		if (strList == null)
+		{
+			strList = new List<string>(strArray);
+		}
+		else
+		{
+			strList.Clear();
+			int strCount = strArray.Length;
+			for (int i = 0; i < strCount; ++i)
+			{
+				strList.Add(strArray[i]);
+			}
+		}
+	}
 	public static void stringToFloatArray(string str, ref float[] values)
 	{
-		str = Regex.Replace(str, @"\s", "");
-		string[] rangeList = str.Split(',');
+		string[] rangeList = split(str, ',');
 		int len = rangeList.Length;
 		if (values != null && len != values.Length)
 		{

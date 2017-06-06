@@ -104,17 +104,28 @@ public class AssetBundleLoader : MonoBehaviour
 		}
 		return null;
 	}
-	public List<string> getBundleNameList(string path)
+	// 得到文件夹中的所有文件,如果文件夹被打包成一个AssetBundle,则返回AssetBundle中的所有资源名
+	// 如果文件夹中包含多个AssetBundle(一般一个AssetBundle代表一个预设),则返回所有预设的名字
+	public List<string> getFileList(string path)
 	{
-		List<string> bundleNameList = new List<string>();
+		List<string> fileList = new List<string>();
+		// 该文件夹被打包成一个AssetBundle
+		if(mAssetBundleInfoList.ContainsKey(path))
+		{
+			foreach (var item in mAssetBundleInfoList[path].mAssetList)
+			{
+				fileList.Add(StringUtility.getFileNameNoSuffix(item.Key, true));
+			}
+		}
+		// 判断文件夹中是否包含预设
 		foreach (var item in mAssetBundleInfoList)
 		{
 			if (item.Key.StartsWith(path))
 			{
-				bundleNameList.Add(item.Key);
+				fileList.Add(StringUtility.getFileNameNoSuffix(item.Key, true));
 			}
 		}
-		return bundleNameList;
+		return fileList;
 	}
 	// 资源是否已经加载
 	public bool isAssetLoaded<T>(string fileName) where T : UnityEngine.Object
@@ -244,7 +255,7 @@ public class AssetBundleLoader : MonoBehaviour
 	{
 		UnityUtility.logInfo(bundleInfo.mBundleName + " start load bundld");
 		// 先确保依赖项全部已经加载完成,才能开始加载当前请求的资源包
-		while (!bundleInfo.isAllDependenceDone())
+		while (!bundleInfo.isAllParentDone())
 		{
 			yield return null;
 		}

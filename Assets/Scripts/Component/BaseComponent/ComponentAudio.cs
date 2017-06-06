@@ -31,7 +31,7 @@ public class ComponentAudio : GameComponent
 		base.init(owner);
 		// 通知子类设置自己的音效类型
 		setSoundOwner();
-		// 如果音效还未加载,则加载所有音效
+		// 如果音效还未加载,则加载所有音效,此处只是注册
 		if (mAudioTypeMap.Count == 0)
 		{
 			int dataCount = mDataBase.getDataCount(DATA_TYPE.DT_GAME_SOUND);
@@ -39,7 +39,9 @@ public class ComponentAudio : GameComponent
 			{
 				DataGameSound soundData = mDataBase.queryData(DATA_TYPE.DT_GAME_SOUND, i) as DataGameSound;
 				string soundName = StringUtility.charArrayToString(soundData.mSoundFileName);
-				createAudio(soundName, soundData.mSoundType, (SOUND_DEFINE)(soundData.mSoundID));
+				mAudioTypeMap.Add(soundName, soundData.mSoundType);
+				mSoundDefineMap.Add((SOUND_DEFINE)(soundData.mSoundID), soundName);
+				mAudioManager.createAudio(soundName, false);
 			}
 		}
 
@@ -138,12 +140,5 @@ public class ComponentAudio : GameComponent
 	public void stop(int channel)
 	{
 		mAudioManager.stopClip(mAudioSource);
-	}
-	//---------------------------------------------------------------------------------------------------------------
-	protected void createAudio(string name, int type, SOUND_DEFINE define)
-	{
-		mAudioTypeMap.Add(name, type);
-		mSoundDefineMap.Add(define, name);
-		mAudioManager.createAudio(name);
 	}
 }

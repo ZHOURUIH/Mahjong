@@ -40,14 +40,26 @@ public class KeyFrameManager : GameBase
 			UnityUtility.logError("error: can not find KeyFrameManager!");
 			return;
 		}
+	}
+	// 加载所有KeyFrame下的关键帧
+	public void loadAll(bool async)
+	{
 		string path = CommonDefine.R_KEY_FRAME_PATH;
-		List<string> fileList = mResourceManager.getFileOrBundleList(path);
+		List<string> fileList = mResourceManager.getFileList(path);
 		int fileCount = fileList.Count;
-		for(int i = 0; i < fileCount; ++i)
+		for (int i = 0; i < fileCount; ++i)
 		{
-			string fileNameNoSuffix = StringUtility.getFileNameNoSuffix(fileList[i], true);
+			string fileNameNoSuffix = fileList[i];
 			mCurveList.Add(fileNameNoSuffix.ToLower(), null);
-			mResourceManager.loadResourceAsync<GameObject>(path + fileNameNoSuffix, onKeyFrameLoaded, true);
+			if (async)
+			{
+				mResourceManager.loadResourceAsync<GameObject>(path + fileNameNoSuffix, onKeyFrameLoaded, true);
+			}
+			else
+			{
+				GameObject prefab = mResourceManager.loadResource<GameObject>(path + fileNameNoSuffix, true);
+				onKeyFrameLoaded(prefab);
+			}
 		}
 	}
 	public void destroy()
@@ -57,6 +69,10 @@ public class KeyFrameManager : GameBase
 	public bool isLoadDone()
 	{
 		return mLoadedCount == mCurveList.Count;
+	}
+	public float getLoadedPercent()
+	{
+		return (float)mLoadedCount / (float)mCurveList.Count;
 	}
 	//------------------------------------------------------------------------------------------------------------------
 	protected void onKeyFrameLoaded(UnityEngine.Object res)

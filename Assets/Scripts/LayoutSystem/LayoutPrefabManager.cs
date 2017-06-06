@@ -22,15 +22,18 @@ public class LayoutPrefabManager : GameBase
 			UnityUtility.logError("error: can not find LayoutPrefabManager!");
 			return;
 		}
-		bool async = true;
+	}
+	// 加载所有LayoutPrefab下的预设
+	public void loadAll(bool async)
+	{
 		string path = CommonDefine.R_LAYOUT_PREFAB_PATH;
-		List<string> fileList = mResourceManager.getFileOrBundleList(path);
+		List<string> fileList = mResourceManager.getFileList(path);
 		int fileCount = fileList.Count;
 		for (int i = 0; i < fileCount; ++i)
 		{
-			string fileNameNoSuffix = StringUtility.getFileNameNoSuffix(fileList[i], true);
+			string fileNameNoSuffix = fileList[i];
 			mPrefabList.Add(fileNameNoSuffix.ToLower(), null);
-			if(async)
+			if (async)
 			{
 				mResourceManager.loadResourceAsync<GameObject>(path + fileNameNoSuffix, onLayoutPrefabLoaded, true);
 			}
@@ -72,6 +75,10 @@ public class LayoutPrefabManager : GameBase
 	public bool isLoadDone()
 	{
 		return mLoadedCount == mPrefabList.Count;
+	}
+	public float getLoadedPercent()
+	{
+		return (float)mLoadedCount / (float)mPrefabList.Count;
 	}
 	//---------------------------------------------------------------------------------------------------------
 	protected void onLayoutPrefabLoaded(UnityEngine.Object res)

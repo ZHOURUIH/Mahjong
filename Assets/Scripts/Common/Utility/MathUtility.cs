@@ -149,8 +149,8 @@ public class MathUtility : GameBase
 			if (i == str.Length - 1)
 			{
 				string num = str.Substring(beginpos, str.Length - beginpos);
-				float fNum = float.Parse(num);
-				numbers.Add(fNum);
+					float fNum = float.Parse(num);
+					numbers.Add(fNum);
 				break;
 			}
 			// 找到第一个运算符

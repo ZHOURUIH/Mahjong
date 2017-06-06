@@ -12,10 +12,12 @@ public class UnityUtility : GameBase
 {
 	protected static GameCamera mForeEffectCamera;
 	protected static GameCamera mBackEffectCamera;
+	protected static bool mOutputLog;
 	public void init() 
 	{
 		mForeEffectCamera = mCameraManager.getCamera("UIForeEffectCamera");
 		mBackEffectCamera = mCameraManager.getCamera("UIBackEffectCamera");
+		mOutputLog = (int)mGameConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_OUTPUT_LOG) != 0;
 	}
 	public static void logError(string info, bool isMainThread = true)
 	{
@@ -25,9 +27,13 @@ public class UnityUtility : GameBase
 		}
 		Debug.LogError("error : " + info);
 	}
-	public static void logInfo(string info)
+	// force表示是否强制输出日志
+	public static void logInfo(string info, bool force = false)
 	{
-		Debug.Log(getTime() + " : " + info);
+		if (mOutputLog || force)
+		{
+			Debug.Log(getTime() + " : " + info);
+		}
 	}
 	public static string getTime()
 	{

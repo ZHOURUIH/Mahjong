@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3783879267
+CRC: 3675982872
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 2c9c96e8da63b6ca4f89210ec2c7dc00
+    Hash: b37ae41fa8a6bbd170ff1c2ef496a11f
   TypeTreeHash:
     serializedVersion: 2
     Hash: aed8a97215449584f30f9c0f1a9141a2
@@ -26,6 +26,6 @@ ClassTypes:
 - Class: 115
   Script: {instanceID: 0}
 Assets:
-- Assets/Resources/Layout/UIPrefab/UIMahjongGameFrame.prefab
+- Assets/Resources/Layout/UIPrefab/UIMahjongBackFrame.prefab
 Dependencies:
 - Assets/StreamingAssets/texture/gametexture/common.unity3d

@@ -4,7 +4,7 @@
 // 变量命名应与代码中枚举命名相同
 
 // 服务器IP
-GDS_TCP_SERVER_IP = 127.0.0.1
+GDS_TCP_SERVER_IP = 192.168.1.103
 
 // 账号
 GDS_ACCOUNT = zhourui

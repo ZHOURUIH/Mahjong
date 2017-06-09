@@ -48,7 +48,7 @@ public class SCOtherPlayerJoinRoom : SocketPacket
 		string name = BinaryUtility.byteArrayToUTF8String(mName);
 		UnityUtility.logInfo("获得玩家数据 : " + mPlayerGUID + ", 名字 : " + name);
 		// 创建该玩家的实例
-		CommandCharacterManagerCreateCharacter cmdCreate = new CommandCharacterManagerCreateCharacter(true, true);
+		CommandCharacterManagerCreateCharacter cmdCreate = new CommandCharacterManagerCreateCharacter();
 		cmdCreate.mName = name;
 		cmdCreate.mGUID = mPlayerGUID;
 		cmdCreate.mCharacterType = CHARACTER_TYPE.CT_OTHER;
@@ -63,6 +63,6 @@ public class SCOtherPlayerJoinRoom : SocketPacket
 		GameScene gameScene = mGameSceneManager.getCurScene();
 		CommandRoomJoin cmd = new CommandRoomJoin(true, true);
 		cmd.mCharacter = cmdCreate.mResultCharacter;
-		mCommandSystem.pushCommand(cmd, (gameScene as MahjongScene).getRoom());
+		mCommandSystem.pushDelayCommand(cmd, (gameScene as MahjongScene).getRoom());
 	}
 }

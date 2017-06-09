@@ -51,7 +51,7 @@ public class SocketManager : GameBase
 	protected bool mRun;
 	protected int mHeartBeatTimes;
 	protected float mHeartBeatTimeCount = 0.0f;
-	protected float mHeartBeatMaxTime = 5.0f;
+	protected float mHeartBeatMaxTime = 0.0f;
 	public SocketManager()
 	{
 		mMaxReceiveCount = 1024;
@@ -64,6 +64,7 @@ public class SocketManager : GameBase
 	public void init()
 	{
 		mSocketFactoryManager.init();
+		mHeartBeatMaxTime = mGameConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_HEART_BEAT_NITERVAL);
 		// 创建socket  
 		mServerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 		try

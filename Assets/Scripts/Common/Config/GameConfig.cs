@@ -21,6 +21,7 @@ public class GameConfig : ConfigBase
 		addFloatParam(GAME_DEFINE_FLOAT.GDF_LOAD_RESOURCES);
 		addFloatParam(GAME_DEFINE_FLOAT.GDF_SHOW_COMMAND_DEBUG_INFO);
 		addFloatParam(GAME_DEFINE_FLOAT.GDF_OUTPUT_LOG);
+		addFloatParam(GAME_DEFINE_FLOAT.GDF_HEART_BEAT_NITERVAL);
 		if (mFloatNameToDefine.Count != (int)GAME_DEFINE_FLOAT.GDF_GAME_MAX - (int)GAME_DEFINE_FLOAT.GDF_GAME_MIN - 1)
 		{
 			UnityUtility.logError("not all float parameter added!");

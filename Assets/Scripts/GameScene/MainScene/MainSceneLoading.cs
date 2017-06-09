@@ -32,6 +32,7 @@ public class MainSceneLoading : SceneProcedure
 		mLoadInfo.Add(LAYOUT_TYPE.LT_CHARACTER, new LayoutLoadInfo(LAYOUT_TYPE.LT_CHARACTER, 1));
 		mLoadInfo.Add(LAYOUT_TYPE.LT_BILLBOARD, new LayoutLoadInfo(LAYOUT_TYPE.LT_BILLBOARD, 1));
 		mLoadInfo.Add(LAYOUT_TYPE.LT_ROOM_MENU, new LayoutLoadInfo(LAYOUT_TYPE.LT_ROOM_MENU, 1));
+		mLoadInfo.Add(LAYOUT_TYPE.LT_JOIN_ROOM_DIALOG, new LayoutLoadInfo(LAYOUT_TYPE.LT_JOIN_ROOM_DIALOG, 2));
 	}
 	protected override void onInit(SceneProcedure lastProcedure, string intent)
 	{

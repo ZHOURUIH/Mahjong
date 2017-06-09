@@ -36,6 +36,7 @@ public class MainSceneRunning : SceneProcedure
 		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_CHARACTER);
 		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_BILLBOARD);
 		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_ROOM_MENU);
+		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_JOIN_ROOM_DIALOG);
 	}
 	protected override void onKeyProcess(float elapsedTime)
 	{

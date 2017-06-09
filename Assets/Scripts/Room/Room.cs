@@ -5,7 +5,7 @@ using System.Text;
 
 public class Room : CommandReceiver
 {
-	protected bool mCanJoin;
+	protected bool mCanJoin = false;
 	protected int mID;
 	protected List<Character> mNoneJoinPlayerList;							// 还未进入等待流程时就接收到的玩家列表
 	protected Dictionary<int, Character> mPlayerIDList;						// key是玩家GUID,value是玩家对象,只用于查找
@@ -15,7 +15,9 @@ public class Room : CommandReceiver
 		base("room")
 	{
 		mID = id;
-		mCanJoin = false;
+		mNoneJoinPlayerList = new List<Character>();
+		mPlayerIDList = new Dictionary<int, Character>();
+		mPlayerPositionList = new Dictionary<PLAYER_POSITION, Character>();
 	}
 	public void notifyPlayerJoin(Character player)
 	{
@@ -29,10 +31,7 @@ public class Room : CommandReceiver
 			mNoneJoinPlayerList.Add(player);
 		}
 	}
-	public int getRoomID()
-	{
-		return mID;
-	}
+	public int getRoomID(){return mID;}
 	// 通知房间开始等待玩家加入
 	public void notifyStartWait()
 	{

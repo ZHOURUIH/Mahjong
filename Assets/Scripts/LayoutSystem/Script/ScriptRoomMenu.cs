@@ -58,7 +58,8 @@ public class ScriptRoomMenu : LayoutScript
 	}
 	protected void onJoinClicked(GameObject obj)
 	{
-		;
+		// 显示加入房间对话框
+		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_JOIN_ROOM_DIALOG);
 	}
 	protected void onButtonPress(GameObject obj, bool press)
 	{

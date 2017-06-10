@@ -62,21 +62,22 @@ public class ScriptMahjongFrame : LayoutScript
 	//-----------------------------------------------------------------------------------
 	protected void onReadyClick(GameObject go)
 	{
-		CommandCharacterReady cmd = new CommandCharacterReady();
-		cmd.mReady = true;
-		mCommandSystem.pushCommand(cmd, mCharacterManager.getMyself());
+		// 发送消息通知服务器玩家已经准备
+		CSReady packetReady = mSocketNetManager.createPacket(PACKET_TYPE.PT_CS_READY) as CSReady;
+		packetReady.mReady = true;
+		mSocketNetManager.sendMessage(packetReady);
 	}
 	protected void onCancelReadyClick(GameObject go)
 	{
-		CommandCharacterReady cmd = new CommandCharacterReady();
-		cmd.mReady = false;
-		mCommandSystem.pushCommand(cmd, mCharacterManager.getMyself());
+		// 发送消息通知服务器玩家已经准备
+		CSReady packetReady = mSocketNetManager.createPacket(PACKET_TYPE.PT_CS_READY) as CSReady;
+		packetReady.mReady = false;
+		mSocketNetManager.sendMessage(packetReady);
 	}
 	protected void onLeaveRoomClick(GameObject go)
 	{
-		CommandGameSceneManagerEnter cmd = new CommandGameSceneManagerEnter();
-		cmd.mSceneType = GAME_SCENE_TYPE.GST_MAIN;
-		mCommandSystem.pushCommand(cmd, mGameSceneManager);
+		CSLeaveRoom packetLeave = mSocketNetManager.createPacket(PACKET_TYPE.PT_CS_LEAVE_ROOM) as CSLeaveRoom;
+		mSocketNetManager.sendMessage(packetLeave);
 	}
 	protected void onButtonPress(GameObject go, bool press)
 	{

@@ -61,8 +61,8 @@ public class SCOtherPlayerJoinRoom : SocketPacket
 		data.mReady = mReady;
 		// 将该玩家加入房间
 		GameScene gameScene = mGameSceneManager.getCurScene();
-		CommandRoomJoin cmd = new CommandRoomJoin(true, true);
+		CommandRoomJoin cmd = new CommandRoomJoin();
 		cmd.mCharacter = cmdCreate.mResultCharacter;
-		mCommandSystem.pushDelayCommand(cmd, (gameScene as MahjongScene).getRoom());
+		mCommandSystem.pushCommand(cmd, (gameScene as MahjongScene).getRoom());
 	}
 }

@@ -35,7 +35,7 @@ public class CharacterInfoPanel
 	}
 	public void onReset()
 	{
-		notifyQuit();
+		notifyLeave();
 		LayoutTools.ACTIVE_WINDOW(mReady, false);
 	}
 	public void notifyJoin(Character player)
@@ -48,7 +48,7 @@ public class CharacterInfoPanel
 		notifyReady(data.mReady);
 		setBanker(data.mBanker);
 	}
-	public void notifyQuit()
+	public void notifyLeave()
 	{
 		LayoutTools.ACTIVE_WINDOW(mRoot, false);
 	}
@@ -130,15 +130,20 @@ public class ScriptAllCharacterInfo : LayoutScript
 		CharacterData data = player.getCharacterData();
 		mInfoPanelList[(int)data.mPosition].notifyJoin(player);
 	}
-	public void notifyCharacterQuit(Character player)
+	public void notifyCharacterLeave(Character player)
 	{
 		CharacterData data = player.getCharacterData();
-		mInfoPanelList[(int)data.mPosition].notifyQuit();
+		mInfoPanelList[(int)data.mPosition].notifyLeave();
 	}
 	public void notifyCharacterReady(Character player, bool ready)
 	{
 		CharacterData data = player.getCharacterData();
 		mInfoPanelList[(int)data.mPosition].notifyReady(ready);
+	}
+	public void notifyCharacterBanker(Character player, bool banker)
+	{
+		CharacterData data = player.getCharacterData();
+		mInfoPanelList[(int)data.mPosition].setBanker(banker);
 	}
 	public void notifyStartGame()
 	{

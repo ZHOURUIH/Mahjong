@@ -27,6 +27,19 @@ public class SCNotifyBanker : SocketPacket
 	}
 	public override void execute()
 	{
-		UnityUtility.logInfo("玩家" + mGUID + "成为庄家");
+		// 通知房间中的所有玩家
+		GameScene gameScene = mGameSceneManager.getCurScene();
+		if(gameScene.getType() != GAME_SCENE_TYPE.GST_MAHJONG)
+		{
+			return;
+		}
+		Room room = (gameScene as MahjongScene).getRoom();
+		Dictionary<int, Character> playerList = room.getPlayerList();
+		foreach(var item in playerList)
+		{
+			CommandCharacterNotifyBanker cmdBanker = new CommandCharacterNotifyBanker();
+			cmdBanker.mBanker = (item.Value.getCharacterData().mGUID == mGUID);
+			mCommandSystem.pushCommand(cmdBanker, item.Value);
+		}
 	}
 }

@@ -41,12 +41,7 @@ public class MahjongSceneWaiting : SceneProcedure
 	}
 	protected override void onKeyProcess(float elapsedTime)
 	{
-		if (Input.GetKeyDown(KeyCode.Alpha0))
-		{
-			CharacterMyself myself = mCharacterManager.getMyself();
-			CommandCharacterReady cmd = new CommandCharacterReady();
-			mCommandSystem.pushCommand(cmd, myself);
-		}
+		;
 	}
 	public void notifyAllPlayerReady()
 	{

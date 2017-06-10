@@ -127,20 +127,26 @@ public class CharacterManager : CommandReceiver
 	public void destroyCharacter(string name)
 	{
 		Character character = getCharacter(name);
-		if (character == null)
+		if (character != null)
 		{
-			return;
+			destroyCharacter(character);
 		}
-		destroyCharacter(character);
 	}
-	public void destroyCharacter(int clientID)
+	public void destroyCharacterByClientID(int clientID)
 	{
 		Character character = getCharacterByClientID(clientID);
-		if (character == null)
+		if (character != null)
 		{
-			return;
+			destroyCharacter(character);
 		}
-		destroyCharacter(character);
+	}
+	public void destroyCharacterByGUID(int guid)
+	{
+		Character character = getCharacterByGUID(guid);
+		if (character != null)
+		{
+			destroyCharacter(character);
+		}
 	}
 	public void notifyCharacterNameChanged(string oldName)
 	{
@@ -190,9 +196,9 @@ public class CharacterManager : CommandReceiver
 			mCharacterClientIDList.Remove(data.mClientID);
 		}
 		// 从GUID索引表中移除
-		if (mCharacterClientIDList.ContainsKey(data.mGUID))
+		if (mCharacterGUIDList.ContainsKey(data.mGUID))
 		{
-			mCharacterClientIDList.Remove(data.mGUID);
+			mCharacterGUIDList.Remove(data.mGUID);
 		}
 		character.destroy();
 	}

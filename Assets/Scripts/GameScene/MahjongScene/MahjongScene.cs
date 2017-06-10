@@ -9,9 +9,10 @@ public class MahjongScene : GameScene
 		:
 		base(type, name)
 	{ }
-	public override void setFirstProcedureName()
+	public override void assignStartExitProcedure()
 	{
-		mFirstProcedure = PROCEDURE_TYPE.PT_MAHJONG_LOADING;
+		mStartProcedure = PROCEDURE_TYPE.PT_MAHJONG_LOADING;
+		mExitProcedure = PROCEDURE_TYPE.PT_MAHJONG_EXIT;
 	}
 	public override void createSceneProcedure()
 	{

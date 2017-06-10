@@ -27,6 +27,15 @@ public class SCOtherPlayerLeaveRoom : SocketPacket
 	}
 	public override void execute()
 	{
-		UnityUtility.logInfo("有玩家离开房间, id : " + mGUID);
+		Character player = mCharacterManager.getCharacterByGUID(mGUID);
+		GameScene gameScene = mGameSceneManager.getCurScene();
+		if (gameScene.getType() != GAME_SCENE_TYPE.GST_MAHJONG)
+		{
+			return;
+		}
+		MahjongScene mahjongScene = gameScene as MahjongScene;
+		CommandRoomLeave cmdLeave = new CommandRoomLeave();
+		cmdLeave.mCharacter = player;
+		mCommandSystem.pushCommand(cmdLeave, mahjongScene.getRoom());
 	}
 }

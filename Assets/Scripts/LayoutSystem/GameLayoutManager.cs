@@ -118,7 +118,15 @@ public class GameLayoutManager : CommandReceiver
 	{
 		if (mLayoutTypeList.ContainsKey(type))
 		{
-			return mLayoutTypeList[type];
+			if (async && callback != null)
+			{
+				callback(mLayoutTypeList[type]);
+				return null;
+			}
+			else
+			{
+				return mLayoutTypeList[type];
+			}
 		}
 		string name = getLayoutNameByType(type);
 		// 如果是异步加载则,则先加入列表中

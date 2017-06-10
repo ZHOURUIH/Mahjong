@@ -14,7 +14,7 @@ public enum JOIN_ROOM_RESULT
 
 public class SCJoinRoomRet : SocketPacket
 {
-	protected byte mResult;  // 0表示成功,1表示失败
+	protected byte mResult;
 	protected int mRoomID;
 	protected byte mServerPosition;
 	public SCJoinRoomRet(PACKET_TYPE type)

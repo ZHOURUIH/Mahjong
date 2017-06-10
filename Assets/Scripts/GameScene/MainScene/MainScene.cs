@@ -8,14 +8,16 @@ public class MainScene : GameScene
 		:
 		base(type, name)
 	{ }
-	public override void setFirstProcedureName()
+	public override void assignStartExitProcedure()
 	{
-		mFirstProcedure = PROCEDURE_TYPE.PT_MAIN_LOADING;
+		mStartProcedure = PROCEDURE_TYPE.PT_MAIN_LOADING;
+		mExitProcedure = PROCEDURE_TYPE.PT_MAIN_EXIT;
 	}
 	public override void createSceneProcedure()
 	{
 		addProcedure<MainSceneLoading>(PROCEDURE_TYPE.PT_MAIN_LOADING);
 		addProcedure<MainSceneRunning>(PROCEDURE_TYPE.PT_MAIN_RUNNING);
+		addProcedure<MainSceneExit>(PROCEDURE_TYPE.PT_MAIN_EXIT);
 		if (mSceneProcedureList.Count != (int)PROCEDURE_TYPE.PT_MAIN_MAX - (int)PROCEDURE_TYPE.PT_MAIN_MIN - 1)
 		{
 			Debug.LogError("error : not all procedure added!");

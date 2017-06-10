@@ -3,11 +3,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class GameScene : ComponentOwner
+abstract public class GameScene : ComponentOwner
 {
 	protected Dictionary<PROCEDURE_TYPE, SceneProcedure>	mSceneProcedureList;
 	protected GAME_SCENE_TYPE								mType;
-	protected PROCEDURE_TYPE								mFirstProcedure;
+	protected PROCEDURE_TYPE								mStartProcedure;
+	protected PROCEDURE_TYPE								mExitProcedure;
 	protected PROCEDURE_TYPE								mLastProcedureType;
 	protected SceneProcedure								mCurProcedure;
 	protected bool											mDestroyEngineScene;
@@ -40,11 +41,11 @@ public class GameScene : ComponentOwner
         initComponents();
         // 创建出所有的场景流程
         createSceneProcedure();
-        // 设置起始流程名
-        setFirstProcedureName();
+		// 设置起始流程名
+		assignStartExitProcedure();
         // 开始执行起始流程
         CommandGameSceneChangeProcedure cmd  = new CommandGameSceneChangeProcedure(false, false);
-        cmd.mProcedure = mFirstProcedure;
+        cmd.mProcedure = mStartProcedure;
         mCommandSystem.pushCommand(cmd, this);
     }
 	public override void initComponents()
@@ -74,17 +75,13 @@ public class GameScene : ComponentOwner
 	// 退出场景
 	public virtual void exit()
 	{
-		if(mCurProcedure != null)
-		{
-			mCurProcedure.exit(null, null);
-			mCurProcedure = null;
-		}
+		// 切换到退出流程
+		changeProcedure(mExitProcedure, "");
+		// 再切换为空流程
+		emptyProcedure();
 	}
-	public AudioSource getAudioSource()
-	{
-		return mAudioSource;
-	}
-    public virtual void setFirstProcedureName() { }
+	public AudioSource getAudioSource(){return mAudioSource;}
+	public abstract void assignStartExitProcedure();
     public virtual void createSceneProcedure() { }
 	public bool atProcedure(PROCEDURE_TYPE type)
 	{
@@ -142,13 +139,16 @@ public class GameScene : ComponentOwner
 				}
 				SceneProcedure lastProcedure = mCurProcedure;
 				mCurProcedure = targetProcedure;
-				mCurProcedure.init(lastProcedure, intent);
+				if(mCurProcedure != null)
+				{
+					mCurProcedure.init(lastProcedure, intent);
+				}
 			}
             return true;
         }
         else
         {
-			UnityUtility.logError("error : can not find scene procedure");
+			UnityUtility.logError("error : can not find scene procedure : " + procedure);
         }
         return false;
     }
@@ -185,4 +185,13 @@ public class GameScene : ComponentOwner
 		mSceneProcedureList.Add(procedure.getType(), procedure);
 		return procedure as T;
     }
+	//--------------------------------------------------------------------------------------------------------------------------------
+	protected void emptyProcedure()
+	{
+		if(mCurProcedure != null)
+		{
+			mCurProcedure.exit(null, null);
+		}
+		mCurProcedure = null;
+	}
 }

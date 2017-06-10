@@ -5,12 +5,12 @@ using System.Collections.Generic;
 public class CharacterManager : CommandReceiver
 {
 	protected Dictionary<string, Character> mCharacterList;                                 // 角色名字索引表
-	protected Dictionary<int, Character> mCharacterIDList;                                  // 角色ID索引表
+	protected Dictionary<int, Character> mCharacterClientIDList;                            // 角色客户端ID索引表
+	protected Dictionary<int, Character> mCharacterGUIDList;								// 角色GUID索引表
 	protected Dictionary<CHARACTER_TYPE, Dictionary<string, Character>> mCharacterTypeList; // 角色分类列表
 	protected CharacterFactoryManager mCharacterFactoryManager;								// 角色工厂
-	protected GameObject mManagerObject;
-	protected bool mLockUpdate;                                                             //角色状态锁
-	protected CharacterMyself mMyself;
+	protected GameObject mManagerObject;													// 角色管理器节点
+	protected CharacterMyself mMyself;														// 玩家自己的实例,方便获取
 
 	public CharacterManager()
 		:
@@ -18,9 +18,9 @@ public class CharacterManager : CommandReceiver
 	{
 		mCharacterList = new Dictionary<string, Character>();
 		mCharacterTypeList = new Dictionary<CHARACTER_TYPE, Dictionary<string, Character>>();
-		mCharacterIDList = new Dictionary<int, Character>();
+		mCharacterClientIDList = new Dictionary<int, Character>();
+		mCharacterGUIDList = new Dictionary<int, Character>();
 		mCharacterFactoryManager = new CharacterFactoryManager();
-		mLockUpdate = false;
 	}
 	public void init()
 	{
@@ -41,42 +41,27 @@ public class CharacterManager : CommandReceiver
 	public override void destroy()
 	{
 		base.destroy();
-		if (mCharacterIDList != null)
+		foreach (var character in mCharacterClientIDList)
 		{
-			foreach (var character in mCharacterIDList)
-			{
-				character.Value.destroy();
-			}
-			mCharacterIDList.Clear();
-			mCharacterList.Clear();
-			mCharacterTypeList.Clear();
-			mCharacterList = null;
-			mCharacterTypeList = null;
-			mCharacterIDList = null;
-			mMyself = null;
+			character.Value.destroy();
 		}
+		mCharacterList = null;
+		mCharacterTypeList = null;
+		mCharacterClientIDList = null;
+		mCharacterGUIDList = null;
+		mMyself = null;
 	}
-	public void update(float fElapsedTime)
+	public void update(float elapsedTime)
 	{
-		if (isLocked())
+		foreach (var characterIter in mCharacterList)
 		{
-			return;
-		}
-		if (mCharacterIDList != null)
-		{
-			foreach (var characterIter in mCharacterList)
+			Character character = characterIter.Value;
+			if (character != null)
 			{
-				Character character = characterIter.Value;
-				if (character != null)
-				{
-					character.update(fElapsedTime);
-				}
+				character.update(elapsedTime);
 			}
 		}
 	}
-	public bool isLocked() { return mLockUpdate; }
-	public void setLock() { mLockUpdate = true; }
-	public void unLock() { mLockUpdate = false; }
 	public CharacterMyself getMyself() { return mMyself; }
 	public Character getCharacter(string name)
 	{
@@ -86,13 +71,21 @@ public class CharacterManager : CommandReceiver
 		}
 		return mCharacterList[name];
 	}
-	public Character getCharacter(int characterID)
+	public Character getCharacterByClientID(int clientID)
 	{
-		if (!mCharacterIDList.ContainsKey(characterID))
+		if (!mCharacterClientIDList.ContainsKey(clientID))
 		{
 			return null;
 		}
-		return mCharacterIDList[characterID];
+		return mCharacterClientIDList[clientID];
+	}
+	public Character getCharacterByGUID(int guid)
+	{
+		if(!mCharacterGUIDList.ContainsKey(guid))
+		{
+			return null;
+		}
+		return mCharacterGUIDList[guid];
 	}
 	public void getCharacterListByType(CHARACTER_TYPE type, ref Dictionary<string, Character> characterList)
 	{
@@ -103,7 +96,7 @@ public class CharacterManager : CommandReceiver
 		characterList = mCharacterTypeList[type];
 	}
 	
-	public Character createCharacter(string name, CHARACTER_TYPE type, int id)
+	public Character createCharacter(string name, CHARACTER_TYPE type, int clientID, int guid)
 	{
 		if (mCharacterList.ContainsKey(name))
 		{
@@ -127,7 +120,7 @@ public class CharacterManager : CommandReceiver
 		}
 		// 将创建的角色挂接到角色管理器下
 		newCharacter.setParent(mManagerObject);
-		newCharacter.init(id);
+		newCharacter.init(clientID, guid);
 		addCharacterToList(newCharacter);
 		return newCharacter;
 	}
@@ -142,21 +135,12 @@ public class CharacterManager : CommandReceiver
 	}
 	public void destroyCharacter(int clientID)
 	{
-		Character character = getCharacter(clientID);
+		Character character = getCharacterByClientID(clientID);
 		if (character == null)
 		{
 			return;
 		}
 		destroyCharacter(character);
-	}
-	public void notifyCharacterIDChanged(int oldID)
-	{
-		if (mCharacterIDList.ContainsKey(oldID))
-		{
-			Character character = mCharacterIDList[oldID];
-			mCharacterIDList.Remove(oldID);
-			mCharacterIDList.Add(character.getCharacterData().mClientID, character);
-		}
 	}
 	public void notifyCharacterNameChanged(string oldName)
 	{
@@ -186,24 +170,29 @@ public class CharacterManager : CommandReceiver
 		{
 			return;
 		}
-
+		CharacterData data = character.getCharacterData();
 		// 从全部角色列表中移除
-		if (mCharacterList.ContainsKey(character.getName()))
+		if (mCharacterList.ContainsKey(data.mName))
 		{
-			mCharacterList.Remove(character.getName());
+			mCharacterList.Remove(data.mName);
 		}
 		// 从角色分类列表中移除
 		if (mCharacterTypeList.ContainsKey(character.getType()))
 		{
-			if (mCharacterTypeList[character.getType()].ContainsKey(character.getName()))
+			if (mCharacterTypeList[character.getType()].ContainsKey(data.mName))
 			{
-				mCharacterTypeList[character.getType()].Remove(character.getName());
+				mCharacterTypeList[character.getType()].Remove(data.mName);
 			}
 		}
-		// 从ID索引表中移除
-		if (mCharacterIDList.ContainsKey(character.getCharacterData().mClientID))
+		// 从客户端ID索引表中移除
+		if (mCharacterClientIDList.ContainsKey(data.mClientID))
 		{
-			mCharacterIDList.Remove(character.getCharacterData().mClientID);
+			mCharacterClientIDList.Remove(data.mClientID);
+		}
+		// 从GUID索引表中移除
+		if (mCharacterClientIDList.ContainsKey(data.mGUID))
+		{
+			mCharacterClientIDList.Remove(data.mGUID);
 		}
 		character.destroy();
 	}
@@ -213,28 +202,33 @@ public class CharacterManager : CommandReceiver
 		{
 			return;
 		}
+		CharacterData data = character.getCharacterData();
 		// 加入到全部角色列表
-		mCharacterList.Add(character.getName(), character);
+		mCharacterList.Add(data.mName, character);
 		// 加入到角色分类列表
 		if (mCharacterTypeList.ContainsKey(character.getType()))
 		{
-			mCharacterTypeList[character.getType()].Add(character.getName(), character);
+			mCharacterTypeList[character.getType()].Add(data.mName, character);
 		}
 		else
 		{
 			Dictionary<string, Character> characterMap = new Dictionary<string, Character>();
-			characterMap.Add(character.getName(), character);
+			characterMap.Add(data.mName, character);
 			mCharacterTypeList.Add(character.getType(), characterMap);
 		}
 		// 加入ID索引表
-		int characterID = character.getCharacterData().mClientID;
-		if (!mCharacterIDList.ContainsKey(characterID))
+		if (!mCharacterClientIDList.ContainsKey(data.mClientID))
 		{
-			mCharacterIDList.Add(characterID, character);
+			mCharacterClientIDList.Add(data.mClientID, character);
 		}
 		else
 		{
-			UnityUtility.logError("error : there is a character id : " + characterID + ", can not add again!");
+			UnityUtility.logError("error : there is a character id : " + data.mClientID + ", can not add again!");
+		}
+		// 如果不是非法GUID才能加入列表
+		if(data.mGUID != CommonDefine.INVALID_ID && !mCharacterGUIDList.ContainsKey(data.mGUID))
+		{
+			mCharacterGUIDList.Add(data.mGUID, character);
 		}
 	}
 	protected void destroyCharacter(Character character)

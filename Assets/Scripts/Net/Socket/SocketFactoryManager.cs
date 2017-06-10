@@ -21,6 +21,7 @@ public class SocketFactoryManager
 		registerFactory(typeof(CSRegister), PACKET_TYPE.PT_CS_REGISTER);
 		registerFactory(typeof(CSCheckName), PACKET_TYPE.PT_CS_CHECK_NAME);
 		registerFactory(typeof(CSCheckAccount), PACKET_TYPE.PT_CS_CHECK_ACCOUNT);
+		registerFactory(typeof(CSReady), PACKET_TYPE.PT_CS_READY);
 		int needCSCount = PACKET_TYPE.PT_CS_MAX - PACKET_TYPE.PT_CS_MIN - 1;
 		if (mFactoryList.Count != needCSCount)
 		{
@@ -39,6 +40,8 @@ public class SocketFactoryManager
 		registerFactory(typeof(SCRegisterRet), PACKET_TYPE.PT_SC_REGISTER_RET);
 		registerFactory(typeof(SCCheckNameRet), PACKET_TYPE.PT_SC_CHECK_NAME_RET);
 		registerFactory(typeof(SCCheckAccountRet), PACKET_TYPE.PT_SC_CHECK_ACCOUNT_RET);
+		registerFactory(typeof(SCReadyRet), PACKET_TYPE.PT_SC_READY_RET);
+		registerFactory(typeof(SCOtherPlayerReady), PACKET_TYPE.PT_SC_OTHER_PLAYER_READY);
 		int needSCCount = PACKET_TYPE.PT_SC_MAX - PACKET_TYPE.PT_SC_MIN - 1;
 		if (mFactoryList.Count - needCSCount != needSCCount)
 		{

@@ -3,6 +3,7 @@ using System.Collections;
 
 public class CommandCharacterReady : Command
 {
+	public bool mReady;
 	public CommandCharacterReady(bool showInfo = true, bool delay = false)
 		:
 		base(showInfo, delay)
@@ -10,16 +11,9 @@ public class CommandCharacterReady : Command
 	public override void execute()
 	{
 		Character character = (mReceiver) as Character;
-		CharacterData data = character.getCharacterData();
-		// 如果已经准备,则直接返回
-		if(data.mReady)
-		{
-			return;
-		}
-		data.mReady = true;
-		// 通知麻将系统玩家已经准备
-		CommandMahjongSystemReady cmd = new CommandMahjongSystemReady();
-		cmd.mCharacter = character;
-		mCommandSystem.pushCommand(cmd, mMahjongSystem);
+		// 发送消息通知服务器玩家已经准备
+		CSReady packetReady = mSocketNetManager.createPacket(PACKET_TYPE.PT_CS_READY) as CSReady;
+		packetReady.mReady = mReady;
+		mSocketNetManager.sendMessage(packetReady);
 	}
 }

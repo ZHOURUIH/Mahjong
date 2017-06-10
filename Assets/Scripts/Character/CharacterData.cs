@@ -12,8 +12,8 @@ public class CharacterData
 {
 	public CharacterData()
 	{
-		mClientID = -1;
-		mGUID = -1;
+		mClientID = CommonDefine.INVALID_ID;
+		mGUID = CommonDefine.INVALID_ID;
 		mName = "";
 		mPosition = PLAYER_POSITION.PP_MAX;
 		mHead = 0;

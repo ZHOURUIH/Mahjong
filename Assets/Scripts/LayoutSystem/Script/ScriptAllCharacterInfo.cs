@@ -40,24 +40,41 @@ public class CharacterInfoPanel
 	}
 	public void notifyJoin(Character player)
 	{
-		CharacterData data = player.getCharacterData();
 		LayoutTools.ACTIVE_WINDOW(mRoot);
-		mHead.setSpriteName("Head" + data.mHead);
-		mName.setText(data.mName);
-		mMoneyValue.setNumber(data.mMoney);
-		LayoutTools.ACTIVE_WINDOW(mBanker, data.mBanker);
+		CharacterData data = player.getCharacterData();
+		setHead(data.mHead);
+		setName(data.mName);
+		setMoney(data.mMoney);
+		notifyReady(data.mReady);
+		setBanker(data.mBanker);
 	}
 	public void notifyQuit()
 	{
 		LayoutTools.ACTIVE_WINDOW(mRoot, false);
 	}
-	public void notifyReady()
+	public void notifyReady(bool ready)
 	{
-		LayoutTools.ACTIVE_WINDOW(mReady, true);
+		LayoutTools.ACTIVE_WINDOW(mReady, ready);
 	}
 	public void notifyStartGame()
 	{
 		LayoutTools.ACTIVE_WINDOW(mReady, false);
+	}
+	public void setHead(int index)
+	{
+		mHead.setSpriteName("Head" + index);
+	}
+	public void setName(string name)
+	{
+		mName.setText(name);
+	}
+	public void setMoney(int money)
+	{
+		mMoneyValue.setNumber(money);
+	}
+	public void setBanker(bool banker)
+	{
+		LayoutTools.ACTIVE_WINDOW(mBanker, banker);
 	}
 }
 
@@ -118,10 +135,10 @@ public class ScriptAllCharacterInfo : LayoutScript
 		CharacterData data = player.getCharacterData();
 		mInfoPanelList[(int)data.mPosition].notifyQuit();
 	}
-	public void notifyCharacterReady(Character player)
+	public void notifyCharacterReady(Character player, bool ready)
 	{
 		CharacterData data = player.getCharacterData();
-		mInfoPanelList[(int)data.mPosition].notifyReady();
+		mInfoPanelList[(int)data.mPosition].notifyReady(ready);
 	}
 	public void notifyStartGame()
 	{

@@ -30,7 +30,7 @@ public class CommandMahjongSystemReady : Command
 		if(!allReady)
 		{
 			ScriptAllCharacterInfo allCharacterInfo = mLayoutManager.getScript(LAYOUT_TYPE.LT_ALL_CHARACTER_INFO) as ScriptAllCharacterInfo;
-			allCharacterInfo.notifyCharacterReady(mCharacter);
+			allCharacterInfo.notifyCharacterReady(mCharacter, true);
 		}
 	}
 	public override string showDebugInfo()

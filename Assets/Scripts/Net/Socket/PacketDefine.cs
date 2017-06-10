@@ -16,6 +16,7 @@ public enum PACKET_TYPE
 	PT_CS_CHECK_ACCOUNT,					// 向服务器请求判断账号是否已经存在
 	PT_CS_CREATE_ROOM,						// 向服务器请求创建房间
 	PT_CS_JOIN_ROOM,						// 向服务器请求加入房间
+	PT_CS_READY,							// 向服务器发送是否已准备
 	PT_CS_MAX,
 
 	// SC表示Server->Client
@@ -32,6 +33,8 @@ public enum PACKET_TYPE
 	PT_SC_OTHER_PLAYER_LEAVE_ROOM,			// 通知客户端有其他玩家离开房间
 	PT_SC_OTHER_PLAYER_JOIN_ROOM,			// 通知客户端有其他玩家加入房间
 	PT_SC_JOIN_ROOM_RET,					// 通知客户端加入房间的结果
+	PT_SC_READY_RET,						// 通知客户端玩家是否准备
+	PT_SC_OTHER_PLAYER_READY,				// 通知客户端有其他玩家准备
 	PT_SC_MAX,
 
 	PT_MAX,

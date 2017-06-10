@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 2452999203
+CRC: 1125880815
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: d4685b0413c20e45ad6b732ccc6c6a79
+    Hash: 31ac285380ed21e2aac2f3f805836cc7
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 53b52eea56b252c298c67f68c2de1e85
+    Hash: b942012a740cb61c153c9ba9812d0525
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -21,8 +21,6 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 65
   Script: {instanceID: 0}
-- Class: 83
-  Script: {instanceID: 0}
 - Class: 114
   Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
 - Class: 114
@@ -36,14 +34,13 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: ac5060295fbd39b4a88d20d0c83d925e, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 7d44bc69c2ca5f943b845318866dc1bd, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: 4d0c51bb0b6e93049af5e88f93826e3b, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 Assets:
-- Assets/Resources/Layout/UIPrefab/UILogin.prefab
+- Assets/Resources/Layout/UIPrefab/UIJoinRoomDialog.prefab
 Dependencies:
+- Assets/StreamingAssets/font/fzy3jw.unity3d
 - Assets/StreamingAssets/font/fzzyjw.unity3d

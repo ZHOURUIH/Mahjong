@@ -17,8 +17,11 @@ public class CommandRoomLeave : Command
 		// 通知界面
 		ScriptAllCharacterInfo allInfo = mLayoutManager.getScript(LAYOUT_TYPE.LT_ALL_CHARACTER_INFO) as ScriptAllCharacterInfo;
 		allInfo.notifyCharacterLeave(mCharacter);
+		// 通知玩家已经离开房间
+		CommandCharacterNotifyLeave cmdLeave = new CommandCharacterNotifyLeave();
+		mCommandSystem.pushCommand(cmdLeave, mCharacter);
 		// 如果不是玩家自己,则需要销毁玩家
-		if(mCharacter.getType() != CHARACTER_TYPE.CT_MYSELF)
+		if (mCharacter.getType() != CHARACTER_TYPE.CT_MYSELF)
 		{
 			CommandCharacterManagerDestroy cmd = new CommandCharacterManagerDestroy();
 			cmd.mGUID = mCharacter.getCharacterData().mGUID;

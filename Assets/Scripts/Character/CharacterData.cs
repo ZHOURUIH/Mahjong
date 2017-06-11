@@ -33,9 +33,9 @@ public class CharacterData
 	public int				mGUID;		// 玩家唯一ID,由服务器发送过来的
 	public string			mName;
 	public int				mMoney;
+	public int				mHead;
 	public PLAYER_POSITION	mServerPosition; // 服务器中的位置,在服务器中庄家的位置是MYSELF
 	public PLAYER_POSITION	mPosition;		 // 转换到客户端的位置,在客户端中自己的位置一直都是MYSELF
-	public int				mHead;
 	public bool				mReady;     // 是否已经准备
 	public bool				mBanker;    // 是否为庄家
 	public PengGangInfo[]	mPengGangList;

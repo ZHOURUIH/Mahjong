@@ -17,6 +17,7 @@ public class SCJoinRoomRet : SocketPacket
 	protected byte mResult;
 	protected int mRoomID;
 	protected byte mServerPosition;
+	protected bool mBanker;
 	public SCJoinRoomRet(PACKET_TYPE type)
 		:
 		base(type)
@@ -29,17 +30,19 @@ public class SCJoinRoomRet : SocketPacket
 		mResult = BinaryUtility.readByte(data, ref index);
 		mRoomID = BinaryUtility.readInt(data, ref index);
 		mServerPosition = BinaryUtility.readByte(data, ref index);
+		mBanker = BinaryUtility.readBool(data, ref index);
 	}
 	public override void write(byte[] data)
 	{
 		int index = 0;
 		BinaryUtility.writeByte(data, ref index, mResult);
 		BinaryUtility.writeInt(data, ref index, mRoomID);
-		BinaryUtility.writeInt(data, ref index, mServerPosition);
+		BinaryUtility.writeByte(data, ref index, mServerPosition);
+		BinaryUtility.writeBool(data, ref index, mBanker);
 	}
 	public override int getSize()
 	{
-		return sizeof(byte) + sizeof(int) + sizeof(byte);
+		return sizeof(byte) + sizeof(int) + sizeof(byte) + sizeof(bool);
 	}
 	public override void execute()
 	{
@@ -49,8 +52,10 @@ public class SCJoinRoomRet : SocketPacket
 			UnityUtility.logInfo("加入房间成功, 房间ID:" + mRoomID);
 			// 设置房间号和服务器中的位置
 			CharacterMyself myself = mCharacterManager.getMyself();
-			myself.getCharacterData().mRoomID = mRoomID;
-			myself.getCharacterData().mServerPosition = (PLAYER_POSITION)mServerPosition;
+			CharacterData data = myself.getCharacterData();
+			data.mRoomID = mRoomID;
+			data.mServerPosition = (PLAYER_POSITION)mServerPosition;
+			data.mBanker = mBanker;
 
 			// 进入麻将场景
 			CommandGameSceneManagerEnter cmd = new CommandGameSceneManagerEnter();

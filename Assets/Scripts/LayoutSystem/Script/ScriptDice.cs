@@ -45,7 +45,7 @@ public class ScriptDice : LayoutScript
 	{
 		;
 	}
-	public void setDiceResult(int[] dice)
+	public void setDiceResult(byte[] dice)
 	{
 		mDice0.setSpriteName("Dice" + dice[0]);
 		mDice1.setSpriteName("Dice" + dice[1]);

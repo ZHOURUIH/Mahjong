@@ -43,10 +43,4 @@ public class MahjongSceneWaiting : SceneProcedure
 	{
 		;
 	}
-	public void notifyAllPlayerReady()
-	{
-		CommandGameSceneChangeProcedure cmd = new CommandGameSceneChangeProcedure();
-		cmd.mProcedure = PROCEDURE_TYPE.PT_MAHJONG_RUNNING_DICE;
-		mCommandSystem.pushCommand(cmd, mGameScene);
-	}
 }

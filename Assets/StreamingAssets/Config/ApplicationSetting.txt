@@ -4,7 +4,7 @@
 // 变量命名应与代码中枚举命名相同
 
 // 是否全屏显示,0为不全屏,1为全屏
-GDF_FULL_SCREEN = 1
+GDF_FULL_SCREEN = 0
 
 // 窗口宽度
 GDF_SCREEN_WIDTH = 1920

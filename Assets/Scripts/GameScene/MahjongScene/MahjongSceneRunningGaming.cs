@@ -14,11 +14,6 @@ public class MahjongSceneRunningGaming : SceneProcedure
 	{
 		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_MAHJONG_DROP);
 		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_PLAYER_ACTION);
-
-		// 通知麻将系统进入正常麻将游戏
-		CommandMahjongSystemState cmdState = new CommandMahjongSystemState();
-		cmdState.mPlayState = MAHJONG_PLAY_STATE.MPS_NORMAL_GAMING;
-		mCommandSystem.pushCommand(cmdState, mMahjongSystem);
 	}
 	protected override void onUpdate(float elapsedTime)
 	{

@@ -264,9 +264,6 @@ public class MahjongSystem : CommandReceiver
 		{
 			return false;
 		}
-		// 如果全部的玩家都已经准备,则通知开始游戏
-		CommandMahjongSceneNotifyAllReady cmd = new CommandMahjongSceneNotifyAllReady();
-		mCommandSystem.pushCommand(cmd, mGameSceneManager.getCurScene());
 		return true;
 	}
 	public void notifyPlayerDrop(Character player, MAHJONG mah)
@@ -598,7 +595,6 @@ public class MahjongSystem : CommandReceiver
 			tempPool[randIndex] = tempPool[mahjongCount - i - 1];
 			tempPool.RemoveAt(tempPool.Count - 1);
 		}
-		GameUtility.toMahjongGroup(mMahjongPool);
 	}
 	// 请求从麻将池中拿一张牌
 	protected MAHJONG requestGet()

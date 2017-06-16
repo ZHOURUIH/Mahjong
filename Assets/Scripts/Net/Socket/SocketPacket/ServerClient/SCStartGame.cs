@@ -32,10 +32,12 @@ public class SCStartGame : SocketPacket
 		{
 			return;
 		}
+		// 跳转到掷骰子流程
 		CommandGameSceneChangeProcedure cmd = new CommandGameSceneChangeProcedure();
 		cmd.mProcedure = PROCEDURE_TYPE.PT_MAHJONG_RUNNING_DICE;
 		mCommandSystem.pushCommand(cmd, mGameSceneManager.getCurScene());
 
+		// 通知麻将场景开始掷骰子
 		CommandMahjongSceneNotifyDice cmdDice = new CommandMahjongSceneNotifyDice();
 		cmdDice.mDice = mDice;
 		mCommandSystem.pushCommand(cmdDice, gameScene);

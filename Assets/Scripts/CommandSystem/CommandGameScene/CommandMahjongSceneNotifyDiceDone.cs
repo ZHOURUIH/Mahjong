@@ -14,8 +14,8 @@ public class CommandMahjongSceneNotifyDiceDone : Command
 		{
 			return;
 		}
-		CommandGameSceneChangeProcedure cmd = new CommandGameSceneChangeProcedure();
-		cmd.mProcedure = PROCEDURE_TYPE.PT_MAHJONG_RUNNING_GET_START;
-		mCommandSystem.pushCommand(cmd, gameScene);
+		// 发消息通知服务器掷骰子完毕
+		CSDiceDone diceDone = mSocketNetManager.createPacket(PACKET_TYPE.PT_CS_DICE_DONE) as CSDiceDone;
+		mSocketNetManager.sendMessage(diceDone);
 	}
 }

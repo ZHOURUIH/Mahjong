@@ -13,6 +13,9 @@ public class MahjongSceneRunningDice : SceneProcedure
 	protected override void onInit(SceneProcedure lastProcedure, string intent)
 	{
 		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_DICE);
+		// 通知全部角色信息布局全部准备完毕
+		ScriptAllCharacterInfo allCharacterInfo = mLayoutManager.getScript(LAYOUT_TYPE.LT_ALL_CHARACTER_INFO) as ScriptAllCharacterInfo;
+		allCharacterInfo.notifyStartGame();
 	}
 	protected override void onUpdate(float elapsedTime)
 	{

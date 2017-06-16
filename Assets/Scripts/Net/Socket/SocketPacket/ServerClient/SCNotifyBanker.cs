@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class SCNotifyBanker : SocketPacket
 {
-	protected int mGUID;		// 庄家ID
+	protected int mPlayerGUID;		// 庄家ID
 	public SCNotifyBanker(PACKET_TYPE type)
 		:
 		base(type)
@@ -14,12 +14,12 @@ public class SCNotifyBanker : SocketPacket
 	public override void read(byte[] data)
 	{
 		int index = 0;
-		mGUID = BinaryUtility.readInt(data, ref index);
+		mPlayerGUID = BinaryUtility.readInt(data, ref index);
 	}
 	public override void write(byte[] data)
 	{
 		int index = 0;
-		BinaryUtility.writeInt(data, ref index, mGUID);
+		BinaryUtility.writeInt(data, ref index, mPlayerGUID);
 	}
 	public override int getSize()
 	{
@@ -38,7 +38,7 @@ public class SCNotifyBanker : SocketPacket
 		foreach(var item in playerList)
 		{
 			CommandCharacterNotifyBanker cmdBanker = new CommandCharacterNotifyBanker();
-			cmdBanker.mBanker = (item.Value.getCharacterData().mGUID == mGUID);
+			cmdBanker.mBanker = (item.Value.getCharacterData().mGUID == mPlayerGUID);
 			mCommandSystem.pushCommand(cmdBanker, item.Value);
 		}
 	}

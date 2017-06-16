@@ -23,6 +23,7 @@ public class SocketFactoryManager
 		registerFactory(typeof(CSCheckAccount), PACKET_TYPE.PT_CS_CHECK_ACCOUNT);
 		registerFactory(typeof(CSReady), PACKET_TYPE.PT_CS_READY);
 		registerFactory(typeof(CSLeaveRoom), PACKET_TYPE.PT_CS_LEAVE_ROOM);
+		registerFactory(typeof(CSDiceDone), PACKET_TYPE.PT_CS_DICE_DONE);
 		int needCSCount = PACKET_TYPE.PT_CS_MAX - PACKET_TYPE.PT_CS_MIN - 1;
 		if (mFactoryList.Count != needCSCount)
 		{
@@ -44,6 +45,11 @@ public class SocketFactoryManager
 		registerFactory(typeof(SCReadyRet), PACKET_TYPE.PT_SC_READY_RET);
 		registerFactory(typeof(SCOtherPlayerReady), PACKET_TYPE.PT_SC_OTHER_PLAYER_READY);
 		registerFactory(typeof(SCLeaveRoomRet), PACKET_TYPE.PT_SC_LEAVE_ROOM_RET);
+		registerFactory(typeof(SCDiceDoneRet), PACKET_TYPE.PT_SC_DICE_DONE_RET);
+		registerFactory(typeof(SCNotifyGetStartMahjong), PACKET_TYPE.PT_SC_NOTIFY_GET_START_MAHJONG);
+		registerFactory(typeof(SCNotifyReorderMahjong), PACKET_TYPE.PT_SC_NOTIFY_REORDER_MAHJONG);
+		registerFactory(typeof(SCNotifyGetStartDone), PACKET_TYPE.PT_SC_NOTIFY_GET_START_DONE);
+		registerFactory(typeof(SCAskDrop), PACKET_TYPE.PT_SC_ASK_DROP);
 		int needSCCount = PACKET_TYPE.PT_SC_MAX - PACKET_TYPE.PT_SC_MIN - 1;
 		if (mFactoryList.Count - needCSCount != needSCCount)
 		{

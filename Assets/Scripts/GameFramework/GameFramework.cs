@@ -124,7 +124,7 @@ public class GameFramework : MonoBehaviour
 			mResourcesManager.update(elapsedTime);
 			mGlobalTouchSystem.update(elapsedTime);
 			mCommandSystem.update(elapsedTime);
-			mMahjongSystem.update(elapsedTime);
+			//mMahjongSystem.update(elapsedTime);
 			mAudioManager.update(elapsedTime);
 			mGameSceneManager.update(elapsedTime);
 			mCharacterManager.update(elapsedTime);

@@ -46,7 +46,7 @@ public class ScriptJoinRoomDialog : LayoutScript
 	protected void onJoinRoom(GameObject go)
 	{
 		CSJoinRoom join = mSocketNetManager.createPacket(PACKET_TYPE.PT_CS_JOIN_ROOM) as CSJoinRoom;
-		join.mRoomID = StringUtility.stringToInt(mRoomIDEditbox.getText());
+		join.setRoomID(StringUtility.stringToInt(mRoomIDEditbox.getText()));
 		mSocketNetManager.sendMessage(join);
 	}
 	protected void onCancel(GameObject go)

@@ -4,25 +4,21 @@ using System.Collections.Generic;
 
 public class CSCheckName : SocketPacket
 {
-	public byte[] mName = new byte[16];
+	protected BYTES mName = new BYTES(16);
 	public CSCheckName(PACKET_TYPE type)
 		:
 		base(type)
 	{
-		;
+		fillParams();
+		zeroParams();
 	}
-	public override void read(byte[] data)
+	public void setName(string name)
 	{
-		int index = 0;
-		BinaryUtility.readBytes(data, ref index, -1, mName, -1, -1);
+		byte[] nameBytes = BinaryUtility.stringToBytes(name);
+		mName.setValue(nameBytes);
 	}
-	public override void write(byte[] data)
+	protected override void fillParams()
 	{
-		int index = 0;
-		BinaryUtility.writeBytes(data, ref index, -1, mName, -1, -1);
-	}
-	public override int getSize()
-	{
-		return sizeof(byte) * mName.Length;
+		pushParam(mName);
 	}
 }

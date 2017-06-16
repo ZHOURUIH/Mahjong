@@ -5,54 +5,41 @@ using System.Text;
 
 public class CSRegister : SocketPacket
 {
-	protected byte[] mAccount = new byte[16];
-	protected byte[] mPassword = new byte[16];
-	protected byte[] mName = new byte[16];
-	protected int mHead;
+	protected BYTES mAccount = new BYTES(16);
+	protected BYTES mPassword = new BYTES(16);
+	protected BYTES mName = new BYTES(16);
+	protected INT mHead = new INT();
 	public CSRegister(PACKET_TYPE type)
 		:
 		base(type)
 	{
-		;
+		fillParams();
+		zeroParams();
 	}
 	public void setAccount(string account)
 	{
-		BinaryUtility.memset<byte>(mAccount, 0);
-		BinaryUtility.memcpy(mAccount, account.ToCharArray(), 0, 0, MathUtility.getMin(mAccount.Length, account.Length));
+		byte[] accountBytes = BinaryUtility.stringToBytes(account);
+		mAccount.setValue(accountBytes);
 	}
 	public void setPassword(string password)
 	{
-		BinaryUtility.memset<byte>(mPassword, 0);
-		BinaryUtility.memcpy(mPassword, password.ToCharArray(), 0, 0, MathUtility.getMin(mPassword.Length, password.Length));
+		byte[] passwordBytes = BinaryUtility.stringToBytes(password);
+		mPassword.setValue(passwordBytes);
 	}
 	public void setName(string name)
 	{
-		BinaryUtility.memset<byte>(mName, 0);
-		byte[] nameByte = BinaryUtility.stringToBytes(name, Encoding.UTF8);
-		BinaryUtility.memcpy(mName, nameByte, 0, 0, MathUtility.getMin(mName.Length, nameByte.Length));
+		byte[] nameBytes = BinaryUtility.stringToBytes(name, Encoding.UTF8);
+		mName.setValue(nameBytes);
 	}
 	public void setHead(int head)
 	{
-		mHead = head;
+		mHead.mValue = head;
 	}
-	public override void read(byte[] data)
+	protected override void fillParams()
 	{
-		int index = 0;
-		BinaryUtility.readBytes(data, ref index, -1, mAccount, -1, -1);
-		BinaryUtility.readBytes(data, ref index, -1, mPassword, -1, -1);
-		BinaryUtility.readBytes(data, ref index, -1, mName, -1, -1);
-		mHead = BinaryUtility.readInt(data, ref index);
-	}
-	public override void write(byte[] data)
-	{
-		int index = 0;
-		BinaryUtility.writeBytes(data, ref index, -1, mAccount, -1, -1);
-		BinaryUtility.writeBytes(data, ref index, -1, mPassword, -1, -1);
-		BinaryUtility.writeBytes(data, ref index, -1, mName, -1, -1);
-		BinaryUtility.writeInt(data, ref index, mHead);
-	}
-	public override int getSize()
-	{
-		return mAccount.Length * sizeof(byte) + mPassword.Length * sizeof(byte) + mName.Length * sizeof(byte) + sizeof(int);
+		pushParam(mAccount);
+		pushParam(mPassword);
+		pushParam(mName);
+		pushParam(mHead);
 	}
 }

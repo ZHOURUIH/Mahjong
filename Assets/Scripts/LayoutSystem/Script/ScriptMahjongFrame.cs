@@ -64,14 +64,14 @@ public class ScriptMahjongFrame : LayoutScript
 	{
 		// 发送消息通知服务器玩家已经准备
 		CSReady packetReady = mSocketNetManager.createPacket(PACKET_TYPE.PT_CS_READY) as CSReady;
-		packetReady.mReady = true;
+		packetReady.setReady(true);
 		mSocketNetManager.sendMessage(packetReady);
 	}
 	protected void onCancelReadyClick(GameObject go)
 	{
 		// 发送消息通知服务器玩家已经准备
 		CSReady packetReady = mSocketNetManager.createPacket(PACKET_TYPE.PT_CS_READY) as CSReady;
-		packetReady.mReady = false;
+		packetReady.setReady(false);
 		mSocketNetManager.sendMessage(packetReady);
 	}
 	protected void onLeaveRoomClick(GameObject go)

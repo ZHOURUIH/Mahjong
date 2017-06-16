@@ -114,6 +114,14 @@ public class BinaryUtility : GameBase
 		}
 		return bytesToFloat(floatBuffer);
 	}
+	public static void readBools(byte[] buffer, ref int index, bool[] destBuffer)
+	{
+		int shortCount = destBuffer.Length;
+		for (int i = 0; i < shortCount; ++i)
+		{
+			destBuffer[i] = readBool(buffer, ref index);
+		}
+	}
 	public static bool readBytes(byte[] buffer, ref int index, int bufferSize, byte[] destBuffer, int destBufferSize, int readSize)
 	{
 		if (bufferSize == -1)
@@ -136,30 +144,29 @@ public class BinaryUtility : GameBase
 		index += readSize;
 		return true;
 	}
-	public static bool readChars(byte[] buffer, ref int index, int bufferSize, char[] destBuffer, int destBufferSize, int readSize)
+	public static void readShorts(byte[] buffer, ref int index, short[] destBuffer)
 	{
-		if(bufferSize == -1)
+		int shortCount = destBuffer.Length;
+		for(int i = 0; i < shortCount; ++i)
 		{
-			bufferSize = buffer.Length;
+			destBuffer[i] = readShort(buffer, ref index);
 		}
-		if(destBufferSize == -1)
+	}
+	public static void readInts(byte[] buffer, ref int index, int[] destBuffer)
+	{
+		int shortCount = destBuffer.Length;
+		for (int i = 0; i < shortCount; ++i)
 		{
-			destBufferSize = destBuffer.Length;
+			destBuffer[i] = readInt(buffer, ref index);
 		}
-		if(readSize == -1)
+	}
+	public static void readFloats(byte[] buffer, ref int index, float[] destBuffer)
+	{
+		int shortCount = destBuffer.Length;
+		for (int i = 0; i < shortCount; ++i)
 		{
-			readSize = destBuffer.Length;
+			destBuffer[i] = readFloat(buffer, ref index);
 		}
-		if (destBufferSize < readSize || readSize + index > bufferSize)
-		{
-			return false;
-		}
-		for(int i = 0; i < readSize; ++i)
-		{
-			destBuffer[i] = (char)buffer[i + index];
-		}
-		index += readSize;
-		return true;
 	}
 	public static bool writeBool(byte[] buffer, ref int index, bool value)
 	{
@@ -224,6 +231,16 @@ public class BinaryUtility : GameBase
 		}
 		return true;
 	}
+	public static bool writeBools(byte[] buffer, ref int index, bool[] sourceBuffer)
+	{
+		bool ret = true;
+		int floatCount = sourceBuffer.Length;
+		for (int i = 0; i < floatCount; ++i)
+		{
+			ret = ret && writeBool(buffer, ref index, sourceBuffer[i]);
+		}
+		return ret;
+	}
 	public static bool writeBytes(byte[] buffer, ref int index, int bufferSize, byte[] sourceBuffer, int sourceBufferSize, int writeSize)
 	{
 		if (bufferSize == -1)
@@ -246,30 +263,35 @@ public class BinaryUtility : GameBase
 		index += writeSize;
 		return true;
 	}
-	public static bool writeChars(byte[] buffer, ref int index, int bufferSize, char[] sourceBuffer, int sourceBufferSize, int writeSize)
+	public static bool writeShorts(byte[] buffer, ref int index, short[] sourceBuffer)
 	{
-		if(bufferSize == -1)
+		bool ret = true;
+		int floatCount = sourceBuffer.Length;
+		for (int i = 0; i < floatCount; ++i)
 		{
-			bufferSize = buffer.Length;
+			ret = ret && writeShort(buffer, ref index, sourceBuffer[i]);
 		}
-		if(sourceBufferSize == -1)
+		return ret;
+	}
+	public static bool writeInts(byte[] buffer, ref int index, int[] sourceBuffer)
+	{
+		bool ret = true;
+		int floatCount = sourceBuffer.Length;
+		for (int i = 0; i < floatCount; ++i)
 		{
-			sourceBufferSize = sourceBuffer.Length;
+			ret = ret && writeInt(buffer, ref index, sourceBuffer[i]);
 		}
-		if(writeSize == -1)
+		return ret;
+	}
+	public static bool writeFloats(byte[] buffer, ref int index, float[] sourceBuffer)
+	{
+		bool ret = true;
+		int floatCount = sourceBuffer.Length;
+		for(int i = 0; i < floatCount; ++i)
 		{
-			writeSize = sourceBuffer.Length;
+			ret = ret && writeFloat(buffer, ref index, sourceBuffer[i]);
 		}
-		if (writeSize > sourceBufferSize || writeSize + index > bufferSize)
-		{
-			return false;
-		}
-		for(int i = 0; i < writeSize; ++i)
-		{
-			buffer[index + i] = (byte)sourceBuffer[i];
-		}
-		index += writeSize;
-		return true;
+		return ret;
 	}
 	public static string bytesToHEXString(byte[] byteList, bool addSpace = true, bool upperOrLower = true)
 	{

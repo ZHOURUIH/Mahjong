@@ -284,7 +284,7 @@ public class SocketManager : GameBase
 	protected void heartBeat()
 	{
 		CSHeartBeat beat = createPacket(PACKET_TYPE.PT_CS_HEART_BEAT) as CSHeartBeat;
-		beat.mHeartBeatTimes = ++mHeartBeatTimes;
+		beat.setHeartBeatTimes(++mHeartBeatTimes);
 		sendMessage(beat);
 	}
 }

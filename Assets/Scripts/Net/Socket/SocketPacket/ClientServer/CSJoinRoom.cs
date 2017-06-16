@@ -4,25 +4,17 @@ using System.Collections.Generic;
 
 public class CSJoinRoom : SocketPacket
 {
-	public int mRoomID;
+	protected INT mRoomID = new INT();
 	public CSJoinRoom(PACKET_TYPE type)
 		:
 		base(type)
 	{
-		;
+		fillParams();
+		zeroParams();
 	}
-	public override void read(byte[] data)
+	public void setRoomID(int id) { mRoomID.mValue = id; }
+	protected override void fillParams()
 	{
-		int index = 0;
-		mRoomID = BinaryUtility.readInt(data, ref index);
-	}
-	public override void write(byte[] data)
-	{
-		int index = 0;
-		BinaryUtility.writeInt(data, ref index, mRoomID);
-	}
-	public override int getSize()
-	{
-		return sizeof(int);
+		pushParam(mRoomID);
 	}
 }

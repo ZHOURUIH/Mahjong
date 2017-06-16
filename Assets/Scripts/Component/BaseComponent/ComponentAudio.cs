@@ -38,7 +38,7 @@ public class ComponentAudio : GameComponent
 			for (int i = 0; i < dataCount; ++i)
 			{
 				DataGameSound soundData = mDataBase.queryData(DATA_TYPE.DT_GAME_SOUND, i) as DataGameSound;
-				string soundName = StringUtility.charArrayToString(soundData.mSoundFileName);
+				string soundName = BinaryUtility.bytesToString(soundData.mSoundFileName);
 				mAudioTypeMap.Add(soundName, soundData.mSoundType);
 				mSoundDefineMap.Add((SOUND_DEFINE)(soundData.mSoundID), soundName);
 				mAudioManager.createAudio(soundName, false);

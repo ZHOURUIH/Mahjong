@@ -26,16 +26,6 @@ public class Serializer
 		mBufferSize = bufferSize;
 		mBuffer = buffer;
 	}
-	public void write(char value)
-	{
-		int writeLen = sizeof(char);
-		if (!writeCheck(writeLen))
-		{
-			return;
-		}
-		BinaryUtility.memcpy(mBuffer, BinaryUtility.toBytes(value), mIndex, 0, writeLen);
-		mIndex += writeLen;
-	}
 	public void write(byte value)
 	{
 		int writeLen = sizeof(byte);
@@ -75,18 +65,6 @@ public class Serializer
 		}
 		BinaryUtility.memcpy(mBuffer, BinaryUtility.toBytes(value), mIndex, 0, writeLen);
 		mIndex += writeLen;
-	}
-	public void read(ref char value)
-	{
-		int readLen = sizeof(char);
-		if (!readCheck(readLen))
-		{
-			return;
-		}
-		byte[] dest = BinaryUtility.toBytes(value);
-		BinaryUtility.memcpy(dest, mBuffer, 0, mIndex, readLen);
-		value = BinaryUtility.bytesToChar(dest);
-		mIndex += readLen;
 	}
 	public void read(ref byte value)
 	{
@@ -145,34 +123,7 @@ public class Serializer
 		BinaryUtility.memcpy(mBuffer, buffer, mIndex, 0, bufferSize);
 		mIndex += bufferSize;
 	}
-	public void writeBuffer(char[] buffer, int bufferSize)
-	{
-		if (!writeCheck(bufferSize))
-		{
-			return;
-		}
-		BinaryUtility.memcpy(mBuffer, buffer, mIndex, 0, bufferSize);
-		mIndex += bufferSize;
-	}
 	public void readBuffer(byte[] buffer, int bufferSize, int readLen)
-	{
-		if (!readCheck(readLen))
-		{
-			return;
-		}
-		// 如果存放数据的空间大小不足以放入当前要读取的数据,则只拷贝能容纳的长度,但是下标应该正常跳转
-		if (bufferSize <= readLen)
-		{
-			BinaryUtility.memcpy(buffer, mBuffer, 0, mIndex, bufferSize);
-			mIndex += readLen;
-		}
-		else
-		{
-			BinaryUtility.memcpy(buffer, mBuffer, 0, mIndex, readLen);
-			mIndex += readLen;
-		}
-	}
-	public void readBuffer(char[] buffer, int bufferSize, int readLen)
 	{
 		if (!readCheck(readLen))
 		{

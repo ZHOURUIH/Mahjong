@@ -30,11 +30,11 @@ public class BYTES : OBJECT
 	}
 	public override void readFromBuffer(byte[] buffer, ref int index)
 	{
-		BinaryUtility.readBytes(buffer, ref index, -1, mValue, -1, -1);
+		BinaryUtility.readBytes(buffer, ref index, mValue);
 	}
 	public override void writeToBuffer(byte[] buffer, ref int index)
 	{
-		BinaryUtility.writeBytes(buffer, ref index, -1, mValue, -1, -1);
+		BinaryUtility.writeBytes(buffer, ref index, mValue);
 	}
 	public void setValue(byte[] value)
 	{

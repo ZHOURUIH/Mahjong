@@ -6,10 +6,10 @@ using System.Text;
 public class DataGameSound : Data
 {
 	public int mSoundID;
-	public char[] mSoundOwner = new char[32];
+	public byte[] mSoundOwner = new byte[32];
 	public int mSoundType;
-	public char[] mSoundFileName = new char[64];
-	public char[] mDescribe = new char[64];
+	public byte[] mSoundFileName = new byte[64];
+	public byte[] mDescribe = new byte[64];
 	public DataGameSound(DATA_TYPE type)
 		:
 		base(type)

@@ -46,7 +46,7 @@ public class MathUtility : GameBase
 			if ((str[i] < '0' || str[i] > '9') && str[i] != '.' && str[i] != '+'
 				&& str[i] != '-' && str[i] != '*' && str[i] != '/' && str[i] != '(' && str[i] != ')')
 			{
-				;
+				continue;
 			}
 			else
 			{
@@ -95,7 +95,7 @@ public class MathUtility : GameBase
 				// 将括号中的计算结果替换原来的表达式,包括括号也一起替换
 				string floatStr = (Math.Round(ret, 4)).ToString();
 				str = StringUtility.strReplace(str, curpos, curpos + strInBracket.Length + 2, floatStr);
-				char[] strchar = str.ToCharArray();
+				byte[] strchar = BinaryUtility.stringToBytes(str);
 				if (isMinus)
 				{
 					// 如果括号中计算出来是负数,则将负号提取出来,将左边的第一个加减号改为相反的符号
@@ -105,8 +105,8 @@ public class MathUtility : GameBase
 						// 找到第一个+号,则直接改为减号,然后退出遍历
 						if (strchar[i] == '+')
 						{
-							strchar[i] = '-';
-							str = StringUtility.charArrayToString(strchar);
+							strchar[i] = (byte)'-';
+							str = BinaryUtility.bytesToString(strchar);
 							changeMark = true;
 							break;
 						}
@@ -116,8 +116,8 @@ public class MathUtility : GameBase
 						{
 							if (strchar[i - 1] >= '0' && strchar[i - 1] <= '9')
 							{
-								strchar[i] = '+';
-								str = StringUtility.charArrayToString(strchar);
+								strchar[i] = (byte)'+';
+								str = BinaryUtility.bytesToString(strchar);
 							}
 							else
 							{

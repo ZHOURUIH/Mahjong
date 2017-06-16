@@ -5,10 +5,10 @@ using System.Text;
 
 public class BinaryUtility : GameBase
 {
-	protected static Encoding DEFAULT_ENCODING;
+	protected static Encoding ENCODING_GB2312;
 	public void init()
 	{
-		DEFAULT_ENCODING = Encoding.GetEncoding("gb2312");
+		ENCODING_GB2312 = Encoding.GetEncoding("gb2312");
 	}
 	// 计算 16进制的c中1的个数
 	public static int crc_check(byte c)
@@ -40,15 +40,6 @@ public class BinaryUtility : GameBase
 			return 0;
 		}
 		byte byte0 = (byte)(0xff & buffer[curIndex++]);
-		return byte0;
-	}
-	public static char readChar(byte[] buffer, ref int curIndex)
-	{
-		if (buffer.Length < 1)
-		{
-			return '\0';
-		}
-		char byte0 = (char)(0xff & buffer[curIndex++]);
 		return byte0;
 	}
 	public static short readShort(byte[] buffer, ref int curIndex, bool inverse = false)
@@ -122,7 +113,7 @@ public class BinaryUtility : GameBase
 			destBuffer[i] = readBool(buffer, ref index);
 		}
 	}
-	public static bool readBytes(byte[] buffer, ref int index, int bufferSize, byte[] destBuffer, int destBufferSize, int readSize)
+	public static bool readBytes(byte[] buffer, ref int index, byte[] destBuffer, int bufferSize = -1, int destBufferSize = -1, int readSize = -1)
 	{
 		if (bufferSize == -1)
 		{
@@ -140,7 +131,7 @@ public class BinaryUtility : GameBase
 		{
 			return false;
 		}
-		Array.Copy(buffer, index, destBuffer, 0, readSize);
+		memcpy(destBuffer, buffer, 0, index, readSize);
 		index += readSize;
 		return true;
 	}
@@ -184,15 +175,6 @@ public class BinaryUtility : GameBase
 			return false;
 		}
 		buffer[index++] = value;
-		return true;
-	}
-	public static bool writeChar(byte[] buffer, ref int index, char value)
-	{
-		if (buffer.Length < 1)
-		{
-			return false;
-		}
-		buffer[index++] = (byte)(value);
 		return true;
 	}
 	public static bool writeShort(byte[] buffer, ref int index, short value)
@@ -241,7 +223,7 @@ public class BinaryUtility : GameBase
 		}
 		return ret;
 	}
-	public static bool writeBytes(byte[] buffer, ref int index, int bufferSize, byte[] sourceBuffer, int sourceBufferSize, int writeSize)
+	public static bool writeBytes(byte[] buffer, ref int index, byte[] sourceBuffer, int bufferSize = -1, int sourceBufferSize = -1, int writeSize = -1)
 	{
 		if (bufferSize == -1)
 		{
@@ -259,7 +241,7 @@ public class BinaryUtility : GameBase
 		{
 			return false;
 		}
-		Array.Copy(sourceBuffer, 0, buffer, index, writeSize);
+		memcpy(buffer, sourceBuffer, index, 0, writeSize);
 		index += writeSize;
 		return true;
 	}
@@ -353,20 +335,6 @@ public class BinaryUtility : GameBase
 			dest[destOffset + i] = src[srcOffset + i];
 		}
 	}
-	public static void memcpy(byte[] dest, char[] src, int destOffset, int srcOffset, int count)
-	{
-		for (int i = 0; i < count; ++i)
-		{
-			dest[destOffset + i] = (byte)src[srcOffset + i];
-		}
-	}
-	public static void memcpy(char[] dest, byte[] src, int destOffset, int srcOffset, int count)
-	{
-		for (int i = 0; i < count; ++i)
-		{
-			dest[destOffset + i] = (char)src[srcOffset + i];
-		}
-	}
 	public static void memmove(short[] data, int start0, int start1, int count)
 	{
 		if (start1 > start0 && (start0 + count > start1))
@@ -396,10 +364,6 @@ public class BinaryUtility : GameBase
 			p[i] = value;
 		}
 	}
-	public static byte[] toBytes(char value)
-	{
-		return BitConverter.GetBytes(value);
-	}
 	public static byte[] toBytes(byte value)
 	{
 		return BitConverter.GetBytes(value);
@@ -420,10 +384,6 @@ public class BinaryUtility : GameBase
 	{
 		return array[0];
 	}
-	public static char bytesToChar(byte[] array)
-	{
-		return BitConverter.ToChar(array, 0);
-	}
 	public static short bytesToShort(byte[] array)
 	{
 		return BitConverter.ToInt16(array, 0);
@@ -438,7 +398,7 @@ public class BinaryUtility : GameBase
 	}
 	public static byte[] stringToBytes(string str)
 	{
-		return stringToBytes(str, DEFAULT_ENCODING);
+		return stringToBytes(str, ENCODING_GB2312);
 	}
 	public static byte[] stringToBytes(string str, Encoding encoding)
 	{
@@ -460,9 +420,25 @@ public class BinaryUtility : GameBase
 	{
 		return convertStringFormat(str, Encoding.UTF8, Encoding.Unicode);
 	}
+	public static string UTF8ToGB2312(string str)
+	{
+		return convertStringFormat(str, Encoding.UTF8, ENCODING_GB2312);
+	}
 	public static string UnicodeToUTF8(string str)
 	{
 		return convertStringFormat(str, Encoding.Unicode, Encoding.UTF8);
+	}
+	public static string UnicodeToGB2312(string str)
+	{
+		return convertStringFormat(str, Encoding.Unicode, ENCODING_GB2312);
+	}
+	public static string GB2312ToUTF8(string str)
+	{
+		return convertStringFormat(str, ENCODING_GB2312, Encoding.UTF8);
+	}
+	public static string GB2312ToUnicode(string str)
+	{
+		return convertStringFormat(str, ENCODING_GB2312, Encoding.Unicode);
 	}
 	// 字节数组转换为字符串时,末尾可能会带有数字0,此时在字符串比较时会出现错误,所以需要移除字符串末尾的0
 	public static string removeLastZero(string str)

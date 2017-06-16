@@ -70,6 +70,7 @@ public class WavRecorder : GameBase
 		}
 		catch (Exception e)
 		{
+			UnityUtility.logInfo("error in record! : " + e.Message);
 			return false;
 		}
 		return true;

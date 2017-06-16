@@ -95,7 +95,7 @@ public class MathUtility : GameBase
 				// 将括号中的计算结果替换原来的表达式,包括括号也一起替换
 				string floatStr = (Math.Round(ret, 4)).ToString();
 				str = StringUtility.strReplace(str, curpos, curpos + strInBracket.Length + 2, floatStr);
-				byte[] strchar = BinaryUtility.stringToBytes(str);
+				byte[] strchar = BinaryUtility.stringToBytes(str, Encoding.ASCII);
 				if (isMinus)
 				{
 					// 如果括号中计算出来是负数,则将负号提取出来,将左边的第一个加减号改为相反的符号
@@ -106,7 +106,7 @@ public class MathUtility : GameBase
 						if (strchar[i] == '+')
 						{
 							strchar[i] = (byte)'-';
-							str = BinaryUtility.bytesToString(strchar);
+							str = BinaryUtility.bytesToString(strchar, Encoding.ASCII);
 							changeMark = true;
 							break;
 						}
@@ -117,7 +117,7 @@ public class MathUtility : GameBase
 							if (strchar[i - 1] >= '0' && strchar[i - 1] <= '9')
 							{
 								strchar[i] = (byte)'+';
-								str = BinaryUtility.bytesToString(strchar);
+								str = BinaryUtility.bytesToString(strchar, Encoding.ASCII);
 							}
 							else
 							{

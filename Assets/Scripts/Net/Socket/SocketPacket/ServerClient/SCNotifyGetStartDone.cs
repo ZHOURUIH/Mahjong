@@ -8,16 +8,11 @@ public class SCNotifyGetStartDone : SocketPacket
 		:
 		base(type)
 	{
-		;
+		fillParams();
+		zeroParams();
 	}
-	public override void read(byte[] data)
-	{}
-	public override void write(byte[] data)
-	{}
-	public override int getSize()
-	{
-		return 0;
-	}
+	protected override void fillParams()
+	{ }
 	public override void execute()
 	{
 		GameScene gameScene = mGameSceneManager.getCurScene();

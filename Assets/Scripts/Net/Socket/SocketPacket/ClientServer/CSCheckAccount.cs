@@ -4,25 +4,21 @@ using System.Collections.Generic;
 
 public class CSCheckAccount : SocketPacket
 {
-	public byte[] mAccount = new byte[16];
+	protected BYTES mAccount = new BYTES(16);
 	public CSCheckAccount(PACKET_TYPE type)
 		:
 		base(type)
 	{
-		;
+		fillParams();
+		zeroParams();
 	}
-	public override void read(byte[] data)
+	public void setAccount(string account)
 	{
-		int index = 0;
-		BinaryUtility.readBytes(data, ref index, -1, mAccount, -1, -1);
+		byte[] accountBytes = BinaryUtility.stringToBytes(account);
+		mAccount.setValue(accountBytes);
 	}
-	public override void write(byte[] data)
+	protected override void fillParams()
 	{
-		int index = 0;
-		BinaryUtility.writeBytes(data, ref index, -1, mAccount, -1, -1);
-	}
-	public override int getSize()
-	{
-		return sizeof(byte) * mAccount.Length;
+		pushParam(mAccount);
 	}
 }

@@ -137,7 +137,7 @@ public class SocketManager : GameBase
 			byte[] realData = new byte[packet.getSize()];
 			packet.write(realData);
 			// 消息内容
-			BinaryUtility.writeBytes(packetData, ref index, -1, realData, -1, -1);
+			BinaryUtility.writeBytes(packetData, ref index, realData);
 		}
 		lock (mOutputList)
 		{
@@ -256,7 +256,7 @@ public class SocketManager : GameBase
 						{
 							byte[] recvData = new byte[packetSize];
 							// 读取消息内容(byte[])
-							BinaryUtility.readBytes(recvBuff, ref index, -1, recvData, -1, -1);
+							BinaryUtility.readBytes(recvBuff, ref index, recvData);
 							mRecieveList.Add(new INPUT_ELEMENT(type, recvData));
 						}
 						else
@@ -284,7 +284,7 @@ public class SocketManager : GameBase
 	protected void heartBeat()
 	{
 		CSHeartBeat beat = createPacket(PACKET_TYPE.PT_CS_HEART_BEAT) as CSHeartBeat;
-		beat.mHeartBeatTimes = ++mHeartBeatTimes;
+		beat.setHeartBeatTimes(++mHeartBeatTimes);
 		sendMessage(beat);
 	}
 }

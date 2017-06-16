@@ -4,34 +4,24 @@ using System.Collections.Generic;
 
 public class SCOtherPlayerReady : SocketPacket
 {
-	protected bool mReady;		// 是否已准备
-	protected int mPlayerGUID;	// 玩家GUID
+	protected BOOL mReady = new BOOL();		// 是否已准备
+	protected INT mPlayerGUID = new INT();	// 玩家GUID
 	public SCOtherPlayerReady(PACKET_TYPE type)
 		:
 		base(type)
 	{
-		;
+		fillParams();
+		zeroParams();
 	}
-	public override void read(byte[] data)
+	protected override void fillParams()
 	{
-		int index = 0;
-		mReady = BinaryUtility.readBool(data, ref index);
-		mPlayerGUID = BinaryUtility.readInt(data, ref index);
-	}
-	public override void write(byte[] data)
-	{
-		int index = 0;
-		BinaryUtility.writeBool(data, ref index, mReady);
-		BinaryUtility.writeInt(data, ref index, mPlayerGUID);
-	}
-	public override int getSize()
-	{
-		return sizeof(byte) + sizeof(int);
+		pushParam(mReady);
+		pushParam(mPlayerGUID);
 	}
 	public override void execute()
 	{
 		CommandCharacterNotifyReady cmd = new CommandCharacterNotifyReady();
-		cmd.mReady = mReady;
-		mCommandSystem.pushCommand(cmd, mCharacterManager.getCharacterByGUID(mPlayerGUID));
+		cmd.mReady = mReady.mValue;
+		mCommandSystem.pushCommand(cmd, mCharacterManager.getCharacterByGUID(mPlayerGUID.mValue));
 	}
 }

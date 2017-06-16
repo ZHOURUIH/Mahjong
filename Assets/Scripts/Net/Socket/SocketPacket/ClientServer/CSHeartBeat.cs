@@ -4,25 +4,17 @@ using System.Collections.Generic;
 
 public class CSHeartBeat : SocketPacket
 {
-	public int mHeartBeatTimes;
+	protected INT mHeartBeatTimes = new INT();
 	public CSHeartBeat(PACKET_TYPE type)
 		:
 		base(type)
 	{
-		;
+		fillParams();
+		zeroParams();
 	}
-	public override void read(byte[] data)
+	public void setHeartBeatTimes(int times) { mHeartBeatTimes.mValue = times; }
+	protected override void fillParams()
 	{
-		int index = 0;
-		mHeartBeatTimes = BinaryUtility.readInt(data, ref index);
-	}
-	public override void write(byte[] data)
-	{
-		int index = 0;
-		BinaryUtility.writeInt(data, ref index, mHeartBeatTimes);
-	}
-	public override int getSize()
-	{
-		return sizeof(int);
+		pushParam(mHeartBeatTimes);
 	}
 }

@@ -242,9 +242,7 @@ public class StringUtility : GameBase
 	}
 	public static string[] split(string str, params char[] keyword)
 	{
-		// 去除所有空白字符
-		str = Regex.Replace(str, @"\s", "");
-		string[] strList = str.Split(keyword);
+		string[] strList = str.Split(keyword, StringSplitOptions.RemoveEmptyEntries);
 		return strList;
 	}
 	public static void split(string str, ref List<string> strList, params char[] keyword)
@@ -299,8 +297,7 @@ public class StringUtility : GameBase
 	}
 	public static void stringToIntArray(string str, ref int[] values)
 	{
-		str = Regex.Replace(str, @"\s", "");
-		string[] rangeList = str.Split(',');
+		string[] rangeList = split(str, ',');
 		int len = rangeList.Length;
 		if (values != null && len != values.Length)
 		{
@@ -329,58 +326,6 @@ public class StringUtility : GameBase
 			}
 		}
 		return str;
-	}
-	public static int getStringLength(string str)
-	{
-		char[] charArray = str.ToCharArray();
-		for (int i = 0; i < str.Length; ++i)
-		{
-			if (charArray[i] == 0)
-			{
-				return i;
-			}
-		}
-		return str.Length;
-	}
-	public static string UTF8ToGB2312(string value)
-	{
-		byte[] byteList = System.Text.Encoding.UTF8.GetBytes(value);
-		char[] chrs = System.Text.Encoding.GetEncoding("GB2312").GetChars(byteList);
-		string s = "";
-		for (int i = 0; i < chrs.Length; i++)
-		{
-			s += chrs[i].ToString();
-		}
-		return s;
-	}
-	public static string GB2312ToUTF8(string str)
-	{
-		try
-		{
-			Encoding utf8 = Encoding.UTF8;
-			Encoding gb2312 = Encoding.GetEncoding("GB2312");
-			byte[] unicodeBytes = gb2312.GetBytes(str);
-			byte[] asciiBytes = Encoding.Convert(gb2312, utf8, unicodeBytes);
-			char[] asciiChars = new char[utf8.GetCharCount(asciiBytes, 0, asciiBytes.Length)];
-			utf8.GetChars(asciiBytes, 0, asciiBytes.Length, asciiChars, 0);
-			string result = StringUtility.charArrayToString(asciiChars);
-			return result;
-		}
-		catch
-		{
-			return "";
-		}
-	}
-	public static string GB2312ToUnicode(string value)
-	{
-		byte[] byteList = System.Text.Encoding.GetEncoding("GB2312").GetBytes(value);
-		char[] chrs = System.Text.Encoding.Unicode.GetChars(byteList);
-		string s = "";
-		for (int i = 0; i < chrs.Length; i++)
-		{
-			s += chrs[i].ToString();
-		}
-		return s;
 	}
 	// precision表示小数点后保留几位小数,removeTailZero表示是否去除末尾的0
 	public static string floatToString(float value, int precision = 4, bool removeTailZero = true)
@@ -435,60 +380,16 @@ public class StringUtility : GameBase
 	{
 		return float.Parse(str);
 	}
-	public static string charArrayToString(char[] charArray)
+	public static int getStringLength(string str)
 	{
-		int charCount = 0;
-		int arrayLength = charArray.Length;
-		for (int i = 0; i < arrayLength; ++i)
+		byte[] bytes = BinaryUtility.stringToBytes(str);
+		for (int i = 0; i < bytes.Length; ++i)
 		{
-			if(charArray[i] == 0)
-			{
-				charCount = i;
-				break;
-			}
-		}
-		string newStr = new string(charArray);
-		newStr = newStr.Substring(0, charCount);
-		return newStr;
-	}
-	public static char[] stringToCharArray(string value) 
-	{
-		char[] mchar = new char[32];
-		for (int i = 0; i < value.Length; i++)
-		{
-			mchar[i] = value[i];
-		}
-		return mchar;
-	}
-	public static int getStringLength(char[] charArray)
-	{
-		for (int i = 0; i < charArray.Length; ++i)
-		{
-			if (charArray[i] == 0)
+			if (bytes[i] == 0)
 			{
 				return i;
 			}
 		}
-		return charArray.Length;
-	}
-	public static bool charEquals(char[] textchar1, char[] textchar2)
-	{
-		if (getStringLength(textchar1) != getStringLength(textchar2))
-		{
-			return false;
-		}
-
-		for (int i = 0; i < textchar1.Length; i++)
-		{
-			if (textchar1[i] != textchar2[i])
-			{
-				return false;
-			}
-			if (textchar1[i] == 0)
-			{
-				return true;
-			}
-		}
-		return true;
+		return bytes.Length;
 	}
 }

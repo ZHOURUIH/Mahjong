@@ -4,31 +4,22 @@ using System.Collections.Generic;
 
 public class SCCheckNameRet : SocketPacket
 {
-	protected byte mResult;  // 0表示成功,1表示失败
+	protected BYTE mResult = new BYTE();  // 0表示成功,1表示失败
 	public SCCheckNameRet(PACKET_TYPE type)
 		:
 		base(type)
 	{
-		;
+		fillParams();
+		zeroParams();
 	}
-	public override void read(byte[] data)
+	protected override void fillParams()
 	{
-		int index = 0;
-		mResult = BinaryUtility.readByte(data, ref index);
-	}
-	public override void write(byte[] data)
-	{
-		int index = 0;
-		BinaryUtility.writeByte(data, ref index, mResult);
-	}
-	public override int getSize()
-	{
-		return sizeof(byte) + sizeof(int);
+		pushParam(mResult);
 	}
 	public override void execute()
 	{
 		// 创建房间成功,进入麻将场景
-		if(mResult == 0)
+		if(mResult.mValue == 0)
 		{
 			UnityUtility.logInfo("成功!");
 		}

@@ -4,26 +4,17 @@ using System.Collections.Generic;
 
 public class SCStartGame : SocketPacket
 {
-	public byte[] mDice;
+	protected BYTES mDice = new BYTES(2);
 	public SCStartGame(PACKET_TYPE type)
 		:
 		base(type)
 	{
-		mDice = new byte[2];
+		fillParams();
+		zeroParams();
 	}
-	public override void read(byte[] data)
+	protected override void fillParams()
 	{
-		int index = 0;
-		BinaryUtility.readBytes(data, ref index, -1, mDice, -1, -1);
-	}
-	public override void write(byte[] data)
-	{
-		int index = 0;
-		BinaryUtility.writeBytes(data, ref index, -1, mDice, -1, -1);
-	}
-	public override int getSize()
-	{
-		return sizeof(byte) * mDice.Length;
+		pushParam(mDice);
 	}
 	public override void execute()
 	{
@@ -39,7 +30,7 @@ public class SCStartGame : SocketPacket
 
 		// 通知麻将场景开始掷骰子
 		CommandMahjongSceneNotifyDice cmdDice = new CommandMahjongSceneNotifyDice();
-		cmdDice.mDice = mDice;
+		cmdDice.mDice = mDice.mValue;
 		mCommandSystem.pushCommand(cmdDice, gameScene);
 	}
 }

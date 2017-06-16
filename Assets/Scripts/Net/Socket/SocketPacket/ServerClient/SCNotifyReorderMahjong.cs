@@ -4,30 +4,21 @@ using System.Collections.Generic;
 
 public class SCNotifyReorderMahjong : SocketPacket
 {
-	protected int mPlayerGUID;
+	protected INT mPlayerGUID = new INT();
 	public SCNotifyReorderMahjong(PACKET_TYPE type)
 		:
 		base(type)
 	{
-		;
+		fillParams();
+		zeroParams();
 	}
-	public override void read(byte[] data)
+	protected override void fillParams()
 	{
-		int index = 0;
-		mPlayerGUID = BinaryUtility.readInt(data, ref index);
-	}
-	public override void write(byte[] data)
-	{
-		int index = 0;
-		BinaryUtility.writeInt(data, ref index, mPlayerGUID);
-	}
-	public override int getSize()
-	{
-		return sizeof(int);
+		pushParam(mPlayerGUID);
 	}
 	public override void execute()
 	{
 		CommandCharacterReorderMahjong cmd = new CommandCharacterReorderMahjong();
-		mCommandSystem.pushCommand(cmd, mCharacterManager.getCharacterByGUID(mPlayerGUID));
+		mCommandSystem.pushCommand(cmd, mCharacterManager.getCharacterByGUID(mPlayerGUID.mValue));
 	}
 }

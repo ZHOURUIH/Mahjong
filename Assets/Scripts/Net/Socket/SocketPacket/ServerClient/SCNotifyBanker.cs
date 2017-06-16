@@ -4,26 +4,17 @@ using System.Collections.Generic;
 
 public class SCNotifyBanker : SocketPacket
 {
-	protected int mPlayerGUID;		// 庄家ID
+	protected INT mPlayerGUID = new INT();		// 庄家ID
 	public SCNotifyBanker(PACKET_TYPE type)
 		:
 		base(type)
 	{
-		;
+		fillParams();
+		zeroParams();
 	}
-	public override void read(byte[] data)
+	protected override void fillParams()
 	{
-		int index = 0;
-		mPlayerGUID = BinaryUtility.readInt(data, ref index);
-	}
-	public override void write(byte[] data)
-	{
-		int index = 0;
-		BinaryUtility.writeInt(data, ref index, mPlayerGUID);
-	}
-	public override int getSize()
-	{
-		return sizeof(int);
+		pushParam(mPlayerGUID);
 	}
 	public override void execute()
 	{
@@ -38,7 +29,7 @@ public class SCNotifyBanker : SocketPacket
 		foreach(var item in playerList)
 		{
 			CommandCharacterNotifyBanker cmdBanker = new CommandCharacterNotifyBanker();
-			cmdBanker.mBanker = (item.Value.getCharacterData().mGUID == mPlayerGUID);
+			cmdBanker.mBanker = (item.Value.getCharacterData().mGUID == mPlayerGUID.mValue);
 			mCommandSystem.pushCommand(cmdBanker, item.Value);
 		}
 	}

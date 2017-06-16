@@ -5,19 +5,19 @@ using System.IO;
 public class WavSound
 {
 	protected string mFileName;
-	protected int mRiffMark;			// riff标记
-	protected int mFileSize;			// 音频文件大小 - 8,也就是从文件大小字节后到文件结尾的长度
-	protected int mWaveMark;			// wave标记
-	protected int mFmtMark;				// fmt 标记
-	protected int mFmtChunkSize;		// fmt块大小
-	protected short mFormatType;			// 编码格式,为1是PCM编码
-	protected short mSoundChannels;		// 声道数
-	protected int mSamplesPerSec;		// 采样频率
-	protected int mAvgBytesPerSec;		// 波形数据传输速率（每秒平均字节数）
-	protected short mBlockAlign;			// DATA数据块长度
-	protected short mBitsPerSample;		// 单个采样数据大小,如果双声道16位,则是4个字节,也叫PCM位宽
-	protected short mOtherSize;			// 附加信息（可选，由上方过滤字节确定）
-	protected char[] mDataMark = new char[4];			// data标记
+	protected int mRiffMark;					// riff标记
+	protected int mFileSize;					// 音频文件大小 - 8,也就是从文件大小字节后到文件结尾的长度
+	protected int mWaveMark;					// wave标记
+	protected int mFmtMark;						// fmt 标记
+	protected int mFmtChunkSize;				// fmt块大小
+	protected short mFormatType;				// 编码格式,为1是PCM编码
+	protected short mSoundChannels;				// 声道数
+	protected int mSamplesPerSec;				// 采样频率
+	protected int mAvgBytesPerSec;				// 波形数据传输速率（每秒平均字节数）
+	protected short mBlockAlign;				// DATA数据块长度
+	protected short mBitsPerSample;				// 单个采样数据大小,如果双声道16位,则是4个字节,也叫PCM位宽
+	protected short mOtherSize;					// 附加信息（可选，由上方过滤字节确定）
+	protected byte[] mDataMark = new byte[4];	// data标记
 	protected int mDataSize;
 	protected byte[] mDataBuffer;
 	protected short[] mMixPCMData;
@@ -49,7 +49,7 @@ public class WavSound
 		mBlockAlign = 0;
 		mBitsPerSample = 0;
 		mOtherSize = 0;
-		BinaryUtility.memset(mDataMark, (char)0, 4);
+		BinaryUtility.memset(mDataMark, (byte)0, 4);
 		mDataSize = 0;
 		mDataBuffer = null;
 		mMixPCMData = null;
@@ -91,7 +91,7 @@ public class WavSound
 			serializer.read(ref mDataSize);
 			mDataBuffer = new byte[mDataSize];
 			serializer.readBuffer(mDataBuffer, mDataSize, mDataSize);
-		} while (StringUtility.charArrayToString(mDataMark) != "data");
+		} while (BinaryUtility.bytesToString(mDataMark) != "data");
 		refreshFileSize();
 
 		int mixDataCount = getMixPCMDataCount();
@@ -109,7 +109,7 @@ public class WavSound
 				byte[] byteData0 = new byte[2];
 				byteData0[0] = (byte)dataBuffer[2 * i + 0];
 				byteData0[1] = (byte)dataBuffer[2 * i + 1];
-				mixPCMData[i] = BinaryUtility.byteArrayToShort(byteData0);
+				mixPCMData[i] = BinaryUtility.bytesToShort(byteData0);
 			}
 		}
 		// 如果有两个声道,则将左右两个声道的平均值赋值到mMixPCMData中
@@ -120,11 +120,11 @@ public class WavSound
 				byte[] byteData0 = new byte[2];
 				byteData0[0] = (byte)dataBuffer[4 * i + 0];
 				byteData0[1] = (byte)dataBuffer[4 * i + 1];
-				short shortData0 = BinaryUtility.byteArrayToShort(byteData0);
+				short shortData0 = BinaryUtility.bytesToShort(byteData0);
 				byte[] byteData1 = new byte[2];
 				byteData1[0] = (byte)dataBuffer[4 * i + 2];
 				byteData1[1] = (byte)dataBuffer[4 * i + 3];
-				short shortData1 = BinaryUtility.byteArrayToShort(byteData1);
+				short shortData1 = BinaryUtility.bytesToShort(byteData1);
 				mixPCMData[i] = (short)((shortData0 + shortData1) * 0.5f);
 			}
 		}
@@ -155,12 +155,12 @@ public class WavSound
 	{
 		mWaveDataSerializer = new Serializer();
 		byte[] riffByte = new byte[4] { (byte)'R', (byte)'I', (byte)'F', (byte)'F' };
-		mRiffMark = BinaryUtility.byteArrayToInt(riffByte);
+		mRiffMark = BinaryUtility.bytesToInt(riffByte);
 		mFileSize = 0;
 		byte[] waveByte = new byte[4] { (byte)'W', (byte)'A', (byte)'V', (byte)'E' };
-		mWaveMark = BinaryUtility.byteArrayToInt(waveByte);
+		mWaveMark = BinaryUtility.bytesToInt(waveByte);
 		byte[] fmtByte = new byte[4] { (byte)'f', (byte)'m', (byte)'t', (byte)' ' };
-		mFmtMark = BinaryUtility.byteArrayToInt(fmtByte);
+		mFmtMark = BinaryUtility.bytesToInt(fmtByte);
 		mFmtChunkSize = 16;
 		mFormatType = waveHeader.wFormatTag;
 		mSoundChannels = waveHeader.nChannels;
@@ -169,7 +169,7 @@ public class WavSound
 		mBlockAlign = waveHeader.nBlockAlign;
 		mBitsPerSample = waveHeader.wBitsPerSample;
 		mOtherSize = waveHeader.cbSize;
-		mDataMark = new char[4] { 'd', 'a', 't', 'a' };
+		mDataMark = new byte[4] { (byte)'d', (byte)'a', (byte)'t', (byte)'a' };
 	}
 	public void pushWaveStream(byte[] data, int dataSize)
 	{

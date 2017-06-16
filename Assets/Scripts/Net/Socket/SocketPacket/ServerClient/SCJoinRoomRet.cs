@@ -14,48 +14,36 @@ public enum JOIN_ROOM_RESULT
 
 public class SCJoinRoomRet : SocketPacket
 {
-	protected byte mResult;
-	protected int mRoomID;
-	protected byte mServerPosition;
-	protected bool mBanker;
+	protected BYTE mResult = new BYTE();
+	protected INT mRoomID = new INT();
+	protected BYTE mServerPosition = new BYTE();
+	protected BOOL mBanker = new BOOL();
 	public SCJoinRoomRet(PACKET_TYPE type)
 		:
 		base(type)
 	{
-		;
+		fillParams();
+		zeroParams();
 	}
-	public override void read(byte[] data)
+	protected override void fillParams()
 	{
-		int index = 0;
-		mResult = BinaryUtility.readByte(data, ref index);
-		mRoomID = BinaryUtility.readInt(data, ref index);
-		mServerPosition = BinaryUtility.readByte(data, ref index);
-		mBanker = BinaryUtility.readBool(data, ref index);
-	}
-	public override void write(byte[] data)
-	{
-		int index = 0;
-		BinaryUtility.writeByte(data, ref index, mResult);
-		BinaryUtility.writeInt(data, ref index, mRoomID);
-		BinaryUtility.writeByte(data, ref index, mServerPosition);
-		BinaryUtility.writeBool(data, ref index, mBanker);
-	}
-	public override int getSize()
-	{
-		return sizeof(byte) + sizeof(int) + sizeof(byte) + sizeof(bool);
+		pushParam(mResult);
+		pushParam(mRoomID);
+		pushParam(mServerPosition);
+		pushParam(mBanker);
 	}
 	public override void execute()
 	{
-		JOIN_ROOM_RESULT result = (JOIN_ROOM_RESULT)(mResult);
+		JOIN_ROOM_RESULT result = (JOIN_ROOM_RESULT)(mResult.mValue);
 		if (result == JOIN_ROOM_RESULT.JRR_SUCC)
 		{
 			UnityUtility.logInfo("加入房间成功, 房间ID:" + mRoomID);
 			// 设置房间号和服务器中的位置
 			CharacterMyself myself = mCharacterManager.getMyself();
 			CharacterData data = myself.getCharacterData();
-			data.mRoomID = mRoomID;
-			data.mServerPosition = (PLAYER_POSITION)mServerPosition;
-			data.mBanker = mBanker;
+			data.mRoomID = mRoomID.mValue;
+			data.mServerPosition = (PLAYER_POSITION)mServerPosition.mValue;
+			data.mBanker = mBanker.mValue;
 
 			// 进入麻将场景
 			CommandGameSceneManagerEnter cmd = new CommandGameSceneManagerEnter();

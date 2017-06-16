@@ -5,30 +5,21 @@ using System.Collections.Generic;
 
 public class SCLeaveRoomRet : SocketPacket
 {
-	protected bool mResult;
+	protected BOOL mResult = new BOOL();
 	public SCLeaveRoomRet(PACKET_TYPE type)
 		:
 		base(type)
 	{
-		;
+		fillParams();
+		zeroParams();
 	}
-	public override void read(byte[] data)
+	protected override void fillParams()
 	{
-		int index = 0;
-		mResult = BinaryUtility.readBool(data, ref index);
-	}
-	public override void write(byte[] data)
-	{
-		int index = 0;
-		BinaryUtility.writeBool(data, ref index, mResult);
-	}
-	public override int getSize()
-	{
-		return sizeof(bool);
+		pushParam(mResult);
 	}
 	public override void execute()
 	{
-		if (mResult)
+		if (mResult.mValue)
 		{
 			UnityUtility.logInfo("离开房间成功");
 

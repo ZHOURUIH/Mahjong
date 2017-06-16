@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 
 public class SCOtherPlayerJoinRoom : SocketPacket
 {
@@ -45,7 +46,7 @@ public class SCOtherPlayerJoinRoom : SocketPacket
 	}
 	public override void execute()
 	{
-		string name = BinaryUtility.byteArrayToUTF8String(mName);
+		string name = BinaryUtility.bytesToString(mName, Encoding.UTF8);
 		UnityUtility.logInfo("获得玩家数据 : " + mPlayerGUID + ", 名字 : " + name);
 		// 创建该玩家的实例
 		CommandCharacterManagerCreateCharacter cmdCreate = new CommandCharacterManagerCreateCharacter();

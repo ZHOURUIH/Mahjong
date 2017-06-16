@@ -158,7 +158,7 @@ public class GlobalTouchSystem : GameBase
 	protected List<BoxCollider> globalRaycast(Vector3 mousePos)
 	{
 		Ray ray = UnityUtility.getRay(Input.mousePosition);
-		List<BoxCollider> raycastRet = UnityUtility.Raycast(ray, mBoxColliderList);
+		List<BoxCollider> raycastRet = UnityUtility.raycast(ray, mBoxColliderList);
 		return raycastRet;
 	}
 	// 通知脚本屏幕被激活,也就是屏幕有点击事件

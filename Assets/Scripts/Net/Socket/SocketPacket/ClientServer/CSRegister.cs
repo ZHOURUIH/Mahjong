@@ -28,7 +28,7 @@ public class CSRegister : SocketPacket
 	public void setName(string name)
 	{
 		BinaryUtility.memset<byte>(mName, 0);
-		byte[] nameByte = BinaryUtility.UTF8StringToByteArray(name);
+		byte[] nameByte = BinaryUtility.stringToBytes(name, Encoding.UTF8);
 		BinaryUtility.memcpy(mName, nameByte, 0, 0, MathUtility.getMin(mName.Length, nameByte.Length));
 	}
 	public void setHead(int head)

@@ -109,7 +109,7 @@ public class WavSound
 				byte[] byteData0 = new byte[2];
 				byteData0[0] = (byte)dataBuffer[2 * i + 0];
 				byteData0[1] = (byte)dataBuffer[2 * i + 1];
-				mixPCMData[i] = BinaryUtility.byteArrayToShort(byteData0);
+				mixPCMData[i] = BinaryUtility.bytesToShort(byteData0);
 			}
 		}
 		// 如果有两个声道,则将左右两个声道的平均值赋值到mMixPCMData中
@@ -120,11 +120,11 @@ public class WavSound
 				byte[] byteData0 = new byte[2];
 				byteData0[0] = (byte)dataBuffer[4 * i + 0];
 				byteData0[1] = (byte)dataBuffer[4 * i + 1];
-				short shortData0 = BinaryUtility.byteArrayToShort(byteData0);
+				short shortData0 = BinaryUtility.bytesToShort(byteData0);
 				byte[] byteData1 = new byte[2];
 				byteData1[0] = (byte)dataBuffer[4 * i + 2];
 				byteData1[1] = (byte)dataBuffer[4 * i + 3];
-				short shortData1 = BinaryUtility.byteArrayToShort(byteData1);
+				short shortData1 = BinaryUtility.bytesToShort(byteData1);
 				mixPCMData[i] = (short)((shortData0 + shortData1) * 0.5f);
 			}
 		}
@@ -155,12 +155,12 @@ public class WavSound
 	{
 		mWaveDataSerializer = new Serializer();
 		byte[] riffByte = new byte[4] { (byte)'R', (byte)'I', (byte)'F', (byte)'F' };
-		mRiffMark = BinaryUtility.byteArrayToInt(riffByte);
+		mRiffMark = BinaryUtility.bytesToInt(riffByte);
 		mFileSize = 0;
 		byte[] waveByte = new byte[4] { (byte)'W', (byte)'A', (byte)'V', (byte)'E' };
-		mWaveMark = BinaryUtility.byteArrayToInt(waveByte);
+		mWaveMark = BinaryUtility.bytesToInt(waveByte);
 		byte[] fmtByte = new byte[4] { (byte)'f', (byte)'m', (byte)'t', (byte)' ' };
-		mFmtMark = BinaryUtility.byteArrayToInt(fmtByte);
+		mFmtMark = BinaryUtility.bytesToInt(fmtByte);
 		mFmtChunkSize = 16;
 		mFormatType = waveHeader.wFormatTag;
 		mSoundChannels = waveHeader.nChannels;

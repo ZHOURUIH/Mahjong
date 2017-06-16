@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 
 public class SCLoginRet : SocketPacket
 {
@@ -44,7 +45,7 @@ public class SCLoginRet : SocketPacket
 			// 创建玩家
 			CommandCharacterManagerCreateCharacter cmdCreate = new CommandCharacterManagerCreateCharacter();
 			cmdCreate.mCharacterType = CHARACTER_TYPE.CT_MYSELF;
-			cmdCreate.mName = BinaryUtility.byteArrayToUTF8String(mName);
+			cmdCreate.mName = BinaryUtility.bytesToString(mName, Encoding.UTF8);
 			cmdCreate.mGUID = mGUID;
 			mCommandSystem.pushCommand(cmdCreate, mCharacterManager);
 			// 设置角色数据

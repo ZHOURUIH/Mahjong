@@ -33,7 +33,7 @@ public class Serializer
 		{
 			return;
 		}
-		BinaryUtility.memcpy(mBuffer, BinaryUtility.toByteArray(value), mIndex, 0, writeLen);
+		BinaryUtility.memcpy(mBuffer, BinaryUtility.toBytes(value), mIndex, 0, writeLen);
 		mIndex += writeLen;
 	}
 	public void write(byte value)
@@ -43,7 +43,7 @@ public class Serializer
 		{
 			return;
 		}
-		BinaryUtility.memcpy(mBuffer, BinaryUtility.toByteArray(value), mIndex, 0, writeLen);
+		BinaryUtility.memcpy(mBuffer, BinaryUtility.toBytes(value), mIndex, 0, writeLen);
 		mIndex += writeLen;
 	}
 	public void write(short value)
@@ -53,7 +53,7 @@ public class Serializer
 		{
 			return;
 		}
-		BinaryUtility.memcpy(mBuffer, BinaryUtility.toByteArray(value), mIndex, 0, writeLen);
+		BinaryUtility.memcpy(mBuffer, BinaryUtility.toBytes(value), mIndex, 0, writeLen);
 		mIndex += writeLen;
 	}
 	public void write(int value)
@@ -63,7 +63,7 @@ public class Serializer
 		{
 			return;
 		}
-		BinaryUtility.memcpy(mBuffer, BinaryUtility.toByteArray(value), mIndex, 0, writeLen);
+		BinaryUtility.memcpy(mBuffer, BinaryUtility.toBytes(value), mIndex, 0, writeLen);
 		mIndex += writeLen;
 	}
 	public void write(float value)
@@ -73,7 +73,7 @@ public class Serializer
 		{
 			return;
 		}
-		BinaryUtility.memcpy(mBuffer, BinaryUtility.toByteArray(value), mIndex, 0, writeLen);
+		BinaryUtility.memcpy(mBuffer, BinaryUtility.toBytes(value), mIndex, 0, writeLen);
 		mIndex += writeLen;
 	}
 	public void read(ref char value)
@@ -83,9 +83,9 @@ public class Serializer
 		{
 			return;
 		}
-		byte[] dest = BinaryUtility.toByteArray(value);
+		byte[] dest = BinaryUtility.toBytes(value);
 		BinaryUtility.memcpy(dest, mBuffer, 0, mIndex, readLen);
-		value = BinaryUtility.byteArrayToChar(dest);
+		value = BinaryUtility.bytesToChar(dest);
 		mIndex += readLen;
 	}
 	public void read(ref byte value)
@@ -95,9 +95,9 @@ public class Serializer
 		{
 			return;
 		}
-		byte[] dest = BinaryUtility.toByteArray(value);
+		byte[] dest = BinaryUtility.toBytes(value);
 		BinaryUtility.memcpy(dest, mBuffer, 0, mIndex, readLen);
-		value = BinaryUtility.byteArrayToByte(dest);
+		value = BinaryUtility.bytesToByte(dest);
 		mIndex += readLen;
 	}
 	public void read(ref short value)
@@ -107,9 +107,9 @@ public class Serializer
 		{
 			return;
 		}
-		byte[] dest = BinaryUtility.toByteArray(value);
+		byte[] dest = BinaryUtility.toBytes(value);
 		BinaryUtility.memcpy(dest, mBuffer, 0, mIndex, readLen);
-		value = BinaryUtility.byteArrayToShort(dest);
+		value = BinaryUtility.bytesToShort(dest);
 		mIndex += readLen;
 	}
 	public void read(ref int value)
@@ -119,9 +119,9 @@ public class Serializer
 		{
 			return;
 		}
-		byte[] dest = BinaryUtility.toByteArray(value);
+		byte[] dest = BinaryUtility.toBytes(value);
 		BinaryUtility.memcpy(dest, mBuffer, 0, mIndex, readLen);
-		value = BinaryUtility.byteArrayToInt(dest);
+		value = BinaryUtility.bytesToInt(dest);
 		mIndex += readLen;
 	}
 	public void read(ref float value)
@@ -131,9 +131,9 @@ public class Serializer
 		{
 			return;
 		}
-		byte[] dest = BinaryUtility.toByteArray(value);
+		byte[] dest = BinaryUtility.toBytes(value);
 		BinaryUtility.memcpy(dest, mBuffer, 0, mIndex, readLen);
-		value = BinaryUtility.byteArrayToFloat(dest);
+		value = BinaryUtility.bytesToFloat(dest);
 		mIndex += readLen;
 	}
 	public void writeBuffer(byte[] buffer, int bufferSize)
@@ -199,7 +199,7 @@ public class Serializer
 		}
 		// 先写入字符串长度
 		write(strLen);
-		BinaryUtility.memcpy(mBuffer, BinaryUtility.toByteArray(str), mIndex, 0, strLen);
+		BinaryUtility.memcpy(mBuffer, BinaryUtility.stringToBytes(str), mIndex, 0, strLen);
 		mIndex += strLen;
 	}
 	public void readString(byte[] str, int strBufferSize)

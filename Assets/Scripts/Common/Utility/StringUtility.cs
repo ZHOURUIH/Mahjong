@@ -242,9 +242,7 @@ public class StringUtility : GameBase
 	}
 	public static string[] split(string str, params char[] keyword)
 	{
-		// 去除所有空白字符
-		str = Regex.Replace(str, @"\s", "");
-		string[] strList = str.Split(keyword);
+		string[] strList = str.Split(keyword, StringSplitOptions.RemoveEmptyEntries);
 		return strList;
 	}
 	public static void split(string str, ref List<string> strList, params char[] keyword)

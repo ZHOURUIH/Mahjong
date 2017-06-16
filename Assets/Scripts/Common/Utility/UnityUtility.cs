@@ -40,6 +40,14 @@ public class UnityUtility : GameBase
 		DateTime time = DateTime.Now;
 		return time.Hour + ":" + time.Minute + ":" + time.Second + ":" + time.Millisecond;
 	}
+	public static void copyTextToClipbord(string str)
+	{
+		Clipboard.SetText(str);
+	}
+	public static string getTextFromClipboard()
+	{
+		return Clipboard.GetText();
+	}
 	public static void messageBox(string info, bool errorOrInfo)
 	{
 		string title = errorOrInfo ? "错误" : "提示";
@@ -60,13 +68,13 @@ public class UnityUtility : GameBase
 		Camera camera = mCameraManager.getUICamera().getCamera();
 		return camera.ScreenPointToRay(screenPos);
 	}
-	public static List<BoxCollider> Raycast(Ray ray, List<BoxCollider> boxList, int maxCount = 0)
+	public static List<BoxCollider> raycast(Ray ray, List<BoxCollider> boxList, int maxCount = 0)
 	{
 		List<BoxCollider> retList = new List<BoxCollider>();
 		RaycastHit hit = new RaycastHit();
 		foreach (var box in boxList)
 		{
-			if (box.Raycast(ray, out hit, 10000.0f))
+			if (box.enabled && box.Raycast(ray, out hit, 10000.0f))
 			{
 				retList.Add(box);
 				if (maxCount > 0 && retList.Count >= maxCount)

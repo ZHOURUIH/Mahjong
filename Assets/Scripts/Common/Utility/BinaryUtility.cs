@@ -5,7 +5,11 @@ using System.Text;
 
 public class BinaryUtility : GameBase
 {
-	public void init(){}
+	protected static Encoding DEFAULT_ENCODING;
+	public void init()
+	{
+		DEFAULT_ENCODING = Encoding.GetEncoding("gb2312");
+	}
 	// 计算 16进制的c中1的个数
 	public static int crc_check(byte c)
 	{
@@ -108,7 +112,7 @@ public class BinaryUtility : GameBase
 			floatBuffer[2] = buffer[curIndex++];
 			floatBuffer[3] = buffer[curIndex++];
 		}
-		return byteArrayToFloat(floatBuffer);
+		return bytesToFloat(floatBuffer);
 	}
 	public static bool readBytes(byte[] buffer, ref int index, int bufferSize, byte[] destBuffer, int destBufferSize, int readSize)
 	{
@@ -213,7 +217,7 @@ public class BinaryUtility : GameBase
 		{
 			return false;
 		}
-		byte[] valueByte = toByteArray(value);
+		byte[] valueByte = toBytes(value);
 		for (int i = 0; i < 4; ++i)
 		{
 			buffer[index++] = valueByte[i];
@@ -267,33 +271,44 @@ public class BinaryUtility : GameBase
 		index += writeSize;
 		return true;
 	}
-	public static string byteArrayToHEXString(byte[] byteList, bool flag)
+	public static string bytesToHEXString(byte[] byteList, bool addSpace = true, bool upperOrLower = true)
 	{
 		string byteString = "";
-		foreach (var curByte in byteList)
+		int byteCount = byteList.Length;
+		for (int i = 0; i < byteCount; ++i)
 		{
-			if (flag)
+			if (addSpace)
 			{
-				byteString += byteToHexString(curByte) + " ";
+				byteString += byteToHEXString(byteList[i], upperOrLower) + " ";
 			}
 			else
 			{
-				byteString += byteToHexString(curByte);
+				byteString += byteToHEXString(byteList[i], upperOrLower);
 			}
-
 		}
-		byteString = byteString.Substring(0, byteString.Length - 1);
+		if (addSpace)
+		{
+			byteString = byteString.Substring(0, byteString.Length - 1);
+		}
 		return byteString;
 	}
-	public static string byteToHexString(byte value)
+	public static string byteToHEXString(byte value, bool upperOrLower = true)
 	{
 		string hexString = "";
-		char[] hexChar = { 'A', 'B', 'C', 'D', 'E', 'F' };
+		char[] hexChar = null;
+		if (upperOrLower)
+		{
+			hexChar = new char[] { 'A', 'B', 'C', 'D', 'E', 'F' };
+		}
+		else
+		{
+			hexChar = new char[] { 'a', 'b', 'c', 'd', 'e', 'f' };
+		}
 		int high = value / 16;
 		int low = value % 16;
 		if (high < 10)
 		{
-			hexString += high.ToString();
+			hexString += (char)('0' + high);
 		}
 		else
 		{
@@ -301,7 +316,7 @@ public class BinaryUtility : GameBase
 		}
 		if (low < 10)
 		{
-			hexString += low.ToString();
+			hexString += (char)('0' + low);
 		}
 		else
 		{
@@ -359,88 +374,88 @@ public class BinaryUtility : GameBase
 			p[i] = value;
 		}
 	}
-	public static byte[] toByteArray(char value)
+	public static byte[] toBytes(char value)
 	{
 		return BitConverter.GetBytes(value);
 	}
-	public static byte[] toByteArray(byte value)
+	public static byte[] toBytes(byte value)
 	{
 		return BitConverter.GetBytes(value);
 	}
-	public static byte[] toByteArray(short value)
+	public static byte[] toBytes(short value)
 	{
 		return BitConverter.GetBytes(value);
 	}
-	public static byte[] toByteArray(int value)
+	public static byte[] toBytes(int value)
 	{
 		return BitConverter.GetBytes(value);
 	}
-	public static byte[] toByteArray(float value)
+	public static byte[] toBytes(float value)
 	{
 		return BitConverter.GetBytes(value);
 	}
-	public static byte[] toByteArray(string value)
-	{
-		return Encoding.Default.GetBytes(value);
-	}
-	public static byte byteArrayToByte(byte[] array)
+	public static byte bytesToByte(byte[] array)
 	{
 		return array[0];
 	}
-	public static char byteArrayToChar(byte[] array)
+	public static char bytesToChar(byte[] array)
 	{
 		return BitConverter.ToChar(array, 0);
 	}
-	public static short byteArrayToShort(byte[] array)
+	public static short bytesToShort(byte[] array)
 	{
 		return BitConverter.ToInt16(array, 0);
 	}
-	public static int byteArrayToInt(byte[] array)
+	public static int bytesToInt(byte[] array)
 	{
 		return BitConverter.ToInt32(array, 0);
 	}
-	public static float byteArrayToFloat(byte[] array)
+	public static float bytesToFloat(byte[] array)
 	{
 		return BitConverter.ToSingle(array, 0);
 	}
-	public static string byteArrayToString(byte[] array)
+	public static byte[] stringToBytes(string str)
 	{
-		string str = "";
-		int arrayLen = array.Length;
-		for(int i = 0; i < arrayLen; ++i)
-		{
-			if(array[i] == 0)
-			{
-				break;
-			}
-			str += (char)array[i];
-		}
-		return str;
+		return stringToBytes(str, DEFAULT_ENCODING);
 	}
-	// 将字节数组转换为utf8编码的字符串,用于包含中文的字符串
-	public static string byteArrayToUTF8String(byte[] array)
+	public static byte[] stringToBytes(string str, Encoding encoding)
 	{
-		return Encoding.UTF8.GetString(array);
+		return encoding.GetBytes(str);
 	}
-	// 将字节数组转换为unicode编码的字符串
-	public static string byteArrayToUnicodeString(byte[] array)
+	public static string bytesToString(byte[] bytes)
 	{
-		return Encoding.Unicode.GetString(array);
+		return bytesToString(bytes, Encoding.Default);
 	}
-	public static byte[] UTF8StringToByteArray(string str)
+	public static string bytesToString(byte[] bytes, Encoding encoding)
 	{
-		return Encoding.UTF8.GetBytes(str);
+		return removeLastZero(encoding.GetString(bytes));
 	}
-	public static byte[] UnicodeStringToByteArray(string str)
+	public static string convertStringFormat(string str, Encoding source, Encoding target)
 	{
-		return Encoding.Unicode.GetBytes(str);
+		return bytesToString(stringToBytes(str, source), target);
 	}
 	public static string UTF8ToUnicode(string str)
 	{
-		return byteArrayToUnicodeString(UTF8StringToByteArray(str));
+		return convertStringFormat(str, Encoding.UTF8, Encoding.Unicode);
 	}
 	public static string UnicodeToUTF8(string str)
 	{
-		return byteArrayToUTF8String(UnicodeStringToByteArray(str));
+		return convertStringFormat(str, Encoding.Unicode, Encoding.UTF8);
+	}
+	// 字节数组转换为字符串时,末尾可能会带有数字0,此时在字符串比较时会出现错误,所以需要移除字符串末尾的0
+	public static string removeLastZero(string str)
+	{
+		int strLen = str.Length;
+		int newLen = strLen;
+		for(int i = 0; i < strLen; ++i)
+		{
+			if(str[i] == 0)
+			{
+				newLen = i;
+				break;
+			}
+		}
+		str = str.Substring(0, newLen);
+		return str;
 	}
 }

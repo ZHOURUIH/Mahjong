@@ -19,6 +19,9 @@ public class UIButton : UIButtonColor
 
 	static public UIButton current;
 
+	// 是否使用Button的按钮状态,如果不使用,则在悬停,点击等操作时,按钮本身不会有任何变化
+	public bool mUseState = false;
+
 	/// <summary>
 	/// Whether the button will highlight when you drag something over it.
 	/// </summary>
@@ -258,24 +261,27 @@ public class UIButton : UIButtonColor
 	{
 		base.SetState(state, immediate);
 
-		if (mSprite != null)
+		if(mUseState)
 		{
-			switch (state)
+			if (mSprite != null)
 			{
-				case State.Normal: SetSprite(mNormalSprite); break;
-				case State.Hover: SetSprite(string.IsNullOrEmpty(hoverSprite) ? mNormalSprite : hoverSprite); break;
-				case State.Pressed: SetSprite(pressedSprite); break;
-				case State.Disabled: SetSprite(disabledSprite); break;
+				switch (state)
+				{
+					case State.Normal: SetSprite(mNormalSprite); break;
+					case State.Hover: SetSprite(string.IsNullOrEmpty(hoverSprite) ? mNormalSprite : hoverSprite); break;
+					case State.Pressed: SetSprite(pressedSprite); break;
+					case State.Disabled: SetSprite(disabledSprite); break;
+				}
 			}
-		}
-		else if (mSprite2D != null)
-		{
-			switch (state)
+			else if (mSprite2D != null)
 			{
-				case State.Normal: SetSprite(mNormalSprite2D); break;
-				case State.Hover: SetSprite(hoverSprite2D == null ? mNormalSprite2D : hoverSprite2D); break;
-				case State.Pressed: SetSprite(pressedSprite2D); break;
-				case State.Disabled: SetSprite(disabledSprite2D); break;
+				switch (state)
+				{
+					case State.Normal: SetSprite(mNormalSprite2D); break;
+					case State.Hover: SetSprite(hoverSprite2D == null ? mNormalSprite2D : hoverSprite2D); break;
+					case State.Pressed: SetSprite(pressedSprite2D); break;
+					case State.Disabled: SetSprite(disabledSprite2D); break;
+				}
 			}
 		}
 	}

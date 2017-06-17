@@ -16,12 +16,8 @@ public class CommandCharacterAskDrop : Command
 		{
 			ScriptMahjongHandIn handIn = mLayoutManager.getScript(LAYOUT_TYPE.LT_MAHJONG_HAND_IN) as ScriptMahjongHandIn;
 			handIn.notifyCanDrop(true);
-		}
-		// 如果是其他玩家,则在0.3秒后自动打出一张牌
-		else
-		{
-			CommandCharacterAutoDrop cmdAutoDrop = new CommandCharacterAutoDrop(true, true);
-			mCommandSystem.pushDelayCommand(cmdAutoDrop, character, 0.3f);
+			ScriptMahjongFrame mahjongFrame = mLayoutManager.getScript(LAYOUT_TYPE.LT_MAHJONG_FRAME) as ScriptMahjongFrame;
+			mahjongFrame.notifyInfo("请打出一张牌");
 		}
 	}
 	public override string showDebugInfo()

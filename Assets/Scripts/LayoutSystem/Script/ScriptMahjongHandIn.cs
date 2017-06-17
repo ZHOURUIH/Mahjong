@@ -330,6 +330,10 @@ public class HandInMahjong : GameBase
 	}
 	protected void onMahjongClicked(GameObject go)
 	{
+		if(mPosition != PLAYER_POSITION.PP_MYSELF)
+		{
+			return;
+		}
 		if(!mCanDrop)
 		{
 			return;
@@ -347,7 +351,7 @@ public class HandInMahjong : GameBase
 			CommandCharacterDrop cmd = new CommandCharacterDrop();
 			cmd.mMah = mHandInMahjong[index].mMahjong;
 			cmd.mIndex = index;
-			mCommandSystem.pushCommand(cmd, mMahjongSystem.getCharacterByPosition(mPosition));
+			mCommandSystem.pushCommand(cmd, mCharacterManager.getMyself());
 		}
 	}
 	protected void prepareDropMahjong(int index)

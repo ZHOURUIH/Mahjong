@@ -11,6 +11,7 @@ public class ScriptMahjongFrame : LayoutScript
 	protected txUIButton mLeaveRoomButton;
 	protected txUIButton mReadyButton;
 	protected txUIButton mCancelReadyButton;
+	protected txUIText mInfo;
 	public ScriptMahjongFrame(LAYOUT_TYPE type, string name, GameLayout layout)
 		:
 		base(type, name, layout)
@@ -24,6 +25,7 @@ public class ScriptMahjongFrame : LayoutScript
 		mLeaveRoomButton = newObject<txUIButton>("LeaveRoom");
 		mReadyButton = newObject<txUIButton>("Ready");
 		mCancelReadyButton = newObject<txUIButton>("CancelReady");
+		mInfo = newObject<txUIText>("Info");
 	}
 	public override void init()
 	{
@@ -58,6 +60,15 @@ public class ScriptMahjongFrame : LayoutScript
 	{
 		LayoutTools.ACTIVE_WINDOW(mReadyButton, !ready);
 		LayoutTools.ACTIVE_WINDOW(mCancelReadyButton, ready);
+	}
+	public void notifyStartGame()
+	{
+		LayoutTools.ACTIVE_WINDOW(mReadyButton, false);
+		LayoutTools.ACTIVE_WINDOW(mCancelReadyButton, false);
+	}
+	public void notifyInfo(string info)
+	{
+		mInfo.setText(info);
 	}
 	//-----------------------------------------------------------------------------------
 	protected void onReadyClick(GameObject go)

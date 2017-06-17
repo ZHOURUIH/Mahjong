@@ -16,23 +16,30 @@ public class CommandCharacterDrop : Command
 		CharacterData data = character.getCharacterData();
 		character.dropMahjong(mMah);
 
-		// 打出一张牌后,锁定玩家手里的牌,玩家不能点击手里的麻将
 		ScriptMahjongHandIn handIn = mLayoutManager.getScript(LAYOUT_TYPE.LT_MAHJONG_HAND_IN) as ScriptMahjongHandIn;
-		handIn.notifyCanDrop(false);
 		handIn.notifyDropMahjong(data.mPosition, mMah, mIndex);
-		// 确认麻将操作按钮已经隐藏
-		ScriptPlayerAction playerAction = mLayoutManager.getScript(LAYOUT_TYPE.LT_PLAYER_ACTION) as ScriptPlayerAction;
-		playerAction.notifyActionAsk(null);
 		ScriptMahjongDrop scriptDrop = mLayoutManager.getScript(LAYOUT_TYPE.LT_MAHJONG_DROP) as ScriptMahjongDrop;
 		scriptDrop.notifyDropMahjong(data.mPosition, data.mDropList, mMah);
-		// 通知重新排列麻将
-		CommandCharacterReorderMahjong cmd = new CommandCharacterReorderMahjong();
-		mCommandSystem.pushCommand(cmd, character);
-		// 通知麻将系统
-		CommandMahjongSystemDrop cmdDrop = new CommandMahjongSystemDrop();
-		cmdDrop.mPlayer = character;
-		cmdDrop.mMahjong = mMah;
-		mCommandSystem.pushCommand(cmdDrop, mMahjongSystem);
+		if (character.getType() == CHARACTER_TYPE.CT_MYSELF)
+		{
+			ScriptMahjongFrame mahjongFrame = mLayoutManager.getScript(LAYOUT_TYPE.LT_MAHJONG_FRAME) as ScriptMahjongFrame;
+			mahjongFrame.notifyInfo("");
+
+			// 打出一张牌后,锁定玩家手里的牌,玩家不能点击手里的麻将
+			handIn.notifyCanDrop(false);
+			// 确认麻将操作按钮已经隐藏
+			ScriptPlayerAction playerAction = mLayoutManager.getScript(LAYOUT_TYPE.LT_PLAYER_ACTION) as ScriptPlayerAction;
+			playerAction.notifyActionAsk(null);
+			// 通知重新排列麻将
+			CommandCharacterReorderMahjong cmd = new CommandCharacterReorderMahjong();
+			mCommandSystem.pushCommand(cmd, character);
+		}
+		
+		//// 通知麻将系统
+		//CommandMahjongSystemDrop cmdDrop = new CommandMahjongSystemDrop();
+		//cmdDrop.mPlayer = character;
+		//cmdDrop.mMahjong = mMah;
+		//mCommandSystem.pushCommand(cmdDrop, mMahjongSystem);
 	}
 	public override string showDebugInfo()
 	{

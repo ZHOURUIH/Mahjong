@@ -30,6 +30,7 @@ public class MahjongSceneWaiting : SceneProcedure
 		CharacterMyself myself = mCharacterManager.getMyself();
 		ScriptMahjongFrame mahjongFrame = mLayoutManager.getScript(LAYOUT_TYPE.LT_MAHJONG_FRAME) as ScriptMahjongFrame;
 		mahjongFrame.setRoomID(myself.getCharacterData().mRoomID);
+		mahjongFrame.notifyInfo("正在等待其他玩家准备");
 	}
 	protected override void onUpdate(float elapsedTime)
 	{
@@ -37,7 +38,8 @@ public class MahjongSceneWaiting : SceneProcedure
 	}
 	protected override void onExit(SceneProcedure nextProcedure)
 	{
-		;
+		ScriptMahjongFrame mahjongFrame = mLayoutManager.getScript(LAYOUT_TYPE.LT_MAHJONG_FRAME) as ScriptMahjongFrame;
+		mahjongFrame.notifyInfo("");
 	}
 	protected override void onKeyProcess(float elapsedTime)
 	{

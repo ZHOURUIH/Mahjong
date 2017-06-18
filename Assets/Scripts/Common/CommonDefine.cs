@@ -401,4 +401,6 @@ public class CommonDefine
 	public const float ASSIGN_MAHJONG_INTERVAL = 0.1f;
 	// 无效ID值
 	public const int INVALID_ID = ~0;
+	// 胡牌类型的最大数量
+	public const int MAX_HU_COUNT = 16;
 }

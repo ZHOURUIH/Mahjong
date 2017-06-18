@@ -345,13 +345,12 @@ public class HandInMahjong : GameBase
 		{
 			prepareDropMahjong(index);
 		}
-		// 点击准备打出的牌,则将牌打出
+		// 点击准备打出的牌,则请求将牌打出
 		else if(mHandInMahjong[index].mState == HANDIN_STATE.HS_PREPARE_DROP)
 		{
-			CommandCharacterDrop cmd = new CommandCharacterDrop();
-			cmd.mMah = mHandInMahjong[index].mMahjong;
-			cmd.mIndex = index;
-			mCommandSystem.pushCommand(cmd, mCharacterManager.getMyself());
+			CSRequestDrop requestDrop = mSocketNetManager.createPacket(PACKET_TYPE.PT_CS_REQUEST_DROP) as CSRequestDrop;
+			requestDrop.setIndex((byte)index);
+			mSocketNetManager.sendMessage(requestDrop);
 		}
 	}
 	protected void prepareDropMahjong(int index)

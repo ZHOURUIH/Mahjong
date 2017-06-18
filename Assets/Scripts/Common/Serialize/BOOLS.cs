@@ -12,6 +12,12 @@ public class BOOLS : OBJECT
 		mType = typeof(bool[]);
 		mSize = 0;
 	}
+	public BOOLS(int count)
+	{
+		mValue = new bool[count];
+		mType = typeof(bool[]);
+		mSize = sizeof(bool) * mValue.Length;
+	}
 	public BOOLS(bool[] value)
 	{
 		mValue = value;

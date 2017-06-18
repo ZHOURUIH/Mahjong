@@ -5,41 +5,21 @@ using System.Text;
 
 public class MahjongAction
 {
+	public ACTION_TYPE mType;           // 操作类型
 	public Character mActionPlayer;		// 需要操作的玩家
 	public Character mDroppedPlayer;	// 打出牌的玩家
-	public ACTION_TYPE mType;			// 操作类型
-	public MAHJONG mMah;				// 打出的牌
-}
-
-public class MahjongActionHu : MahjongAction
-{
-	public List<HU_TYPE> mHuList;       // 胡的所有类型
-	public MahjongActionHu()
+	public MAHJONG mMah;                // 打出的牌
+	public List<HU_TYPE> mHuList;       // 胡的所有类型,只有胡类型才会有值
+	public MahjongAction()
 	{
-		mType = ACTION_TYPE.AT_HU;
+		;
 	}
-}
-
-public class MahjongActionPeng : MahjongAction
-{
-	public MahjongActionPeng()
+	public MahjongAction(ACTION_TYPE type, Character actionPlayer, Character droppedPlayer, MAHJONG mahjong, List<HU_TYPE> huList = null)
 	{
-		mType = ACTION_TYPE.AT_PENG;
-	}
-}
-
-public class MahjongActionGang : MahjongAction
-{
-	public MahjongActionGang()
-	{
-		mType = ACTION_TYPE.AT_GANG;
-	}
-}
-
-public class MahjongActionPass : MahjongAction
-{
-	public MahjongActionPass()
-	{
-		mType = ACTION_TYPE.AT_PASS;
+		mType = type;
+		mActionPlayer = actionPlayer;
+		mDroppedPlayer = droppedPlayer;
+		mMah = mahjong;
+		mHuList = huList;
 	}
 }

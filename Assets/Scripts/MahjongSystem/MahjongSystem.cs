@@ -283,40 +283,23 @@ public class MahjongSystem : CommandReceiver
 					if (GameUtility.canHu(data.mHandIn, mah))
 					{
 						List<HU_TYPE> huList = GameUtility.generateHuType(data.mHandIn, mah, data.mPengGangList, false, false);
-						MahjongActionHu hu = new MahjongActionHu();
-						hu.mHuList = huList;
-						hu.mMah = mah;
-						hu.mDroppedPlayer = player;
-						hu.mActionPlayer = item.Value;
-						checkActionList.Add(hu);
+						checkActionList.Add(new MahjongAction(ACTION_TYPE.AT_HU, item.Value, player, mah, huList));
 					}
 					// 是否可杠
 					if (GameUtility.canGang(data.mHandIn, mah))
 					{
-						MahjongActionGang gang = new MahjongActionGang();
-						gang.mMah = mah;
-						gang.mDroppedPlayer = player;
-						gang.mActionPlayer = item.Value;
-						checkActionList.Add(gang);
+						checkActionList.Add(new MahjongAction(ACTION_TYPE.AT_GANG, item.Value, player, mah));
 					}
 					// 是否可碰
 					if (GameUtility.canPeng(data.mHandIn, mah))
 					{
-						MahjongActionPeng peng = new MahjongActionPeng();
-						peng.mMah = mah;
-						peng.mDroppedPlayer = player;
-						peng.mActionPlayer = item.Value;
-						checkActionList.Add(peng);
+						checkActionList.Add(new MahjongAction(ACTION_TYPE.AT_PENG, item.Value, player, mah));
 					}
 					if (checkActionList.Count > 0)
 					{
 						hasAction = true;
 						// 添加pass操作
-						MahjongActionPass pass = new MahjongActionPass();
-						pass.mMah = mah;
-						pass.mDroppedPlayer = player;
-						pass.mActionPlayer = item.Value;
-						checkActionList.Add(pass);
+						checkActionList.Add(new MahjongAction(ACTION_TYPE.AT_PASS, item.Value, player, mah));
 						askPlayerAction(item.Value, player, mah, checkActionList);
 					}
 				}
@@ -353,21 +336,12 @@ public class MahjongSystem : CommandReceiver
 		if (GameUtility.canHu(data.mHandIn))
 		{
 			List<HU_TYPE> huList = GameUtility.generateHuType(data.mHandIn, mah, data.mPengGangList, true, true);
-			MahjongActionHu hu = new MahjongActionHu();
-			hu.mHuList = huList;
-			hu.mMah = mah;
-			hu.mDroppedPlayer = player;
-			hu.mActionPlayer = player;
-			actionList.Add(hu);
+			actionList.Add(new MahjongAction(ACTION_TYPE.AT_HU, player, player, mah, huList));
 		}
 		// 是否可以杠
 		else if (GameUtility.canGang(data.mHandIn))
 		{
-			MahjongActionGang gang = new MahjongActionGang();
-			gang.mMah = mah;
-			gang.mDroppedPlayer = player;
-			gang.mActionPlayer = player;
-			actionList.Add(gang);
+			actionList.Add(new MahjongAction(ACTION_TYPE.AT_GANG, player, player, mah));
 		}
 		// 摸了一张自己碰的牌,可以开杠
 		else
@@ -377,11 +351,7 @@ public class MahjongSystem : CommandReceiver
 				if(data.mPengGangList[i].mMahjong == mah
 					&& data.mPengGangList[i].mType == ACTION_TYPE.AT_PENG)
 				{
-					MahjongActionGang gang = new MahjongActionGang();
-					gang.mMah = mah;
-					gang.mDroppedPlayer = player;
-					gang.mActionPlayer = player;
-					actionList.Add(gang);
+					actionList.Add(new MahjongAction(ACTION_TYPE.AT_GANG, player, player, mah));
 					break;
 				}
 			}
@@ -389,11 +359,7 @@ public class MahjongSystem : CommandReceiver
 		if (actionList.Count > 0)
 		{
 			// 如果有可以操作的行为,则还需要添加Pass行为
-			MahjongActionGang pass = new MahjongActionGang();
-			pass.mMah = MAHJONG.M_MAX;
-			pass.mDroppedPlayer = null;
-			pass.mActionPlayer = player;
-			actionList.Add(pass);
+			actionList.Add(new MahjongAction(ACTION_TYPE.AT_PASS, player, null, MAHJONG.M_MAX));
 			askPlayerAction(player, player, mah, actionList);
 		}
 		else
@@ -455,13 +421,12 @@ public class MahjongSystem : CommandReceiver
 			notifyPlayState(MAHJONG_PLAY_STATE.MPS_NORMAL_GAMING);
 			CommandCharacterHu cmd = new CommandCharacterHu();
 			mCommandSystem.pushCommand(cmd, player);
-
-			MahjongActionHu huAction = action as MahjongActionHu;
+			
 			// 有玩家胡牌后则结束游戏
 			CommandMahjongSystemEnd cmdEnd = new CommandMahjongSystemEnd();
 			cmdEnd.mHuPlayer = player;
-			cmdEnd.mMahjong = huAction.mMah;
-			cmdEnd.mHuList = huAction.mHuList;
+			cmdEnd.mMahjong = action.mMah;
+			cmdEnd.mHuList = action.mHuList;
 			mCommandSystem.pushCommand(cmdEnd, this);
 		}
 		else

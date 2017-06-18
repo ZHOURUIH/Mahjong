@@ -12,6 +12,12 @@ public class FLOATS : OBJECT
 		mType = typeof(float[]);
 		mSize = 0;
 	}
+	public FLOATS(int count)
+	{
+		mValue = new float[count];
+		mType = typeof(float[]);
+		mSize = sizeof(float) * mValue.Length;
+	}
 	public FLOATS(float[] value)
 	{
 		mValue = value;

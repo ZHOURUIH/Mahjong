@@ -12,6 +12,12 @@ public class SHORTS : OBJECT
 		mType = typeof(short[]);
 		mSize = 0;
 	}
+	public SHORTS(int count)
+	{
+		mValue = new short[count];
+		mType = typeof(short[]);
+		mSize = sizeof(short) * mValue.Length;
+	}
 	public SHORTS(short[] value)
 	{
 		mValue = value;

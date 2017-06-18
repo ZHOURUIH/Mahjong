@@ -12,6 +12,12 @@ public class INTS : OBJECT
 		mType = typeof(int[]);
 		mSize = 0;
 	}
+	public INTS(int count)
+	{
+		mValue = new int[count];
+		mType = typeof(int[]);
+		mSize = sizeof(int) * mValue.Length;
+	}
 	public INTS(int[] value)
 	{
 		mValue = value;

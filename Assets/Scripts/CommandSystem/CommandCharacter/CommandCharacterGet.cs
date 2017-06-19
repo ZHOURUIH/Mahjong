@@ -17,12 +17,6 @@ public class CommandCharacterGet : Command
 		// 通知布局
 		ScriptMahjongHandIn handIn = mLayoutManager.getScript(LAYOUT_TYPE.LT_MAHJONG_HAND_IN) as ScriptMahjongHandIn;
 		handIn.notifyGetMahjong(data.mPosition, mMahjong);
-
-		// 通知麻将系统
-		CommandMahjongSystemNotifyGet cmdNotifyGet = new CommandMahjongSystemNotifyGet();
-		cmdNotifyGet.mCharacter = character;
-		cmdNotifyGet.mMahjong = mMahjong;
-		mCommandSystem.pushCommand(cmdNotifyGet, mMahjongSystem);
 	}
 	public override string showDebugInfo()
 	{

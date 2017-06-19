@@ -30,16 +30,7 @@ public class CommandCharacterDrop : Command
 			// 确认麻将操作按钮已经隐藏
 			ScriptPlayerAction playerAction = mLayoutManager.getScript(LAYOUT_TYPE.LT_PLAYER_ACTION) as ScriptPlayerAction;
 			playerAction.notifyActionAsk(null);
-			// 通知重新排列麻将
-			CommandCharacterReorderMahjong cmd = new CommandCharacterReorderMahjong();
-			mCommandSystem.pushCommand(cmd, character);
 		}
-		
-		//// 通知麻将系统
-		//CommandMahjongSystemDrop cmdDrop = new CommandMahjongSystemDrop();
-		//cmdDrop.mPlayer = character;
-		//cmdDrop.mMahjong = mMah;
-		//mCommandSystem.pushCommand(cmdDrop, mMahjongSystem);
 	}
 	public override string showDebugInfo()
 	{

@@ -22,6 +22,9 @@ public class SCOtherPlayerDrop : SocketPacket
 	}
 	public override void execute()
 	{
-		;
+		CommandCharacterDrop cmd = new CommandCharacterDrop();
+		cmd.mMah = (MAHJONG)mMahjong.mValue;
+		cmd.mIndex = mIndex.mValue;
+		mCommandSystem.pushCommand(cmd, mCharacterManager.getCharacterByGUID(mPlayerGUID.mValue));
 	}
 }

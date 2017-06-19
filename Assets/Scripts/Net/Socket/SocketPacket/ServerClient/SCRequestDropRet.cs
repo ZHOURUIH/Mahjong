@@ -20,6 +20,9 @@ public class SCRequestDropRet : SocketPacket
 	}
 	public override void execute()
 	{
-		;
+		CommandCharacterDrop cmd = new CommandCharacterDrop();
+		cmd.mMah = (MAHJONG)mMahjong.mValue;
+		cmd.mIndex = mIndex.mValue;
+		mCommandSystem.pushCommand(cmd, mCharacterManager.getMyself());
 	}
 }

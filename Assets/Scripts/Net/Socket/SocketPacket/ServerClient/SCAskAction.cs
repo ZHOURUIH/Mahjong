@@ -32,21 +32,24 @@ public class SCAskAction : SocketPacket
 			Character player = mCharacterManager.getCharacterByGUID(mActionPlayer.mValue[i]);
 			Character droppedPlayer = mCharacterManager.getCharacterByGUID(mDroppedPlayer.mValue[i]);
 			ACTION_TYPE type = (ACTION_TYPE)mAction.mValue[i];
-			MAHJONG mah = (MAHJONG)mMahjong.mValue[i];
-			List<HU_TYPE> huList = null;
-			if(type == ACTION_TYPE.AT_HU)
+			if(type != ACTION_TYPE.AT_MAX)
 			{
-				huList = new List<HU_TYPE>();
-				for(int j = 0; j < CommonDefine.MAX_HU_COUNT; ++j)
+				MAHJONG mah = (MAHJONG)mMahjong.mValue[i];
+				List<HU_TYPE> huList = null;
+				if (type == ACTION_TYPE.AT_HU)
 				{
-					if(mHuList.mValue[i] == 0)
+					huList = new List<HU_TYPE>();
+					for (int j = 0; j < CommonDefine.MAX_HU_COUNT; ++j)
 					{
-						break;
+						if (mHuList.mValue[i] == 0)
+						{
+							break;
+						}
+						huList.Add((HU_TYPE)mHuList.mValue[i]);
 					}
-					huList.Add((HU_TYPE)mHuList.mValue[i]);
 				}
+				actionList.Add(new MahjongAction(type, player, droppedPlayer, mah, huList));
 			}
-			actionList.Add(new MahjongAction(type, player, droppedPlayer, mah, huList));
 		}
 		CommandCharacterAskAction cmd = new CommandCharacterAskAction();
 		cmd.mActionList = actionList;

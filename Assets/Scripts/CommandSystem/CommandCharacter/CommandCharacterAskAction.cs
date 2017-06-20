@@ -19,28 +19,6 @@ public class CommandCharacterAskAction : Command
 			ScriptPlayerAction playerAction = mLayoutManager.getScript(LAYOUT_TYPE.LT_PLAYER_ACTION) as ScriptPlayerAction;
 			playerAction.notifyActionAsk(mActionList);
 		}
-		// 其他玩家则请求麻将系统做出第一个操作
-		else
-		{
-			if(mActionList[0].mType == ACTION_TYPE.AT_HU)
-			{
-				CommandMahjongSystemRequestHu cmd = new CommandMahjongSystemRequestHu();
-				cmd.mCharacter = character;
-				mCommandSystem.pushCommand(cmd, mMahjongSystem);
-			}
-			else if(mActionList[0].mType == ACTION_TYPE.AT_GANG)
-			{
-				CommandMahjongSystemRequestGang cmd = new CommandMahjongSystemRequestGang();
-				cmd.mCharacter = character;
-				mCommandSystem.pushCommand(cmd, mMahjongSystem);
-			}
-			else if(mActionList[0].mType == ACTION_TYPE.AT_PENG)
-			{
-				CommandMahjongSystemRequestPeng cmd = new CommandMahjongSystemRequestPeng();
-				cmd.mCharacter = character;
-				mCommandSystem.pushCommand(cmd, mMahjongSystem);
-			}
-		}
 	}
 	public override string showDebugInfo()
 	{

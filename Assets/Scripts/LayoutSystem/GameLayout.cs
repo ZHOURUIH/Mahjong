@@ -87,7 +87,10 @@ public class GameLayout : MonoBehaviour
 			// 先更新所有的UI物体
 			foreach (var obj in mObjectList)
 			{
-				obj.Value.update(elapsedTime);
+				if(obj.Value.isActive())
+				{
+					obj.Value.update(elapsedTime);
+				}
 			}
 			mScript.update(elapsedTime);
 		}
@@ -103,7 +106,7 @@ public class GameLayout : MonoBehaviour
 		foreach(var obj in mObjectList)
 		{
 			BoxCollider collider = obj.Value.mObject.GetComponent<BoxCollider>();
-			if(collider != null)
+			if (collider != null && collider.enabled)
 			{
 				boxList.Add(collider);
 			}

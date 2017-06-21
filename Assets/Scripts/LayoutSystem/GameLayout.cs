@@ -49,10 +49,6 @@ public class GameLayout : MonoBehaviour
 		}
 		return null;
 	}
-	public bool getScriptInited()
-	{
-		return mScriptInited;
-	}
 	public LayoutScript createLayoutScript()
 	{
 		LayoutScript script = mLayoutManager.createScript(mType, mName, this);
@@ -162,7 +158,10 @@ public class GameLayout : MonoBehaviour
 		}
 		return false;
 	}
-	public LayoutScript getScript() { return mScript; }
+	public LayoutScript getScript() 
+	{
+		return mScript; 
+	}
 	public LAYOUT_TYPE getType() { return mType; }
 	public string getName() { return mName; }
 	public void registerUIObject(txUIObject uiObj)
@@ -180,5 +179,9 @@ public class GameLayout : MonoBehaviour
 		{
 			mGameObjectSearchList.Remove(uiObj.mObject);
 		}
+	}
+	public void setLayer(string layer)
+	{
+		UnityUtility.setGameObjectLayer(mLayoutObject, layer);
 	}
 }

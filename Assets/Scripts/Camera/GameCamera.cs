@@ -54,4 +54,12 @@ public class GameCamera : ComponentOwner
 	{
 		return mCamera;
 	}
+	public void setActive(bool active)
+	{
+		mCameraObject.SetActive(active);
+	}
+	public string getCameraLayer()
+	{
+		return LayerMask.LayerToName(mCameraObject.layer);
+	}
 }

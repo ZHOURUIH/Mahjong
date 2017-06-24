@@ -160,7 +160,14 @@ public class ComponentKeyFrame : GameComponent
 	}
 	public float getTremblingPercent()
 	{
-		return mPlayLength > 0 ? mCurrentTime / mPlayLength : 0.0f;
+		if(mLoop)
+		{
+			return mOnceLength > 0.0f ? mCurrentTime / mOnceLength : 0.0f;
+		}
+		else
+		{
+			return mPlayLength > 0.0f ? mCurrentTime / mPlayLength : 0.0f;
+		}
 	}
 	public void setTremblingCallback(KeyFrameCallback callback, object userData)
 	{

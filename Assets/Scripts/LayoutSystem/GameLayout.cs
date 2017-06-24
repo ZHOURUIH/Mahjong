@@ -49,10 +49,6 @@ public class GameLayout : MonoBehaviour
 		}
 		return null;
 	}
-	public bool getScriptInited()
-	{
-		return mScriptInited;
-	}
 	public LayoutScript createLayoutScript()
 	{
 		LayoutScript script = mLayoutManager.createScript(mType, mName, this);
@@ -91,7 +87,10 @@ public class GameLayout : MonoBehaviour
 			// 先更新所有的UI物体
 			foreach (var obj in mObjectList)
 			{
-				obj.Value.update(elapsedTime);
+				if(obj.Value.isActive())
+				{
+					obj.Value.update(elapsedTime);
+				}
 			}
 			mScript.update(elapsedTime);
 		}
@@ -107,7 +106,7 @@ public class GameLayout : MonoBehaviour
 		foreach(var obj in mObjectList)
 		{
 			BoxCollider collider = obj.Value.mObject.GetComponent<BoxCollider>();
-			if(collider != null)
+			if (collider != null && collider.enabled)
 			{
 				boxList.Add(collider);
 			}
@@ -162,7 +161,10 @@ public class GameLayout : MonoBehaviour
 		}
 		return false;
 	}
-	public LayoutScript getScript() { return mScript; }
+	public LayoutScript getScript() 
+	{
+		return mScript; 
+	}
 	public LAYOUT_TYPE getType() { return mType; }
 	public string getName() { return mName; }
 	public void registerUIObject(txUIObject uiObj)
@@ -180,5 +182,9 @@ public class GameLayout : MonoBehaviour
 		{
 			mGameObjectSearchList.Remove(uiObj.mObject);
 		}
+	}
+	public void setLayer(string layer)
+	{
+		UnityUtility.setGameObjectLayer(mLayoutObject, layer);
 	}
 }

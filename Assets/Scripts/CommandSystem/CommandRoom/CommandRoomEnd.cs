@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public class CommandMahjongSystemEnd : Command
+public class CommandRoomEnd : Command
 {
 	public Character mHuPlayer;
 	public MAHJONG mMahjong;
 	public List<HU_TYPE> mHuList;
-	public CommandMahjongSystemEnd(bool showInfo = true, bool delay = false)
+	public CommandRoomEnd(bool showInfo = true, bool delay = false)
 		:
 		base(showInfo, delay)
 	{ }
 	public override void execute()
 	{
-		MahjongSystem mahjongSystem = mReceiver as MahjongSystem;
+		Room room = mReceiver as Room;
 		// 先设置结果
 		GameScene gameScene = mGameSceneManager.getCurScene();
 		MahjongSceneEnding ending = gameScene.getSceneProcedure(PROCEDURE_TYPE.PT_MAHJONG_ENDING) as MahjongSceneEnding;
@@ -24,7 +24,7 @@ public class CommandMahjongSystemEnd : Command
 		cmdProcedure.mProcedure = PROCEDURE_TYPE.PT_MAHJONG_ENDING;
 		mCommandSystem.pushCommand(cmdProcedure, gameScene);
 		// 通知所有玩家本局结束
-		Dictionary<int, Character> playerList = mahjongSystem.getAllPlayer();
+		Dictionary<int, Character> playerList = room.getPlayerList();
 		foreach(var player in playerList)
 		{
 			CommandCharacterNotifyEnd cmdEnd = new CommandCharacterNotifyEnd();

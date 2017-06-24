@@ -25,6 +25,7 @@ public class SocketFactoryManager
 		registerFactory(typeof(CSLeaveRoom), PACKET_TYPE.PT_CS_LEAVE_ROOM);
 		registerFactory(typeof(CSDiceDone), PACKET_TYPE.PT_CS_DICE_DONE);
 		registerFactory(typeof(CSRequestDrop), PACKET_TYPE.PT_CS_REQUEST_DROP);
+		registerFactory(typeof(CSConfirmAction), PACKET_TYPE.PT_CS_CONFIRM_ACTION);
 		int needCSCount = PACKET_TYPE.PT_CS_MAX - PACKET_TYPE.PT_CS_MIN - 1;
 		if (mFactoryList.Count != needCSCount)
 		{
@@ -55,6 +56,14 @@ public class SocketFactoryManager
 		registerFactory(typeof(SCAskAction), PACKET_TYPE.PT_SC_ASK_ACTION);
 		registerFactory(typeof(SCOtherPlayerDrop), PACKET_TYPE.PT_SC_OTHER_PLAYER_DROP);
 		registerFactory(typeof(SCRequestDropRet), PACKET_TYPE.PT_SC_REQUEST_DROP_RET);
+		registerFactory(typeof(SCPlayerHu), PACKET_TYPE.PT_SC_PLAYER_HU);
+		registerFactory(typeof(SCPlayerGang), PACKET_TYPE.PT_SC_PLAYER_GANG);
+		registerFactory(typeof(SCPlayerPeng), PACKET_TYPE.PT_SC_PLAYER_PENG);
+		registerFactory(typeof(SCPlayerPass), PACKET_TYPE.PT_SC_PLAYER_PASS);
+		registerFactory(typeof(SCOtherPlayerHu), PACKET_TYPE.PT_SC_OTHER_PLAYER_HU);
+		registerFactory(typeof(SCOtherPlayerGang), PACKET_TYPE.PT_SC_OTHER_PLAYER_GANG);
+		registerFactory(typeof(SCOtherPlayerPeng), PACKET_TYPE.PT_SC_OTHER_PLAYER_PENG);
+		registerFactory(typeof(SCOtherPlayerPass), PACKET_TYPE.PT_SC_OTHER_PLAYER_PASS);
 		int needSCCount = PACKET_TYPE.PT_SC_MAX - PACKET_TYPE.PT_SC_MIN - 1;
 		if (mFactoryList.Count - needCSCount != needSCCount)
 		{

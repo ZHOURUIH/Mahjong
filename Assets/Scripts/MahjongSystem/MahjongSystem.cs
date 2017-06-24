@@ -318,11 +318,7 @@ public class MahjongSystem : CommandReceiver
 				// 牌已经摸完了,则本局为平局
 				else
 				{
-					CommandMahjongSystemEnd cmdEnd = new CommandMahjongSystemEnd();
-					cmdEnd.mHuPlayer = null;
-					cmdEnd.mMahjong = MAHJONG.M_MAX;
-					cmdEnd.mHuList = null;
-					mCommandSystem.pushCommand(cmdEnd, this);
+					//End;
 				}
 			}
 		}
@@ -423,11 +419,7 @@ public class MahjongSystem : CommandReceiver
 			mCommandSystem.pushCommand(cmd, player);
 			
 			// 有玩家胡牌后则结束游戏
-			CommandMahjongSystemEnd cmdEnd = new CommandMahjongSystemEnd();
-			cmdEnd.mHuPlayer = player;
-			cmdEnd.mMahjong = action.mMah;
-			cmdEnd.mHuList = action.mHuList;
-			mCommandSystem.pushCommand(cmdEnd, this);
+			//End;
 		}
 		else
 		{
@@ -481,11 +473,7 @@ public class MahjongSystem : CommandReceiver
 					// 没有牌了则平局
 					else
 					{
-						CommandMahjongSystemEnd cmdEnd = new CommandMahjongSystemEnd();
-						cmdEnd.mHuPlayer = null;
-						cmdEnd.mMahjong = MAHJONG.M_MAX;
-						cmdEnd.mHuList = null;
-						mCommandSystem.pushCommand(cmdEnd, this);
+						//End;
 					}
 				}
 				else if (highestAction.mType == ACTION_TYPE.AT_PENG)
@@ -519,11 +507,7 @@ public class MahjongSystem : CommandReceiver
 						// 没有牌了则平局
 						else
 						{
-							CommandMahjongSystemEnd cmdEnd = new CommandMahjongSystemEnd();
-							cmdEnd.mHuPlayer = null;
-							cmdEnd.mMahjong = MAHJONG.M_MAX;
-							cmdEnd.mHuList = null;
-							mCommandSystem.pushCommand(cmdEnd, this);
+							//End;
 						}
 					}
 				}

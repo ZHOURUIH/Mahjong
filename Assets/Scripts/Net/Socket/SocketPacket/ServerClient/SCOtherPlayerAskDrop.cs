@@ -2,12 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class SCOtherPlayerPass : SocketPacket
+public class SCOtherPlayerAskDrop : SocketPacket
 {
 	public INT mOtherPlayerGUID = new INT();
-	public INT mDroppedPlayerGUID = new INT();
-	public BYTE mMahjong = new BYTE();
-	public SCOtherPlayerPass(PACKET_TYPE type)
+	public SCOtherPlayerAskDrop(PACKET_TYPE type)
 		:
 		base(type)
 	{
@@ -17,12 +15,11 @@ public class SCOtherPlayerPass : SocketPacket
 	protected override void fillParams()
 	{
 		pushParam(mOtherPlayerGUID);
-		pushParam(mDroppedPlayerGUID);
-		pushParam(mMahjong);
 	}
 	public override void execute()
 	{
+		CharacterOther otherPlayer = mCharacterManager.getCharacterByGUID(mOtherPlayerGUID.mValue) as CharacterOther;
 		ScriptMahjongFrame mahjongFrame = mLayoutManager.getScript(LAYOUT_TYPE.LT_MAHJONG_FRAME) as ScriptMahjongFrame;
-		mahjongFrame.notifyInfo("");
+		mahjongFrame.notifyInfo("正在等待玩家" + otherPlayer.getName() + "打出一张牌");
 	}
 }

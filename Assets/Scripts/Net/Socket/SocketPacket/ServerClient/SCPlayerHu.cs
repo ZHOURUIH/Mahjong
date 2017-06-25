@@ -4,9 +4,10 @@ using System.Collections.Generic;
 
 public class SCPlayerHu : SocketPacket
 {
+	public INTS mHuPlayerGUID = new INTS(CommonDefine.MAX_PLAYER_COUNT - 1);
 	public INT mDroppedPlayerGUID = new INT();
 	public BYTE mMahjong = new BYTE();
-	public BYTES mHuList = new BYTES(CommonDefine.MAX_HU_COUNT);
+	public BYTES mHuList = new BYTES(CommonDefine.MAX_HU_COUNT * (CommonDefine.MAX_PLAYER_COUNT - 1));
 	public SCPlayerHu(PACKET_TYPE type)
 		:
 		base(type)
@@ -16,34 +17,38 @@ public class SCPlayerHu : SocketPacket
 	}
 	protected override void fillParams()
 	{
+		pushParam(mHuPlayerGUID);
 		pushParam(mDroppedPlayerGUID);
 		pushParam(mMahjong);
 		pushParam(mHuList);
 	}
 	public override void execute()
 	{
-		// 先设置结果
+		// 通知房间保存胡牌结果
 		GameScene gameScene = mGameSceneManager.getCurScene();
-		if(gameScene.getType() != GAME_SCENE_TYPE.GST_MAHJONG)
+		if (gameScene.getType() != GAME_SCENE_TYPE.GST_MAHJONG)
 		{
 			return;
 		}
 		MahjongScene mahjongScene = gameScene as MahjongScene;
 		Room room = mahjongScene.getRoom();
-		CommandRoomEnd cmdEnd = new CommandRoomEnd();
-		cmdEnd.mHuPlayer = mCharacterManager.getMyself();
-		cmdEnd.mMahjong = (MAHJONG)mMahjong.mValue;
-		cmdEnd.mHuList = new List<HU_TYPE>();
-		int huCount = mHuList.mValue.Length;
-		for (int i = 0; i < huCount; ++i)
+		for(int i = 0; i < CommonDefine.MAX_PLAYER_COUNT - 1; ++i)
 		{
-			HU_TYPE huType = (HU_TYPE)mHuList.mValue[i];
-			if(huType == HU_TYPE.HT_NONE)
+			List<HU_TYPE> huList = new List<HU_TYPE>();
+			for(int j = 0; j < CommonDefine.MAX_HU_COUNT; ++i)
 			{
-				break;
+				HU_TYPE huType = (HU_TYPE)mHuList.mValue[i * CommonDefine.MAX_HU_COUNT + j];
+				if(huType == HU_TYPE.HT_NONE)
+				{
+					break;
+				}
+				huList.Add(huType);
 			}
-			cmdEnd.mHuList.Add(huType);
+			CommandRoomPlayerHu cmdHu = new CommandRoomPlayerHu();
+			cmdHu.mHuPlayer = mCharacterManager.getCharacterByGUID(mHuPlayerGUID.mValue[i]);
+			cmdHu.mDroppedPlayer = mCharacterManager.getCharacterByGUID(mDroppedPlayerGUID.mValue);
+			cmdHu.mHuList = huList;
+			cmdHu.mMahjong = (MAHJONG)mMahjong.mValue;
 		}
-		mCommandSystem.pushCommand(cmdEnd, room);
 	}
 }

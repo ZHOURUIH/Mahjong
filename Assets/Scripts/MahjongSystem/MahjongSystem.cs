@@ -342,14 +342,10 @@ public class MahjongSystem : CommandReceiver
 		// 摸了一张自己碰的牌,可以开杠
 		else
 		{
-			for(int i = 0; i < CommonDefine.MAX_PENG_TIMES; ++i)
+			int pengIndex = 0;
+			if(player.hasPeng(mah, ref pengIndex))
 			{
-				if(data.mPengGangList[i].mMahjong == mah
-					&& data.mPengGangList[i].mType == ACTION_TYPE.AT_PENG)
-				{
-					actionList.Add(new MahjongAction(ACTION_TYPE.AT_GANG, player, player, mah));
-					break;
-				}
+				actionList.Add(new MahjongAction(ACTION_TYPE.AT_GANG, player, player, mah));
 			}
 		}
 		if (actionList.Count > 0)

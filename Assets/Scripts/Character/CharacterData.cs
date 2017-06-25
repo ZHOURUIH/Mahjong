@@ -19,13 +19,7 @@ public class CharacterData
 		mHead = 0;
 		mReady = false;
 		mBanker = false;
-		mPengGangList = new PengGangInfo[CommonDefine.MAX_PENG_TIMES];
-		for (int i = 0; i < CommonDefine.MAX_PENG_TIMES; ++i)
-		{
-			mPengGangList[i] = new PengGangInfo();
-			mPengGangList[i].mType = ACTION_TYPE.AT_MAX;
-			mPengGangList[i].mMahjong = MAHJONG.M_MAX;
-		}
+		mPengGangList = new List<PengGangInfo>();
 		mHandIn = new List<MAHJONG>();
 		mDropList = new List<MAHJONG>();
 	}
@@ -38,7 +32,7 @@ public class CharacterData
 	public PLAYER_POSITION	mPosition;		 // 转换到客户端的位置,在客户端中自己的位置一直都是MYSELF
 	public bool				mReady;     // 是否已经准备
 	public bool				mBanker;    // 是否为庄家
-	public PengGangInfo[]	mPengGangList;
+	public List<PengGangInfo> mPengGangList;
 	public List<MAHJONG>	mHandIn;
 	public List<MAHJONG>	mDropList;
 	public int				mRoomID;	// 房间号

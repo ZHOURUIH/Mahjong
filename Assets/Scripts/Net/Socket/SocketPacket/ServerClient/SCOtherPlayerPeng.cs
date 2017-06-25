@@ -27,6 +27,9 @@ public class SCOtherPlayerPeng : SocketPacket
 		{
 			return;
 		}
+		// 清空提示信息
+		ScriptMahjongFrame mahjongFrame = mLayoutManager.getScript(LAYOUT_TYPE.LT_MAHJONG_FRAME) as ScriptMahjongFrame;
+		mahjongFrame.notifyInfo("");
 		CommandCharacterPeng cmdGang = new CommandCharacterPeng();
 		cmdGang.mDroppedPlayer = mCharacterManager.getCharacterByGUID(mDroppedPlayerGUID.mValue);
 		cmdGang.mMahjong = (MAHJONG)mMahjong.mValue;

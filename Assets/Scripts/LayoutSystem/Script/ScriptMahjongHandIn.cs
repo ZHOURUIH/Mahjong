@@ -50,22 +50,15 @@ public class PengGangMahjong
 			resetPengGang(i);
 		}
 	}
-	public void showMahjong(PengGangInfo[] infoList)
+	public void showMahjong(List<PengGangInfo> infoList)
 	{
 		int maxCount = mPengGangSingleRoot.Count;
-		if(maxCount != infoList.Length)
-		{
-			UnityUtility.logError("count not match!");
-			return;
-		}
-		int showIndex = 0;
 		for (int i = 0; i < maxCount; ++i)
 		{
 			resetPengGang(i);
-			PengGangInfo curInfo = infoList[i];
-			if(curInfo.mMahjong != MAHJONG.M_MAX)
+			if(i < infoList.Count)
 			{
-				showPengGang(showIndex++, curInfo.mType, curInfo.mMahjong);
+				showPengGang(i, infoList[i].mType, infoList[i].mMahjong);
 			}
 		}
 	}
@@ -81,31 +74,28 @@ public class PengGangMahjong
 	}
 	protected void showPengGang(int index, ACTION_TYPE type, MAHJONG mah)
 	{
-		if (type == ACTION_TYPE.AT_PENG || type == ACTION_TYPE.AT_GANG)
+		int count = 0;
+		if (type == ACTION_TYPE.AT_PENG)
 		{
-			int count = 0;
-			if (type == ACTION_TYPE.AT_PENG)
+			count = 3;
+		}
+		else if (type == ACTION_TYPE.AT_GANG)
+		{
+			count = 4;
+		}
+		else
+		{
+			return;
+		}
+		LayoutTools.ACTIVE_WINDOW(mPengGangSingleRoot[index]);
+		int maxCount = mMahjongWindows[index].Count;
+		string mahjongSpriteName = mMahjongPreName + CommonDefine.MAHJONG_NAME[(int)mah];
+		for (int i = 0; i < maxCount; ++i)
+		{
+			LayoutTools.ACTIVE_WINDOW(mMahjongWindows[index][i], i < count);
+			if (i < count)
 			{
-				count = 3;
-			}
-			else if (type == ACTION_TYPE.AT_GANG)
-			{
-				count = 4;
-			}
-			else
-			{
-				return;
-			}
-			LayoutTools.ACTIVE_WINDOW(mPengGangSingleRoot[index]);
-			int maxCount = mMahjongWindows[index].Count;
-			string mahjongSpriteName = mMahjongPreName + CommonDefine.MAHJONG_NAME[(int)mah];
-			for (int i = 0; i < maxCount; ++i)
-			{
-				LayoutTools.ACTIVE_WINDOW(mMahjongWindows[index][i], i < count);
-				if (i < count)
-				{
-					mMahjongWindows[index][i].setSpriteName(mahjongSpriteName);
-				}
+				mMahjongWindows[index][i].setSpriteName(mahjongSpriteName);
 			}
 		}
 	}
@@ -435,7 +425,7 @@ public class PlayerMahjong : GameBase
 		mHandInMahjong.notifyCanDrop(canDrop);
 	}
 	// 碰牌或者杠牌
-	public void notifyPengOrGang(PengGangInfo[] infoList)
+	public void notifyPengOrGang(List<PengGangInfo> infoList)
 	{
 		mPengGangMahjong.showMahjong(infoList);
 	}
@@ -513,7 +503,7 @@ public class ScriptMahjongHandIn : LayoutScript
 		mPlayerMahjong[(int)pos].notifyDrop(mah, index);
 	}
 	// 碰牌或者杠牌
-	public void notifyPengOrGang(PLAYER_POSITION pos, PengGangInfo[] infoList)
+	public void notifyPengOrGang(PLAYER_POSITION pos, List<PengGangInfo> infoList)
 	{
 		mPlayerMahjong[(int)pos].notifyPengOrGang(infoList);
 	}

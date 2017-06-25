@@ -60,10 +60,12 @@ public class SocketFactoryManager
 		registerFactory(typeof(SCPlayerGang), PACKET_TYPE.PT_SC_PLAYER_GANG);
 		registerFactory(typeof(SCPlayerPeng), PACKET_TYPE.PT_SC_PLAYER_PENG);
 		registerFactory(typeof(SCPlayerPass), PACKET_TYPE.PT_SC_PLAYER_PASS);
-		registerFactory(typeof(SCOtherPlayerHu), PACKET_TYPE.PT_SC_OTHER_PLAYER_HU);
 		registerFactory(typeof(SCOtherPlayerGang), PACKET_TYPE.PT_SC_OTHER_PLAYER_GANG);
 		registerFactory(typeof(SCOtherPlayerPeng), PACKET_TYPE.PT_SC_OTHER_PLAYER_PENG);
 		registerFactory(typeof(SCOtherPlayerPass), PACKET_TYPE.PT_SC_OTHER_PLAYER_PASS);
+		registerFactory(typeof(SCOtherPlayerAskDrop), PACKET_TYPE.PT_SC_OTHER_PLAYER_ASK_DROP);
+		registerFactory(typeof(SCOtherPlayerAskAction), PACKET_TYPE.PT_SC_OTHER_PLAYER_ASK_ACTION);
+		registerFactory(typeof(SCNotifyMahjongEnd), PACKET_TYPE.PT_SC_NOTIFY_MAHJONG_END);
 		int needSCCount = PACKET_TYPE.PT_SC_MAX - PACKET_TYPE.PT_SC_MIN - 1;
 		if (mFactoryList.Count - needCSCount != needSCCount)
 		{

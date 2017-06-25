@@ -311,11 +311,9 @@ public class GameUtility : GameBase
 		int mahCount = handInMah.Count;
 		for (int i = 0; i < mahCount - 1; ++i)
 		{
-			if (handInMah[i] == mah)
+			if (handInMah[i] == mah && handInMah[i + 1] == mah)
 			{
-				// 从后往前删除
-				handInMah.RemoveAt(i + 1);
-				handInMah.RemoveAt(i);
+				handInMah.RemoveRange(i, 2);
 				break;
 			}
 		}
@@ -326,17 +324,15 @@ public class GameUtility : GameBase
 		int mahCount = handInMah.Count;
 		for (int i = 0; i < mahCount - 2; ++i)
 		{
-			if (handInMah[i] == mah)
+			if (handInMah[i] == mah && handInMah[i + 1] == mah && handInMah[i + 2] == mah)
 			{
-				handInMah.RemoveAt(i + 2);
-				handInMah.RemoveAt(i + 1);
-				handInMah.RemoveAt(i);
+				handInMah.RemoveRange(i, 3);
 				break;
 			}
 		}
 	}
 	// handInIncludeDrop表示handInMah中是否已经包含了dropMah
-	public static List<HU_TYPE> generateHuType(List<MAHJONG> handInMah, MAHJONG dropMah, PengGangInfo[] gangPengList, bool isSelfGet, bool handInIncludeDrop)
+	public static List<HU_TYPE> generateHuType(List<MAHJONG> handInMah, MAHJONG dropMah, List<PengGangInfo> gangPengList, bool isSelfGet, bool handInIncludeDrop)
 	{
 		// 将数组转换为列表
 		List<MAHJONG> handInList = new List<MAHJONG>();
@@ -359,7 +355,7 @@ public class GameUtility : GameBase
 				}
 			}
 		}
-		int gangPengCount = gangPengList.Length;
+		int gangPengCount = gangPengList.Count;
 		for (int i = 0; i < gangPengCount; ++i)
 		{
 			if (gangPengList[i].mType == ACTION_TYPE.AT_GANG)

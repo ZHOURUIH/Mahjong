@@ -54,10 +54,12 @@ public enum PACKET_TYPE
 	PT_SC_PLAYER_GANG,                      // 通知客户端杠牌
 	PT_SC_PLAYER_PENG,                      // 通知客户端碰牌
 	PT_SC_PLAYER_PASS,                      // 通知客户端过
-	PT_SC_OTHER_PLAYER_HU,                  // 通知客户端其他玩家胡牌
 	PT_SC_OTHER_PLAYER_GANG,                // 通知客户端其他玩家杠牌
 	PT_SC_OTHER_PLAYER_PENG,                // 通知客户端其他玩家碰牌
 	PT_SC_OTHER_PLAYER_PASS,                // 通知客户端其他玩家过
+	PT_SC_OTHER_PLAYER_ASK_DROP,            // 通知客户端等待其他玩家打出牌
+	PT_SC_OTHER_PLAYER_ASK_ACTION,          // 通知客户端等待其他玩家选择操作
+	PT_SC_NOTIFY_MAHJONG_END,               // 通知客户端本局游戏结束
 	PT_SC_MAX,
 
 	PT_MAX,

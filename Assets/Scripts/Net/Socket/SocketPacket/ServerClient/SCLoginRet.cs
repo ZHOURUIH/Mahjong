@@ -5,11 +5,11 @@ using System.Text;
 
 public class SCLoginRet : SocketPacket
 {
-	protected BYTE mLoginRet = new BYTE();  // 0表示登陆成功,1表示账号密码错误,2表示已经在其他地方登陆
-	protected BYTES mName = new BYTES(16);
-	protected INT mMoney = new INT();
-	protected SHORT mHead = new SHORT();
-	protected INT mPlayerGUID = new INT();
+	public BYTE mLoginRet = new BYTE();  // 0表示登陆成功,1表示账号密码错误,2表示已经在其他地方登陆
+	public BYTES mName = new BYTES(16);
+	public INT mMoney = new INT();
+	public SHORT mHead = new SHORT();
+	public INT mPlayerGUID = new INT();
 	public SCLoginRet(PACKET_TYPE type)
 		:
 		base(type)

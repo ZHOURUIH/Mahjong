@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class CSCheckName : SocketPacket
 {
-	protected BYTES mName = new BYTES(16);
+	public BYTES mName = new BYTES(16);
 	public CSCheckName(PACKET_TYPE type)
 		:
 		base(type)

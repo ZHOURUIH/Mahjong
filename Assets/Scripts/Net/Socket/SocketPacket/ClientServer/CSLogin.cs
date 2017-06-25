@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 public class CSLogin : SocketPacket
 {
-	protected BYTES mAccount = new BYTES(16);
-	protected BYTES mPassword = new BYTES(16);
+	public BYTES mAccount = new BYTES(16);
+	public BYTES mPassword = new BYTES(16);
 	public CSLogin(PACKET_TYPE type)
 		:
 		base(type)

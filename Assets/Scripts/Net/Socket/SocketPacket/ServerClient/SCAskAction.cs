@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 public class SCAskAction : SocketPacket
 {
-	protected BYTES mAction = new BYTES(4);
-	protected INTS mActionPlayer = new INTS(4);
-	protected INTS mDroppedPlayer = new INTS(4);
-	protected BYTES mMahjong = new BYTES(4);
-	protected BYTES mHuList = new BYTES(CommonDefine.MAX_HU_COUNT);     // 当有胡操作时,该数组中才会有值
+	public BYTES mAction = new BYTES(4);
+	public INTS mActionPlayer = new INTS(4);
+	public INTS mDroppedPlayer = new INTS(4);
+	public BYTES mMahjong = new BYTES(4);
+	public BYTES mHuList = new BYTES(CommonDefine.MAX_HU_COUNT);     // 当有胡操作时,该数组中才会有值
 	public SCAskAction(PACKET_TYPE type)
 		:
 		base(type)

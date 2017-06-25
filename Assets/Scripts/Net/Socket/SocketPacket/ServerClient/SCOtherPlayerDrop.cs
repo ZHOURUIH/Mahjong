@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 public class SCOtherPlayerDrop : SocketPacket
 {
-	protected INT mPlayerGUID = new INT();
-	protected INT mIndex = new INT();
-	protected BYTE mMahjong = new BYTE();
+	public INT mPlayerGUID = new INT();
+	public INT mIndex = new INT();
+	public BYTE mMahjong = new BYTE();
 	public SCOtherPlayerDrop(PACKET_TYPE type)
 		:
 		base(type)

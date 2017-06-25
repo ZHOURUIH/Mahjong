@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class SCCheckAccountRet : SocketPacket
 {
-	protected BYTE mResult = new BYTE();  // 0表示成功,1表示失败
+	public BYTE mResult = new BYTE();  // 0表示成功,1表示失败
 	public SCCheckAccountRet(PACKET_TYPE type)
 		:
 		base(type)

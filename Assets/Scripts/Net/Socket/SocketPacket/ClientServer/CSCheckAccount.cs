@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class CSCheckAccount : SocketPacket
 {
-	protected BYTES mAccount = new BYTES(16);
+	public BYTES mAccount = new BYTES(16);
 	public CSCheckAccount(PACKET_TYPE type)
 		:
 		base(type)

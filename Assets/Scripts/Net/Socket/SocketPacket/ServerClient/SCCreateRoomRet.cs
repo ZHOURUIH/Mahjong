@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 public class SCCreateRoomRet : SocketPacket
 {
-	protected BYTE mResult = new BYTE();  // 0表示成功,1表示失败
-	protected INT mRoomID = new INT();
+	public BYTE mResult = new BYTE();  // 0表示成功,1表示失败
+	public INT mRoomID = new INT();
 	public SCCreateRoomRet(PACKET_TYPE type)
 		:
 		base(type)

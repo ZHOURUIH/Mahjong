@@ -14,10 +14,10 @@ public enum JOIN_ROOM_RESULT
 
 public class SCJoinRoomRet : SocketPacket
 {
-	protected BYTE mResult = new BYTE();
-	protected INT mRoomID = new INT();
-	protected BYTE mServerPosition = new BYTE();
-	protected BOOL mBanker = new BOOL();
+	public BYTE mResult = new BYTE();
+	public INT mRoomID = new INT();
+	public BYTE mServerPosition = new BYTE();
+	public BOOL mBanker = new BOOL();
 	public SCJoinRoomRet(PACKET_TYPE type)
 		:
 		base(type)

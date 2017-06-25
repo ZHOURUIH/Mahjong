@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 public class SCPlayerGang : SocketPacket
 {
-	protected INT mDroppedPlayerGUID = new INT();
-	protected BYTE mMahjong = new BYTE();
+	public INT mDroppedPlayerGUID = new INT();
+	public BYTE mMahjong = new BYTE();
 	public SCPlayerGang(PACKET_TYPE type)
 		:
 		base(type)

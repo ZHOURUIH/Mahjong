@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 public class SCRequestDropRet : SocketPacket
 {
-	protected BYTE mIndex = new BYTE();
-	protected BYTE mMahjong = new BYTE();
+	public BYTE mIndex = new BYTE();
+	public BYTE mMahjong = new BYTE();
 	public SCRequestDropRet(PACKET_TYPE type)
 		:
 		base(type)

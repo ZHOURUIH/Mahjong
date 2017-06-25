@@ -349,7 +349,7 @@ public class HandInMahjong : GameBase
 		else if(mHandInMahjong[index].mState == HANDIN_STATE.HS_PREPARE_DROP)
 		{
 			CSRequestDrop requestDrop = mSocketNetManager.createPacket(PACKET_TYPE.PT_CS_REQUEST_DROP) as CSRequestDrop;
-			requestDrop.setIndex((byte)index);
+			requestDrop.mIndex.mValue = (byte)index;
 			mSocketNetManager.sendMessage(requestDrop);
 		}
 	}

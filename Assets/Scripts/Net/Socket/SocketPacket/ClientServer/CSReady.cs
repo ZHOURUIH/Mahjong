@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class CSReady : SocketPacket
 {
-	protected BOOL mReady = new BOOL();
+	public BOOL mReady = new BOOL();
 	public CSReady(PACKET_TYPE type)
 		:
 		base(type)
@@ -12,7 +12,6 @@ public class CSReady : SocketPacket
 		fillParams();
 		zeroParams();
 	}
-	public void setReady(bool ready) { mReady.mValue = ready; }
 	protected override void fillParams()
 	{
 		pushParam(mReady);

@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 public class SCPlayerHu : SocketPacket
 {
-	protected INT mDroppedPlayerGUID = new INT();
-	protected BYTE mMahjong = new BYTE();
-	protected BYTES mHuList = new BYTES(CommonDefine.MAX_HU_COUNT);
+	public INT mDroppedPlayerGUID = new INT();
+	public BYTE mMahjong = new BYTE();
+	public BYTES mHuList = new BYTES(CommonDefine.MAX_HU_COUNT);
 	public SCPlayerHu(PACKET_TYPE type)
 		:
 		base(type)

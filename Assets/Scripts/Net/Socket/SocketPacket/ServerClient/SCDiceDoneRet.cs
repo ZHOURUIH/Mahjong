@@ -11,8 +11,7 @@ public class SCDiceDoneRet : SocketPacket
 		fillParams();
 		zeroParams();
 	}
-	protected override void fillParams()
-	{ }
+	protected override void fillParams(){ }
 	public override void execute()
 	{
 		GameScene gameScene = mGameSceneManager.getCurScene();

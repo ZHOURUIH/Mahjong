@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class SCNotifyReorderMahjong : SocketPacket
 {
-	protected INT mPlayerGUID = new INT();
+	public INT mPlayerGUID = new INT();
 	public SCNotifyReorderMahjong(PACKET_TYPE type)
 		:
 		base(type)

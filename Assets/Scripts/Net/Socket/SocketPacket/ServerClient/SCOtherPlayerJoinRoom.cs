@@ -5,13 +5,13 @@ using System.Text;
 
 public class SCOtherPlayerJoinRoom : SocketPacket
 {
-	protected INT mPlayerGUID = new INT();
-	protected BYTES mName = new BYTES(16);
-	protected INT mMoney = new INT();
-	protected INT mHead = new INT();
-	protected INT mPosition = new INT();
-	protected BOOL mReady = new BOOL();
-	protected BOOL mBanker = new BOOL();
+	public INT mPlayerGUID = new INT();
+	public BYTES mName = new BYTES(16);
+	public INT mMoney = new INT();
+	public INT mHead = new INT();
+	public INT mPosition = new INT();
+	public BOOL mReady = new BOOL();
+	public BOOL mBanker = new BOOL();
 	public SCOtherPlayerJoinRoom(PACKET_TYPE type)
 		:
 		base(type)

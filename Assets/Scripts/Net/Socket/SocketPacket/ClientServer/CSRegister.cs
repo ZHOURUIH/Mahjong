@@ -5,10 +5,10 @@ using System.Text;
 
 public class CSRegister : SocketPacket
 {
-	protected BYTES mAccount = new BYTES(16);
-	protected BYTES mPassword = new BYTES(16);
-	protected BYTES mName = new BYTES(16);
-	protected INT mHead = new INT();
+	public BYTES mAccount = new BYTES(16);
+	public BYTES mPassword = new BYTES(16);
+	public BYTES mName = new BYTES(16);
+	public INT mHead = new INT();
 	public CSRegister(PACKET_TYPE type)
 		:
 		base(type)
@@ -30,10 +30,6 @@ public class CSRegister : SocketPacket
 	{
 		byte[] nameBytes = BinaryUtility.stringToBytes(name, Encoding.UTF8);
 		mName.setValue(nameBytes);
-	}
-	public void setHead(int head)
-	{
-		mHead.mValue = head;
 	}
 	protected override void fillParams()
 	{

@@ -4,10 +4,10 @@ using System.Collections.Generic;
 
 public class SCOtherPlayerHu : SocketPacket
 {
-	protected INT mOtherPlayerGUID = new INT();
-	protected INT mDroppedPlayerGUID = new INT();
-	protected BYTE mMahjong = new BYTE();
-	protected BYTES mHuList = new BYTES(CommonDefine.MAX_HU_COUNT);
+	public INT mOtherPlayerGUID = new INT();
+	public INT mDroppedPlayerGUID = new INT();
+	public BYTE mMahjong = new BYTE();
+	public BYTES mHuList = new BYTES(CommonDefine.MAX_HU_COUNT);
 	public SCOtherPlayerHu(PACKET_TYPE type)
 		:
 		base(type)

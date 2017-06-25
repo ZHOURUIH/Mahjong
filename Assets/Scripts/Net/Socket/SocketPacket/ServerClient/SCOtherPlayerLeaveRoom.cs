@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class SCOtherPlayerLeaveRoom : SocketPacket
 {
-	protected INT mPlayerGUID = new INT();		// 离开房间的玩家GUID
+	public INT mPlayerGUID = new INT();		// 离开房间的玩家GUID
 	public SCOtherPlayerLeaveRoom(PACKET_TYPE type)
 		:
 		base(type)

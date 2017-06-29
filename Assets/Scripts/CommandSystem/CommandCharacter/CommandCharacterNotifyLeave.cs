@@ -15,11 +15,7 @@ public class CommandCharacterNotifyLeave : Command
 		data.mBanker = false;
 		data.mServerPosition = PLAYER_POSITION.PP_MAX;
 		data.mPosition = PLAYER_POSITION.PP_MAX;
-		for (int i = 0; i < CommonDefine.MAX_PENG_TIMES; ++i)
-		{
-			data.mPengGangList[i].mType = ACTION_TYPE.AT_MAX;
-			data.mPengGangList[i].mMahjong = MAHJONG.M_MAX;
-		}
+		data.mPengGangList.Clear();
 		data.mHandIn.Clear();
 		data.mDropList.Clear();
 		data.mRoomID = -1;

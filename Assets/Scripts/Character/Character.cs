@@ -40,68 +40,33 @@ public class Character : MovableObject
 	public virtual void pengMahjong(MAHJONG mahjong)
 	{
 		GameUtility.pengMahjong(ref mCharacterData.mHandIn, mahjong);
-		// 找到一个空的位置,设置为碰的状态
-		int maxTimes = mCharacterData.mPengGangList.Length;
-		for (int i = 0; i < maxTimes; ++i)
-		{
-			if(mCharacterData.mPengGangList[i].mType == ACTION_TYPE.AT_MAX)
-			{
-				mCharacterData.mPengGangList[i].mType = ACTION_TYPE.AT_PENG;
-				mCharacterData.mPengGangList[i].mMahjong = mahjong;
-				break;
-			}
-		}
+		addPeng(mahjong);
 	}
 	// 杠指定牌
 	public virtual void gangMahjong(MAHJONG mahjong, Character dropPlayer)
 	{
-		int maxTimes = mCharacterData.mPengGangList.Length;
-		for (int i = 0; i < maxTimes; ++i)
+		int pengIndex = -1;
+		bool isAlreadyPeng = hasPeng(mahjong, ref pengIndex);
+		if (isAlreadyPeng)
 		{
-			// 如果是自己摸了一张已经碰的牌来开杠
-			if(mCharacterData.mPengGangList[i].mMahjong == mahjong
-				&& mCharacterData.mPengGangList[i].mType == ACTION_TYPE.AT_PENG)
+			mCharacterData.mPengGangList[pengIndex].mType = ACTION_TYPE.AT_GANG;
+		}
+		else
+		{
+			GameUtility.gangMahjong(ref mCharacterData.mHandIn, mahjong);
+			addGang(mahjong);
+		}
+		// 如果是自己摸了一张牌,则需要将自己摸的牌拿出来,如果是其他人打出的牌,则不进行操作
+		if (dropPlayer == this)
+		{
+			int handInCount = mCharacterData.mHandIn.Count;
+			for (int j = 0; j < handInCount; ++j)
 			{
-				mCharacterData.mPengGangList[i].mType = ACTION_TYPE.AT_GANG;
-				// 将手里摸的牌拿出
-				int handInCount = mCharacterData.mHandIn.Count;
-				for(int j = 0; j < handInCount; ++j)
+				if (mCharacterData.mHandIn[j] == mahjong)
 				{
-					if(mCharacterData.mHandIn[j] == mahjong)
-					{
-						mCharacterData.mHandIn.RemoveAt(j);
-						break;
-					}
+					mCharacterData.mHandIn.RemoveAt(j);
+					break;
 				}
-				break;
-			}
-			// 自己手里有三张牌
-			else if(mCharacterData.mPengGangList[i].mMahjong == MAHJONG.M_MAX
-				&& mCharacterData.mPengGangList[i].mType == ACTION_TYPE.AT_MAX)
-			{
-				GameUtility.gangMahjong(ref mCharacterData.mHandIn, mahjong);
-				mCharacterData.mPengGangList[i].mType = ACTION_TYPE.AT_GANG;
-				mCharacterData.mPengGangList[i].mMahjong = mahjong;
-				// 自己摸了一张牌后开杠
-				if (dropPlayer == this)
-				{
-					// 将手里摸的牌拿出
-					int handInCount = mCharacterData.mHandIn.Count;
-					for (int j = 0; j < handInCount; ++j)
-					{
-						if (mCharacterData.mHandIn[j] == mahjong)
-						{
-							mCharacterData.mHandIn.RemoveAt(j);
-							break;
-						}
-					}
-				}
-				// 别人打出一张牌开杠,不做其他操作
-				else
-				{
-					;
-				}
-				break;
 			}
 		}
 	}
@@ -129,5 +94,33 @@ public class Character : MovableObject
 	public void reorderMahjong()
 	{
 		mCharacterData.mHandIn.Sort();
+	}
+	public bool hasPeng(MAHJONG mahjong, ref int pengIndex)
+	{
+		int count = mCharacterData.mPengGangList.Count;
+		for (int i = 0; i < count; ++i)
+		{
+			if (mCharacterData.mPengGangList[i].mMahjong == mahjong)
+			{
+				pengIndex = i;
+				return true;
+			}
+		}
+		return false;
+	}
+	//---------------------------------------------------------------------------------------------------------
+	protected void addPeng(MAHJONG mahjong)
+	{
+		PengGangInfo info = new PengGangInfo();
+		info.mMahjong = mahjong;
+		info.mType = ACTION_TYPE.AT_PENG;
+		mCharacterData.mPengGangList.Add(info);
+	}
+	protected void addGang(MAHJONG mahjong)
+	{
+		PengGangInfo info = new PengGangInfo();
+		info.mMahjong = mahjong;
+		info.mType = ACTION_TYPE.AT_GANG;
+		mCharacterData.mPengGangList.Add(info);
 	}
 }

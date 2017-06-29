@@ -35,7 +35,7 @@ public class MahjongSceneEnding : SceneProcedure
 	{
 		;
 	}
-	public void setResult(List<HU_TYPE> huList)
+	public void setResult(List<ResultInfo> huList)
 	{
 		ScriptGameEnding gameEnding = mLayoutManager.getScript(LAYOUT_TYPE.LT_GAME_ENDING) as ScriptGameEnding;
 		gameEnding.setResult(huList);

@@ -58,7 +58,7 @@ public class ScriptRegister : LayoutScript
 		register.setAccount(mAccountEdit.getText());
 		register.setPassword(mPasswordEdit.getText());
 		register.setName(mNameEdit.getText());
-		register.setHead(0);
+		register.mHead.mValue = 0;
 		mSocketNetManager.sendMessage(register);
 	}
 	protected void onCancelClick(GameObject button)

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class SCOtherPlayerOffline : SocketPacket
 {
-	protected INT mPlayerGUID = new INT();		// 离线的玩家GUID
+	public INT mPlayerGUID = new INT();		// 离线的玩家GUID
 	public SCOtherPlayerOffline(PACKET_TYPE type)
 		:
 		base(type)

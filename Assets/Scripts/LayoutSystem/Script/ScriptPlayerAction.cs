@@ -67,31 +67,30 @@ public class ScriptPlayerAction : LayoutScript
 	//------------------------------------------------------------------------------------------------------
 	protected void onHuClicked(GameObject obj)
 	{
-		// 请求麻将系统自己要胡牌
-		CommandMahjongSystemRequestHu cmd = new CommandMahjongSystemRequestHu();
-		cmd.mCharacter = mCharacterManager.getMyself();
-		mCommandSystem.pushCommand(cmd, mMahjongSystem);
+		CSConfirmAction confirm = mSocketNetManager.createPacket(PACKET_TYPE.PT_CS_CONFIRM_ACTION) as CSConfirmAction;
+		confirm.mAction.mValue = (byte)ACTION_TYPE.AT_HU;
+		mSocketNetManager.sendMessage(confirm);
 		afterActionSelected();
 	}
 	protected void onGangClicked(GameObject obj)
 	{
-		CommandMahjongSystemRequestGang cmd = new CommandMahjongSystemRequestGang();
-		cmd.mCharacter = mCharacterManager.getMyself();
-		mCommandSystem.pushCommand(cmd, mMahjongSystem);
+		CSConfirmAction confirm = mSocketNetManager.createPacket(PACKET_TYPE.PT_CS_CONFIRM_ACTION) as CSConfirmAction;
+		confirm.mAction.mValue = (byte)ACTION_TYPE.AT_GANG;
+		mSocketNetManager.sendMessage(confirm);
 		afterActionSelected();
 	}
 	protected void onPengClicked(GameObject obj)
 	{
-		CommandMahjongSystemRequestPeng cmd = new CommandMahjongSystemRequestPeng();
-		cmd.mCharacter = mCharacterManager.getMyself();
-		mCommandSystem.pushCommand(cmd, mMahjongSystem);
+		CSConfirmAction confirm = mSocketNetManager.createPacket(PACKET_TYPE.PT_CS_CONFIRM_ACTION) as CSConfirmAction;
+		confirm.mAction.mValue = (byte)ACTION_TYPE.AT_PENG;
+		mSocketNetManager.sendMessage(confirm);
 		afterActionSelected();
 	}
 	protected void onPassClicked(GameObject obj)
 	{
-		CommandMahjongSystemRequestPass cmd = new CommandMahjongSystemRequestPass();
-		cmd.mCharacter = mCharacterManager.getMyself();
-		mCommandSystem.pushCommand(cmd, mMahjongSystem);
+		CSConfirmAction confirm = mSocketNetManager.createPacket(PACKET_TYPE.PT_CS_CONFIRM_ACTION) as CSConfirmAction;
+		confirm.mAction.mValue = (byte)ACTION_TYPE.AT_PASS;
+		mSocketNetManager.sendMessage(confirm);
 		afterActionSelected();
 	}
 	protected void afterActionSelected()

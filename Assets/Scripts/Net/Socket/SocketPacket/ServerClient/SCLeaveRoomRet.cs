@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class SCLeaveRoomRet : SocketPacket
 {
-	protected BOOL mResult = new BOOL();
+	public BOOL mResult = new BOOL();
 	public SCLeaveRoomRet(PACKET_TYPE type)
 		:
 		base(type)

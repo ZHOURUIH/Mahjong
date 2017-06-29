@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class SCNotifyBanker : SocketPacket
 {
-	protected INT mPlayerGUID = new INT();		// 庄家ID
+	public INT mPlayerGUID = new INT();		// 庄家ID
 	public SCNotifyBanker(PACKET_TYPE type)
 		:
 		base(type)

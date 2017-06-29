@@ -11,6 +11,5 @@ public class CSLeaveRoom : SocketPacket
 		fillParams();
 		zeroParams();
 	}
-	protected override void fillParams()
-	{}
+	protected override void fillParams(){}
 }

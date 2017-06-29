@@ -318,11 +318,7 @@ public class MahjongSystem : CommandReceiver
 				// 牌已经摸完了,则本局为平局
 				else
 				{
-					CommandMahjongSystemEnd cmdEnd = new CommandMahjongSystemEnd();
-					cmdEnd.mHuPlayer = null;
-					cmdEnd.mMahjong = MAHJONG.M_MAX;
-					cmdEnd.mHuList = null;
-					mCommandSystem.pushCommand(cmdEnd, this);
+					//End;
 				}
 			}
 		}
@@ -346,14 +342,10 @@ public class MahjongSystem : CommandReceiver
 		// 摸了一张自己碰的牌,可以开杠
 		else
 		{
-			for(int i = 0; i < CommonDefine.MAX_PENG_TIMES; ++i)
+			int pengIndex = 0;
+			if(player.hasPeng(mah, ref pengIndex))
 			{
-				if(data.mPengGangList[i].mMahjong == mah
-					&& data.mPengGangList[i].mType == ACTION_TYPE.AT_PENG)
-				{
-					actionList.Add(new MahjongAction(ACTION_TYPE.AT_GANG, player, player, mah));
-					break;
-				}
+				actionList.Add(new MahjongAction(ACTION_TYPE.AT_GANG, player, player, mah));
 			}
 		}
 		if (actionList.Count > 0)
@@ -423,11 +415,7 @@ public class MahjongSystem : CommandReceiver
 			mCommandSystem.pushCommand(cmd, player);
 			
 			// 有玩家胡牌后则结束游戏
-			CommandMahjongSystemEnd cmdEnd = new CommandMahjongSystemEnd();
-			cmdEnd.mHuPlayer = player;
-			cmdEnd.mMahjong = action.mMah;
-			cmdEnd.mHuList = action.mHuList;
-			mCommandSystem.pushCommand(cmdEnd, this);
+			//End;
 		}
 		else
 		{
@@ -481,11 +469,7 @@ public class MahjongSystem : CommandReceiver
 					// 没有牌了则平局
 					else
 					{
-						CommandMahjongSystemEnd cmdEnd = new CommandMahjongSystemEnd();
-						cmdEnd.mHuPlayer = null;
-						cmdEnd.mMahjong = MAHJONG.M_MAX;
-						cmdEnd.mHuList = null;
-						mCommandSystem.pushCommand(cmdEnd, this);
+						//End;
 					}
 				}
 				else if (highestAction.mType == ACTION_TYPE.AT_PENG)
@@ -519,11 +503,7 @@ public class MahjongSystem : CommandReceiver
 						// 没有牌了则平局
 						else
 						{
-							CommandMahjongSystemEnd cmdEnd = new CommandMahjongSystemEnd();
-							cmdEnd.mHuPlayer = null;
-							cmdEnd.mMahjong = MAHJONG.M_MAX;
-							cmdEnd.mHuList = null;
-							mCommandSystem.pushCommand(cmdEnd, this);
+							//End;
 						}
 					}
 				}

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class CSHeartBeat : SocketPacket
 {
-	protected INT mHeartBeatTimes = new INT();
+	public INT mHeartBeatTimes = new INT();
 	public CSHeartBeat(PACKET_TYPE type)
 		:
 		base(type)

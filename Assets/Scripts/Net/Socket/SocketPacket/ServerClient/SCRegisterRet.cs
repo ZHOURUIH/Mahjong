@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class SCRegisterRet : SocketPacket
 {
-	protected BYTE mResult = new BYTE();
+	public BYTE mResult = new BYTE();
 	public SCRegisterRet(PACKET_TYPE type)
 		:
 		base(type)

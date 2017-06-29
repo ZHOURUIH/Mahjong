@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 public class SCOtherPlayerDrop : SocketPacket
 {
-	protected INT mPlayerGUID = new INT();
-	protected INT mIndex = new INT();
-	protected BYTE mMahjong = new BYTE();
+	public INT mPlayerGUID = new INT();
+	public INT mIndex = new INT();
+	public BYTE mMahjong = new BYTE();
 	public SCOtherPlayerDrop(PACKET_TYPE type)
 		:
 		base(type)
@@ -22,6 +22,9 @@ public class SCOtherPlayerDrop : SocketPacket
 	}
 	public override void execute()
 	{
+		// 清空提示信息
+		ScriptMahjongFrame mahjongFrame = mLayoutManager.getScript(LAYOUT_TYPE.LT_MAHJONG_FRAME) as ScriptMahjongFrame;
+		mahjongFrame.notifyInfo("");
 		CommandCharacterDrop cmd = new CommandCharacterDrop();
 		cmd.mMah = (MAHJONG)mMahjong.mValue;
 		cmd.mIndex = mIndex.mValue;

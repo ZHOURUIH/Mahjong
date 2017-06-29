@@ -3,10 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
-public class CSRequestDrop : SocketPacket
+public class CSConfirmAction : SocketPacket
 {
-	public BYTE mIndex = new BYTE();
-	public CSRequestDrop(PACKET_TYPE type)
+	public BYTE mAction = new BYTE();
+	public CSConfirmAction(PACKET_TYPE type)
 		:
 		base(type)
 	{
@@ -15,6 +15,6 @@ public class CSRequestDrop : SocketPacket
 	}
 	protected override void fillParams()
 	{
-		pushParam(mIndex);
+		pushParam(mAction);
 	}
 }

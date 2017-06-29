@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 public class SCOtherPlayerReady : SocketPacket
 {
-	protected BOOL mReady = new BOOL();		// 是否已准备
-	protected INT mPlayerGUID = new INT();	// 玩家GUID
+	public BOOL mReady = new BOOL();		// 是否已准备
+	public INT mPlayerGUID = new INT();	// 玩家GUID
 	public SCOtherPlayerReady(PACKET_TYPE type)
 		:
 		base(type)

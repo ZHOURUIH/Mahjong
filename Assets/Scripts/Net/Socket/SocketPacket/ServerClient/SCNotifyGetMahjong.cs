@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 public class SCNotifyGetMahjong : SocketPacket
 {
-	protected INT mPlayerGUID = new INT();
-	protected BYTE mMahjong = new BYTE();
+	public INT mPlayerGUID = new INT();
+	public BYTE mMahjong = new BYTE();
 	public SCNotifyGetMahjong(PACKET_TYPE type)
 		:
 		base(type)

@@ -11,6 +11,5 @@ public class CSDiceDone : SocketPacket
 		fillParams();
 		zeroParams();
 	}
-	protected override void fillParams()
-	{ }
+	protected override void fillParams(){ }
 }

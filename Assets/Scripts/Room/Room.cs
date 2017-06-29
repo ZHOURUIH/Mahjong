@@ -3,13 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+public class ResultInfo
+{
+	public Character mPlayer;
+	public Character mDroppedPlayer;
+	public MAHJONG mMahjong;
+	public List<HU_TYPE> mHuList;
+}
+
 public class Room : CommandReceiver
 {
 	protected bool mCanJoin = false;
 	protected int mID;
 	protected List<Character> mNoneJoinPlayerList;							// 还未进入等待流程时就接收到的玩家列表
 	protected Dictionary<int, Character> mPlayerIDList;						// key是玩家GUID,value是玩家对象,只用于查找
-	protected SortedDictionary<PLAYER_POSITION, Character> mPlayerPositionList;	// 玩家列表,保存着玩家之间的顺序
+	protected SortedDictionary<PLAYER_POSITION, Character> mPlayerPositionList; // 玩家列表,保存着玩家之间的顺序
+	protected List<ResultInfo> mResultInfoList;
 	public Room(int id)
 		:
 		base("room")
@@ -18,9 +27,11 @@ public class Room : CommandReceiver
 		mNoneJoinPlayerList = new List<Character>();
 		mPlayerIDList = new Dictionary<int, Character>();
 		mPlayerPositionList = new SortedDictionary<PLAYER_POSITION, Character>();
+		mResultInfoList = new List<ResultInfo>();
 	}
 	public int getRoomID() { return mID; }
 	public Dictionary<int, Character> getPlayerList() { return mPlayerIDList; }
+	public List<ResultInfo> getResultInfoList() { return mResultInfoList; }
 	// 通知房间有玩家加入
 	public void notifyPlayerJoin(Character player)
 	{
@@ -75,5 +86,15 @@ public class Room : CommandReceiver
 			cmdLeave.mCharacter = item.Value;
 			mCommandSystem.pushCommand(cmdLeave, this);
 		}
+	}
+	// 有玩家胡牌
+	public void notifyPlayerHu(Character player, Character droppedPlayer, List<HU_TYPE> huList, MAHJONG mah)
+	{
+		ResultInfo result = new ResultInfo();
+		result.mPlayer = player;
+		result.mDroppedPlayer = droppedPlayer;
+		result.mMahjong = mah;
+		result.mHuList = huList;
+		mResultInfoList.Add(result);
 	}
 }

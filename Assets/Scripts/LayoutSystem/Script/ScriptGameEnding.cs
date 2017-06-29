@@ -39,7 +39,7 @@ public class ScriptGameEnding : LayoutScript
 	{
 		;
 	}
-	public void setResult(List<HU_TYPE> huList)
+	public void setResult(List<ResultInfo> huList)
 	{
 		// 先隐藏全部
 		LayoutTools.ACTIVE_WINDOW(mHu, false);

@@ -12,14 +12,6 @@ public class ComponentRotate : GameComponent
 	{
 		mPlayState = PLAY_STATE.PS_STOP;
 	}
-	public override void setBaseType() 
-	{
-		mBaseType = typeof(ComponentRotate);
-	}
-	public override bool isType(Type type) 
-	{ 
-		return type == typeof(ComponentRotate); 
-	}
 	public override void setActive(bool active)
 	{
 		base.setActive(active);
@@ -49,10 +41,12 @@ public class ComponentRotate : GameComponent
 			stop();
 		}
 	}
-	
 	public PLAY_STATE getPlayState() { return mPlayState; }
 	public void setStartAngle(Vector3 startAngle) { mStartAngle = startAngle; }
 	public Vector3 getStartAngle() { return mStartAngle; }
 	public virtual void applyRotation( Vector3 rotation, bool done = false, bool refreshNow = false) { }
 	public virtual Vector3 getCurRotation() { return Vector3.zero; }
+	//------------------------------------------------------------------------------------------------------------------
+	protected override void setBaseType() { mBaseType = typeof(ComponentRotate); }
+	protected override bool isType(Type type) { return type == typeof(ComponentRotate); }
 }

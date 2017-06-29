@@ -330,6 +330,13 @@ public class MathUtility : GameBase
 	{
 		return Mathf.Sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
 	}
+	public static Vector3 getMatrixScale(Matrix4x4 mat)
+	{
+		Vector3 vec0 = new Vector3(mat.m00, mat.m01, mat.m02);
+		Vector3 vec1 = new Vector3(mat.m10, mat.m11, mat.m12);
+		Vector3 vec2 = new Vector3(mat.m20, mat.m21, mat.m22);
+		return new Vector3(getLength(vec0), getLength(vec1), getLength(vec2));
+	}
 	public static Matrix4x4 identityMatrix4(Matrix4x4 rot)
 	{
 		Vector3 vec0 = new Vector3(rot.m00, rot.m01, rot.m02);
@@ -868,5 +875,19 @@ public class MathUtility : GameBase
 		outHour = seconds / 3600;
 		outMin = (seconds - outHour * 3600) / 60;
 		outSec = seconds - outHour * 3600 - outMin * 60;
+	}
+	//将时间转化成时间戳
+	public static long convertDateTimeUnixTime(System.DateTime dateTime) 
+	{
+		System.DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1)); // 当地时区
+		long timeStamp = (long)(dateTime - startTime).TotalSeconds; // 相差毫秒数
+		return timeStamp;
+	}
+	//将时间戳转化成时间
+	public static DateTime ConvertUnixTimeDateTime(long unixTimeStamp)
+	{
+		System.DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1)); // 当地时区
+		DateTime dt = startTime.AddSeconds(unixTimeStamp);
+		return dt;
 	}
 }

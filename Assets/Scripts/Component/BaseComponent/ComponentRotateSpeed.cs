@@ -7,7 +7,6 @@ public class ComponentRotateSpeed : ComponentRotate
 	public Vector3 mRotateSpeed;				// 欧拉角旋转速度
 	public Vector3 mRotateAcceleration;			// 旋转加速度
 	public Vector3 mCurRotation;
-
 	public ComponentRotateSpeed(Type type, string name)
 		:
 		base(type, name)
@@ -25,14 +24,10 @@ public class ComponentRotateSpeed : ComponentRotate
 		}
 		 base.update(elapsedTime);
 	}
-	public override bool isType(Type type)
-	{
-		return base.isType(type) || type == typeof(ComponentRotateSpeed);
-	}
 	public Vector3 getRotateSpeed() { return mRotateSpeed; }
 	public Vector3 getRotateAcceleration() { return mRotateAcceleration; }
-	public void setRotateSpeed( Vector3 speed) { mRotateSpeed = speed; }
-	public void setRotateAcceleration( Vector3 acceleration) { mRotateAcceleration = acceleration; }
+	public void setRotateSpeed(Vector3 speed) { mRotateSpeed = speed; }
+	public void setRotateAcceleration(Vector3 acceleration) { mRotateAcceleration = acceleration; }
 	public void startRotateSpeed(Vector3 startAngle, Vector3 rotateSpeed, Vector3 rotateAcceleration) 
 	{
 		pause(false);
@@ -46,4 +41,6 @@ public class ComponentRotateSpeed : ComponentRotate
 			setActive(false);
 		}
 	}
+	//--------------------------------------------------------------------------------------------------------------------------------------
+	protected override bool isType(Type type){return base.isType(type) || type == typeof(ComponentRotateSpeed);}
 }

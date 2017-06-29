@@ -12,11 +12,11 @@ public class CommandWindowRotateFixed : Command
 	public override void execute()
 	{
 		txUIObject window = (mReceiver) as txUIObject;
-		CompoentRotateFixed component = window.getFirstComponent<CompoentRotateFixed>();
+		ComponentRotateFixed component = window.getFirstComponent<ComponentRotateFixed>();
 		if (component != null)
 		{
 			component.setActive(mActive);
-			component.setFixedRotation(mFixedEuler);
+			component.setFixedEuler(mFixedEuler);
 		}	
 	}
 }

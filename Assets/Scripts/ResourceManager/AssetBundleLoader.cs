@@ -250,7 +250,26 @@ public class AssetBundleLoader : MonoBehaviour
 #endif
 		StartCoroutine(loadAssetBundleCoroutine(bundleInfo, loadFromWWW));
 	}
+	public void requestLoadTextureFromUrl(string url, LoadURLTextureCallback callback)
+	{
+		StartCoroutine(loadTextureFromUrl(url, callback));
+	}
 	//-----------------------------------------------------------------------------------------------
+	protected IEnumerator loadTextureFromUrl(string url, LoadURLTextureCallback callback)
+	{
+		WWW www = new WWW(url);
+		yield return www;
+		if (www.error != null)
+		{
+			// 下载失败
+			UnityUtility.logInfo("下载失败 : " + url);
+			callback(null);
+		}
+		else
+		{
+			callback(www.texture);
+		}
+	}
 	protected IEnumerator loadAssetBundleCoroutine(AssetBundleInfo bundleInfo, bool loadFromWWW)
 	{
 		UnityUtility.logInfo(bundleInfo.mBundleName + " start load bundld");

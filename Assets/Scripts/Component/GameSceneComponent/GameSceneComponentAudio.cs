@@ -18,8 +18,5 @@ public class GameSceneComponentAudio : ComponentAudio
 	{
 		mSoundOwner = CommonDefine.SOUND_OWNER_NAME[(int)SOUND_OWNER.SO_GAME_SCENE];
 	}
-	public override bool isType(Type type)
-	{
-		return base.isType(type) || type == typeof(GameSceneComponentAudio);
-	}
+	protected override bool isType(Type type){return base.isType(type) || type == typeof(GameSceneComponentAudio);}
 }

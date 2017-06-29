@@ -8,13 +8,11 @@ public class WindowComponentAlpha : ComponentAlpha
 		:
 		base(typeName, name)
 	{ }
-	public override bool isType(Type type)
-	{
-		return base.isType(type) || type == typeof(WindowComponentAlpha);
-	}
 	public override void applyAlpha(float alpha, bool done = false)
 	{
 		txUIObject window = mComponentOwner as txUIObject;
 		window.setAlpha(alpha);
 	}
+	//---------------------------------------------------------------------------------------------------------------
+	protected override bool isType(Type type) { return base.isType(type) || type == typeof(WindowComponentAlpha); }
 }

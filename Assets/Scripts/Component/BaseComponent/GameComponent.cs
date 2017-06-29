@@ -33,7 +33,6 @@ public abstract class GameComponent : GameBase
 		// setBaseType不能在构造中调用,因为构造时对象还没有完全创建出,所以无法正确调用派生类的函数
 		setBaseType();
 	}
-	public abstract void setBaseType();
 	public virtual void preUpdate(float elapsedTime)
 	{
 		if (mLockOneFrame || !isActive())
@@ -79,8 +78,6 @@ public abstract class GameComponent : GameBase
 			mChildComponentList[i].lateUpdate(elapsedTime);
 		}
 	}
-	// 判断该组件是否是指定类型的,包括所有继承的类型
-	public virtual bool isType(Type type) { return false; }
 	public virtual void destroy()
 	{
 		// 首先通知所有的子组件
@@ -262,7 +259,7 @@ public abstract class GameComponent : GameBase
 	// 设置成员变量
 	public virtual void setActive(bool active) { mActive = active; }
 	public void setLockOneFrame(bool lockOneFrame) { mLockOneFrame = lockOneFrame; }
-	public void setPreUpdate(bool pre)			{ mPreUpdate = pre; }
+	public void setPreUpdate(bool pre) { mPreUpdate = pre; }
 	// 获得成员变量
 	public ComponentOwner getOwner() { return mComponentOwner; }
 	public GameComponent getParentComponent() { return mParent; }
@@ -294,4 +291,8 @@ public abstract class GameComponent : GameBase
 			}
 		}
 	}
+	//------------------------------------------------------------------------------------------------------------------------
+	// 判断该组件是否是指定类型的,包括所有继承的类型
+	protected virtual bool isType(Type type) { return false; }
+	protected abstract void setBaseType();
 }

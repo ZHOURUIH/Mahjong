@@ -18,8 +18,6 @@ public class WindowComponentAudio : ComponentAudio
 	{
 		mSoundOwner = CommonDefine.SOUND_OWNER_NAME[(int)SOUND_OWNER.SO_WINDOW];
 	}
-	public override bool isType(Type type)
-	{
-		return base.isType(type) || type == typeof(WindowComponentAudio);
-	}
+	//--------------------------------------------------------------------------------------------------------------
+	protected override bool isType(Type type) { return base.isType(type) || type == typeof(WindowComponentAudio); }
 }

@@ -8,11 +8,9 @@ public class WindowComponentMove : ComponentMove
 		:
 		base(type, name)
 	{ }
-	public override bool isType(Type type)
-	{
-		return base.isType(type) || type == typeof(WindowComponentMove);
-	}
-	public override void applyMove(Vector3 position, bool done = false)
+	//-----------------------------------------------------------------------------------------------
+	protected override bool isType(Type type) { return base.isType(type) || type == typeof(WindowComponentMove); }
+	protected override void applyMove(Vector3 position, bool done = false)
 	{
 		txUIObject window = mComponentOwner as txUIObject;
 		window.setLocalPosition(position);

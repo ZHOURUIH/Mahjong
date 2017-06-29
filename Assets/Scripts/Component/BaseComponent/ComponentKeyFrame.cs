@@ -28,7 +28,6 @@ public class ComponentKeyFrame : GameComponent
 	{
 		clearCallback();
 	}
-	public override void setBaseType() { mBaseType = typeof(ComponentKeyFrame); }
 	public override void update(float elapsedTime)
 	{
 		if (mKeyFrame != null && mPlayState == PLAY_STATE.PS_PLAY)
@@ -68,7 +67,6 @@ public class ComponentKeyFrame : GameComponent
 			}
 		}
 	}
-	public override bool isType(Type type) { return type == typeof(ComponentKeyFrame); }
 	public override void setActive(bool active)
 	{
 		base.setActive(active);
@@ -244,4 +242,7 @@ public class ComponentKeyFrame : GameComponent
 			tempCallback(component, tempUserData, false, true);
 		}
 	}
+	//----------------------------------------------------------------------------------------------------------------------------
+	protected override bool isType(Type type) { return type == typeof(ComponentKeyFrame); }
+	protected override void setBaseType() { mBaseType = typeof(ComponentKeyFrame); }
 }

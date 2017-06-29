@@ -8,18 +8,12 @@ public class WindowComponentRotateSpeed : ComponentRotateSpeed
 		:
 		base(type, name)
 	{ }
-	public override bool isType(Type type)
-	{
-		return base.isType(type) || type == typeof(WindowComponentRotateSpeed);
-	}
 	public override void applyRotation(Vector3 rotation, bool done = false, bool refreshNow = false) 
 	{
 		txUIObject window = mComponentOwner as txUIObject;
 		window.setLocalRotation(rotation);
 	}
-	public 	override Vector3 getCurRotation()
-	{
-		Vector3 rot = (mComponentOwner as txUIObject).getRotationEuler();
-		return rot;
-	}
+	public override Vector3 getCurRotation(){return (mComponentOwner as txUIObject).getRotationEuler();}
+	//-------------------------------------------------------------------------------------------------------------
+	protected override bool isType(Type type) { return base.isType(type) || type == typeof(WindowComponentRotateSpeed); }
 }

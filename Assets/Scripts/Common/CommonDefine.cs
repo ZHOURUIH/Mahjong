@@ -297,6 +297,7 @@ public delegate void AssetLoadDoneCallback(UnityEngine.Object res);
 public delegate void AssetBundleLoadDoneCallback(List<UnityEngine.Object> resList);
 public delegate void LayoutAsyncDone(GameLayout layout);
 public delegate void VideoPlayEndCallback(string videoName, bool isBreak);
+public delegate void LoadURLTextureCallback(Texture tex);
 
 // 游戏常量定义-------------------------------------------------------------------------------------------------------------
 public class CommonDefine

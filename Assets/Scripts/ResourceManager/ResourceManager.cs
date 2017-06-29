@@ -141,4 +141,9 @@ public class ResourceManager : GameBase
 		}
 		return ret;
 	}
+	public void loadTextureFromUrl(string url, LoadURLTextureCallback callback)
+	{
+		// 只能通过AssetBundleLoader加载
+		mAssetBundleLoader.requestLoadTextureFromUrl(url, callback);
+	}
 }

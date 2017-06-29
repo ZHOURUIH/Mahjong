@@ -9,13 +9,7 @@ public class WindowComponentScaleTrembling : ComponentKeyFrame
 	public WindowComponentScaleTrembling(Type type, string name)
 		:
 		base(type, name)
-	{
-		;
-	}
-	public override bool isType(Type type)
-	{
-		return base.isType(type) || type == typeof(WindowComponentScaleTrembling);
-	}
+	{}
 	public override void applyTrembling(float value)
 	{
 		txUIObject mObject = mComponentOwner as txUIObject;
@@ -23,12 +17,8 @@ public class WindowComponentScaleTrembling : ComponentKeyFrame
 		Vector2 newSacle = mStartScale + (mTargetScale - mStartScale) * value;
 		mObject.setLocalScale(new Vector3(newSacle.x, newSacle.y, curScale.z));
 	}
-	public void setStartScale(Vector2 start)
-	{
-		mStartScale = start;
-	}
-	public void setTargetScale(Vector2 target)
-	{
-		mTargetScale = target;
-	}
+	public void setStartScale(Vector2 start){mStartScale = start;}
+	public void setTargetScale(Vector2 target){mTargetScale = target;}
+	//--------------------------------------------------------------------------------------------------------------------
+	protected override bool isType(Type type) { return base.isType(type) || type == typeof(WindowComponentScaleTrembling); }
 }

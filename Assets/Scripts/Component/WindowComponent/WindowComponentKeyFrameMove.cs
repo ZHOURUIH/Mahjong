@@ -10,13 +10,7 @@ public class WindowComponentKeyFrameMove : ComponentKeyFrame
 	public WindowComponentKeyFrameMove(Type type, string name)
 		:
 		base(type, name)
-	{
-		;
-	}
-	public override bool isType(Type type)
-	{
-		return base.isType(type) || type == typeof(WindowComponentKeyFrameMove);
-	}
+	{}
 	public override void applyTrembling(float value)
 	{
 		txUIObject uiObj = mComponentOwner as txUIObject;
@@ -25,4 +19,6 @@ public class WindowComponentKeyFrameMove : ComponentKeyFrame
 	}
 	public void setTargetPos(Vector3 pos) { mTargetPos = pos; }
 	public void setStartPos(Vector3 pos) { mStartPos = pos; }
+	//-------------------------------------------------------------------------------------------------------------
+	protected override bool isType(Type type) { return base.isType(type) || type == typeof(WindowComponentKeyFrameMove); }
 }

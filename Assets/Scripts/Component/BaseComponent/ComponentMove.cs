@@ -2,78 +2,25 @@
 using System;
 using System.Collections;
 
-public class ComponentMove : GameComponent
+public class ComponentMove : ComponentLinear
 {
-	public bool mPause;
-	public float mMoveTime;
-	public float mCurTimeCount;
-	public Vector3 mStartPosition;
-	public Vector3 mDestPosition;
-	public MoveCallback mMovingCallback;
-	public object mMovingUserData;
-	public MoveCallback mMoveDoneCallback;
-	public object mMoveDoneUserData;
-
+	protected Vector3 mStartPosition;
+	protected Vector3 mTargetPosition;
+	protected MoveCallback mMovingCallback;
+	protected object mMovingUserData;
+	protected MoveCallback mMoveDoneCallback;
+	protected object mMoveDoneUserData;
 	public ComponentMove(Type type, string name)
 		:
 		base(type, name)
 	{
-		mMoveTime = 0.0f;
-		mCurTimeCount = 0.0f;
-	    mPause = false;
 		clearCallback();
 	}
-		
-	public override  void setBaseType(){ mBaseType = typeof(ComponentMove); }
-	public override  void update(float elapsedTime)
+	public void start(float moveTime, Vector3 startPos, Vector3 targetPos, float timeOffset)
 	{
-		updatePosition(elapsedTime);
-		base.update(elapsedTime);
-	
-	}
-	public override bool isType(Type type) { return type == typeof(ComponentMove); }
-	public override void setActive( bool active)
-	{
-		base.setActive(active);
-		if (!active)
-		{
-			stop();
-		}
-	}
-	public void start(float moveTime, Vector3 startPos, Vector3 destPos, float timeOffset)
-	{	
-		start();
-		mMoveTime = moveTime;
 		mStartPosition = startPos;
-		mDestPosition = destPos;
-		mCurTimeCount = timeOffset;
-		bool isStop = MathUtility.isFloatZero(mMoveTime);
-		if (!isStop)
-		{
-			applyMove(mStartPosition + (mDestPosition - mStartPosition) * (mCurTimeCount / mMoveTime));
-		}
-		else
-		{
-			applyMove(mDestPosition);
-		}
-		afterApplyMove(isStop);
-	}
-	public void stop()
-	{
-		mMoveTime = 0.0f;
-		mCurTimeCount = 0.0f;
-	}
-	// 暂停
-	public void pause(){ mPause = true; }
-	// 从暂停状态恢复更新
-	public void start(){ mPause = false; }
-	public float getMovePercent()
-	{
-		if (MathUtility.isFloatZero(mMoveTime))
-		{
-			return 0.0f;
-		}
-		return mCurTimeCount / mMoveTime;
+		mTargetPosition = targetPos;
+		base.start(0.0f, 1.0f, moveTime, timeOffset);
 	}
 	public void setMoveDoneCallback(MoveCallback doneCallback, object userdata)
 	{
@@ -83,51 +30,21 @@ public class ComponentMove : GameComponent
 	{
 		setCallback(movingCallback, userdata, ref mMovingCallback,ref mMovingUserData, this);
 	}
-	public virtual void updatePosition(float elapsedTime) 
-	{
-		if (!mPause && mMoveTime > 0.0f)
-		{
-			Vector3 curPos;
-			mCurTimeCount += elapsedTime;
-			bool done = false;
-			if (mCurTimeCount < mMoveTime)
-			{
-				curPos = mStartPosition + (mDestPosition - mStartPosition) * (mCurTimeCount / mMoveTime);
-			}
-			else
-			{
-				curPos = mDestPosition;
-				done = true;
-			}
-			applyMove(curPos);
-			afterApplyMove(done);
-		}
-	}
-	public virtual void applyMove(Vector3 position, bool done = false)
-	{
-		;
-	}
-	public virtual void afterApplyMove(bool done = false) 
-	{ 
-		// 无论移动是否已经完成,都应该先调用正在移动的回调,确保数据正确
-		if (mMovingCallback != null)
-		{
-			mMovingCallback(this, mMovingUserData, false, done);
-		}
-		if (done)
-		{
-			setActive(false);
-			doneCallback(mMoveDoneCallback, mMoveDoneUserData, this);
-		}
-	}
-	public void clearCallback()
+	public void setStartPosition(Vector3 startPos) { mStartPosition = startPos; }
+	public void setTargetPosition(Vector3 targetPos) { mTargetPosition = targetPos; }
+	public Vector3 getStartPosition() { return mStartPosition; }
+	public Vector3 getTargetPosition() { return mTargetPosition; }
+	//---------------------------------------------------------------------------------------------------------------------------
+	protected override void setBaseType() { mBaseType = typeof(ComponentMove); }
+	protected override bool isType(Type type) { return type == typeof(ComponentMove); }
+	protected void clearCallback()
 	{
 		mMoveDoneCallback = null;
 		mMoveDoneUserData = null;
 		mMovingCallback = null;
 		mMovingUserData = null;
 	}
-	public static void setCallback(MoveCallback callback, object userData, ref MoveCallback curCallback, ref object curUserData, ComponentMove component)
+	protected static void setCallback(MoveCallback callback, object userData, ref MoveCallback curCallback, ref object curUserData, ComponentMove component)
 	{
 		MoveCallback tempCallback = curCallback;
 		object tempUserData = curUserData;
@@ -141,7 +58,7 @@ public class ComponentMove : GameComponent
 		curCallback = callback;
 		curUserData = userData;
 	}
-	public void doneCallback(MoveCallback curDoneCallback, object curDoneUserData, ComponentMove component)
+	protected void doneCallback(MoveCallback curDoneCallback, object curDoneUserData, ComponentMove component)
 	{
 		// 先保存回调,然后再调用回调之前就清空回调,确保在回调函数执行时已经完全完成
 		MoveCallback tempCallback = curDoneCallback;
@@ -150,6 +67,24 @@ public class ComponentMove : GameComponent
 		if (tempCallback != null)
 		{
 			tempCallback(component, tempUserData, false, true);
+		}
+	}
+	protected override void applyValue(float value, bool done = false)
+	{
+		applyMove(mStartPosition + (mTargetPosition - mStartPosition) * value, done);
+	}
+	protected virtual void applyMove(Vector3 position, bool done = false) { }
+	protected override void afterApplyValue(bool done = false)
+	{
+		// 无论移动是否已经完成,都应该先调用正在移动的回调,确保数据正确
+		if (mMovingCallback != null)
+		{
+			mMovingCallback(this, mMovingUserData, false, done);
+		}
+		base.afterApplyValue(done);
+		if (done)
+		{
+			doneCallback(mMoveDoneCallback, mMoveDoneUserData, this);
 		}
 	}
 }

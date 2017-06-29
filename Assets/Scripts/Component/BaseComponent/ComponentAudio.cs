@@ -57,13 +57,7 @@ public class ComponentAudio : GameComponent
 		mAudioSource.playOnAwake = false;
 	}
 	public override void update(float elapsedTime) { }
-	public override void setBaseType() { mBaseType = typeof(ComponentAudio); }
-	public override bool isType(Type type)
-	{
-		return type == typeof(ComponentAudio);
-	}
 	public virtual void setSoundOwner() { }
-
 	public void setLoop(bool loop = false)
 	{
 		mAudioManager.setLoop(mAudioSource, loop);
@@ -116,7 +110,6 @@ public class ComponentAudio : GameComponent
 	{
 		play(getAudioName(sound), loop, volume);
 	}
-
 	public virtual void stop(string name)
 	{
 		int channel = getAudioChannel(name);
@@ -141,4 +134,7 @@ public class ComponentAudio : GameComponent
 	{
 		mAudioManager.stopClip(mAudioSource);
 	}
+	//--------------------------------------------------------------------------------------------------------------------------
+	protected override void setBaseType() { mBaseType = typeof(ComponentAudio); }
+	protected override bool isType(Type type) { return type == typeof(ComponentAudio); }
 }

@@ -40,10 +40,6 @@ public class ComponentRotateToTarget : ComponentRotate
 		}
 		base.update(elapsedTime);
 	}
-	public override bool isType(Type type)
-	{
-		return base.isType(type) || type == typeof(ComponentRotateToTarget);
-	}
 	public override void stop()
 	{
 		base.stop();
@@ -136,4 +132,6 @@ public class ComponentRotateToTarget : ComponentRotate
 			rotateCallback(component, tempUserData, false, true);
 		}
 	}
+	//--------------------------------------------------------------------------------------------------------------------------------------
+	protected override bool isType(Type type){return base.isType(type) || type == typeof(ComponentRotateToTarget);}
 }

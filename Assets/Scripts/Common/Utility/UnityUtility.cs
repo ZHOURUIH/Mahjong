@@ -152,7 +152,7 @@ public class UnityUtility : GameBase
 		T instance = Activator.CreateInstance(classType, param) as T;
 		return instance;
 	}
-	public static Vector2 screenPosToEffectPos(Vector2 screenPos, Vector2 parentWorldPos, float effectDepth, bool isBack, bool isRelative = true)
+	public static Vector2 screenPosToEffectPos(Vector2 screenPos, Vector2 parentWorldPos,Vector2 parentWorldScale, float effectDepth, bool isBack, bool isRelative = true)
 	{
 		GameCamera camera = isBack ? mBackEffectCamera : mForeEffectCamera;
 		if (isRelative)
@@ -164,7 +164,8 @@ public class UnityUtility : GameBase
 			parentWorldPos.x = parentWorldPos.x / scale.x;
 			parentWorldPos.y = parentWorldPos.y / scale.y;
 		}
-		return (effectDepth / -camera.getPosition().z + 1) * screenPos - parentWorldPos;
+		Vector2 pos = (effectDepth / -camera.getPosition().z + 1) * screenPos - parentWorldPos;
+		return new Vector2(pos.x / parentWorldScale.x,pos.y/parentWorldScale.y);
 	}
 	public static void setGameObjectLayer(txUIObject obj, string layerName)
 	{

@@ -105,6 +105,14 @@ public class WavRecorder : GameBase
 				mLastPosition = curPos;
 			}
 		}
+		else 
+		{
+			if (mStartDevice!=-1)
+			{
+				mClip = Microphone.Start(mDeviceList[mStartDevice], false, maxRecordTime, mSampleRate);
+				mLastPosition = 0;
+			}
+		}
 	}
 	//----------------------------------------------------------------------------------------------------------------------------------
 	protected void receiveData(short[] data, int dataCount)

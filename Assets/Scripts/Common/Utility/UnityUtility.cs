@@ -42,11 +42,17 @@ public class UnityUtility : GameBase
 	}
 	public static void copyTextToClipbord(string str)
 	{
+#if UNITY_STANDALONE_WIN
 		Clipboard.SetText(str);
+#endif
 	}
 	public static string getTextFromClipboard()
 	{
+#if UNITY_STANDALONE_WIN
 		return Clipboard.GetText();
+#else
+		return "";
+#endif
 	}
 	public static void messageBox(string info, bool errorOrInfo)
 	{

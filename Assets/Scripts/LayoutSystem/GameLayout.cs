@@ -3,9 +3,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class GameLayout : MonoBehaviour
+public class GameLayout : GameBase
 {
-	protected static GameLayoutManager mLayoutManager;
 	protected LAYOUT_TYPE	mType;
 	protected LayoutScript	mScript;
 	protected string		mName;
@@ -17,13 +16,8 @@ public class GameLayout : MonoBehaviour
 	protected bool			mScriptControlHide;	// 是否由脚本来控制隐藏
 	protected Dictionary<int, txUIObject> mObjectList;
 	protected Dictionary<GameObject, txUIObject> mGameObjectSearchList;
-	protected Dictionary<int, GameObject> mGameObjectList;
-	void Awake()
+	public GameLayout()
 	{
-		if (mLayoutManager == null)
-		{
-			mLayoutManager = GameFramework.instance.getLayoutManager();
-		}
 		mObjectList = new Dictionary<int, txUIObject>();
 		mGameObjectSearchList = new Dictionary<GameObject, txUIObject>();
 		mScriptInited = false;
@@ -64,14 +58,14 @@ public class GameLayout : MonoBehaviour
 		mType = type;
 		mScript = createLayoutScript();
 		// 初始化布局脚本
-		mLayoutObject = mScript.newObject<txUIObject>(mLayoutManager.getUIRoot(), mName, -1);
+		mLayoutObject = mScript.newObject<txUIObject>(mLayoutManager.getUIRoot(), mName);
 		mRootPanel = mLayoutObject.mObject.GetComponent<UIPanel>();
 		if (mRootPanel == null)
 		{
 			UnityUtility.logError("error : layout root window must has a panel component!, name : " + mName);
 		}
 		setRenderOrder(renderOrder);
-		mRoot = mScript.newObject<txUIObject>(mLayoutObject, "Root", -1);
+		mRoot = mScript.newObject<txUIObject>(mLayoutObject, "Root");
 		mScript.setRoot(mRoot);
 		mScript.findAllWindow();
 		mScript.assignWindow();
@@ -87,7 +81,7 @@ public class GameLayout : MonoBehaviour
 			// 先更新所有的UI物体
 			foreach (var obj in mObjectList)
 			{
-				if(obj.Value.isActive())
+				if (obj.Value.isActive())
 				{
 					obj.Value.update(elapsedTime);
 				}
@@ -113,10 +107,7 @@ public class GameLayout : MonoBehaviour
 		}
 		return boxList;
 	}
-	public txUIObject getRoot()
-	{
-		return mRoot;
-	}
+	public txUIObject getRoot(){ return mRoot; }
 	// 设置是否会立即隐藏,应该由布局脚本调用
 	public void setScriptControlHide(bool control) { mScriptControlHide = control; }
 	public void setVisible(bool visible, bool immediately, string param)
@@ -161,10 +152,7 @@ public class GameLayout : MonoBehaviour
 		}
 		return false;
 	}
-	public LayoutScript getScript() 
-	{
-		return mScript; 
-	}
+	public LayoutScript getScript() { return mScript; }
 	public LAYOUT_TYPE getType() { return mType; }
 	public string getName() { return mName; }
 	public void registerUIObject(txUIObject uiObj)

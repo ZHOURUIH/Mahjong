@@ -8,9 +8,8 @@ public class GameLayout : GameBase
 	protected LAYOUT_TYPE	mType;
 	protected LayoutScript	mScript;
 	protected string		mName;
-	protected txUIObject	mLayoutObject;
+	protected txUIPanel		mLayoutPanel;
 	protected txUIObject	mRoot;
-	protected UIPanel		mRootPanel;
 	protected int			mRenderOrder;		// 渲染顺序,越大则渲染优先级越高
 	protected bool			mScriptInited;		// 脚本是否已经初始化
 	protected bool			mScriptControlHide;	// 是否由脚本来控制隐藏
@@ -26,10 +25,7 @@ public class GameLayout : GameBase
 	public void setRenderOrder(int renderOrder)
 	{
 		mRenderOrder = renderOrder;
-		if (mRootPanel != null)
-		{
-			mRootPanel.depth = mRenderOrder;
-		}
+		mLayoutPanel.setDepth(mRenderOrder);
 	}
 	public int getRenderOrder()
 	{
@@ -58,14 +54,9 @@ public class GameLayout : GameBase
 		mType = type;
 		mScript = createLayoutScript();
 		// 初始化布局脚本
-		mLayoutObject = mScript.newObject<txUIObject>(mLayoutManager.getUIRoot(), mName);
-		mRootPanel = mLayoutObject.mObject.GetComponent<UIPanel>();
-		if (mRootPanel == null)
-		{
-			UnityUtility.logError("error : layout root window must has a panel component!, name : " + mName);
-		}
+		mLayoutPanel = mScript.newObject<txUIPanel>(mLayoutManager.getUIRoot(), mName);
 		setRenderOrder(renderOrder);
-		mRoot = mScript.newObject<txUIObject>(mLayoutObject, "Root");
+		mRoot = mScript.newObject<txUIObject>(mLayoutPanel, "Root");
 		mScript.setRoot(mRoot);
 		mScript.findAllWindow();
 		mScript.assignWindow();
@@ -100,7 +91,7 @@ public class GameLayout : GameBase
 		foreach(var obj in mObjectList)
 		{
 			BoxCollider collider = obj.Value.mObject.GetComponent<BoxCollider>();
-			if (collider != null && collider.enabled)
+			if(collider != null)
 			{
 				boxList.Add(collider);
 			}
@@ -121,7 +112,7 @@ public class GameLayout : GameBase
 		// 显示布局时立即显示
 		if (visible)
 		{
-			mLayoutObject.setActive(visible);
+			mLayoutPanel.setActive(visible);
 			mScript.onReset();
 			mScript.onShow(immediately, param);
 		}
@@ -130,7 +121,7 @@ public class GameLayout : GameBase
 		{
 			if (!mScriptControlHide)
 			{
-				mLayoutObject.setActive(visible);
+				mLayoutPanel.setActive(visible);
 			}
 			mScript.onHide(immediately, param);
 		}
@@ -142,13 +133,13 @@ public class GameLayout : GameBase
 			return;
 		}
 		// 直接设置布局显示或隐藏
-		mLayoutObject.setActive(visible);
+		mLayoutPanel.setActive(visible);
 	}
 	public bool isVisible()
 	{
-		if (mLayoutObject != null)
+		if (mLayoutPanel != null)
 		{
-			return mLayoutObject.mObject.activeSelf;
+			return mLayoutPanel.isActive();
 		}
 		return false;
 	}
@@ -173,6 +164,6 @@ public class GameLayout : GameBase
 	}
 	public void setLayer(string layer)
 	{
-		UnityUtility.setGameObjectLayer(mLayoutObject, layer);
+		UnityUtility.setGameObjectLayer(mLayoutPanel, layer);
 	}
 }

@@ -42,6 +42,7 @@ public enum UI_OBJECT_TYPE
 	UBT_VIDEO,			// 用于播放视频的窗口
 	UBT_TEXT,           // 文本窗口
 	UBT_EDITBOX,		// 文本输入框
+	UBT_PANEL,			// 面板
 }
 // 停靠位置
 public enum DOCKING_POSITION

@@ -3,28 +3,28 @@ using System.Collections;
 
 public class CommandLayoutManagerLoadLayout : Command 
 {
-	public LAYOUT_TYPE	mType;
-	public bool			mVisible;
-	public GameLayout	mResultLayout;
-	public int			mRenderOrder;
-	public bool			mAsync;
-	public LayoutAsyncDone mCallback;
-	public string		mParam;
-
-	public CommandLayoutManagerLoadLayout(bool showInfo = true, bool delay = false)
-		:
-		base(showInfo, delay)
+	public LAYOUT_TYPE	mLayoutType = LAYOUT_TYPE.LT_MAX;
+	public bool			mVisible = true;
+	public GameLayout	mResultLayout = null;
+	public int			mRenderOrder = 0;
+	public bool			mAsync = false;
+	public LayoutAsyncDone mCallback = null;
+	public string		mParam = "";
+	public override void init()
 	{
-		mType = LAYOUT_TYPE.LT_MAX;
+		base.init();
+		mLayoutType = LAYOUT_TYPE.LT_MAX;
 		mVisible = true;
 		mResultLayout = null;
+		mRenderOrder = 0;
 		mAsync = false;
 		mCallback = null;
+		mParam = "";
 	}
 	public override void execute()
 	{
 		GameLayoutManager layoutManager = mReceiver as GameLayoutManager;
-		mResultLayout = layoutManager.createLayout(mType, mRenderOrder, mAsync, mCallback);
+		mResultLayout = layoutManager.createLayout(mLayoutType, mRenderOrder, mAsync, mCallback);
 		// 只有同步加载时才能立即设置布局的显示和渲染顺序
 		if (mResultLayout != null && !mAsync)
 		{
@@ -41,6 +41,6 @@ public class CommandLayoutManagerLoadLayout : Command
 	}
 	public override string showDebugInfo()
 	{
-		return this.GetType().ToString()+"layout type : " + mType + ", visible : " + mVisible;
+		return this.GetType().ToString() + "layout type : " + mLayoutType + ", visible : " + mVisible;
 	}
 }

@@ -44,7 +44,7 @@ abstract public class GameScene : ComponentOwner
 		// 设置起始流程名
 		assignStartExitProcedure();
         // 开始执行起始流程
-        CommandGameSceneChangeProcedure cmd  = new CommandGameSceneChangeProcedure(false, false);
+        CommandGameSceneChangeProcedure cmd  = mCommandSystem.newCmd<CommandGameSceneChangeProcedure>(false, false);
         cmd.mProcedure = mStartProcedure;
         mCommandSystem.pushCommand(cmd, this);
     }

@@ -6,10 +6,11 @@ using System.Text;
 public class CommandRoomJoin : Command
 {
 	public Character mCharacter;
-	public CommandRoomJoin(bool showInfo = true, bool delay = false)
-		:
-		base(showInfo, delay)
-	{ }
+	public override void init()
+	{
+		base.init();
+		mCharacter = null;
+	}
 	public override void execute()
 	{
 		Room room = mReceiver as Room;

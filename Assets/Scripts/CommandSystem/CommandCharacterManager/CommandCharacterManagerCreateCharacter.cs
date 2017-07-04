@@ -7,13 +7,13 @@ public class CommandCharacterManagerCreateCharacter : Command
 	public string			mName;
 	public Character		mResultCharacter;
 	public int				mGUID;
-	public CommandCharacterManagerCreateCharacter(bool showInfo = true, bool delay = false)
-		:
-		base(showInfo, delay)
+	public override void init()
 	{
-		mCharacterType  = CHARACTER_TYPE.CT_MAX;
+		base.init();
+		mCharacterType = CHARACTER_TYPE.CT_MAX;
 		mName = null;
 		mResultCharacter = null;
+		mGUID = CommonDefine.INVALID_ID;
 	}
 	public override void execute()
 	{

@@ -20,7 +20,7 @@ public class SCNotifyGetStartMahjong : SocketPacket
 	}
 	public override void execute()
 	{
-		CommandCharacterGetStart cmd = new CommandCharacterGetStart();
+		CommandCharacterGetStart cmd = mCommandSystem.newCmd<CommandCharacterGetStart>();
 		cmd.mMahjong = (MAHJONG)mMahjong.mValue;
 		mCommandSystem.pushCommand(cmd, mCharacterManager.getCharacterByGUID(mPlayerGUID.mValue));
 	}

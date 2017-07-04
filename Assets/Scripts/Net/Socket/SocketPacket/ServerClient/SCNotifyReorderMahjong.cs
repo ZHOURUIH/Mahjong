@@ -18,7 +18,7 @@ public class SCNotifyReorderMahjong : SocketPacket
 	}
 	public override void execute()
 	{
-		CommandCharacterReorderMahjong cmd = new CommandCharacterReorderMahjong();
+		CommandCharacterReorderMahjong cmd = mCommandSystem.newCmd<CommandCharacterReorderMahjong>();
 		mCommandSystem.pushCommand(cmd, mCharacterManager.getCharacterByGUID(mPlayerGUID.mValue));
 	}
 }

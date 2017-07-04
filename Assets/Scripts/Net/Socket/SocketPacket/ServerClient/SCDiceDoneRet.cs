@@ -20,7 +20,7 @@ public class SCDiceDoneRet : SocketPacket
 			return;
 		}
 		// 进入到发牌流程
-		CommandGameSceneChangeProcedure cmd = new CommandGameSceneChangeProcedure();
+		CommandGameSceneChangeProcedure cmd = mCommandSystem.newCmd<CommandGameSceneChangeProcedure>();
 		cmd.mProcedure = PROCEDURE_TYPE.PT_MAHJONG_RUNNING_GET_START;
 		mCommandSystem.pushCommand(cmd, gameScene);
 	}

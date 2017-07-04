@@ -20,7 +20,7 @@ public class SCRegisterRet : SocketPacket
 	{
 		if (mResult.mValue == 0)
 		{
-			CommandGameSceneChangeProcedure cmd = new CommandGameSceneChangeProcedure(true, true);
+			CommandGameSceneChangeProcedure cmd = mCommandSystem.newCmd<CommandGameSceneChangeProcedure>(true, true);
 			cmd.mProcedure = PROCEDURE_TYPE.PT_START_LOGIN;
 			mCommandSystem.pushDelayCommand(cmd, mGameSceneManager.getCurScene());
 		}

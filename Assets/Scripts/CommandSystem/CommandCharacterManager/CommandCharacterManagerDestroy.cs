@@ -6,10 +6,13 @@ public class CommandCharacterManagerDestroy : Command
 	public int mGUID = CommonDefine.INVALID_ID;
 	public int mClientID = CommonDefine.INVALID_ID;
 	public string mName;
-	public CommandCharacterManagerDestroy(bool showInfo = true, bool delay = false)
-		:
-		base(showInfo, delay)
-	{ }
+	public override void init()
+	{
+		base.init();
+		mGUID = CommonDefine.INVALID_ID;
+		mClientID = CommonDefine.INVALID_ID;
+		mName = "";
+	}
 	public override void execute()
 	{
 		CharacterManager characterManager = (mReceiver) as CharacterManager;

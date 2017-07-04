@@ -107,7 +107,7 @@ public class GameFramework : MonoBehaviour
 		mLayoutPrefabManager.init();
 		mMaterialManager.init();
 
-		CommandGameSceneManagerEnter cmd = new CommandGameSceneManagerEnter(false, false);
+		CommandGameSceneManagerEnter cmd = mCommandSystem.newCmd<CommandGameSceneManagerEnter>(false, false);
 		cmd.mSceneType = GAME_SCENE_TYPE.GST_START;
 		mCommandSystem.pushCommand(cmd, getGameSceneManager());
 	}

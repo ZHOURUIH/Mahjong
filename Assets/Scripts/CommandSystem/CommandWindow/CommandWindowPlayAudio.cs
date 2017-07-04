@@ -9,10 +9,14 @@ public class CommandWindowPlayAudio : Command
 	public string mSoundFileName;
 	public bool mLoop = false;
 	public float mVolume = 1.0f;
-	public CommandWindowPlayAudio(bool showInfo = true, bool delay = false)
-		:
-		base(showInfo, delay)
-	{ }
+	public override void init()
+	{
+		base.init();
+		mSound = SOUND_DEFINE.SD_MAX;
+		mSoundFileName = "";
+		mLoop = false;
+		mVolume = 1.0f;
+	}
 	public override void execute()
 	{
 		txUIObject window = mReceiver as txUIObject;
@@ -31,7 +35,6 @@ public class CommandWindowPlayAudio : Command
 			audioComponent.play(soundName, mLoop, mVolume);
 		}
 	}
-
 	public override string showDebugInfo()
 	{
 		string soundName;
@@ -46,4 +49,3 @@ public class CommandWindowPlayAudio : Command
 		return this.GetType().ToString() + " : sound : " + mSound + ", name : " + soundName + ", loop : " + mLoop + ", volume : " + mVolume;
 	}
 }
-

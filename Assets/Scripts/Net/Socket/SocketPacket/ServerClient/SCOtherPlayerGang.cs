@@ -30,7 +30,7 @@ public class SCOtherPlayerGang : SocketPacket
 		// 清空提示信息
 		ScriptMahjongFrame mahjongFrame = mLayoutManager.getScript(LAYOUT_TYPE.LT_MAHJONG_FRAME) as ScriptMahjongFrame;
 		mahjongFrame.notifyInfo("");
-		CommandCharacterGang cmdGang = new CommandCharacterGang();
+		CommandCharacterGang cmdGang = mCommandSystem.newCmd<CommandCharacterGang>();
 		cmdGang.mDroppedPlayer = mCharacterManager.getCharacterByGUID(mDroppedPlayerGUID.mValue);
 		cmdGang.mMahjong = (MAHJONG)mMahjong.mValue;
 		mCommandSystem.pushCommand(cmdGang, mCharacterManager.getCharacterByGUID(mOtherPlayerGUID.mValue));

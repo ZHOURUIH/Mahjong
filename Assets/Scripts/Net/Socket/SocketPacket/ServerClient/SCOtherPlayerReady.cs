@@ -20,7 +20,7 @@ public class SCOtherPlayerReady : SocketPacket
 	}
 	public override void execute()
 	{
-		CommandCharacterNotifyReady cmd = new CommandCharacterNotifyReady();
+		CommandCharacterNotifyReady cmd = mCommandSystem.newCmd<CommandCharacterNotifyReady>();
 		cmd.mReady = mReady.mValue;
 		mCommandSystem.pushCommand(cmd, mCharacterManager.getCharacterByGUID(mPlayerGUID.mValue));
 	}

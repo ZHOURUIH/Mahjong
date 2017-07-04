@@ -4,10 +4,11 @@ using System.Collections;
 public class CommandGameSceneStopAudio : Command
 {
 	public SOUND_DEFINE mSound;
-	public CommandGameSceneStopAudio(bool showInfo = true, bool delay = false)
-		:
-		base(showInfo, delay)
-	{ }
+	public override void init()
+	{
+		base.init();
+		mSound = SOUND_DEFINE.SD_MAX;
+	}
 	public override void execute()
 	{
 		GameScene gameScene = (mReceiver) as GameScene;

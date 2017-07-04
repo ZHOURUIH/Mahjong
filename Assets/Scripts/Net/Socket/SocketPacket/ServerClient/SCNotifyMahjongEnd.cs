@@ -21,7 +21,7 @@ public class SCNotifyMahjongEnd : SocketPacket
 		}
 		MahjongScene mahjongScene = gameScene as MahjongScene;
 		Room room = mahjongScene.getRoom();
-		CommandRoomEnd cmdEnd = new CommandRoomEnd();
+		CommandRoomEnd cmdEnd = mCommandSystem.newCmd<CommandRoomEnd>();
 		mCommandSystem.pushCommand(cmdEnd, room);
 	}
 }

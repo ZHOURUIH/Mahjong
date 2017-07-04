@@ -7,14 +7,21 @@ public class CommandWindowRotateToTarget : Command
 	public float mRotateTime;
 	public float mTimeOffset;
 	public RotateToTargetCallback mRotatingCallback;
-	public object mRotatingUserData;
 	public RotateToTargetCallback mRotateDoneCallback;
+	public object mRotatingUserData;
 	public object mRotateDoneUserData;
-
-	public CommandWindowRotateToTarget(bool showInfo = true, bool delay = false)
-		:
-		base(showInfo, delay)
-	{ }
+	public override void init()
+	{
+		base.init();
+		mStartAngle = Vector3.zero;
+		mTargetAngle = Vector3.zero;
+		mRotateTime = 1.0f;
+		mTimeOffset = 0.0f;
+		mRotatingCallback = null;
+		mRotateDoneCallback = null;
+		mRotatingUserData = null;
+		mRotateDoneUserData = null;
+	}
 	public override void execute()
 	{
 		txUIObject window = (mReceiver) as txUIObject;

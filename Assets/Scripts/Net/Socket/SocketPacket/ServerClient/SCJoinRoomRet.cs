@@ -46,7 +46,7 @@ public class SCJoinRoomRet : SocketPacket
 			data.mBanker = mBanker.mValue;
 
 			// 进入麻将场景
-			CommandGameSceneManagerEnter cmd = new CommandGameSceneManagerEnter();
+			CommandGameSceneManagerEnter cmd = mCommandSystem.newCmd<CommandGameSceneManagerEnter>();
 			cmd.mSceneType = GAME_SCENE_TYPE.GST_MAHJONG;
 			mCommandSystem.pushCommand(cmd, mGameSceneManager);
 
@@ -54,7 +54,7 @@ public class SCJoinRoomRet : SocketPacket
 			MahjongScene mahjongScene = mGameSceneManager.getCurScene() as MahjongScene;
 			Room room = mahjongScene.createRoom(myself.getCharacterData().mRoomID);
 			// 将自己加入房间
-			CommandRoomJoin cmdJoin = new CommandRoomJoin();
+			CommandRoomJoin cmdJoin = mCommandSystem.newCmd<CommandRoomJoin>();
 			cmdJoin.mCharacter = myself;
 			mCommandSystem.pushCommand(cmdJoin, room);
 		}

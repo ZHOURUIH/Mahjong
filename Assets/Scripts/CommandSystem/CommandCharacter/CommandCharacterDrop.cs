@@ -6,10 +6,12 @@ public class CommandCharacterDrop : Command
 {
 	public MAHJONG mMah;
 	public int mIndex;
-	public CommandCharacterDrop(bool showInfo = true, bool delay = false)
-		:
-		base(showInfo, delay)
-	{ }
+	public override void init()
+	{
+		base.init();
+		mMah = MAHJONG.M_MAX;
+		mIndex = 0;
+	}
 	public override void execute()
 	{
 		Character character = (mReceiver) as Character;

@@ -3,10 +3,10 @@ using System.Collections;
 
 public class CommandMahjongSceneNotifyDiceDone : Command
 {
-	public CommandMahjongSceneNotifyDiceDone(bool showInfo = true, bool delay = false)
-		:
-		base(showInfo, delay)
-	{ }
+	public override void init()
+	{
+		base.init();
+	}
 	public override void execute()
 	{
 		GameScene gameScene = (mReceiver) as GameScene;

@@ -4,18 +4,25 @@ using System.Collections;
 public class CommandWindowScale : Command
 {
 	public ScaleCallback mScalingCallback;
-	public object		 mScalingUserData;
 	public ScaleCallback mScaleDoneCallback;
-	public object		mScaleDoneUserData;
-	public float mTimeOffset;					// 缩放的起始时间偏移
-	public float mScaleTime;					// 缩放的总时间
+	public object		 mScalingUserData;
+	public object		 mScaleDoneUserData;
+	public float mTimeOffset;				// 缩放的起始时间偏移
+	public float mScaleTime;				// 缩放的总时间
 	public Vector2 mStartScale;				// 窗口起始缩放值
-	public Vector2 mTargetScale;				// 窗口的目标缩放值
-
-	public CommandWindowScale(bool showInfo = true, bool delay = false)
-		:
-		base(showInfo, delay)
-	{ }
+	public Vector2 mTargetScale;			// 窗口的目标缩放值
+	public override void init()
+	{
+		base.init();
+		mScalingCallback = null;
+		mScaleDoneCallback = null;
+		mScalingUserData = null;
+		mScaleDoneUserData = null;
+		mTimeOffset = 0.0f;
+		mScaleTime = 0.0f;
+		mStartScale = Vector2.one;
+		mTargetScale = Vector2.one;
+	}
 	public override void execute()
 	{
 		txUIObject window = (txUIObject)(mReceiver);

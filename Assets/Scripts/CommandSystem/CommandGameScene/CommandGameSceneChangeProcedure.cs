@@ -5,10 +5,12 @@ public class CommandGameSceneChangeProcedure : Command
 {
 	public PROCEDURE_TYPE mProcedure;
 	public string mIntent;
-	public CommandGameSceneChangeProcedure(bool showInfo = true, bool delay = false)
-		:
-		base(showInfo, delay)
-	{ }
+	public override void init()
+	{
+		base.init();
+		mProcedure = PROCEDURE_TYPE.PT_NONE;
+		mIntent = "";
+	}
 	public override void execute()
 	{
 		GameScene gameScene = mReceiver as GameScene;

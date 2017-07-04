@@ -7,10 +7,12 @@ public class CommandMahjongSystemNotifyGet : Command
 {
 	public Character mCharacter;
 	public MAHJONG mMahjong;
-	public CommandMahjongSystemNotifyGet(bool showInfo = true, bool delay = false)
-		:
-		base(showInfo, delay)
-	{ }
+	public override void init()
+	{
+		base.init();
+		mCharacter = null;
+		mMahjong = MAHJONG.M_MAX;
+	}
 	public override void execute()
 	{
 		MahjongSystem mahjongSystem = mReceiver as MahjongSystem;

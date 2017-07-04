@@ -40,6 +40,7 @@ public class GameFramework : MonoBehaviour
 	protected ResourceManager		mResourcesManager	= null;
 	protected LayoutPrefabManager	mLayoutPrefabManager = null;
 	protected MaterialManager		mMaterialManager	= null;
+	protected PlayerHeadManager		mPlayerHeadManager	= null;
 	protected bool					mPauseFrame			= false; // 暂停整个程序
 	public void Start()
 	{
@@ -71,6 +72,7 @@ public class GameFramework : MonoBehaviour
 		mResourcesManager = new ResourceManager();
 		mLayoutPrefabManager = new LayoutPrefabManager();
 		mMaterialManager = new MaterialManager();
+		mPlayerHeadManager = new PlayerHeadManager();
 
 		// 所有类都构造完成后通知GameBase
 		GameBase.notifyConstructDone();
@@ -106,6 +108,7 @@ public class GameFramework : MonoBehaviour
 		mCameraManager.init();
 		mLayoutPrefabManager.init();
 		mMaterialManager.init();
+		mPlayerHeadManager.init();
 
 		CommandGameSceneManagerEnter cmd = new CommandGameSceneManagerEnter(false, false);
 		cmd.mSceneType = GAME_SCENE_TYPE.GST_START;
@@ -159,6 +162,7 @@ public class GameFramework : MonoBehaviour
 		mResourcesManager.destroy();
 		mMaterialManager.destroy();
 		mApplicationConfig.destory();
+		mPlayerHeadManager.destroy();
 		mLayoutPrefabManager = null;
 		mMahjongSystem = null;
 		mGameConfig = null;
@@ -183,6 +187,7 @@ public class GameFramework : MonoBehaviour
 		mResourcesManager = null;
 		mMaterialManager = null;
 		mApplicationConfig = null;
+		mPlayerHeadManager = null;
 	}
 	public void stop()
 	{
@@ -219,4 +224,5 @@ public class GameFramework : MonoBehaviour
 	public LayoutPrefabManager getLayoutPrefabManager() { return mLayoutPrefabManager; }
 	public GameConfig getGameConfig() { return mGameConfig; }
 	public MaterialManager getMaterialManager() { return mMaterialManager; }
+	public PlayerHeadManager getPlayerHeadManager() { return mPlayerHeadManager; }
 }

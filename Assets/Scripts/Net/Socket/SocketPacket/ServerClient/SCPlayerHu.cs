@@ -38,7 +38,7 @@ public class SCPlayerHu : SocketPacket
 			for(int j = 0; j < CommonDefine.MAX_HU_COUNT; ++i)
 			{
 				HU_TYPE huType = (HU_TYPE)mHuList.mValue[i * CommonDefine.MAX_HU_COUNT + j];
-				if(huType == HU_TYPE.HT_NONE)
+				if(huType == HU_TYPE.HT_MAX)
 				{
 					break;
 				}

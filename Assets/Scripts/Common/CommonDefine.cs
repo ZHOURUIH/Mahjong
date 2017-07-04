@@ -276,9 +276,22 @@ public enum PLAYER_POSITION
 // 胡牌类型
 public enum HU_TYPE
 {
-	HT_NONE,		// 没有人胡
 	HT_NORMAL,		// 平胡
 	HT_QINGYISE,	// 清一色
+	HT_QUESE,		// 缺一门
+	HT_HUA,			// 花牌
+	HT_GANG,		// 杠牌
+	HT_ANGANG,		// 暗杠
+	HT_MENQING,		// 门清
+	HT_DUIDUIHU,	// 对对胡
+	HT_ANQIDUI,		// 暗七对
+	HT_LONGQIDUI,	// 龙七对
+	HT_GANGSHANGHUA,// 杠上花
+	HT_GANGSHANGPAO,// 杠上炮
+	HT_HAIDIHUA,	// 海底花
+	HT_HAIDIPAO,	// 海底炮
+	HT_TIANHU,		// 天胡
+	HT_MAX,
 }
 
 // 游戏委托定义-------------------------------------------------------------------------------------------------------------
@@ -298,7 +311,7 @@ public delegate void AssetLoadDoneCallback(UnityEngine.Object res);
 public delegate void AssetBundleLoadDoneCallback(List<UnityEngine.Object> resList);
 public delegate void LayoutAsyncDone(GameLayout layout);
 public delegate void VideoPlayEndCallback(string videoName, bool isBreak);
-public delegate void LoadURLTextureCallback(Texture tex);
+public delegate void LoadURLTextureCallback(Texture tex, object userData);
 
 // 游戏常量定义-------------------------------------------------------------------------------------------------------------
 public class CommonDefine
@@ -378,6 +391,16 @@ public class CommonDefine
 		"Tong0", "Tong1", "Tong2", "Tong3", "Tong4", "Tong5", "Tong6", "Tong7", "Tong8",
 		"Tiao0", "Tiao1", "Tiao2", "Tiao3", "Tiao4", "Tiao5", "Tiao6", "Tiao7", "Tiao8",
 		"Wan0", "Wan1", "Wan2", "Wan3", "Wan4", "Wan5", "Wan6", "Wan7", "Wan8"
+	};
+	// 所有胡牌类型的名字,必须与枚举一一对应
+	public static string[] HU_NAME = new string[(int)HU_TYPE.HT_MAX]
+	{
+		"平胡", "清一色", "缺一门", "花牌", "杠牌", "暗杠", "门清", "对对胡",
+		"暗七对", "龙七对", "杠上花", "杠上炮", "海底花", "海底炮", "天胡"
+	};
+	public static int[] HU_MULTIPLE = new int[(int)HU_TYPE.HT_MAX]
+	{
+		1, 4, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2
 	};
 	public static string[] mHandInRootName = new string[MAX_PLAYER_COUNT] { "MyHandInRoot", "LeftHandInRoot", "OppositeHandInRoot", "RightHandInRoot" };
 	public static string[] mPengGangRootName = new string[MAX_PLAYER_COUNT] { "MyPengGangRoot", "LeftPengGangRoot", "OppositePengGangRoot", "RightPengGangRoot" };

@@ -19,9 +19,10 @@ public class GameBase
 	public static MahjongSystem		mMahjongSystem		= null;
 	public static ResourceManager	mResourceManager	= null;
 	public static CameraManager		mCameraManager		= null;
-	public static GameConfig		mGameConfig = null;
+	public static GameConfig		mGameConfig			= null;
 	public static LayoutPrefabManager mLayoutPrefabManager = null;
 	public static MaterialManager	mMaterialManager	= null;
+	public static PlayerHeadManager mPlayerHeadManager	= null;
 	public static void notifyConstructDone()
 	{
 		if (mGameFramework == null)
@@ -43,6 +44,7 @@ public class GameBase
 			mLayoutPrefabManager = mGameFramework.getLayoutPrefabManager();
 			mGameConfig = mGameFramework.getGameConfig();
 			mMaterialManager = mGameFramework.getMaterialManager();
+			mPlayerHeadManager = mGameFramework.getPlayerHeadManager();
 		}
 	}
 }

@@ -6,10 +6,11 @@ using System.Text;
 public class CommandRoomLeave : Command
 {
 	public Character mCharacter;
-	public CommandRoomLeave(bool showInfo = true, bool delay = false)
-		:
-		base(showInfo, delay)
-	{ }
+	public override void init()
+	{
+		base.init();
+		mCharacter = null;
+	}
 	public override void execute()
 	{
 		Room room = mReceiver as Room;
@@ -18,12 +19,12 @@ public class CommandRoomLeave : Command
 		ScriptAllCharacterInfo allInfo = mLayoutManager.getScript(LAYOUT_TYPE.LT_ALL_CHARACTER_INFO) as ScriptAllCharacterInfo;
 		allInfo.notifyCharacterLeave(mCharacter);
 		// 通知玩家已经离开房间
-		CommandCharacterNotifyLeave cmdLeave = new CommandCharacterNotifyLeave();
+		CommandCharacterNotifyLeave cmdLeave = mCommandSystem.newCmd<CommandCharacterNotifyLeave>();
 		mCommandSystem.pushCommand(cmdLeave, mCharacter);
 		// 如果不是玩家自己,则需要销毁玩家
 		if (mCharacter.getType() != CHARACTER_TYPE.CT_MYSELF)
 		{
-			CommandCharacterManagerDestroy cmd = new CommandCharacterManagerDestroy();
+			CommandCharacterManagerDestroy cmd = mCommandSystem.newCmd<CommandCharacterManagerDestroy>();
 			cmd.mGUID = mCharacter.getCharacterData().mGUID;
 			mCommandSystem.pushCommand(cmd, mCharacterManager);
 		}

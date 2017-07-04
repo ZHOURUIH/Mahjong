@@ -4,10 +4,11 @@ using System.Collections;
 public class CommandCharacterNotifyReady : Command
 {
 	public bool mReady;
-	public CommandCharacterNotifyReady(bool showInfo = true, bool delay = false)
-		:
-		base(showInfo, delay)
-	{ }
+	public override void init()
+	{
+		base.init();
+		mReady = false;
+	}
 	public override void execute()
 	{
 		Character character = (mReceiver) as Character;

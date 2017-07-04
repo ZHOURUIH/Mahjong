@@ -5,23 +5,31 @@ using System.Text;
 using UnityEngine;
 class CommandWindowHSL : Command
 {
-	public Vector3 mStartHSL = Vector3.one;
-	public Vector3 mTargetHSL = Vector3.one;
+	public Vector3 mStartHSL = Vector3.zero;
+	public Vector3 mTargetHSL = Vector3.zero;
 	public float mFadeTime = 1.0f;
 	public float mTimeOffset = 0.0f;
 	public bool mFadeChildren = true;
 	public HSLCallback mFadingCallback = null;
-	public object mFadingUserData = null;
 	public HSLCallback mFadeDoneCallback = null;
+	public object mFadingUserData = null;
 	public object mFadeDoneUserData = null;
-
-	public CommandWindowHSL(bool showInfo = true, bool delay = false)
-		:
-		base(showInfo, delay)
-	{ }
+	public override void init()
+	{
+		base.init();
+		mStartHSL = Vector3.zero;
+		mTargetHSL = Vector3.zero;
+		mFadeTime = 1.0f;
+		mTimeOffset = 0.0f;
+		mFadeChildren = true;
+		mFadingCallback = null;
+		mFadeDoneCallback = null;
+		mFadingUserData = null;
+		mFadeDoneUserData = null;
+	}
 	public override void execute()
 	{
-		txUIObject window = (txUIObject)(mReceiver);
+		txUIObject window = mReceiver as txUIObject;
 		WindowComponentHSL componentHSL = window.getFirstComponent<WindowComponentHSL>();
 		if (componentHSL != null)
 		{
@@ -42,4 +50,3 @@ class CommandWindowHSL : Command
 		mFadeDoneUserData = userData;
 	}
 }
-

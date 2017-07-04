@@ -27,7 +27,7 @@ public class SCLeaveRoomRet : SocketPacket
 			Room room = (mGameSceneManager.getCurScene() as MahjongScene).getRoom();
 			room.leaveAllRoomPlayer();
 			// 进入到上一个场景
-			CommandGameSceneManagerEnter cmdEnter = new CommandGameSceneManagerEnter();
+			CommandGameSceneManagerEnter cmdEnter = mCommandSystem.newCmd<CommandGameSceneManagerEnter>();
 			cmdEnter.mSceneType = GAME_SCENE_TYPE.GST_MAIN;
 			mCommandSystem.pushCommand(cmdEnter, mGameSceneManager);
 		}

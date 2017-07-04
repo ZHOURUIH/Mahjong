@@ -63,7 +63,7 @@ public class MahjongSceneLoading : SceneProcedure
 	{
 		QualitySettings.vSyncCount = mLastVSync;
 		Application.targetFrameRate = mLastTargetFrameRate;
-		CommandGameSceneChangeProcedure cmd = new CommandGameSceneChangeProcedure(true, true);
+		CommandGameSceneChangeProcedure cmd = mCommandSystem.newCmd<CommandGameSceneChangeProcedure>(true, true);
 		cmd.mProcedure = PROCEDURE_TYPE.PT_MAHJONG_WAITING;
 		mCommandSystem.pushDelayCommand(cmd, mGameScene);
 	}

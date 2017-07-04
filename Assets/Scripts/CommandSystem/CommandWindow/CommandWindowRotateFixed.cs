@@ -4,11 +4,13 @@ using System.Collections;
 public class CommandWindowRotateFixed : Command
 {
 	public bool mActive;
-	public Vector3 mFixedEuler;
-	public CommandWindowRotateFixed (bool showInfo = true, bool delay = false)
-		:
-		base(showInfo, delay)
-	{ }
+	public Vector3 mFixedEuler = Vector3.zero;
+	public override void init()
+	{
+		base.init();
+		mActive = true;
+		mFixedEuler = Vector3.zero;
+	}
 	public override void execute()
 	{
 		txUIObject window = (mReceiver) as txUIObject;

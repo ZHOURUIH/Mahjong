@@ -71,7 +71,7 @@ public class MainSceneLoading : SceneProcedure
 		QualitySettings.vSyncCount = mLastVSync;
 		Application.targetFrameRate = mLastTargetFrameRate;
 
-		CommandGameSceneChangeProcedure cmd = new CommandGameSceneChangeProcedure(true, true);
+		CommandGameSceneChangeProcedure cmd = mCommandSystem.newCmd<CommandGameSceneChangeProcedure>(true, true);
 		cmd.mProcedure = PROCEDURE_TYPE.PT_MAIN_RUNNING;
 		mCommandSystem.pushDelayCommand(cmd, mGameScene);
 	}

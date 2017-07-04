@@ -64,7 +64,7 @@ public class ScriptRegister : LayoutScript
 	protected void onCancelClick(GameObject button)
 	{
 		// 取消时返回登录流程
-		CommandGameSceneChangeProcedure cmd = new CommandGameSceneChangeProcedure();
+		CommandGameSceneChangeProcedure cmd = mCommandSystem.newCmd<CommandGameSceneChangeProcedure>();
 		cmd.mProcedure = PROCEDURE_TYPE.PT_START_LOGIN;
 		mCommandSystem.pushCommand(cmd, mGameSceneManager.getCurScene());
 	}

@@ -36,7 +36,7 @@ public class LogoSceneLoading : SceneProcedure
 		if (mLoadedCount == mLoadInfo.Count && mKeyFrameManager.isLoadDone() && mAudioManager.isLoadDone() && mLayoutPrefabManager.isLoadDone())
 		{
 			// 加载结束后进入登录流程
-			CommandGameSceneChangeProcedure cmd = new CommandGameSceneChangeProcedure(true, true);
+			CommandGameSceneChangeProcedure cmd = mCommandSystem.newCmd<CommandGameSceneChangeProcedure>(true, true);
 			cmd.mProcedure = PROCEDURE_TYPE.PT_START_LOGIN;
 			mCommandSystem.pushDelayCommand(cmd, mGameScene);
 		}

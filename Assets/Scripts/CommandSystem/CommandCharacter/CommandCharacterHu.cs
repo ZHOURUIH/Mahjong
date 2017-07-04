@@ -3,10 +3,10 @@ using System.Collections;
 
 public class CommandCharacterHu : Command
 {
-	public CommandCharacterHu(bool showInfo = true, bool delay = false)
-		:
-		base(showInfo, delay)
-	{ }
+	public override void init()
+	{
+		base.init();
+	}
 	public override void execute()
 	{
 		;

@@ -3,23 +3,24 @@ using System.Collections;
 
 public class CommandLayoutManagerLayoutVisible : Command
 {
-	public LAYOUT_TYPE	mType;
-	public bool			mForce;
-	public bool			mImmediately;
-	public bool			mVisibility;
-	public string		mParam;
-	public CommandLayoutManagerLayoutVisible(bool showInfo = true, bool delay = false)
-		:
-		base(showInfo, delay)
+	public LAYOUT_TYPE	mLayoutType = LAYOUT_TYPE.LT_MAX;
+	public bool			mForce = false;
+	public bool			mImmediately = false;
+	public bool			mVisibility = true;
+	public string		mParam = "";
+	public override void init()
 	{
+		base.init();
+		mLayoutType = LAYOUT_TYPE.LT_MAX;
 		mForce = false;
 		mImmediately = false;
 		mVisibility = true;
+		mParam = "";
 	}
 	public override void execute()
 	{
 		GameLayoutManager layoutManager = mReceiver as GameLayoutManager;
-		GameLayout layout = layoutManager.getGameLayout(mType);
+		GameLayout layout = layoutManager.getGameLayout(mLayoutType);
 		if (layout != null)
 		{
 			if (!mForce)
@@ -34,6 +35,6 @@ public class CommandLayoutManagerLayoutVisible : Command
 	}
 	public override string showDebugInfo()
 	{
-		return this.GetType().ToString() + " : type : " + mType + ", visibility : " + mVisibility;
+		return this.GetType().ToString() + " : type : " + mLayoutType + ", visibility : " + mVisibility;
 	}
 }

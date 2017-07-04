@@ -5,11 +5,12 @@ using System.Collections.Generic;
 // 询问玩家是否确定要碰杠胡
 public class CommandCharacterAskAction : Command
 {
-	public List<MahjongAction> mActionList;
-	public CommandCharacterAskAction(bool showInfo = true, bool delay = false)
-		:
-		base(showInfo, delay)
-	{ }
+	public List<MahjongAction> mActionList = null;
+	public override void init()
+	{
+		base.init();
+		mActionList = null;
+	}
 	public override void execute()
 	{
 		Character character = (mReceiver) as Character;

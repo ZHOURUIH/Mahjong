@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -7,20 +8,31 @@ public abstract class Command : GameBase
 	public CommandReceiver			mReceiver;		// 命令接受者
 	public bool						mShowDebugInfo;	// 是否显示调试信息
 	public bool						mDelayCommand;	// 是否是延迟执行的命令
+	public bool						mValid;
 	public List<CommandCallback>	mEndCallback;	// 命令执行完毕时的回调函数
 	public List<CommandCallback>	mStartCallback;	// 命令开始执行时的回调函数
 	public List<object>				mEndUserData;
 	public List<object>				mStartUserData;
-
-	public Command(bool showInfo = true, bool delay = false)
+	public Type						mType;
+	public Command()
 	{
 		mReceiver = null;
-		mShowDebugInfo = showInfo;
 		mEndCallback = new List<CommandCallback>();
 		mStartCallback = new List<CommandCallback>();
 		mEndUserData = new List<object>();
 		mStartUserData = new List<object>();
-		mDelayCommand = delay;
+		mValid = false;
+	}
+	public virtual void init()
+	{
+		mReceiver = null;
+		mShowDebugInfo = true;
+		mDelayCommand = false;
+		mValid = false;
+		mEndCallback.Clear();
+		mStartCallback.Clear();
+		mEndUserData.Clear();
+		mStartUserData.Clear();
 	}
 	// 命令执行
 	public abstract void execute();
@@ -29,11 +41,16 @@ public abstract class Command : GameBase
 	{
 		return this.GetType().ToString();
 	}
-	public bool getShowDebugInfo() { return mShowDebugInfo; }
-	public bool isDelayCommand() { return mDelayCommand; }
-	public void setDelayCommand(bool delay) { mDelayCommand = delay; }
-	public void setReceiver(CommandReceiver Reciver) { mReceiver = Reciver; }
-	public CommandReceiver getReceiver() { return mReceiver; }
+	public bool getShowDebugInfo()					{ return mShowDebugInfo; }
+	public bool isDelayCommand()					{ return mDelayCommand; }
+	public CommandReceiver getReceiver()			{ return mReceiver; }
+	public bool isValid()							{ return mValid; }
+	public Type getType()							{ return mType; }
+	public void setShowDebugInfo(bool show)			{ mShowDebugInfo = show; }
+	public void setDelayCommand(bool delay)			{ mDelayCommand = delay; }
+	public void setReceiver(CommandReceiver Reciver){ mReceiver = Reciver; }
+	public void setValid(bool valid)				{ mValid = valid;}
+	public void setType(Type type)					{ mType = type; }
 	public void addEndCommandCallback(CommandCallback cmdCallback, object userdata)
 	{
 		if (cmdCallback != null)

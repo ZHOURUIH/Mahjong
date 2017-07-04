@@ -8,20 +8,31 @@ public class CommandWindowKeyFrameRotate : Command
 	public float mOnceLength;
 	public float mOffset;
 	public bool mLoop;
-	public float mAmplitude;
+	public float mAmplitude = 1.0f;
 	public bool mFullOnce;
 	public bool mRandomOffset;
 	public Vector3 mStartRotation;
 	public Vector3 mTargetRotation;
 	public KeyFrameCallback mTremblingCallBack;
-	public object mTremblingUserData;
 	public KeyFrameCallback mTrembleDoneCallBack;
+	public object mTremblingUserData;
 	public object mTrembleDoneUserData;
-	public CommandWindowKeyFrameRotate(bool showInfo = true, bool delay = false)
-		:
-		base(showInfo, delay)
+	public override void init()
 	{
+		base.init();
+		mName = "";
+		mOnceLength = 1.0f;
+		mOffset = 0.0f;
+		mLoop = false;
 		mAmplitude = 1.0f;
+		mFullOnce = true;
+		mRandomOffset = false;
+		mStartRotation = Vector3.zero;
+		mTargetRotation = Vector3.zero;
+		mTremblingCallBack = null;
+		mTrembleDoneCallBack = null;
+		mTremblingUserData = null;
+		mTrembleDoneUserData = null;
 	}
 	public override void execute()
 	{

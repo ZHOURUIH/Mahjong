@@ -7,21 +7,32 @@ public class CommandWindowAlphaTremble : Command
 	public string mName;
 	public float mOnceLength;
 	public float mOffset;
-	public bool mLoop;
-	public float mAmplitude;
-	public bool mFullOnce;
-	public bool mRandomOffset;
 	public float mStartAlpha;
 	public float mTargetAlpha;
-	public KeyFrameCallback mTremblingCallBack;
-	public object mTremblingUserData;
-	public KeyFrameCallback mTrembleDoneCallBack;
-	public object mTrembleDoneUserData;
-	public CommandWindowAlphaTremble(bool showInfo = true, bool delay = false)
-		:
-		base(showInfo, delay)
+	public bool mLoop;
+	public float mAmplitude = 1.0f;
+	public bool mFullOnce;
+	public bool mRandomOffset;
+	public KeyFrameCallback mTremblingCallBack = null;
+	public KeyFrameCallback mTrembleDoneCallBack = null;
+	public object mTremblingUserData = null;
+	public object mTrembleDoneUserData = null;
+	public override void init()
 	{
-		mAmplitude = 1.0f;	
+		base.init();
+		mName = "";
+		mOnceLength = 1.0f;
+		mOffset = 0.0f;
+		mStartAlpha = 1.0f;
+		mTargetAlpha = 1.0f;
+		mLoop = false;
+		mAmplitude = 1.0f;
+		mFullOnce = true;
+		mRandomOffset = false;
+		mTremblingCallBack = null;
+		mTrembleDoneCallBack = null;
+		mTremblingUserData = null;
+		mTrembleDoneUserData = null;
 	}
 	public void setTremblingCallback(KeyFrameCallback callback, object userData)
 	{

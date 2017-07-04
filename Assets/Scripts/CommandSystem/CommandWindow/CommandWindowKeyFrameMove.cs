@@ -4,24 +4,35 @@ using System.Collections;
 
 public class CommandWindowKeyFrameMove : Command
 {
-	public	string mName;
-	public	float mOnceLength;
-	public	float mOffset;
-	public	bool mLoop;
-	public	float mAmplitude;
-	public	bool mFullOnce;
-	public	bool mRandomOffset;
+	public string mName;
+	public float mOnceLength;
+	public float mOffset;
+	public bool mLoop;
+	public float mAmplitude = 1.0f;
+	public bool mFullOnce;
+	public bool mRandomOffset;
 	public Vector3 mStartPos;
 	public Vector3 mTargetPos;
-	public	KeyFrameCallback mTremblingCallBack;
-	public	object mTremblingUserData;
-	public	KeyFrameCallback mTrembleDoneCallBack;
-	public	object mTrembleDoneUserData;
-	public CommandWindowKeyFrameMove (bool showInfo = true, bool delay = false)
-		:
-		base(showInfo, delay)
+	public KeyFrameCallback mTremblingCallBack;
+	public KeyFrameCallback mTrembleDoneCallBack;
+	public object mTremblingUserData;
+	public object mTrembleDoneUserData;
+	public override void init()
 	{
- 		mAmplitude = 1.0f;	
+		base.init();
+		mName = "";
+		mOnceLength = 1.0f;
+		mOffset = 0.0f;
+		mLoop = false;
+		mAmplitude = 1.0f;
+		mFullOnce = true;
+		mRandomOffset = false;
+		mStartPos = Vector3.zero;
+		mTargetPos = Vector3.zero;
+		mTremblingCallBack = null;
+		mTrembleDoneCallBack = null;
+		mTremblingUserData = null;
+		mTrembleDoneUserData = null;
 	}
 	public override void execute()
 	{

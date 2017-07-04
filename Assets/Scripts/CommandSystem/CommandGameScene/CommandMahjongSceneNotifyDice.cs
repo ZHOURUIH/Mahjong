@@ -4,10 +4,11 @@ using System.Collections;
 public class CommandMahjongSceneNotifyDice : Command
 {
 	public byte[] mDice;
-	public CommandMahjongSceneNotifyDice(bool showInfo = true, bool delay = false)
-		:
-		base(showInfo, delay)
-	{ }
+	public override void init()
+	{
+		base.init();
+		mDice = null;
+	}
 	public override void execute()
 	{
 		GameScene gameScene = (mReceiver) as GameScene;

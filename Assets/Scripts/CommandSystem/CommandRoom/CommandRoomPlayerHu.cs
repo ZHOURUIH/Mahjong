@@ -9,10 +9,14 @@ public class CommandRoomPlayerHu : Command
 	public MAHJONG mMahjong;
 	public List<HU_TYPE> mHuList;
 	public Character mDroppedPlayer;
-	public CommandRoomPlayerHu(bool showInfo = true, bool delay = false)
-		:
-		base(showInfo, delay)
-	{ }
+	public override void init()
+	{
+		base.init();
+		mHuPlayer = null;
+		mMahjong = MAHJONG.M_MAX;
+		mHuList = null;
+		mDroppedPlayer = null;
+	}
 	public override void execute()
 	{
 		Room room = mReceiver as Room;

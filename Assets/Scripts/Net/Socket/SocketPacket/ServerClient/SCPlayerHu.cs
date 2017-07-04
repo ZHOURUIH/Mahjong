@@ -44,7 +44,7 @@ public class SCPlayerHu : SocketPacket
 				}
 				huList.Add(huType);
 			}
-			CommandRoomPlayerHu cmdHu = new CommandRoomPlayerHu();
+			CommandRoomPlayerHu cmdHu = mCommandSystem.newCmd<CommandRoomPlayerHu>();
 			cmdHu.mHuPlayer = mCharacterManager.getCharacterByGUID(mHuPlayerGUID.mValue[i]);
 			cmdHu.mDroppedPlayer = mCharacterManager.getCharacterByGUID(mDroppedPlayerGUID.mValue);
 			cmdHu.mHuList = huList;

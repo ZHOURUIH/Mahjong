@@ -25,7 +25,7 @@ public class SCOtherPlayerLeaveRoom : SocketPacket
 			return;
 		}
 		MahjongScene mahjongScene = gameScene as MahjongScene;
-		CommandRoomLeave cmdLeave = new CommandRoomLeave();
+		CommandRoomLeave cmdLeave = mCommandSystem.newCmd<CommandRoomLeave>();
 		cmdLeave.mCharacter = player;
 		mCommandSystem.pushCommand(cmdLeave, mahjongScene.getRoom());
 	}

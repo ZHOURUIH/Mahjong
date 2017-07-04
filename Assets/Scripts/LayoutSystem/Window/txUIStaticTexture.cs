@@ -7,8 +7,8 @@ using UnityEngine;
 public class txUIStaticTexture : txUIObject
 {
 	public UITexture mTexture;
-	public Vector3 mHSLOffset;	// 当前HSL偏移,只有当shader为HSLOffet或者HSLOffsetLinearDodge时才有效
-	public string mLastShaderName;
+	public Vector3   mHSLOffset;	// 当前HSL偏移,只有当shader为HSLOffet或者HSLOffsetLinearDodge时才有效
+	public string    mNormalShaderName;
 	public txUIStaticTexture()
 	{
 		mType = UI_OBJECT_TYPE.UBT_STATIC_TEXTURE;
@@ -22,6 +22,7 @@ public class txUIStaticTexture : txUIObject
 			mTexture = mObject.AddComponent<UITexture>();
 		}
 		mTexture.onRender = onWidgetRender;
+		mNormalShaderName = mTexture.shader.name;
 	}
 	public void setTexture(Texture tex)
 	{
@@ -48,13 +49,15 @@ public class txUIStaticTexture : txUIObject
 		Material mat = null;
 		if (newMaterial)
 		{
-			mat = mMaterialManager.copyMaterial(materialName, materialName + mID);
+			mat = new Material(mResourceManager.loadResource<Material>(CommonDefine.R_MATERIAL_PATH + materialName, true));
+			mat.name = materialName + mID;
 		}
 		else
 		{
-			mat = mMaterialManager.tryGetMaterial(materialName);
+			mat = mResourceManager.loadResource<Material>(CommonDefine.R_MATERIAL_PATH + materialName, true);
 		}
 		mTexture.material = mat;
+		mNormalShaderName = mTexture.material.shader.name;
 	}
 	public void setShader(Shader shader, bool force)
 	{
@@ -66,6 +69,19 @@ public class txUIStaticTexture : txUIObject
 		{
 			mTexture.shader = null;
 			mTexture.shader = shader;
+			mNormalShaderName = shader.name;
+		}
+	}
+	public void setTextureName(string name)
+	{
+		if (name != "")
+		{
+			Texture tex = mResourceManager.loadResource<Texture>(name, true);
+			setTexture(tex);
+		}
+		else
+		{
+			setTexture(null);
 		}
 	}
 	public string getTextureName()
@@ -131,15 +147,13 @@ public class txUIStaticTexture : txUIObject
 			return;
 		}
 		// 设置为灰色shader时,需要记录当前shader名,以便取消灰色时恢复之前的shader
-		if(gray)
+		if (gray)
 		{
-			mLastShaderName = mTexture.shader.name;
 			mTexture.shader = mShaderManager.getShader("Gray");
 		}
 		else
 		{
-			mTexture.shader = mShaderManager.getShader(mLastShaderName);
-			mLastShaderName = "";
+			mTexture.shader = mShaderManager.getShader(mNormalShaderName);
 		}
 	}
 	public float getFillPercent()

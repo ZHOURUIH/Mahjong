@@ -6,10 +6,11 @@ using System.Text;
 public class CommandMahjongSystemState : Command
 {
 	public MAHJONG_PLAY_STATE mPlayState;
-	public CommandMahjongSystemState(bool showInfo = true, bool delay = false)
-		:
-		base(showInfo, delay)
-	{ }
+	public override void init()
+	{
+		base.init();
+		mPlayState = MAHJONG_PLAY_STATE.MPS_ENDING;
+	}
 	public override void execute()
 	{
 		MahjongSystem mahjongSystem = mReceiver as MahjongSystem;

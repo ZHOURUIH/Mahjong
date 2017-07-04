@@ -15,7 +15,7 @@ public class SCAskDrop : SocketPacket
 	{ }
 	public override void execute()
 	{
-		CommandCharacterAskDrop cmd = new CommandCharacterAskDrop();
+		CommandCharacterAskDrop cmd = mCommandSystem.newCmd<CommandCharacterAskDrop>();
 		mCommandSystem.pushCommand(cmd, mCharacterManager.getMyself());
 	}
 }

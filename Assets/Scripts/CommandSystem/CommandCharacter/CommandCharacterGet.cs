@@ -5,10 +5,11 @@ using System.Collections.Generic;
 public class CommandCharacterGet : Command
 {
 	public MAHJONG mMahjong;
-	public CommandCharacterGet(bool showInfo = true, bool delay = false)
-		:
-		base(showInfo, delay)
-	{ }
+	public override void init()
+	{
+		base.init();
+		mMahjong = MAHJONG.M_MAX;
+	}
 	public override void execute()
 	{
 		Character character = (mReceiver) as Character;

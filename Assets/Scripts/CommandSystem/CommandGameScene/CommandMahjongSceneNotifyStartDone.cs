@@ -3,10 +3,10 @@ using System.Collections;
 
 public class CommandMahjongSceneNotifyStartDone : Command
 {
-	public CommandMahjongSceneNotifyStartDone(bool showInfo = true, bool delay = false)
-		:
-		base(showInfo, delay)
-	{ }
+	public override void init()
+	{
+		base.init();
+	}
 	public override void execute()
 	{
 		GameScene gameScene = (mReceiver) as GameScene;
@@ -14,7 +14,7 @@ public class CommandMahjongSceneNotifyStartDone : Command
 		{
 			return;
 		}
-		CommandGameSceneChangeProcedure cmd = new CommandGameSceneChangeProcedure();
+		CommandGameSceneChangeProcedure cmd = mCommandSystem.newCmd<CommandGameSceneChangeProcedure>();
 		cmd.mProcedure = PROCEDURE_TYPE.PT_MAHJONG_RUNNING_GAMING;
 		mCommandSystem.pushCommand(cmd, gameScene);
 	}

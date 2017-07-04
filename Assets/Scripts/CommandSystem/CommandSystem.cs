@@ -2,32 +2,36 @@
 using System.Collections;
 using System.Collections.Generic;
 
+public class DelayCommand
+{
+	public float mDelayTime;
+	public Command mCommand;
+	public CommandReceiver mReceiver;
+	public DelayCommand(float delayTime, Command cmd, CommandReceiver receiver)
+	{
+		mDelayTime = delayTime;
+		mCommand = cmd;
+		mReceiver = receiver;
+	}
+};
+
 public class CommandSystem
 {
-	public List<DelayCommand> mCommandBufferProcess = new List<DelayCommand>();	// 用于处理的命令列表
-	public List<DelayCommand> mCommandBufferInput = new List<DelayCommand>();		// 用于放入命令的命令列表
-	public bool mLockBuffer;
-	public bool mShowDebugInfo;
-	public class DelayCommand
-	{
-		public DelayCommand(float delayTime, Command cmd, CommandReceiver receiver)
-		{
-			mDelayTime = delayTime;
-			mCommand = cmd;
-			mReceiver = receiver;
-		}
-		public float mDelayTime;
-		public Command mCommand;
-		public CommandReceiver mReceiver;
-	};
+	protected CommandPool mCommandPool;
+	protected List<DelayCommand> mCommandBufferProcess = new List<DelayCommand>();	// 用于处理的命令列表
+	protected List<DelayCommand> mCommandBufferInput = new List<DelayCommand>();		// 用于放入命令的命令列表
+	protected bool mLockBuffer;
+	protected bool mShowDebugInfo;
 	public CommandSystem()
 	{
 		mLockBuffer = false;
 		mShowDebugInfo = true;
+		mCommandPool = new CommandPool();
 	}
 	public virtual void init(bool showDebug = true)
 	{
 		mShowDebugInfo = showDebug;
+		mCommandPool.init();
 	}
 	public void setShowDebugInfo(bool show)
 	{
@@ -37,10 +41,8 @@ public class CommandSystem
 	public bool getShowDebugInfo() { return mShowDebugInfo; }
 	protected void syncCommandBuffer()
 	{
-		// 等待解锁缓冲区
-		waitUnlockBuffer();
-		// 锁定缓冲区
-		lockBuffer();
+		// 等待解锁缓冲区并锁定缓冲区
+		waitAndLockBuffer();
 		int inputCount = mCommandBufferInput.Count;
 		for (int i = 0; i < inputCount; ++i)
 		{
@@ -79,12 +81,16 @@ public class CommandSystem
 			pushCommand(cmd.mCommand, cmd.mReceiver);
 		}
 	}
-	//中断命令
+	// 创建命令
+	public T newCmd<T>(bool show = true, bool delay = false) where T : Command, new()
+	{
+		return mCommandPool.newCmd<T>(show, delay);
+	}
+	// 中断命令
 	public bool interruptCommand(Command cmd)
 	{
 		if (cmd == null)
 		{
-			UnityUtility.logError("cmd is null");
 			return false;
 		}
 		if (!cmd.isDelayCommand())
@@ -110,12 +116,17 @@ public class CommandSystem
 	{
 		if (cmd == null || cmdReceiver == null)
 		{
-			UnityUtility.logError("error : cmd or receiver is null!");
+			UnityUtility.logError("cmd or receiver is null!");
+			return;
+		}
+		if(!cmd.isValid())
+		{
+			UnityUtility.logError("cmd is invalid! make sure create cmd use CommandSystem.newCmd!");
 			return;
 		}
 		if(cmd.isDelayCommand())
 		{
-			UnityUtility.logError("error : cmd is a delay cmd! can not use pushCommand!");
+			UnityUtility.logError("cmd is a delay cmd! can not use pushCommand!");
 			return;
 		}
 		cmd.setReceiver(cmdReceiver);
@@ -124,6 +135,9 @@ public class CommandSystem
 			UnityUtility.logInfo("CommandSystem : " + cmd.showDebugInfo() + ", receiver : " + cmdReceiver.getName());				
 		}
 		cmdReceiver.receiveCommand(cmd);
+
+		// 销毁回收命令
+		mCommandPool.destroyCmd(cmd);
 	}
 	// delayExecute是命令延时执行的时间,默认为0,只有new出来的命令才能延时执行
 	// 子线程中发出的命令必须是延时执行的命令!
@@ -131,7 +145,17 @@ public class CommandSystem
 	{
 		if (cmd == null || cmdReceiver == null)
 		{
-			UnityUtility.logError("error : cmd or receiver is null!");
+			UnityUtility.logError("cmd or receiver is null!");
+			return;
+		}
+		if(!cmd.isValid())
+		{
+			UnityUtility.logError("cmd is invalid! make sure create cmd use CommandSystem.newCmd!");
+			return;
+		}
+		if(!cmd.isDelayCommand())
+		{
+			UnityUtility.logError("cmd is not a delay command, Command : " + cmd.showDebugInfo());
 			return;
 		}
 		if (delayExecute < 0.0f)
@@ -142,41 +166,24 @@ public class CommandSystem
 		{
 			UnityUtility.logInfo("CommandSystem : delay cmd : " + delayExecute + ", info : " + cmd.showDebugInfo() + ", receiver : " + cmdReceiver.getName());
 		}
-		if (cmd.isDelayCommand())
-		{
-			DelayCommand delayCommand = new DelayCommand(delayExecute, cmd, cmdReceiver);
+		DelayCommand delayCommand = new DelayCommand(delayExecute, cmd, cmdReceiver);
 
-			// 等待解锁缓冲区
-			waitUnlockBuffer();
-			// 锁定缓冲区
-			lockBuffer();
-			mCommandBufferInput.Add(delayCommand);
-			// 解锁缓冲区
-			unlockBuffer();
-		}
-		else
-		{
-			UnityUtility.logError("error : cmd is not a delay command, Command : " + cmd.showDebugInfo());
-		}
+		// 等待解锁缓冲区并锁定缓冲区
+		waitAndLockBuffer();
+		mCommandBufferInput.Add(delayCommand);
+		// 解锁缓冲区
+		unlockBuffer();
 	}
 	public void destroy()
 	{
+		mCommandPool.destroy();
 		mCommandBufferInput.Clear();
 		mCommandBufferProcess.Clear();
 	}
-	public void waitUnlockBuffer()
-	{
-		while (mLockBuffer)
-		{ }
-	}
-	public void lockBuffer() { mLockBuffer = true; }
-	public void unlockBuffer() { mLockBuffer = false; }
 	public virtual void notifyReceiverDestroied(CommandReceiver receiver)
 	{
-		// 等待解锁缓冲区
-		waitUnlockBuffer();
-		// 锁定缓冲区
-		lockBuffer();
+		// 等待解锁缓冲区并锁定缓冲区
+		waitAndLockBuffer();
 		for (int i = 0; i < mCommandBufferInput.Count; ++i)
 		{
 			if (mCommandBufferInput[i].mReceiver == receiver)
@@ -197,6 +204,22 @@ public class CommandSystem
 				mCommandBufferProcess.Remove(mCommandBufferProcess[i]);
 				--i;
 			}
+		}
+	}
+	//------------------------------------------------------------------------------------------------------------------------------------
+	protected void waitAndLockBuffer()
+	{
+		while (mLockBuffer)
+		{ }
+		mLockBuffer = true;
+	}
+	protected void unlockBuffer() { mLockBuffer = false; }
+	protected void destroyCmd(Command cmd)
+	{
+		if(!cmd.isValid())
+		{
+			UnityUtility.logError("cmd is invalid, can not destroy it!");
+			return;
 		}
 	}
 }

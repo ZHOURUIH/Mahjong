@@ -51,7 +51,7 @@ public class SCAskAction : SocketPacket
 				actionList.Add(new MahjongAction(type, player, droppedPlayer, mah, huList));
 			}
 		}
-		CommandCharacterAskAction cmd = new CommandCharacterAskAction();
+		CommandCharacterAskAction cmd = mCommandSystem.newCmd<CommandCharacterAskAction>();
 		cmd.mActionList = actionList;
 		mCommandSystem.pushCommand(cmd, mCharacterManager.getMyself());
 	}

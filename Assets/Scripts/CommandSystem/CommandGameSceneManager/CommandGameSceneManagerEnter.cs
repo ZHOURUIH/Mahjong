@@ -4,10 +4,11 @@ using System.Collections;
 public class CommandGameSceneManagerEnter : Command
 {
 	public GAME_SCENE_TYPE mSceneType;
-	public CommandGameSceneManagerEnter(bool showInfo = true, bool delay = false)
-		:
-		base(showInfo, delay)
-	{ }
+	public override void init()
+	{
+		base.init();
+		mSceneType = GAME_SCENE_TYPE.GST_MAX;
+	}
 	public override void execute()
 	{
 		GameSceneManager sceneManager = mReceiver as GameSceneManager;

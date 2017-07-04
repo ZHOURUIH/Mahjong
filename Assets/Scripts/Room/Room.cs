@@ -72,7 +72,7 @@ public class Room : CommandReceiver
 		int count = mNoneJoinPlayerList.Count;
 		for(int i = 0; i < count; ++i)
 		{
-			CommandRoomJoin cmd = new CommandRoomJoin();
+			CommandRoomJoin cmd = mCommandSystem.newCmd<CommandRoomJoin>();
 			cmd.mCharacter = mNoneJoinPlayerList[i];
 			mCommandSystem.pushCommand(cmd, this);
 		}
@@ -86,7 +86,7 @@ public class Room : CommandReceiver
 		foreach (var item in listCopy)
 		{
 			// 离开房间时会自动销毁其他玩家
-			CommandRoomLeave cmdLeave = new CommandRoomLeave();
+			CommandRoomLeave cmdLeave = mCommandSystem.newCmd<CommandRoomLeave>();
 			cmdLeave.mCharacter = item.Value;
 			mCommandSystem.pushCommand(cmdLeave, this);
 		}

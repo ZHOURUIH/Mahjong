@@ -67,7 +67,7 @@ public class ScriptLogin : LayoutScript
 	}
 	protected void onRegisterClick(GameObject button)
 	{
-		CommandGameSceneChangeProcedure cmd = new CommandGameSceneChangeProcedure();
+		CommandGameSceneChangeProcedure cmd = mCommandSystem.newCmd<CommandGameSceneChangeProcedure>();
 		cmd.mProcedure = PROCEDURE_TYPE.PT_START_REGISTER;
 		mCommandSystem.pushCommand(cmd, mGameSceneManager.getCurScene());
 	}

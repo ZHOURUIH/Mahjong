@@ -25,7 +25,7 @@ public class SCOtherPlayerDrop : SocketPacket
 		// 清空提示信息
 		ScriptMahjongFrame mahjongFrame = mLayoutManager.getScript(LAYOUT_TYPE.LT_MAHJONG_FRAME) as ScriptMahjongFrame;
 		mahjongFrame.notifyInfo("");
-		CommandCharacterDrop cmd = new CommandCharacterDrop();
+		CommandCharacterDrop cmd = mCommandSystem.newCmd<CommandCharacterDrop>();
 		cmd.mMah = (MAHJONG)mMahjong.mValue;
 		cmd.mIndex = mIndex.mValue;
 		mCommandSystem.pushCommand(cmd, mCharacterManager.getCharacterByGUID(mPlayerGUID.mValue));

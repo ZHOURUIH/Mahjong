@@ -7,10 +7,12 @@ public class CommandMahjongSystemDrop : Command
 {
 	public Character mPlayer;
 	public MAHJONG mMahjong;
-	public CommandMahjongSystemDrop(bool showInfo = true, bool delay = false)
-		:
-		base(showInfo, delay)
-	{ }
+	public override void init()
+	{
+		base.init();
+		mPlayer = null;
+		mMahjong = MAHJONG.M_MAX;
+	}
 	public override void execute()
 	{
 		MahjongSystem mahjongSystem = mReceiver as MahjongSystem;

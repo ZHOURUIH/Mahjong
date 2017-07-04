@@ -30,7 +30,7 @@ public class SCLoginRet : SocketPacket
 		if(mLoginRet.mValue == 0)
 		{
 			// 创建玩家
-			CommandCharacterManagerCreateCharacter cmdCreate = new CommandCharacterManagerCreateCharacter();
+			CommandCharacterManagerCreateCharacter cmdCreate = mCommandSystem.newCmd<CommandCharacterManagerCreateCharacter>();
 			cmdCreate.mCharacterType = CHARACTER_TYPE.CT_MYSELF;
 			cmdCreate.mName = BinaryUtility.bytesToString(mName.mValue, Encoding.UTF8);
 			cmdCreate.mGUID = mPlayerGUID.mValue;
@@ -42,7 +42,7 @@ public class SCLoginRet : SocketPacket
 			data.mHead = mHead.mValue;
 
 			// 进入到主场景
-			CommandGameSceneManagerEnter cmdEnterMain = new CommandGameSceneManagerEnter(true, true);
+			CommandGameSceneManagerEnter cmdEnterMain = mCommandSystem.newCmd<CommandGameSceneManagerEnter>(true, true);
 			cmdEnterMain.mSceneType = GAME_SCENE_TYPE.GST_MAIN;
 			mCommandSystem.pushDelayCommand(cmdEnterMain, mGameSceneManager);
 		}

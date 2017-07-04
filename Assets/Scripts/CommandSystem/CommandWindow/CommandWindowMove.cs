@@ -3,24 +3,24 @@ using System.Collections;
 
 public class CommandWindowMove : Command
 {
-	public float mTimeOffset;
-	public float mMoveTime;
+	public float mTimeOffset = 0.0f;
+	public float mMoveTime = 0.0f;
 	public Vector3 mStartPosition;
 	public Vector3 mDestPosition;
 	public MoveCallback mMovingCallback;
-	public object mMovingUserData;
 	public MoveCallback mMoveDoneCallback;
+	public object mMovingUserData;
 	public object mMoveDoneUserData;
-
-	public CommandWindowMove(bool showInfo = true, bool delay = false)
-		:
-		base(showInfo, delay)
+	public override void init()
 	{
-		mMoveTime = 0.0f;
+		base.init();
 		mTimeOffset = 0.0f;
+		mMoveTime = 0.0f;
+		mStartPosition = Vector3.zero;
+		mDestPosition = Vector3.zero;
 		mMovingCallback = null;
-		mMovingUserData = null;
 		mMoveDoneCallback = null;
+		mMovingUserData = null;
 		mMoveDoneUserData = null;
 	}
 	public override void execute()

@@ -4,10 +4,10 @@ using System.Collections.Generic;
 
 public class CommandCharacterAutoDrop : Command
 {
-	public CommandCharacterAutoDrop(bool showInfo = true, bool delay = false)
-		:
-		base(showInfo, delay)
-	{ }
+	public override void init()
+	{
+		base.init();
+	}
 	public override void execute()
 	{
 		Character character = (mReceiver) as Character;
@@ -41,7 +41,7 @@ public class CommandCharacterAutoDrop : Command
 		{
 			dropIndex = data.mHandIn.Count - 1;
 		}
-		CommandCharacterDrop cmd = new CommandCharacterDrop();
+		CommandCharacterDrop cmd = mCommandSystem.newCmd<CommandCharacterDrop>();
 		cmd.mIndex = dropIndex;
 		cmd.mMah = data.mHandIn[dropIndex];
 		mCommandSystem.pushCommand(cmd, character);

@@ -5,10 +5,12 @@ public class CommandCharacterGang : Command
 {
 	public Character mDroppedPlayer;
 	public MAHJONG mMahjong;
-	public CommandCharacterGang(bool showInfo = true, bool delay = false)
-		:
-		base(showInfo, delay)
-	{ }
+	public override void init()
+	{
+		base.init();
+		mDroppedPlayer = null;
+		mMahjong = MAHJONG.M_MAX;
+	}
 	public override void execute()
 	{
 		Character character = (mReceiver) as Character;
@@ -16,7 +18,7 @@ public class CommandCharacterGang : Command
 
 		if (character != mDroppedPlayer)
 		{
-			CommandCharacterTakeDrop cmdTakeDrop = new CommandCharacterTakeDrop();
+			CommandCharacterTakeDrop cmdTakeDrop = mCommandSystem.newCmd<CommandCharacterTakeDrop>();
 			mCommandSystem.pushCommand(cmdTakeDrop, mDroppedPlayer);
 		}
 
@@ -26,7 +28,7 @@ public class CommandCharacterGang : Command
 		handIn.notifyPengOrGang(data.mPosition, data.mPengGangList);
 
 		// 然后重新排列玩家手里的牌
-		CommandCharacterReorderMahjong cmdReorder = new CommandCharacterReorderMahjong();
+		CommandCharacterReorderMahjong cmdReorder = mCommandSystem.newCmd<CommandCharacterReorderMahjong>();
 		mCommandSystem.pushCommand(cmdReorder, character);
 	}
 	public override string showDebugInfo()

@@ -7,10 +7,14 @@ public class CommandGameScenePlayAudio : Command
 	public string		mSoundFileName;
 	public bool			mLoop = false;
 	public float		mVolume = 1.0f;
-	public CommandGameScenePlayAudio(bool showInfo = true, bool delay = false)
-		:
-		base(showInfo, delay)
-	{ }
+	public override void init()
+	{
+		base.init();
+		mSound = SOUND_DEFINE.SD_MAX;
+		mSoundFileName = "";
+		mLoop = false;
+		mVolume = 1.0f;
+	}
 	public override void execute()
 	{
 		GameScene gameScene = (mReceiver) as GameScene;

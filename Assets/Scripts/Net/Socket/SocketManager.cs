@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Net;
 using System.Net.Sockets;
@@ -73,7 +74,7 @@ public class SocketManager : GameBase
 			IPAddress serverIP = IPAddress.Parse(mGameConfig.getStringParam(GAME_DEFINE_STRING.GDS_TCP_SERVER_IP));
 			mServerSocket.Connect(serverIP, port);
 		}
-		catch
+		catch(Exception)
 		{
 			UnityUtility.logInfo("can not connect server!");
 			mServerSocket = null;

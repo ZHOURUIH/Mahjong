@@ -35,13 +35,4 @@ public class MahjongSceneEnding : SceneProcedure
 	{
 		;
 	}
-	public void setResult(List<ResultInfo> huList)
-	{
-		ScriptGameEnding gameEnding = mLayoutManager.getScript(LAYOUT_TYPE.LT_GAME_ENDING) as ScriptGameEnding;
-		gameEnding.setResult(huList.Count != 0);
-		gameEnding.setDetail(huList);
-		MahjongScene scene = mGameScene as MahjongScene;
-		Room room = scene.getRoom();
-		gameEnding.setPlayerInfo(room.getMoneyDeltaList());
-	}
 }

@@ -5,8 +5,6 @@ using System.Collections.Generic;
 public class SCPlayerHu : SocketPacket
 {
 	public INTS mHuPlayerGUID = new INTS(CommonDefine.MAX_PLAYER_COUNT - 1);
-	public INT mDroppedPlayerGUID = new INT();
-	public BYTE mMahjong = new BYTE();
 	public BYTES mHuList = new BYTES(CommonDefine.MAX_HU_COUNT * (CommonDefine.MAX_PLAYER_COUNT - 1));
 	public SCPlayerHu(PACKET_TYPE type)
 		:
@@ -18,8 +16,6 @@ public class SCPlayerHu : SocketPacket
 	protected override void fillParams()
 	{
 		pushParam(mHuPlayerGUID);
-		pushParam(mDroppedPlayerGUID);
-		pushParam(mMahjong);
 		pushParam(mHuList);
 	}
 	public override void execute()
@@ -44,11 +40,13 @@ public class SCPlayerHu : SocketPacket
 				}
 				huList.Add(huType);
 			}
-			CommandRoomPlayerHu cmdHu = mCommandSystem.newCmd<CommandRoomPlayerHu>();
-			cmdHu.mHuPlayer = mCharacterManager.getCharacterByGUID(mHuPlayerGUID.mValue[i]);
-			cmdHu.mDroppedPlayer = mCharacterManager.getCharacterByGUID(mDroppedPlayerGUID.mValue);
-			cmdHu.mHuList = huList;
-			cmdHu.mMahjong = (MAHJONG)mMahjong.mValue;
+			if(huList.Count > 0)
+			{
+				CommandRoomPlayerHu cmdHu = mCommandSystem.newCmd<CommandRoomPlayerHu>();
+				cmdHu.mHuList = huList;
+				cmdHu.mPlayer = mCharacterManager.getCharacterByGUID(mHuPlayerGUID.mValue[i]);
+				mCommandSystem.pushCommand(cmdHu, room);
+			}
 		}
 	}
 }

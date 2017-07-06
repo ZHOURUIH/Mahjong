@@ -11,7 +11,9 @@ public class CommandReceiver : GameBase
 	public virtual void receiveCommand(Command cmd)
 	{
 		cmd.runStartCallBack();
+		cmd.setExecuteState(EXECUTE_STATE.ES_EXECUTING);
 		cmd.execute();
+		cmd.setExecuteState(EXECUTE_STATE.ES_EXECUTED);
 		cmd.runEndCallBack();
 	}
 	public string getName() { return mName; }

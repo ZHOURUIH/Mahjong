@@ -3,12 +3,20 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
+public enum EXECUTE_STATE
+{
+	ES_NOT_EXECUTE,
+	ES_EXECUTING,
+	ES_EXECUTED,
+}
+
 public abstract class Command : GameBase
 {
 	public CommandReceiver			mReceiver;		// 命令接受者
 	public bool						mShowDebugInfo;	// 是否显示调试信息
 	public bool						mDelayCommand;	// 是否是延迟执行的命令
-	public bool						mValid;
+	public bool						mValid;			// 是否为有效命令
+	public EXECUTE_STATE			mExecuteState;	// 命令执行状态
 	public List<CommandCallback>	mEndCallback;	// 命令执行完毕时的回调函数
 	public List<CommandCallback>	mStartCallback;	// 命令开始执行时的回调函数
 	public List<object>				mEndUserData;
@@ -29,6 +37,7 @@ public abstract class Command : GameBase
 		mShowDebugInfo = true;
 		mDelayCommand = false;
 		mValid = false;
+		mExecuteState = EXECUTE_STATE.ES_NOT_EXECUTE;
 		mEndCallback.Clear();
 		mStartCallback.Clear();
 		mEndUserData.Clear();
@@ -46,11 +55,13 @@ public abstract class Command : GameBase
 	public CommandReceiver getReceiver()			{ return mReceiver; }
 	public bool isValid()							{ return mValid; }
 	public Type getType()							{ return mType; }
+	public EXECUTE_STATE getExecuteState()			{ return mExecuteState; }
 	public void setShowDebugInfo(bool show)			{ mShowDebugInfo = show; }
 	public void setDelayCommand(bool delay)			{ mDelayCommand = delay; }
 	public void setReceiver(CommandReceiver Reciver){ mReceiver = Reciver; }
 	public void setValid(bool valid)				{ mValid = valid;}
 	public void setType(Type type)					{ mType = type; }
+	public void setExecuteState(EXECUTE_STATE state){ mExecuteState = state; }
 	public void addEndCommandCallback(CommandCallback cmdCallback, object userdata)
 	{
 		if (cmdCallback != null)

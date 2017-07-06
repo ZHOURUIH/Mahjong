@@ -5,10 +5,11 @@ using System.Collections.Generic;
 
 public class CommandPool : GameBase
 {
-	Dictionary<Type, List<Command>> mInusedList;
-	Dictionary<Type, List<Command>> mUnusedList;
-	ThreadLock mInuseLock;
-	ThreadLock mUnuseLock;
+	protected Dictionary<Type, List<Command>> mInusedList;
+	protected Dictionary<Type, List<Command>> mUnusedList;
+	protected ThreadLock mInuseLock;
+	protected ThreadLock mUnuseLock;
+	protected int mNewCount;
 	public CommandPool()
 	{
 		mInusedList = new Dictionary<Type, List<Command>>();
@@ -48,6 +49,8 @@ public class CommandPool : GameBase
 			cmd = new T();
 			cmd.init();
 			cmd.setType(typeof(T));
+			++mNewCount;
+			UnityUtility.logInfo("new cmd : " + mNewCount);
 		}
 		// 设置为可用命令
 		cmd.setValid(true);

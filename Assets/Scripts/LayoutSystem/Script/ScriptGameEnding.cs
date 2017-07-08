@@ -59,7 +59,7 @@ public class Multiple
 	{
 		mRoot = mScript.newObject<txUIObject>(parent, rootName);
 		mDescribe = mScript.newObject<txUIText>(mRoot, "Describe");
-		mMultipleCount = mScript.newObject<txUIText>(mRoot, "Multiple");
+		mMultipleCount = mScript.newObject<txUIText>(mRoot, "MultipleCount");
 	}
 	public void init()
 	{
@@ -115,8 +115,8 @@ public class ScriptGameEnding : LayoutScript
 	public override void assignWindow()
 	{
 		mHuResultRoot = newObject<txUIObject>("HuResultRoot");
-		mHu = newObject<txUIStaticSprite>("Hu", 1);
-		mPingJu = newObject<txUIStaticSprite>("PingJu", 1);
+		mHu = newObject<txUIStaticSprite>(mHuResultRoot, "Hu", 1);
+		mPingJu = newObject<txUIStaticSprite>(mHuResultRoot, "PingJu", 1);
 		mMoneyResultRoot = newObject<txUIObject>("MoneyResultRoot");
 		int charCount = mEndingCharacterList.Count;
 		for(int i = 0; i < charCount; ++i)

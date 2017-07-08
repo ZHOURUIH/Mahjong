@@ -36,7 +36,7 @@ public class SCLoginRet : SocketPacket
 			cmdCreate.mGUID = mPlayerGUID.mValue;
 			mCommandSystem.pushCommand(cmdCreate, mCharacterManager);
 			// 设置角色数据
-			CharacterMyself myself = cmdCreate.mResultCharacter as CharacterMyself;
+			CharacterMyself myself = mCharacterManager.getMyself();
 			CharacterData data = myself.getCharacterData();
 			data.mMoney = mMoney.mValue;
 			data.mHead = mHead.mValue;

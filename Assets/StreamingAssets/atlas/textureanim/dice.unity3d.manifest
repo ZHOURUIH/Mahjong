@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 1476516654
+CRC: 1913383074
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: dafdef72c9d60e01e2ae521a3de28ebd
+    Hash: 5334da718c7615134a289372cce60149
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 7a8becec1d197c8ad30ef65e4815a480
+    Hash: 8cb6cf904aa7fcd465980b4eca569019
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -22,4 +22,4 @@ ClassTypes:
 Assets:
 - Assets/Resources/Atlas/TextureAnim/Dice.prefab
 Dependencies:
-- Assets/StreamingAssets/atlas/textureanim.unity3d
+- "E:/SOURCE_HOME/\u5916\u5305\u9879\u76EE/Mahjong/Assets/StreamingAssets/atlas/textureanim.unity3d"

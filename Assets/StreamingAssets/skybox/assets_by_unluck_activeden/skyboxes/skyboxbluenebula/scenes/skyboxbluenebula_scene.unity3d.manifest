@@ -1,41 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3726959134
+CRC: 1547080672
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: f890b45cbed12bccb953a32489dfdeeb
+    Hash: 4b3df97ba6034b2da944a852a9739d4a
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 6a7cd3bfdbc046116778541d6099eed7
+    Hash: 31d6cfe0d16ae931b73c59d7e0c089c0
 HashAppended: 0
-ClassTypes:
-- Class: 1
-  Script: {instanceID: 0}
-- Class: 4
-  Script: {instanceID: 0}
-- Class: 20
-  Script: {instanceID: 0}
-- Class: 21
-  Script: {instanceID: 0}
-- Class: 28
-  Script: {instanceID: 0}
-- Class: 48
-  Script: {instanceID: 0}
-- Class: 81
-  Script: {instanceID: 0}
-- Class: 92
-  Script: {instanceID: 0}
-- Class: 104
-  Script: {instanceID: 0}
-- Class: 114
-  Script: {fileID: 11500000, guid: 31f6c382bec7bcc43abbff7e235ee28d, type: 3}
-- Class: 115
-  Script: {instanceID: 0}
-- Class: 124
-  Script: {instanceID: 0}
-- Class: 157
-  Script: {instanceID: 0}
+ClassTypes: []
 Assets:
 - Assets/Resources/Skybox/Assets_By_Unluck_Activeden/skyboxes/skyboxBlueNebula/scenes/SkyboxBlueNebula_Scene.unity
 Dependencies:
-- Assets/StreamingAssets/skybox/assets_by_unluck_activeden/skyboxes/skyboxbluenebula/materials.unity3d
+- "E:/SOURCE_HOME/\u5916\u5305\u9879\u76EE/Mahjong/Assets/StreamingAssets/skybox/assets_by_unluck_activeden/skyboxes/skyboxbluenebula/materials.unity3d"

@@ -3,13 +3,15 @@ guid: 5702d371f8abdaa4a97cabb5de64ae01
 timeCreated: 1492604544
 licenseType: Free
 TrueTypeFontImporter:
-  serializedVersion: 3
+  serializedVersion: 4
   fontSize: 16
   forceTextureCase: -2
-  characterSpacing: 1
-  characterPadding: 0
+  characterSpacing: 0
+  characterPadding: 1
   includeFontData: 1
-  fontNames: []
+  fontName: FZZongYi-M05S
+  fontNames:
+  - FZZongYi-M05S
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0

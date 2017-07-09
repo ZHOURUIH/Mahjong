@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 103953895
+CRC: 2195130876
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 2585b63add2a295081fbc33c1fe20d3e
+    Hash: 5bc8ad1ce1cd3c5912f4fae22ba3bbc0
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 8b459978547ce532b85ba0675022b1ec
+    Hash: 5195f000afcda5aaebb743387a1da4e0
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -26,4 +26,4 @@ ClassTypes:
 Assets:
 - Assets/Resources/Layout/UIPrefab/UIMahjongBackFrame.prefab
 Dependencies:
-- Assets/StreamingAssets/texture/gametexture/common.unity3d
+- "E:/SOURCE_HOME/\u5916\u5305\u9879\u76EE/Mahjong/Assets/StreamingAssets/texture/gametexture/common.unity3d"

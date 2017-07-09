@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 1859802660
+CRC: 3176851888
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 49564c437b9ae5980180b146f8b065c9
+    Hash: 6c36a9f939303126fab87641e965b161
   TypeTreeHash:
     serializedVersion: 2
-    Hash: f8aa2a62bcec291b87e4b4acbd0324b6
+    Hash: 06500a90d702e19bce766ef632b7061c
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -24,4 +24,4 @@ ClassTypes:
 Assets:
 - Assets/Resources/Layout/UIPrefab/UIMahjongDrop.prefab
 Dependencies:
-- Assets/StreamingAssets/atlas/gameatlas/atlasmahjongdrop.unity3d
+- "E:/SOURCE_HOME/\u5916\u5305\u9879\u76EE/Mahjong/Assets/StreamingAssets/atlas/gameatlas/atlasmahjongdrop.unity3d"

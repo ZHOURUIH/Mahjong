@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 2631016930
+CRC: 3874172637
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 64159d62532f544c155ed158ba820af1
+    Hash: 9dbb3f536c9feaa4db733fb7303f36d2
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 21e15ebef90b1e7f0fa9861480b74c55
+    Hash: e2f0cedbfe0596c39b1aa2015c4e50cf
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -40,6 +40,6 @@ ClassTypes:
 Assets:
 - Assets/Resources/Layout/UIPrefab/UIGameEnding.prefab
 Dependencies:
-- Assets/StreamingAssets/atlas/gameatlas/atlasgameending.unity3d
-- Assets/StreamingAssets/font/fzy3jw.unity3d
-- Assets/StreamingAssets/texture/gametexture/mainframe.unity3d
+- "E:/SOURCE_HOME/\u5916\u5305\u9879\u76EE/Mahjong/Assets/StreamingAssets/atlas/gameatlas/atlasgameending.unity3d"
+- "E:/SOURCE_HOME/\u5916\u5305\u9879\u76EE/Mahjong/Assets/StreamingAssets/font/fzy3jw.unity3d"
+- "E:/SOURCE_HOME/\u5916\u5305\u9879\u76EE/Mahjong/Assets/StreamingAssets/texture/gametexture/mainframe.unity3d"

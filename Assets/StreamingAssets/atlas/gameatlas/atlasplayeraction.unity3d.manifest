@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 1648253004
+CRC: 123727768
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 47f80457cae6172f6450c05ee9c366fa
+    Hash: 211e44ca85f72159085c1706e0f37ef4
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 7a8becec1d197c8ad30ef65e4815a480
+    Hash: 8cb6cf904aa7fcd465980b4eca569019
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -22,4 +22,4 @@ ClassTypes:
 Assets:
 - Assets/Resources/Atlas/GameAtlas/AtlasPlayerAction.prefab
 Dependencies:
-- Assets/StreamingAssets/atlas/gameatlas.unity3d
+- "E:/SOURCE_HOME/\u5916\u5305\u9879\u76EE/Mahjong/Assets/StreamingAssets/atlas/gameatlas.unity3d"

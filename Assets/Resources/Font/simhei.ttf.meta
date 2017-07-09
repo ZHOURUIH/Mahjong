@@ -3,13 +3,15 @@ guid: 0f8d4372236ff704991c858363c7f05f
 timeCreated: 1482288103
 licenseType: Pro
 TrueTypeFontImporter:
-  serializedVersion: 3
+  serializedVersion: 4
   fontSize: 16
   forceTextureCase: -2
-  characterSpacing: 1
-  characterPadding: 0
+  characterSpacing: 0
+  characterPadding: 1
   includeFontData: 1
-  fontNames: []
+  fontName: SimHei
+  fontNames:
+  - SimHei
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0

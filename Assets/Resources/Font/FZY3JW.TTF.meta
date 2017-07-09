@@ -3,13 +3,15 @@ guid: e7e3d7bced3f00a47a7ac9743d50990a
 timeCreated: 1492604544
 licenseType: Free
 TrueTypeFontImporter:
-  serializedVersion: 3
+  serializedVersion: 4
   fontSize: 16
   forceTextureCase: -2
-  characterSpacing: 1
-  characterPadding: 0
+  characterSpacing: 0
+  characterPadding: 1
   includeFontData: 1
-  fontNames: []
+  fontName: FZZhunYuan-M02S
+  fontNames:
+  - FZZhunYuan-M02S
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0

@@ -14,10 +14,6 @@ public class MahjongSceneEnding : SceneProcedure
 	{
 		// 设置本局结果
 		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_GAME_ENDING);
-		// 通知麻将系统进入结束流程
-		CommandMahjongSystemState cmdState = mCommandSystem.newCmd<CommandMahjongSystemState>();
-		cmdState.mPlayState = MAHJONG_PLAY_STATE.MPS_ENDING;
-		mCommandSystem.pushCommand(cmdState, mMahjongSystem);
 	}
 	protected override void onUpdate(float elapsedTime)
 	{
@@ -25,11 +21,7 @@ public class MahjongSceneEnding : SceneProcedure
 	}
 	protected override void onExit(SceneProcedure nextProcedure)
 	{
-		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_MAHJONG_HAND_IN);
-		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_MAHJONG_DROP);
-		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_PLAYER_ACTION);
 		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_GAME_ENDING);
-		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_MAHJONG_FRAME);
 	}
 	protected override void onKeyProcess(float elapsedTime)
 	{

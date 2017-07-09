@@ -34,6 +34,10 @@ public class EndingCharacter
 	{
 		mHead.setTexture(tex);
 	}
+	public void setHead(int head)
+	{
+		mHead.setTextureName(CommonDefine.R_GAME_TEXTURE_PATH + "Head/Head" + head);
+	}
 	public void setName(string name)
 	{
 		mName.setText(name);
@@ -219,7 +223,8 @@ public class ScriptGameEnding : LayoutScript
 		{
 			CharacterData data = keys[i].getCharacterData();
 			EndingCharacter endChar = mEndingCharacterList[i];
-			endChar.setHead(mPlayerHeadManager.getHead(keys[i]));
+			// 如果是微信头像,则使用PlayerHeadManager
+			endChar.setHead(data.mHead);
 			endChar.setName(data.mName);
 			endChar.setMoneyDelta(moneyDelta[keys[i]]);
 		}

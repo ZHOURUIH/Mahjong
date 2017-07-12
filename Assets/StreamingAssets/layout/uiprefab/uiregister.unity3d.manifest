@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 1412400869
+CRC: 2732467733
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: f86b1e167ddd7b2fc8fc52c30868d3ff
+    Hash: b8a0b2ddcb5db0d1c58df26d036e22e6
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 638b1b5750a61dcb3eb559d381c53f7c
+    Hash: 8a85b3aa5690ec65a41435ca262b12cf
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -44,4 +44,4 @@ ClassTypes:
 Assets:
 - Assets/Resources/Layout/UIPrefab/UIRegister.prefab
 Dependencies:
-- Assets/StreamingAssets/font/fzzyjw.unity3d
+- "E:/SOURCE_HOME/\u5916\u5305\u9879\u76EE/Mahjong/Assets/StreamingAssets/font/fzzyjw.unity3d"

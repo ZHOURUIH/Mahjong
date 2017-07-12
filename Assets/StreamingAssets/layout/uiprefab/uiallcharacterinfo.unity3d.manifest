@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 45597543
+CRC: 2509838374
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: d0a925698ba2828627ecf27f1399f415
+    Hash: 257d6c0d8290af8b93bcd5ff188b341b
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 58534426d4873056ca7b3d32c4363467
+    Hash: 0fe9452520b8fd374ee8ad0c2b347307
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -28,8 +28,8 @@ ClassTypes:
 Assets:
 - Assets/Resources/Layout/UIPrefab/UIAllCharacterInfo.prefab
 Dependencies:
-- Assets/StreamingAssets/atlas/gameatlas/atlascommon.unity3d
-- Assets/StreamingAssets/atlas/gameatlas/atlashead.unity3d
-- Assets/StreamingAssets/atlas/gameatlas/atlasmainframe.unity3d
-- Assets/StreamingAssets/atlas/numberstyle/atlaswhitenumber.unity3d
-- Assets/StreamingAssets/font.unity3d
+- "E:/SOURCE_HOME/\u5916\u5305\u9879\u76EE/Mahjong/Assets/StreamingAssets/atlas/gameatlas/atlascommon.unity3d"
+- "E:/SOURCE_HOME/\u5916\u5305\u9879\u76EE/Mahjong/Assets/StreamingAssets/atlas/gameatlas/atlashead.unity3d"
+- "E:/SOURCE_HOME/\u5916\u5305\u9879\u76EE/Mahjong/Assets/StreamingAssets/atlas/gameatlas/atlasmainframe.unity3d"
+- "E:/SOURCE_HOME/\u5916\u5305\u9879\u76EE/Mahjong/Assets/StreamingAssets/atlas/numberstyle/atlaswhitenumber.unity3d"
+- "E:/SOURCE_HOME/\u5916\u5305\u9879\u76EE/Mahjong/Assets/StreamingAssets/font.unity3d"

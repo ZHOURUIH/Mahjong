@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 3226698367
+CRC: 4143064149
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -166,6 +166,8 @@ AssetBundleManifest:
       Name: layout/uiprefab/uigameending.unity3d
       Dependencies:
         Dependency_0: atlas/gameatlas/atlasgameending.unity3d
+        Dependency_1: font/fzy3jw.unity3d
+        Dependency_2: texture/gametexture/mainframe.unity3d
     Info_44:
       Name: layout/uiprefab/uiglobaltouch.unity3d
       Dependencies: {}

@@ -34,6 +34,10 @@ public class EndingCharacter
 	{
 		mHead.setTexture(tex);
 	}
+	public void setHead(int head)
+	{
+		mHead.setTextureName(CommonDefine.R_GAME_TEXTURE_PATH + "Head/Head" + head);
+	}
 	public void setName(string name)
 	{
 		mName.setText(name);
@@ -59,7 +63,7 @@ public class Multiple
 	{
 		mRoot = mScript.newObject<txUIObject>(parent, rootName);
 		mDescribe = mScript.newObject<txUIText>(mRoot, "Describe");
-		mMultipleCount = mScript.newObject<txUIText>(mRoot, "Multiple");
+		mMultipleCount = mScript.newObject<txUIText>(mRoot, "MultipleCount");
 	}
 	public void init()
 	{
@@ -115,8 +119,8 @@ public class ScriptGameEnding : LayoutScript
 	public override void assignWindow()
 	{
 		mHuResultRoot = newObject<txUIObject>("HuResultRoot");
-		mHu = newObject<txUIStaticSprite>("Hu", 1);
-		mPingJu = newObject<txUIStaticSprite>("PingJu", 1);
+		mHu = newObject<txUIStaticSprite>(mHuResultRoot, "Hu", 1);
+		mPingJu = newObject<txUIStaticSprite>(mHuResultRoot, "PingJu", 1);
 		mMoneyResultRoot = newObject<txUIObject>("MoneyResultRoot");
 		int charCount = mEndingCharacterList.Count;
 		for(int i = 0; i < charCount; ++i)
@@ -219,7 +223,8 @@ public class ScriptGameEnding : LayoutScript
 		{
 			CharacterData data = keys[i].getCharacterData();
 			EndingCharacter endChar = mEndingCharacterList[i];
-			endChar.setHead(mPlayerHeadManager.getHead(keys[i]));
+			// 如果是微信头像,则使用PlayerHeadManager
+			endChar.setHead(data.mHead);
 			endChar.setName(data.mName);
 			endChar.setMoneyDelta(moneyDelta[keys[i]]);
 		}

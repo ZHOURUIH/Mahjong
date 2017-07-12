@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 3926488810
+CRC: 2127747960
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 5793fc7cb558c1591c63cd7e52ec5f88
+    Hash: 35bfd2075b599682b5a47c577a3d7f99
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 481d7883ed51bd886518d1fb548c8fae
+    Hash: 82a9dce13154eebdc51e747f8e084380
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -28,4 +28,4 @@ ClassTypes:
 Assets:
 - Assets/Resources/Layout/UIPrefab/UIMainFrame.prefab
 Dependencies:
-- Assets/StreamingAssets/atlas/gameatlas/atlasmainframe.unity3d
+- "E:/SOURCE_HOME/\u5916\u5305\u9879\u76EE/Mahjong/Assets/StreamingAssets/atlas/gameatlas/atlasmainframe.unity3d"

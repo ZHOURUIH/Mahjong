@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 4107247373
+CRC: 717122508
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 379339b1f11bc5347a287367ef651419
+    Hash: 74dfd50969ad6f3041b48b75b5fd8d34
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 6cb1feaa788df534b69fc4c7b5d9d21b
+    Hash: b909114dc383db712f4cba461e7f635d
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -24,4 +24,4 @@ ClassTypes:
 Assets:
 - Assets/Resources/Font/simhei.prefab
 Dependencies:
-- Assets/StreamingAssets/font.unity3d
+- "E:/SOURCE_HOME/\u5916\u5305\u9879\u76EE/Mahjong/Assets/StreamingAssets/font.unity3d"

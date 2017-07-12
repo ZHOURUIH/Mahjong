@@ -3,6 +3,7 @@ guid: 64a975bd77d85b3439aceb2f674d6b65
 timeCreated: 1496483728
 licenseType: Pro
 NativeFormatImporter:
+  mainObjectFileID: -1
   userData: 
   assetBundleName: layout/uiprefab/uilogin.unity3d
   assetBundleVariant: 

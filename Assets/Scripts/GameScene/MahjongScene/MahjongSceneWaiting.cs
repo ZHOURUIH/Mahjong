@@ -17,11 +17,6 @@ public class MahjongSceneWaiting : SceneProcedure
 		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_MAHJONG_BACK_FRAME);
 		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_MAHJONG_FRAME);
 
-		// 通知麻将系统开始新的一局
-		CommandMahjongSystemState cmdState = mCommandSystem.newCmd<CommandMahjongSystemState>();
-		cmdState.mPlayState = MAHJONG_PLAY_STATE.MPS_WAITING;
-		mCommandSystem.pushCommand(cmdState, mMahjongSystem);
-
 		// 通知房间开始等待玩家加入
 		MahjongScene mahjongScene = mGameScene as MahjongScene;
 		mahjongScene.getRoom().notifyStartWait();

@@ -39,7 +39,8 @@ public class SCOtherPlayerJoinRoom : SocketPacket
 		cmdCreate.mGUID = mPlayerGUID.mValue;
 		cmdCreate.mCharacterType = CHARACTER_TYPE.CT_OTHER;
 		mCommandSystem.pushCommand(cmdCreate, mCharacterManager);
-		CharacterData data = cmdCreate.mResultCharacter.getCharacterData();
+		CharacterOther other = mCharacterManager.getCharacterByGUID(mPlayerGUID.mValue) as CharacterOther;
+		CharacterData data = other.getCharacterData();
 		data.mMoney = mMoney.mValue;
 		data.mHead = mHead.mValue;
 		data.mServerPosition = (PLAYER_POSITION)mPosition.mValue;
@@ -48,7 +49,7 @@ public class SCOtherPlayerJoinRoom : SocketPacket
 		// 将该玩家加入房间
 		GameScene gameScene = mGameSceneManager.getCurScene();
 		CommandRoomJoin cmd = mCommandSystem.newCmd<CommandRoomJoin>();
-		cmd.mCharacter = cmdCreate.mResultCharacter;
+		cmd.mCharacter = other;
 		mCommandSystem.pushCommand(cmd, (gameScene as MahjongScene).getRoom());
 	}
 }

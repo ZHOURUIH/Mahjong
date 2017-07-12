@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 2625192317
+CRC: 2079753536
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 7256b692b7ab5df46d96a509a8caa254
+    Hash: 7c0a6a68bc8a86b3a147a0b132067cf8
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 58534426d4873056ca7b3d32c4363467
+    Hash: 0fe9452520b8fd374ee8ad0c2b347307
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -28,6 +28,6 @@ ClassTypes:
 Assets:
 - Assets/Resources/Layout/UIPrefab/UIBillboard.prefab
 Dependencies:
-- Assets/StreamingAssets/atlas/gameatlas/atlascommon.unity3d
-- Assets/StreamingAssets/atlas/gameatlas/atlasroommenu.unity3d
-- Assets/StreamingAssets/font.unity3d
+- "E:/SOURCE_HOME/\u5916\u5305\u9879\u76EE/Mahjong/Assets/StreamingAssets/atlas/gameatlas/atlascommon.unity3d"
+- "E:/SOURCE_HOME/\u5916\u5305\u9879\u76EE/Mahjong/Assets/StreamingAssets/atlas/gameatlas/atlasroommenu.unity3d"
+- "E:/SOURCE_HOME/\u5916\u5305\u9879\u76EE/Mahjong/Assets/StreamingAssets/font.unity3d"

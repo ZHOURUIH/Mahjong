@@ -21,7 +21,9 @@ public class MahjongSceneRunningGaming : SceneProcedure
 	}
 	protected override void onExit(SceneProcedure nextProcedure)
 	{
-		;
+		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_MAHJONG_DROP);
+		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_PLAYER_ACTION);
+		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_MAHJONG_HAND_IN);
 	}
 	protected override void onKeyProcess(float elapsedTime)
 	{

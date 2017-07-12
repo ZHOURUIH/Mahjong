@@ -107,7 +107,10 @@ public class AudioManager : GameBase
 	//--------------------------------------------------------------------------------------------------------------------------------------
 	protected void onAudioLoaded(UnityEngine.Object res)
 	{
-		mAudioClipList[res.name] = res as AudioClip;
+		if (res != null)
+		{
+			mAudioClipList[res.name] = res as AudioClip;
+		}
 		++mLoadedCount;
 	}
 	// name为Sound下相对路径,不带后缀
@@ -120,7 +123,10 @@ public class AudioManager : GameBase
 		else
 		{
 			AudioClip audio = mResourceManager.loadResource<AudioClip>(CommonDefine.R_SOUND_PATH + name, false);
-			mAudioClipList[audio.name] = audio;
+			if (audio != null)
+			{
+				mAudioClipList[audio.name] = audio;
+			}
 			++mLoadedCount;
 		}
 	}

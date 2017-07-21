@@ -78,6 +78,10 @@ public class LayoutPrefabManager : GameBase
 	}
 	public float getLoadedPercent()
 	{
+		if (mPrefabList.Count == 0)
+		{
+			return 1.0f;
+		}
 		return (float)mLoadedCount / (float)mPrefabList.Count;
 	}
 	//---------------------------------------------------------------------------------------------------------

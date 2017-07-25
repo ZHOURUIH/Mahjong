@@ -5,7 +5,6 @@ using System.Collections.Generic;
 public class CharacterManager : CommandReceiver
 {
 	protected Dictionary<string, Character> mCharacterList;                                 // 角色名字索引表
-	protected Dictionary<int, Character> mCharacterClientIDList;                            // 角色客户端ID索引表
 	protected Dictionary<int, Character> mCharacterGUIDList;								// 角色GUID索引表
 	protected Dictionary<CHARACTER_TYPE, Dictionary<string, Character>> mCharacterTypeList; // 角色分类列表
 	protected CharacterFactoryManager mCharacterFactoryManager;								// 角色工厂
@@ -18,7 +17,6 @@ public class CharacterManager : CommandReceiver
 	{
 		mCharacterList = new Dictionary<string, Character>();
 		mCharacterTypeList = new Dictionary<CHARACTER_TYPE, Dictionary<string, Character>>();
-		mCharacterClientIDList = new Dictionary<int, Character>();
 		mCharacterGUIDList = new Dictionary<int, Character>();
 		mCharacterFactoryManager = new CharacterFactoryManager();
 	}
@@ -41,13 +39,12 @@ public class CharacterManager : CommandReceiver
 	public override void destroy()
 	{
 		base.destroy();
-		foreach (var character in mCharacterClientIDList)
+		foreach (var character in mCharacterGUIDList)
 		{
 			character.Value.destroy();
 		}
 		mCharacterList = null;
 		mCharacterTypeList = null;
-		mCharacterClientIDList = null;
 		mCharacterGUIDList = null;
 		mMyself = null;
 	}
@@ -71,14 +68,6 @@ public class CharacterManager : CommandReceiver
 		}
 		return mCharacterList[name];
 	}
-	public Character getCharacterByClientID(int clientID)
-	{
-		if (!mCharacterClientIDList.ContainsKey(clientID))
-		{
-			return null;
-		}
-		return mCharacterClientIDList[clientID];
-	}
 	public Character getCharacterByGUID(int guid)
 	{
 		if(!mCharacterGUIDList.ContainsKey(guid))
@@ -96,7 +85,7 @@ public class CharacterManager : CommandReceiver
 		characterList = mCharacterTypeList[type];
 	}
 	
-	public Character createCharacter(string name, CHARACTER_TYPE type, int clientID, int guid)
+	public Character createCharacter(string name, CHARACTER_TYPE type, int guid)
 	{
 		if (mCharacterList.ContainsKey(name))
 		{
@@ -120,21 +109,13 @@ public class CharacterManager : CommandReceiver
 		}
 		// 将创建的角色挂接到角色管理器下
 		newCharacter.setParent(mManagerObject);
-		newCharacter.init(clientID, guid);
+		newCharacter.init( guid);
 		addCharacterToList(newCharacter);
 		return newCharacter;
 	}
 	public void destroyCharacter(string name)
 	{
 		Character character = getCharacter(name);
-		if (character != null)
-		{
-			destroyCharacter(character);
-		}
-	}
-	public void destroyCharacterByClientID(int clientID)
-	{
-		Character character = getCharacterByClientID(clientID);
 		if (character != null)
 		{
 			destroyCharacter(character);
@@ -190,11 +171,6 @@ public class CharacterManager : CommandReceiver
 				mCharacterTypeList[character.getType()].Remove(data.mName);
 			}
 		}
-		// 从客户端ID索引表中移除
-		if (mCharacterClientIDList.ContainsKey(data.mClientID))
-		{
-			mCharacterClientIDList.Remove(data.mClientID);
-		}
 		// 从GUID索引表中移除
 		if (mCharacterGUIDList.ContainsKey(data.mGUID))
 		{
@@ -221,15 +197,6 @@ public class CharacterManager : CommandReceiver
 			Dictionary<string, Character> characterMap = new Dictionary<string, Character>();
 			characterMap.Add(data.mName, character);
 			mCharacterTypeList.Add(character.getType(), characterMap);
-		}
-		// 加入ID索引表
-		if (!mCharacterClientIDList.ContainsKey(data.mClientID))
-		{
-			mCharacterClientIDList.Add(data.mClientID, character);
-		}
-		else
-		{
-			UnityUtility.logError("error : there is a character id : " + data.mClientID + ", can not add again!");
 		}
 		// 如果不是非法GUID才能加入列表
 		if(data.mGUID != CommonDefine.INVALID_ID && !mCharacterGUIDList.ContainsKey(data.mGUID))

@@ -12,7 +12,6 @@ public class CharacterData
 {
 	public CharacterData()
 	{
-		mClientID = CommonDefine.INVALID_ID;
 		mGUID = CommonDefine.INVALID_ID;
 		mName = "";
 		mPosition = PLAYER_POSITION.PP_MAX;
@@ -23,7 +22,6 @@ public class CharacterData
 		mHandIn = new List<MAHJONG>();
 		mDropList = new List<MAHJONG>();
 	}
-	public int				mClientID;	// 客户端ID,由角色管理器自动生成
 	public int				mGUID;		// 玩家唯一ID,由服务器发送过来的
 	public string			mName;
 	public int				mMoney;

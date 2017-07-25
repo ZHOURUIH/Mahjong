@@ -13,13 +13,12 @@ public class Character : MovableObject
 		mCharacterType = type;
 		mCharacterData = null;
 	}
-	public virtual void init(int clientID, int guid)
+	public virtual void init(int guid)
 	{
 		if (null == mCharacterData)
 		{
 			mCharacterData = new CharacterData();
 		}
-		mCharacterData.mClientID = clientID;
 		mCharacterData.mGUID = guid;
 		mCharacterData.mName = mName;
 		initComponents();

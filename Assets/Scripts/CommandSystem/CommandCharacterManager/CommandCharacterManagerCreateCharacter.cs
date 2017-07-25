@@ -16,7 +16,7 @@ public class CommandCharacterManagerCreateCharacter : Command
 	public override void execute()
 	{
 		CharacterManager characterManager = mReceiver as CharacterManager;
-		characterManager.createCharacter(mName, mCharacterType, GameUtility.makeID(), mGUID);
+		characterManager.createCharacter(mName, mCharacterType, mGUID);
 	}
 	public override string showDebugInfo()
 	{

@@ -4,8 +4,8 @@
 	{
 		_MainTex ("Texture", 2D) = "white" {}
 		_MaskTex ("Texture", 2D) = "white" {}
-		_SizeX("Size X", float) = 1.0f
-		_SizeY("Size Y", float) = 1.0f
+		_SizeX("Size X", float) = 1.0
+		_SizeY("Size Y", float) = 1.0
 	}
 	SubShader
 	{
@@ -65,7 +65,7 @@
 			fixed4 frag (v2f i) : SV_Target
 			{
 				fixed3 srcColor = tex2D(_MainTex, i.uv).rgb;
-				flaot2 vDir = i.uv - float2(0.5, 0.5);
+				float2 vDir = i.uv - float2(0.5, 0.5);
 				float2 newUV = float2(vDir.x / _SizeX, vDir.y / _SizeY) + float2(0.5, 0.5);
 				// 取红色分量作为主纹理采样的透明度
 				fixed3 maskColor = tex2D(_MaskTex, newUV).rgb;

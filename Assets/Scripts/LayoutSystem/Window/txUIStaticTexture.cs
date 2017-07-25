@@ -6,9 +6,11 @@ using UnityEngine;
 
 public class txUIStaticTexture : txUIObject
 {
-	public UITexture mTexture;
-	public Vector3   mHSLOffset;	// 当前HSL偏移,只有当shader为HSLOffet或者HSLOffsetLinearDodge时才有效
-	public string    mNormalShaderName;
+	protected UITexture mTexture;
+	protected Vector3   mHSLOffset;	// 当前HSL偏移,只有当shader为HSLOffet或者HSLOffsetLinearDodge时才有效
+	protected string    mNormalShaderName;
+	protected Texture	mMask;
+	protected Vector2	mMaskSize;
 	public txUIStaticTexture()
 	{
 		mType = UI_OBJECT_TYPE.UBT_STATIC_TEXTURE;
@@ -124,15 +126,7 @@ public class txUIStaticTexture : txUIObject
 		}
 		return mTexture.alpha;
 	}
-	public void setHSLOffset(Vector3 offset)
-	{
-		mHSLOffset = offset;
-	}
-	public Vector3 getHSLOff() 
-	{
-		return mHSLOffset;
-	}
-	public void setFillPercent(float percent)
+	public override void setFillPercent(float percent)
 	{
 		if (mTexture == null)
 		{
@@ -140,6 +134,10 @@ public class txUIStaticTexture : txUIObject
 		}
 		mTexture.fillAmount = percent;
 	}
+	public void setMaskTexture(Texture mask){mMask = mask;}
+	public void setMaskSize(Vector2 size){mMaskSize = size;}
+	public void setHSLOffset(Vector3 offset){mHSLOffset = offset;}
+	public Vector3 getHSLOff() {return mHSLOffset;}
 	public void setGray(bool gray)
 	{
 		if (mTexture == null)
@@ -156,7 +154,7 @@ public class txUIStaticTexture : txUIObject
 			mTexture.shader = mShaderManager.getShader(mNormalShaderName);
 		}
 	}
-	public float getFillPercent()
+	public override float getFillPercent()
 	{
 		if (mTexture == null)
 		{
@@ -177,9 +175,16 @@ public class txUIStaticTexture : txUIObject
 	{
 		if (mat != null && mat.shader != null)
 		{
-			if (mat.shader.name == "HSLOffset" || mat.shader.name == "HSLOffsetLinearDodge")
+			string shaderName = mat.shader.name;
+			if (shaderName == "HSLOffset" || shaderName == "HSLOffsetLinearDodge")
 			{
 				mat.SetColor("_HSLOffset", new Color(mHSLOffset.x, mHSLOffset.y, mHSLOffset.z));
+			}
+			else if(shaderName == "MaskCut")
+			{
+				mat.SetTexture("_MaskTex", mMask);
+				mat.SetFloat("_SizeX", mMaskSize.x);
+				mat.SetFloat("_SizeY", mMaskSize.y);
 			}
 		}
 	}

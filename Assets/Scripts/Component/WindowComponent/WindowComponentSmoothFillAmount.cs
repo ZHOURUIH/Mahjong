@@ -12,7 +12,7 @@ public class WindowComponentSmoothFillAmount : ComponentLinear
 	protected override bool isType(Type type) { return base.isType(type) || type == typeof(WindowComponentSmoothFillAmount); }
 	protected override void applyValue(float value, bool done = false)
 	{
-		txUIStaticTexture window = mComponentOwner as txUIStaticTexture;
+		txUIObject window = mComponentOwner as txUIObject;
 		window.setFillPercent(value);
 	}
 }

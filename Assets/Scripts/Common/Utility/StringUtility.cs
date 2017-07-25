@@ -179,9 +179,9 @@ public class StringUtility : GameBase
 		rightToLeft(ref str);
 		string ret = str;
 		// 如果有文件名,则先去除文件名
-		int dotPos = ret.LastIndexOf('.');
 		int namePos = ret.LastIndexOf('/');
-		if(dotPos != -1)
+		int dotPos = ret.LastIndexOf('.');
+		if (dotPos > namePos)
 		{
 			ret = ret.Substring(0, namePos + 1);
 		}
@@ -240,14 +240,15 @@ public class StringUtility : GameBase
 	{
 		str = str.Replace('/', '\\');
 	}
-	public static string[] split(string str, params char[] keyword)
+	public static string[] split(string str, bool removeEmpty, params char[] keyword)
 	{
-		string[] strList = str.Split(keyword, StringSplitOptions.RemoveEmptyEntries);
+		StringSplitOptions option = removeEmpty ? StringSplitOptions.RemoveEmptyEntries : StringSplitOptions.None;
+		string[] strList = str.Split(keyword, option);
 		return strList;
 	}
-	public static void split(string str, ref List<string> strList, params char[] keyword)
+	public static void split(string str, ref List<string> strList, bool removeEmpty, params char[] keyword)
 	{
-		string[] strArray = split(str, keyword);
+		string[] strArray = split(str, removeEmpty, keyword);
 		if (strList == null)
 		{
 			strList = new List<string>(strArray);
@@ -264,7 +265,7 @@ public class StringUtility : GameBase
 	}
 	public static void stringToFloatArray(string str, ref float[] values)
 	{
-		string[] rangeList = split(str, ',');
+		string[] rangeList = split(str, true, ',');
 		int len = rangeList.Length;
 		if (values != null && len != values.Length)
 		{
@@ -297,7 +298,7 @@ public class StringUtility : GameBase
 	}
 	public static void stringToIntArray(string str, ref int[] values)
 	{
-		string[] rangeList = split(str, ',');
+		string[] rangeList = split(str, true, ',');
 		int len = rangeList.Length;
 		if (values != null && len != values.Length)
 		{

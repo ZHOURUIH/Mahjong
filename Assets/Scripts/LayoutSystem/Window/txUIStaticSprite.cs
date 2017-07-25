@@ -68,7 +68,7 @@ public class txUIStaticSprite : txUIObject
 		}
 		return mSprite.alpha;
 	}
-	public void setFillPercent(float percent)
+	public override void setFillPercent(float percent)
 	{
 		if (mSprite == null)
 		{

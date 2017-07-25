@@ -55,6 +55,9 @@ public class txUIObject : ComponentOwner
 		addComponent<WindowComponentMove>("Move").setActive(false);
 		addComponent<WindowComponentKeyFrameRotate>("KeyFrameRotate").setActive(false);
 		addComponent<WindowComponentHSL>("HSL").setActive(false);
+		addComponent<WindowComponentSmoothSlider>("slider").setActive(false);
+		addComponent<WindowComponentSmoothFillAmount>("fillAmount").setActive(false);
+		addComponent<ComponentRotateFixed>("RotateFixed").setActive(false);
 	}
 	public Transform getTransform() { return mTransform; }
 	public AudioSource getAudioSource() { return mAudioSource; }
@@ -105,4 +108,6 @@ public class txUIObject : ComponentOwner
 	public GameObject getChild(int index) { return mTransform.GetChild(index).gameObject; }
 	public virtual void setAlpha(float alpha) { }
 	public virtual float getAlpha() { return 1.0f; }
+	public virtual void setFillPercent(float percent) { }
+	public virtual float getFillPercent() { return 1.0f; }
 }

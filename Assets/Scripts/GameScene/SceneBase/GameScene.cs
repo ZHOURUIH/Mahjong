@@ -114,7 +114,7 @@ abstract public class GameScene : ComponentOwner
 		}
 		else
 		{
-			UnityUtility.logError("error : can not back scene procedure");
+			UnityUtility.logError("can not back scene procedure : " + lastType);
 		}
 	}
 	public bool changeProcedure(PROCEDURE_TYPE procedure, string intent)
@@ -124,9 +124,9 @@ abstract public class GameScene : ComponentOwner
 			// 将上一个流程记录到返回列表中
 			if (mCurProcedure != null)
 			{
-				mLastProcedureList.Add(mCurProcedure.getType());
+				mLastProcedureList.Add(mCurProcedure.getProcedureType());
 			}
-			if (mCurProcedure == null || mCurProcedure.getType() != procedure)
+			if (mCurProcedure == null || mCurProcedure.getProcedureType() != procedure)
 			{
 				SceneProcedure targetProcedure = mSceneProcedureList[procedure];
 				// 如果当前已经在一个流程中了,则要先退出当前流程,但是不要销毁流程
@@ -136,19 +136,20 @@ abstract public class GameScene : ComponentOwner
 					SceneProcedure exitTo = mCurProcedure.getSameParent(targetProcedure);
 					SceneProcedure nextPro = targetProcedure;
 					mCurProcedure.exit(exitTo, nextPro);
+					mCurProcedure.notifyExitSelf();
 				}
 				SceneProcedure lastProcedure = mCurProcedure;
 				mCurProcedure = targetProcedure;
 				if(mCurProcedure != null)
 				{
-					mCurProcedure.init(lastProcedure, intent);
-				}
+				mCurProcedure.init(lastProcedure, intent);
+			}
 			}
             return true;
         }
         else
         {
-			UnityUtility.logError("error : can not find scene procedure : " + procedure);
+			UnityUtility.logError("can not find scene procedure : " + procedure);
         }
         return false;
     }
@@ -168,7 +169,7 @@ abstract public class GameScene : ComponentOwner
 	{
 		return mCurProcedure.getThisOrParent<T>(type);
 	}
-    public GAME_SCENE_TYPE getType() { return mType; }
+	public GAME_SCENE_TYPE getSceneType() { return mSceneType; }
 	public static SceneProcedure createProcedure<T>(GameScene gameScene, PROCEDURE_TYPE type) where T : SceneProcedure, new()
 	{
 		object[] procedureParams = new object[] { type, gameScene };
@@ -182,7 +183,7 @@ abstract public class GameScene : ComponentOwner
 		{
 			parent.addChildProcedure(procedure);
 		}
-		mSceneProcedureList.Add(procedure.getType(), procedure);
+		mSceneProcedureList.Add(procedure.getProcedureType(), procedure);
 		return procedure as T;
     }
 	//--------------------------------------------------------------------------------------------------------------------------------

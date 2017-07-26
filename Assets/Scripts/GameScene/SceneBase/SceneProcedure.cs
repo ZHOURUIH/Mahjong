@@ -7,7 +7,7 @@ public abstract class SceneProcedure : GameBase
 {
 	protected Dictionary<Command, float> mDelayCmdList;	// 流程进入时的延迟命令列表,当命令执行时,会从列表中移除该命令
 	protected Dictionary<PROCEDURE_TYPE, SceneProcedure> mChildProcedureList;	// 子流程列表
-	protected PROCEDURE_TYPE	mType;					// 该流程的类型
+	protected PROCEDURE_TYPE	mProcedureType;			// 该流程的类型
 	protected GameScene			mGameScene;				// 流程所属的场景
 	protected SceneProcedure	mParentProcedure;		// 父流程
 	protected SceneProcedure	mCurChildProcedure;		// 当前正在运行的子流程
@@ -19,19 +19,26 @@ public abstract class SceneProcedure : GameBase
 	public SceneProcedure(PROCEDURE_TYPE type, GameScene gameScene)
 	{
 		mInited = false;
-		mType = type;
+		mProcedureType = type;
 		mGameScene = gameScene;
 		mParentProcedure = null;
 		mCurChildProcedure = null;
 		mDelayCmdList = new Dictionary<Command, float>();
 		mChildProcedureList = new Dictionary<PROCEDURE_TYPE, SceneProcedure>();
 	}
+	// 在进入流程时调用
 	// 在onInit中如果要跳转流程,必须使用延迟命令进行跳转
 	protected abstract void onInit(SceneProcedure lastProcedure, string intent);
+	// 更新流程时调用
 	protected abstract void onUpdate(float elapsedTime);
+	// 更新流程时调用
 	protected abstract void onKeyProcess(float elapsedTime);
+	// 退出流程时调用,并且进入的不是自己的子流程时
 	protected abstract void onExit(SceneProcedure nextProcedure);
+	// 返回上一流程时调用
 	protected virtual void onBack() { }
+	// 流程为当前流程,退出当前流程进入其他任何流程时调用
+	protected virtual void onExitSelf() { }
 	// 由GameScene调用
 	// 进入流程
 	public void init(SceneProcedure lastProcedure, string intent)
@@ -104,6 +111,10 @@ public abstract class SceneProcedure : GameBase
 			mParentProcedure.back(backTo);
 		}
 	}
+	public void notifyExitSelf()
+	{
+		onExitSelf();
+	}
 	public void keyProcess(float elapsedTime)
 	{
 		// 先处理父节点按键响应
@@ -153,7 +164,7 @@ public abstract class SceneProcedure : GameBase
 	public bool isThisOrParent(PROCEDURE_TYPE type)
 	{
 		// 判断是否是自己的类型
-		if(mType == type)
+		if (mProcedureType == type)
 		{
 			return true;
 		}
@@ -165,7 +176,7 @@ public abstract class SceneProcedure : GameBase
 		// 没有父节点,返回false
 		return false;
 	}
-	public PROCEDURE_TYPE getType() { return mType; }
+	public PROCEDURE_TYPE getProcedureType() { return mProcedureType; }
 	public GameScene getGameScene() { return mGameScene; }
 	public SceneProcedure getParent() { return mParentProcedure; }
 	public SceneProcedure getParent(PROCEDURE_TYPE type)
@@ -176,7 +187,7 @@ public abstract class SceneProcedure : GameBase
 			return null;
 		}
 		// 有父节点,则判断类型是否匹配,匹配则返回父节点
-		if(mParentProcedure.getType() == type)
+		if (mParentProcedure.getProcedureType() == type)
 		{
 			return mParentProcedure;
 		}
@@ -188,7 +199,7 @@ public abstract class SceneProcedure : GameBase
 	}
 	public T getThisOrParent<T>(PROCEDURE_TYPE type) where T : SceneProcedure
 	{
-		if(mType == type)
+		if (mProcedureType == type)
 		{
 			return this as T;
 		}
@@ -217,12 +228,12 @@ public abstract class SceneProcedure : GameBase
 		{
 			return false;
 		}
-		if (mChildProcedureList.ContainsKey(child.getType()))
+		if (mChildProcedureList.ContainsKey(child.getProcedureType()))
 		{
 			return false;
 		}
 		child.setParent(this);
-		mChildProcedureList.Add(child.getType(), child);
+		mChildProcedureList.Add(child.getProcedureType(), child);
 		return true;
 	}
 	//---------------------------------------------------------------------------------------------------------

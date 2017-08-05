@@ -33,6 +33,10 @@ public class Room : CommandReceiver
 	// 通知房间有玩家加入
 	public void notifyPlayerJoin(Character player)
 	{
+		if(mPlayerIDList.ContainsKey(player.getCharacterData().mGUID))
+		{
+			return;
+		}
 		if (mCanJoin)
 		{
 			mPlayerIDList.Add(player.getCharacterData().mGUID, player);

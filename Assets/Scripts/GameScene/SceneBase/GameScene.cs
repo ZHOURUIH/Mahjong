@@ -6,7 +6,7 @@ using System.Collections.Generic;
 abstract public class GameScene : ComponentOwner
 {
 	protected Dictionary<PROCEDURE_TYPE, SceneProcedure>	mSceneProcedureList;
-	protected GAME_SCENE_TYPE								mType;
+	protected GAME_SCENE_TYPE								mSceneType;
 	protected PROCEDURE_TYPE								mStartProcedure;
 	protected PROCEDURE_TYPE								mExitProcedure;
 	protected PROCEDURE_TYPE								mLastProcedureType;
@@ -19,7 +19,7 @@ abstract public class GameScene : ComponentOwner
         :
         base(name)
     {
-        mType = type;
+		mSceneType = type;
         mCurProcedure = null;
         mDestroyEngineScene = true;
 		mLastProcedureType = PROCEDURE_TYPE.PT_NONE;

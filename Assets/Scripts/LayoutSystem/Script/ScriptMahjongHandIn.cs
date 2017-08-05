@@ -127,7 +127,7 @@ public class ShowMahjong
 	}
 	public void onReset()
 	{
-		;
+		LayoutTools.ACTIVE_WINDOW(mShowRoot, false);
 	}
 	public void showCurMahjong(List<MAHJONG> mahList)
 	{
@@ -194,8 +194,6 @@ public class HandInMahjong : GameBase
 		{
 			mHandInMahjong[i].mWindow = mScript.newObject<txUIButton>(mHandInRoot, "Mahjong" + i);
 		}
-		// 碰或者杠了的麻将
-		
 	}
 	public void init()
 	{

@@ -21,7 +21,7 @@ public class SCPlayerPeng : SocketPacket
 	public override void execute()
 	{
 		GameScene gameScene = mGameSceneManager.getCurScene();
-		if(gameScene.getType() != GAME_SCENE_TYPE.GST_MAHJONG)
+		if(gameScene.getSceneType() != GAME_SCENE_TYPE.GST_MAHJONG)
 		{
 			return;
 		}

@@ -12,7 +12,14 @@ public class MahjongSceneRunning : SceneProcedure
 	{ }
 	protected override void onInit(SceneProcedure lastProcedure, string intent)
 	{
-		;
+		// 游戏开始时取消所有玩家的准备标记
+		MahjongScene mahjongScene = mGameScene as MahjongScene;
+		Room room = mahjongScene.getRoom();
+		Dictionary<int, Character> playerList = room.getPlayerList();
+		foreach(var item in playerList)
+		{
+			item.Value.getCharacterData().mReady = false;
+		}
 	}
 	protected override void onUpdate(float elapsedTime)
 	{

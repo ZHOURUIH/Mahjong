@@ -99,7 +99,6 @@ public class ScriptGameEnding : LayoutScript
 	protected List<Multiple> mMultipleList;
 	protected txUIObject mButtonRoot;
 	protected txUIButton mContinueButton;
-	protected txUIButton mMatchButton;
 	protected txUIButton mReturnButton;
 	public ScriptGameEnding(LAYOUT_TYPE type, string name, GameLayout layout)
 		:
@@ -136,7 +135,6 @@ public class ScriptGameEnding : LayoutScript
 		}
 		mButtonRoot = newObject<txUIObject>("ButtonRoot");
 		mContinueButton = newObject<txUIButton>(mButtonRoot, "Continue");
-		mMatchButton = newObject<txUIButton>(mButtonRoot, "Match");
 		mReturnButton = newObject<txUIButton>(mButtonRoot, "Return");
 	}
 	public override void init()
@@ -153,8 +151,6 @@ public class ScriptGameEnding : LayoutScript
 		}
 		mContinueButton.setClickCallback(onContinueClick);
 		mContinueButton.setPressCallback(onButtonPress);
-		mMatchButton.setClickCallback(onMatchClick);
-		mMatchButton.setPressCallback(onButtonPress);
 		mReturnButton.setClickCallback(onReturnClick);
 		mReturnButton.setPressCallback(onButtonPress);
 	}
@@ -232,15 +228,13 @@ public class ScriptGameEnding : LayoutScript
 	//---------------------------------------------------------------------------------
 	protected void onContinueClick(GameObject go)
 	{
-		;
-	}
-	protected void onMatchClick(GameObject go)
-	{
-		;
+		CSContinueGame continueGame = mSocketNetManager.createPacket(PACKET_TYPE.PT_CS_CONTINUE_GAME) as CSContinueGame;
+		mSocketNetManager.sendMessage(continueGame);
 	}
 	protected void onReturnClick(GameObject go)
 	{
-		;
+		CSBackToMahjongHall backToMahjongHall = mSocketNetManager.createPacket(PACKET_TYPE.PT_CS_BACK_TO_MAHJONG_HALL) as CSBackToMahjongHall;
+		mSocketNetManager.sendMessage(backToMahjongHall);
 	}
 	protected void onButtonPress(GameObject go, bool press)
 	{

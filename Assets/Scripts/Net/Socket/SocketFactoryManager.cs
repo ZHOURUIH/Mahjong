@@ -72,6 +72,8 @@ public class SocketFactoryManager
 		registerFactory<SCOtherPlayerContinueGame>(PACKET_TYPE.PT_SC_OTHER_PLAYER_CONTINUE_GAME);
 		registerFactory<SCBackToMahjongHallRet>(PACKET_TYPE.PT_SC_BACK_TO_MAHJONG_HALL_RET);
 		registerFactory<SCOtherPlayerBackToMahjongHall>(PACKET_TYPE.PT_SC_OTHER_PLAYER_BACK_TO_MAHJONG_HALL);
+        registerFactory<SCShowHua>(PACKET_TYPE.PT_SC_SHOW_HUA);
+        registerFactory<SCOtherPlayerShowHua>(PACKET_TYPE.PT_SC_OTHER_PLAYER_SHOW_HUA);
 		int needSCCount = PACKET_TYPE.PT_SC_MAX - PACKET_TYPE.PT_SC_MIN - 1;
 		if (mFactoryList.Count - needCSCount != needSCCount)
 		{

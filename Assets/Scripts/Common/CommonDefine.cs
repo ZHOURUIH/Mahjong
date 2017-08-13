@@ -216,14 +216,6 @@ public enum ACTION_TYPE
 }
 public enum MAHJONG
 {
-	// 7个风
-	M_FENG_DONG,
-	M_FENG_NAN,
-	M_FENG_XI,
-	M_FENG_BEI,
-	M_FENG_ZHONG,
-	M_FENG_FA,
-	M_FENG_BAI,
 	// 9个筒
 	M_TONG1,
 	M_TONG2,
@@ -254,6 +246,23 @@ public enum MAHJONG
 	M_WAN7,
 	M_WAN8,
 	M_WAN9,
+	// 7个风
+	M_FENG_DONG,
+	M_FENG_NAN,
+	M_FENG_XI,
+	M_FENG_BEI,
+	M_FENG_ZHONG,
+	M_FENG_FA,
+	M_FENG_BAI,
+	// 8个花牌
+	M_HUA_CHUN,
+	M_HUA_XIA,
+	M_HUA_QIU,
+	M_HUA_DONG,
+	M_HUA_MEI,
+	M_HUA_LAN,
+	M_HUA_ZHU,
+	M_HUA_JU,
 
 	M_MAX,
 }
@@ -263,6 +272,7 @@ public enum MAHJONG_HUASE
 	MH_TONG,	// 筒
 	MH_TIAO,	// 条
 	MH_WAN,		// 万
+	MH_HUA,		// 花
 	MH_MAX,
 }
 public enum PLAYER_POSITION
@@ -387,10 +397,11 @@ public class CommonDefine
 	// 所有麻将的资源名字
 	public static string[] MAHJONG_NAME = new string[(int)MAHJONG.M_MAX]
 	{
-		"Feng0", "Feng1", "Feng2", "Feng3", "Feng4", "Feng5", "Feng6",
 		"Tong0", "Tong1", "Tong2", "Tong3", "Tong4", "Tong5", "Tong6", "Tong7", "Tong8",
 		"Tiao0", "Tiao1", "Tiao2", "Tiao3", "Tiao4", "Tiao5", "Tiao6", "Tiao7", "Tiao8",
-		"Wan0", "Wan1", "Wan2", "Wan3", "Wan4", "Wan5", "Wan6", "Wan7", "Wan8"
+		"Wan0", "Wan1", "Wan2", "Wan3", "Wan4", "Wan5", "Wan6", "Wan7", "Wan8",
+		"Feng0", "Feng1", "Feng2", "Feng3", "Feng4", "Feng5", "Feng6",
+		"Hua0","Hua1","Hua2","Hua3","Hua4","Hua5","Hua6","Hua7",
 	};
 	// 所有胡牌类型的名字,必须与枚举一一对应
 	public static string[] HU_NAME = new string[(int)HU_TYPE.HT_MAX]
@@ -402,14 +413,13 @@ public class CommonDefine
 	{
 		1, 4, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2
 	};
-	public static string[] mHandInRootName = new string[MAX_PLAYER_COUNT] { "MyHandInRoot", "LeftHandInRoot", "OppositeHandInRoot", "RightHandInRoot" };
-	public static string[] mPengGangRootName = new string[MAX_PLAYER_COUNT] { "MyPengGangRoot", "LeftPengGangRoot", "OppositePengGangRoot", "RightPengGangRoot" };
-	public static string[] mShowRootName = new string[MAX_PLAYER_COUNT] { "MyShowRoot", "LeftShowRoot", "OppositeShowRoot", "RightShowRoot" };
 	public static string[] mDropMahjongPreName = new string[MAX_PLAYER_COUNT] { "Drop_My_", "Drop_Side_", "Drop_Opposite_", "Drop_Side_" };
 	//------------------------------------------------------------------------------------------------------------------------
 	// 常量数字
 	// 每名玩家手里最多有14张牌,不包含碰,吃,杠
 	public const int MAX_HAND_IN_COUNT = 14;
+	// 花牌的最大数量
+	public const int MAX_HUA_COUNT = MAHJONG.M_HUA_JU - MAHJONG.M_HUA_CHUN + 1;
 	// 可以碰或者杠的最大次数
 	public const int MAX_PENG_TIMES = MAX_HAND_IN_COUNT / 3;
 	// 一局麻将游戏中玩家的最大数量

@@ -55,8 +55,8 @@ public class ScriptDice : LayoutScript
 	{
 		LayoutTools.ACTIVE_WINDOW(mDice0);
 		LayoutTools.ACTIVE_WINDOW(mDice1);
-		// 骰子停留1秒后再通知场景
+		// 骰子停留0.2秒后再通知场景
 		CommandMahjongSceneNotifyDiceDone cmd = mCommandSystem.newCmd<CommandMahjongSceneNotifyDiceDone>(true, true);
-		mCommandSystem.pushDelayCommand(cmd, mGameSceneManager.getCurScene(), 2.0f);
+		mCommandSystem.pushDelayCommand(cmd, mGameSceneManager.getCurScene(), 0.2f);
 	}
 }

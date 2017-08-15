@@ -79,7 +79,7 @@ public class ComponentKeyFrame : GameComponent
 	{
 		setTrembling(name);
 		mKeyFrame = mKeyFrameManager.getKeyFrame(mTremblingName);
-		if (mKeyFrame == null)
+		if (mKeyFrame == null || MathUtility.isFloatZero(onceLength))
 		{
 			mStopValue = 0.0f;
 			// 停止并禁用组件
@@ -89,11 +89,6 @@ public class ComponentKeyFrame : GameComponent
 		else 
 		{
 			mStopValue = mKeyFrame.Evaluate(mKeyFrame.length);
-		}
-		if (MathUtility.isFloatZero(onceLength))
-		{
-			UnityUtility.logError("once length can not be zero!");
-			return;
 		}
 		mOnceLength = onceLength;
 		mPlayState = PLAY_STATE.PS_PLAY;
@@ -135,8 +130,6 @@ public class ComponentKeyFrame : GameComponent
 		mPlayedTime = 0.0f;
 	}
 	public virtual void pause() { mPlayState = PLAY_STATE.PS_PAUSE; }
-	public virtual void applyTrembling(float value){}
-	
 	public void setState(PLAY_STATE state)
 	{
 		if (mPlayState == state)
@@ -245,4 +238,5 @@ public class ComponentKeyFrame : GameComponent
 	//----------------------------------------------------------------------------------------------------------------------------
 	protected override bool isType(Type type) { return type == typeof(ComponentKeyFrame); }
 	protected override void setBaseType() { mBaseType = typeof(ComponentKeyFrame); }
+	protected virtual void applyTrembling(float value) { }
 }

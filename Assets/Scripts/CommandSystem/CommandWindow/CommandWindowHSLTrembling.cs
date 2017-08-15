@@ -2,13 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class CommandWindowAlphaTremble : Command
+public class CommandWindowHSLTremble : Command
 {
 	public string mName;
 	public float mOnceLength;
 	public float mOffset;
-	public float mStartAlpha;
-	public float mTargetAlpha;
+	public Vector3 mStartHSL;
+	public Vector3 mTargetHSL;
 	public bool mLoop;
 	public float mAmplitude = 1.0f;
 	public bool mFullOnce;
@@ -22,11 +22,11 @@ public class CommandWindowAlphaTremble : Command
 		mName = "";
 		mOnceLength = 1.0f;
 		mOffset = 0.0f;
-		mStartAlpha = 1.0f;
-		mTargetAlpha = 1.0f;
+		mStartHSL = Vector3.zero;
+		mTargetHSL = Vector3.zero;
 		mLoop = false;
 		mAmplitude = 1.0f;
-		mFullOnce = false;
+		mFullOnce = true;
 		mTremblingCallBack = null;
 		mTrembleDoneCallBack = null;
 		mTremblingUserData = null;
@@ -45,14 +45,14 @@ public class CommandWindowAlphaTremble : Command
 	public override void execute()
 	{
 		txUIObject window = mReceiver as txUIObject;
-		WindowComponentAlphaTrembling comTrembling = window.getFirstComponent<WindowComponentAlphaTrembling>();
+		WindowComponentHSLTrembling comTrembling = window.getFirstComponent<WindowComponentHSLTrembling>();
 		if (comTrembling != null)
 		{
 			comTrembling.setTremblingCallback(mTremblingCallBack, mTremblingUserData);
 			comTrembling.setTrembleDoneCallback(mTrembleDoneCallBack, mTrembleDoneUserData);
 			comTrembling.setActive(true);
-			comTrembling.setStartAlpha(mStartAlpha);
-			comTrembling.setTargetAlpha(mTargetAlpha);
+			comTrembling.setStartHSL(mStartHSL);
+			comTrembling.setTargetHSL(mTargetHSL);
 			comTrembling.play(mName, mLoop, mOnceLength, mOffset, mFullOnce, mAmplitude);
 		}
 	}

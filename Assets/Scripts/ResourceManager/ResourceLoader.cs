@@ -93,10 +93,15 @@ public class ResourceLoader : MonoBehaviour
 		// 已经加载,则返回true
 		if (mLoadedPath[path].ContainsKey(name))
 		{
-			doneCallback(mLoadedPath[path][name]);
+			// 如果已经加载完毕,则返回,否则继续等待
+			if(mLoadedPath[path][name] != null)
+			{
+				doneCallback(mLoadedPath[path][name]);
+			}
 		}
 		else
 		{
+			mLoadedPath[path].Add(name, null);
 			StartCoroutine(loadResourceCoroutine<T>(name, doneCallback));
 		}
 		return true;
@@ -148,7 +153,7 @@ public class ResourceLoader : MonoBehaviour
 		ResourceRequest request = Resources.LoadAsync<T>(resName);
 		yield return request;
 		string path = StringUtility.getFilePath(resName);
-		mLoadedPath[path].Add(resName, request.asset);
+		mLoadedPath[path][resName] = request.asset;
 		doneCallback(request.asset);
 		UnityUtility.logInfo(resName + " load done!");
 	}

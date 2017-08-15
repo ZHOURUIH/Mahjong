@@ -10,7 +10,6 @@ public class CommandWindowScaleTrembling : Command
 	public bool mLoop;
 	public float mAmplitude = 1.0f;
 	public bool mFullOnce;
-	public bool mRandomOffset;
 	public Vector2 mStartScale;
 	public Vector2 mTargetScale;
 	public KeyFrameCallback mTremblingCallBack;
@@ -25,8 +24,7 @@ public class CommandWindowScaleTrembling : Command
 		mOffset = 0.0f;
 		mLoop = false;
 		mAmplitude = 1.0f;
-		mFullOnce = true;
-		mRandomOffset = false;
+		mFullOnce = false;
 		mStartScale = Vector2.one;
 		mTargetScale = Vector2.one;
 		mTremblingCallBack = null;
@@ -53,11 +51,6 @@ public class CommandWindowScaleTrembling : Command
 			comTrembling.setActive(true);
 			comTrembling.setTremblingCallback(mTremblingCallBack, mTremblingUserData);
 			comTrembling.setTrembleDoneCallback(mTrembleDoneCallBack, mTrembleDoneUserData);
-			// 随机偏移量
-			if (mRandomOffset)
-			{
-				mOffset = MathUtility.randomFloat(0.0f, mOnceLength);
-			}
 			comTrembling.setStartScale(mStartScale);
 			comTrembling.setTargetScale(mTargetScale);
 			comTrembling.play(mName, mLoop, mOnceLength, mOffset, mFullOnce, mAmplitude);

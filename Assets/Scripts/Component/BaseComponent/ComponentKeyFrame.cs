@@ -36,8 +36,16 @@ public class ComponentKeyFrame : GameComponent
 			mPlayedTime += elapsedTime;
 
 			bool done = false;
+			// 无限播放当前震动
+			if (mPlayLength < 0.0f)
+			{
+				if (mCurrentTime > mOnceLength)
+				{
+					mCurrentTime = 0.0f;
+				}
+			}
 			// 播放固定长度的震动
-			if (mPlayLength > 0.0f)
+			else
 			{
 				// 超过时间则停止,暂时不播放最后一帧
 				if (mPlayedTime > mPlayLength)
@@ -46,14 +54,6 @@ public class ComponentKeyFrame : GameComponent
 					mCurrentTime = mOffset + mPlayLength;
 				}
 				else if (mCurrentTime > mOnceLength)
-				{
-					mCurrentTime = 0.0f;
-				}
-			}
-			// 无限播放当前震动
-			else
-			{
-				if (mCurrentTime > mOnceLength)
 				{
 					mCurrentTime = 0.0f;
 				}
@@ -89,6 +89,10 @@ public class ComponentKeyFrame : GameComponent
 		else 
 		{
 			mStopValue = mKeyFrame.Evaluate(mKeyFrame.length);
+		}
+		if(offset > onceLength)
+		{
+			UnityUtility.logError("offset must be less than onceLength!");
 		}
 		mOnceLength = onceLength;
 		mPlayState = PLAY_STATE.PS_PLAY;

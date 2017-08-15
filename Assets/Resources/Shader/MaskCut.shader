@@ -40,11 +40,13 @@
 			struct appdata
 			{
 				float4 vertex : POSITION;
+				half4 color : COLOR;
 				float2 uv : TEXCOORD0;
 			};
 			struct v2f
 			{
 				float4 vertex : SV_POSITION;
+				half4 color : COLOR;
 				float2 uv : TEXCOORD0;
 			};
 
@@ -59,17 +61,18 @@
 				v2f o;
 				o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
 				o.uv = v.uv.xy * _MainTex_ST.xy + _MainTex_ST.zw;
+				o.color = v.color;
 				return o;
 			}
 
 			fixed4 frag (v2f i) : SV_Target
 			{
-				fixed3 srcColor = tex2D(_MainTex, i.uv).rgb;
+				fixed4 srcColor = tex2D(_MainTex, i.uv);
 				float2 vDir = i.uv - float2(0.5, 0.5);
 				float2 newUV = float2(vDir.x / _SizeX, vDir.y / _SizeY) + float2(0.5, 0.5);
 				// 取红色分量作为主纹理采样的透明度
 				fixed3 maskColor = tex2D(_MaskTex, newUV).rgb;
-				return fixed4(srcColor, maskColor.r);
+				return fixed4(srcColor.rgb, maskColor.r * i.color.a * srcColor.a);
 			}
 			ENDCG
 		}

@@ -93,7 +93,8 @@ public class ComponentKeyFrame : GameComponent
 		mOnceLength = onceLength;
 		mPlayState = PLAY_STATE.PS_PLAY;
 		mLoop = loop;
-		mCurrentTime = offset;
+		mOffset = offset;
+		mCurrentTime = mOffset;
 		mAmplitude = amplitude;
 		mPlayedTime = 0.0f;
 		if (mLoop)
@@ -151,14 +152,7 @@ public class ComponentKeyFrame : GameComponent
 	}
 	public float getTremblingPercent()
 	{
-		if(mLoop)
-		{
-			return mOnceLength > 0.0f ? mCurrentTime / mOnceLength : 0.0f;
-		}
-		else
-		{
-			return mPlayLength > 0.0f ? mCurrentTime / mPlayLength : 0.0f;
-		}
+		return mOnceLength > 0.0f ? mCurrentTime / mOnceLength : 0.0f;
 	}
 	public void setTremblingCallback(KeyFrameCallback callback, object userData)
 	{

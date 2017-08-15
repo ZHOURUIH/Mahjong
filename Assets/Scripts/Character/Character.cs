@@ -69,6 +69,11 @@ public class Character : MovableObject
 			}
 		}
 	}
+    public void showHua(MAHJONG mah)
+    {
+		mCharacterData.mHuaList.Add(mah);
+		mCharacterData.mHandIn.Remove(mah);
+    }
 	// 摸一张牌
 	public virtual void getMahjong(MAHJONG mah)
 	{

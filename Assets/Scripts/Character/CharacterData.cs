@@ -21,6 +21,7 @@ public class CharacterData
 		mPengGangList = new List<PengGangInfo>();
 		mHandIn = new List<MAHJONG>();
 		mDropList = new List<MAHJONG>();
+		mHuaList = new List<MAHJONG>();
 	}
 	public int				mGUID;		// 玩家唯一ID,由服务器发送过来的
 	public string			mName;
@@ -33,5 +34,6 @@ public class CharacterData
 	public List<PengGangInfo> mPengGangList;
 	public List<MAHJONG>	mHandIn;
 	public List<MAHJONG>	mDropList;
+	public List<MAHJONG>	mHuaList;
 	public int				mRoomID;	// 房间号
 }

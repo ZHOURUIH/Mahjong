@@ -7,7 +7,8 @@ public class GameScene : ComponentOwner
 {
 	protected Dictionary<PROCEDURE_TYPE, SceneProcedure>	mSceneProcedureList;
 	protected GAME_SCENE_TYPE								mSceneType;
-	protected PROCEDURE_TYPE								mFirstProcedure;
+	protected PROCEDURE_TYPE								mStartProcedure;
+	protected PROCEDURE_TYPE								mExitProcedure;
 	protected PROCEDURE_TYPE								mLastProcedureType;
 	protected SceneProcedure								mCurProcedure;
 	protected bool											mDestroyEngineScene;
@@ -18,7 +19,7 @@ public class GameScene : ComponentOwner
         :
         base(name)
     {
-        mSceneType = type;
+		mSceneType = type;
         mCurProcedure = null;
         mDestroyEngineScene = true;
 		mLastProcedureType = PROCEDURE_TYPE.PT_NONE;

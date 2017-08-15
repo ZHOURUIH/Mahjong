@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2092673022
+CRC: 3975707563
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: c25a38b986e07de24c57e451d893e2a6
+    Hash: da7982ec209bbbe9b5fcd8eb60a48e53
   TypeTreeHash:
     serializedVersion: 2
     Hash: cc7b69794a2bdada249e557ebbfded10
@@ -14,6 +14,7 @@ ClassTypes:
 Assets:
 - Assets/Resources/Shader/GaussianBlur.shader
 - Assets/Resources/Shader/HSLOffsetLinearDodge.shader
+- Assets/Resources/Shader/MaskCut.shader
 - Assets/Resources/Shader/HSLOffset.shader
 - Assets/Resources/Shader/Gray.shader
 Dependencies: []

@@ -17,8 +17,6 @@ public class LayoutLoadInfo
 
 public class MainSceneLoading : SceneProcedure
 {
-	protected int mLastVSync;
-	protected int mLastTargetFrameRate;
 	protected Dictionary<LAYOUT_TYPE, LayoutLoadInfo> mLoadInfo;
 	protected int mLoadedCount;
 	public MainSceneLoading()
@@ -36,8 +34,6 @@ public class MainSceneLoading : SceneProcedure
 	}
 	protected override void onInit(SceneProcedure lastProcedure, string intent)
 	{
-		mLastVSync = QualitySettings.vSyncCount;
-		mLastTargetFrameRate = Application.targetFrameRate;
 		QualitySettings.vSyncCount = 0;
 		Application.targetFrameRate = 30;
 		mLoadedCount = 0;
@@ -68,9 +64,6 @@ public class MainSceneLoading : SceneProcedure
 	}
 	protected void allLayoutLoaded()
 	{
-		QualitySettings.vSyncCount = mLastVSync;
-		Application.targetFrameRate = mLastTargetFrameRate;
-
 		CommandGameSceneChangeProcedure cmd = mCommandSystem.newCmd<CommandGameSceneChangeProcedure>(true, true);
 		cmd.mProcedure = PROCEDURE_TYPE.PT_MAIN_RUNNING;
 		mCommandSystem.pushDelayCommand(cmd, mGameScene);

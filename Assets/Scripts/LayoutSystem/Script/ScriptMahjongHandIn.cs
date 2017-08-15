@@ -127,7 +127,7 @@ public class ShowMahjong
 	}
 	public void onReset()
 	{
-		;
+		LayoutTools.ACTIVE_WINDOW(mShowRoot, false);
 	}
 	public void showCurMahjong(List<MAHJONG> mahList)
 	{
@@ -141,6 +141,51 @@ public class ShowMahjong
 			if(show)
 			{
 				mShowMahjong[i].setSpriteName(mMahjongPreName + CommonDefine.MAHJONG_NAME[(int)mahList[i]]);
+			}
+		}
+	}
+}
+
+public class HuaMahjong
+{
+	protected ScriptMahjongHandIn mScript;
+	protected string mMahjongPreName;
+	protected txUIObject mHuaRoot;
+	protected List<txUIStaticSprite> mHuaMahjong;
+	public HuaMahjong(ScriptMahjongHandIn script, string mahjongPreName)
+	{
+		mScript = script;
+		mMahjongPreName = mahjongPreName;
+		mHuaMahjong = new List<txUIStaticSprite>();
+	}
+	public void assignWindow(string huaRoot)
+	{
+		mHuaRoot = mScript.newObject<txUIObject>(huaRoot, 0);
+		for (int i = 0; i < CommonDefine.MAX_HUA_COUNT; ++i)
+		{
+			mHuaMahjong.Add(mScript.newObject<txUIStaticSprite>(mHuaRoot, "Mahjong" + i));
+		}
+	}
+	public void init()
+	{
+		;
+	}
+	public void onReset()
+	{
+		LayoutTools.ACTIVE_WINDOW(mHuaRoot, false);
+	}
+	public void showHua(List<MAHJONG> huaList)
+	{
+		LayoutTools.ACTIVE_WINDOW(mHuaRoot);
+		int curCount = huaList.Count;
+		int maxCount = mHuaMahjong.Count;
+		for(int i = 0; i < maxCount; ++i)
+		{
+			bool show = i < curCount;
+			LayoutTools.ACTIVE_WINDOW(mHuaMahjong[i], show);
+			if (show)
+			{
+				mHuaMahjong[i].setSpriteName(mMahjongPreName + CommonDefine.MAHJONG_NAME[(int)huaList[i]]);
 			}
 		}
 	}
@@ -194,8 +239,6 @@ public class HandInMahjong : GameBase
 		{
 			mHandInMahjong[i].mWindow = mScript.newObject<txUIButton>(mHandInRoot, "Mahjong" + i);
 		}
-		// 碰或者杠了的麻将
-		
 	}
 	public void init()
 	{
@@ -253,6 +296,18 @@ public class HandInMahjong : GameBase
 			prepareDropMahjong(mCurHandInCount);
 		}
 		++mCurHandInCount;
+	}
+	// 拿出一张花牌
+	public void notifyShowHua(MAHJONG mah, int index)
+	{
+		HandInMahjongInfo info = mHandInMahjong[index];
+		if (mPosition == PLAYER_POSITION.PP_MYSELF)
+		{
+			info.mMahjong = MAHJONG.M_MAX;
+			info.mState = HANDIN_STATE.HS_MAX;
+			info.mWindow.setSpriteName("");
+		}
+		LayoutTools.ACTIVE_WINDOW(info.mWindow, false);
 	}
 	// 打出一张牌
 	public void notifyDrop(MAHJONG mah, int index)
@@ -376,6 +431,7 @@ public class PlayerMahjong : GameBase
 	protected ShowMahjong mShowMahjong;
 	protected PengGangMahjong mPengGangMahjong;
 	protected HandInMahjong mHandInMahjong;
+	protected HuaMahjong mHuaMahjong;
 	protected PLAYER_POSITION mPosition;
 	protected ScriptMahjongHandIn mScript;
 	public PlayerMahjong(ScriptMahjongHandIn script, PLAYER_POSITION position)
@@ -385,24 +441,28 @@ public class PlayerMahjong : GameBase
 		mHandInMahjong = new HandInMahjong(mScript, mPosition);
 		mShowMahjong = new ShowMahjong(mScript, CommonDefine.mDropMahjongPreName[(int)mPosition]);
 		mPengGangMahjong = new PengGangMahjong(mScript, CommonDefine.mDropMahjongPreName[(int)mPosition]);
+		mHuaMahjong = new HuaMahjong(mScript, CommonDefine.mDropMahjongPreName[(int)mPosition]);
 	}
-	public void assignWindow(string handInRoot, string pengGangRoot, string showRoot)
+	public void assignWindow(string handInRoot, string pengGangRoot, string showRoot, string huaRoot)
 	{
 		mHandInMahjong.assignWindow(handInRoot);
 		mPengGangMahjong.assignWindow(pengGangRoot);
 		mShowMahjong.assignWindow(showRoot);
+		mHuaMahjong.assignWindow(huaRoot);
 	}
 	public void init()
 	{
 		mHandInMahjong.init();
 		mPengGangMahjong.init();
 		mShowMahjong.init();
+		mHuaMahjong.init();
 	}
 	public void onReset()
 	{
 		mHandInMahjong.onReset();
 		mPengGangMahjong.onReset();
 		mShowMahjong.onReset();
+		mHuaMahjong.onReset();
 	}
 	public void notifyGetStart(MAHJONG mah)
 	{
@@ -411,6 +471,10 @@ public class PlayerMahjong : GameBase
 	public void notifyGet(MAHJONG mah)
 	{
 		mHandInMahjong.notifyGet(mah);
+	}
+	public void notifyShowHua(MAHJONG mah, int index)
+	{
+		mHandInMahjong.notifyShowHua(mah, index);
 	}
 	public void notifyDrop(MAHJONG mah, int index)
 	{
@@ -435,6 +499,10 @@ public class PlayerMahjong : GameBase
 		mHandInMahjong.notifyEnd();
 		mShowMahjong.showCurMahjong(handIn);
 	}
+	public void notifyShowHua(List<MAHJONG> huaList)
+	{
+		mHuaMahjong.showHua(huaList);
+	}
 }
 
 public class ScriptMahjongHandIn : LayoutScript
@@ -452,10 +520,14 @@ public class ScriptMahjongHandIn : LayoutScript
 	}
 	public override void assignWindow()
 	{
+		string[] handInRootName = new string[CommonDefine.MAX_PLAYER_COUNT] { "MyHandInRoot", "LeftHandInRoot", "OppositeHandInRoot", "RightHandInRoot" };
+		string[] pengGangRootName = new string[CommonDefine.MAX_PLAYER_COUNT] { "MyPengGangRoot", "LeftPengGangRoot", "OppositePengGangRoot", "RightPengGangRoot" };
+		string[] showRootName = new string[CommonDefine.MAX_PLAYER_COUNT] { "MyShowRoot", "LeftShowRoot", "OppositeShowRoot", "RightShowRoot" };
+		string[] huaRootName = new string[CommonDefine.MAX_PLAYER_COUNT] { "MyHuaRoot", "LeftHuaRoot", "OppositeHuaRoot", "RightHuaRoot" };
 		int length = mPlayerMahjong.Count;
 		for (int i = 0; i < length; ++i)
 		{
-			mPlayerMahjong[i].assignWindow(CommonDefine.mHandInRootName[i], CommonDefine.mPengGangRootName[i], CommonDefine.mShowRootName[i]);
+			mPlayerMahjong[i].assignWindow(handInRootName[i], pengGangRootName[i], showRootName[i], huaRootName[i]);
 		}
 	}
 	public override void init()
@@ -502,6 +574,11 @@ public class ScriptMahjongHandIn : LayoutScript
 	{
 		mPlayerMahjong[(int)pos].notifyDrop(mah, index);
 	}
+	// 拿出一张花牌
+	public void notifyShowHua(PLAYER_POSITION pos, MAHJONG mah, int index)
+	{
+		mPlayerMahjong[(int)pos].notifyShowHua(mah, index);
+	}
 	// 碰牌或者杠牌
 	public void notifyPengOrGang(PLAYER_POSITION pos, List<PengGangInfo> infoList)
 	{
@@ -519,5 +596,9 @@ public class ScriptMahjongHandIn : LayoutScript
 	public void notifyEnd(PLAYER_POSITION pos, List<MAHJONG> handIn)
 	{
 		mPlayerMahjong[(int)pos].notifyEnd(handIn);
+	}
+	public void notifyShowHua(PLAYER_POSITION pos, List<MAHJONG> huaList)
+	{
+		mPlayerMahjong[(int)pos].notifyShowHua(huaList);
 	}
 }

@@ -18,6 +18,7 @@ public class CommandCharacterNotifyLeave : Command
 		data.mPengGangList.Clear();
 		data.mHandIn.Clear();
 		data.mDropList.Clear();
+		data.mHuaList.Clear();
 		data.mRoomID = -1;
 	}
 }

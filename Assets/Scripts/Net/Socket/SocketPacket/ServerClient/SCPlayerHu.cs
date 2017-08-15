@@ -22,7 +22,7 @@ public class SCPlayerHu : SocketPacket
 	{
 		// 通知房间保存胡牌结果
 		GameScene gameScene = mGameSceneManager.getCurScene();
-		if (gameScene.getType() != GAME_SCENE_TYPE.GST_MAHJONG)
+		if (gameScene.getSceneType() != GAME_SCENE_TYPE.GST_MAHJONG)
 		{
 			return;
 		}

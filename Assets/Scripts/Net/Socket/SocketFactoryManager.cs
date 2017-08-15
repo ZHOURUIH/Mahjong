@@ -26,6 +26,8 @@ public class SocketFactoryManager
 		registerFactory<CSDiceDone>(PACKET_TYPE.PT_CS_DICE_DONE);
 		registerFactory<CSRequestDrop>(PACKET_TYPE.PT_CS_REQUEST_DROP);
 		registerFactory<CSConfirmAction>(PACKET_TYPE.PT_CS_CONFIRM_ACTION);
+		registerFactory<CSContinueGame>(PACKET_TYPE.PT_CS_CONTINUE_GAME);
+		registerFactory<CSBackToMahjongHall>(PACKET_TYPE.PT_CS_BACK_TO_MAHJONG_HALL);
 		int needCSCount = PACKET_TYPE.PT_CS_MAX - PACKET_TYPE.PT_CS_MIN - 1;
 		if (mFactoryList.Count != needCSCount)
 		{
@@ -66,6 +68,12 @@ public class SocketFactoryManager
 		registerFactory<SCOtherPlayerAskDrop>(PACKET_TYPE.PT_SC_OTHER_PLAYER_ASK_DROP);
 		registerFactory<SCOtherPlayerAskAction>(PACKET_TYPE.PT_SC_OTHER_PLAYER_ASK_ACTION);
 		registerFactory<SCNotifyMahjongEnd>(PACKET_TYPE.PT_SC_NOTIFY_MAHJONG_END);
+		registerFactory<SCContinueGameRet>(PACKET_TYPE.PT_SC_CONTINUE_GAME_RET);
+		registerFactory<SCOtherPlayerContinueGame>(PACKET_TYPE.PT_SC_OTHER_PLAYER_CONTINUE_GAME);
+		registerFactory<SCBackToMahjongHallRet>(PACKET_TYPE.PT_SC_BACK_TO_MAHJONG_HALL_RET);
+		registerFactory<SCOtherPlayerBackToMahjongHall>(PACKET_TYPE.PT_SC_OTHER_PLAYER_BACK_TO_MAHJONG_HALL);
+        registerFactory<SCShowHua>(PACKET_TYPE.PT_SC_SHOW_HUA);
+        registerFactory<SCOtherPlayerShowHua>(PACKET_TYPE.PT_SC_OTHER_PLAYER_SHOW_HUA);
 		int needSCCount = PACKET_TYPE.PT_SC_MAX - PACKET_TYPE.PT_SC_MIN - 1;
 		if (mFactoryList.Count - needCSCount != needSCCount)
 		{

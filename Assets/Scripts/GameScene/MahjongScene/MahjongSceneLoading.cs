@@ -5,8 +5,6 @@ using System.Collections.Generic;
 
 public class MahjongSceneLoading : SceneProcedure
 {
-	protected int mLastVSync;
-	protected int mLastTargetFrameRate;
 	protected Dictionary<LAYOUT_TYPE, LayoutLoadInfo> mLoadInfo;
 	protected int mLoadedCount;
 	public MahjongSceneLoading()
@@ -28,10 +26,6 @@ public class MahjongSceneLoading : SceneProcedure
 	}
 	protected override void onInit(SceneProcedure lastProcedure, string intent)
 	{
-		mLastVSync = QualitySettings.vSyncCount;
-		mLastTargetFrameRate = Application.targetFrameRate;
-		QualitySettings.vSyncCount = 0;
-		Application.targetFrameRate = 30;
 		mLoadedCount = 0;
 		foreach (var item in mLoadInfo)
 		{
@@ -61,8 +55,6 @@ public class MahjongSceneLoading : SceneProcedure
 	}
 	protected void allLayoutLoaded()
 	{
-		QualitySettings.vSyncCount = mLastVSync;
-		Application.targetFrameRate = mLastTargetFrameRate;
 		CommandGameSceneChangeProcedure cmd = mCommandSystem.newCmd<CommandGameSceneChangeProcedure>(true, true);
 		cmd.mProcedure = PROCEDURE_TYPE.PT_MAHJONG_WAITING;
 		mCommandSystem.pushDelayCommand(cmd, mGameScene);

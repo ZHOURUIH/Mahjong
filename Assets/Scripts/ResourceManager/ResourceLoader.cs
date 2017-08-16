@@ -149,13 +149,13 @@ public class ResourceLoader : MonoBehaviour
 	//---------------------------------------------------------------------------------------------------------------------------------------
 	protected IEnumerator loadResourceCoroutine<T>(string resName, AssetLoadDoneCallback doneCallback) where T : UnityEngine.Object
 	{
-		UnityUtility.logInfo(resName + " start load!");
+		UnityUtility.logInfo(resName + " start load!", LOG_LEVEL.LL_NORMAL);
 		ResourceRequest request = Resources.LoadAsync<T>(resName);
 		yield return request;
 		string path = StringUtility.getFilePath(resName);
 		mLoadedPath[path][resName] = request.asset;
 		doneCallback(request.asset);
-		UnityUtility.logInfo(resName + " load done!");
+		UnityUtility.logInfo(resName + " load done!", LOG_LEVEL.LL_NORMAL);
 	}
 	protected IEnumerator loadPathCoroutine(string path, AssetBundleLoadDoneCallback callback)
 	{

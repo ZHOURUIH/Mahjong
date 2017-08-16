@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class GameScene : ComponentOwner
+abstract public class GameScene : ComponentOwner
 {
 	protected Dictionary<PROCEDURE_TYPE, SceneProcedure>	mSceneProcedureList;
 	protected GAME_SCENE_TYPE								mSceneType;
@@ -37,11 +37,11 @@ public class GameScene : ComponentOwner
         initComponents();
 		// 创建出所有的场景流程
 		createSceneProcedure();
-        // 设置起始流程名
-        setFirstProcedureName();
-        // 开始执行起始流程
+		// 设置起始流程名
+		assignStartExitProcedure();
+		// 开始执行起始流程
 		CommandGameSceneChangeProcedure cmd = mCommandSystem.newCmd<CommandGameSceneChangeProcedure>(false, false);
-        cmd.mProcedure = mFirstProcedure;
+        cmd.mProcedure = mStartProcedure;
         mCommandSystem.pushCommand(cmd, this);
     }
 	public override void initComponents()
@@ -78,6 +78,7 @@ public class GameScene : ComponentOwner
 		}
 	}
 	public AudioSource getAudioSource() { return mAudioSource; }
+	public abstract void assignStartExitProcedure();
 	public AudioSource createAudioSource()
 	{
 		mAudioSource = mSceneObject.AddComponent<AudioSource>();

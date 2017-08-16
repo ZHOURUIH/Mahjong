@@ -8,16 +8,38 @@ using System.Windows.Forms;
 #endif
 using UnityEngine;
 
+// 日志等级
+public enum LOG_LEVEL
+{
+	LL_FORCE,	// 强制显示
+	LL_HIGH,	// 高
+	LL_NORMAL,	// 正常
+	LL_MAX,
+}
+
 public class UnityUtility : GameBase
 {
 	protected static GameCamera mForeEffectCamera;
 	protected static GameCamera mBackEffectCamera;
-	protected static bool mOutputLog;
+	protected static LOG_LEVEL mLogLevel;
 	public void init() 
 	{
 		mForeEffectCamera = mCameraManager.getCamera("UIForeEffectCamera");
 		mBackEffectCamera = mCameraManager.getCamera("UIBackEffectCamera");
-		mOutputLog = (int)mGameConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_OUTPUT_LOG) != 0;
+#if UNITY_EDITOR
+		setLogLevel(LOG_LEVEL.LL_NORMAL);
+#else
+		setLogLevel((LOG_LEVEL)(int)mGameConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_LOG_LEVEL));
+#endif
+	}
+	public static void setLogLevel(LOG_LEVEL level)
+	{
+		mLogLevel = level;
+		logInfo("log level : " + mLogLevel, LOG_LEVEL.LL_FORCE);
+	}
+	public static LOG_LEVEL getLogLevel()
+	{
+		return mLogLevel;
 	}
 	public static void logError(string info, bool isMainThread = true)
 	{
@@ -28,9 +50,9 @@ public class UnityUtility : GameBase
 		Debug.LogError("error : " + info);
 	}
 	// force表示是否强制输出日志
-	public static void logInfo(string info, bool force = false)
+	public static void logInfo(string info, LOG_LEVEL level = LOG_LEVEL.LL_NORMAL)
 	{
-		if (mOutputLog || force)
+		if ((int)level <= (int)mLogLevel)
 		{
 			Debug.Log(getTime() + " : " + info);
 		}

@@ -262,7 +262,7 @@ public class AssetBundleLoader : MonoBehaviour
 		if (www.error != null)
 		{
 			// 下载失败
-			UnityUtility.logInfo("下载失败 : " + url);
+			UnityUtility.logInfo("下载失败 : " + url, LOG_LEVEL.LL_FORCE);
 			callback(null, userData);
 		}
 		else
@@ -272,7 +272,7 @@ public class AssetBundleLoader : MonoBehaviour
 	}
 	protected IEnumerator loadAssetBundleCoroutine(AssetBundleInfo bundleInfo, bool loadFromWWW)
 	{
-		UnityUtility.logInfo(bundleInfo.mBundleName + " start load bundld");
+		UnityUtility.logInfo(bundleInfo.mBundleName + " start load bundld", LOG_LEVEL.LL_NORMAL);
 		// 先确保依赖项全部已经加载完成,才能开始加载当前请求的资源包
 		while (!bundleInfo.isAllParentDone())
 		{
@@ -317,7 +317,7 @@ public class AssetBundleLoader : MonoBehaviour
 			yield return assetRequest;
 			item.Value.mAssetObject = assetRequest.asset;
 		}
-		UnityUtility.logInfo(bundleInfo.mBundleName + " load bundld done");
+		UnityUtility.logInfo(bundleInfo.mBundleName + " load bundld done", LOG_LEVEL.LL_NORMAL);
 
 		// 加载完成后记录下来并且通知AssetBundleInfo
 		mBundleRequestList[bundleInfo] = true;

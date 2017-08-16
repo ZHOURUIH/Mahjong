@@ -200,41 +200,41 @@ public class ComponentKeyFrame : GameComponent
 	public void setFullOnce(bool fullOnce)		{ mFullOnce = fullOnce; }
 	public void setCurrentTime(float time)		{ mCurrentTime = time; }
 	public void setTrembling(string name)		{ mTremblingName = name; }
-	protected void clearCallback()
-	{
-		mTremblingCallBack = null;
-		mTremblingUserData = null;
-		mTrembleDoneCallBack = null;
-		mTrembleDoneUserData = null;
-	}
-	protected void afterApllyTrembling(bool done)
-	{
-		if (mTremblingCallBack != null)
-		{
-			mTremblingCallBack(this, mTremblingUserData, false, done);
-		}
+    //----------------------------------------------------------------------------------------------------------------------------
+    protected void clearCallback()
+    {
+        mTremblingCallBack = null;
+        mTremblingUserData = null;
+        mTrembleDoneCallBack = null;
+        mTrembleDoneUserData = null;
+    }
+    protected void afterApllyTrembling(bool done)
+    {
+        if (mTremblingCallBack != null)
+        {
+            mTremblingCallBack(this, mTremblingUserData, false, done);
+        }
 
-		if (done)
-		{
-			setActive(false);
-			// 强制停止组件
-			stop(true);
-			doneCallback(ref mTrembleDoneCallBack, ref mTrembleDoneUserData, this);
-		}
-	}
-	protected void doneCallback(ref KeyFrameCallback curDoneCallback, ref object curDoneUserData, ComponentKeyFrame component)
-	{
-		// 先保存回调,然后再调用回调之前就清空回调,确保在回调函数执行时已经完全完成
-		KeyFrameCallback tempCallback = curDoneCallback;
-		object tempUserData = curDoneUserData;
-		clearCallback();
-		if (tempCallback != null)
-		{
-			tempCallback(component, tempUserData, false, true);
-		}
-	}
-	//----------------------------------------------------------------------------------------------------------------------------
-	protected override bool isType(Type type) { return type == typeof(ComponentKeyFrame); }
+        if (done)
+        {
+            setActive(false);
+            // 强制停止组件
+            stop(true);
+            doneCallback(ref mTrembleDoneCallBack, ref mTrembleDoneUserData, this);
+        }
+    }
+    protected void doneCallback(ref KeyFrameCallback curDoneCallback, ref object curDoneUserData, ComponentKeyFrame component)
+    {
+        // 先保存回调,然后再调用回调之前就清空回调,确保在回调函数执行时已经完全完成
+        KeyFrameCallback tempCallback = curDoneCallback;
+        object tempUserData = curDoneUserData;
+        clearCallback();
+        if (tempCallback != null)
+        {
+            tempCallback(component, tempUserData, false, true);
+        }
+    }
+    protected override bool isType(Type type) { return type == typeof(ComponentKeyFrame); }
 	protected override void setBaseType() { mBaseType = typeof(ComponentKeyFrame); }
 	protected virtual void applyTrembling(float value) { }
 }

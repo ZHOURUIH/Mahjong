@@ -201,7 +201,9 @@ public class GameFramework : MonoBehaviour
 		}
 		else if(Input.GetKeyDown(KeyCode.D))
 		{
-			mCommandSystem.setShowDebugInfo(!mCommandSystem.getShowDebugInfo());
+			LOG_LEVEL level = UnityUtility.getLogLevel();
+			int newLevel = ((int)level + 1) % (int)LOG_LEVEL.LL_MAX;
+			UnityUtility.setLogLevel((LOG_LEVEL)newLevel);
 		}
 	}
 	public void setPasueFrame(bool value) { mPauseFrame = value; }

@@ -146,7 +146,7 @@ public enum GAME_DEFINE_FLOAT
 	GDF_SOCKET_TCP_PORT,			// socket端口
 	GDF_SHOW_COMMAND_DEBUG_INFO,    // 是否输出显示命令调试信息,0为不显示,1为显示
 	GDF_LOAD_RESOURCES,             // -1表示优先从AssetBundle加载,找不到再去Resources加载,0表示从AssetBundle加载,1表示从Resources加载
-	GDF_OUTPUT_LOG,                 // 是否启用所有日志输出
+	GDF_LOG_LEVEL,					// 是否启用所有日志输出
 	GDF_HEART_BEAT_NITERVAL,		// 心跳间隔时间
 	GDF_GAME_MAX,
 };
@@ -308,12 +308,7 @@ public enum HU_TYPE
 public delegate void SpriteAnimCallBack(txUISpriteAnim window, object userData, bool isBreak);
 public delegate void TextureAnimCallBack(txUITextureAnim window, object userData, bool isBreak);
 public delegate void KeyFrameCallback(ComponentKeyFrame component, object userData, bool breakTremling, bool done);
-public delegate void AlphaFadeCallback(ComponentAlpha component, object userData, bool breakFade, bool done);
 public delegate void CommandCallback(object user_data, Command cmd);
-public delegate void MoveCallback(ComponentMove moveComponent, object userdata, bool breakMove, bool done);
-public delegate void RotateToTargetCallback(ComponentRotateToTarget component, object userData, bool breakRotate, bool done);
-public delegate void ScaleCallback(ComponentScale component, object user_data, bool breakDone, bool done);
-public delegate void HSLCallback(ComponentHSL component, object userData, bool breakHSL, bool done);
 public delegate void BoxColliderClickCallback(txUIButton obj);
 public delegate void BoxColliderHoverCallback(txUIButton obj, bool hover);
 public delegate void BoxColliderPressCallback(txUIButton obj, bool press);

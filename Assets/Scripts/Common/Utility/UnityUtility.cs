@@ -96,19 +96,31 @@ public class UnityUtility : GameBase
 		Camera camera = mCameraManager.getUICamera().getCamera();
 		return camera.ScreenPointToRay(screenPos);
 	}
-	public static List<BoxCollider> raycast(Ray ray, List<BoxCollider> boxList, int maxCount = 0)
+	public static List<txUIButton> raycast(Ray ray, SortedDictionary<int, List<txUIButton>> buttonList, int maxCount = 0)
 	{
-		List<BoxCollider> retList = new List<BoxCollider>();
+		bool cast = true;
+		List<txUIButton> retList = new List<txUIButton>();
 		RaycastHit hit = new RaycastHit();
-		foreach (var box in boxList)
+		foreach (var box in buttonList)
 		{
-			if (box.enabled && box.Raycast(ray, out hit, 10000.0f))
+			int count = box.Value.Count;
+			for(int i = 0; i < count; ++i)
 			{
-				retList.Add(box);
-				if (maxCount > 0 && retList.Count >= maxCount)
+				txUIButton button = box.Value[i];
+				if (button.getHandleInput() && button.Raycast(ray, out hit, 10000.0f))
 				{
-					break;
+					retList.Add(button);
+					// 如果射线不能穿透当前按钮,或者已经达到最大数量,则不再继续
+					if (!button.getPassRay() || maxCount > 0 && retList.Count >= maxCount)
+					{
+						cast = false;
+						break;
+					}
 				}
+			}
+			if(!cast)
+			{
+				break;
 			}
 		}
 		return retList;

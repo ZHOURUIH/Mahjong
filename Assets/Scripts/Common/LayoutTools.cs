@@ -323,21 +323,21 @@ public class LayoutTools : GameBase
 		mCommandSystem.pushCommand(cmd, obj);
 	}
 	// 延迟窗口的显示和隐藏
-	public static CommandWindowActive ACTIVE_WINDOW_DELAY(LayoutScript script, txUIObject obj, bool active, float dealyTime)
+	public static CommandWindowActive ACTIVE_WINDOW_DELAY(LayoutScript script, txUIObject obj, bool active, float delayTime)
 	{
 		CommandWindowActive cmd = mCommandSystem.newCmd<CommandWindowActive>(false, true);
 		cmd.mActive = active;
-		mCommandSystem.pushDelayCommand(cmd, obj, dealyTime);
+		mCommandSystem.pushDelayCommand(cmd, obj, delayTime);
 		script.addDelayCmd(cmd);
 		return cmd;
 	}
 	// 延迟窗口的显示和隐藏,并且可以设置回调函数
-	public static CommandWindowActive ACTIVE_WINDOW_DELAY_EX(LayoutScript script, txUIObject obj, bool active, float dealyTime, CommandCallback startCallback, object userData)
+	public static CommandWindowActive ACTIVE_WINDOW_DELAY_EX(LayoutScript script, txUIObject obj, bool active, float delayTime, CommandCallback startCallback, object userData)
 	{
 		CommandWindowActive cmd = mCommandSystem.newCmd<CommandWindowActive>(false, true);
 		cmd.mActive = active;
 		cmd.addStartCommandCallback(startCallback, userData);
-		mCommandSystem.pushDelayCommand(cmd, obj, dealyTime);
+		mCommandSystem.pushDelayCommand(cmd, obj, delayTime);
 		script.addDelayCmd(cmd);
 		return cmd;
 	}

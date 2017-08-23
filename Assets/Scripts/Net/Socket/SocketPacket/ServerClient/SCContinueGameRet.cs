@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class SCContinueGameRet : SocketPacket
 {
+	public BOOL mBanker = new BOOL();
 	public SCContinueGameRet(PACKET_TYPE type)
 		:
 		base(type)
@@ -12,7 +13,9 @@ public class SCContinueGameRet : SocketPacket
 		zeroParams();
 	}
 	protected override void fillParams()
-	{ }
+	{
+		pushParam(mBanker);
+	}
 	public override void execute()
 	{
 		GameScene gameScene = mGameSceneManager.getCurScene();
@@ -32,5 +35,9 @@ public class SCContinueGameRet : SocketPacket
 		CommandRoomJoin cmdJoin = mCommandSystem.newCmd<CommandRoomJoin>();
 		cmdJoin.mCharacter = myself;
 		mCommandSystem.pushCommand(cmdJoin, mahjongScene.getRoom());
+
+		CommandCharacterNotifyBanker cmdBanker = mCommandSystem.newCmd<CommandCharacterNotifyBanker>();
+		cmdBanker.mBanker = mBanker.mValue;
+		mCommandSystem.pushCommand(cmdBanker, myself);
 	}
 }

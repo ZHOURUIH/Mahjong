@@ -32,6 +32,21 @@ public class Character : MovableObject
 		// 先更新自己的所有组件
 		base.updateComponents(elaspedTime);
 	}
+	public void clearMahjongData()
+	{
+		mCharacterData.mPengGangList.Clear();
+		mCharacterData.mHandIn.Clear();
+		mCharacterData.mDropList.Clear();
+		mCharacterData.mHuaList.Clear();
+		mCharacterData.mReady = false;
+	}
+	public void clearRoomData()
+	{
+		mCharacterData.mBanker = false;
+		mCharacterData.mServerPosition = PLAYER_POSITION.PP_MAX;
+		mCharacterData.mPosition = PLAYER_POSITION.PP_MAX;
+		mCharacterData.mRoomID = -1;
+	}
 	public virtual void notifyComponentChanged(GameComponent component) {}
 	public CharacterData getCharacterData() { return mCharacterData; }
 	public CHARACTER_TYPE getType() { return mCharacterType; }

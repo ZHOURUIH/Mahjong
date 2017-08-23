@@ -15,22 +15,19 @@ public class txUIObject : ComponentOwner
 	public int mID;
 	public txUIObject()
 		:
-			base("")
+		base("")
 	{
 		mID = mIDSeed++;
-	}
-	~txUIObject()
-	{
-		if (mLayout != null)
-		{
-			mLayout.unregisterUIObject(this);
-			mLayout = null;
-		}
 	}
 	public override void destroy()
 	{
 		base.destroy();
 		base.destroyAllComponents();
+		if (mLayout != null)
+		{
+			mLayout.unregisterUIObject(this);
+			mLayout = null;
+		}
 	}
 	public virtual void init(GameLayout layout, GameObject go)
 	{
@@ -41,36 +38,33 @@ public class txUIObject : ComponentOwner
 		{
 			mLayout.registerUIObject(this);
 		}
+		mAudioSource = mObject.GetComponent<AudioSource>();
 	}
 	public override void initComponents()
 	{
 		addComponent<WindowComponentAudio>("Audio");
-		addComponent<WindowComponentScale>("Scale").setActive(false);
-		addComponent<WindowComponentRotateToTarget>("RotateToTarget").setActive(false);
 		addComponent<WindowComponentRotateSpeed>("RotateSpeed").setActive(false);
 		addComponent<WindowComponentKeyFrameMove>("KeyFrameMove").setActive(false);
 		addComponent<WindowComponentScaleTrembling>("ScaleTrembling").setActive(false);
 		addComponent<WindowComponentAlphaTrembling>("AlphaTrembling").setActive(false);
-		addComponent<WindowComponentAlpha>("Alpha").setActive(false);
-		addComponent<WindowComponentMove>("Move").setActive(false);
 		addComponent<WindowComponentKeyFrameRotate>("KeyFrameRotate").setActive(false);
-		addComponent<WindowComponentHSL>("HSL").setActive(false);
 		addComponent<WindowComponentSmoothSlider>("slider").setActive(false);
 		addComponent<WindowComponentSmoothFillAmount>("fillAmount").setActive(false);
 		addComponent<ComponentRotateFixed>("RotateFixed").setActive(false);
+		addComponent<WindowComponentHSLTrembling>("HSLTrembling").setActive(false);
 	}
 	public Transform getTransform() { return mTransform; }
 	public AudioSource getAudioSource() { return mAudioSource; }
+	public AudioSource createAudioSource()
+	{
+		mAudioSource = mObject.AddComponent<AudioSource>();
+		return mAudioSource;
+	}
 	private void setGameObject(GameObject go)
 	{
 		setName(go.name);
 		mObject = go;
 		mTransform = mObject.transform;
-		mAudioSource = go.GetComponent<AudioSource>();
-		if (mAudioSource == null)
-		{
-			mAudioSource = go.AddComponent<AudioSource>();
-		}
 	}
 	public virtual void update(float elapsedTime)
 	{

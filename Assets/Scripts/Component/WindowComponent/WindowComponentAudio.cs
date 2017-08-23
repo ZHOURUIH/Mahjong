@@ -8,16 +8,20 @@ public class WindowComponentAudio : ComponentAudio
 		:
 		base(type, name)
 	{}
-	public override void init(ComponentOwner owner)
+	//--------------------------------------------------------------------------------------------------------------
+	protected override bool isType(Type type) { return base.isType(type) || type == typeof(WindowComponentAudio); }
+	protected override void assignAudioSource()
 	{
-		base.init(owner);
-		txUIObject uiObj = owner as txUIObject;
-		setAudioSource(uiObj.getAudioSource());
+		txUIObject window = mComponentOwner as txUIObject;
+		AudioSource audioSource = window.getAudioSource();
+		if(audioSource == null)
+		{
+			audioSource = window.createAudioSource();
+		}
+		setAudioSource(audioSource);
 	}
-	public override void setSoundOwner()
+	protected override void setSoundOwner()
 	{
 		mSoundOwner = CommonDefine.SOUND_OWNER_NAME[(int)SOUND_OWNER.SO_WINDOW];
 	}
-	//--------------------------------------------------------------------------------------------------------------
-	protected override bool isType(Type type) { return base.isType(type) || type == typeof(WindowComponentAudio); }
 }

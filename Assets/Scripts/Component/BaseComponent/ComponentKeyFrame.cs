@@ -36,8 +36,16 @@ public class ComponentKeyFrame : GameComponent
 			mPlayedTime += elapsedTime;
 
 			bool done = false;
+			// 无限播放当前震动
+			if (mPlayLength < 0.0f)
+			{
+				if (mCurrentTime > mOnceLength)
+				{
+					mCurrentTime = 0.0f;
+				}
+			}
 			// 播放固定长度的震动
-			if (mPlayLength > 0.0f)
+			else
 			{
 				// 超过时间则停止,暂时不播放最后一帧
 				if (mPlayedTime > mPlayLength)
@@ -46,14 +54,6 @@ public class ComponentKeyFrame : GameComponent
 					mCurrentTime = mOffset + mPlayLength;
 				}
 				else if (mCurrentTime > mOnceLength)
-				{
-					mCurrentTime = 0.0f;
-				}
-			}
-			// 无限播放当前震动
-			else
-			{
-				if (mCurrentTime > mOnceLength)
 				{
 					mCurrentTime = 0.0f;
 				}
@@ -79,7 +79,7 @@ public class ComponentKeyFrame : GameComponent
 	{
 		setTrembling(name);
 		mKeyFrame = mKeyFrameManager.getKeyFrame(mTremblingName);
-		if (mKeyFrame == null)
+		if (mKeyFrame == null || MathUtility.isFloatZero(onceLength))
 		{
 			mStopValue = 0.0f;
 			// 停止并禁用组件
@@ -90,15 +90,15 @@ public class ComponentKeyFrame : GameComponent
 		{
 			mStopValue = mKeyFrame.Evaluate(mKeyFrame.length);
 		}
-		if (MathUtility.isFloatZero(onceLength))
+		if(offset > onceLength)
 		{
-			UnityUtility.logError("once length can not be zero!");
-			return;
+			UnityUtility.logError("offset must be less than onceLength!");
 		}
 		mOnceLength = onceLength;
 		mPlayState = PLAY_STATE.PS_PLAY;
 		mLoop = loop;
-		mCurrentTime = offset;
+		mOffset = offset;
+		mCurrentTime = mOffset;
 		mAmplitude = amplitude;
 		mPlayedTime = 0.0f;
 		if (mLoop)
@@ -135,8 +135,6 @@ public class ComponentKeyFrame : GameComponent
 		mPlayedTime = 0.0f;
 	}
 	public virtual void pause() { mPlayState = PLAY_STATE.PS_PAUSE; }
-	public virtual void applyTrembling(float value){}
-	
 	public void setState(PLAY_STATE state)
 	{
 		if (mPlayState == state)
@@ -158,14 +156,7 @@ public class ComponentKeyFrame : GameComponent
 	}
 	public float getTremblingPercent()
 	{
-		if(mLoop)
-		{
-			return mOnceLength > 0.0f ? mCurrentTime / mOnceLength : 0.0f;
-		}
-		else
-		{
-			return mPlayLength > 0.0f ? mCurrentTime / mPlayLength : 0.0f;
-		}
+		return mOnceLength > 0.0f ? mCurrentTime / mOnceLength : 0.0f;
 	}
 	public void setTremblingCallback(KeyFrameCallback callback, object userData)
 	{
@@ -209,40 +200,41 @@ public class ComponentKeyFrame : GameComponent
 	public void setFullOnce(bool fullOnce)		{ mFullOnce = fullOnce; }
 	public void setCurrentTime(float time)		{ mCurrentTime = time; }
 	public void setTrembling(string name)		{ mTremblingName = name; }
-	protected void clearCallback()
-	{
-		mTremblingCallBack = null;
-		mTremblingUserData = null;
-		mTrembleDoneCallBack = null;
-		mTrembleDoneUserData = null;
-	}
-	protected void afterApllyTrembling(bool done)
-	{
-		if (mTremblingCallBack != null)
-		{
-			mTremblingCallBack(this, mTremblingUserData, false, done);
-		}
+    //----------------------------------------------------------------------------------------------------------------------------
+    protected void clearCallback()
+    {
+        mTremblingCallBack = null;
+        mTremblingUserData = null;
+        mTrembleDoneCallBack = null;
+        mTrembleDoneUserData = null;
+    }
+    protected void afterApllyTrembling(bool done)
+    {
+        if (mTremblingCallBack != null)
+        {
+            mTremblingCallBack(this, mTremblingUserData, false, done);
+        }
 
-		if (done)
-		{
-			setActive(false);
-			// 强制停止组件
-			stop(true);
-			doneCallback(ref mTrembleDoneCallBack, ref mTrembleDoneUserData, this);
-		}
-	}
-	protected void doneCallback(ref KeyFrameCallback curDoneCallback, ref object curDoneUserData, ComponentKeyFrame component)
-	{
-		// 先保存回调,然后再调用回调之前就清空回调,确保在回调函数执行时已经完全完成
-		KeyFrameCallback tempCallback = curDoneCallback;
-		object tempUserData = curDoneUserData;
-		clearCallback();
-		if (tempCallback != null)
-		{
-			tempCallback(component, tempUserData, false, true);
-		}
-	}
-	//----------------------------------------------------------------------------------------------------------------------------
-	protected override bool isType(Type type) { return type == typeof(ComponentKeyFrame); }
+        if (done)
+        {
+            setActive(false);
+            // 强制停止组件
+            stop(true);
+            doneCallback(ref mTrembleDoneCallBack, ref mTrembleDoneUserData, this);
+        }
+    }
+    protected void doneCallback(ref KeyFrameCallback curDoneCallback, ref object curDoneUserData, ComponentKeyFrame component)
+    {
+        // 先保存回调,然后再调用回调之前就清空回调,确保在回调函数执行时已经完全完成
+        KeyFrameCallback tempCallback = curDoneCallback;
+        object tempUserData = curDoneUserData;
+        clearCallback();
+        if (tempCallback != null)
+        {
+            tempCallback(component, tempUserData, false, true);
+        }
+    }
+    protected override bool isType(Type type) { return type == typeof(ComponentKeyFrame); }
 	protected override void setBaseType() { mBaseType = typeof(ComponentKeyFrame); }
+	protected virtual void applyTrembling(float value) { }
 }

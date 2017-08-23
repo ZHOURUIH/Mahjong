@@ -16,7 +16,7 @@ public class ComponentRotateFixed : GameComponent
 		base.update(elapsedTime);
 	}
 	public void setFixedEuler(Vector3 euler) { mFixedEuler = euler; }
-	public Vector3 getFixedEuler() { return mFixedEuler; }
+	public Vector3 getFiexdEuler() { return mFixedEuler; }
 	//---------------------------------------------------------------------------------------------------------------
 	protected override void setBaseType(){mBaseType = typeof(ComponentRotateFixed);	}
 	protected override bool isType(Type type) { return base.isType(type) || type == typeof(ComponentRotateFixed); }

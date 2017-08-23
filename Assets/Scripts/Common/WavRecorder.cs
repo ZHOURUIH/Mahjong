@@ -36,7 +36,7 @@ public class WavRecorder : GameBase
 	protected int mSampleRate;					// 音频采样率
 	protected GameObject mRecorderObject;
 	protected AudioClip mClip;
-	protected int maxRecordTime = 100000;
+	protected int maxRecordTime = 500;
 	protected string[] mDeviceList;
 	protected int mStartDevice = -1;
 	protected int mLastPosition;
@@ -70,7 +70,7 @@ public class WavRecorder : GameBase
 		}
 		catch (Exception e)
 		{
-			UnityUtility.logInfo("error in record! : " + e.Message);
+			UnityUtility.logInfo("error in record! : " + e.Message, LOG_LEVEL.LL_FORCE);
 			return false;
 		}
 		return true;

@@ -21,24 +21,15 @@ public class CommandSystem
 	protected List<DelayCommand> mCommandBufferProcess = new List<DelayCommand>();	// 用于处理的命令列表
 	protected List<DelayCommand> mCommandBufferInput = new List<DelayCommand>();		// 用于放入命令的命令列表
 	protected bool mLockBuffer;
-	protected bool mShowDebugInfo;
 	public CommandSystem()
 	{
 		mLockBuffer = false;
-		mShowDebugInfo = true;
 		mCommandPool = new CommandPool();
 	}
 	public virtual void init(bool showDebug = true)
 	{
-		mShowDebugInfo = showDebug;
 		mCommandPool.init();
 	}
-	public void setShowDebugInfo(bool show)
-	{
-		mShowDebugInfo = show;
-		UnityUtility.logInfo("debug info : " + mShowDebugInfo);
-	}
-	public bool getShowDebugInfo() { return mShowDebugInfo; }
 	protected void syncCommandBuffer()
 	{
 		// 等待解锁缓冲区并锁定缓冲区
@@ -104,7 +95,7 @@ public class CommandSystem
 		{
 			if (item.mCommand == cmd)
 			{
-				UnityUtility.logInfo("CommandSystem : interrupt command : " + cmd.showDebugInfo() + "receiver : " + item.mReceiver.getName());
+				UnityUtility.logInfo("CommandSystem : interrupt command : " + cmd.showDebugInfo() + "receiver : " + item.mReceiver.getName(), LOG_LEVEL.LL_HIGH);
 				mCommandBufferProcess.Remove(item);
 				return true;
 			}
@@ -130,9 +121,9 @@ public class CommandSystem
 			return;
 		}
 		cmd.setReceiver(cmdReceiver);
-		if (mShowDebugInfo && cmd.getShowDebugInfo())
+		if (cmd.getShowDebugInfo())
 		{
-			UnityUtility.logInfo("CommandSystem : " + cmd.showDebugInfo() + ", receiver : " + cmdReceiver.getName());				
+			UnityUtility.logInfo("CommandSystem : " + cmd.showDebugInfo() + ", receiver : " + cmdReceiver.getName(), LOG_LEVEL.LL_NORMAL);				
 		}
 		cmdReceiver.receiveCommand(cmd);
 
@@ -162,9 +153,9 @@ public class CommandSystem
 		{
 			delayExecute = 0.0f;
 		}
-		if (mShowDebugInfo && cmd.getShowDebugInfo())
+		if (cmd.getShowDebugInfo())
 		{
-			UnityUtility.logInfo("CommandSystem : delay cmd : " + delayExecute + ", info : " + cmd.showDebugInfo() + ", receiver : " + cmdReceiver.getName());
+			UnityUtility.logInfo("CommandSystem : delay cmd : " + delayExecute + ", info : " + cmd.showDebugInfo() + ", receiver : " + cmdReceiver.getName(), LOG_LEVEL.LL_NORMAL);
 		}
 		DelayCommand delayCommand = new DelayCommand(delayExecute, cmd, cmdReceiver);
 

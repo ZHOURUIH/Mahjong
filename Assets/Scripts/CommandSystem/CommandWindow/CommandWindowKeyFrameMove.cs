@@ -10,7 +10,6 @@ public class CommandWindowKeyFrameMove : Command
 	public bool mLoop;
 	public float mAmplitude = 1.0f;
 	public bool mFullOnce;
-	public bool mRandomOffset;
 	public Vector3 mStartPos;
 	public Vector3 mTargetPos;
 	public KeyFrameCallback mTremblingCallBack;
@@ -25,8 +24,7 @@ public class CommandWindowKeyFrameMove : Command
 		mOffset = 0.0f;
 		mLoop = false;
 		mAmplitude = 1.0f;
-		mFullOnce = true;
-		mRandomOffset = false;
+		mFullOnce = false;
 		mStartPos = Vector3.zero;
 		mTargetPos = Vector3.zero;
 		mTremblingCallBack = null;
@@ -43,10 +41,6 @@ public class CommandWindowKeyFrameMove : Command
 			component.setTremblingCallback(mTremblingCallBack, mTremblingUserData);
 			component.setTrembleDoneCallback(mTrembleDoneCallBack, mTrembleDoneUserData);
 			component.setActive(true);
-			if (mRandomOffset)
-			{
-				mOffset = MathUtility.randomFloat(0.0f, mOnceLength);
-			}
 			component.setTargetPos(mTargetPos);
 			component.setStartPos(mStartPos);
 			component.play(mName, mLoop, mOnceLength, mOffset, mFullOnce, mAmplitude);	

@@ -10,14 +10,14 @@ public class WindowComponentKeyFrameRotate : ComponentKeyFrame
 		:
 		base(type, name)
 	{}
-	public override void applyTrembling(float value)
+	public void setStartRotation(Vector3 rot){mStartRotation = rot;}
+	public void setTargetRotation(Vector3 rot){	mTargetRotation = rot;}
+	//-------------------------------------------------------------------------------------------------------------
+	protected override bool isType(Type type) { return base.isType(type) || type == typeof(WindowComponentKeyFrameRotate); }
+	protected override void applyTrembling(float value)
 	{
 		txUIObject mObject = mComponentOwner as txUIObject;
 		Vector3 curRotation = mStartRotation + (mTargetRotation - mStartRotation) * value;
 		mObject.setLocalRotation(curRotation);
 	}
-	public void setStartRotation(Vector3 rot){mStartRotation = rot;}
-	public void setTargetRotation(Vector3 rot){	mTargetRotation = rot;}
-	//-------------------------------------------------------------------------------------------------------------
-	protected override bool isType(Type type) { return base.isType(type) || type == typeof(WindowComponentKeyFrameRotate); }
 }

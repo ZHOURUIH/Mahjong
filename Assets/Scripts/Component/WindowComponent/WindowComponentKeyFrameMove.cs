@@ -11,14 +11,14 @@ public class WindowComponentKeyFrameMove : ComponentKeyFrame
 		:
 		base(type, name)
 	{}
-	public override void applyTrembling(float value)
+	public void setTargetPos(Vector3 pos) { mTargetPos = pos; }
+	public void setStartPos(Vector3 pos) { mStartPos = pos; }
+	//-------------------------------------------------------------------------------------------------------------
+	protected override bool isType(Type type) { return base.isType(type) || type == typeof(WindowComponentKeyFrameMove); }
+	protected override void applyTrembling(float value)
 	{
 		txUIObject uiObj = mComponentOwner as txUIObject;
 		Vector3 curPos = mStartPos + (mTargetPos - mStartPos) * value;
 		uiObj.setLocalPosition(curPos);
 	}
-	public void setTargetPos(Vector3 pos) { mTargetPos = pos; }
-	public void setStartPos(Vector3 pos) { mStartPos = pos; }
-	//-------------------------------------------------------------------------------------------------------------
-	protected override bool isType(Type type) { return base.isType(type) || type == typeof(WindowComponentKeyFrameMove); }
 }

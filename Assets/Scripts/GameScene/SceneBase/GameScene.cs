@@ -30,21 +30,17 @@ abstract public class GameScene : ComponentOwner
 		mSceneObject = new GameObject(name);
 		mSceneObject.transform.parent = mGameSceneManager.getManagerObject().transform;
 		mAudioSource = mSceneObject.GetComponent<AudioSource>();
-		if (mAudioSource == null)
-		{
-			mAudioSource = mSceneObject.AddComponent<AudioSource>();
-		}
-    }
+	}
 	// 进入场景时初始化
     public virtual void init()
     {
         initComponents();
-        // 创建出所有的场景流程
-        createSceneProcedure();
+		// 创建出所有的场景流程
+		createSceneProcedure();
 		// 设置起始流程名
 		assignStartExitProcedure();
-        // 开始执行起始流程
-        CommandGameSceneChangeProcedure cmd  = mCommandSystem.newCmd<CommandGameSceneChangeProcedure>(false, false);
+		// 开始执行起始流程
+		CommandGameSceneChangeProcedure cmd = mCommandSystem.newCmd<CommandGameSceneChangeProcedure>(false, false);
         cmd.mProcedure = mStartProcedure;
         mCommandSystem.pushCommand(cmd, this);
     }
@@ -75,13 +71,20 @@ abstract public class GameScene : ComponentOwner
 	// 退出场景
 	public virtual void exit()
 	{
-		// 切换到退出流程
-		changeProcedure(mExitProcedure, "");
-		// 再切换为空流程
-		emptyProcedure();
+		if(mCurProcedure != null)
+		{
+			mCurProcedure.exit(null, null);
+			mCurProcedure = null;
+		}
 	}
-	public AudioSource getAudioSource(){return mAudioSource;}
+	public AudioSource getAudioSource() { return mAudioSource; }
 	public abstract void assignStartExitProcedure();
+	public AudioSource createAudioSource()
+	{
+		mAudioSource = mSceneObject.AddComponent<AudioSource>();
+		return mAudioSource;
+	}
+	public virtual void setFirstProcedureName() { }
     public virtual void createSceneProcedure() { }
 	public bool atProcedure(PROCEDURE_TYPE type)
 	{
@@ -90,6 +93,15 @@ abstract public class GameScene : ComponentOwner
 			return false;
 		}
 		return mCurProcedure.isThisOrParent(type);
+	}
+	// 是否在指定的流程,不考虑子流程
+	public bool atSelfProcedure(PROCEDURE_TYPE type)
+	{
+		if(mCurProcedure == null)
+		{
+			return false;
+		}
+		return mCurProcedure.getProcedureType() == type;
 	}
 	public void backToLastProcedure(string intend)
 	{
@@ -140,10 +152,7 @@ abstract public class GameScene : ComponentOwner
 				}
 				SceneProcedure lastProcedure = mCurProcedure;
 				mCurProcedure = targetProcedure;
-				if(mCurProcedure != null)
-				{
 				mCurProcedure.init(lastProcedure, intent);
-			}
 			}
             return true;
         }
@@ -186,13 +195,4 @@ abstract public class GameScene : ComponentOwner
 		mSceneProcedureList.Add(procedure.getProcedureType(), procedure);
 		return procedure as T;
     }
-	//--------------------------------------------------------------------------------------------------------------------------------
-	protected void emptyProcedure()
-	{
-		if(mCurProcedure != null)
-		{
-			mCurProcedure.exit(null, null);
-		}
-		mCurProcedure = null;
-	}
 }

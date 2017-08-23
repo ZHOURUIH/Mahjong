@@ -51,13 +51,7 @@ public class ComponentAudio : GameComponent
 			mCurPlayList.Add(i, "");
 		}
 	}
-	public void setAudioSource(AudioSource source)
-	{
-		mAudioSource = source;
-		mAudioSource.playOnAwake = false;
-	}
 	public override void update(float elapsedTime) { }
-	public virtual void setSoundOwner() { }
 	public void setLoop(bool loop = false)
 	{
 		mAudioManager.setLoop(mAudioSource, loop);
@@ -84,6 +78,11 @@ public class ComponentAudio : GameComponent
 	}
 	public virtual void play(string name, bool isLoop, float volume)
 	{
+		// 先确定音频源已经设置
+		if(mAudioSource == null)
+		{
+			assignAudioSource();
+		}
 		// 如果该通道正在播放音效,则先停止正在播放的音效
 		int channel = getAudioChannel(name);
 		if (channel == mMaxChannel)
@@ -137,4 +136,14 @@ public class ComponentAudio : GameComponent
 	//--------------------------------------------------------------------------------------------------------------------------
 	protected override void setBaseType() { mBaseType = typeof(ComponentAudio); }
 	protected override bool isType(Type type) { return type == typeof(ComponentAudio); }
+	protected virtual void assignAudioSource() { }
+	protected void setAudioSource(AudioSource source)
+	{
+		mAudioSource = source;
+		if (mAudioSource != null)
+		{
+			mAudioSource.playOnAwake = false;
+		}
+	}
+	protected virtual void setSoundOwner() { }
 }

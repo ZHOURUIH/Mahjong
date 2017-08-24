@@ -5,16 +5,16 @@ using RenderHeads.Media.AVProVideo;
 
 public class txUIVideo : txUIObject
 {
-	protected UITexture			   mTexture;
-	protected MediaPlayer		   mMediaPlayer;
-	protected string			   mFileName;
+	protected UITexture mTexture;
+	protected MediaPlayer mMediaPlayer;
+	protected string mFileName;
 	protected VideoPlayEndCallback mVideoEndCallback;
-	protected bool				   mReady = false;
+	protected bool mReady = false;
 	// 刚设置视频文件,还未加载时,要设置播放状态就需要先保存状态,然后等到视频准备完毕后再设置
-	protected bool				   mNextLoop = false;
-	protected float				   mNextRate = 1.0f;
-	protected PLAY_STATE		   mNextState = PLAY_STATE.PS_NONE;
-	protected bool				   mAutoShowOrHide = true;
+	protected bool mNextLoop = false;
+	protected float mNextRate = 1.0f;
+	protected PLAY_STATE mNextState = PLAY_STATE.PS_NONE;
+	protected bool mAutoShowOrHide = true;
 	public txUIVideo()
 	{
 		mType = UI_OBJECT_TYPE.UBT_VIDEO;
@@ -28,7 +28,7 @@ public class txUIVideo : txUIObject
 			mTexture = mObject.AddComponent<UITexture>();
 		}
 		mMediaPlayer = mObject.GetComponent<MediaPlayer>();
-		if(mMediaPlayer == null)
+		if (mMediaPlayer == null)
 		{
 			mMediaPlayer = mObject.AddComponent<MediaPlayer>();
 		}
@@ -86,12 +86,17 @@ public class txUIVideo : txUIObject
 			mAutoShowOrHide = autoShowOrHide;
 		}
 	}
-	public void setFileName(string file)
+	public bool setFileName(string file)
 	{
 		setVideoEndCallback(null);
 		if (!file.StartsWith(CommonDefine.A_VIDEO_PATH))
 		{
 			file = CommonDefine.A_VIDEO_PATH + file;
+		}
+		if(!FileUtility.isFileExist(CommonDefine.F_ASSETS_PATH + file))
+		{
+			UnityUtility.logError("找不到视频文件 : " + file);
+			return false;
 		}
 		notifyVideoReady(false);
 		mFileName = StringUtility.getFileName(file);
@@ -99,6 +104,7 @@ public class txUIVideo : txUIObject
 		mTexture.mainTexture = null;
 		mMediaPlayer.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToDataFolder, file, false);
 		mMediaPlayer.Events.AddListener(onVideoEvent);
+		return true;
 	}
 	public string getFileName()
 	{
@@ -149,6 +155,14 @@ public class txUIVideo : txUIObject
 			return 0.0f;
 		}
 		return mMediaPlayer.Info.GetDurationMs() * 0.001f;
+	}
+	public float getVideoPlayTime()
+	{
+		return mMediaPlayer.Control.GetCurrentTimeMs();
+	}
+	public void setVideoPlayTime(float timeMS)
+	{
+		mMediaPlayer.Control.SeekFast(timeMS);
 	}
 	public void setVideoEndCallback(VideoPlayEndCallback callback)
 	{

@@ -107,6 +107,10 @@ public class FileUtility : GameBase
 	public static bool findDirectory(string path, ref List<string> dirList)
 	{
 		path = CommonDefine.F_ASSETS_PATH + path;
+		if(!isDirExist(path))
+		{
+			return false;
+		}
 		string[] ret = Directory.GetDirectories(path);
 		int count = ret.Length;
 		for (int i = 0; i < count; ++i)

@@ -172,7 +172,7 @@ public class HuaMahjong
 	}
 	public void onReset()
 	{
-		LayoutTools.ACTIVE_WINDOW(mHuaRoot, false);
+		showHua(new List<MAHJONG>());
 	}
 	public void showHua(List<MAHJONG> huaList)
 	{
@@ -266,7 +266,14 @@ public class HandInMahjong : GameBase
 	}
 	public void onReset()
 	{
-		refreshMahjongCount(0);
+		if (mPosition == PLAYER_POSITION.PP_MYSELF)
+		{
+			refreshMahjong(new List<MAHJONG>());
+		}
+		else
+		{
+			refreshMahjongCount(0);
+		}
 	}
 	// 通知开局时的拿牌
 	public void notifyGetStart(MAHJONG mah)

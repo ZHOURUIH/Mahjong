@@ -22,6 +22,9 @@ public class MahjongSceneEnding : SceneProcedure
 	protected override void onExit(SceneProcedure nextProcedure)
 	{
 		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_GAME_ENDING);
+		// 清空房间中所有玩家的麻将数据
+		MahjongScene mahjongScene = mGameScene as MahjongScene;
+		mahjongScene.getRoom().clearAllPlayerMahjongData();
 	}
 	protected override void onKeyProcess(float elapsedTime)
 	{

@@ -97,4 +97,11 @@ public class Room : CommandReceiver
 		result.mPlayer = player;
 		mResultInfoList.Add(result);
 	}
+	public void clearAllPlayerMahjongData()
+	{
+		foreach(var item in mPlayerIDList)
+		{
+			item.Value.clearMahjongData();
+		}
+	}
 }

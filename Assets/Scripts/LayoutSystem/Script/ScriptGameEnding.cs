@@ -169,12 +169,9 @@ public class ScriptGameEnding : LayoutScript
 	}
 	public override void onShow(bool immediately, string param)
 	{
-		LayoutTools.ACTIVE_WINDOW(mMoneyResultRoot, false);
-		LayoutTools.ACTIVE_WINDOW(mDetailRoot, false);
-		LayoutTools.ACTIVE_WINDOW(mButtonRoot, false);
-		LayoutTools.ACTIVE_WINDOW_DELAY(this, mMoneyResultRoot, true, 2.0f);
-		LayoutTools.ACTIVE_WINDOW_DELAY(this, mDetailRoot, true, 2.0f);
-		LayoutTools.ACTIVE_WINDOW_DELAY(this, mButtonRoot, true, 2.0f);
+		LayoutTools.ACTIVE_WINDOW(mMoneyResultRoot);
+		LayoutTools.ACTIVE_WINDOW(mDetailRoot);
+		LayoutTools.ACTIVE_WINDOW(mButtonRoot);
 	}
 	public override void onHide(bool immediately, string param)
 	{

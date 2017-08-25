@@ -43,16 +43,18 @@ public class AssetBundleBuild
 	[MenuItem(mAssetMenuRoot + "clear")]
 	public static void clearCache()
 	{
+		DateTime time0 = DateTime.Now;
 		// 清理输出目录
 		CreateOrClearOutPath();
 
 		// 清理之前设置过的bundleName
 		ClearAssetBundleName();
-		UnityUtility.messageBox("清理结束!", false);
+		UnityUtility.messageBox("清理结束! 耗时 : " + (DateTime.Now - time0), false);
 	}
 	[MenuItem(mAssetMenuRoot + "pack")]
 	public static void packAssetBundle()
 	{
+		DateTime time0 = DateTime.Now;
 		// 设置bunderName
 		bundleMap.Clear();
 		List<string> resList = GetAllResDirs(RES_SRC_PATH);
@@ -62,7 +64,7 @@ public class AssetBundleBuild
 		}
 
 		// 打包
-		BuildPipeline.BuildAssetBundles(RES_OUTPUT_PATH, BuildAssetBundleOptions.DeterministicAssetBundle, BuildTarget.StandaloneWindows);
+		BuildPipeline.BuildAssetBundles(RES_OUTPUT_PATH, BuildAssetBundleOptions.ChunkBasedCompression, BuildTarget.StandaloneWindows);
 		AssetDatabase.Refresh();
 
 		// 构建依赖关系
@@ -119,7 +121,7 @@ public class AssetBundleBuild
 		fs.Write(data, 0, data.Length);
 		fs.Flush();
 		fs.Close();
-		UnityUtility.messageBox("资源打包结束!", false);
+		UnityUtility.messageBox("资源打包结束! 耗时 : " + (DateTime.Now - time0), false);
 	}
 	protected static void setAssetBundleName(string fullPath)
 	{

@@ -286,7 +286,7 @@ public class AssetBundleLoader : MonoBehaviour
 #if UNITY_EDITOR || UNITY_STANDALONE_WIN || UNITY_IPHONE || UNITY_IOS
 			string path = "file:\\" + CommonDefine.F_STREAMING_ASSETS_PATH + bundleInfo.mBundleName + CommonDefine.ASSET_BUNDLE_SUFFIX;
 #elif UNITY_ANDROID
-			string path = "file:\\" + Application.dataPath + "!/assets" + bundleInfo.mBundleName + CommonDefine.ASSET_BUNDLE_SUFFIX;
+			string path = "file:\\" + Application.dataPath + "!assets/" + bundleInfo.mBundleName + CommonDefine.ASSET_BUNDLE_SUFFIX;
 #endif
 			WWW www = new WWW(path);
 			yield return www;

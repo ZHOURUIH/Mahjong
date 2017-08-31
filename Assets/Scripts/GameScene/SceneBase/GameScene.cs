@@ -118,6 +118,7 @@ abstract public class GameScene : ComponentOwner
 			// 需要找到共同的父节点,退到该父节点时则不再退出
 			SceneProcedure exitTo = mCurProcedure.getSameParent(targetProcedure);
 			mCurProcedure.back(exitTo);
+			mCurProcedure.notifyExitSelf();
 			SceneProcedure lastProcedure = mCurProcedure;
 			mCurProcedure = targetProcedure;
 			mCurProcedure.init(lastProcedure, intend);

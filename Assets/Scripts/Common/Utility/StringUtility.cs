@@ -202,7 +202,7 @@ public class StringUtility : GameBase
 		{
 			return fileName.Substring(0, lastPos);
 		}
-		return fileName;
+		return "";
 	}
 	public static string getFileName(string str)
 	{

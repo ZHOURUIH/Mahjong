@@ -2,15 +2,20 @@
 using System.Collections;
 using System.Collections.Generic;
 
+public class AudioInfo
+{
+	public AudioClip mClip;
+	public string mAudioName;	// 音效名,不含路径和后缀名
+	public string mAudioPath;	// 相对于Sound的路径
+}
+
 public class AudioManager : GameBase
 {
-	protected Dictionary<string, AudioClip> mAudioClipList;	// 音效资源列表
-	protected List<string> mAudioFlieName;
+	protected Dictionary<string, AudioInfo> mAudioClipList;	// 音效资源列表
 	protected int mLoadedCount;
 	public AudioManager()
 	{
-		mAudioClipList = new Dictionary<string, AudioClip>();
-		mAudioFlieName = new List<string>();
+		mAudioClipList = new Dictionary<string, AudioInfo>();
 	}
 	public virtual void init()
 	{
@@ -25,29 +30,39 @@ public class AudioManager : GameBase
 	// 参数为Sound下的相对路径,并且不带后缀
 	public void createAudio(string fileName, bool load = true, bool async = true)
 	{
-		if (mAudioClipList.ContainsKey(fileName))
+		string audioName = StringUtility.getFileNameNoSuffix(fileName, true);
+		if (!mAudioClipList.ContainsKey(audioName))
 		{
-			UnityUtility.logError("error : audio has already loaded! file name : " + fileName);
-			return;
-		}		
-		mAudioClipList.Add(fileName, null);
-		mAudioFlieName.Add(fileName);
-		if(load)
+			AudioInfo newInfo = new AudioInfo();
+			newInfo.mAudioName = StringUtility.getFileNameNoSuffix(fileName, true);
+			newInfo.mAudioPath = StringUtility.getFilePath(fileName);
+			newInfo.mClip = null;
+			mAudioClipList.Add(audioName, newInfo);
+		}
+		AudioInfo info = mAudioClipList[audioName];
+		if (load && info.mClip == null)
 		{
-			loadAudio(fileName, async);
+			loadAudio(info.mAudioName, info.mAudioPath, async);
 		}
 	}
 	// 加载所有已经注册的音效
 	public void loadAll(bool async)
 	{
-		int audioClipCount = mAudioClipList.Count;
-		for (int i = 0; i < audioClipCount; i++)
+		foreach(var item in mAudioClipList)
 		{
-			if (mAudioClipList[mAudioFlieName[i]] == null)
+			if(item.Value.mClip == null)
 			{
-				loadAudio(mAudioFlieName[i], async);
+				loadAudio(item.Value.mAudioName, item.Value.mAudioPath, async);
 			}
 		}
+	}
+	public float getAudioLength(string name)
+	{
+		if (!mAudioClipList.ContainsKey(name) || mAudioClipList[name] == null)
+		{
+			return 0.0f;
+		}
+		return mAudioClipList[name].mClip.length;
 	}
 	// volume范围0-1
 	public void playClip(AudioSource source, string name, bool loop, float volume)
@@ -56,11 +71,11 @@ public class AudioManager : GameBase
 		{
 			return;
 		}
-		if (!mAudioClipList.ContainsKey(name))
+		if (!mAudioClipList.ContainsKey(name) || mAudioClipList[name].mClip == null)
 		{
 			return;
 		}
-		AudioClip clip = mAudioClipList[name];
+		AudioClip clip = mAudioClipList[name].mClip;
 		if(clip == null)
 		{
 			return;
@@ -79,7 +94,14 @@ public class AudioManager : GameBase
 		}
 		source.Stop();
 	}
-
+	public void pauseClip(AudioSource source)
+	{
+		if (source == null)
+		{
+			return;
+		}
+		source.Pause();
+	}
 	public void setVolume(AudioSource source, float volume)
 	{
 		if (source == null)
@@ -109,23 +131,32 @@ public class AudioManager : GameBase
 	{
 		if (res != null)
 		{
-			mAudioClipList[res.name] = res as AudioClip;
+			mAudioClipList[res.name].mClip = res as AudioClip;
 		}
 		++mLoadedCount;
 	}
 	// name为Sound下相对路径,不带后缀
-	protected void loadAudio(string name, bool async)
+	protected void loadAudio(string name, string path, bool async)
 	{
+		if(!mAudioClipList.ContainsKey(name))
+		{
+			UnityUtility.logError("音效还未注册,请使用createAudio注册音效");
+			return;
+		}
+		if(path != "" && !path.EndsWith("/"))
+		{
+			path += "/";
+		}
 		if (async)
 		{
-			mResourceManager.loadResourceAsync<AudioClip>(CommonDefine.R_SOUND_PATH + name, onAudioLoaded, false);
+			mResourceManager.loadResourceAsync<AudioClip>(CommonDefine.R_SOUND_PATH + path + name, onAudioLoaded, false);
 		}
 		else
 		{
-			AudioClip audio = mResourceManager.loadResource<AudioClip>(CommonDefine.R_SOUND_PATH + name, false);
+			AudioClip audio = mResourceManager.loadResource<AudioClip>(CommonDefine.R_SOUND_PATH + path + name, false);
 			if (audio != null)
 			{
-				mAudioClipList[audio.name] = audio;
+				mAudioClipList[audio.name].mClip = audio;
 			}
 			++mLoadedCount;
 		}

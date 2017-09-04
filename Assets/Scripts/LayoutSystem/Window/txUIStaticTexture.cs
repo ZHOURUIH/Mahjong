@@ -25,6 +25,11 @@ public class txUIStaticTexture : txUIObject
 		}
 		mTexture.onRender = onWidgetRender;
 		mNormalShaderName = mTexture.shader.name;
+		string materialName = getMaterialName();
+		if(materialName != "")
+		{
+			setMaterial(getMaterialName(), true);
+		}
 	}
 	public void setTexture(Texture tex)
 	{

@@ -199,10 +199,29 @@ public class txUITextureAnim : txUIStaticTexture
 	{
 		mTextureNameList.Clear();
 		mTextureSetName = textureSetName;
-		// 由于加载时会将整个文件夹的资源都加载,所以只需要加载一个就可以了
 		string path = CommonDefine.R_TEXTURE_ANIM_PATH + mTextureSetName;
-		string name = path + "/" + mTextureSetName + "_" + StringUtility.intToString(1);
-		mResourceManager.loadResourceAsync<Texture>(name, onAllFrameLoaded, false);
+		string preName = path + "/" + mTextureSetName + "_";
+		for (int i = 1; ; ++i)
+		{
+			string name = preName + StringUtility.intToString(i);
+			Texture tex = mResourceManager.loadResource<Texture>(name, false);
+			if(tex == null)
+			{
+				break;
+			}
+			mTextureNameList.Add(new TextureInfo(name, tex));
+		}
+
+		// 重新判断起始下标和终止下标,确保下标不会越界
+		MathUtility.clamp(ref mStartIndex, 0, getTextureFrameCount() - 1);
+		if (mEndIndex >= 0)
+		{
+			MathUtility.clamp(ref mEndIndex, 0, getTextureFrameCount() - 1);
+		}
+		if (mTextureNameList.Count > 0 && mStartIndex >= 0 && mStartIndex < mTextureNameList.Count)
+		{
+			setTexture(mTextureNameList[mStartIndex].mTexture);
+		}
 	}
 	public void stop(bool resetStartIndex = true, bool callback = true, bool isBreak = true)
 	{
@@ -221,12 +240,13 @@ public class txUITextureAnim : txUIStaticTexture
 	}
 	public void play() { mPlayState = PLAY_STATE.PS_PLAY; }
 	public void pause() { mPlayState = PLAY_STATE.PS_PAUSE; }
-	public void setPlayEndCallback(TextureAnimCallBack callback, object userData)
+	public void setPlayEndCallback(TextureAnimCallBack callback, object userData = null)
 	{
 		callAndClearEndCallback(true);
 		mPlayEndCallback = callback;
 		mPlayEndUserData = userData;
 	}
+	public int getCurFrameIndex() { return mCurTextureIndex; }
 	public void setCurFrameIndex(int index)
 	{
 		mCurTextureIndex = index;
@@ -238,7 +258,6 @@ public class txUITextureAnim : txUIStaticTexture
 		}
 		mCurTimeCount = 0.0f;
 	}
-	//-----------------------------------------------------------------------------------------------------------------------
 	// 调用并且清空回调,清空是在调用之前
 	protected void callAndClearEndCallback(bool isBreak)
 	{
@@ -255,30 +274,5 @@ public class txUITextureAnim : txUIStaticTexture
 	{
 		mPlayEndCallback = null;
 		mPlayEndUserData = null;
-	}
-	protected void onAllFrameLoaded(UnityEngine.Object res)
-	{
-		string path = CommonDefine.R_TEXTURE_ANIM_PATH + mTextureSetName;
-		string preName = path + "/" + mTextureSetName + "_";
-		for (int i = 0; ; ++i)
-		{
-			string name = preName + StringUtility.intToString(i + 1);
-			Texture tex = mResourceManager.getResource<Texture>(name, false);
-			if(tex == null)
-			{
-				break;
-			}
-			mTextureNameList.Add(new TextureInfo(name, tex));
-		}
-		// 重新判断起始下标和终止下标,确保下标不会越界
-		MathUtility.clamp(ref mStartIndex, 0, getTextureFrameCount() - 1);
-		if (mEndIndex >= 0)
-		{
-			MathUtility.clamp(ref mEndIndex, 0, getTextureFrameCount() - 1);
-		}
-		if (mTextureNameList.Count > 0 && mStartIndex >= 0 && mStartIndex < mTextureNameList.Count)
-		{
-			setTexture(mTextureNameList[mStartIndex].mTexture);
-		}
 	}
 }

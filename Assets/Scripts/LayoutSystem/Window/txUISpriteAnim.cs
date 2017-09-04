@@ -236,7 +236,7 @@ public class txUISpriteAnim : txUIStaticSprite
 	}
 	public void play() { mPlayState = PLAY_STATE.PS_PLAY; }
 	public void pause() { mPlayState = PLAY_STATE.PS_PAUSE; }
-	public void setPlayEndCallback(SpriteAnimCallBack callback, object userData)
+	public void setPlayEndCallback(SpriteAnimCallBack callback, object userData = null)
 	{
 		callAndClearEndCallback(true);
 		mPlayEndCallback = callback;

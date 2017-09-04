@@ -11,8 +11,8 @@ public class AssetBundleLoader : MonoBehaviour
 {
 	protected Dictionary<string, AssetBundleInfo> mAssetBundleInfoList;
 	protected Dictionary<string, AssetInfo> mAssetToBundleInfo;
-	protected static Dictionary<Type, string> mTypeSuffixList;		// 资源类型对应的后缀名
-	protected Dictionary<AssetBundleInfo, bool> mBundleRequestList;	// 已经请求过异步加载的资源包列表,value表示是否已经加载完毕
+	protected static Dictionary<Type, List<string>> mTypeSuffixList;		// 资源类型对应的后缀名
+	protected Dictionary<AssetBundleInfo, bool> mBundleRequestList;			// 已经请求过异步加载的资源包列表,value表示是否已经加载完毕
 	public AssetBundleLoader()
 	{
 		mAssetBundleInfoList = new Dictionary<string, AssetBundleInfo>();
@@ -20,12 +20,13 @@ public class AssetBundleLoader : MonoBehaviour
 		mBundleRequestList = new Dictionary<AssetBundleInfo, bool>();
 		if (mTypeSuffixList == null)
 		{
-			mTypeSuffixList = new Dictionary<Type, string>();
-			mTypeSuffixList.Add(typeof(Texture), ".png");
-			mTypeSuffixList.Add(typeof(GameObject), ".prefab");
-			mTypeSuffixList.Add(typeof(Material), ".mat");
-			mTypeSuffixList.Add(typeof(Shader), ".shader");
-			mTypeSuffixList.Add(typeof(AudioClip), ".wav");
+			mTypeSuffixList = new Dictionary<Type, List<string>>();
+			registeSuffix(typeof(Texture), ".png");
+			registeSuffix(typeof(GameObject), ".prefab");
+			registeSuffix(typeof(Material), ".mat");
+			registeSuffix(typeof(Shader), ".shader");
+			registeSuffix(typeof(AudioClip), ".wav");
+			registeSuffix(typeof(AudioClip), ".mp3");
 		}
 	}
 	public bool init()
@@ -130,35 +131,44 @@ public class AssetBundleLoader : MonoBehaviour
 	// 资源是否已经加载
 	public bool isAssetLoaded<T>(string fileName) where T : UnityEngine.Object
 	{
-		string fileNameWithSuffix = fileName;
-		adjustResourceName<T>(ref fileNameWithSuffix);
-		// 找不到资源则直接返回
-		if (!mAssetToBundleInfo.ContainsKey(fileNameWithSuffix))
+		List<string> fileNameList = adjustResourceName<T>(fileName);
+		// 只返回第一个找到的资源
+		int count = fileNameList.Count;
+		for (int i = 0; i < count; ++i)
 		{
-			return false;
+			string fileNameWithSuffix = fileNameList[i];
+			// 找不到资源则直接返回
+			if (mAssetToBundleInfo.ContainsKey(fileNameWithSuffix))
+			{
+				AssetBundleInfo bundleInfo = mAssetToBundleInfo[fileNameWithSuffix].mParentAssetBundle;
+				if (bundleInfo.mLoaded != LOAD_STATE.LS_LOADED)
+				{
+					return false;
+				}
+				else
+				{
+					return bundleInfo.mAssetList[fileNameWithSuffix].mAssetObject != null;
+				}
+			}
 		}
-		AssetBundleInfo bundleInfo = mAssetToBundleInfo[fileNameWithSuffix].mParentAssetBundle;
-		if (bundleInfo.mLoaded != LOAD_STATE.LS_LOADED)
-		{
-			return false;
-		}
-		else
-		{
-			return bundleInfo.mAssetList[fileNameWithSuffix].mAssetObject != null;
-		}
+		return false;
 	}
 	// 获得资源,如果资源包未加载,则返回空
 	public T getAsset<T>(string fileName) where T : UnityEngine.Object
 	{
-		string fileNameWithSuffix = fileName;
-		adjustResourceName<T>(ref fileNameWithSuffix);
-		// 找不到资源则直接返回
-		if (!mAssetToBundleInfo.ContainsKey(fileNameWithSuffix))
+		List<string> fileNameList = adjustResourceName<T>(fileName);
+		// 只返回第一个找到的资源
+		int count = fileNameList.Count;
+		for(int i = 0; i < count; ++i)
 		{
-			return null;
+			string fileNameWithSuffix = fileNameList[i];
+			if (mAssetToBundleInfo.ContainsKey(fileNameWithSuffix))
+			{
+				AssetBundleInfo bundleInfo = mAssetToBundleInfo[fileNameWithSuffix].mParentAssetBundle;
+				return bundleInfo.getAsset<T>(fileNameWithSuffix);
+			}
 		}
-		AssetBundleInfo bundleInfo = mAssetToBundleInfo[fileNameWithSuffix].mParentAssetBundle;
-		return bundleInfo.getAsset<T>(fileNameWithSuffix);
+		return null;
 	}
 	// 同步加载资源包
 	public List<UnityEngine.Object> loadAssetBundle(string bundleName)
@@ -209,30 +219,47 @@ public class AssetBundleLoader : MonoBehaviour
 	// 同步加载资源,文件名称,不带后缀,Resources下的相对路径
 	public T loadAsset<T>(string fileName) where T : UnityEngine.Object
 	{
-		string fileNameWithSuffix = fileName;
-		adjustResourceName<T>(ref fileNameWithSuffix);
-		// 找不到资源则直接返回
-		if (!mAssetToBundleInfo.ContainsKey(fileNameWithSuffix))
+		List<string> fileNameList = adjustResourceName<T>(fileName);
+		// 只加载第一个找到的资源,所以不允许有重名的同类资源
+		T res = null;
+		int count = fileNameList.Count;
+		for (int i = 0; i < count; ++i)
 		{
-			return null;
+			string fileNameWithSuffix = fileNameList[i];
+			if (mAssetToBundleInfo.ContainsKey(fileNameWithSuffix))
+			{
+				AssetBundleInfo bundleInfo = mAssetToBundleInfo[fileNameWithSuffix].mParentAssetBundle;
+				res = bundleInfo.loadAsset<T>(ref fileNameWithSuffix);
+				if(res != null)
+				{
+					break;
+				}
+			}
 		}
-		AssetBundleInfo bundleInfo = mAssetToBundleInfo[fileNameWithSuffix].mParentAssetBundle;
-		T res = bundleInfo.loadAsset<T>(ref fileNameWithSuffix);
 		return res;
 	}
 	// 异步加载资源
 	public bool loadAssetAsync<T>(string fileName, AssetLoadDoneCallback doneCallback) where T : UnityEngine.Object
 	{
-		string fileNameWithSuffix = fileName;
-		adjustResourceName<T>(ref fileNameWithSuffix);
-		// 找不到资源则直接返回
-		if (!mAssetToBundleInfo.ContainsKey(fileNameWithSuffix))
+		List<string> fileNameList = adjustResourceName<T>(fileName);
+		// 只加载第一个找到的资源,所以不允许有重名的同类资源
+		int loadedCount = 0;
+		int count = fileNameList.Count;
+		for(int i = 0; i < count; ++i)
 		{
-			return false;
+			string fileNameWithSuffix = fileNameList[i];
+			if (mAssetToBundleInfo.ContainsKey(fileNameWithSuffix))
+			{
+				AssetBundleInfo bundleInfo = mAssetToBundleInfo[fileNameWithSuffix].mParentAssetBundle;
+				bool ret = bundleInfo.loadAssetAsync(ref fileNameWithSuffix, doneCallback);
+				if (ret)
+				{
+					++loadedCount;
+					break;
+				}
+			}
 		}
-		AssetBundleInfo bundleInfo = mAssetToBundleInfo[fileNameWithSuffix].mParentAssetBundle;
-		bool ret = bundleInfo.loadAssetAsync(ref fileNameWithSuffix, doneCallback);
-		return ret;
+		return loadedCount != 0;
 	}
 	// 请求异步加载资源包
 	public void requestLoadAssetBundle(AssetBundleInfo bundleInfo)
@@ -304,7 +331,6 @@ public class AssetBundleLoader : MonoBehaviour
 			yield return request;
 			assetBundle = request.assetBundle;
 		}
-
 		// 异步加载其中所有的资源
 		foreach (var item in bundleInfo.mAssetList)
 		{
@@ -318,29 +344,54 @@ public class AssetBundleLoader : MonoBehaviour
 			item.Value.mAssetObject = assetRequest.asset;
 		}
 		UnityUtility.logInfo(bundleInfo.mBundleName + " load bundld done", LOG_LEVEL.LL_NORMAL);
+		GC.Collect();
 
 		// 加载完成后记录下来并且通知AssetBundleInfo
 		mBundleRequestList[bundleInfo] = true;
 		bundleInfo.notifyAssetBundleAsyncLoadedDone(assetBundle);
 	}
-	protected void adjustResourceName<T>(ref string fileName) where T : UnityEngine.Object
+	protected List<string> adjustResourceName<T>(string fileName) where T : UnityEngine.Object
 	{
 		// 将\\转为/,加上后缀名,转为小写
 		StringUtility.rightToLeft(ref fileName);
-		addSuffix(ref fileName, typeof(T));
-		fileName = fileName.ToLower();
+		List<string> fileNameList = addSuffix(fileName, typeof(T));
+		int count = fileNameList.Count;
+		for (int i = 0; i < count; ++i)
+		{
+			fileNameList[i] = fileNameList[i].ToLower();
+		}
+		return fileNameList;
 	}
 	// 为资源名加上对应的后缀名
-	public static void addSuffix(ref string fileName, Type type)
+	public static List<string> addSuffix(string fileName, Type type)
 	{
+		List<string> fileNameWithSuffix = new List<string>();
 		if (mTypeSuffixList.ContainsKey(type))
 		{
-			string suffix = mTypeSuffixList[type];
-			fileName += suffix;
+			int suffixCount = mTypeSuffixList[type].Count;
+			for(int i = 0; i < suffixCount; ++i)
+			{
+				fileNameWithSuffix.Add(fileName + mTypeSuffixList[type][i]);
+			}
+			return fileNameWithSuffix;
 		}
 		else
 		{
 			UnityUtility.logError("resource type : " + type.ToString() + " is not registered!");
+		}
+		return fileNameWithSuffix;
+	}
+	protected void registeSuffix(Type t, string suffix)
+	{
+		if (mTypeSuffixList.ContainsKey(t))
+		{
+			mTypeSuffixList[t].Add(suffix);
+		}
+		else
+		{
+			List<string> list = new List<string>();
+			list.Add(suffix);
+			mTypeSuffixList.Add(t, list);
 		}
 	}
 }

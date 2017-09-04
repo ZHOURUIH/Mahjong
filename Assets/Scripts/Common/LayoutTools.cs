@@ -530,6 +530,14 @@ public class LayoutTools : GameBase
 		return cmd;
 	}
 	//-----------------------------------------------------------------------------------------------------------------------------------------------------------
+	public static void SMOOTH_WINDOW_SLIDER(txUIObject obj, float value)
+	{
+		CommandWindowSmoothSlider cmd = mCommandSystem.newCmd<CommandWindowSmoothSlider>(false);
+		cmd.mStartSliderValue = value;
+		cmd.mTargetSliderValue = value;
+		cmd.mFadeTime = 0.0f;
+		mCommandSystem.pushCommand(cmd, obj);
+	}
 	// 进度条
 	public static void SMOOTH_WINDOW_SLIDER(txUIObject obj, float start, float target, float time) 
 	{
@@ -713,6 +721,15 @@ public class LayoutTools : GameBase
 	{
 		CommandWindowPlayAudio cmd = mCommandSystem.newCmd<CommandWindowPlayAudio>(false);
 		cmd.mSound = sound;
+		cmd.mLoop = loop;
+		cmd.mVolume = volume;
+		mCommandSystem.pushCommand(cmd, obj);
+	}
+	// fileName为sound文件夹的相对路径,
+	public static void PLAY_AUDIO_WINDOW(txUIObject obj, string fileName, bool loop, float volume)
+	{
+		CommandWindowPlayAudio cmd = mCommandSystem.newCmd<CommandWindowPlayAudio>(false);
+		cmd.mSoundFileName = fileName;
 		cmd.mLoop = loop;
 		cmd.mVolume = volume;
 		mCommandSystem.pushCommand(cmd, obj);

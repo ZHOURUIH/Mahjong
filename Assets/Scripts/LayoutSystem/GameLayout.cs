@@ -114,6 +114,7 @@ public class GameLayout : GameBase
 		{
 			mLayoutPanel.setActive(visible);
 			mScript.onReset();
+			mScript.onGameState();
 			mScript.onShow(immediately, param);
 		}
 		// 隐藏布局时需要判断

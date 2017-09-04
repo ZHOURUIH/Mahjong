@@ -83,6 +83,8 @@ public abstract class LayoutScript : CommandReceiver
 	}
 	// 在开始显示之前,需要将所有的状态都重置到加载时的状态
 	public virtual void onReset(){}
+	// 重置布局状态后,再根据当前游戏状态设置布局显示前的状态
+	public virtual void onGameState() {}
 	public abstract void onShow(bool immediately, string param);
 	// immediately表示是否需要立即隐藏,即便有隐藏的动画也需要立即执行完
 	public abstract void onHide(bool immediately, string param);
@@ -91,8 +93,13 @@ public abstract class LayoutScript : CommandReceiver
 		mDelayCmdList.Add(cmd, 0.0f);
 		cmd.addStartCommandCallback(onCmdStarted, this);
 	}
+	public bool hasObject(txUIObject parent, string name)
+	{
+		GameObject gameObject = getObjectFromList(parent.mObject, name);
+		return gameObject != null;
+	}
 	// 创建txUIObject,并且新建GameObject,分配到txUIObject中
-	public T createObject<T>(txUIObject parent, string name, bool active) where T : txUIObject, new()
+	public T createObject<T>(txUIObject parent, string name, bool active = true) where T : txUIObject, new()
 	{
 		T obj = new T();
 		GameObject go = new GameObject(name);

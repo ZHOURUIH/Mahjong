@@ -10,6 +10,7 @@ public class CommandPool : GameBase
 	protected ThreadLock mInuseLock;
 	protected ThreadLock mUnuseLock;
 	protected int mNewCount;
+	protected static int mIDSeed;
 	public CommandPool()
 	{
 		mInusedList = new Dictionary<Type, List<Command>>();
@@ -47,6 +48,7 @@ public class CommandPool : GameBase
 		if(cmd == null)
 		{
 			cmd = new T();
+			cmd.setID(mIDSeed++);
 			cmd.init();
 			cmd.setType(typeof(T));
 			++mNewCount;

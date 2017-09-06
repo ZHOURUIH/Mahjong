@@ -22,6 +22,9 @@ public abstract class Command : GameBase
 	public List<object>				mEndUserData;
 	public List<object>				mStartUserData;
 	public Type						mType;
+	public int						mLine;
+	public string					mFile;
+	public int						mCmdID;
 	public Command()
 	{
 		mReceiver = null;
@@ -62,6 +65,7 @@ public abstract class Command : GameBase
 	public void setValid(bool valid)				{ mValid = valid;}
 	public void setType(Type type)					{ mType = type; }
 	public void setExecuteState(EXECUTE_STATE state){ mExecuteState = state; }
+	public void setID(int id) { mCmdID = id; }
 	public void addEndCommandCallback(CommandCallback cmdCallback, object userdata)
 	{
 		if (cmdCallback != null)

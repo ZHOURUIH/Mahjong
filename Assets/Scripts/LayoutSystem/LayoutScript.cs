@@ -21,18 +21,18 @@ public class WindowInfo
 
 public abstract class LayoutScript : CommandReceiver
 {
-	protected Dictionary<Command, float>		   mDelayCmdList;	// 布局显示和隐藏时的延迟命令列表,当命令执行时,会从列表中移除该命令
-	protected GameLayout						   mLayout;
-	protected txUIObject						   mRoot;
-	protected LAYOUT_TYPE						   mType;
-	protected Dictionary<string, List<WindowInfo>> mAllWindowList;
+	protected Dictionary<int, Command>				mDelayCmdList;	// 布局显示和隐藏时的延迟命令列表,当命令执行时,会从列表中移除该命令
+	protected GameLayout							mLayout;
+	protected txUIObject							mRoot;
+	protected LAYOUT_TYPE							mType;
+	protected Dictionary<string, List<WindowInfo>>	mAllWindowList;
 	public LayoutScript(LAYOUT_TYPE type, string name, GameLayout layout)
 		:
 		base(name)
 	{
 		mType = type;
 		mLayout = layout;
-		mDelayCmdList = new Dictionary<Command, float>();
+		mDelayCmdList = new Dictionary<int, Command>();
 		mAllWindowList = new Dictionary<string, List<WindowInfo>>();
 	}
 	public LAYOUT_TYPE getType() { return mType; }
@@ -77,7 +77,7 @@ public abstract class LayoutScript : CommandReceiver
 	{
 		foreach(var cmd in mDelayCmdList)
 		{
-			mCommandSystem.interruptCommand(cmd.Key);
+			mCommandSystem.interruptCommand(cmd.Value);
 		}
 		mDelayCmdList.Clear();
 	}
@@ -90,7 +90,7 @@ public abstract class LayoutScript : CommandReceiver
 	public abstract void onHide(bool immediately, string param);
 	public void addDelayCmd(Command cmd)
 	{
-		mDelayCmdList.Add(cmd, 0.0f);
+		mDelayCmdList.Add(cmd.mCmdID, cmd);
 		cmd.addStartCommandCallback(onCmdStarted, this);
 	}
 	public bool hasObject(txUIObject parent, string name)
@@ -151,10 +151,18 @@ public abstract class LayoutScript : CommandReceiver
 		gameObject.SetActive(false);
 		findWindow(parent.mObject, gameObject, ref mAllWindowList);
 	}
+	public void interruptCommand(Command cmd)
+	{
+		if (cmd != null && cmd.isDelayCommand())
+		{
+			mDelayCmdList.Remove(cmd.mCmdID);
+			mCommandSystem.interruptCommand(cmd);
+		}
+	}
 	//----------------------------------------------------------------------------------------------------
 	protected void onCmdStarted(object userdata, Command cmd)
 	{
-		mDelayCmdList.Remove(cmd);
+		mDelayCmdList.Remove(cmd.mCmdID);
 	}
 	protected GameObject getObjectFromList(GameObject parent, string name)
 	{

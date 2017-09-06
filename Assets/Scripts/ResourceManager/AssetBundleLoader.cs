@@ -109,6 +109,10 @@ public class AssetBundleLoader : MonoBehaviour
 	// 如果文件夹中包含多个AssetBundle(一般一个AssetBundle代表一个预设),则返回所有预设的名字
 	public List<string> getFileList(string path)
 	{
+		if(path.EndsWith("/"))
+		{
+			path = path.Substring(0, path.Length - 1);
+		}
 		List<string> fileList = new List<string>();
 		// 该文件夹被打包成一个AssetBundle
 		if(mAssetBundleInfoList.ContainsKey(path))
@@ -118,12 +122,16 @@ public class AssetBundleLoader : MonoBehaviour
 				fileList.Add(StringUtility.getFileNameNoSuffix(item.Key, true));
 			}
 		}
-		// 判断文件夹中是否包含预设
+		// 判断文件夹中是否包含预设(因为预设在列表中也是跟文件夹一样的打成一个AssetBundle,所以需要另外判断)
 		foreach (var item in mAssetBundleInfoList)
 		{
-			if (item.Key.StartsWith(path))
+			if (item.Key.StartsWith(path) && item.Key != path)
 			{
-				fileList.Add(StringUtility.getFileNameNoSuffix(item.Key, true));
+				string fileName = StringUtility.getFileNameNoSuffix(item.Key, true);
+				if(!fileList.Contains(fileName))
+				{
+					fileList.Add(fileName);
+				}
 			}
 		}
 		return fileList;

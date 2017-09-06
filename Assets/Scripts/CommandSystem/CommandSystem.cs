@@ -20,10 +20,12 @@ public class CommandSystem
 	protected CommandPool mCommandPool;
 	protected List<DelayCommand> mCommandBufferProcess = new List<DelayCommand>();	// 用于处理的命令列表
 	protected List<DelayCommand> mCommandBufferInput = new List<DelayCommand>();		// 用于放入命令的命令列表
-	protected bool mLockBuffer;
+	protected ThreadLock mBufferLock;
+	protected bool mTraceCommand;	// 是否追踪命令的来源
 	public CommandSystem()
 	{
-		mLockBuffer = false;
+		mBufferLock = new ThreadLock();
+		mTraceCommand = false;
 		mCommandPool = new CommandPool();
 	}
 	public virtual void init(bool showDebug = true)
@@ -32,16 +34,14 @@ public class CommandSystem
 	}
 	protected void syncCommandBuffer()
 	{
-		// 等待解锁缓冲区并锁定缓冲区
-		waitAndLockBuffer();
+		mBufferLock.waitForUnlock(LOCK_TYPE.LT_READ);
 		int inputCount = mCommandBufferInput.Count;
 		for (int i = 0; i < inputCount; ++i)
 		{
 			mCommandBufferProcess.Add(mCommandBufferInput[i]);
 		}
 		mCommandBufferInput.Clear();
-		// 解锁缓冲区
-		unlockBuffer();
+		mBufferLock.unlock(LOCK_TYPE.LT_READ);
 	}
 	public void update(float elapsedTime)
 	{
@@ -75,7 +75,26 @@ public class CommandSystem
 	// 创建命令
 	public T newCmd<T>(bool show = true, bool delay = false) where T : Command, new()
 	{
-		return mCommandPool.newCmd<T>(show, delay);
+		T cmd = mCommandPool.newCmd<T>(show, delay);
+		if(mTraceCommand)
+		{
+			int line = 0;
+			string file = "";
+			int frame = 2;
+			while (true)
+			{
+				file = UnityUtility.getCurSourceFileName(frame);
+				line = UnityUtility.getLineNum(frame);
+				if (!file.EndsWith("LayoutTools.cs"))
+				{
+					break;
+				}
+				++frame;
+			}
+			cmd.mLine = line;
+			cmd.mFile = file;
+		}
+		return cmd;
 	}
 	// 中断命令
 	public bool interruptCommand(Command cmd)
@@ -86,7 +105,7 @@ public class CommandSystem
 		}
 		if (!cmd.isDelayCommand())
 		{
-			UnityUtility.logError("cmd is not a delay command");
+			UnityUtility.logError("cmd is not a delay command, ID : " + cmd.mCmdID);
 			return false;
 		}
 		// 中断命令之前需要同步延迟命令列表
@@ -95,14 +114,16 @@ public class CommandSystem
 		{
 			if (item.mCommand == cmd)
 			{
-				UnityUtility.logInfo("CommandSystem : interrupt command : " + cmd.showDebugInfo() + "receiver : " + item.mReceiver.getName(), LOG_LEVEL.LL_HIGH);
+				UnityUtility.logInfo("CommandSystem : interrupt command : " + cmd.showDebugInfo() + ", receiver : " + item.mReceiver.getName(), LOG_LEVEL.LL_HIGH);
 				mCommandBufferProcess.Remove(item);
+				// 销毁回收命令
+				mCommandPool.destroyCmd(cmd);
 				return true;
 			}
 		}
 		return false;
 	}
-	//执行命令
+	// 执行命令
 	public void pushCommand(Command cmd, CommandReceiver cmdReceiver)
 	{
 		if (cmd == null || cmdReceiver == null)
@@ -158,12 +179,10 @@ public class CommandSystem
 			UnityUtility.logInfo("CommandSystem : delay cmd : " + delayExecute + ", info : " + cmd.showDebugInfo() + ", receiver : " + cmdReceiver.getName(), LOG_LEVEL.LL_NORMAL);
 		}
 		DelayCommand delayCommand = new DelayCommand(delayExecute, cmd, cmdReceiver);
-
-		// 等待解锁缓冲区并锁定缓冲区
-		waitAndLockBuffer();
+		
+		mBufferLock.waitForUnlock(LOCK_TYPE.LT_READ);
 		mCommandBufferInput.Add(delayCommand);
-		// 解锁缓冲区
-		unlockBuffer();
+		mBufferLock.unlock(LOCK_TYPE.LT_READ);
 	}
 	public void destroy()
 	{
@@ -173,8 +192,7 @@ public class CommandSystem
 	}
 	public virtual void notifyReceiverDestroied(CommandReceiver receiver)
 	{
-		// 等待解锁缓冲区并锁定缓冲区
-		waitAndLockBuffer();
+		mBufferLock.waitForUnlock(LOCK_TYPE.LT_READ);
 		for (int i = 0; i < mCommandBufferInput.Count; ++i)
 		{
 			if (mCommandBufferInput[i].mReceiver == receiver)
@@ -184,8 +202,7 @@ public class CommandSystem
 				--i;
 			}
 		}
-		// 解锁缓冲区
-		unlockBuffer();
+		mBufferLock.unlock(LOCK_TYPE.LT_READ);
 
 		for (int i = 0; i < mCommandBufferProcess.Count; ++i)
 		{
@@ -198,13 +215,6 @@ public class CommandSystem
 		}
 	}
 	//------------------------------------------------------------------------------------------------------------------------------------
-	protected void waitAndLockBuffer()
-	{
-		while (mLockBuffer)
-		{ }
-		mLockBuffer = true;
-	}
-	protected void unlockBuffer() { mLockBuffer = false; }
 	protected void destroyCmd(Command cmd)
 	{
 		if(!cmd.isValid())

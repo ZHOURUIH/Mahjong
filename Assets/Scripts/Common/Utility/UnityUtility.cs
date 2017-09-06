@@ -11,9 +11,9 @@ using UnityEngine;
 // 日志等级
 public enum LOG_LEVEL
 {
-	LL_FORCE,	// 强制显示
-	LL_HIGH,	// 高
-	LL_NORMAL,	// 正常
+	LL_FORCE,   // 强制显示
+	LL_HIGH,    // 高
+	LL_NORMAL,  // 正常
 	LL_MAX,
 }
 
@@ -22,7 +22,7 @@ public class UnityUtility : GameBase
 	protected static GameCamera mForeEffectCamera;
 	protected static GameCamera mBackEffectCamera;
 	protected static LOG_LEVEL mLogLevel;
-	public void init() 
+	public void init()
 	{
 		mForeEffectCamera = mCameraManager.getCamera("UIForeEffectCamera");
 		mBackEffectCamera = mCameraManager.getCamera("UIBackEffectCamera");
@@ -43,7 +43,7 @@ public class UnityUtility : GameBase
 	}
 	public static void logError(string info, bool isMainThread = true)
 	{
-		if(isMainThread)
+		if (isMainThread)
 		{
 			messageBox(info, true);
 		}
@@ -104,7 +104,7 @@ public class UnityUtility : GameBase
 		foreach (var box in buttonList)
 		{
 			int count = box.Value.Count;
-			for(int i = 0; i < count; ++i)
+			for (int i = 0; i < count; ++i)
 			{
 				txUIButton button = box.Value[i];
 				if (button.getHandleInput() && button.Raycast(ray, out hit, 10000.0f))
@@ -118,7 +118,7 @@ public class UnityUtility : GameBase
 					}
 				}
 			}
-			if(!cast)
+			if (!cast)
 			{
 				break;
 			}
@@ -192,7 +192,7 @@ public class UnityUtility : GameBase
 		T instance = Activator.CreateInstance(classType, param) as T;
 		return instance;
 	}
-	public static Vector2 screenPosToEffectPos(Vector2 screenPos, Vector2 parentWorldPos,Vector2 parentWorldScale, float effectDepth, bool isBack, bool isRelative = true)
+	public static Vector2 screenPosToEffectPos(Vector2 screenPos, Vector2 parentWorldPos, Vector2 parentWorldScale, float effectDepth, bool isBack, bool isRelative = true)
 	{
 		GameCamera camera = isBack ? mBackEffectCamera : mForeEffectCamera;
 		if (isRelative)
@@ -205,7 +205,7 @@ public class UnityUtility : GameBase
 			parentWorldPos.y = parentWorldPos.y / scale.y;
 		}
 		Vector2 pos = (effectDepth / -camera.getPosition().z + 1) * screenPos - parentWorldPos;
-		return new Vector2(pos.x / parentWorldScale.x,pos.y/parentWorldScale.y);
+		return new Vector2(pos.x / parentWorldScale.x, pos.y / parentWorldScale.y);
 	}
 	public static void setGameObjectLayer(txUIObject obj, string layerName)
 	{

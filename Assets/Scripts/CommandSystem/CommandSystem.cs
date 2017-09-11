@@ -76,6 +76,7 @@ public class CommandSystem
 	public T newCmd<T>(bool show = true, bool delay = false) where T : Command, new()
 	{
 		T cmd = mCommandPool.newCmd<T>(show, delay);
+#if UNITY_EDITOR
 		if(mTraceCommand)
 		{
 			int line = 0;
@@ -94,6 +95,7 @@ public class CommandSystem
 			cmd.mLine = line;
 			cmd.mFile = file;
 		}
+#endif
 		return cmd;
 	}
 	// 中断命令

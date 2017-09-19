@@ -21,7 +21,7 @@ public class WindowInfo
 
 public abstract class LayoutScript : CommandReceiver
 {
-	protected Dictionary<int, Command>				mDelayCmdList;	// 布局显示和隐藏时的延迟命令列表,当命令执行时,会从列表中移除该命令
+	protected List<int>								mDelayCmdList;	// 布局显示和隐藏时的延迟命令列表,当命令执行时,会从列表中移除该命令
 	protected GameLayout							mLayout;
 	protected txUIObject							mRoot;
 	protected LAYOUT_TYPE							mType;
@@ -32,7 +32,7 @@ public abstract class LayoutScript : CommandReceiver
 	{
 		mType = type;
 		mLayout = layout;
-		mDelayCmdList = new Dictionary<int, Command>();
+		mDelayCmdList = new List<int>();
 		mAllWindowList = new Dictionary<string, List<WindowInfo>>();
 	}
 	public LAYOUT_TYPE getType() { return mType; }
@@ -75,9 +75,10 @@ public abstract class LayoutScript : CommandReceiver
 	// 通知脚本开始显示或隐藏,中断全部命令
 	public void notifyStartShowOrHide()
 	{
-		foreach(var cmd in mDelayCmdList)
+		int count = mDelayCmdList.Count;
+		for(int i = 0; i < count; ++i)
 		{
-			mCommandSystem.interruptCommand(cmd.Value);
+			mCommandSystem.interruptCommand(mDelayCmdList[i]);
 		}
 		mDelayCmdList.Clear();
 	}
@@ -90,7 +91,7 @@ public abstract class LayoutScript : CommandReceiver
 	public abstract void onHide(bool immediately, string param);
 	public void addDelayCmd(Command cmd)
 	{
-		mDelayCmdList.Add(cmd.mCmdID, cmd);
+		mDelayCmdList.Add(cmd.mAssignID);
 		cmd.addStartCommandCallback(onCmdStarted, this);
 	}
 	public bool hasObject(txUIObject parent, string name)
@@ -151,18 +152,21 @@ public abstract class LayoutScript : CommandReceiver
 		gameObject.SetActive(false);
 		findWindow(parent.mObject, gameObject, ref mAllWindowList);
 	}
-	public void interruptCommand(Command cmd)
+	public void interruptCommand(int assignID)
 	{
-		if (cmd != null && cmd.isDelayCommand())
+		if(mDelayCmdList.Contains(assignID))
 		{
-			mDelayCmdList.Remove(cmd.mCmdID);
-			mCommandSystem.interruptCommand(cmd);
+			mDelayCmdList.Remove(assignID);
+			mCommandSystem.interruptCommand(assignID);
 		}
 	}
 	//----------------------------------------------------------------------------------------------------
 	protected void onCmdStarted(object userdata, Command cmd)
 	{
-		mDelayCmdList.Remove(cmd.mCmdID);
+		if(!mDelayCmdList.Remove(cmd.mAssignID))
+		{
+			UnityUtility.logError("命令执行后移除命令失败!");
+		}
 	}
 	protected GameObject getObjectFromList(GameObject parent, string name)
 	{

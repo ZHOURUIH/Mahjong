@@ -99,30 +99,25 @@ public class CommandSystem
 		return cmd;
 	}
 	// 中断命令
-	public bool interruptCommand(Command cmd)
+	public bool interruptCommand(int assignID)
 	{
-		if (cmd == null)
+		if(assignID < 0)
 		{
+			UnityUtility.logError("assignID invalid!");
 			return false;
 		}
-		if (!cmd.isDelayCommand())
-		{
-			UnityUtility.logError("cmd is not a delay command, ID : " + cmd.mCmdID);
-			return false;
-		}
-		// 中断命令之前需要同步延迟命令列表
-		syncCommandBuffer();
 		foreach (var item in mCommandBufferProcess)
 		{
-			if (item.mCommand == cmd)
+			if (item.mCommand.mAssignID == assignID)
 			{
-				UnityUtility.logInfo("CommandSystem : interrupt command : " + cmd.showDebugInfo() + ", receiver : " + item.mReceiver.getName(), LOG_LEVEL.LL_HIGH);
+				UnityUtility.logInfo("CommandSystem : interrupt command : " + item.mCommand.showDebugInfo() + ", receiver : " + item.mReceiver.getName(), LOG_LEVEL.LL_HIGH);
 				mCommandBufferProcess.Remove(item);
 				// 销毁回收命令
-				mCommandPool.destroyCmd(cmd);
+				mCommandPool.destroyCmd(item.mCommand);
 				return true;
 			}
 		}
+		UnityUtility.logError("not find cmd with assignID!");
 		return false;
 	}
 	// 执行命令

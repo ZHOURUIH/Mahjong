@@ -25,6 +25,7 @@ public abstract class Command : GameBase
 	public int						mLine;
 	public string					mFile;
 	public int						mCmdID;
+	public int						mAssignID;		// 重新分配时的ID,每次分配都会设置一个新的唯一执行ID
 	public Command()
 	{
 		mReceiver = null;
@@ -33,6 +34,7 @@ public abstract class Command : GameBase
 		mEndUserData = new List<object>();
 		mStartUserData = new List<object>();
 		mValid = false;
+		mAssignID = -1;
 	}
 	public virtual void init()
 	{
@@ -65,6 +67,8 @@ public abstract class Command : GameBase
 	public void setValid(bool valid)				{ mValid = valid;}
 	public void setType(Type type)					{ mType = type; }
 	public void setExecuteState(EXECUTE_STATE state){ mExecuteState = state; }
+	// 被分配为延迟命令时的唯一ID
+	public void setAssignID(int id)					{ mAssignID = id; }
 	public void setID(int id) { mCmdID = id; }
 	public void addEndCommandCallback(CommandCallback cmdCallback, object userdata)
 	{

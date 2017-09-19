@@ -5,7 +5,7 @@ using System;
 
 public abstract class SceneProcedure : GameBase
 {
-	protected Dictionary<Command, float> mDelayCmdList;	// 流程进入时的延迟命令列表,当命令执行时,会从列表中移除该命令
+	protected List<int>			mDelayCmdList;	// 流程进入时的延迟命令列表,当命令执行时,会从列表中移除该命令
 	protected Dictionary<PROCEDURE_TYPE, SceneProcedure> mChildProcedureList;	// 子流程列表
 	protected PROCEDURE_TYPE	mProcedureType;			// 该流程的类型
 	protected GameScene			mGameScene;				// 流程所属的场景
@@ -23,7 +23,7 @@ public abstract class SceneProcedure : GameBase
 		mGameScene = gameScene;
 		mParentProcedure = null;
 		mCurChildProcedure = null;
-		mDelayCmdList = new Dictionary<Command, float>();
+		mDelayCmdList = new List<int>();
 		mChildProcedureList = new Dictionary<PROCEDURE_TYPE, SceneProcedure>();
 	}
 	// 在进入流程时调用
@@ -67,9 +67,10 @@ public abstract class SceneProcedure : GameBase
 	public void exit(SceneProcedure exitTo, SceneProcedure nextPro)
 	{
 		// 中断自己所有未执行的命令
-		foreach (var cmd in mDelayCmdList)
+		int count = mDelayCmdList.Count;
+		for(int i = 0; i < count; ++i)
 		{
-			mCommandSystem.interruptCommand(cmd.Key);
+			mCommandSystem.interruptCommand(mDelayCmdList[i]);
 		}
 		mDelayCmdList.Clear();
 
@@ -91,9 +92,10 @@ public abstract class SceneProcedure : GameBase
 	public void back(SceneProcedure backTo)
 	{
 		// 中断自己所有未执行的命令
-		foreach (var cmd in mDelayCmdList)
+		int count = mDelayCmdList.Count;
+		for (int i = 0; i < count; ++i)
 		{
-			mCommandSystem.interruptCommand(cmd.Key);
+			mCommandSystem.interruptCommand(mDelayCmdList[i]);
 		}
 		mDelayCmdList.Clear();
 
@@ -127,7 +129,7 @@ public abstract class SceneProcedure : GameBase
 	}
 	public void addDelayCmd(Command cmd)
 	{
-		mDelayCmdList.Add(cmd, 0.0f);
+		mDelayCmdList.Add(cmd.mAssignID);
 		cmd.addStartCommandCallback(onCmdStarted, this);
 	}
 	public void getParentList(ref List<SceneProcedure> parentList)
@@ -248,6 +250,9 @@ public abstract class SceneProcedure : GameBase
 	}
 	protected void onCmdStarted(object userdata, Command cmd)
 	{
-		mDelayCmdList.Remove(cmd);
+		if(!mDelayCmdList.Remove(cmd.mAssignID))
+		{
+			UnityUtility.logError("命令执行后移除流程命令失败");
+		}
 	}
 }

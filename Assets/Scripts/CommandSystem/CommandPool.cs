@@ -10,7 +10,8 @@ public class CommandPool : GameBase
 	protected ThreadLock mInuseLock;
 	protected ThreadLock mUnuseLock;
 	protected int mNewCount;
-	protected static int mIDSeed;
+	protected static int mIDSeed = 0;
+	protected static int mAssignIDSeed = 0;
 	public CommandPool()
 	{
 		mInusedList = new Dictionary<Type, List<Command>>();
@@ -56,6 +57,14 @@ public class CommandPool : GameBase
 		}
 		// 设置为可用命令
 		cmd.setValid(true);
+		if(delay)
+		{
+			cmd.setAssignID(mAssignIDSeed++);
+		}
+		else
+		{
+			cmd.setAssignID(-1);
+		}
 		cmd.setShowDebugInfo(show);
 		cmd.setDelayCommand(delay);
 		// 加入已使用列表

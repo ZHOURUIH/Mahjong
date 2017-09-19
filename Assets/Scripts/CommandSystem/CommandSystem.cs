@@ -106,6 +106,7 @@ public class CommandSystem
 			UnityUtility.logError("assignID invalid!");
 			return false;
 		}
+		syncCommandBuffer();
 		foreach (var item in mCommandBufferProcess)
 		{
 			if (item.mCommand.mAssignID == assignID)

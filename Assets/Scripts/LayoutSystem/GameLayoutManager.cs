@@ -225,7 +225,7 @@ public class GameLayoutManager : CommandReceiver
 			mLayoutNameList.Remove(layout.getName());
 		}
 	}
-	protected void onLayoutPrefabAsyncDone(UnityEngine.Object res)
+	protected void onLayoutPrefabAsyncDone(UnityEngine.Object res, object userData)
 	{
 		LayoutAsyncInfo info = mLayoutAsyncList[res.name];
 		info.mLayoutObject = GameObject.Instantiate(res) as GameObject;

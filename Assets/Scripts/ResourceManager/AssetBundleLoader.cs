@@ -285,12 +285,12 @@ public class AssetBundleLoader : MonoBehaviour
 #endif
 		StartCoroutine(loadAssetBundleCoroutine(bundleInfo, loadFromWWW));
 	}
-	public void requestLoadTextureFromUrl(string url, LoadURLTextureCallback callback, object userData)
+	public void requestLoadAssetsFromUrl(string url, Type assetsType, AssetLoadDoneCallback callback, object userData)
 	{
-		StartCoroutine(loadTextureFromUrl(url, callback, userData));
+		StartCoroutine(loadAssetsFromUrl(url, assetsType, callback, userData));
 	}
 	//-----------------------------------------------------------------------------------------------
-	protected IEnumerator loadTextureFromUrl(string url, LoadURLTextureCallback callback, object userData)
+	protected IEnumerator loadAssetsFromUrl(string url, Type assetsType, AssetLoadDoneCallback callback, object userData)
 	{
 		WWW www = new WWW(url);
 		yield return www;
@@ -302,7 +302,24 @@ public class AssetBundleLoader : MonoBehaviour
 		}
 		else
 		{
-			callback(www.texture, userData);
+			UnityEngine.Object obj = null;
+			if(assetsType == typeof(AudioClip))
+			{
+				obj = www.audioClip;
+			}
+			else if(assetsType == typeof(Texture2D) || assetsType == typeof(Texture))
+			{
+				obj = www.texture;
+			}
+			else if(assetsType == typeof(MovieTexture))
+			{
+				obj = www.movie;
+			}
+			else if(assetsType == typeof(AssetBundle))
+			{
+				obj = www.assetBundle;
+			}
+			callback(obj, userData);
 		}
 	}
 	protected IEnumerator loadAssetBundleCoroutine(AssetBundleInfo bundleInfo, bool loadFromWWW)

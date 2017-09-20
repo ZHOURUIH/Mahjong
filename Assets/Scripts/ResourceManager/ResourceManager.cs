@@ -141,9 +141,9 @@ public class ResourceManager : GameBase
 		}
 		return ret;
 	}
-	public void loadTextureFromUrl(string url, LoadURLTextureCallback callback, object userData)
+	public void loadAssetsFromUrl<T>(string url, AssetLoadDoneCallback callback, object userData) where T : UnityEngine.Object
 	{
 		// 只能通过AssetBundleLoader加载
-		mAssetBundleLoader.requestLoadTextureFromUrl(url, callback, userData);
+		mAssetBundleLoader.requestLoadAssetsFromUrl(url, typeof(T), callback, userData);
 	}
 }

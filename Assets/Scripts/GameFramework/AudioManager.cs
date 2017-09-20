@@ -127,7 +127,7 @@ public class AudioManager : GameBase
 		return (float)mLoadedCount / (float)mAudioClipList.Count;
 	}
 	//--------------------------------------------------------------------------------------------------------------------------------------
-	protected void onAudioLoaded(UnityEngine.Object res)
+	protected void onAudioLoaded(UnityEngine.Object res, object userData)
 	{
 		if (res != null)
 		{
@@ -135,7 +135,7 @@ public class AudioManager : GameBase
 		}
 		++mLoadedCount;
 	}
-	// name为Sound下相对路径,不带后缀
+	// name为Resource下相对路径,不带后缀
 	protected void loadAudio(string name, string path, bool async)
 	{
 		if(!mAudioClipList.ContainsKey(name))
@@ -147,13 +147,14 @@ public class AudioManager : GameBase
 		{
 			path += "/";
 		}
+		string fullName = CommonDefine.R_SOUND_PATH + path + name;
 		if (async)
 		{
-			mResourceManager.loadResourceAsync<AudioClip>(CommonDefine.R_SOUND_PATH + path + name, onAudioLoaded, false);
+			mResourceManager.loadResourceAsync<AudioClip>(fullName, onAudioLoaded, false);
 		}
 		else
 		{
-			AudioClip audio = mResourceManager.loadResource<AudioClip>(CommonDefine.R_SOUND_PATH + path + name, false);
+			AudioClip audio = mResourceManager.loadResource<AudioClip>(fullName, false);
 			if (audio != null)
 			{
 				mAudioClipList[audio.name].mClip = audio;

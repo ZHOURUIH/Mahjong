@@ -155,7 +155,7 @@ public class AssetBundleInfo : GameBase
 		// 如果资源包已经加载,则可以直接异步加载资源
 		else
 		{
-			callback(mAssetList[fileNameWithSuffix].mAssetObject);
+			callback(mAssetList[fileNameWithSuffix].mAssetObject, null);
 		}
 		return true;
 	}
@@ -220,7 +220,7 @@ public class AssetBundleInfo : GameBase
 		{
 			if (assetInfo.Value.mCallback != null)
 			{
-				assetInfo.Value.mCallback(assetInfo.Value.mAssetInfo.mAssetObject);
+				assetInfo.Value.mCallback(assetInfo.Value.mAssetInfo.mAssetObject, null);
 			}
 		}
 		mLoadAsyncList.Clear();

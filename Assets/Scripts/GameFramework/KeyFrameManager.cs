@@ -58,7 +58,7 @@ public class KeyFrameManager : GameBase
 			else
 			{
 				GameObject prefab = mResourceManager.loadResource<GameObject>(path + fileNameNoSuffix, true);
-				onKeyFrameLoaded(prefab);
+				onKeyFrameLoaded(prefab, null);
 			}
 		}
 	}
@@ -75,7 +75,7 @@ public class KeyFrameManager : GameBase
 		return (float)mLoadedCount / (float)mCurveList.Count;
 	}
 	//------------------------------------------------------------------------------------------------------------------
-	protected void onKeyFrameLoaded(UnityEngine.Object res)
+	protected void onKeyFrameLoaded(UnityEngine.Object res, object userData)
 	{
 		GameObject keyFrameObject = UnityUtility.instantiatePrefab(mManagerObject, res as GameObject);
 		// 查找关键帧曲线,加入列表中

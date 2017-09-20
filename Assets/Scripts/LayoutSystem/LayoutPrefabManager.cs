@@ -85,7 +85,7 @@ public class LayoutPrefabManager : GameBase
 		return (float)mLoadedCount / (float)mPrefabList.Count;
 	}
 	//---------------------------------------------------------------------------------------------------------
-	protected void onLayoutPrefabLoaded(UnityEngine.Object res)
+	protected void onLayoutPrefabLoaded(UnityEngine.Object res, object userData)
 	{
 		GameObject prefab = res as GameObject;
 		mPrefabList[prefab.name.ToLower()] = prefab;

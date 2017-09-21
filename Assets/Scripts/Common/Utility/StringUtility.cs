@@ -214,6 +214,15 @@ public class StringUtility : GameBase
 		}
 		return str;
 	}
+	public static string getFileSuffix(string file)
+	{
+		int dotPos = file.LastIndexOf('.');
+		if(dotPos != -1)
+		{
+			return file.Substring(dotPos, file.Length - dotPos);
+		}
+		return "";
+	}
 	public static string getFileNameNoSuffix(string str, bool removeDir = false)
 	{
 		rightToLeft(ref str);

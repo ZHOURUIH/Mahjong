@@ -319,6 +319,7 @@ public class AssetBundleLoader : MonoBehaviour
 			{
 				obj = www.assetBundle;
 			}
+			obj.name = url;
 			callback(obj, userData);
 		}
 	}

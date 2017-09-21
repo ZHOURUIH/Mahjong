@@ -6,7 +6,9 @@ public class AudioInfo
 {
 	public AudioClip mClip;
 	public string mAudioName;	// 音效名,不含路径和后缀名
-	public string mAudioPath;	// 相对于Sound的路径
+	public string mAudioPath;   // 相对于Sound的路径
+	public string mSuffix;		// 后缀名
+	public bool mIsResource;	// 是否为固定资源,如果为false则是通过链接加载的,可以是网络链接也可以是本地链接
 }
 
 public class AudioManager : GameBase
@@ -34,15 +36,36 @@ public class AudioManager : GameBase
 		if (!mAudioClipList.ContainsKey(audioName))
 		{
 			AudioInfo newInfo = new AudioInfo();
-			newInfo.mAudioName = StringUtility.getFileNameNoSuffix(fileName, true);
+			newInfo.mAudioName = audioName;
 			newInfo.mAudioPath = StringUtility.getFilePath(fileName);
 			newInfo.mClip = null;
+			newInfo.mIsResource = true;
+			newInfo.mSuffix = "";
 			mAudioClipList.Add(audioName, newInfo);
 		}
 		AudioInfo info = mAudioClipList[audioName];
 		if (load && info.mClip == null)
 		{
-			loadAudio(info.mAudioName, info.mAudioPath, async);
+			loadAudio(info, async);
+		}
+	}
+	public void createStreamingAudio(string url, bool load = true)
+	{
+		string audioName = StringUtility.getFileNameNoSuffix(url, true);
+		if (!mAudioClipList.ContainsKey(audioName))
+		{
+			AudioInfo newInfo = new AudioInfo();
+			newInfo.mAudioName = audioName;
+			newInfo.mAudioPath = StringUtility.getFilePath(url);
+			newInfo.mClip = null;
+			newInfo.mIsResource = false;
+			newInfo.mSuffix = StringUtility.getFileSuffix(url);
+			mAudioClipList.Add(audioName, newInfo);
+		}
+		AudioInfo info = mAudioClipList[audioName];
+		if (load && info.mClip == null)
+		{
+			loadAudio(info, true);
 		}
 	}
 	// 加载所有已经注册的音效
@@ -52,7 +75,7 @@ public class AudioManager : GameBase
 		{
 			if(item.Value.mClip == null)
 			{
-				loadAudio(item.Value.mAudioName, item.Value.mAudioPath, async);
+				loadAudio(item.Value, async);
 			}
 		}
 	}
@@ -131,35 +154,40 @@ public class AudioManager : GameBase
 	{
 		if (res != null)
 		{
-			mAudioClipList[res.name].mClip = res as AudioClip;
+			string name = StringUtility.getFileNameNoSuffix(res.name, true);
+			mAudioClipList[name].mClip = res as AudioClip;
 		}
 		++mLoadedCount;
 	}
 	// name为Resource下相对路径,不带后缀
-	protected void loadAudio(string name, string path, bool async)
+	protected void loadAudio(AudioInfo info, bool async)
 	{
-		if(!mAudioClipList.ContainsKey(name))
-		{
-			UnityUtility.logError("音效还未注册,请使用createAudio注册音效");
-			return;
-		}
-		if(path != "" && !path.EndsWith("/"))
+		string path = info.mAudioPath;
+		if (path != "" && !path.EndsWith("/"))
 		{
 			path += "/";
 		}
-		string fullName = CommonDefine.R_SOUND_PATH + path + name;
-		if (async)
+		if(info.mIsResource)
 		{
-			mResourceManager.loadResourceAsync<AudioClip>(fullName, onAudioLoaded, false);
+			string fullName = CommonDefine.R_SOUND_PATH + path + info.mAudioName;
+			if (async)
+			{
+				mResourceManager.loadResourceAsync<AudioClip>(fullName, onAudioLoaded, false);
+			}
+			else
+			{
+				AudioClip audio = mResourceManager.loadResource<AudioClip>(fullName, false);
+				if (audio != null)
+				{
+					mAudioClipList[audio.name].mClip = audio;
+				}
+				++mLoadedCount;
+			}
 		}
 		else
 		{
-			AudioClip audio = mResourceManager.loadResource<AudioClip>(fullName, false);
-			if (audio != null)
-			{
-				mAudioClipList[audio.name].mClip = audio;
-			}
-			++mLoadedCount;
+			string url = path + info.mAudioName + info.mSuffix;
+			mResourceManager.loadAssetsFromUrl<AudioClip>(url, onAudioLoaded, null);
 		}
 	}
 }

@@ -86,16 +86,19 @@ public class AssetBundleLoader : MonoBehaviour
 	}
 	public void destroy()
 	{
-		;
+		foreach (var item in mAssetBundleInfoList)
+		{
+			item.Value.unload();
+		}
 	}
-	public void unload(string name, bool unloadAllLoadedObjects)
+	public void unload(string name)
 	{
 		AssetBundleInfo assetBundle = getAssetBundleInfo(name);
 		if(assetBundle == null)
 		{
 			return;
 		}
-		assetBundle.unload(unloadAllLoadedObjects);
+		assetBundle.unload();
 	}
 	public AssetBundleInfo getAssetBundleInfo(string name)
 	{
@@ -325,9 +328,9 @@ public class AssetBundleLoader : MonoBehaviour
 	}
 	protected IEnumerator loadAssetBundleCoroutine(AssetBundleInfo bundleInfo, bool loadFromWWW)
 	{
-		UnityUtility.logInfo(bundleInfo.mBundleName + " start load bundld", LOG_LEVEL.LL_NORMAL);
+		UnityUtility.logInfo(bundleInfo.mBundleName + " start load bundle", LOG_LEVEL.LL_NORMAL);
 		// 先确保依赖项全部已经加载完成,才能开始加载当前请求的资源包
-		while (!bundleInfo.isAllParentDone())
+		while (!bundleInfo.isAllParentLoaded())
 		{
 			yield return null;
 		}
@@ -369,7 +372,7 @@ public class AssetBundleLoader : MonoBehaviour
 			yield return assetRequest;
 			item.Value.mAssetObject = assetRequest.asset;
 		}
-		UnityUtility.logInfo(bundleInfo.mBundleName + " load bundld done", LOG_LEVEL.LL_NORMAL);
+		UnityUtility.logInfo(bundleInfo.mBundleName + " load bundle done", LOG_LEVEL.LL_NORMAL);
 		GC.Collect();
 
 		// 加载完成后记录下来并且通知AssetBundleInfo

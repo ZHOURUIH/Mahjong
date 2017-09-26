@@ -10,6 +10,10 @@ public class ScriptFactoryManager
 	{
 		mFactoryList = new Dictionary<LAYOUT_TYPE, ScriptFactory>();
 	}
+	public void destroy()
+	{
+		mFactoryList.Clear();
+	}
 	public ScriptFactory addFactory(Type classType, LAYOUT_TYPE type)
 	{
 		ScriptFactory factory = createFactory(classType, type);

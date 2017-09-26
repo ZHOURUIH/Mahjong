@@ -82,6 +82,8 @@ public class GameLayout : GameBase
 	}
 	public void destroy()
 	{
+		mLayoutPanel.destroy();
+		mLayoutPanel = null;
 		mScript.destroy();
 		mScript = null;
 	}

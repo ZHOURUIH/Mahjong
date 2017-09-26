@@ -25,6 +25,7 @@ public class AssetBundleInfo : GameBase
 	public string mBundleName;					// 资源所在的AssetBundle名,相对于StreamingAsset,不含后缀
 	public AssetBundle mAssetBundle;
 	public int mLoadedParentCount;
+	public int mLoadedChildCount;
 	public Dictionary<string, AssetBundleInfo> mParents;	// 依赖的AssetBundle列表
 	public Dictionary<string, AssetBundleInfo> mChildren;	// 依赖自己的AssetBundle列表
 	public Dictionary<string, AssetInfo> mAssetList;			// 资源包中已加载的所有资源
@@ -34,16 +35,20 @@ public class AssetBundleInfo : GameBase
 	{
 		mBundleName = bundleName;
 		mLoadedParentCount = 0;
+		mLoadedChildCount = 0;
 		mLoaded = LOAD_STATE.LS_UNLOAD;
 		mParents = new Dictionary<string, AssetBundleInfo>();
 		mChildren = new Dictionary<string, AssetBundleInfo>();
 		mLoadAsyncList = new Dictionary<string, AsyncLoadInfo>();
 		mAssetList = new Dictionary<string, AssetInfo>();
 	}
-	public void unload(bool unloadAllLoadedObjects)
+	public void unload()
 	{
-		mAssetBundle.Unload(unloadAllLoadedObjects);
-		mAssetBundle = null;
+		if(mAssetBundle != null)
+		{
+			mAssetBundle.Unload(true);
+			mAssetBundle = null;
+		}
 	}
 	public void addAssetName(string fileNameWithSuffix)
 	{
@@ -93,9 +98,13 @@ public class AssetBundleInfo : GameBase
 		}
 	}
 	// 所有依赖项是否都已经加载完成
-	public bool isAllParentDone()
+	public bool isAllParentLoaded()
 	{
 		return mLoadedParentCount == mParents.Count;
+	}
+	public bool isAllChildLoaded()
+	{
+		return mLoadedChildCount == mChildren.Count;
 	}
 	// 获得资源,只能在加载后才能获得
 	public T getAsset<T>(string fileNameWithSuffix) where T : UnityEngine.Object
@@ -187,11 +196,7 @@ public class AssetBundleInfo : GameBase
 			mAssetList[assetNameList[i]].mAssetObject = obj;
 		}
 		mLoaded = LOAD_STATE.LS_LOADED;
-		// 通知自己的所有子节点,自己已经加载完了
-		foreach (var item in mChildren)
-		{
-			item.Value.notifyParentLoaded(this);
-		}
+		afterLoaded();
 	}
 	// 异步加载资源包
 	public void loadAssetBundleAsync(AssetBundleLoadDoneCallback callback)
@@ -224,16 +229,45 @@ public class AssetBundleInfo : GameBase
 			}
 		}
 		mLoadAsyncList.Clear();
+		afterLoaded();
+	}
+	//-----------------------------------------------------------------------------------------------------------------------------
+	protected void afterLoaded()
+	{
 		// 通知自己的所有子节点,自己已经加载完了
-		foreach(var item in mChildren)
+		foreach (var item in mChildren)
 		{
 			item.Value.notifyParentLoaded(this);
 		}
+		// 通知自己的所有父节点,自己已经加载完了
+		foreach (var item in mParents)
+		{
+			item.Value.notifyChildLoaded(this);
+		}
+		if (mLoadedChildCount == mChildren.Count)
+		{
+			notifyAllChildLoaded();
+		}
 	}
-	//-----------------------------------------------------------------------------
 	// 通知自己有一个父节点已经加载完毕
 	protected void notifyParentLoaded(AssetBundleInfo parent)
 	{
 		++mLoadedParentCount;
+	}
+	protected void notifyChildLoaded(AssetBundleInfo child)
+	{
+		++mLoadedChildCount;
+		if(mLoadedChildCount == mChildren.Count)
+		{
+			notifyAllChildLoaded();
+		}
+	}
+	protected void notifyAllChildLoaded()
+	{
+		if(mAssetBundle != null)
+		{
+			mAssetBundle.Unload(false);
+			UnityUtility.logInfo("release AssetBundle : " + mBundleName, LOG_LEVEL.LL_FORCE);
+		}
 	}
 }

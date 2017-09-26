@@ -63,8 +63,18 @@ public class GameLayoutManager : CommandReceiver
 	}
 	public override void destroy()
 	{
+		foreach(var item in mLayoutNameList)
+		{
+			item.Value.destroy();
+		}
+		mLayoutNameList.Clear();
 		mLayoutTypeToName.Clear();
 		mLayoutNameToType.Clear();
+		mScriptFactoryManager.destroy();
+		mLayoutTypeList.Clear();
+		mLayoutAsyncList.Clear();
+		mUIRoot.destroy();
+		mUIRoot = null;
 	}
 	public string getLayoutNameByType(LAYOUT_TYPE type)
 	{
@@ -158,6 +168,7 @@ public class GameLayoutManager : CommandReceiver
 			return;
 		}
 		removeLayoutFromList(layout);
+		layout.destroy();
 	}
 	public LayoutScript createScript(LAYOUT_TYPE type, string name, GameLayout layout)
 	{

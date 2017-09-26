@@ -28,6 +28,8 @@ public class txUIObject : ComponentOwner
 			mLayout.unregisterUIObject(this);
 			mLayout = null;
 		}
+		GameObject.Destroy(mObject);
+		mObject = null;
 	}
 	public virtual void init(GameLayout layout, GameObject go)
 	{
@@ -104,4 +106,5 @@ public class txUIObject : ComponentOwner
 	public virtual float getAlpha() { return 1.0f; }
 	public virtual void setFillPercent(float percent) { }
 	public virtual float getFillPercent() { return 1.0f; }
+
 }

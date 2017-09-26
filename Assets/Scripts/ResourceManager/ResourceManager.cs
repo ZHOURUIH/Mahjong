@@ -39,12 +39,12 @@ public class ResourceManager : GameBase
 		mAssetBundleLoader.destroy();
 		mResourceLoader.destroy();
 	}
-	public void unload(string name, bool unloadAllLoadedObjects)
+	public void unload(string name)
 	{
 		// 只能用AssetBundleLoader卸载
 		if (mLoadSource == 1)
 		{
-			mAssetBundleLoader.unload(name, unloadAllLoadedObjects);
+			mAssetBundleLoader.unload(name);
 		}
 	}
 	// 指定资源是否已经加载

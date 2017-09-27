@@ -46,6 +46,7 @@ public class AssetBundleInfo : GameBase
 	{
 		if(mAssetBundle != null)
 		{
+			UnityUtility.logInfo("unload completely AssetBundle : " + mBundleName);
 			mAssetBundle.Unload(true);
 			mAssetBundle = null;
 		}

@@ -31,6 +31,12 @@ public class txUIStaticTexture : txUIObject
 			setMaterial(getMaterialName(), true);
 		}
 	}
+	public override void destroy()
+	{
+		// 卸载创建出的材质
+		GameObject.DestroyImmediate(mTexture.material);
+		base.destroy();
+	}
 	public void setTexture(Texture tex)
 	{
 		if(mTexture == null)

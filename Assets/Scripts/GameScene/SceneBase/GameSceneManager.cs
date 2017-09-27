@@ -74,6 +74,8 @@ public class GameSceneManager : CommandReceiver
 			mCurScene.destroy();
 			mCurScene = null;
 		}
+		GameObject.Destroy(mManagerObject);
+		mManagerObject = null;
 	}
 	//----------------------------------------------------------------------------------------------
 	protected void registerAllGameScene()

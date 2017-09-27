@@ -25,6 +25,14 @@ public class AudioManager : GameBase
 	}
 	public void destroy()
 	{
+		foreach(var item in mAudioClipList)
+		{
+			// 只销毁通过链接加载的音频
+			if(!item.Value.mIsResource)
+			{
+				GameObject.DestroyImmediate(item.Value.mClip);
+			}
+		}
 		mAudioClipList.Clear();
 	}
 	public virtual void update(float elapsedTime)

@@ -48,7 +48,8 @@ public class GlobalTouchSystem : GameBase
 	}
 	public void destroy()
 	{
-		;
+		mButtonCallbackList.Clear();
+		mButtonOrderList.Clear();
 	}
 	public Vector3 getCurMousePosition()
 	{
@@ -127,7 +128,6 @@ public class GlobalTouchSystem : GameBase
 	{
 		if (!mButtonCallbackList.ContainsKey(button))
 		{
-			BoxCollider box = button.getBoxCollider();
 			ColliderCallBack colliderCallback = new ColliderCallBack();
 			colliderCallback.mButton = button;
 			colliderCallback.mClickCallback = clickCallback;

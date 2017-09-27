@@ -6,10 +6,10 @@ using UnityEngine;
 
 public class ShaderManager
 {
-	protected Dictionary<string, Shader> mShaderList = new Dictionary<string, Shader>();
+	protected Dictionary<string, Shader> mShaderList;
 	public ShaderManager()
 	{
-		;
+		mShaderList = new Dictionary<string, Shader>();
 	}
 	public void init()
 	{
@@ -17,7 +17,8 @@ public class ShaderManager
 	}
 	public void destroy()
 	{
-		;
+		// shader不主动卸载
+		mShaderList.Clear();
 	}
 	public Shader getShader(string name)
 	{

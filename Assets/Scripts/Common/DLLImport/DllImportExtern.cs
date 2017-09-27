@@ -18,6 +18,7 @@ public class Dll
 	public void destroy()
 	{
 		DllImportExtern.FreeLibrary(mHandle);
+		mFunctionList = null;
 	}
 	public string getName()
 	{
@@ -43,7 +44,8 @@ public class Dll
 public class DllImportExtern
 {
 	public const string KERNEL32_DLL = "kernel32.dll";
-	public static string WINMM_DLL = "winmm.dll";
+	public const string WINMM_DLL = "winmm.dll";
+	public const string USER32_DLL = "user32.dll";
 	protected static Dictionary<string, Dll> mDllLibraryList = new Dictionary<string,Dll>();
 
 	[DllImport(KERNEL32_DLL)]
@@ -52,6 +54,13 @@ public class DllImportExtern
 	public extern static IntPtr GetProcAddress(IntPtr lib, String funcName);
 	[DllImport(KERNEL32_DLL)]
 	public extern static bool FreeLibrary(IntPtr lib);
+
+	[DllImport(USER32_DLL)]
+	public extern static IntPtr SetWindowLong(IntPtr hwnd, int _nIndex, uint dwNewLong);
+	[DllImport(USER32_DLL)]
+	public extern static bool SetWindowPos(IntPtr hWnd, int hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
+	[DllImport(USER32_DLL)]
+	public extern static IntPtr GetForegroundWindow();
 	//将要执行的函数转换为委托
 	public static Delegate Invoke(string library, string funcName, Type t)
 	{
@@ -63,9 +72,7 @@ public class DllImportExtern
 	}
 	public void init()
 	{
-		Dll dll = new Dll();
-		dll.init(WINMM_DLL);
-		mDllLibraryList.Add(dll.getName(), dll);
+		registerDLL(WINMM_DLL);
 	}
 	public void destroy()
 	{
@@ -74,5 +81,11 @@ public class DllImportExtern
 			library.Value.destroy();
 		}
 		mDllLibraryList.Clear();
+	}
+	protected void registerDLL(string name)
+	{
+		Dll dll = new Dll();
+		dll.init(name);
+		mDllLibraryList.Add(dll.getName(), dll);
 	}
 }

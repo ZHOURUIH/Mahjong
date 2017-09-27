@@ -21,6 +21,12 @@ public class LayoutTools : GameBase
 		cmd.mLayoutType = type;
 		mCommandSystem.pushCommand(cmd, mLayoutManager);
 	}
+	public static void UNLOAD_LAYOUT_DELAY(LAYOUT_TYPE type, float delayTime)
+	{
+		CommandLayoutManagerUnloadLayout cmd = mCommandSystem.newCmd<CommandLayoutManagerUnloadLayout>(true, true);
+		cmd.mLayoutType = type;
+		mCommandSystem.pushDelayCommand(cmd, mLayoutManager, delayTime);
+	}
 	public static void LOAD_LAYOUT_ASYNC(LAYOUT_TYPE type, int renderOrder, LayoutAsyncDone callback)
 	{
 		CommandLayoutManagerLoadLayout cmd = mCommandSystem.newCmd<CommandLayoutManagerLoadLayout>(true, false);

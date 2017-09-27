@@ -14,6 +14,7 @@ public class txUIVideo : txUIObject
 	protected bool mNextLoop = false;
 	protected float mNextRate = 1.0f;
 	protected PLAY_STATE mNextState = PLAY_STATE.PS_NONE;
+	protected float mNextSeekTime = 0.0f;
 	protected bool mAutoShowOrHide = true;
 	public txUIVideo()
 	{
@@ -36,7 +37,7 @@ public class txUIVideo : txUIObject
 	public override void update(float elapsedTime)
 	{
 		base.update(elapsedTime);
-		if (mReady && mMediaPlayer.Control.IsPlaying())
+		if (mReady && mMediaPlayer.Control != null &&  mMediaPlayer.Control.IsPlaying())
 		{
 			if (mMediaPlayer != null)
 			{
@@ -162,7 +163,14 @@ public class txUIVideo : txUIObject
 	}
 	public void setVideoPlayTime(float timeMS)
 	{
-		mMediaPlayer.Control.SeekFast(timeMS);
+		if(mReady)
+		{
+			mMediaPlayer.Control.SeekFast(timeMS);
+		}
+		else
+		{
+			mNextSeekTime = timeMS;
+		}
 	}
 	public void setVideoEndCallback(VideoPlayEndCallback callback)
 	{
@@ -176,15 +184,20 @@ public class txUIVideo : txUIObject
 		mReady = ready;
 		if(mReady)
 		{
-			setPlayState(mNextState, mAutoShowOrHide);
+			if(mNextState != PLAY_STATE.PS_NONE)
+			{
+				setPlayState(mNextState, mAutoShowOrHide);
+			}
 			setLoop(mNextLoop);
 			setRate(mNextRate);
+			setVideoPlayTime(mNextSeekTime);
 		}
 		else
 		{
 			mNextState = PLAY_STATE.PS_NONE;
 			mNextRate = 1.0f;
 			mNextLoop = false;
+			mNextSeekTime = 0.0f;
 		}
 	}
 	protected void clearAndCallEvent(bool isBreak)

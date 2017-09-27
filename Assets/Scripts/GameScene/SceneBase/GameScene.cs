@@ -53,7 +53,7 @@ abstract public class GameScene : ComponentOwner
 	{
 		base.destroy();
 		base.destroyAllComponents();
-		GameObject.DestroyObject(mSceneObject);
+		GameObject.Destroy(mSceneObject);
 		mSceneObject = null;
 	}
 	public virtual void update(float elapsedTime)

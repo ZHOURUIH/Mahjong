@@ -159,10 +159,10 @@ public class GameFramework : MonoBehaviour
 		mShaderManager.destroy();
 		mDataBase.destroy();
 		mCameraManager.destroy();
-		mResourcesManager.destroy();
 		mMaterialManager.destroy();
 		mApplicationConfig.destory();
 		mPlayerHeadManager.destroy();
+		mResourcesManager.destroy();
 		mLayoutPrefabManager = null;
 		mMahjongSystem = null;
 		mGameConfig = null;

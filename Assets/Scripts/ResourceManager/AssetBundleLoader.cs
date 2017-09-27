@@ -325,6 +325,8 @@ public class AssetBundleLoader : MonoBehaviour
 			obj.name = url;
 			callback(obj, userData);
 		}
+		www.Dispose();
+		www = null;
 	}
 	protected IEnumerator loadAssetBundleCoroutine(AssetBundleInfo bundleInfo, bool loadFromWWW)
 	{
@@ -347,6 +349,8 @@ public class AssetBundleLoader : MonoBehaviour
 			WWW www = new WWW(path);
 			yield return www;
 			assetBundle = www.assetBundle;
+			www.Dispose();
+			www = null;
 		}
 		// 直接从文件加载
 		else

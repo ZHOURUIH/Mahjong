@@ -5,14 +5,20 @@ using System.Text;
 using UnityEngine;
 using System.IO;
 
+public class Curve
+{
+	public GameObject mObject;
+	public AnimationCurve mCurve;
+}
+
 public class KeyFrameManager : GameBase
 {
 	protected GameObject mManagerObject;
-	protected Dictionary<string, AnimationCurve> mCurveList;
+	protected Dictionary<string, Curve> mCurveList;
 	protected int mLoadedCount;	// 已加载的关键帧数量
 	public KeyFrameManager()
 	{
-		mCurveList = new Dictionary<string, AnimationCurve>();
+		mCurveList = new Dictionary<string, Curve>();
 		mLoadedCount = 0;
 	}
 	public AnimationCurve getKeyFrame(string name)
@@ -20,13 +26,13 @@ public class KeyFrameManager : GameBase
 		name = name.ToLower();
 		if (mCurveList.ContainsKey(name))
 		{
-			return mCurveList[name];
+			return mCurveList[name].mCurve;
 		}
 		else 
 		{
 			if (mCurveList.ContainsKey(name.ToLower()))
 			{
-				return mCurveList[name.ToLower()];
+				return mCurveList[name.ToLower()].mCurve;
 			}	
 		}
 		return null;
@@ -64,7 +70,15 @@ public class KeyFrameManager : GameBase
 	}
 	public void destroy()
 	{
+		// 将实例化出的所有物体销毁
+		foreach(var item in mCurveList)
+		{
+			GameObject.Destroy(item.Value.mObject);
+		}
 		mCurveList.Clear();
+		mLoadedCount = 0;
+		GameObject.Destroy(mManagerObject);
+		mManagerObject = null;
 	}
 	public bool isLoadDone()
 	{
@@ -85,9 +99,12 @@ public class KeyFrameManager : GameBase
 			UnityUtility.logError("object in KeyFrame folder must has TweenScale!");
 			return;
 		}
-		AnimationCurve curve = tweenScale.animationCurve;
-		if (curve != null)
+		AnimationCurve animCurve = tweenScale.animationCurve;
+		if (animCurve != null)
 		{
+			Curve curve = new Curve();
+			curve.mObject = keyFrameObject;
+			curve.mCurve = animCurve;
 			mCurveList[res.name.ToLower()] = curve;
 			++mLoadedCount;
 		}

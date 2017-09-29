@@ -3,32 +3,22 @@ guid: 70fa70b7a86639a4dbd45752e3b6ca3f
 timeCreated: 1466009650
 licenseType: Store
 PluginImporter:
-  serializedVersion: 2
+  serializedVersion: 1
   iconMap: {}
   executionOrder: {}
   isPreloaded: 0
-  isOverridable: 0
   platformData:
-    data:
-      first:
-        Android: Android
-      second:
-        enabled: 1
-        settings:
-          CPU: x86
-    data:
-      first:
-        Any: 
-      second:
-        enabled: 0
-        settings: {}
-    data:
-      first:
-        Editor: Editor
-      second:
-        enabled: 0
-        settings:
-          DefaultValueInitialized: true
+    Android:
+      enabled: 1
+      settings:
+        CPU: x86
+    Any:
+      enabled: 0
+      settings: {}
+    Editor:
+      enabled: 0
+      settings:
+        DefaultValueInitialized: true
   userData: 
   assetBundleName: 
   assetBundleVariant: 

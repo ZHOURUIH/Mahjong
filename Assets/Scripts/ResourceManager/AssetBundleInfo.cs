@@ -265,10 +265,6 @@ public class AssetBundleInfo : GameBase
 	}
 	protected void notifyAllChildLoaded()
 	{
-		if(mAssetBundle != null)
-		{
-			mAssetBundle.Unload(false);
-			UnityUtility.logInfo("release AssetBundle : " + mBundleName, LOG_LEVEL.LL_FORCE);
-		}
+		// 不做任何处理,不卸载资源包镜像,仅在确认卸载资源包以及程序退出时使用unload(true)
 	}
 }

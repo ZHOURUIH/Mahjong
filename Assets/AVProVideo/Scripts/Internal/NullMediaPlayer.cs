@@ -1,8 +1,8 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System;
+using UnityEngine;
 
 //-----------------------------------------------------------------------------
-// Copyright 2015-2016 RenderHeads Ltd.  All rights reserverd.
+// Copyright 2015-2017 RenderHeads Ltd.  All rights reserverd.
 //-----------------------------------------------------------------------------
 
 namespace RenderHeads.Media.AVProVideo
@@ -10,7 +10,7 @@ namespace RenderHeads.Media.AVProVideo
 	/// <summary>
 	/// This media player fakes video playback for platforms that aren't supported
 	/// </summary>
-	public class NullMediaPlayer : BaseMediaPlayer
+	public sealed class NullMediaPlayer : BaseMediaPlayer
 	{
 		private bool		_isPlaying = false;
 		private bool		_isPaused = false;
@@ -35,7 +35,7 @@ namespace RenderHeads.Media.AVProVideo
 			return "0.0.0";
 		}
 
-		public override bool OpenVideoFromFile( string path )
+		public override bool OpenVideoFromFile(string path, long offset, string httpHeaderJson)
 		{
 			_texture_AVPro = (Texture2D)Resources.Load("AVPro");
 			_texture_AVPro1 = (Texture2D)Resources.Load("AVPro1");
@@ -147,12 +147,12 @@ namespace RenderHeads.Media.AVProVideo
 			return _height;
 		}
 
-		public override float GetVideoPlaybackRate()
+		public override float GetVideoDisplayRate()
 		{
 			return FrameRate;
 		}
 
-		public override Texture GetTexture()
+		public override Texture GetTexture( int index )
 		{
 //			return _texture ? _texture : Texture2D.whiteTexture;
 			return _texture;
@@ -198,6 +198,11 @@ namespace RenderHeads.Media.AVProVideo
 			return _playbackRate;
 		}
 
+		public override float GetBufferingProgress()
+		{
+			return 0f;
+		}
+
 		public override void MuteAudio(bool bMuted)
 		{
 //			_audioMuted = bMuted;
@@ -218,8 +223,64 @@ namespace RenderHeads.Media.AVProVideo
 			return _volume;
 		}
 
+		public override int GetAudioTrackCount()
+		{
+			return 0;
+		}
+
+		public override int GetCurrentAudioTrack()
+		{
+			return 0;
+		}
+
+		public override void SetAudioTrack( int index )
+		{
+		}
+
+		public override int GetVideoTrackCount()
+		{
+			return 0;
+		}
+
+		public override int GetCurrentVideoTrack()
+		{
+			return 0;
+		}
+
+		public override string GetCurrentAudioTrackId()
+		{
+			// TODO
+			return "";
+		}
+
+		public override int GetCurrentAudioTrackBitrate()
+		{
+			// TODO
+			return 0;
+		}
+		public override void SetVideoTrack( int index )
+		{
+		}
+
+		public override string GetCurrentVideoTrackId()
+		{
+			return "";
+		}
+
+		public override int GetCurrentVideoTrackBitrate()
+		{
+			return 0;
+		}
+		
+		public override float GetVideoFrameRate()
+		{
+			return 0.0f;
+		}
+
 		public override void Update()
 		{
+			UpdateSubtitles();
+
 			if (_isPlaying)
 			{
 				_currentTime += Time.deltaTime * 1000.0f;

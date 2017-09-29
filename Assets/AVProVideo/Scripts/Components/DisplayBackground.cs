@@ -1,8 +1,11 @@
+#if UNITY_5_4_OR_NEWER || (UNITY_5 && !UNITY_5_0)
+	#define UNITY_HELPATTRIB
+#endif
+
 using UnityEngine;
-using System.Collections;
 
 //-----------------------------------------------------------------------------
-// Copyright 2015-2016 RenderHeads Ltd.  All rights reserverd.
+// Copyright 2015-2017 RenderHeads Ltd.  All rights reserverd.
 //-----------------------------------------------------------------------------
 
 
@@ -13,7 +16,10 @@ namespace RenderHeads.Media.AVProVideo
 	/// Useful for augmented reality.
 	/// NOTE: This doesn't work with the camera clear mode set to 'skybox'
 	/// </summary>
-	[AddComponentMenu("AVPro Video/Display Background")]
+	[AddComponentMenu("AVPro Video/Display Background", 200)]
+#if UNITY_HELPATTRIB
+	[HelpURL("http://renderheads.com/product/avpro-video/")]
+#endif
 	[ExecuteInEditMode]
 	public class DisplayBackground : MonoBehaviour
 	{

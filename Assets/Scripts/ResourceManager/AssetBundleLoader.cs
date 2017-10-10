@@ -79,7 +79,6 @@ public class AssetBundleLoader : MonoBehaviour
 		{
 			info.Value.findAllDependence();
 		}
-		// 然后或者所有的资源
 		return true;
 	}
 	public void update(float elapsedTime)

@@ -26,6 +26,8 @@ public abstract class SceneProcedure : GameBase
 		mDelayCmdList = new List<int>();
 		mChildProcedureList = new Dictionary<PROCEDURE_TYPE, SceneProcedure>();
 	}
+	// 从自己的子流程进入当前流程
+	protected virtual void onInitFromChild(SceneProcedure lastProcedure, string intent) { }
 	// 在进入流程时调用
 	// 在onInit中如果要跳转流程,必须使用延迟命令进行跳转
 	protected abstract void onInit(SceneProcedure lastProcedure, string intent);
@@ -33,11 +35,11 @@ public abstract class SceneProcedure : GameBase
 	protected abstract void onUpdate(float elapsedTime);
 	// 更新流程时调用
 	protected abstract void onKeyProcess(float elapsedTime);
-	// 退出流程时调用,并且进入的不是自己的子流程时
+	// 退出当前流程,进入的不是自己的子流程时调用
 	protected abstract void onExit(SceneProcedure nextProcedure);
-	// 返回上一流程时调用
-	protected virtual void onBack() { }
-	// 流程为当前流程,退出当前流程进入其他任何流程时调用
+	// 退出当前流程,进入自己的子流程时调用
+	protected virtual void onExitToChild(SceneProcedure nextProcedure) { }
+	// 退出当前流程进入其他任何流程时调用
 	protected virtual void onExitSelf() { }
 	// 由GameScene调用
 	// 进入流程
@@ -48,8 +50,15 @@ public abstract class SceneProcedure : GameBase
 		{
 			mParentProcedure.init(lastProcedure, intent);
 		}
-		// 再初始化自己
-		onInit(lastProcedure, intent);
+		// 再初始化自己,如果是从子节点返回到父节点,则需要调用另外一个初始化函数
+		if(lastProcedure != null && lastProcedure.isThisOrParent(mProcedureType))
+		{
+			onInitFromChild(lastProcedure, intent);
+		}
+		else
+		{
+			onInit(lastProcedure, intent);
+		}
 		mInited = true;
 	}
 	// 更新流程
@@ -74,48 +83,27 @@ public abstract class SceneProcedure : GameBase
 		}
 		mDelayCmdList.Clear();
 
-		// 当停止目标为自己时,则不再退出
-		if(this == exitTo)
+		// 当停止目标为自己时,则不再退出,此时需要判断当前将要进入的流程是否为当前流程的子流程
+		// 如果是,则需要调用onExitToChild,执行退出当前并且进入子流程的操作
+		// 如果不是则不需要调用,不需要执行任何退出操作
+		if (this == exitTo)
 		{
+			if (nextPro != null && nextPro.isThisOrParent(mProcedureType))
+			{
+				onExitToChild(nextPro);
+				onExitSelf();
+			}
 			return;
 		}
 		// 先退出自己
 		onExit(nextPro);
+		onExitSelf();
 		mInited = false;
 		// 再退出父节点
 		if (mParentProcedure != null)
 		{
 			mParentProcedure.exit(exitTo, nextPro);
 		}
-	}
-	// 返回到自己进入之前的状态
-	public void back(SceneProcedure backTo)
-	{
-		// 中断自己所有未执行的命令
-		int count = mDelayCmdList.Count;
-		for (int i = 0; i < count; ++i)
-		{
-			mCommandSystem.interruptCommand(mDelayCmdList[i]);
-		}
-		mDelayCmdList.Clear();
-
-		// 当返回目标为自己时,则不再返回
-		if (this == backTo)
-		{
-			return;
-		}
-		// 先返回自己进入之前的状态
-		onBack();
-		mInited = false;
-		// 再返回父节点进入之前的状态
-		if (mParentProcedure != null)
-		{
-			mParentProcedure.back(backTo);
-		}
-	}
-	public void notifyExitSelf()
-	{
-		onExitSelf();
 	}
 	public void keyProcess(float elapsedTime)
 	{

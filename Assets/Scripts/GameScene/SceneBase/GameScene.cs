@@ -111,31 +111,15 @@ abstract public class GameScene : ComponentOwner
 		}
 		// 获得上一次进入的流程
 		PROCEDURE_TYPE lastType = mLastProcedureList[mLastProcedureList.Count - 1];
-		if (mSceneProcedureList.ContainsKey(lastType))
-		{
-			SceneProcedure targetProcedure = mSceneProcedureList[lastType];
-			// 先返回到当前流程进入之前的状态
-			// 需要找到共同的父节点,退到该父节点时则不再退出
-			SceneProcedure exitTo = mCurProcedure.getSameParent(targetProcedure);
-			mCurProcedure.back(exitTo);
-			mCurProcedure.notifyExitSelf();
-			SceneProcedure lastProcedure = mCurProcedure;
-			mCurProcedure = targetProcedure;
-			mCurProcedure.init(lastProcedure, intend);
-			// 进入上一次的流程后,将流程从返回列表中删除
-			mLastProcedureList.RemoveAt(mLastProcedureList.Count - 1);
-		}
-		else
-		{
-			UnityUtility.logError("can not back scene procedure : " + lastType);
-		}
+		changeProcedure(lastType, intend, false);
+		mLastProcedureList.RemoveAt(mLastProcedureList.Count - 1);
 	}
-	public bool changeProcedure(PROCEDURE_TYPE procedure, string intent)
+	public bool changeProcedure(PROCEDURE_TYPE procedure, string intent, bool addToLastList = true)
     {
         if (mSceneProcedureList.ContainsKey(procedure))
         {
 			// 将上一个流程记录到返回列表中
-			if (mCurProcedure != null)
+			if (mCurProcedure != null && addToLastList)
 			{
 				mLastProcedureList.Add(mCurProcedure.getProcedureType());
 			}
@@ -149,7 +133,6 @@ abstract public class GameScene : ComponentOwner
 					SceneProcedure exitTo = mCurProcedure.getSameParent(targetProcedure);
 					SceneProcedure nextPro = targetProcedure;
 					mCurProcedure.exit(exitTo, nextPro);
-					mCurProcedure.notifyExitSelf();
 				}
 				SceneProcedure lastProcedure = mCurProcedure;
 				mCurProcedure = targetProcedure;

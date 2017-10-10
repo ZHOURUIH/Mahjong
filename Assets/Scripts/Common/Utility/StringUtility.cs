@@ -164,6 +164,18 @@ public class StringUtility : GameBase
 			str += "\r\n";
 		}
 	}
+	public static void jsonAddObject(ref string str, string name, string value, int preTableCount = 0, bool returnLine = false)
+	{
+		for (int i = 0; i < preTableCount; ++i)
+		{
+			str += "\t";
+		}
+		str += "\"" + name + "\": " + value + ",";
+		if (returnLine)
+		{
+			str += "\r\n";
+		}
+	}
 	public static string removeSuffix(string str)
 	{
 		int dotPos = str.IndexOf('.');
@@ -401,5 +413,32 @@ public class StringUtility : GameBase
 			}
 		}
 		return bytes.Length;
+	}
+	public static string checkString(string str, string valid)
+	{
+		string newString = "";
+		int validCount = valid.Length;
+		int oldStrLen = str.Length;
+		for (int i = 0; i < oldStrLen; ++i)
+		{
+			bool keep = false;
+			for (int j = 0; j < validCount; ++j)
+			{
+				if (str[i] == valid[j])
+				{
+					keep = true;
+					break;
+				}
+			}
+			if (keep)
+			{
+				newString += str[i];
+			}
+		}
+		return newString;
+	}
+	public static string checkNumberString(string str, string valid)
+	{
+		return checkString(str, "0123456789." + valid);
 	}
 }

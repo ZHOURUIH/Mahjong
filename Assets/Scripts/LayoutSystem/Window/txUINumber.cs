@@ -6,14 +6,14 @@ using UnityEngine;
 
 public class txUINumber : txUIStaticSprite
 {
-	protected int mMaxCount = 0;
-	protected string[] mSpriteNameList = new string[11];		// 前10个是0~9,第11个是小数点
-	protected UISpriteData[] mSpriteDataList = new UISpriteData[11];
+	protected int					 mMaxCount = 0;
+	protected string[]				 mSpriteNameList = new string[11];		// 前10个是0~9,第11个是小数点
+	protected UISpriteData[]		 mSpriteDataList = new UISpriteData[11];
 	protected List<txUIStaticSprite> mNumberList = new List<txUIStaticSprite>();
-	protected string mNumberStyle = "";
-	protected int mInterval = 5;
-	protected DOCKING_POSITION mDockingPosition = DOCKING_POSITION.DP_LEFT;
-	protected string mNumber = "";
+	protected string                 mNumberStyle = "";
+	protected int                    mInterval = 5;
+	protected DOCKING_POSITION		 mDockingPosition = DOCKING_POSITION.DP_LEFT;
+	protected string				 mNumber = "";
 	public txUINumber()
 	{
 		mType = UI_OBJECT_TYPE.UBT_NUMBER;
@@ -74,9 +74,8 @@ public class txUINumber : txUIStaticSprite
 	}
 	protected void refreshNumber()
 	{
-		// 设置数字图片
-		// 整数部分
 		Vector2 windowSize = getWindowSize();
+		// 整数部分
 		int dotPos = mNumber.LastIndexOf('.');
 		if (mNumber.Length > 0 && (dotPos == 0 || dotPos == mNumber.Length - 1))
 		{
@@ -98,7 +97,6 @@ public class txUINumber : txUIStaticSprite
 				mNumberList[i + dotPos + 1].setSpriteName(mSpriteNameList[floatPart[i] - '0']);
 			}
 		}
-
 		// 调整所有数字的大小,此处的aspectRatio可能没有更新
 		Vector2 numberSize = Vector2.zero;
 		float numberScale = 0.0f;
@@ -125,7 +123,6 @@ public class txUINumber : txUIStaticSprite
 				mNumberList[i].setWindowSize(numberSize);
 			}
 		}
-
 		// 调整窗口位置,隐藏不需要显示的窗口
 		int contentWidth = getContentWidth();
 		Vector2 pos = Vector2.zero;
@@ -187,7 +184,7 @@ public class txUINumber : txUIStaticSprite
 	}
 	public void setNumber(string num)
 	{
-		mNumber = num;
+		mNumber = StringUtility.checkNumberString(num, "");
 		// 设置的数字字符串不能超过最大数量
 		if (mNumber.Length > mMaxCount)
 		{

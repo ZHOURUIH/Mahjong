@@ -39,21 +39,7 @@ public class MathUtility : GameBase
 	public static float calculateFloat(string str)
 	{
 		// 判断字符串是否含有非法字符,也就是除数字,小数点,运算符以外的字符
-		string newString = "";
-		int oldStrLen = str.Length;
-		for (int i = 0; i < oldStrLen; ++i)
-		{
-			if ((str[i] < '0' || str[i] > '9') && str[i] != '.' && str[i] != '+'
-				&& str[i] != '-' && str[i] != '*' && str[i] != '/' && str[i] != '(' && str[i] != ')')
-			{
-				continue;
-			}
-			else
-			{
-				newString += str[i];
-			}
-		}
-		str = newString;
+		str = StringUtility.checkNumberString(str, "+-*/()");
 		// 判断左右括号数量是否相等
 		int leftBracketCount = 0;
 		int rightBracketCount = 0;
@@ -880,7 +866,7 @@ public class MathUtility : GameBase
 	public static long convertDateTimeUnixTime(System.DateTime dateTime) 
 	{
 		System.DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1)); // 当地时区
-		long timeStamp = (long)(dateTime - startTime).TotalSeconds; // 相差毫秒数
+		long timeStamp = (long)(dateTime - startTime).TotalSeconds; // 相差秒数
 		return timeStamp;
 	}
 	//将时间戳转化成时间

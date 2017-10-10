@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 public class txUIScrollView : txUIObject
 {
-	protected UIScrollView mScrollView;
-	protected txUIObject mGrid;
-	public  List<txUIObject> mItemList = new List<txUIObject>();
+	protected UIScrollView     mScrollView;
+	protected txUIObject       mGrid;
+	public    List<txUIObject> mItemList = new List<txUIObject>();
 	public txUIScrollView()
 	{
 		mType = UI_OBJECT_TYPE.UBT_SCROLL_VIEW;
@@ -21,7 +21,7 @@ public class txUIScrollView : txUIObject
 			GameObject gridGo = mScrollView.transform.GetChild(i).gameObject;
 			if(gridGo.GetComponent<UIGrid>() != null)
 			{
-				mGrid = mLayout.getScript().newObject<txUIObject>(this, gridGo.name, -1);
+				mGrid = mLayout.getScript().newObject<txUIObject>(this, gridGo.name);
 				break;
 			}
 		}
@@ -34,7 +34,7 @@ public class txUIScrollView : txUIObject
 		for(int i = 0; i < itemCount; ++i)
 		{
 			GameObject child = mGrid.getChild(i);
-			txUIObject item = mLayout.getScript().newObject<txUIObject>(mGrid, child.name, -1);
+			txUIObject item = mLayout.getScript().newObject<txUIObject>(mGrid, child.name);
 			mItemList.Add(item);
 		}
 	}
@@ -53,7 +53,7 @@ public class txUIScrollView : txUIObject
 		{
 			return;
 		}
-		GameObject.DestroyObject(mItemList[index].mObject);
+		GameObject.Destroy(mItemList[index].mObject);
 		mItemList.RemoveAt(index);
 	}
 	public void clearItem()
@@ -61,7 +61,7 @@ public class txUIScrollView : txUIObject
 		int itemCount = mItemList.Count;
 		for (int i = 0; i < itemCount; ++i)
 		{
-			GameObject.DestroyObject(mItemList[i].mObject);
+			GameObject.Destroy(mItemList[i].mObject);
 		}
 		mItemList.Clear();
 	}

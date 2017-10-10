@@ -73,7 +73,6 @@ public class GameLayoutManager : CommandReceiver
 		mScriptFactoryManager.destroy();
 		mLayoutTypeList.Clear();
 		mLayoutAsyncList.Clear();
-		mUIRoot.destroy();
 		mUIRoot = null;
 	}
 	public string getLayoutNameByType(LAYOUT_TYPE type)

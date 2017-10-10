@@ -11,13 +11,15 @@ public class AssetBundleLoader : MonoBehaviour
 {
 	protected Dictionary<string, AssetBundleInfo> mAssetBundleInfoList;
 	protected Dictionary<string, AssetInfo> mAssetToBundleInfo;
-	protected static Dictionary<Type, List<string>> mTypeSuffixList;		// 资源类型对应的后缀名
-	protected Dictionary<AssetBundleInfo, bool> mBundleRequestList;			// 已经请求过异步加载的资源包列表,value表示是否已经加载完毕
+	protected static Dictionary<Type, List<string>> mTypeSuffixList;        // 资源类型对应的后缀名
+	protected List<AssetBundleInfo> mRequestBundleList;
+	protected int mAssetBundleCoroutineCount = 0;
+	protected int MAX_ASSET_BUNDLE_COROUTINE = 8;
 	public AssetBundleLoader()
 	{
 		mAssetBundleInfoList = new Dictionary<string, AssetBundleInfo>();
 		mAssetToBundleInfo = new Dictionary<string, AssetInfo>();
-		mBundleRequestList = new Dictionary<AssetBundleInfo, bool>();
+		mRequestBundleList = new List<AssetBundleInfo>();
 		if (mTypeSuffixList == null)
 		{
 			mTypeSuffixList = new Dictionary<Type, List<string>>();
@@ -82,7 +84,16 @@ public class AssetBundleLoader : MonoBehaviour
 	}
 	public void update(float elapsedTime)
 	{
-		;
+		if(mRequestBundleList.Count > 0 && mAssetBundleCoroutineCount < MAX_ASSET_BUNDLE_COROUTINE)
+		{
+#if UNITY_EDITOR || UNITY_STANDALONE_WIN || UNITY_IPHONE || UNITY_IOS
+			bool loadFromWWW = false;
+#elif UNITY_ANDROID
+			bool loadFromWWW = true;
+#endif
+			StartCoroutine(loadAssetBundleCoroutine(mRequestBundleList[0], loadFromWWW));
+			mRequestBundleList.RemoveAt(0);
+		}
 	}
 	public void destroy()
 	{
@@ -90,6 +101,7 @@ public class AssetBundleLoader : MonoBehaviour
 		{
 			item.Value.unload();
 		}
+		GC.Collect();
 	}
 	public void unload(string name)
 	{
@@ -275,18 +287,7 @@ public class AssetBundleLoader : MonoBehaviour
 	// 请求异步加载资源包
 	public void requestLoadAssetBundle(AssetBundleInfo bundleInfo)
 	{
-		if (mBundleRequestList.ContainsKey(bundleInfo))
-		{
-			return;
-		}
-		mBundleRequestList.Add(bundleInfo, false);
-
-#if UNITY_EDITOR || UNITY_STANDALONE_WIN || UNITY_IPHONE || UNITY_IOS
-		bool loadFromWWW = false;
-#elif UNITY_ANDROID
-		bool loadFromWWW = true;
-#endif
-		StartCoroutine(loadAssetBundleCoroutine(bundleInfo, loadFromWWW));
+		mRequestBundleList.Add(bundleInfo);
 	}
 	public void requestLoadAssetsFromUrl(string url, Type assetsType, AssetLoadDoneCallback callback, object userData)
 	{
@@ -330,6 +331,7 @@ public class AssetBundleLoader : MonoBehaviour
 	}
 	protected IEnumerator loadAssetBundleCoroutine(AssetBundleInfo bundleInfo, bool loadFromWWW)
 	{
+		++mAssetBundleCoroutineCount;
 		UnityUtility.logInfo(bundleInfo.mBundleName + " start load bundle", LOG_LEVEL.LL_NORMAL);
 		// 先确保依赖项全部已经加载完成,才能开始加载当前请求的资源包
 		while (!bundleInfo.isAllParentLoaded())
@@ -359,6 +361,7 @@ public class AssetBundleLoader : MonoBehaviour
 			if (request == null)
 			{
 				UnityUtility.logError("can not load asset bundle async : " + bundleInfo.mBundleName);
+				--mAssetBundleCoroutineCount;
 				yield break;
 			}
 			yield return request;
@@ -371,6 +374,7 @@ public class AssetBundleLoader : MonoBehaviour
 			if (assetRequest == null)
 			{
 				UnityUtility.logError("can not load asset async : " + item.Value.mAssetName);
+				--mAssetBundleCoroutineCount;
 				yield break;
 			}
 			yield return assetRequest;
@@ -379,9 +383,9 @@ public class AssetBundleLoader : MonoBehaviour
 		UnityUtility.logInfo(bundleInfo.mBundleName + " load bundle done", LOG_LEVEL.LL_NORMAL);
 		GC.Collect();
 
-		// 加载完成后记录下来并且通知AssetBundleInfo
-		mBundleRequestList[bundleInfo] = true;
+		// 通知AssetBundleInfo
 		bundleInfo.notifyAssetBundleAsyncLoadedDone(assetBundle);
+		--mAssetBundleCoroutineCount;
 	}
 	protected List<string> adjustResourceName<T>(string fileName) where T : UnityEngine.Object
 	{

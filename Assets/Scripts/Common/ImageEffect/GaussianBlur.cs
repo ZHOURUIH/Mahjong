@@ -184,7 +184,7 @@ public class GaussianBlur : MonoBehaviour
 		if (CurMaterial)
 		{
 			//立即销毁材质实例  
-			DestroyImmediate(CurMaterial);
+			Destroy(CurMaterial);
 		}
 	}
 

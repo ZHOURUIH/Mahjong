@@ -30,7 +30,7 @@ public class AudioManager : GameBase
 			// 只销毁通过链接加载的音频
 			if(!item.Value.mIsResource)
 			{
-				GameObject.DestroyImmediate(item.Value.mClip);
+				GameObject.Destroy(item.Value.mClip);
 			}
 		}
 		mAudioClipList.Clear();

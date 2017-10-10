@@ -83,6 +83,8 @@ public class SocketManager : GameBase
 		catch(Exception)
 		{
 			UnityUtility.logError("初始化网络失败!请确保测试软件等其他可能占用网络端口的程序已关闭!");
+			mReceiveFinish = true;
+			mOutputFinish = true;
 			mGameFramework.stop();
 		}
 	}
@@ -92,18 +94,30 @@ public class SocketManager : GameBase
 	}
 	public void destroy()
 	{
-		mServerSoket.Close();
-		mServerSoket = null;
-		mBroadcastSocket.Close();
-		mBroadcastSocket = null;
+		if (mServerSoket != null)
+		{
+			mServerSoket.Close();
+			mServerSoket = null;
+		}
+		if(mBroadcastSocket != null)
+		{
+			mBroadcastSocket.Close();
+			mBroadcastSocket = null;
+		}
 		mRunning = false;
 		while (!mReceiveFinish) {}
-		mReceiveThread.Abort();
-		mReceiveThread = null;
+		if(mReceiveThread != null)
+		{
+			mReceiveThread.Abort();
+			mReceiveThread = null;
+		}
 		while (!mOutputFinish) {}
-		mOutputTread.Abort();
-		mOutputTread = null;
-		UnityUtility.logInfo("退出完毕", LOG_LEVEL.LL_FORCE);
+		if(mOutputTread != null)
+		{
+			mOutputTread.Abort();
+			mOutputTread = null;
+		}
+		UnityUtility.logInfo("网络管理器退出完毕", LOG_LEVEL.LL_FORCE);
 	}
 	public SocketPacket createPacket(SOCKET_PACKET type)
 	{

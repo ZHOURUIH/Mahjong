@@ -36,6 +36,7 @@ public class MathUtility : GameBase
 	}
 	public static float KMHtoMS(float kmh) { return kmh / 3.6f; }		// km/h转m/s
 	public static float MStoKMH(float ms) { return ms * 3.6f; }
+	public static float MtoKM(float m) { return m / 1000.0f; }
 	public static float calculateFloat(string str)
 	{
 		// 判断字符串是否含有非法字符,也就是除数字,小数点,运算符以外的字符
@@ -246,6 +247,26 @@ public class MathUtility : GameBase
 			return numbers[0];
 		}
 	}
+	// 得到大于等于value的第一个整数,只能是0或者整数
+	public static int getForwardInt(float value)
+	{
+		if (value >= 0.0f)
+		{
+			int intValue = (int)(value);
+			if (value - intValue > 0.0f)
+			{
+				return intValue + 1;
+			}
+			else
+			{
+				return (int)value;
+			}
+		}
+		else
+		{
+			return (int)value;
+		}
+	}
 	public static void checkInt(ref float value, float precision = 0.0001f)
 	{
 		// 先判断是否为0
@@ -311,6 +332,34 @@ public class MathUtility : GameBase
 			max += 1;
 		}
 		return UnityEngine.Random.Range(min, max);
+	}
+	// 给定一段圆弧,以及圆弧圆心角的百分比,计算对应的圆弧上的一个点以及该点的切线方向
+	public static void getPosOnArc(Vector3 circleCenter, Vector3 startArcPos, Vector3 endArcPos, float radius, float anglePercent, ref Vector3 pos, ref Vector3 tangencyDir)
+	{
+		Vector3 curStart = startArcPos;
+		clamp(ref anglePercent, 0.0f, 1.0f);
+		// 首先判断从起始半径线段到终止半径线段的角度的正负
+		float angleBetween = getAngleFromVectorToVector(new Vector2(curStart.x - circleCenter.x, curStart.z - circleCenter.z),
+														new Vector2(endArcPos.x - circleCenter.x, endArcPos.z - circleCenter.z));
+		if (isFloatZero(angleBetween))
+		{
+			curStart = normalize(curStart - circleCenter) * radius;
+			pos = normalize(curStart) * radius;
+			tangencyDir = normalize(rotateVector3(circleCenter - pos, Mathf.PI / 2.0f));
+			return;
+		}
+		// 根据夹角的正负,判断应该顺时针还是逆时针旋转起始半径线段
+		else
+		{
+			pos = normalize(rotateVector3(curStart - circleCenter, anglePercent * angleBetween)) * radius + circleCenter;
+			// 计算切线,如果顺时针计算出的切线与从起始点到终止点所成的角度大于90度,则使切线反向
+			tangencyDir = normalize(rotateVector3(circleCenter - pos, Mathf.PI / 2.0f));
+			Vector3 posToEnd = endArcPos - pos;
+			if (Mathf.Abs(getAngleFromVectorToVector(new Vector2(tangencyDir.x, tangencyDir.z), new Vector2(posToEnd.x, posToEnd.z))) > Mathf.PI / 2.0f)
+			{
+				tangencyDir = -tangencyDir;
+			}
+		}
 	}
 	public static float getLength(Vector3 vec)
 	{

@@ -82,5 +82,5 @@ public class MovableObject : ComponentOwner
 		mObject.transform.Rotate(axis, angle, Space.World);
 	}
 	public Vector3 getSpeed() { return mSpeed; }
-	void setSpeed(Vector3 speed) { mSpeed = speed; }
+	public void setSpeed(Vector3 speed) { mSpeed = speed; }
 }

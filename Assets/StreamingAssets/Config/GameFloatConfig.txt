@@ -3,20 +3,5 @@
 // 可以添加任意的换行和空格
 // 变量命名应与代码中枚举命名相同
 
-// http端口
-GDF_HTTP_PORT = 8080
-
-// socket端口
-GDF_SOCKET_TCP_PORT = 60777
-
-// 是否输出显示命令调试信息,0为不显示,1为显示
-GDF_SHOW_COMMAND_DEBUG_INFO = 1
-
-// 0表示从Resources加载,1表示从AssetBundle加载
-GDF_LOAD_RESOURCES = 0
-
-// 是否启用所有日志输出
-GDF_LOG_LEVEL = 0
-
 // 心跳间隔时间
 GDF_HEART_BEAT_NITERVAL = 30

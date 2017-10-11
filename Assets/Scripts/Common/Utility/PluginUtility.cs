@@ -13,6 +13,7 @@ using ZXing.QrCode;
 public class PluginUtility : GameBase
 {
 	public void init() { }
+	public void destroy() { }
 	public static Color32[] stringToBinaryCodeColour(string textForEncoding, int width, int height)
 	{
 		var writer = new BarcodeWriter

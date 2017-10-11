@@ -138,15 +138,23 @@ public enum GAME_DEFINE_FLOAT
 	GDF_SCREEN_WIDTH,				// 分辨率的宽
 	GDF_SCREEN_HEIGHT,				// 分辨率的高
 	GDF_USE_FIXED_TIME,				// 是否将每帧的时间固定下来
-	GDF_FIXED_TIME,					// 每帧的固定时间,单位秒
+	GDF_FIXED_TIME,                 // 每帧的固定时间,单位秒
+	GDF_SCREEN_COUNT,               // 显示屏数量,用于多屏横向组合为高分辨率
 	GDF_APPLICATION_MAX,
 
-	GDF_GAME_MIN,
-	GDF_HTTP_PORT,					// http端口
-	GDF_SOCKET_TCP_PORT,			// socket端口
+	// 框架配置参数
+	GDF_FRAME_MIN,
+	GDF_HTTP_PORT,                  // http端口
+	GDF_SOCKET_PORT,                // socket端口
+	GDF_BROADCAST_PORT,             // 广播端口
 	GDF_SHOW_COMMAND_DEBUG_INFO,    // 是否输出显示命令调试信息,0为不显示,1为显示
-	GDF_LOAD_RESOURCES,             // -1表示优先从AssetBundle加载,找不到再去Resources加载,0表示从AssetBundle加载,1表示从Resources加载
-	GDF_LOG_LEVEL,					// 是否启用所有日志输出
+	GDF_LOAD_RESOURCES,             // 游戏加载资源的路径,0代表在Resources中读取,1代表从AssetBundle中读取 
+	GDF_LOAD_ASYNC,                 // 是否异步加载资源
+	GDF_LOG_LEVEL,                  // 是否关闭所有的日志输出
+	GDF_FRAME_MAX,
+
+	// 游戏配置参数
+	GDF_GAME_MIN,
 	GDF_HEART_BEAT_NITERVAL,		// 心跳间隔时间
 	GDF_GAME_MAX,
 };
@@ -157,6 +165,11 @@ public enum GAME_DEFINE_STRING
 	GDS_APPLICATION_MIN,
 	GDS_APPLICATION_MAX,
 
+	// 框架配置参数
+	GDS_FRAME_MIN,
+	GDS_FRAME_MAX,
+
+	// 游戏配置参数
 	GDS_GAME_MIN,
 	GDS_TCP_SERVER_IP,
 	GDS_ACCOUNT,
@@ -411,6 +424,26 @@ public class CommonDefine
 	public static string[] mDropMahjongPreName = new string[MAX_PLAYER_COUNT] { "Drop_My_", "Drop_Side_", "Drop_Opposite_", "Drop_Side_" };
 	//------------------------------------------------------------------------------------------------------------------------
 	// 常量数字
+	public const uint WS_OVERLAPPED = 0x00000000;
+	public const uint WS_POPUP = 0x80000000;
+	public const uint WS_CHILD = 0x40000000;
+	public const uint WS_MINIMIZE = 0x20000000;
+	public const uint WS_VISIBLE = 0x10000000;
+	public const uint WS_DISABLED = 0x08000000;
+	public const uint WS_CLIPSIBLINGS = 0x04000000;
+	public const uint WS_CLIPCHILDREN = 0x02000000;
+	public const uint WS_MAXIMIZE = 0x01000000;
+	public const uint WS_CAPTION = 0x00C00000;
+	public const uint WS_BORDER = 0x00800000;
+	public const uint WS_DLGFRAME = 0x00400000;
+	public const uint WS_VSCROLL = 0x00200000;
+	public const uint WS_HSCROLL = 0x00100000;
+	public const uint WS_SYSMENU = 0x00080000;
+	public const uint WS_THICKFRAME = 0x00040000;
+	public const uint WS_GROUP = 0x00020000;
+	public const uint WS_TABSTOP = 0x00010000;
+	public const uint WS_MINIMIZEBOX = 0x00020000;
+	public const uint WS_MAXIMIZEBOX = 0x00010000;
 	// 每名玩家手里最多有14张牌,不包含碰,吃,杠
 	public const int MAX_HAND_IN_COUNT = 14;
 	// 花牌的最大数量

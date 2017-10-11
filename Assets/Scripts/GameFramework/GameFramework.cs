@@ -13,48 +13,54 @@ using System.Net;
 /// </summary>
 public class GameFramework : MonoBehaviour
 {
-	public static GameFramework		instance			= null;
-	protected GameObject            mGameFrameObject    = null;
-	protected ApplicationConfig		mApplicationConfig	= null;
-	protected GameConfig			mGameConfig			= null;
-	protected GameUtility			mGameUtility		= null;
-	protected BinaryUtility			mBinaryUtility		= null;
-	protected FileUtility			mFileUtility		= null;
-	protected MathUtility			mMathUtility		= null;
-	protected StringUtility			mStringUtility		= null;
-	protected UnityUtility			mUnityUtility		= null;
-	protected CommandSystem			mCommandSystem		= null;
-	protected GameLayoutManager		mLayoutManager		= null;
-	protected AudioManager			mAudioManager		= null;
-	protected GameSceneManager		mGameSceneManager	= null;
-	protected CharacterManager		mCharacterManager	= null;
-	protected SocketManager			mSocketManager		= null;
-	protected HttpServerManager		mHttpServerManager	= null;
-	protected KeyFrameManager		mKeyFrameManager	= null;
-	protected GlobalTouchSystem		mGlobalTouchSystem	= null;
-	protected DllImportExtern		mDllImportExtern	= null;
-	protected ShaderManager			mShaderManager		= null;
-	protected DataBase				mDataBase			= null;
-	protected MahjongSystem			mMahjongSystem		= null;
-	protected CameraManager			mCameraManager		= null;
-	protected ResourceManager		mResourcesManager	= null;
-	protected LayoutPrefabManager	mLayoutPrefabManager = null;
-	protected MaterialManager		mMaterialManager	= null;
-	protected PlayerHeadManager		mPlayerHeadManager	= null;
-	protected bool					mPauseFrame			= false; // 暂停整个程序
+	public static GameFramework		instance;
+	protected GameObject			mGameFrameObject;
+	protected ApplicationConfig		mApplicationConfig;
+	protected BinaryUtility			mBinaryUtility;
+	protected FileUtility			mFileUtility;
+	protected MathUtility			mMathUtility;
+	protected StringUtility			mStringUtility;
+	protected UnityUtility			mUnityUtility;
+	protected PluginUtility			mPluginUtility;
+	protected CommandSystem			mCommandSystem;
+	protected GameLayoutManager		mLayoutManager;
+	protected AudioManager			mAudioManager;
+	protected GameSceneManager		mGameSceneManager;
+	protected CharacterManager		mCharacterManager;
+	protected FrameConfig			mFrameConfig;
+	protected SocketManager			mSocketManager;
+	protected KeyFrameManager		mKeyFrameManager;
+	protected GlobalTouchSystem		mGlobalTouchSystem;
+	protected DllImportExtern		mDllImportExtern;
+	protected ShaderManager			mShaderManager;
+	protected DataBase				mDataBase;
+	protected CameraManager			mCameraManager;
+	protected ResourceManager		mResourceManager;
+	protected LayoutPrefabManager	mLayoutPrefabManager;
+	protected bool					mPauseFrame;
 	public void Start()
 	{
-		Screen.SetResolution(1920, 1080, true);
+		UnityUtility.logInfo("start game!", LOG_LEVEL.LL_FORCE);
+		start();
+		// 所有类都构造完成后通知GameBase
+		GameBase.notifyConstructDone();
+		init();
+		// 初始化完毕后启动游戏
+		launch();
+	}
+	public virtual void start()
+	{
+		mPauseFrame = false;
 		instance = this;
 		mGameFrameObject = this.transform.gameObject;
 		mApplicationConfig = new ApplicationConfig();
-		mGameConfig = new GameConfig();
-		mGameUtility = new GameUtility();
+		mResourceManager = new ResourceManager();
 		mBinaryUtility = new BinaryUtility();
 		mFileUtility = new FileUtility();
 		mMathUtility = new MathUtility();
 		mStringUtility = new StringUtility();
 		mUnityUtility = new UnityUtility();
+		mPluginUtility = new PluginUtility();
 		mCommandSystem = new CommandSystem();
 		mLayoutManager = new GameLayoutManager();
 		mAudioManager = new AudioManager();
@@ -66,54 +72,50 @@ public class GameFramework : MonoBehaviour
 		mDllImportExtern = new DllImportExtern();
 		mShaderManager = new ShaderManager();
 		mDataBase = new DataBase();
-		mHttpServerManager = new HttpServerManager();
-		mMahjongSystem = new MahjongSystem();
 		mCameraManager = new CameraManager();
-		mResourcesManager = new ResourceManager();
 		mLayoutPrefabManager = new LayoutPrefabManager();
-		mMaterialManager = new MaterialManager();
-		mPlayerHeadManager = new PlayerHeadManager();
-
-		// 所有类都构造完成后通知GameBase
-		GameBase.notifyConstructDone();
-
+		mFrameConfig = new FrameConfig();
+	}
+	public virtual void init()
+	{
 		// 必须先初始化配置文件
 		mApplicationConfig.init();
+		mDllImportExtern.init();
 		int width = (int)mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SCREEN_WIDTH);
 		int height = (int)mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SCREEN_HEIGHT);
-		bool fullscreen = (int)mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_FULL_SCREEN) != 0;
-		Screen.SetResolution(width, height, fullscreen);
-		mGameConfig.init();
-		mResourcesManager.init();
+		int fullscreen = (int)mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_FULL_SCREEN);
+		Screen.SetResolution(width, height, fullscreen == 1);
+		int screenCount = (int)mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SCREEN_COUNT);
+		processResolution(width, height, screenCount);
+		// 设置为无边框窗口
+		if (fullscreen == 2)
+		{
+			User32.SetWindowLong(User32.GetForegroundWindow(), -16, CommonDefine.WS_POPUP | CommonDefine.WS_VISIBLE);
+		}
+		mDataBase.init();
+		mResourceManager.init();
 		mShaderManager.init();
-		mDllImportExtern.init();
-		mGameUtility.init();
 		mBinaryUtility.init();
-		mFileUtility.init(); 
+		mFileUtility.init();
 		mMathUtility.init();
 		mStringUtility.init();
 		mUnityUtility.init();
+		mPluginUtility.init();
 		mGlobalTouchSystem.init();
 		mAudioManager.init();
 		mLayoutManager.init();
-		bool showDebug = mGameConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SHOW_COMMAND_DEBUG_INFO) > 0.0f;
+		mFrameConfig.init();
+		bool showDebug = (int)mFrameConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SHOW_COMMAND_DEBUG_INFO) != 0;
 		mCommandSystem.init(showDebug);
 		mGameSceneManager.init();
 		mCharacterManager.init();
 		mSocketManager.init();
 		mKeyFrameManager.init();
-		mDataBase.init();
-		mMahjongSystem.init();
-		mHttpServerManager.init("", "", "");
 		mCameraManager.init();
 		mLayoutPrefabManager.init();
-		mMaterialManager.init();
-		mPlayerHeadManager.init();
-
-		CommandGameSceneManagerEnter cmd = mCommandSystem.newCmd<CommandGameSceneManagerEnter>(false, false);
-		cmd.mSceneType = GAME_SCENE_TYPE.GST_START;
-		mCommandSystem.pushCommand(cmd, getGameSceneManager());
+		System.Net.ServicePointManager.DefaultConnectionLimit = 200;
 	}
+	public virtual void launch() { }
 	public void Update()
 	{
 		try
@@ -123,55 +125,56 @@ public class GameFramework : MonoBehaviour
 			{
 				return;
 			}
-			elapsedTime = 0.015f;
-			mResourcesManager.update(elapsedTime);
-			mGlobalTouchSystem.update(elapsedTime);
-			mCommandSystem.update(elapsedTime);
-			//mMahjongSystem.update(elapsedTime);
-			mAudioManager.update(elapsedTime);
-			mGameSceneManager.update(elapsedTime);
-			mCharacterManager.update(elapsedTime);
-			mSocketManager.update(elapsedTime);
-			mLayoutManager.update(elapsedTime);
-			mCameraManager.update(elapsedTime);
+			update(elapsedTime);
 			keyProcess();
 		}
-		catch(Exception e)
+		catch (Exception e)
 		{
-			UnityUtility.logError(e.Message + "stack : " + e.StackTrace);
+			UnityUtility.logError(e.Message + ", stack : " + e.StackTrace);
 		}
+	}
+	public virtual void update(float elapsedTime)
+	{
+		mResourceManager.update(elapsedTime);
+		mGlobalTouchSystem.update(elapsedTime);
+		mCommandSystem.update(elapsedTime);
+		mAudioManager.update(elapsedTime);
+		mGameSceneManager.update(elapsedTime);
+		mCharacterManager.update(elapsedTime);
+		mSocketManager.update(elapsedTime);
+		mLayoutManager.update(elapsedTime);
+		mCameraManager.update(elapsedTime);
 	}
 	public void OnDestroy()
 	{
+		destroy();
+		UnityUtility.logInfo("程序退出完毕!", LOG_LEVEL.LL_FORCE);
+	}
+	public virtual void destroy()
+	{
 		mLayoutPrefabManager.destroy();
-		mMahjongSystem.destroy();
 		mSocketManager.destroy();
 		mCharacterManager.destroy();
 		mGameSceneManager.destroy();
 		mAudioManager.destroy();
 		mLayoutManager.destroy();
 		mCommandSystem.destroy();
-		mGameConfig.destory();
 		mKeyFrameManager.destroy();
-		mHttpServerManager.destroy();
 		mGlobalTouchSystem.destroy();
 		mDllImportExtern.destroy();
 		mShaderManager.destroy();
 		mDataBase.destroy();
 		mCameraManager.destroy();
-		mMaterialManager.destroy();
-		mApplicationConfig.destory();
-		mPlayerHeadManager.destroy();
-		mResourcesManager.destroy();
+		mPluginUtility.destroy();
+		mResourceManager.destroy();         // 资源管理器必须最后销毁,作为最后的资源清理
 		mLayoutPrefabManager = null;
-		mMahjongSystem = null;
-		mGameConfig = null;
-		mGameUtility = null;
+		mResourceManager = null;
 		mBinaryUtility = null;
 		mFileUtility = null;
 		mMathUtility = null;
 		mStringUtility = null;
 		mUnityUtility = null;
+		mPluginUtility = null;
 		mCommandSystem = null;
 		mLayoutManager = null;
 		mAudioManager = null;
@@ -184,10 +187,6 @@ public class GameFramework : MonoBehaviour
 		mShaderManager = null;
 		mDataBase = null;
 		mCameraManager = null;
-		mResourcesManager = null;
-		mMaterialManager = null;
-		mApplicationConfig = null;
-		mPlayerHeadManager = null;
 	}
 	public void stop()
 	{
@@ -216,15 +215,76 @@ public class GameFramework : MonoBehaviour
 	public SocketManager getSocketManager() { return mSocketManager; }
 	public KeyFrameManager getKeyFrameManager() { return mKeyFrameManager; }
 	public GameObject getGameFrameObject() { return mGameFrameObject; }
-	public HttpServerManager getHttpServerManager() { return mHttpServerManager; }
 	public GlobalTouchSystem getGlobalTouchSystem() { return mGlobalTouchSystem; }
 	public ShaderManager getShaderManager() { return mShaderManager; }
 	public DataBase getDataBase() { return mDataBase; }
 	public CameraManager getCameraManager() { return mCameraManager; }
-	public MahjongSystem getMahjongSystem() { return mMahjongSystem; }
-	public ResourceManager getResourceManager() { return mResourcesManager; }
+	public ResourceManager getResourceManager() { return mResourceManager;}
 	public LayoutPrefabManager getLayoutPrefabManager() { return mLayoutPrefabManager; }
-	public GameConfig getGameConfig() { return mGameConfig; }
-	public MaterialManager getMaterialManager() { return mMaterialManager; }
-	public PlayerHeadManager getPlayerHeadManager() { return mPlayerHeadManager; }
+	public ApplicationConfig getApplicationConfig() { return mApplicationConfig; }
+	public void setCameraTargetTexture(GameObject parent, string cameraName, UITexture renderTexture)
+	{
+		GameObject cameraObject = UnityUtility.getGameObject(parent, cameraName);
+		Camera camera = cameraObject.GetComponent<Camera>();
+		if (renderTexture != null)
+		{
+			camera.targetTexture = renderTexture.mainTexture as RenderTexture;
+		}
+		else
+		{
+			camera.targetTexture = null;
+		}
+	}
+	public void setTextureWindowSize(GameObject go, int positionX, int width, int height)
+	{
+		go.transform.localPosition = new Vector3((float)positionX, 0.0f, 0.0f);
+		UIWidget widget0 = go.GetComponent<UIWidget>();
+		widget0.width = width;
+		widget0.height = height;
+	}
+	public void setCameraPosition(string cameraName, GameObject parent, Vector3 pos)
+	{
+		GameObject camera = UnityUtility.getGameObject(parent, cameraName);
+		camera.transform.localPosition = pos;
+	}
+	protected void processResolution(int width, int height, int screenCount)
+	{
+		GameObject uiRootObj = UnityUtility.getGameObject(null, "UI Root");
+		GameObject rootTarget = UnityUtility.getGameObject(null, "UIRootTarget");
+		if (screenCount == 1)
+		{
+			setCameraTargetTexture(null, "MainCamera", null);
+			setCameraTargetTexture(uiRootObj, "UICamera", null);
+			setCameraTargetTexture(uiRootObj, "UIBackEffectCamera", null);
+			setCameraTargetTexture(uiRootObj, "UIForeEffectCamera", null);
+			setCameraTargetTexture(uiRootObj, "UIBlurCamera", null);
+			rootTarget.SetActive(false);
+		}
+		else
+		{
+			// 激活渲染目标
+			GameObject camera = UnityUtility.getGameObject(rootTarget, "Camera");
+			GameObject cameraTexture0 = UnityUtility.getGameObject(rootTarget, "UICameraTexture0");
+			GameObject cameraTexture1 = UnityUtility.getGameObject(rootTarget, "UICameraTexture1");
+			rootTarget.SetActive(true);
+			camera.SetActive(true);
+			cameraTexture0.SetActive(true);
+			cameraTexture1.SetActive(true);
+			// 设置渲染目标属性
+			UIRoot uiRoot = rootTarget.GetComponent<UIRoot>();
+			uiRoot.scalingStyle = UIRoot.Scaling.Constrained;
+			uiRoot.manualWidth = width;
+			uiRoot.manualHeight = height;
+			camera.transform.localPosition = new Vector3(0.0f, 0.0f, -height / 2.0f);
+			setTextureWindowSize(cameraTexture0, -width / screenCount, width / screenCount, height);
+			setTextureWindowSize(cameraTexture1, -width / screenCount + width / 2, width / screenCount * (screenCount - 1), height);
+			// 设置各个摄像机的渲染目标
+			UITexture uiTexture = cameraTexture0.GetComponent<UITexture>();
+			setCameraTargetTexture(null, "MainCamera", uiTexture);
+			setCameraTargetTexture(uiRootObj, "UICamera", uiTexture);
+			setCameraTargetTexture(uiRootObj, "UIBackEffectCamera", uiTexture);
+			setCameraTargetTexture(uiRootObj, "UIForeEffectCamera", uiTexture);
+			setCameraTargetTexture(uiRootObj, "UIBlurCamera", uiTexture);
+		}
+	}
 }

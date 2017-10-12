@@ -9,9 +9,9 @@ public class Game : GameFramework
 {
 	protected GameUtility mGameUtility;
 	protected GameConfig mGameConfig;
-	protected MaterialManager mMaterialManager = null;
-	protected PlayerHeadManager mPlayerHeadManager = null;
-	protected MahjongSystem mMahjongSystem = null;
+	protected MaterialManager mMaterialManager;
+	protected PlayerHeadManager mPlayerHeadManager;
+	protected MahjongSystem mMahjongSystem;
 	public override void start()
 	{
 		base.start();
@@ -20,6 +20,13 @@ public class Game : GameFramework
 		mMaterialManager = new MaterialManager();
 		mPlayerHeadManager = new PlayerHeadManager();
 		mMahjongSystem = new MahjongSystem();
+	}
+	public override void notifyBase()
+	{
+		base.notifyBase();
+		// 所有类都构造完成后通知GameBase
+		GameBase frameBase = new GameBase();
+		frameBase.notifyConstructDone();
 	}
 	public override void init()
 	{

@@ -42,8 +42,7 @@ public class GameFramework : MonoBehaviour
 	{
 		UnityUtility.logInfo("start game!", LOG_LEVEL.LL_FORCE);
 		start();
-		// 所有类都构造完成后通知GameBase
-		GameBase.notifyConstructDone();
+		notifyBase();
 		init();
 		// 初始化完毕后启动游戏
 		launch();
@@ -114,6 +113,12 @@ public class GameFramework : MonoBehaviour
 		mCameraManager.init();
 		mLayoutPrefabManager.init();
 		System.Net.ServicePointManager.DefaultConnectionLimit = 200;
+	}
+	public virtual void notifyBase()
+	{
+		// 所有类都构造完成后通知FrameBase
+		FrameBase frameBase = new FrameBase();
+		frameBase.notifyConstructDone();
 	}
 	public virtual void launch() { }
 	public void Update()

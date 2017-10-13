@@ -108,8 +108,8 @@ public class CharacterManager : CommandReceiver
 			mMyself = newCharacter as CharacterMyself;
 		}
 		// 将创建的角色挂接到角色管理器下
-		newCharacter.setParent(mManagerObject);
-		newCharacter.init( guid);
+		newCharacter.getObject().transform.parent = mManagerObject.transform;
+		newCharacter.init(guid);
 		addCharacterToList(newCharacter);
 		return newCharacter;
 	}
@@ -199,7 +199,7 @@ public class CharacterManager : CommandReceiver
 			mCharacterTypeList.Add(character.getType(), characterMap);
 		}
 		// 如果不是非法GUID才能加入列表
-		if(data.mGUID != CommonDefine.INVALID_ID && !mCharacterGUIDList.ContainsKey(data.mGUID))
+		if(data.mGUID != GameDefine.INVALID_ID && !mCharacterGUIDList.ContainsKey(data.mGUID))
 		{
 			mCharacterGUIDList.Add(data.mGUID, character);
 		}

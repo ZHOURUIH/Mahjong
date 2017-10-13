@@ -106,11 +106,11 @@ public class ScriptGameEnding : LayoutScript
 	{
 		mEndingCharacterList = new List<EndingCharacter>();
 		mMultipleList = new List<Multiple>();
-		for (int i = 0; i < CommonDefine.MAX_PLAYER_COUNT; ++i)
+		for (int i = 0; i < GameDefine.MAX_PLAYER_COUNT; ++i)
 		{
 			mEndingCharacterList.Add(new EndingCharacter(this));
 		}
-		for(int i = 0; i < CommonDefine.MAX_HU_COUNT; ++i)
+		for(int i = 0; i < GameDefine.MAX_HU_COUNT; ++i)
 		{
 			mMultipleList.Add(new Multiple(this));
 		}
@@ -203,8 +203,8 @@ public class ScriptGameEnding : LayoutScript
 			mMultipleList[i].setVisible(visible);
 			if (visible)
 			{
-				mMultipleList[i].setDescribe(CommonDefine.HU_NAME[(int)info.mHuList[i]]);
-				mMultipleList[i].setMultiple(CommonDefine.HU_MULTIPLE[(int)info.mHuList[i]]);
+				mMultipleList[i].setDescribe(GameDefine.HU_NAME[(int)info.mHuList[i]]);
+				mMultipleList[i].setMultiple(GameDefine.HU_MULTIPLE[(int)info.mHuList[i]]);
 			}
 		}
 	}

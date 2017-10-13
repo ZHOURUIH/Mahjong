@@ -10,7 +10,7 @@ public class Game : GameFramework
 	protected GameUtility mGameUtility;
 	protected GameConfig mGameConfig;
 	protected MaterialManager mMaterialManager;
-	protected PlayerHeadManager mPlayerHeadManager;
+	protected HeadTextureManager mHeadTextureManager;
 	protected MahjongSystem mMahjongSystem;
 	public override void start()
 	{
@@ -18,7 +18,7 @@ public class Game : GameFramework
 		mGameConfig = new GameConfig();
 		mGameUtility = new GameUtility();
 		mMaterialManager = new MaterialManager();
-		mPlayerHeadManager = new PlayerHeadManager();
+		mHeadTextureManager = new HeadTextureManager();
 		mMahjongSystem = new MahjongSystem();
 	}
 	public override void notifyBase()
@@ -36,7 +36,7 @@ public class Game : GameFramework
         mGameConfig.init();
 		mGameUtility.init();
 		mMaterialManager.init();
-		mPlayerHeadManager.init();
+		mHeadTextureManager.init();
 		mMahjongSystem.init();
 	}
 	public override void launch()
@@ -54,18 +54,18 @@ public class Game : GameFramework
 	{
 		mGameConfig.destory();
 		mMaterialManager.destroy();
-		mPlayerHeadManager.destroy();
+		mHeadTextureManager.destroy();
 		mMahjongSystem.destroy();
 		mGameConfig = null;
 		mGameUtility = null;
 		mMaterialManager = null;
-		mPlayerHeadManager = null;
+		mHeadTextureManager = null;
 		mMahjongSystem = null;
 		// 最后调用基类的destroy,确保资源被释放完毕
 		base.destroy();
 	}
 	public MaterialManager getMaterialManager() { return mMaterialManager; }
-	public PlayerHeadManager getPlayerHeadManager() { return mPlayerHeadManager; }
+	public HeadTextureManager getHeadTextureManager() { return mHeadTextureManager; }
 	public MahjongSystem getMahjongSystem() { return mMahjongSystem; }
 	public GameConfig getGameConfig() { return mGameConfig; }
 }

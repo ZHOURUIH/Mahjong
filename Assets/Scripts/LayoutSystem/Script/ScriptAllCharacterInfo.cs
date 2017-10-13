@@ -85,8 +85,8 @@ public class ScriptAllCharacterInfo : LayoutScript
 		:
 		base(type, name, layout)
 	{
-		mInfoPanelList = new CharacterInfoPanel[CommonDefine.MAX_PLAYER_COUNT];
-		for (int i = 0; i < CommonDefine.MAX_PLAYER_COUNT; ++i)
+		mInfoPanelList = new CharacterInfoPanel[GameDefine.MAX_PLAYER_COUNT];
+		for (int i = 0; i < GameDefine.MAX_PLAYER_COUNT; ++i)
 		{
 			mInfoPanelList[i] = new CharacterInfoPanel();
 		}
@@ -94,14 +94,14 @@ public class ScriptAllCharacterInfo : LayoutScript
 	public override void assignWindow()
 	{
 		string[] rootNameList = new string[] { "MyInfoRoot", "LeftInfoRoot", "OppositeInfoRoot", "RightInfoRoot" };
-		for (int i = 0; i < CommonDefine.MAX_PLAYER_COUNT; ++i)
+		for (int i = 0; i < GameDefine.MAX_PLAYER_COUNT; ++i)
 		{
 			mInfoPanelList[i].assignWindow(this, rootNameList[i]);
 		}
 	}
 	public override void init()
 	{
-		for (int i = 0; i < CommonDefine.MAX_PLAYER_COUNT; ++i)
+		for (int i = 0; i < GameDefine.MAX_PLAYER_COUNT; ++i)
 		{
 			mInfoPanelList[i].init();
 		}

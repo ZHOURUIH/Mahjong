@@ -11,7 +11,7 @@ public class CommandCharacterManagerCreateCharacter : Command
 		base.init();
 		mCharacterType = CHARACTER_TYPE.CT_MAX;
 		mName = null;
-		mGUID = CommonDefine.INVALID_ID;
+		mGUID = GameDefine.INVALID_ID;
 	}
 	public override void execute()
 	{

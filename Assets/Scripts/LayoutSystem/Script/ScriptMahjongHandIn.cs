@@ -17,7 +17,7 @@ public class PengGangMahjong
 		mMahjongPreName = preName;
 		mPengGangSingleRoot = new List<txUIObject>();
 		mMahjongWindows = new List<List<txUIStaticSprite>>();
-		for (int i = 0; i < CommonDefine.MAX_PENG_TIMES; ++i)
+		for (int i = 0; i < GameDefine.MAX_PENG_TIMES; ++i)
 		{
 			mMahjongWindows.Add(new List<txUIStaticSprite>());
 		}
@@ -25,14 +25,14 @@ public class PengGangMahjong
 	public void assignWindow(string rootName)
 	{
 		mPengGangRoot = mScript.newObject<txUIObject>(rootName);
-		for (int i = 0; i < CommonDefine.MAX_PENG_TIMES; ++i)
+		for (int i = 0; i < GameDefine.MAX_PENG_TIMES; ++i)
 		{
 			mPengGangSingleRoot.Add(mScript.newObject<txUIObject>(mPengGangRoot, "PengGang" + i));
 		}
 		int pengTimes = mMahjongWindows.Count;
 		for (int i = 0; i < pengTimes; ++i)
 		{
-			for (int j = 0; j < CommonDefine.MAX_SINGLE_COUNT; ++j)
+			for (int j = 0; j < GameDefine.MAX_SINGLE_COUNT; ++j)
 			{
 				mMahjongWindows[i].Add(mScript.newObject<txUIStaticSprite>(mPengGangSingleRoot[i], "Mahjong" + j, 0));
 			}
@@ -89,7 +89,7 @@ public class PengGangMahjong
 		}
 		LayoutTools.ACTIVE_WINDOW(mPengGangSingleRoot[index]);
 		int maxCount = mMahjongWindows[index].Count;
-		string mahjongSpriteName = mMahjongPreName + CommonDefine.MAHJONG_NAME[(int)mah];
+		string mahjongSpriteName = mMahjongPreName + GameDefine.MAHJONG_NAME[(int)mah];
 		for (int i = 0; i < maxCount; ++i)
 		{
 			LayoutTools.ACTIVE_WINDOW(mMahjongWindows[index][i], i < count);
@@ -116,7 +116,7 @@ public class ShowMahjong
 	public void assignWindow(string showRoot)
 	{
 		mShowRoot = mScript.newObject<txUIObject>(showRoot, 0);
-		for(int i = 0; i < CommonDefine.MAX_HAND_IN_COUNT; ++i)
+		for(int i = 0; i < GameDefine.MAX_HAND_IN_COUNT; ++i)
 		{
 			mShowMahjong.Add(mScript.newObject<txUIStaticSprite>(mShowRoot, "Mahjong" + i));
 		}
@@ -140,7 +140,7 @@ public class ShowMahjong
 			LayoutTools.ACTIVE_WINDOW(mShowMahjong[i], show);
 			if(show)
 			{
-				mShowMahjong[i].setSpriteName(mMahjongPreName + CommonDefine.MAHJONG_NAME[(int)mahList[i]]);
+				mShowMahjong[i].setSpriteName(mMahjongPreName + GameDefine.MAHJONG_NAME[(int)mahList[i]]);
 			}
 		}
 	}
@@ -161,7 +161,7 @@ public class HuaMahjong
 	public void assignWindow(string huaRoot)
 	{
 		mHuaRoot = mScript.newObject<txUIObject>(huaRoot, 0);
-		for (int i = 0; i < CommonDefine.MAX_HUA_COUNT; ++i)
+		for (int i = 0; i < GameDefine.MAX_HUA_COUNT; ++i)
 		{
 			mHuaMahjong.Add(mScript.newObject<txUIStaticSprite>(mHuaRoot, "Mahjong" + i));
 		}
@@ -185,7 +185,7 @@ public class HuaMahjong
 			LayoutTools.ACTIVE_WINDOW(mHuaMahjong[i], show);
 			if (show)
 			{
-				mHuaMahjong[i].setSpriteName(mMahjongPreName + CommonDefine.MAHJONG_NAME[(int)huaList[i]]);
+				mHuaMahjong[i].setSpriteName(mMahjongPreName + GameDefine.MAHJONG_NAME[(int)huaList[i]]);
 			}
 		}
 	}
@@ -223,7 +223,7 @@ public class HandInMahjong : GameBase
 		mHandInMahjong = new List<HandInMahjongInfo>();
 		mHandInPosition = new List<Vector3>();
 		mHandInTargetPosition = new List<Vector3>();
-		for (int i = 0; i < CommonDefine.MAX_HAND_IN_COUNT; ++i)
+		for (int i = 0; i < GameDefine.MAX_HAND_IN_COUNT; ++i)
 		{
 			HandInMahjongInfo info = new HandInMahjongInfo();
 			info.mState = HANDIN_STATE.HS_MAX;
@@ -284,7 +284,7 @@ public class HandInMahjong : GameBase
 		{
 			info.mMahjong = mah;
 			info.mState = HANDIN_STATE.HS_SAVED;
-			info.mWindow.setSpriteName(CommonDefine.MAHJONG_NAME[(int)mah]);
+			info.mWindow.setSpriteName(GameDefine.MAHJONG_NAME[(int)mah]);
 		}
 		LayoutTools.ACTIVE_WINDOW(info.mWindow);
 		++mCurHandInCount;
@@ -299,7 +299,7 @@ public class HandInMahjong : GameBase
 			// 放到末尾,并且设置为准备打出的状态
 			info.mMahjong = mah;
 			info.mState = HANDIN_STATE.HS_SAVED;
-			info.mWindow.setSpriteName(CommonDefine.MAHJONG_NAME[(int)mah]);
+			info.mWindow.setSpriteName(GameDefine.MAHJONG_NAME[(int)mah]);
 			prepareDropMahjong(mCurHandInCount);
 		}
 		++mCurHandInCount;
@@ -370,7 +370,7 @@ public class HandInMahjong : GameBase
 			if (i < mCurHandInCount)
 			{
 				mHandInMahjong[i].mMahjong = handIn[i];
-				mHandInMahjong[i].mWindow.setSpriteName(CommonDefine.MAHJONG_NAME[(int)handIn[i]]);
+				mHandInMahjong[i].mWindow.setSpriteName(GameDefine.MAHJONG_NAME[(int)handIn[i]]);
 				setState(HANDIN_STATE.HS_SAVED, i);
 			}
 			else
@@ -446,9 +446,9 @@ public class PlayerMahjong : GameBase
 		mScript = script;
 		mPosition = position;
 		mHandInMahjong = new HandInMahjong(mScript, mPosition);
-		mShowMahjong = new ShowMahjong(mScript, CommonDefine.mDropMahjongPreName[(int)mPosition]);
-		mPengGangMahjong = new PengGangMahjong(mScript, CommonDefine.mDropMahjongPreName[(int)mPosition]);
-		mHuaMahjong = new HuaMahjong(mScript, CommonDefine.mDropMahjongPreName[(int)mPosition]);
+		mShowMahjong = new ShowMahjong(mScript, GameDefine.mDropMahjongPreName[(int)mPosition]);
+		mPengGangMahjong = new PengGangMahjong(mScript, GameDefine.mDropMahjongPreName[(int)mPosition]);
+		mHuaMahjong = new HuaMahjong(mScript, GameDefine.mDropMahjongPreName[(int)mPosition]);
 	}
 	public void assignWindow(string handInRoot, string pengGangRoot, string showRoot, string huaRoot)
 	{
@@ -520,17 +520,17 @@ public class ScriptMahjongHandIn : LayoutScript
 		base(type, name, layout)
 	{
 		mPlayerMahjong = new List<PlayerMahjong>();
-		for (int i = 0; i < CommonDefine.MAX_PLAYER_COUNT; ++i)
+		for (int i = 0; i < GameDefine.MAX_PLAYER_COUNT; ++i)
 		{
 			mPlayerMahjong.Add(new PlayerMahjong(this, (PLAYER_POSITION)i));
 		}
 	}
 	public override void assignWindow()
 	{
-		string[] handInRootName = new string[CommonDefine.MAX_PLAYER_COUNT] { "MyHandInRoot", "LeftHandInRoot", "OppositeHandInRoot", "RightHandInRoot" };
-		string[] pengGangRootName = new string[CommonDefine.MAX_PLAYER_COUNT] { "MyPengGangRoot", "LeftPengGangRoot", "OppositePengGangRoot", "RightPengGangRoot" };
-		string[] showRootName = new string[CommonDefine.MAX_PLAYER_COUNT] { "MyShowRoot", "LeftShowRoot", "OppositeShowRoot", "RightShowRoot" };
-		string[] huaRootName = new string[CommonDefine.MAX_PLAYER_COUNT] { "MyHuaRoot", "LeftHuaRoot", "OppositeHuaRoot", "RightHuaRoot" };
+		string[] handInRootName = new string[GameDefine.MAX_PLAYER_COUNT] { "MyHandInRoot", "LeftHandInRoot", "OppositeHandInRoot", "RightHandInRoot" };
+		string[] pengGangRootName = new string[GameDefine.MAX_PLAYER_COUNT] { "MyPengGangRoot", "LeftPengGangRoot", "OppositePengGangRoot", "RightPengGangRoot" };
+		string[] showRootName = new string[GameDefine.MAX_PLAYER_COUNT] { "MyShowRoot", "LeftShowRoot", "OppositeShowRoot", "RightShowRoot" };
+		string[] huaRootName = new string[GameDefine.MAX_PLAYER_COUNT] { "MyHuaRoot", "LeftHuaRoot", "OppositeHuaRoot", "RightHuaRoot" };
 		int length = mPlayerMahjong.Count;
 		for (int i = 0; i < length; ++i)
 		{

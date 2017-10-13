@@ -8,7 +8,7 @@ public class SCAskAction : SocketPacket
 	public INTS mActionPlayer = new INTS(4);
 	public INTS mDroppedPlayer = new INTS(4);
 	public BYTES mMahjong = new BYTES(4);
-	public BYTES mHuList = new BYTES(CommonDefine.MAX_HU_COUNT);     // 当有胡操作时,该数组中才会有值
+	public BYTES mHuList = new BYTES(GameDefine.MAX_HU_COUNT);     // 当有胡操作时,该数组中才会有值
 	public SCAskAction(PACKET_TYPE type)
 		:
 		base(type)
@@ -39,7 +39,7 @@ public class SCAskAction : SocketPacket
 				if (type == ACTION_TYPE.AT_HU)
 				{
 					huList = new List<HU_TYPE>();
-					for (int j = 0; j < CommonDefine.MAX_HU_COUNT; ++j)
+					for (int j = 0; j < GameDefine.MAX_HU_COUNT; ++j)
 					{
 						if (mHuList.mValue[i] == 0)
 						{

@@ -15,7 +15,7 @@ public class CommandGameSceneStopAudio : Command
 		GameSceneComponentAudio audioComponent = gameScene.getFirstActiveComponent<GameSceneComponentAudio>();
 		if (audioComponent != null)
 		{
-			audioComponent.stop(mSound);
+			audioComponent.stop();
 		}
 	}
 	public override string showDebugInfo()

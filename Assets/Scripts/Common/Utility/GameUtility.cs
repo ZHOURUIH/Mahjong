@@ -417,7 +417,7 @@ public class GameUtility : GameBase
 		int interval = serverPosition - myselfSererPosition;
 		if(interval < 0)
 		{
-			interval += CommonDefine.MAX_PLAYER_COUNT;
+			interval += GameDefine.MAX_PLAYER_COUNT;
 		}
 		return (PLAYER_POSITION)(interval);
 	}

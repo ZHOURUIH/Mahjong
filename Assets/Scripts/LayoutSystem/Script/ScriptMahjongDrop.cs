@@ -13,9 +13,9 @@ public class ScriptMahjongDrop : LayoutScript
 		:
 		base(type, name, layout)
 	{
-		mRootList = new txUIObject[CommonDefine.MAX_PLAYER_COUNT];
-		mDropList = new List<txUIStaticSprite>[CommonDefine.MAX_PLAYER_COUNT];
-		for(int i = 0; i < CommonDefine.MAX_PLAYER_COUNT; ++i)
+		mRootList = new txUIObject[GameDefine.MAX_PLAYER_COUNT];
+		mDropList = new List<txUIStaticSprite>[GameDefine.MAX_PLAYER_COUNT];
+		for(int i = 0; i < GameDefine.MAX_PLAYER_COUNT; ++i)
 		{
 			mDropList[i] = new List<txUIStaticSprite>();
 		}
@@ -23,7 +23,7 @@ public class ScriptMahjongDrop : LayoutScript
 	public override void assignWindow()
 	{
 		string[] rootName = new string[] { "MyDropRoot", "LeftDropRoot", "OppositeDropRoot", "RightDropRoot"};
-		for (int i = 0; i < CommonDefine.MAX_PLAYER_COUNT; ++i)
+		for (int i = 0; i < GameDefine.MAX_PLAYER_COUNT; ++i)
 		{
 			mRootList[i] = newObject<txUIObject>(rootName[i], 1);
 			for(int j = 0; j < mMaxDropCount; ++j)
@@ -39,7 +39,7 @@ public class ScriptMahjongDrop : LayoutScript
 	}
 	public override void onReset()
 	{
-		for(int i = 0; i < CommonDefine.MAX_PLAYER_COUNT; ++i)
+		for(int i = 0; i < GameDefine.MAX_PLAYER_COUNT; ++i)
 		{
 			int count = mDropList[i].Count;
 			for(int j = 0; j < count; ++j)
@@ -66,7 +66,7 @@ public class ScriptMahjongDrop : LayoutScript
 		int preCount = droppedMahjong.Count - 1;
 		if(preCount < mDropList[(int)pos].Count)
 		{
-			string mahjongSpriteName = CommonDefine.mDropMahjongPreName[(int)pos] + CommonDefine.MAHJONG_NAME[(int)mahjong];
+			string mahjongSpriteName = GameDefine.mDropMahjongPreName[(int)pos] + GameDefine.MAHJONG_NAME[(int)mahjong];
 			mDropList[(int)pos][preCount].setSpriteName(mahjongSpriteName);
 			LayoutTools.ACTIVE_WINDOW(mDropList[(int)pos][preCount]);
 		}
@@ -91,7 +91,7 @@ public class ScriptMahjongDrop : LayoutScript
 			LayoutTools.ACTIVE_WINDOW(mDropList[(int)pos][i], i < showCount);
 			if(i < showCount)
 			{
-				mDropList[(int)pos][i].setSpriteName(CommonDefine.mDropMahjongPreName[(int)pos] + CommonDefine.MAHJONG_NAME[(int)droppedMahjong[showStartIndex + i]]);
+				mDropList[(int)pos][i].setSpriteName(GameDefine.mDropMahjongPreName[(int)pos] + GameDefine.MAHJONG_NAME[(int)droppedMahjong[showStartIndex + i]]);
 			}
 		}
 	}

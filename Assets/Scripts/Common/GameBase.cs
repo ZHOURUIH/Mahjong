@@ -9,7 +9,7 @@ public class GameBase : FrameBase
 	public static GameConfig mGameConfig;
 	public static MahjongSystem mMahjongSystem;
 	public static MaterialManager mMaterialManager;
-	public static PlayerHeadManager mPlayerHeadManager;
+	public static HeadTextureManager mHeadTextureManager;
 	public override void notifyConstructDone()
 	{
 		base.notifyConstructDone();
@@ -19,7 +19,7 @@ public class GameBase : FrameBase
 			mGameConfig = mGame.getGameConfig();
 			mMahjongSystem = mGame.getMahjongSystem();
 			mMaterialManager = mGame.getMaterialManager();
-			mPlayerHeadManager = mGame.getPlayerHeadManager();
+			mHeadTextureManager = mGame.getHeadTextureManager();
 		}
 	}
 }

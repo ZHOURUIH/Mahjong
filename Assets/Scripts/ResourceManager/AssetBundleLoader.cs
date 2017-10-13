@@ -308,7 +308,11 @@ public class AssetBundleLoader : MonoBehaviour
 			UnityEngine.Object obj = null;
 			if(assetsType == typeof(AudioClip))
 			{
+#if UNITY_5_3_5
 				obj = www.audioClip;
+#else
+				obj = WWWAudioExtensions.GetAudioClip(www);
+#endif
 			}
 			else if(assetsType == typeof(Texture2D) || assetsType == typeof(Texture))
 			{
@@ -316,7 +320,11 @@ public class AssetBundleLoader : MonoBehaviour
 			}
 			else if(assetsType == typeof(MovieTexture))
 			{
-				obj = www.movie;
+#if UNITY_5_3_5
+				obj = www.movieTexture;
+#else
+				obj = WWWAudioExtensions.GetMovieTexture(www);
+#endif
 			}
 			else if(assetsType == typeof(AssetBundle))
 			{

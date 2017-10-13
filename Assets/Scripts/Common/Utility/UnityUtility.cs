@@ -221,4 +221,14 @@ public class UnityUtility : GameBase
 			t.gameObject.layer = layer;
 		}
 	}
+	public static int getLineNum(int preFrameCount = 1)
+	{
+		System.Diagnostics.StackTrace st = new System.Diagnostics.StackTrace(preFrameCount, true);
+		return st.GetFrame(0).GetFileLineNumber();
+	}
+	public static string getCurSourceFileName(int preFrameCount = 1)
+	{
+		System.Diagnostics.StackTrace st = new System.Diagnostics.StackTrace(preFrameCount, true);
+		return st.GetFrame(0).GetFileName();
+	}
 }

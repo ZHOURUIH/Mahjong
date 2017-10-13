@@ -12,7 +12,7 @@ public class CharacterData
 {
 	public CharacterData()
 	{
-		mGUID = CommonDefine.INVALID_ID;
+		mGUID = GameDefine.INVALID_ID;
 		mName = "";
 		mPosition = PLAYER_POSITION.PP_MAX;
 		mHead = 0;

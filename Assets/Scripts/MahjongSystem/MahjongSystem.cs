@@ -45,7 +45,7 @@ public class MahjongSystem : CommandReceiver
 			mPlayerPositionList.Add((PLAYER_POSITION)i, null);
 		}
 		mMahjongPool = new List<MAHJONG>();
-		mDice = new int[CommonDefine.DICE_COUNT];
+		mDice = new int[GameDefine.DICE_COUNT];
 		mWaitList = new Dictionary<Character, WaitActionInfo>();
 	}
 	public void init()
@@ -65,7 +65,7 @@ public class MahjongSystem : CommandReceiver
 			// 从庄家开始发牌
 			if (mCurInterval <= 0.0f)
 			{
-				mCurInterval = CommonDefine.ASSIGN_MAHJONG_INTERVAL;
+				mCurInterval = GameDefine.ASSIGN_MAHJONG_INTERVAL;
 				Character curPlayer = mPlayerPositionList[mCurAssignPos];
 				// 给玩家发牌
 				CommandCharacterGetStart cmd = mCommandSystem.newCmd<CommandCharacterGetStart>();
@@ -77,12 +77,12 @@ public class MahjongSystem : CommandReceiver
 				// 如果是庄家,需要拿够14张牌
 				if (mCurAssignPos == mBankerPos)
 				{
-					isDone = (palyerHandInCount == CommonDefine.MAX_HAND_IN_COUNT);
+					isDone = (palyerHandInCount == GameDefine.MAX_HAND_IN_COUNT);
 				}
 				// 不是庄家则拿13张牌
 				else
 				{
-					isDone = (palyerHandInCount == CommonDefine.MAX_HAND_IN_COUNT - 1);
+					isDone = (palyerHandInCount == GameDefine.MAX_HAND_IN_COUNT - 1);
 				}
 				// 牌拿完时需要重新排列
 				if (isDone)
@@ -108,7 +108,7 @@ public class MahjongSystem : CommandReceiver
 	}
 	public bool canPlayerJoin()
 	{
-		return mPlayerIDList.Count < CommonDefine.MAX_PLAYER_COUNT;
+		return mPlayerIDList.Count < GameDefine.MAX_PLAYER_COUNT;
 	}
 	public bool canPlayerJoin(Character player)
 	{
@@ -516,14 +516,14 @@ public class MahjongSystem : CommandReceiver
 		int diceCount = dice.Length;
 		for (int i = 0; i < diceCount; ++i)
 		{
-			dice[i] = MathUtility.randomInt(0, CommonDefine.MAX_DICE_VALUE);
+			dice[i] = MathUtility.randomInt(0, GameDefine.MAX_DICE_VALUE);
 		}
 	}
 	protected void resetMahjongPool()
 	{
 		for(int i = 0; i < (int)MAHJONG.M_MAX; ++i)
 		{
-			for (int j = 0; j < CommonDefine.MAX_SINGLE_COUNT; ++j)
+			for (int j = 0; j < GameDefine.MAX_SINGLE_COUNT; ++j)
 			{
 				mMahjongPool.Add((MAHJONG)i);
 			}

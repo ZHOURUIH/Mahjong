@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 public class SCNotifyMahjongEnd : SocketPacket
 {
-	INTS mCharacterGUIDList = new INTS(CommonDefine.MAX_PLAYER_COUNT);
-	INTS mMoneyDeltaList = new INTS(CommonDefine.MAX_PLAYER_COUNT);
+	INTS mCharacterGUIDList = new INTS(GameDefine.MAX_PLAYER_COUNT);
+	INTS mMoneyDeltaList = new INTS(GameDefine.MAX_PLAYER_COUNT);
 	public SCNotifyMahjongEnd(PACKET_TYPE type)
 		:
 		base(type)
@@ -28,7 +28,7 @@ public class SCNotifyMahjongEnd : SocketPacket
 		MahjongScene mahjongScene = gameScene as MahjongScene;
 		Room room = mahjongScene.getRoom();
 		Dictionary<Character, int> moneyDeltaList = new Dictionary<Character, int>();
-		for (int i = 0; i < CommonDefine.MAX_PLAYER_COUNT; ++i)
+		for (int i = 0; i < GameDefine.MAX_PLAYER_COUNT; ++i)
 		{
 			moneyDeltaList.Add(mCharacterManager.getCharacterByGUID(mCharacterGUIDList.mValue[i]), mMoneyDeltaList.mValue[i]);
 		}

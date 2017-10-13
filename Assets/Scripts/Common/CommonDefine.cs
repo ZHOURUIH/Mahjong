@@ -50,21 +50,6 @@ public enum SOUND_OWNER
 	SO_WINDOW,
 	SO_SCENE,
 }
-// 组件属性的类型
-public enum PROPERTY_TYPE
-{
-	PT_BOOL,
-	PT_INT,
-	PT_STRING,
-	PT_VECTOR2,
-	PT_VECTOR3,
-	PT_VECTOR4,
-	PT_FLOAT,
-	PT_ENUM,
-	PT_TEXTURE,
-	PT_DIM,
-	PT_POINT,
-};
 // character 类型
 public enum CHARACTER_TYPE
 {

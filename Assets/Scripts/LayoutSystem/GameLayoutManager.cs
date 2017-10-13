@@ -37,7 +37,6 @@ public class GameLayoutManager : CommandReceiver
 	}
 	public void init()
 	{
-		addLayoutNameType();
 		mUIRoot = new txUIObject();
 		mUIRoot.init(null, UnityUtility.getGameObject(null, "UI Root"));
 		if (mUIRoot.mObject == null)
@@ -191,37 +190,17 @@ public class GameLayoutManager : CommandReceiver
 		}
 		return allBoxList;
 	}
-	//---------------------------------------------------------------------------------------------------------------------------------------------------
-	protected void addLayoutNameType()
-	{
-		registerLayout(typeof(ScriptGlobalTouch), LAYOUT_TYPE.LT_GLOBAL_TOUCH, "UIGlobalTouch");
-		registerLayout(typeof(ScriptLogin), LAYOUT_TYPE.LT_LOGIN, "UILogin");
-		registerLayout(typeof(ScriptRegister), LAYOUT_TYPE.LT_REGISTER, "UIRegister");
-		registerLayout(typeof(ScriptMainFrame), LAYOUT_TYPE.LT_MAIN_FRAME, "UIMainFrame");
-		registerLayout(typeof(ScriptBillboard), LAYOUT_TYPE.LT_BILLBOARD, "UIBillboard");
-		registerLayout(typeof(ScriptCharacter), LAYOUT_TYPE.LT_CHARACTER, "UICharacter");
-		registerLayout(typeof(ScriptRoomMenu), LAYOUT_TYPE.LT_ROOM_MENU, "UIRoomMenu");
-		registerLayout(typeof(ScriptMahjongHandIn), LAYOUT_TYPE.LT_MAHJONG_HAND_IN, "UIMahjongHandIn");
-		registerLayout(typeof(ScriptMahjongDrop), LAYOUT_TYPE.LT_MAHJONG_DROP, "UIMahjongDrop");
-		registerLayout(typeof(ScriptAllCharacterInfo), LAYOUT_TYPE.LT_ALL_CHARACTER_INFO, "UIAllCharacterInfo");
-		registerLayout(typeof(ScriptDice), LAYOUT_TYPE.LT_DICE, "UIDice");
-		registerLayout(typeof(ScriptMahjongBackFrame), LAYOUT_TYPE.LT_MAHJONG_BACK_FRAME, "UIMahjongBackFrame");
-		registerLayout(typeof(ScriptPlayerAction), LAYOUT_TYPE.LT_PLAYER_ACTION, "UIPlayerAction");
-		registerLayout(typeof(ScriptGameEnding), LAYOUT_TYPE.LT_GAME_ENDING, "UIGameEnding");
-		registerLayout(typeof(ScriptAddPlayer), LAYOUT_TYPE.LT_ADD_PLAYER, "UIAddPlayer");
-		registerLayout(typeof(ScriptMahjongFrame), LAYOUT_TYPE.LT_MAHJONG_FRAME, "UIMahjongFrame");
-		registerLayout(typeof(ScriptJoinRoomDialog), LAYOUT_TYPE.LT_JOIN_ROOM_DIALOG, "UIJoinRoomDialog");
-		if (mLayoutTypeToName.Count < (int)LAYOUT_TYPE.LT_MAX)
-		{
-			UnityUtility.logError("error : not all script added! max count : " + (int)LAYOUT_TYPE.LT_MAX + ", added count :" + mLayoutTypeToName.Count);
-		}
-	}
-	protected void registerLayout(Type classType, LAYOUT_TYPE type, string name)
+	public void registeLayout(Type classType, LAYOUT_TYPE type, string name)
 	{
 		mLayoutTypeToName.Add(type, name);
 		mLayoutNameToType.Add(name, type);
 		mScriptFactoryManager.addFactory(classType, type);
 	}
+	public int getLayoutCount()
+	{
+		return mLayoutTypeToName.Count;
+	}
+	//----------------------------------------------------------------------------------------------------------------------------------------------------
 	protected void addLayoutToList(GameLayout layout, string name, LAYOUT_TYPE type)
 	{
 		mLayoutTypeList.Add(type, layout);

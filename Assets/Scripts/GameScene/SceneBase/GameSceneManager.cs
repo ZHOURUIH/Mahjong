@@ -19,7 +19,6 @@ public class GameSceneManager : CommandReceiver
 	}
 	public void init() 
 	{
-		registerAllGameScene();
 		mManagerObject = UnityUtility.getGameObject(mGameFramework.getGameFrameObject(), "GameSceneManager");
 		if(mManagerObject == null)
 		{
@@ -76,17 +75,11 @@ public class GameSceneManager : CommandReceiver
 		}
 		mManagerObject = null;
 	}
-	//----------------------------------------------------------------------------------------------
-	protected void registerAllGameScene()
-	{
-		registerLayout(typeof(StartScene), GAME_SCENE_TYPE.GST_START);
-		registerLayout(typeof(MainScene), GAME_SCENE_TYPE.GST_MAIN);
-		registerLayout(typeof(MahjongScene), GAME_SCENE_TYPE.GST_MAHJONG);
-	}
-	protected void registerLayout(Type classType, GAME_SCENE_TYPE type)
+	public void registeGameScene(Type classType, GAME_SCENE_TYPE type)
 	{
 		mSceneFactoryManager.addFactory(classType, type);
 	}
+	//----------------------------------------------------------------------------------------------
 	protected GameScene createScene(GAME_SCENE_TYPE type)
 	{
 		SceneFactory factory = mSceneFactoryManager.getFactory(type);

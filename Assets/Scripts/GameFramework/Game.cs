@@ -31,9 +31,11 @@ public class Game : GameFramework
 	public override void init()
 	{
 		base.init();
-        LayoutRegister register = new LayoutRegister();
-        register.registeAllLayout();
-        mGameConfig.init();
+		LayoutRegister layoutRegister = new LayoutRegister();
+		layoutRegister.registeAllLayout();
+		GameSceneRegister sceneRegister = new GameSceneRegister();
+		sceneRegister.registerAllGameScene();
+		mGameConfig.init();
 		mGameUtility.init();
 		mMaterialManager.init();
 		mHeadTextureManager.init();

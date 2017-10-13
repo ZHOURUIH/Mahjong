@@ -29,7 +29,7 @@ public class UnityUtility : GameBase
 #if UNITY_EDITOR
 		setLogLevel(LOG_LEVEL.LL_NORMAL);
 #else
-		setLogLevel((LOG_LEVEL)(int)mGameConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_LOG_LEVEL));
+		setLogLevel((LOG_LEVEL)(int)mFrameConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_LOG_LEVEL));
 #endif
 	}
 	public static void setLogLevel(LOG_LEVEL level)
@@ -223,12 +223,12 @@ public class UnityUtility : GameBase
 	}
 	public static int getLineNum(int preFrameCount = 1)
 	{
-		System.Diagnostics.StackTrace st = new System.Diagnostics.StackTrace(preFrameCount, true);
-		return st.GetFrame(0).GetFileLineNumber();
+	    System.Diagnostics.StackTrace st = new System.Diagnostics.StackTrace(preFrameCount, true);
+	    return st.GetFrame(0).GetFileLineNumber();
 	}
 	public static string getCurSourceFileName(int preFrameCount = 1)
 	{
-		System.Diagnostics.StackTrace st = new System.Diagnostics.StackTrace(preFrameCount, true);
-		return st.GetFrame(0).GetFileName();
+	    System.Diagnostics.StackTrace st = new System.Diagnostics.StackTrace(preFrameCount, true);
+	    return st.GetFrame(0).GetFileName();
 	}
 }

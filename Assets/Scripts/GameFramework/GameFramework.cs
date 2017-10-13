@@ -43,6 +43,7 @@ public class GameFramework : MonoBehaviour
 		UnityUtility.logInfo("start game!", LOG_LEVEL.LL_FORCE);
 		start();
 		notifyBase();
+		registe();
 		init();
 		// 初始化完毕后启动游戏
 		launch();
@@ -75,22 +76,13 @@ public class GameFramework : MonoBehaviour
 		mLayoutPrefabManager = new LayoutPrefabManager();
 		mFrameConfig = new FrameConfig();
 	}
+	public virtual void registe(){}
 	public virtual void init()
 	{
 		// 必须先初始化配置文件
 		mApplicationConfig.init();
 		mDllImportExtern.init();
-		int width = (int)mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SCREEN_WIDTH);
-		int height = (int)mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SCREEN_HEIGHT);
-		int fullscreen = (int)mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_FULL_SCREEN);
-		Screen.SetResolution(width, height, fullscreen == 1);
-		int screenCount = (int)mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SCREEN_COUNT);
-		processResolution(width, height, screenCount);
-		// 设置为无边框窗口
-		if (fullscreen == 2)
-		{
-			User32.SetWindowLong(User32.GetForegroundWindow(), -16, CommonDefine.WS_POPUP | CommonDefine.WS_VISIBLE);
-		}
+		mFrameConfig.init();
 		mDataBase.init();
 		mResourceManager.init();
 		mShaderManager.init();
@@ -103,7 +95,6 @@ public class GameFramework : MonoBehaviour
 		mGlobalTouchSystem.init();
 		mAudioManager.init();
 		mLayoutManager.init();
-		mFrameConfig.init();
 		bool showDebug = (int)mFrameConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SHOW_COMMAND_DEBUG_INFO) != 0;
 		mCommandSystem.init(showDebug);
 		mGameSceneManager.init();
@@ -113,6 +104,17 @@ public class GameFramework : MonoBehaviour
 		mCameraManager.init();
 		mLayoutPrefabManager.init();
 		System.Net.ServicePointManager.DefaultConnectionLimit = 200;
+		int width = (int)mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SCREEN_WIDTH);
+		int height = (int)mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SCREEN_HEIGHT);
+		int fullscreen = (int)mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_FULL_SCREEN);
+		Screen.SetResolution(width, height, fullscreen == 1);
+		int screenCount = (int)mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SCREEN_COUNT);
+		processResolution(width, height, screenCount);
+		// 设置为无边框窗口
+		if (fullscreen == 2)
+		{
+			User32.SetWindowLong(User32.GetForegroundWindow(), -16, CommonDefine.WS_POPUP | CommonDefine.WS_VISIBLE);
+		}
 	}
 	public virtual void notifyBase()
 	{
@@ -220,6 +222,7 @@ public class GameFramework : MonoBehaviour
 	public SocketManager getSocketManager() { return mSocketManager; }
 	public KeyFrameManager getKeyFrameManager() { return mKeyFrameManager; }
 	public GameObject getGameFrameObject() { return mGameFrameObject; }
+	public FrameConfig getFrameConfig() { return mFrameConfig; }
 	public GlobalTouchSystem getGlobalTouchSystem() { return mGlobalTouchSystem; }
 	public ShaderManager getShaderManager() { return mShaderManager; }
 	public DataBase getDataBase() { return mDataBase; }

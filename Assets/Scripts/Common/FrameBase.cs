@@ -20,6 +20,7 @@ public class FrameBase
 	public static ResourceManager		mResourceManager		= null;
 	public static LayoutPrefabManager	mLayoutPrefabManager	= null;
 	public static ApplicationConfig		mApplicationConfig		= null;
+	public static FrameConfig			mFrameConfig			= null;
 	public virtual void notifyConstructDone()
 	{
 		if (mGameFramework == null)
@@ -39,6 +40,7 @@ public class FrameBase
 			mResourceManager = mGameFramework.getResourceManager();
 			mLayoutPrefabManager = mGameFramework.getLayoutPrefabManager();
 			mApplicationConfig = mGameFramework.getApplicationConfig();
+			mFrameConfig = mGameFramework.getFrameConfig();
 		}
 	}
 }

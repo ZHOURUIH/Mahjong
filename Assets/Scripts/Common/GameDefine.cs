@@ -85,12 +85,10 @@ public enum GAME_DEFINE_FLOAT
 
 	// 框架配置参数
 	GDF_FRAME_MIN,
-	GDF_HTTP_PORT,                  // http端口
 	GDF_SOCKET_PORT,                // socket端口
 	GDF_BROADCAST_PORT,             // 广播端口
 	GDF_SHOW_COMMAND_DEBUG_INFO,    // 是否输出显示命令调试信息,0为不显示,1为显示
 	GDF_LOAD_RESOURCES,             // 游戏加载资源的路径,0代表在Resources中读取,1代表从AssetBundle中读取 
-	GDF_LOAD_ASYNC,                 // 是否异步加载资源
 	GDF_LOG_LEVEL,                  // 是否关闭所有的日志输出
 	GDF_FRAME_MAX,
 

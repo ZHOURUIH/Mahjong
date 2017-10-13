@@ -28,15 +28,18 @@ public class Game : GameFramework
 		GameBase frameBase = new GameBase();
 		frameBase.notifyConstructDone();
 	}
-	public override void init()
+	public override void registe()
 	{
-		base.init();
 		LayoutRegister layoutRegister = new LayoutRegister();
 		layoutRegister.registeAllLayout();
 		GameSceneRegister sceneRegister = new GameSceneRegister();
 		sceneRegister.registerAllGameScene();
 		DataRegister dataRegister = new DataRegister();
 		dataRegister.registeAllData();
+	}
+	public override void init()
+	{
+		base.init();
 		mGameConfig.init();
 		mGameUtility.init();
 		mMaterialManager.init();

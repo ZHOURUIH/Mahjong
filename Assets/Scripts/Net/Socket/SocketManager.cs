@@ -76,7 +76,7 @@ public class SocketManager : GameBase
 			mServerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 			try
 			{
-				int port = (int)mGameConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SOCKET_PORT);
+				int port = (int)mFrameConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SOCKET_PORT);
 				IPAddress serverIP = IPAddress.Parse(mGameConfig.getStringParam(GAME_DEFINE_STRING.GDS_TCP_SERVER_IP));
 				mServerSocket.Connect(serverIP, port);
 			}

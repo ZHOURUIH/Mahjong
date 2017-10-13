@@ -24,7 +24,7 @@ public class ResourceManager : GameBase
 		mAssetBundleLoader.init();
 		mResourceLoader.init();
 #if UNITY_EDITOR
-		mLoadSource = (int)mGameConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_LOAD_RESOURCES);
+		mLoadSource = (int)mFrameConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_LOAD_RESOURCES);
 #else
 		mLoadSource = 1;
 #endif

@@ -15,12 +15,10 @@ public class FrameConfig : ConfigBase
 	//-----------------------------------------------------------------------------------------------------------------------
 	protected override void addFloat()
 	{
-		addFloatParam(GAME_DEFINE_FLOAT.GDF_HTTP_PORT);
 		addFloatParam(GAME_DEFINE_FLOAT.GDF_SOCKET_PORT);
 		addFloatParam(GAME_DEFINE_FLOAT.GDF_BROADCAST_PORT);
 		addFloatParam(GAME_DEFINE_FLOAT.GDF_SHOW_COMMAND_DEBUG_INFO);
 		addFloatParam(GAME_DEFINE_FLOAT.GDF_LOAD_RESOURCES);
-		addFloatParam(GAME_DEFINE_FLOAT.GDF_LOAD_ASYNC);
 		addFloatParam(GAME_DEFINE_FLOAT.GDF_LOG_LEVEL);
 		if (mFloatNameToDefine.Count != (int)GAME_DEFINE_FLOAT.GDF_FRAME_MAX - (int)GAME_DEFINE_FLOAT.GDF_FRAME_MIN - 1)
 		{

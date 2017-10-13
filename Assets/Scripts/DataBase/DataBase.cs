@@ -7,12 +7,18 @@ using System.Collections.Generic;
 public class DataBase : CommandReceiver
 {
 	protected Dictionary<DATA_TYPE, List<Data>> mDataStructList;
+	protected Dictionary<string, DATA_TYPE> mDataFileDefine;
+	protected Dictionary<DATA_TYPE, string> mDataDefineFile;
+	protected Dictionary<DATA_TYPE, int> mDataSizeMap;
 	protected DataFactoryManager mDataFactoryManager;
 	public DataBase()
 		:
 		base(typeof(DataBase).ToString())
 	{
 		mDataStructList = new Dictionary<DATA_TYPE,List<Data>>();
+		mDataFileDefine = new Dictionary<string, DATA_TYPE>();
+		mDataDefineFile = new Dictionary<DATA_TYPE, string>();
+		mDataSizeMap = new Dictionary<DATA_TYPE, int>();
 		mDataFactoryManager = new DataFactoryManager();
 	}
 	// 初始化所有数据
@@ -103,7 +109,7 @@ public class DataBase : CommandReceiver
 
 		// 解析文件
 		List<Data> dataList = new List<Data>();
-		int dataSize = mDataFactoryManager.getDataSize(type);
+		int dataSize = getDataSize(type);
 		byte[] dataBuffer = new byte[dataSize];
 		int dataCount = fileSize / dataSize;
 		for (int i = 0; i < dataCount; ++i)
@@ -162,14 +168,39 @@ public class DataBase : CommandReceiver
 			mDataStructList.Add(type, datalist);
 		}
 	}
+	public void registeData(Type data, DATA_TYPE type)
+	{
+		DataFactory factory = mDataFactoryManager.addFactory(data, type);
+		Data temp = factory.createData();
+		string dataName = data.ToString();
+		mDataFileDefine.Add(dataName, type);
+		mDataDefineFile.Add(type, dataName);
+		mDataSizeMap.Add(type, temp.getDataSize());
+	}
 	// 根据数据名得到数据定义
 	public string getDataNameByDataType(DATA_TYPE type)
 	{
-		return mDataFactoryManager.getDataNameByDataType(type);
+		if (mDataDefineFile.ContainsKey(type))
+		{
+			return mDataDefineFile[type];
+		}
+		return "";
 	}
 	// 根据数据定义得到数据名
 	public DATA_TYPE getDataTypeByDataName(string name)
 	{
-		return mDataFactoryManager.getDataTypeByDataName(name);
+		if (mDataFileDefine.ContainsKey(name))
+		{
+			return mDataFileDefine[name];
+		}
+		return DATA_TYPE.DT_MAX;
+	}
+	public int getDataSize(DATA_TYPE type)
+	{
+		if (mDataSizeMap.ContainsKey(type))
+		{
+			return mDataSizeMap[type];
+		}
+		return 0;
 	}
 };

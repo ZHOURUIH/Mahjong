@@ -35,6 +35,8 @@ public class Game : GameFramework
 		layoutRegister.registeAllLayout();
 		GameSceneRegister sceneRegister = new GameSceneRegister();
 		sceneRegister.registerAllGameScene();
+		DataRegister dataRegister = new DataRegister();
+		dataRegister.registeAllData();
 		mGameConfig.init();
 		mGameUtility.init();
 		mMaterialManager.init();

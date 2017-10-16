@@ -74,19 +74,9 @@ public class SocketManager : GameBase
 			mHeartBeatMaxTime = mGameConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_HEART_BEAT_NITERVAL);
 			// 创建socket  
 			mServerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-			try
-			{
-				int port = (int)mFrameConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SOCKET_PORT);
-				IPAddress serverIP = IPAddress.Parse(mGameConfig.getStringParam(GAME_DEFINE_STRING.GDS_TCP_SERVER_IP));
-				mServerSocket.Connect(serverIP, port);
-			}
-			catch (Exception)
-			{
-				UnityUtility.logInfo("can not connect server!");
-				mServerSocket = null;
-				return;
-			}
-			
+			int port = (int)mFrameConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SOCKET_PORT);
+			IPAddress serverIP = IPAddress.Parse(mGameConfig.getStringParam(GAME_DEFINE_STRING.GDS_TCP_SERVER_IP));
+			mServerSocket.Connect(serverIP, port);
 			mSendThread = new Thread(sendSocket);
 			mSendThread.Start();
 			mReceiveThread = new Thread(receiveSocket);
@@ -96,6 +86,7 @@ public class SocketManager : GameBase
 		{
 			mReceiveFinish = true;
 			mSendFinish = true;
+			mServerSocket = null;
 			UnityUtility.logError("网络初始化失败!");
 			mGameFramework.stop();
 		}
@@ -129,11 +120,6 @@ public class SocketManager : GameBase
 		{
 			mSendThread.Abort();
 			mSendThread = null;
-		}
-		if (mReceiveThread != null)
-		{
-			mReceiveThread.Abort();
-			mReceiveThread = null;
 		}
 		if (mServerSocket != null)
 		{

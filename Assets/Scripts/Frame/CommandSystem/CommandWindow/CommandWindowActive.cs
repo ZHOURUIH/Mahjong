@@ -14,4 +14,8 @@ public class CommandWindowActive : Command
 		txUIObject uiObjcet = (txUIObject)(mReceiver);
 		uiObjcet.setActive(mActive);
 	}
+	public override string showDebugInfo()
+	{
+		return this.GetType().ToString() + ": active : " + mActive;
+	}
 }

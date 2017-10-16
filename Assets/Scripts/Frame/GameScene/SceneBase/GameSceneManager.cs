@@ -60,7 +60,6 @@ public class GameSceneManager : CommandReceiver
             mCurScene.update(elapsedTime);
         }
 	}
-
     public override void destroy()
 	{
 		foreach (var scene in mLastSceneList)

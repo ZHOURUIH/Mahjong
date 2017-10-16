@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class txUIText : txUIStaticSprite
-{
+public class txUIText : txUIObject
+{	
 	protected UILabel mLabel;
 	public txUIText()
 	{
@@ -17,12 +17,16 @@ public class txUIText : txUIStaticSprite
 			mLabel = mObject.AddComponent<UILabel>();
 		}
 	}
-	public void setText(string text)
-	{
-		mLabel.text = text;
-	}
-	public string getText()
+	public string getLabel()
 	{
 		return mLabel.text;
+	}
+	public void setLabel(string label)
+	{
+		mLabel.text = label;
+	}
+	public override void setAlpha(float alpha)
+	{
+		mLabel.alpha = alpha;
 	}
 }

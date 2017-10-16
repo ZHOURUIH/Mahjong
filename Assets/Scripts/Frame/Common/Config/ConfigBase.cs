@@ -238,7 +238,10 @@ public abstract class ConfigBase : GameBase
 					info.mComment = comment;
 					info.mName = value[0];
 					info.mValue = value[1];
-					valueList.Add(info.mName, info);
+					if (!valueList.ContainsKey(info.mName))
+					{
+						valueList.Add(info.mName, info);
+					}
 				}
 			}
 		}

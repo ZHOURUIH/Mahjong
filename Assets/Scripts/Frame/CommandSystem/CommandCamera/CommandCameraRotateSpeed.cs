@@ -23,4 +23,8 @@ public class CommandCameraRotateSpeed : Command
 			component.startRotateSpeed(mStartAngle, mRotateSpeed, mRotateAcceleration);
 		}
 	}
+	public override string showDebugInfo()
+	{
+		return this.GetType().ToString() + " : start angle : " + mStartAngle + ", rotate speed : " + mRotateSpeed + ", rotate acceleration : "+ mRotateAcceleration;
+	}
 }

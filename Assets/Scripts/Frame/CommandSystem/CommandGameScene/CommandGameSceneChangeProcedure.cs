@@ -3,8 +3,8 @@ using System.Collections;
 
 public class CommandGameSceneChangeProcedure : Command
 {
-	public PROCEDURE_TYPE mProcedure;
-	public string mIntent;
+	public PROCEDURE_TYPE	mProcedure = PROCEDURE_TYPE.PT_NONE;
+	public string			mIntent = "";
 	public override void init()
 	{
 		base.init();
@@ -18,6 +18,6 @@ public class CommandGameSceneChangeProcedure : Command
 	}
 	public override string showDebugInfo()
 	{
-		return this.GetType().ToString() + ": procedure : " + mProcedure;
+		return this.GetType().ToString() + " : procedure : " + mProcedure + ", intent : " + mIntent;
 	}
 }

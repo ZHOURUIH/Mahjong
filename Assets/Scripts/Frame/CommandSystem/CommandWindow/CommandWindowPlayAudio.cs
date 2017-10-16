@@ -30,7 +30,7 @@ public class CommandWindowPlayAudio : Command
 	public override void init()
 	{
 		base.init();
-		mSound = SOUND_DEFINE.SD_MAX;
+		mSound = SOUND_DEFINE.SD_MIN;
 		mSoundFileName = "";
 		mLoop = false;
 		mVolume = 1.0f;
@@ -69,6 +69,6 @@ public class CommandWindowPlayAudio : Command
 		{
 			soundName = mSoundFileName;
 		}
-		return this.GetType().ToString() + " : sound : " + mSound + ", name : " + soundName + ", loop : " + mLoop + ", volume : " + mVolume;
+		return this.GetType().ToString() + " : sound : " + mSound + ", name : " + soundName + ", loop : " + mLoop + ", volume : " + mVolume + ", sound file name : " + mSoundFileName + ", use volume coe : " + mUseVolumeCoe;
 	}
 }

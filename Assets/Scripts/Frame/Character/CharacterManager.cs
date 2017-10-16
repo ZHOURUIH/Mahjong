@@ -4,13 +4,12 @@ using System.Collections.Generic;
 
 public class CharacterManager : CommandReceiver
 {
-	protected Dictionary<string, Character> mCharacterList;                                 // 角色名字索引表
-	protected Dictionary<int, Character> mCharacterGUIDList;								// 角色GUID索引表
-	protected Dictionary<CHARACTER_TYPE, Dictionary<string, Character>> mCharacterTypeList; // 角色分类列表
-	protected CharacterFactoryManager mCharacterFactoryManager;								// 角色工厂
-	protected GameObject mManagerObject;													// 角色管理器节点
-	protected CharacterMyself mMyself;														// 玩家自己的实例,方便获取
-
+	protected Dictionary<CHARACTER_TYPE, Dictionary<string, Character>> mCharacterTypeList;    // 角色分类列表
+	protected Dictionary<string, Character>		mCharacterList;     // 角色名字索引表
+	protected Dictionary<int, Character>		mCharacterGUIDList; // 角色ID索引表
+	protected CharacterMyself					mMyself;            // 玩家自己,方便获取
+	protected GameObject						mManagerObject;     // 角色管理器物体
+	protected CharacterFactoryManager			mCharacterFactoryManager;                             // 角色工厂
 	public CharacterManager()
 		:
 		base(typeof(CharacterManager).ToString())
@@ -23,7 +22,7 @@ public class CharacterManager : CommandReceiver
 	public void init()
 	{
 		mManagerObject = UnityUtility.getGameObject(mGameFramework.getGameFrameObject(), "CharacterManager");
-		if(mManagerObject == null)
+		if (mManagerObject == null)
 		{
 			UnityUtility.logError("can not find Character Manager under GameFramework!");
 		}
@@ -40,19 +39,19 @@ public class CharacterManager : CommandReceiver
 		mCharacterGUIDList = null;
 		mMyself = null;
 	}
-	public void update(float elapsedTime)
+	public void update(float fElapsedTime)
 	{
 		foreach (var characterIter in mCharacterList)
 		{
 			Character character = characterIter.Value;
 			if (character != null)
 			{
-				character.update(elapsedTime);
+				character.update(fElapsedTime);
 			}
 		}
 	}
 	public CharacterMyself getMyself() { return mMyself; }
-	public void registeCharacter<T>(CHARACTER_TYPE type)where T : Character
+	public void registeCharacter<T>(CHARACTER_TYPE type) where T : Character
 	{
 		mCharacterFactoryManager.addFactory<T>(type);
 	}
@@ -64,13 +63,13 @@ public class CharacterManager : CommandReceiver
 		}
 		return mCharacterList[name];
 	}
-	public Character getCharacterByGUID(int guid)
+	public Character getCharacter(int characterID)
 	{
-		if(!mCharacterGUIDList.ContainsKey(guid))
+		if (!mCharacterGUIDList.ContainsKey(characterID))
 		{
 			return null;
 		}
-		return mCharacterGUIDList[guid];
+		return mCharacterGUIDList[characterID];
 	}
 	public void getCharacterListByType(CHARACTER_TYPE type, ref Dictionary<string, Character> characterList)
 	{
@@ -80,19 +79,18 @@ public class CharacterManager : CommandReceiver
 		}
 		characterList = mCharacterTypeList[type];
 	}
-	
-	public Character createCharacter(string name, CHARACTER_TYPE type, int guid)
+	public Character createCharacter(string name, CHARACTER_TYPE type, int id)
 	{
 		if (mCharacterList.ContainsKey(name))
 		{
-			Debug.LogError("error : there is a character named : " + name + "! can not create again!");
+			UnityUtility.logError("error : there is a character named : " + name + "! can not create again!");
 			return null;
 		}
 		if (type == CHARACTER_TYPE.CT_MYSELF)
 		{
-			if (mMyself != null)
+			if(mMyself != null)
 			{
-				Debug.LogError("error : Myself has exist ! can not create again ,name " + name);
+				Debug .LogError ("error : Myself has exist ! can not create again ,name " + name);
 				return null;
 			}
 		}
@@ -103,10 +101,13 @@ public class CharacterManager : CommandReceiver
 		{
 			mMyself = newCharacter as CharacterMyself;
 		}
-		// 将创建的角色挂接到角色管理器下
-		newCharacter.getObject().transform.parent = mManagerObject.transform;
-		newCharacter.init(guid);
-		addCharacterToList(newCharacter);
+		if (newCharacter != null)
+		{
+			// 将角色挂接到管理器下
+			newCharacter.getObject().transform.parent = mManagerObject.transform;
+			newCharacter.init(id);
+			addCharacterToList(newCharacter);
+		}
 		return newCharacter;
 	}
 	public void destroyCharacter(string name)
@@ -117,12 +118,21 @@ public class CharacterManager : CommandReceiver
 			destroyCharacter(character);
 		}
 	}
-	public void destroyCharacterByGUID(int guid)
+	public void destroyCharacter(int id)
 	{
-		Character character = getCharacterByGUID(guid);
-		if (character != null)
+		Character character = getCharacter(id);
+		if(character != null)
 		{
 			destroyCharacter(character);
+		}
+	}
+	public void notifyCharacterIDChanged(int oldID)
+	{
+		if (mCharacterGUIDList.ContainsKey(oldID))
+		{
+			Character character = mCharacterGUIDList[oldID];
+			mCharacterGUIDList.Remove(oldID);
+			mCharacterGUIDList.Add(character.getCharacterData().mID, character);
 		}
 	}
 	public void notifyCharacterNameChanged(string oldName)
@@ -146,59 +156,63 @@ public class CharacterManager : CommandReceiver
 			}
 		}
 	}
-	//------------------------------------------------------------------------------------------------------------------------------
-	protected void removeCharacterFromList(Character character)
-	{
-		if (character == null)
-		{
-			return;
-		}
-		CharacterData data = character.getCharacterData();
-		// 从全部角色列表中移除
-		if (mCharacterList.ContainsKey(data.mName))
-		{
-			mCharacterList.Remove(data.mName);
-		}
-		// 从角色分类列表中移除
-		if (mCharacterTypeList.ContainsKey(character.getType()))
-		{
-			if (mCharacterTypeList[character.getType()].ContainsKey(data.mName))
-			{
-				mCharacterTypeList[character.getType()].Remove(data.mName);
-			}
-		}
-		// 从GUID索引表中移除
-		if (mCharacterGUIDList.ContainsKey(data.mGUID))
-		{
-			mCharacterGUIDList.Remove(data.mGUID);
-		}
-		character.destroy();
-	}
+	//------------------------------------------------------------------------------------------------------------
 	protected void addCharacterToList(Character character)
 	{
 		if (character == null)
 		{
 			return;
 		}
-		CharacterData data = character.getCharacterData();
 		// 加入到全部角色列表
-		mCharacterList.Add(data.mName, character);
+		mCharacterList.Add(character.getName(), character);
 		// 加入到角色分类列表
 		if (mCharacterTypeList.ContainsKey(character.getType()))
 		{
-			mCharacterTypeList[character.getType()].Add(data.mName, character);
+			mCharacterTypeList[character.getType()].Add(character.getName(), character);
 		}
 		else
 		{
 			Dictionary<string, Character> characterMap = new Dictionary<string, Character>();
-			characterMap.Add(data.mName, character);
+			characterMap.Add(character.getName(), character);
 			mCharacterTypeList.Add(character.getType(), characterMap);
 		}
-		// 如果不是非法GUID才能加入列表
-		if(data.mGUID != GameDefine.INVALID_ID && !mCharacterGUIDList.ContainsKey(data.mGUID))
+		// 加入ID索引表
+		int characterID = character.getCharacterData().mID;
+		if (!mCharacterGUIDList.ContainsKey(characterID))
 		{
-			mCharacterGUIDList.Add(data.mGUID, character);
+			mCharacterGUIDList.Add(characterID, character);
 		}
+		else
+		{
+			UnityUtility.logError("error : there is a character id : " + characterID + ", can not add again!");
+		}
+	}
+	protected void removeCharacterFromList(Character character)
+	{
+		if (character == null)
+		{
+			return;
+		}
+
+		// 从全部角色列表中移除
+		if (mCharacterList.ContainsKey(character.getName()))
+		{
+			mCharacterList.Remove(character.getName());
+		}
+		// 从角色分类列表中移除
+		if (mCharacterTypeList.ContainsKey(character.getType()))
+		{
+			if (mCharacterTypeList[character.getType()].ContainsKey(character.getName()))
+			{
+				mCharacterTypeList[character.getType()].Remove(character.getName());
+			}
+		}
+		// 从ID索引表中移除
+		if (mCharacterGUIDList.ContainsKey(character.getCharacterData().mID))
+		{
+			mCharacterGUIDList.Remove(character.getCharacterData().mID);
+		}
+		character.destroy();
 	}
 	protected void destroyCharacter(Character character)
 	{

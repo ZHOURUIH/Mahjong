@@ -26,4 +26,8 @@ class CommandWindowSmoothFillAmount : Command
 			componentSmoothFillAmount.start(mStartFillAmount, mTargetFillAmount, mFadeTime, mTimeOffset);
 		}
 	}
+	public override string showDebugInfo()
+	{
+		return this.GetType().ToString() + " : start fill amount : " + mStartFillAmount + ", target fill amount : " + mTargetFillAmount + ", fade time : " + mFadeTime + ", time offset : " + mTimeOffset;
+	}
 }

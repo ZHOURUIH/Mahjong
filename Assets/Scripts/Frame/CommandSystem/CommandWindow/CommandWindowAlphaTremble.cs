@@ -56,4 +56,8 @@ public class CommandWindowAlphaTremble : Command
 			comTrembling.play(mName, mLoop, mOnceLength, mOffset, mFullOnce, mAmplitude);
 		}
 	}
+	public override string showDebugInfo()
+	{
+		return this.GetType().ToString() + " : name : " + mName + ", once length : " + mOnceLength + ", offset : " + mOffset + ", start alpha : " + mStartAlpha + ", target alpha : " + mTargetAlpha + ", loop : " + mLoop + ", amplitude : " + mAmplitude + ", fullOnce : " + mFullOnce;
+	}
 }

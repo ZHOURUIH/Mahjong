@@ -19,12 +19,12 @@ public class RecorderParser
 		mAllPCMCount = 0;
 		int sampleRate = 44100;
 		// 采集音频输入
-		mBlockBufferSize = (int)(sampleRate * 0.03f);
+		mBlockBufferSize = (int)(sampleRate * 0.02f);
 		mRecorder = new WavRecorder(mBlockBufferSize, sampleRate);
 		mRecorder.setRecordCallback(onRecorderData);
 
 		// 缓冲区大小固定为2048,确保比mBlockBufferSize大
-		mRecorderDataBlockSize = 2048;
+		mRecorderDataBlockSize = 1024;
 		mAllPCMData = new short[mRecorderDataBlockSize];
 
 		// 频域缓冲区

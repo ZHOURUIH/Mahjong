@@ -35,6 +35,6 @@ public class CommandLayoutManagerLayoutVisible : Command
 	}
 	public override string showDebugInfo()
 	{
-		return this.GetType().ToString() + " : type : " + mLayoutType + ", visibility : " + mVisibility;
+		return this.GetType().ToString() + " : type : " + mLayoutType + ", visibility : " + mVisibility + ", force : " + mForce + ", immediately : " + mImmediately + ", param : " + mParam;
 	}
 }

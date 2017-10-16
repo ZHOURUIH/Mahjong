@@ -62,4 +62,8 @@ public class CommandWindowKeyFrameRotate : Command
 		mTrembleDoneCallBack = callback;
 		mTrembleDoneUserData = userData;
 	}
+	public override string showDebugInfo()
+	{
+		return this.GetType().ToString() + ": name : " + mName + ", once length : " + mOnceLength + ", offset : " + mOffset + ", loop : " + mLoop + ", amplitude : " + mAmplitude + ", full once : " + mFullOnce + ", random offset : " + mRandomOffset + ", start totation : " + mStartRotation + ", target rotation : " + mTargetRotation;
+	}
 }

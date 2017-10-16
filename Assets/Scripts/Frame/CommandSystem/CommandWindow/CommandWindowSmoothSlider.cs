@@ -26,4 +26,8 @@ class CommandWindowSmoothSlider :Command
 			componentSmoothSlider.start(mStartSliderValue, mTargetSliderValue, mFadeTime, mTimeOffset);
 		}
 	}
+	public override string showDebugInfo()
+	{
+		return this.GetType().ToString() + ": start slider value : " + mStartSliderValue + ", target slider value : " + mTargetSliderValue + ", fade time : " + mFadeTime + ", time offset : " + mTimeOffset;
+	}
 }

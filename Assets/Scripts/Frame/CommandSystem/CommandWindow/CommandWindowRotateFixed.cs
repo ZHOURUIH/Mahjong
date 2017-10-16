@@ -21,4 +21,8 @@ public class CommandWindowRotateFixed : Command
 			component.setFixedEuler(mFixedEuler);
 		}	
 	}
+	public override string showDebugInfo()
+	{
+		return this.GetType().ToString() + ": active : " + mActive + ", fixed euler : " + mFixedEuler; 
+	}
 }

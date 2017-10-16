@@ -259,7 +259,7 @@ public class GameFramework : MonoBehaviour
 	{
 		GameObject uiRootObj = UnityUtility.getGameObject(null, "UI Root");
 		GameObject rootTarget = UnityUtility.getGameObject(null, "UIRootTarget");
-		if(rootTarget == null)
+		if (rootTarget == null)
 		{
 			return;
 		}

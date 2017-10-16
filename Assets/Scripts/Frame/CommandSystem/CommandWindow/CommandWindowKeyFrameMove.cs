@@ -56,4 +56,8 @@ public class CommandWindowKeyFrameMove : Command
 		mTrembleDoneCallBack = callback;
 		mTrembleDoneUserData = userData;
 	}
+	public override string showDebugInfo()
+	{
+		return this.GetType().ToString() + " : name : " + mName + ", once length : " + mOnceLength + ", offset : " + mOffset + ", start pos : " + mStartPos + ", target pos : " + mTargetPos + ", loop : " + mLoop + ", amplitude : " + mAmplitude + ", fullOnce : " + mFullOnce;
+	}
 }

@@ -5,7 +5,7 @@ using System.Text;
 
 public class ScriptFactory
 {
-	protected Type mClassType;
+	protected Type		  mClassType;
 	protected LAYOUT_TYPE mType;
 	public ScriptFactory(LAYOUT_TYPE type, Type classType)
 	{

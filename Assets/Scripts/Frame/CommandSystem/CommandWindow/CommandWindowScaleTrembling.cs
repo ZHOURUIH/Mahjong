@@ -56,4 +56,8 @@ public class CommandWindowScaleTrembling : Command
 			comTrembling.play(mName, mLoop, mOnceLength, mOffset, mFullOnce, mAmplitude);
 		}
 	}
+	public override string showDebugInfo()
+	{
+		return this.GetType().ToString() + ": name : " + mName + ", once length : " + mOnceLength + ", offset : " + mOffset + ", loop : " + mLoop + ", amplitude : " + mAmplitude + ", full once : " + mFullOnce + ", start scale : " + mStartScale + ", target scale : " + mTargetScale;
+	}
 }

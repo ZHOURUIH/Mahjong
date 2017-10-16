@@ -56,4 +56,8 @@ public class CommandWindowHSLTremble : Command
 			comTrembling.play(mName, mLoop, mOnceLength, mOffset, mFullOnce, mAmplitude);
 		}
 	}
+	public override string showDebugInfo()
+	{
+		return this.GetType().ToString() + " : name : " + mName + ", once length : " + mOnceLength + ", offset : " + mOffset + ", start HSL : " + mStartHSL + ", target HSL : " + mTargetHSL + ", loop : " + mLoop + ", amplitude : " + mAmplitude + ", fullOnce : " + mFullOnce;
+	}
 }

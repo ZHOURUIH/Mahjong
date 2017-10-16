@@ -8,20 +8,23 @@ public class CameraManager : CommandReceiver
 {
 	protected Dictionary<string, GameCamera> mCameraList;
 	protected GameCamera mMainCamera;
-	protected GameCamera mUIEffectCamera;
 	protected GameCamera mUICamera;
+	protected GameCamera mUIForeEffectCamera;
+	protected GameCamera mUIBackEffectCamera;
+	protected GameCamera mUIBlurCamera;
 	public CameraManager()
 		:
 		base(typeof(CameraManager).ToString())
 	{
-		mCameraList = new Dictionary<string,GameCamera>();
+		mCameraList = new Dictionary<string, GameCamera>();
 	}
 	public void init()
 	{
-		// 默认获取主摄像机
-		mMainCamera = getCamera("Main Camera");
-		mUIEffectCamera = getCamera("EffectCamera");
-		mUICamera = getCamera("UICamera");
+		mMainCamera = getCamera("MainCamera");
+		mUICamera = getCamera("UICamera", "UI Root");
+		mUIForeEffectCamera = getCamera("UIForeEffectCamera", "UI Root");
+		mUIBackEffectCamera = getCamera("UIBackEffectCamera", "UI Root");
+		mUIBlurCamera = getCamera("UIBlurCamera", "UI Root");
 	}
 	public override void destroy()
 	{
@@ -35,7 +38,7 @@ public class CameraManager : CommandReceiver
 		}
 	}
 	// 获得摄像机,名字是场景中摄像机的名字
-	public GameCamera getCamera(string name)
+	public GameCamera getCamera(string name, string parentName = "")
 	{
 		if(mCameraList.ContainsKey(name))
 		{
@@ -43,8 +46,9 @@ public class CameraManager : CommandReceiver
 		}
 		else
 		{
+			GameObject parent = UnityUtility.getGameObject(null, parentName);
 			GameCamera camera = null;
-			GameObject obj = UnityUtility.getGameObject(null, name);
+			GameObject obj = UnityUtility.getGameObject(parent, name);
 			if(obj != null)
 			{
 				camera = new GameCamera(obj);
@@ -54,16 +58,9 @@ public class CameraManager : CommandReceiver
 			return camera;
 		}
 	}
-	public GameCamera getMainCamera()
-	{
-		return mMainCamera;
-	}
-	public GameCamera getUIEffectCamera()
-	{
-		return mUIEffectCamera;
-	}
-	public GameCamera getUICamera()
-	{
-		return mUICamera;
-	}
+	public GameCamera getMainCamera(){return mMainCamera;}
+	public GameCamera getUICamera(){return mUICamera;}
+	public GameCamera getUIForeEffectCamera(){return mUIForeEffectCamera;}
+	public GameCamera getUIBackEffectCamera() {return mUIBackEffectCamera;}
+	public GameCamera getUIBlurCamera() { return mUIBlurCamera; }
 }

@@ -41,6 +41,6 @@ public class CommandLayoutManagerLoadLayout : Command
 	}
 	public override string showDebugInfo()
 	{
-		return this.GetType().ToString() + "layout type : " + mLayoutType + ", visible : " + mVisible;
+		return this.GetType().ToString() + " : layout type : " + mLayoutType + ", visible : " + mVisible + ", result layout : " + mResultLayout + ", render order : " + mRenderOrder + ", Async : " + mAsync + ", call back : " + mCallback + ", param : " + mParam;
 	}
 }

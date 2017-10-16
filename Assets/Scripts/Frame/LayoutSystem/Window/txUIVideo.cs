@@ -178,6 +178,14 @@ public class txUIVideo : txUIObject
 		clearAndCallEvent(true);
 		mVideoEndCallback = callback;
 	}
+	public override float getAlpha()
+	{
+		return mTexture.alpha;
+	}
+	public override void setAlpha(float alpha)
+	{
+		mTexture.alpha = alpha;
+	}
 	//----------------------------------------------------------------------------------------------------------------------------------------
 	protected void notifyVideoReady(bool ready)
 	{

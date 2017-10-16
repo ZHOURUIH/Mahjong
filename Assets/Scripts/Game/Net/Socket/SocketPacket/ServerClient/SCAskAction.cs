@@ -29,8 +29,8 @@ public class SCAskAction : SocketPacket
 		List<MahjongAction> actionList = new List<MahjongAction>();
 		for(int i = 0; i < 4; ++i)
 		{
-			Character player = mCharacterManager.getCharacterByGUID(mActionPlayer.mValue[i]);
-			Character droppedPlayer = mCharacterManager.getCharacterByGUID(mDroppedPlayer.mValue[i]);
+			Character player = mCharacterManager.getCharacter(mActionPlayer.mValue[i]);
+			Character droppedPlayer = mCharacterManager.getCharacter(mDroppedPlayer.mValue[i]);
 			ACTION_TYPE type = (ACTION_TYPE)mAction.mValue[i];
 			if(type != ACTION_TYPE.AT_MAX)
 			{

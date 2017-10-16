@@ -321,7 +321,7 @@ public class AssetBundleLoader : MonoBehaviour
 			else if(assetsType == typeof(MovieTexture))
 			{
 #if UNITY_5_3_5
-				obj = www.movieTexture;
+				obj = www.movie;
 #else
 				obj = WWWAudioExtensions.GetMovieTexture(www);
 #endif

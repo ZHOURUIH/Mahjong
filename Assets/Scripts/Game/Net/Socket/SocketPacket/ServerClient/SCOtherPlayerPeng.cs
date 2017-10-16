@@ -31,8 +31,8 @@ public class SCOtherPlayerPeng : SocketPacket
 		ScriptMahjongFrame mahjongFrame = mLayoutManager.getScript(LAYOUT_TYPE.LT_MAHJONG_FRAME) as ScriptMahjongFrame;
 		mahjongFrame.notifyInfo("");
 		CommandCharacterPeng cmdGang = mCommandSystem.newCmd<CommandCharacterPeng>();
-		cmdGang.mDroppedPlayer = mCharacterManager.getCharacterByGUID(mDroppedPlayerGUID.mValue);
+		cmdGang.mDroppedPlayer = mCharacterManager.getCharacter(mDroppedPlayerGUID.mValue);
 		cmdGang.mMahjong = (MAHJONG)mMahjong.mValue;
-		mCommandSystem.pushCommand(cmdGang, mCharacterManager.getCharacterByGUID(mOtherPlayerGUID.mValue));
+		mCommandSystem.pushCommand(cmdGang, mCharacterManager.getCharacter(mOtherPlayerGUID.mValue));
 	}
 }

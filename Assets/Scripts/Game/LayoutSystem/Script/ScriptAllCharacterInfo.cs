@@ -66,7 +66,7 @@ public class CharacterInfoPanel
 	}
 	public void setName(string name)
 	{
-		mName.setText(name);
+		mName.setLabel(name);
 	}
 	public void setMoney(int money)
 	{

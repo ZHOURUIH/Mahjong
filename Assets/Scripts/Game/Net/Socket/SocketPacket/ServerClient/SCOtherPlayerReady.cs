@@ -22,6 +22,6 @@ public class SCOtherPlayerReady : SocketPacket
 	{
 		CommandCharacterNotifyReady cmd = mCommandSystem.newCmd<CommandCharacterNotifyReady>();
 		cmd.mReady = mReady.mValue;
-		mCommandSystem.pushCommand(cmd, mCharacterManager.getCharacterByGUID(mPlayerGUID.mValue));
+		mCommandSystem.pushCommand(cmd, mCharacterManager.getCharacter(mPlayerGUID.mValue));
 	}
 }

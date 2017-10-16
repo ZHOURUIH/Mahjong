@@ -3,20 +3,20 @@ using System.Collections;
 
 public class CommandCharacterManagerDestroy : Command
 {
-	public int mGUID = GameDefine.INVALID_ID;
+	public int mGUID = -1;
 	public string mName;
 	public override void init()
 	{
 		base.init();
-		mGUID = GameDefine.INVALID_ID;
+		mGUID = -1;
 		mName = "";
 	}
 	public override void execute()
 	{
 		CharacterManager characterManager = (mReceiver) as CharacterManager;
-		if(mGUID != GameDefine.INVALID_ID)
+		if(mGUID != -1)
 		{
-			characterManager.destroyCharacterByGUID(mGUID);
+			characterManager.destroyCharacter(mGUID);
 		}
 		else if(mName != null && mName != "")
 		{

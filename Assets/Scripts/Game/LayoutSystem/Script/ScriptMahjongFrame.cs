@@ -54,7 +54,7 @@ public class ScriptMahjongFrame : LayoutScript
 	}
 	public void setRoomID(int roomID)
 	{
-		mRoomIDLabel.setText(StringUtility.intToString(roomID));
+		mRoomIDLabel.setLabel(StringUtility.intToString(roomID));
 	}
 	public void notifyReady(bool ready)
 	{
@@ -68,7 +68,7 @@ public class ScriptMahjongFrame : LayoutScript
 	}
 	public void notifyInfo(string info)
 	{
-		mInfo.setText(info);
+		mInfo.setLabel(info);
 	}
 	//-----------------------------------------------------------------------------------
 	protected void onReadyClick(GameObject go)

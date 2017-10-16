@@ -18,7 +18,7 @@ public class SCOtherPlayerLeaveRoom : SocketPacket
 	}
 	public override void execute()
 	{
-		Character player = mCharacterManager.getCharacterByGUID(mPlayerGUID.mValue);
+		Character player = mCharacterManager.getCharacter(mPlayerGUID.mValue);
 		GameScene gameScene = mGameSceneManager.getCurScene();
 		if (gameScene.getSceneType() != GAME_SCENE_TYPE.GST_MAHJONG)
 		{

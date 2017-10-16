@@ -33,7 +33,7 @@ public class SCLoginRet : SocketPacket
 			CommandCharacterManagerCreateCharacter cmdCreate = mCommandSystem.newCmd<CommandCharacterManagerCreateCharacter>();
 			cmdCreate.mCharacterType = CHARACTER_TYPE.CT_MYSELF;
 			cmdCreate.mName = BinaryUtility.bytesToString(mName.mValue, Encoding.UTF8);
-			cmdCreate.mGUID = mPlayerGUID.mValue;
+			cmdCreate.mID = mPlayerGUID.mValue;
 			mCommandSystem.pushCommand(cmdCreate, mCharacterManager);
 			// 设置角色数据
 			CharacterMyself myself = mCharacterManager.getMyself();

@@ -40,13 +40,13 @@ public class EndingCharacter
 	}
 	public void setName(string name)
 	{
-		mName.setText(name);
+		mName.setLabel(name);
 	}
 	public void setMoneyDelta(int moneyDelta)
 	{
 		string deltaStr = StringUtility.intToString(Mathf.Abs(moneyDelta));
 		deltaStr = moneyDelta > 0 ? ("+" + deltaStr) : ("-" + deltaStr);
-		mMoneyDelta.setText(deltaStr);
+		mMoneyDelta.setLabel(deltaStr);
 	}
 }
 public class Multiple
@@ -79,11 +79,11 @@ public class Multiple
 	}
 	public void setDescribe(string describe)
 	{
-		mDescribe.setText(describe);
+		mDescribe.setLabel(describe);
 	}
 	public void setMultiple(int multiple)
 	{
-		mMultipleCount.setText(StringUtility.intToString(multiple) + " 番");
+		mMultipleCount.setLabel(StringUtility.intToString(multiple) + " 番");
 	}
 }
 

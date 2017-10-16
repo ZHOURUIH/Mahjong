@@ -18,7 +18,7 @@ public class SCOtherPlayerAskDrop : SocketPacket
 	}
 	public override void execute()
 	{
-		CharacterOther otherPlayer = mCharacterManager.getCharacterByGUID(mOtherPlayerGUID.mValue) as CharacterOther;
+		CharacterOther otherPlayer = mCharacterManager.getCharacter(mOtherPlayerGUID.mValue) as CharacterOther;
 		ScriptMahjongFrame mahjongFrame = mLayoutManager.getScript(LAYOUT_TYPE.LT_MAHJONG_FRAME) as ScriptMahjongFrame;
 		mahjongFrame.notifyInfo("正在等待玩家" + otherPlayer.getName() + "打出一张牌");
 	}

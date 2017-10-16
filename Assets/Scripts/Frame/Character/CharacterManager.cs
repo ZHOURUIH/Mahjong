@@ -132,7 +132,7 @@ public class CharacterManager : CommandReceiver
 		{
 			Character character = mCharacterGUIDList[oldID];
 			mCharacterGUIDList.Remove(oldID);
-			mCharacterGUIDList.Add(character.getCharacterData().mID, character);
+			mCharacterGUIDList.Add(character.getCharacterData().mGUID, character);
 		}
 	}
 	public void notifyCharacterNameChanged(string oldName)
@@ -177,7 +177,7 @@ public class CharacterManager : CommandReceiver
 			mCharacterTypeList.Add(character.getType(), characterMap);
 		}
 		// 加入ID索引表
-		int characterID = character.getCharacterData().mID;
+		int characterID = character.getCharacterData().mGUID;
 		if (!mCharacterGUIDList.ContainsKey(characterID))
 		{
 			mCharacterGUIDList.Add(characterID, character);
@@ -208,9 +208,9 @@ public class CharacterManager : CommandReceiver
 			}
 		}
 		// 从ID索引表中移除
-		if (mCharacterGUIDList.ContainsKey(character.getCharacterData().mID))
+		if (mCharacterGUIDList.ContainsKey(character.getCharacterData().mGUID))
 		{
-			mCharacterGUIDList.Remove(character.getCharacterData().mID);
+			mCharacterGUIDList.Remove(character.getCharacterData().mGUID);
 		}
 		character.destroy();
 	}

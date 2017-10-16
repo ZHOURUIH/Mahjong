@@ -8,12 +8,11 @@ public class PengGangInfo
 	public MAHJONG mMahjong;
 }
 
-public class CharacterData
+public class CharacterData : CharacterBaseData
 {
 	public CharacterData()
 	{
 		mGUID = GameDefine.INVALID_ID;
-		mName = "";
 		mPosition = PLAYER_POSITION.PP_MAX;
 		mHead = 0;
 		mReady = false;
@@ -23,8 +22,6 @@ public class CharacterData
 		mDropList = new List<MAHJONG>();
 		mHuaList = new List<MAHJONG>();
 	}
-	public int				mGUID;		// 玩家唯一ID,由服务器发送过来的
-	public string			mName;
 	public int				mMoney;
 	public int				mHead;
 	public PLAYER_POSITION	mServerPosition; // 服务器中的位置,在服务器中庄家的位置是MYSELF

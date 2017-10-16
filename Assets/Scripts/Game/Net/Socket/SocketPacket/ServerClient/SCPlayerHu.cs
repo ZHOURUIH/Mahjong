@@ -44,7 +44,7 @@ public class SCPlayerHu : SocketPacket
 			{
 				CommandRoomPlayerHu cmdHu = mCommandSystem.newCmd<CommandRoomPlayerHu>();
 				cmdHu.mHuList = huList;
-				cmdHu.mPlayer = mCharacterManager.getCharacterByGUID(mHuPlayerGUID.mValue[i]);
+				cmdHu.mPlayer = mCharacterManager.getCharacter(mHuPlayerGUID.mValue[i]);
 				mCommandSystem.pushCommand(cmdHu, room);
 			}
 		}

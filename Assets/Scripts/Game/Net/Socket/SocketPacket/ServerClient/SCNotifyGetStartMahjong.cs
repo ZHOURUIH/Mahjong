@@ -22,6 +22,6 @@ public class SCNotifyGetStartMahjong : SocketPacket
 	{
 		CommandCharacterGetStart cmd = mCommandSystem.newCmd<CommandCharacterGetStart>();
 		cmd.mMahjong = (MAHJONG)mMahjong.mValue;
-		mCommandSystem.pushCommand(cmd, mCharacterManager.getCharacterByGUID(mPlayerGUID.mValue));
+		mCommandSystem.pushCommand(cmd, mCharacterManager.getCharacter(mPlayerGUID.mValue));
 	}
 }

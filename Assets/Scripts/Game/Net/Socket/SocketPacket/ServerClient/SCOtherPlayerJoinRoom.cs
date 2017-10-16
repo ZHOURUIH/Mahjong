@@ -36,10 +36,10 @@ public class SCOtherPlayerJoinRoom : SocketPacket
 		// 创建该玩家的实例
 		CommandCharacterManagerCreateCharacter cmdCreate = mCommandSystem.newCmd<CommandCharacterManagerCreateCharacter>();
 		cmdCreate.mName = name;
-		cmdCreate.mGUID = mPlayerGUID.mValue;
+		cmdCreate.mID = mPlayerGUID.mValue;
 		cmdCreate.mCharacterType = CHARACTER_TYPE.CT_OTHER;
 		mCommandSystem.pushCommand(cmdCreate, mCharacterManager);
-		CharacterOther other = mCharacterManager.getCharacterByGUID(mPlayerGUID.mValue) as CharacterOther;
+		CharacterOther other = mCharacterManager.getCharacter(mPlayerGUID.mValue) as CharacterOther;
 		CharacterData data = other.getCharacterData();
 		data.mMoney = mMoney.mValue;
 		data.mHead = mHead.mValue;

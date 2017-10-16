@@ -47,8 +47,8 @@ public class ScriptCharacter : LayoutScript
 	public void setCharacterInfo(int head, string name, int id, int money)
 	{
 		mCharacterHead.setSpriteName("Head" + head);
-		mCharacterName.setText(name);
-		mCharacterID.setText("ID:" + StringUtility.intToString(id));
-		mMoney.setText(StringUtility.intToString(money));
+		mCharacterName.setLabel(name);
+		mCharacterID.setLabel("ID:" + StringUtility.intToString(id));
+		mMoney.setLabel(StringUtility.intToString(money));
 	}
 }

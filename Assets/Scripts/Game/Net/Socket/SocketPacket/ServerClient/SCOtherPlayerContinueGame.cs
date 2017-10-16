@@ -27,7 +27,7 @@ public class SCOtherPlayerContinueGame : SocketPacket
 		}
 		MahjongScene mahjongScene = gameScene as MahjongScene;
 		Room room = mahjongScene.getRoom();
-		Character player = mCharacterManager.getCharacterByGUID(mOtherPlayerGUID.mValue);
+		Character player = mCharacterManager.getCharacter(mOtherPlayerGUID.mValue);
 		CommandRoomJoin cmdJoin = mCommandSystem.newCmd<CommandRoomJoin>();
 		cmdJoin.mCharacter = player;
 		mCommandSystem.pushCommand(cmdJoin, room);

@@ -30,7 +30,7 @@ public class SCNotifyMahjongEnd : SocketPacket
 		Dictionary<Character, int> moneyDeltaList = new Dictionary<Character, int>();
 		for (int i = 0; i < GameDefine.MAX_PLAYER_COUNT; ++i)
 		{
-			moneyDeltaList.Add(mCharacterManager.getCharacterByGUID(mCharacterGUIDList.mValue[i]), mMoneyDeltaList.mValue[i]);
+			moneyDeltaList.Add(mCharacterManager.getCharacter(mCharacterGUIDList.mValue[i]), mMoneyDeltaList.mValue[i]);
 		}
 		CommandRoomEnd cmdEnd = mCommandSystem.newCmd<CommandRoomEnd>();
 		cmdEnd.mMoneyDeltaList = moneyDeltaList;

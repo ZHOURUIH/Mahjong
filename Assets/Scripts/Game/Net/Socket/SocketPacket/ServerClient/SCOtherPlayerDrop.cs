@@ -28,6 +28,6 @@ public class SCOtherPlayerDrop : SocketPacket
 		CommandCharacterDrop cmd = mCommandSystem.newCmd<CommandCharacterDrop>();
 		cmd.mMah = (MAHJONG)mMahjong.mValue;
 		cmd.mIndex = mIndex.mValue;
-		mCommandSystem.pushCommand(cmd, mCharacterManager.getCharacterByGUID(mPlayerGUID.mValue));
+		mCommandSystem.pushCommand(cmd, mCharacterManager.getCharacter(mPlayerGUID.mValue));
 	}
 }

@@ -28,7 +28,6 @@ public class GameFramework : MonoBehaviour
 	protected GameSceneManager		mGameSceneManager;
 	protected CharacterManager		mCharacterManager;
 	protected FrameConfig			mFrameConfig;
-	protected SocketManager			mSocketManager;
 	protected KeyFrameManager		mKeyFrameManager;
 	protected GlobalTouchSystem		mGlobalTouchSystem;
 	protected DllImportExtern		mDllImportExtern;
@@ -66,7 +65,6 @@ public class GameFramework : MonoBehaviour
 		mAudioManager = new AudioManager();
 		mGameSceneManager = new GameSceneManager();
 		mCharacterManager = new CharacterManager();
-		mSocketManager = new SocketManager();
 		mKeyFrameManager = new KeyFrameManager();
 		mGlobalTouchSystem = new GlobalTouchSystem();
 		mDllImportExtern = new DllImportExtern();
@@ -99,7 +97,6 @@ public class GameFramework : MonoBehaviour
 		mCommandSystem.init(showDebug);
 		mGameSceneManager.init();
 		mCharacterManager.init();
-		mSocketManager.init();
 		mKeyFrameManager.init();
 		mCameraManager.init();
 		mLayoutPrefabManager.init();
@@ -148,7 +145,6 @@ public class GameFramework : MonoBehaviour
 		mAudioManager.update(elapsedTime);
 		mGameSceneManager.update(elapsedTime);
 		mCharacterManager.update(elapsedTime);
-		mSocketManager.update(elapsedTime);
 		mLayoutManager.update(elapsedTime);
 		mCameraManager.update(elapsedTime);
 	}
@@ -160,7 +156,6 @@ public class GameFramework : MonoBehaviour
 	public virtual void destroy()
 	{
 		mLayoutPrefabManager.destroy();
-		mSocketManager.destroy();
 		mCharacterManager.destroy();
 		mGameSceneManager.destroy();
 		mAudioManager.destroy();
@@ -187,7 +182,6 @@ public class GameFramework : MonoBehaviour
 		mAudioManager = null;
 		mGameSceneManager = null;
 		mCharacterManager = null;
-		mSocketManager = null;
 		mKeyFrameManager = null;
 		mGlobalTouchSystem = null;
 		mDllImportExtern = null;
@@ -219,7 +213,6 @@ public class GameFramework : MonoBehaviour
 	public AudioManager getAudioManager() { return mAudioManager; }
 	public GameSceneManager getGameSceneManager() { return mGameSceneManager; }
 	public CharacterManager getCharacterManager() { return mCharacterManager; }
-	public SocketManager getSocketManager() { return mSocketManager; }
 	public KeyFrameManager getKeyFrameManager() { return mKeyFrameManager; }
 	public GameObject getGameFrameObject() { return mGameFrameObject; }
 	public FrameConfig getFrameConfig() { return mFrameConfig; }

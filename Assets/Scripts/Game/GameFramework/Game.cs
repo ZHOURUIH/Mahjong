@@ -12,9 +12,11 @@ public class Game : GameFramework
 	protected MaterialManager mMaterialManager;
 	protected HeadTextureManager mHeadTextureManager;
 	protected MahjongSystem mMahjongSystem;
+	protected SocketManager mSocketManager;
 	public override void start()
 	{
 		base.start();
+		mSocketManager = new SocketManager();
 		mGameConfig = new GameConfig();
 		mGameUtility = new GameUtility();
 		mMaterialManager = new MaterialManager();
@@ -40,6 +42,7 @@ public class Game : GameFramework
 	public override void init()
 	{
 		base.init();
+		mSocketManager.init();
 		mGameConfig.init();
 		mGameUtility.init();
 		mMaterialManager.init();
@@ -56,13 +59,16 @@ public class Game : GameFramework
 	public override void update(float elapsedTime)
 	{
 		base.update(elapsedTime);
+		mSocketManager.update(elapsedTime);
 	}
 	public override void destroy()
 	{
+		mSocketManager.destroy();
 		mGameConfig.destory();
 		mMaterialManager.destroy();
 		mHeadTextureManager.destroy();
 		mMahjongSystem.destroy();
+		mSocketManager = null;
 		mGameConfig = null;
 		mGameUtility = null;
 		mMaterialManager = null;
@@ -75,4 +81,5 @@ public class Game : GameFramework
 	public HeadTextureManager getHeadTextureManager() { return mHeadTextureManager; }
 	public MahjongSystem getMahjongSystem() { return mMahjongSystem; }
 	public GameConfig getGameConfig() { return mGameConfig; }
+	public SocketManager getSocketManager() { return mSocketManager; }
 }

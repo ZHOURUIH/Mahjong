@@ -11,7 +11,6 @@ public class FrameBase
 	public static GameSceneManager		mGameSceneManager		= null;
 	public static CharacterManager		mCharacterManager		= null;
 	public static GameLayoutManager		mLayoutManager			= null;
-	public static SocketManager			mSocketNetManager		= null;
 	public static KeyFrameManager		mKeyFrameManager		= null;
 	public static GlobalTouchSystem		mGlobalTouchSystem		= null;
 	public static ShaderManager			mShaderManager			= null;
@@ -31,7 +30,6 @@ public class FrameBase
 			mGameSceneManager = mGameFramework.getGameSceneManager();
 			mCharacterManager = mGameFramework.getCharacterManager();
 			mLayoutManager = mGameFramework.getLayoutManager();
-			mSocketNetManager = mGameFramework.getSocketManager();
 			mKeyFrameManager = mGameFramework.getKeyFrameManager();
 			mGlobalTouchSystem = mGameFramework.getGlobalTouchSystem();
 			mShaderManager = mGameFramework.getShaderManager();

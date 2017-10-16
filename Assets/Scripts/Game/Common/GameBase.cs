@@ -10,6 +10,7 @@ public class GameBase : FrameBase
 	public static MahjongSystem mMahjongSystem;
 	public static MaterialManager mMaterialManager;
 	public static HeadTextureManager mHeadTextureManager;
+	public static SocketManager mSocketNetManager;
 	public override void notifyConstructDone()
 	{
 		base.notifyConstructDone();
@@ -20,6 +21,7 @@ public class GameBase : FrameBase
 			mMahjongSystem = mGame.getMahjongSystem();
 			mMaterialManager = mGame.getMaterialManager();
 			mHeadTextureManager = mGame.getHeadTextureManager();
+			mSocketNetManager = mGame.getSocketManager();
 		}
 	}
 }

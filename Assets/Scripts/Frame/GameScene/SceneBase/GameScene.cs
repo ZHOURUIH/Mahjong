@@ -71,7 +71,11 @@ abstract public class GameScene : ComponentOwner
 	// 退出场景
 	public virtual void exit()
 	{
-		if(mCurProcedure != null)
+		// 首先进入退出流程,然后再退出最后的流程
+		CommandGameSceneChangeProcedure cmd = mCommandSystem.newCmd<CommandGameSceneChangeProcedure>();
+		cmd.mProcedure = mExitProcedure;
+		mCommandSystem.pushCommand(cmd, this);
+		if (mCurProcedure != null)
 		{
 			mCurProcedure.exit(null, null);
 			mCurProcedure = null;

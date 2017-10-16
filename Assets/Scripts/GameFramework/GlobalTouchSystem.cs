@@ -183,7 +183,8 @@ public class GlobalTouchSystem : GameBase
 			}
 			if (raycast.Count == 0)
 			{
-				notifyScreenActived();
+				GameScene gameScene = mGameSceneManager.getCurScene();
+				gameScene.notifyScreenActived();
 			}
 		}
 	}
@@ -194,10 +195,5 @@ public class GlobalTouchSystem : GameBase
 		Ray ray = UnityUtility.getRay(mousePos);
 		List<txUIButton> raycastRet = UnityUtility.raycast(ray, mButtonOrderList);
 		return raycastRet;
-	}
-	// 通知脚本屏幕被激活,也就是屏幕有点击事件
-	protected void notifyScreenActived()
-	{
-        ;
 	}
 }

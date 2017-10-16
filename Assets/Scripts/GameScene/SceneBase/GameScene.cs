@@ -84,7 +84,6 @@ abstract public class GameScene : ComponentOwner
 		mAudioSource = mSceneObject.AddComponent<AudioSource>();
 		return mAudioSource;
 	}
-	public virtual void setFirstProcedureName() { }
     public virtual void createSceneProcedure() { }
 	public bool atProcedure(PROCEDURE_TYPE type)
 	{
@@ -179,4 +178,5 @@ abstract public class GameScene : ComponentOwner
 		mSceneProcedureList.Add(procedure.getProcedureType(), procedure);
 		return procedure as T;
     }
+	public virtual void notifyScreenActived() { }
 }

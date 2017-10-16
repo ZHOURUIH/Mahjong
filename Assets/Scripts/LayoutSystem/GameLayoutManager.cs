@@ -162,7 +162,6 @@ public class GameLayoutManager : CommandReceiver
 		GameLayout layout = getGameLayout(type);
 		if (layout == null)
 		{
-			UnityUtility.logError("not find layout");
 			return;
 		}
 		removeLayoutFromList(layout);

@@ -400,6 +400,11 @@ public class StringUtility : GameBase
 	}
 	public static float stringToFloat(string str)
 	{
+		str = checkNumberString(str, "");
+		if(str == "")
+		{
+			return 0.0f;
+		}
 		return float.Parse(str);
 	}
 	public static int getStringLength(string str)

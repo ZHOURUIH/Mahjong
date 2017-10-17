@@ -11,6 +11,7 @@ public class txUIStaticTexture : txUIObject
 	protected string    mNormalShaderName;
 	protected Texture	mMask;
 	protected Vector2	mMaskSize;
+	protected float		mCriticalValue;
 	public txUIStaticTexture()
 	{
 		mType = UI_OBJECT_TYPE.UBT_STATIC_TEXTURE;
@@ -149,6 +150,8 @@ public class txUIStaticTexture : txUIObject
 	public void setMaskSize(Vector2 size){mMaskSize = size;}
 	public void setHSLOffset(Vector3 offset){mHSLOffset = offset;}
 	public Vector3 getHSLOff() {return mHSLOffset;}
+	public void setCriticalValue(float critical) { mCriticalValue = critical; }
+	public float getCriticalValue() { return mCriticalValue; }
 	public void setGray(bool gray)
 	{
 		if (mTexture == null)
@@ -196,6 +199,10 @@ public class txUIStaticTexture : txUIObject
 				mat.SetTexture("_MaskTex", mMask);
 				mat.SetFloat("_SizeX", mMaskSize.x);
 				mat.SetFloat("_SizeY", mMaskSize.y);
+			}
+			else if(shaderName == "Hexagon")
+			{
+				mat.SetFloat("_CriticalValue", mCriticalValue);
 			}
 		}
 	}

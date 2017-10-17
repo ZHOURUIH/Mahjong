@@ -20,9 +20,17 @@ public class txUIStaticSprite : txUIObject
 			mSprite = mObject.AddComponent<UISprite>();
 		}
 	}
+	public UIAtlas getAtlas()
+	{
+		return mSprite.atlas;
+	}
 	public string getSpriteName()
 	{
 		return mSprite.spriteName;
+	}
+	public void setAtlas(UIAtlas atlas)
+	{
+		mSprite.atlas = atlas;
 	}
 	public void setSpriteName(string name)
 	{

@@ -99,6 +99,22 @@ public abstract class LayoutScript : CommandReceiver
 		GameObject gameObject = getObjectFromList(parent.mObject, name);
 		return gameObject != null;
 	}
+	public T cloneObject<T>(txUIObject parent, txUIObject oriObj, string name, bool active = true) where T : txUIObject, new()
+	{
+		if(parent == null)
+		{
+			parent = mRoot;
+		}
+		GameObject obj = UnityUtility.cloneObject(oriObj.mObject, name);
+		obj.transform.parent = parent.mObject.transform;
+		T window = new T();
+		window.init(mLayout, obj);
+		window.setActive(active);
+		obj.transform.localPosition = oriObj.mObject.transform.localPosition;
+		obj.transform.localEulerAngles = oriObj.mObject.transform.localEulerAngles;
+		obj.transform.localScale = oriObj.mObject.transform.localScale;
+		return window;
+	}
 	// 创建txUIObject,并且新建GameObject,分配到txUIObject中
 	public T createObject<T>(txUIObject parent, string name, bool active = true) where T : txUIObject, new()
 	{

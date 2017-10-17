@@ -142,7 +142,12 @@ public class UnityUtility : GameBase
 		}
 		return go;
 	}
-
+	public static GameObject cloneObject(GameObject oriObj, string name)
+	{
+		GameObject obj = GameObject.Instantiate(oriObj);
+		obj.name = name;
+		return obj;
+	}
 	// 根据预设名实例化
 	public static GameObject instantiatePrefab(GameObject parent, string prefabName, string name, Vector3 scale, Vector3 rot, Vector3 pos)
 	{

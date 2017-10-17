@@ -104,10 +104,11 @@ public abstract class LayoutScript : CommandReceiver
 	{
 		T obj = new T();
 		GameObject go = new GameObject(name);
-		if(parent != null && parent.mObject != null)
+		if(parent == null)
 		{
-			go.transform.parent = parent.mObject.transform;
+			parent = mRoot;
 		}
+		go.transform.parent = parent.mObject.transform;
 		go.transform.localScale = Vector3.one;
 		go.layer = parent.mObject.layer;
 		obj.init(mLayout, go);

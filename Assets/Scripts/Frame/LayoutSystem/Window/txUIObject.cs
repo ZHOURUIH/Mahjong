@@ -6,12 +6,12 @@ using UnityEngine;
 
 public class txUIObject : ComponentOwner
 {
-	public UI_OBJECT_TYPE mType = UI_OBJECT_TYPE.UBT_BASE;
-	public GameObject mObject;
-	public AudioSource mAudioSource;
-	public Transform mTransform;
+	protected UI_OBJECT_TYPE mType = UI_OBJECT_TYPE.UBT_BASE;
+	protected AudioSource mAudioSource;
+	protected Transform mTransform;
+	protected static int mIDSeed = 0;
 	public GameLayout mLayout;
-	public static int mIDSeed = 0;
+	public GameObject mObject;
 	public int mID;
 	public txUIObject()
 		:

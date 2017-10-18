@@ -7,11 +7,7 @@ using UnityEngine;
 public class txUIStaticTexture : txUIObject
 {
 	protected UITexture mTexture;
-	protected Vector3   mHSLOffset;	// 当前HSL偏移,只有当shader为HSLOffet或者HSLOffsetLinearDodge时才有效
 	protected string    mNormalShaderName;
-	protected Texture	mMask;
-	protected Vector2	mMaskSize;
-	protected float		mCriticalValue;
 	public txUIStaticTexture()
 	{
 		mType = UI_OBJECT_TYPE.UBT_STATIC_TEXTURE;
@@ -146,28 +142,6 @@ public class txUIStaticTexture : txUIObject
 		}
 		mTexture.fillAmount = percent;
 	}
-	public void setMaskTexture(Texture mask){mMask = mask;}
-	public void setMaskSize(Vector2 size){mMaskSize = size;}
-	public void setHSLOffset(Vector3 offset){mHSLOffset = offset;}
-	public Vector3 getHSLOff() {return mHSLOffset;}
-	public void setCriticalValue(float critical) { mCriticalValue = critical; }
-	public float getCriticalValue() { return mCriticalValue; }
-	public void setGray(bool gray)
-	{
-		if (mTexture == null)
-		{
-			return;
-		}
-		// 设置为灰色shader时,需要记录当前shader名,以便取消灰色时恢复之前的shader
-		if (gray)
-		{
-			mTexture.shader = mShaderManager.getShader("Gray");
-		}
-		else
-		{
-			mTexture.shader = mShaderManager.getShader(mNormalShaderName);
-		}
-	}
 	public override float getFillPercent()
 	{
 		if (mTexture == null)
@@ -187,23 +161,10 @@ public class txUIStaticTexture : txUIObject
 	//---------------------------------------------------------------------------------------------------
 	protected void onWidgetRender(Material mat)
 	{
-		if (mat != null && mat.shader != null)
-		{
-			string shaderName = mat.shader.name;
-			if (shaderName == "HSLOffset" || shaderName == "HSLOffsetLinearDodge")
-			{
-				mat.SetColor("_HSLOffset", new Color(mHSLOffset.x, mHSLOffset.y, mHSLOffset.z));
-			}
-			else if(shaderName == "MaskCut")
-			{
-				mat.SetTexture("_MaskTex", mMask);
-				mat.SetFloat("_SizeX", mMaskSize.x);
-				mat.SetFloat("_SizeY", mMaskSize.y);
-			}
-			else if(shaderName == "Hexagon")
-			{
-				mat.SetFloat("_CriticalValue", mCriticalValue);
-			}
-		}
+		applyShader(mat);
+	}
+	protected virtual void applyShader(Material mat)
+	{
+		;
 	}
 }

@@ -18,7 +18,7 @@ public class WindowComponentHSLTrembling : ComponentKeyFrame
 	protected override bool isType(Type type) { return base.isType(type) || type == typeof(WindowComponentHSLTrembling); }
 	protected override void applyTrembling(float offset)
 	{
-		txUIStaticTexture window = (mComponentOwner) as txUIStaticTexture;
+		txUIStaticTextureHSLOffset window = (mComponentOwner) as txUIStaticTextureHSLOffset;
 		if(window != null)
 		{
 			Vector3 hsl = mStartHSL + (mTargetHSL - mStartHSL) * offset;

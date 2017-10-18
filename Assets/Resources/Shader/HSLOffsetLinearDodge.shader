@@ -1,6 +1,4 @@
-﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
-Shader "HSLOffsetLinearDodge"
+﻿Shader "HSLOffsetLinearDodge"
 {
 	Properties
 	{
@@ -169,7 +167,7 @@ Shader "HSLOffsetLinearDodge"
 			v2f vert (appdata v)
 			{
 				v2f o;
-				o.vertex = UnityObjectToClipPos(v.vertex);
+				o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
 				o.texcoord = v.texcoord;
 				o.color = v.color;
 				return o;
@@ -178,7 +176,6 @@ Shader "HSLOffsetLinearDodge"
 			fixed4 frag (v2f i) : SV_Target
 			{
 				fixed4 col = tex2D(_MainTex, i.texcoord);
-				col.a *= i.color.a;
 				// 转换到HSL颜色空间,再做HSL计算偏移
 				float3 hsl = RGBtoHSL(float3(col.r, col.g, col.b));
 				hsl += float3(_HSLOffset.r, _HSLOffset.g, _HSLOffset.b);
@@ -190,6 +187,7 @@ Shader "HSLOffsetLinearDodge"
 				col.r = clamp(rgb.r, 0.0, 1.0);
 				col.g = clamp(rgb.g, 0.0, 1.0);
 				col.b = clamp(rgb.b, 0.0, 1.0);
+				col.a *= i.color.a;
 				return col;
 			}
 			ENDCG

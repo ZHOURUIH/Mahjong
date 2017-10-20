@@ -24,5 +24,17 @@ public class WindowComponentHSLTrembling : ComponentKeyFrame
 			Vector3 hsl = mStartHSL + (mTargetHSL - mStartHSL) * offset;
 			window.setHSLOffset(hsl);
 		}
+		else if(mComponentOwner != null)
+		{
+			txUIObject obj = mComponentOwner as txUIObject;
+			if(obj != null)
+			{
+				UnityUtility.logError("window is not a hsl window! name : " + mComponentOwner.getName() + ", layout : " + obj.mLayout.getName());
+			}
+			else
+			{
+				UnityUtility.logError("ComponentOwner is not a window! name : " + mComponentOwner.getName());
+			}
+		}
 	}
 }

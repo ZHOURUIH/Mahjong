@@ -55,6 +55,7 @@ public class txUIObject : ComponentOwner
 		addComponent<ComponentRotateFixed>("RotateFixed").setActive(false);
 		addComponent<WindowComponentHSLTrembling>("HSLTrembling").setActive(false);
 	}
+	public UI_OBJECT_TYPE getUIType() { return mType; }
 	public Transform getTransform() { return mTransform; }
 	public AudioSource getAudioSource() { return mAudioSource; }
 	public AudioSource createAudioSource()

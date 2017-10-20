@@ -27,18 +27,32 @@ public class WindowComponentHSLTrembling : ComponentKeyFrame
 		if(uiObj.getUIType() == UI_OBJECT_TYPE.UBT_STATIC_TEXTURE)
 		{
 			txUIStaticTextureHSLOffset window = (mComponentOwner) as txUIStaticTextureHSLOffset;
-			Vector3 hsl = mStartHSL + (mTargetHSL - mStartHSL) * offset;
-			window.setHSLOffset(hsl);
+			if(window != null)
+			{
+				Vector3 hsl = mStartHSL + (mTargetHSL - mStartHSL) * offset;
+				window.setHSLOffset(hsl);
+			}
+			else
+			{
+				UnityUtility.logError("window is not a hsl window! name : " + mComponentOwner.getName() + ", layout : " + uiObj.mLayout.getName());
+			}
 		}
 		else if(uiObj.getUIType() == UI_OBJECT_TYPE.UBT_TEXTURE_ANIM)
 		{
 			txUITextureAnimHSLOffset window = (mComponentOwner) as txUITextureAnimHSLOffset;
-			Vector3 hsl = mStartHSL + (mTargetHSL - mStartHSL) * offset;
-			window.setHSLOffset(hsl);
+			if(window != null)
+			{
+				Vector3 hsl = mStartHSL + (mTargetHSL - mStartHSL) * offset;
+				window.setHSLOffset(hsl);
+			}
+			else
+			{
+				UnityUtility.logError("window is not a hsl window! name : " + mComponentOwner.getName() + ", layout : " + uiObj.mLayout.getName());
+			}
 		}
 		else
 		{
-			UnityUtility.logError("window is not a hsl window! name : " + mComponentOwner.getName() + ", layout : " + uiObj.mLayout.getName());
+			UnityUtility.logError("window is not a texture window! name : " + mComponentOwner.getName() + ", layout : " + uiObj.mLayout.getName());
 		}
 	}
 }

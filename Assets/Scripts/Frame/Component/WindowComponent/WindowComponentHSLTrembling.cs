@@ -18,23 +18,27 @@ public class WindowComponentHSLTrembling : ComponentKeyFrame
 	protected override bool isType(Type type) { return base.isType(type) || type == typeof(WindowComponentHSLTrembling); }
 	protected override void applyTrembling(float offset)
 	{
-		txUIStaticTextureHSLOffset window = (mComponentOwner) as txUIStaticTextureHSLOffset;
-		if(window != null)
+		txUIObject uiObj = mComponentOwner as txUIObject;
+		if (uiObj == null)
 		{
+			UnityUtility.logError("ComponentOwner is not a window! name : " + mComponentOwner.getName());
+			return;
+		}
+		if(uiObj.getUIType() == UI_OBJECT_TYPE.UBT_STATIC_TEXTURE)
+		{
+			txUIStaticTextureHSLOffset window = (mComponentOwner) as txUIStaticTextureHSLOffset;
 			Vector3 hsl = mStartHSL + (mTargetHSL - mStartHSL) * offset;
 			window.setHSLOffset(hsl);
 		}
-		else if(mComponentOwner != null)
+		else if(uiObj.getUIType() == UI_OBJECT_TYPE.UBT_TEXTURE_ANIM)
 		{
-			txUIObject obj = mComponentOwner as txUIObject;
-			if(obj != null)
-			{
-				UnityUtility.logError("window is not a hsl window! name : " + mComponentOwner.getName() + ", layout : " + obj.mLayout.getName());
-			}
-			else
-			{
-				UnityUtility.logError("ComponentOwner is not a window! name : " + mComponentOwner.getName());
-			}
+			txUITextureAnimHSLOffset window = (mComponentOwner) as txUITextureAnimHSLOffset;
+			Vector3 hsl = mStartHSL + (mTargetHSL - mStartHSL) * offset;
+			window.setHSLOffset(hsl);
+		}
+		else
+		{
+			UnityUtility.logError("window is not a hsl window! name : " + mComponentOwner.getName() + ", layout : " + uiObj.mLayout.getName());
 		}
 	}
 }

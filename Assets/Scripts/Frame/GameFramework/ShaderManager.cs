@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class ShaderManager
+public class ShaderManager : GameBase
 {
 	protected Dictionary<string, Shader> mShaderList;
 	public ShaderManager()

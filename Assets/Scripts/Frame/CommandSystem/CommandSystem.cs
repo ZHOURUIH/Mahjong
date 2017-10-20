@@ -15,7 +15,7 @@ public class DelayCommand
 	}
 };
 
-public class CommandSystem
+public class CommandSystem : GameBase
 {
 	protected CommandPool mCommandPool;
 	protected List<DelayCommand> mCommandBufferProcess = new List<DelayCommand>();	// 用于处理的命令列表

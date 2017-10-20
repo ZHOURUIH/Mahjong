@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-public class DllImportExtern
+public class DllImportExtern : GameBase
 {
 	protected static Dictionary<string, Dll> mDllLibraryList = new Dictionary<string, Dll>();
 	

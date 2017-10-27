@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.Events;
+using System.Collections;
+using RenderHeads.Media.AVProVideo;
 
-public class txUIStaticTextureCriticalMask : txUIStaticTexture
+public class txUIVideoCriticalMask : txUIVideo
 {
 	protected float mCriticalValue = 1.0f;
 	protected bool mInverseVertical = false;
-	public txUIStaticTextureCriticalMask()
+	public txUIVideoCriticalMask()
 	{
 		;
 	}
@@ -16,9 +15,13 @@ public class txUIStaticTextureCriticalMask : txUIStaticTexture
 	{
 		base.init(layout, go);
 	}
+	public override void update(float elapsedTime)
+	{
+		base.update(elapsedTime);
+	}
 	public void setCriticalValue(float critical) { mCriticalValue = critical; }
 	public void setInverseVertical(bool inverse) { mInverseVertical = inverse; }
-	//---------------------------------------------------------------------------------------------------
+	//---------------------------------------------------------------------------------------------------------------------------------------
 	protected override void applyShader(Material mat)
 	{
 		base.applyShader(mat);

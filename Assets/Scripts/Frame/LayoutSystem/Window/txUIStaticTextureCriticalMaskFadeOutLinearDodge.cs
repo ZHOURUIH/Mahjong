@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class txUIStaticTextureCriticalMask : txUIStaticTexture
+public class txUIStaticTextureCriticalMaskFadeOutLinearDodge : txUIStaticTextureCriticalMask
 {
-	protected float mCriticalValue = 1.0f;
-	protected bool mInverseVertical = false;
-	public txUIStaticTextureCriticalMask()
+	protected float mFadeOutCriticalValue;
+	public txUIStaticTextureCriticalMaskFadeOutLinearDodge()
 	{
 		;
 	}
@@ -16,8 +15,7 @@ public class txUIStaticTextureCriticalMask : txUIStaticTexture
 	{
 		base.init(layout, go);
 	}
-	public void setCriticalValue(float critical) { mCriticalValue = critical; }
-	public void setInverseVertical(bool inverse) { mInverseVertical = inverse; }
+	public void setFadeOutCriticalValue(float value) { mFadeOutCriticalValue = value; }
 	//---------------------------------------------------------------------------------------------------
 	protected override void applyShader(Material mat)
 	{
@@ -25,8 +23,9 @@ public class txUIStaticTextureCriticalMask : txUIStaticTexture
 		if (mat != null && mat.shader != null)
 		{
 			string shaderName = mat.shader.name;
-			if (shaderName == "CriticalMask")
+			if (shaderName == "CriticalMaskFadeOutLinearDodge")
 			{
+				mat.SetFloat("_FadeOutCriticalValue", mFadeOutCriticalValue);
 				mat.SetFloat("_CriticalValue", mCriticalValue);
 				mat.SetInt("_InverseVertical", mInverseVertical ? 1 : 0);
 			}

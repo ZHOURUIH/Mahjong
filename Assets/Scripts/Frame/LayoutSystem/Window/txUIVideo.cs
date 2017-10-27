@@ -3,9 +3,8 @@ using UnityEngine.Events;
 using System.Collections;
 using RenderHeads.Media.AVProVideo;
 
-public class txUIVideo : txUIObject
+public class txUIVideo : txUIStaticTexture
 {
-	protected UITexture mTexture;
 	protected MediaPlayer mMediaPlayer;
 	protected string mFileName;
 	protected VideoPlayEndCallback mVideoEndCallback;
@@ -23,11 +22,6 @@ public class txUIVideo : txUIObject
 	public override void init(GameLayout layout, GameObject go)
 	{
 		base.init(layout, go);
-		mTexture = mObject.GetComponent<UITexture>();
-		if (mTexture == null)
-		{
-			mTexture = mObject.AddComponent<UITexture>();
-		}
 		mMediaPlayer = mObject.GetComponent<MediaPlayer>();
 		if (mMediaPlayer == null)
 		{
@@ -177,14 +171,6 @@ public class txUIVideo : txUIObject
 		// 重新设置回调之前,先调用之前的回调
 		clearAndCallEvent(true);
 		mVideoEndCallback = callback;
-	}
-	public override float getAlpha()
-	{
-		return mTexture.alpha;
-	}
-	public override void setAlpha(float alpha)
-	{
-		mTexture.alpha = alpha;
 	}
 	//----------------------------------------------------------------------------------------------------------------------------------------
 	protected void notifyVideoReady(bool ready)

@@ -1,10 +1,12 @@
-﻿Shader "CriticalMask"
+﻿Shader "CriticalMaskFadeOutLinearDodge"
 {
 	Properties
 	{
 		_MainTex ("Texture", 2D) = "white" {}
 		_MaskTex("Texture", 2D) = "white" {}
+		_FadeOutTex("Texture", 2D) = "black" {}
 		_CriticalValue("Critical Value", float) = 1
+		_FadeOutCriticalValue("Fade Out Critical Value", float) = 0
 		_InverseVertical("Inverse Vertical", int) = 0
 	}
 	SubShader
@@ -26,7 +28,7 @@
 		Offset -1, -1
 		Fog { Mode Off }
 		ColorMask RGB
-		Blend SrcAlpha OneMinusSrcAlpha
+		Blend SrcAlpha DstAlpha
 
 		Pass
 		{
@@ -52,8 +54,10 @@
 
 			sampler2D _MainTex;
 			sampler2D _MaskTex;
+			sampler2D _FadeOutTex;
 			float4 _MainTex_ST;
 			float _CriticalValue;
+			float _FadeOutCriticalValue;
 			int _InverseVertical;
 
 			v2f vert (appdata v)
@@ -72,6 +76,12 @@
 				maskUV.y = abs(_InverseVertical - maskUV.y);
 				fixed4 maskColor = tex2D(_MaskTex, maskUV).rgba;
 				srcColor.a = srcColor.a * ceil(maskColor.r - _CriticalValue);
+				// 当前绿色分量减去临界值表示距离,距离小于0时不显示,大于0且小于1时,距离越远透明度越低
+				fixed4 fadeOutColor = tex2D(_FadeOutTex, i.uv).rgba;
+				float distance = 1 - fadeOutColor.g - _FadeOutCriticalValue;
+				distance = distance * ceil(distance) * 3;
+				distance = clamp(distance, 0, 1);
+				srcColor.a = srcColor.a * pow(distance, 2);
 				return srcColor;
 			}
 			ENDCG

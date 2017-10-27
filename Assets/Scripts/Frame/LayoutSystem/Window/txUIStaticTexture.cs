@@ -158,6 +158,22 @@ public class txUIStaticTexture : txUIObject
 		}
 		return new Vector2(mTexture.width, mTexture.height);
 	}
+	public int getDepth()
+	{
+		if(mTexture == null)
+		{
+			return 0;
+		}
+		return mTexture.depth;
+	}
+	public void setDepth(int depth)
+	{
+		if(mTexture == null)
+		{
+			return;
+		}
+		mTexture.depth = depth;
+	}
 	//---------------------------------------------------------------------------------------------------
 	protected void onWidgetRender(Material mat)
 	{

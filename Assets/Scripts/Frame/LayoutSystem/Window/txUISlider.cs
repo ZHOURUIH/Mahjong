@@ -8,9 +8,9 @@ public class txUISlider : txUIObject
 	{
 		mType = UI_OBJECT_TYPE.UBT_SLIDER;
 	}
-	public override void init(GameLayout layout, GameObject go)
+	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{
-		base.init(layout, go);
+		base.init(layout, go, parent);
 		mSlider = mObject.GetComponent<UISlider>();
 		if(mSlider == null)
 		{

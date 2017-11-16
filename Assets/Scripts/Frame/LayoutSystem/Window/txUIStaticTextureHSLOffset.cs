@@ -11,9 +11,9 @@ public class txUIStaticTextureHSLOffset : txUIStaticTexture
 	{
 		;
 	}
-	public override void init(GameLayout layout, GameObject go)
+	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{
-		base.init(layout, go);
+		base.init(layout, go, parent);
 	}
 	public void setHSLOffset(Vector3 offset){mHSLOffset = offset;}
 	public Vector3 getHSLOff() {return mHSLOffset;}

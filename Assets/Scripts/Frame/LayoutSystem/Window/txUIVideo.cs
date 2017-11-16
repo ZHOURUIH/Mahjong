@@ -19,9 +19,9 @@ public class txUIVideo : txUIStaticTexture
 	{
 		mType = UI_OBJECT_TYPE.UBT_VIDEO;
 	}
-	public override void init(GameLayout layout, GameObject go)
+	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{
-		base.init(layout, go);
+		base.init(layout, go, parent);
 		mMediaPlayer = mObject.GetComponent<MediaPlayer>();
 		if (mMediaPlayer == null)
 		{

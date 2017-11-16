@@ -12,9 +12,9 @@ using UnityEngine;
 	{
 		mType = UI_OBJECT_TYPE.UBT_PARTICLE;
 	}
-	public override void init(GameLayout layout, GameObject go)
+	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{
-		base.init(layout, go);
+		base.init(layout, go, parent);
 		mParticle = go.GetComponent<ParticleSystem>();
 		setBack(false);
 	}

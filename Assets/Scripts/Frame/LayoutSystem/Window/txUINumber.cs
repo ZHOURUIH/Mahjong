@@ -18,9 +18,9 @@ public class txUINumber : txUIStaticSprite
 	{
 		mType = UI_OBJECT_TYPE.UBT_NUMBER;
 	}
-	public override void init(GameLayout layout, GameObject go)
+	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{
-		base.init(layout, go);
+		base.init(layout, go, parent);
 		if(mSprite == null || mSprite.atlas == null)
 		{
 			return;

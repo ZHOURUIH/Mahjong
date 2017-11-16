@@ -43,6 +43,15 @@ public abstract class LayoutScript : CommandReceiver
 	{
 		findWindow(null, mRoot.mObject, ref mAllWindowList);
 	}
+	public void registeBoxCollider(txUIObject obj, BoxColliderClickCallback clickCallback = null,
+		BoxColliderHoverCallback hoverCallback = null, BoxColliderPressCallback pressCallback = null)
+	{
+		mGlobalTouchSystem.registeBoxCollider(obj, clickCallback, hoverCallback, pressCallback);
+	}
+	public void unregisteBoxCollider(txUIObject obj)
+	{
+		mGlobalTouchSystem.unregisteBoxCollider(obj);
+	}
 	public void findWindow(GameObject parent, GameObject gameObject, ref Dictionary<string, List<WindowInfo>> windowList)
 	{
 		// 将自己加入列表
@@ -108,7 +117,7 @@ public abstract class LayoutScript : CommandReceiver
 		GameObject obj = UnityUtility.cloneObject(oriObj.mObject, name);
 		obj.transform.parent = parent.mObject.transform;
 		T window = new T();
-		window.init(mLayout, obj);
+		window.init(mLayout, obj, parent);
 		window.setActive(active);
 		obj.transform.localPosition = oriObj.mObject.transform.localPosition;
 		obj.transform.localEulerAngles = oriObj.mObject.transform.localEulerAngles;
@@ -127,7 +136,7 @@ public abstract class LayoutScript : CommandReceiver
 		go.transform.parent = parent.mObject.transform;
 		go.transform.localScale = Vector3.one;
 		go.layer = parent.mObject.layer;
-		obj.init(mLayout, go);
+		obj.init(mLayout, go, parent);
 		obj.setActive(active);
 		return obj;
 	}
@@ -148,7 +157,7 @@ public abstract class LayoutScript : CommandReceiver
 			return null;
 		}
 		T obj = new T();
-		obj.init(mLayout, gameObject);
+		obj.init(mLayout, gameObject, parent);
 		if (active == 0)
 		{
 			obj.setActive(false);

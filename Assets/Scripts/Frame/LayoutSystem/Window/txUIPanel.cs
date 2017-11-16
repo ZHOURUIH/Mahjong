@@ -8,20 +8,21 @@ public class txUIPanel : txUIObject
 	{
 		mType = UI_OBJECT_TYPE.UBT_PANEL;
 	}
-	public override void init(GameLayout layout, GameObject go)
+	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{
-		base.init(layout, go);
+		base.init(layout, go, parent);
 		mPanel = mObject.GetComponent<UIPanel>();
 		if (mPanel == null)
 		{
 			mPanel = mObject.AddComponent<UIPanel>();
 		}
 	}
-	public void setDepth(int depth)
+	public override void setDepth(int depth)
 	{
+		// 不调用基类函数
 		mPanel.depth = depth;
 	}
-	public int getDepth()
+	public override int getDepth()
 	{
 		return mPanel.depth;
 	}

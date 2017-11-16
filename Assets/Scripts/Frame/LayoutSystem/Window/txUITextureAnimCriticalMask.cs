@@ -11,9 +11,9 @@ public class txUITextureAnimCriticalMask : txUITextureAnim
 	{
 		;
 	}
-	public override void init(GameLayout layout, GameObject go)
+	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{
-		base.init(layout, go);
+		base.init(layout, go, parent);
 	}
 	public void setCriticalValue(float critical) { mCriticalValue = critical; }
 	//---------------------------------------------------------------------------------------------------

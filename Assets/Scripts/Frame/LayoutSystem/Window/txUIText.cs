@@ -8,9 +8,9 @@ public class txUIText : txUIObject
 	{
 		mType = UI_OBJECT_TYPE.UBT_TEXT;
 	}
-	public override void init(GameLayout layout, GameObject go)
+	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{
-		base.init(layout, go);
+		base.init(layout, go, parent);
 		mLabel = mObject.GetComponent<UILabel>();
 		if (mLabel == null)
 		{

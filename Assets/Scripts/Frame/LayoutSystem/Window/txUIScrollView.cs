@@ -11,9 +11,9 @@ public class txUIScrollView : txUIObject
 	{
 		mType = UI_OBJECT_TYPE.UBT_SCROLL_VIEW;
 	}
-	public override void init(GameLayout layout, GameObject go)
+	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{
-		base.init(layout, go);
+		base.init(layout, go, parent);
 		mScrollView = go.GetComponent<UIScrollView>();
 		int childCount = mScrollView.transform.childCount;
 		for (int i = 0; i < childCount; ++i)

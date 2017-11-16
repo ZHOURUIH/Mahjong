@@ -37,9 +37,9 @@ public class txUITextureAnim : txUIStaticTexture
 		mTextureNameList = new List<TextureInfo>();
 		mInverseInterval = 1.0f / mInterval;
 	}
-	public override void init(GameLayout layout, GameObject go)
+	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{
-		base.init(layout, go);
+		base.init(layout, go, parent);
 		string textureName = getTextureName();
 		int index = textureName.LastIndexOf('_');
 		if(index >= 0)

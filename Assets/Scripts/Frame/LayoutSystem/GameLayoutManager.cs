@@ -38,7 +38,7 @@ public class GameLayoutManager : CommandReceiver
 	public void init()
 	{
 		mUIRoot = new txUIObject();
-		mUIRoot.init(null, UnityUtility.getGameObject(null, "UI Root"));
+		mUIRoot.init(null, UnityUtility.getGameObject(null, "UI Root"), null);
 		if (mUIRoot.mObject == null)
 		{
 			UnityUtility.logError("can not find ui root! please add it to scene!");

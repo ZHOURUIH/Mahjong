@@ -12,9 +12,9 @@ public class txUIStaticTexture : txUIObject
 	{
 		mType = UI_OBJECT_TYPE.UBT_STATIC_TEXTURE;
 	}
-	public override void init(GameLayout layout, GameObject go)
+	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{
-		base.init(layout, go);
+		base.init(layout, go, parent);
 		mTexture = mObject.GetComponent<UITexture>();
 		if (mTexture == null)
 		{
@@ -158,7 +158,7 @@ public class txUIStaticTexture : txUIObject
 		}
 		return new Vector2(mTexture.width, mTexture.height);
 	}
-	public int getDepth()
+	public override int getDepth()
 	{
 		if(mTexture == null)
 		{
@@ -166,21 +166,19 @@ public class txUIStaticTexture : txUIObject
 		}
 		return mTexture.depth;
 	}
-	public void setDepth(int depth)
+	public override void setDepth(int depth)
 	{
 		if(mTexture == null)
 		{
 			return;
 		}
 		mTexture.depth = depth;
+		base.setDepth(depth);
 	}
 	//---------------------------------------------------------------------------------------------------
 	protected void onWidgetRender(Material mat)
 	{
 		applyShader(mat);
 	}
-	protected virtual void applyShader(Material mat)
-	{
-		;
-	}
+	protected virtual void applyShader(Material mat){}
 }

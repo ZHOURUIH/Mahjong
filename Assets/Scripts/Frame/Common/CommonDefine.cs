@@ -65,9 +65,9 @@ public delegate void SpriteAnimCallBack(txUISpriteAnim window, object userData, 
 public delegate void TextureAnimCallBack(txUITextureAnim window, object userData, bool isBreak);
 public delegate void KeyFrameCallback(ComponentKeyFrame component, object userData, bool breakTremling, bool done);
 public delegate void CommandCallback(object user_data, Command cmd);
-public delegate void BoxColliderClickCallback(txUIButton obj);
-public delegate void BoxColliderHoverCallback(txUIButton obj, bool hover);
-public delegate void BoxColliderPressCallback(txUIButton obj, bool press);
+public delegate void BoxColliderClickCallback(txUIObject obj);
+public delegate void BoxColliderHoverCallback(txUIObject obj, bool hover);
+public delegate void BoxColliderPressCallback(txUIObject obj, bool press);
 public delegate void AssetLoadDoneCallback(UnityEngine.Object res, object userData);
 public delegate void AssetBundleLoadDoneCallback(List<UnityEngine.Object> resList);
 public delegate void LayoutAsyncDone(GameLayout layout);

@@ -10,9 +10,9 @@ public class txUITextureAnimFeather : txUITextureAnim
 	{
 		;
 	}
-	public override void init(GameLayout layout, GameObject go)
+	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{
-		base.init(layout, go);
+		base.init(layout, go, parent);
 	}
 	//---------------------------------------------------------------------------------------------------
 	protected override void applyShader(Material mat)

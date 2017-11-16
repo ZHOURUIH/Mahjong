@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -96,22 +97,22 @@ public class UnityUtility : GameBase
 		Camera camera = mCameraManager.getUICamera().getCamera();
 		return camera.ScreenPointToRay(screenPos);
 	}
-	public static List<txUIButton> raycast(Ray ray, SortedDictionary<int, List<txUIButton>> buttonList, int maxCount = 0)
+	public static List<txUIObject> raycast(Ray ray, SortedDictionary<int, List<txUIObject>> buttonList, int maxCount = 0)
 	{
 		bool cast = true;
-		List<txUIButton> retList = new List<txUIButton>();
+		List<txUIObject> retList = new List<txUIObject>();
 		RaycastHit hit = new RaycastHit();
 		foreach (var box in buttonList)
 		{
 			int count = box.Value.Count;
 			for (int i = 0; i < count; ++i)
 			{
-				txUIButton button = box.Value[i];
-				if (button.getHandleInput() && button.Raycast(ray, out hit, 10000.0f))
+				txUIObject window = box.Value[i];
+				if (window.getHandleInput() && window.Raycast(ray, out hit, 10000.0f))
 				{
-					retList.Add(button);
+					retList.Add(window);
 					// 如果射线不能穿透当前按钮,或者已经达到最大数量,则不再继续
-					if (!button.getPassRay() || maxCount > 0 && retList.Count >= maxCount)
+					if (!window.getPassRay() || maxCount > 0 && retList.Count >= maxCount)
 					{
 						cast = false;
 						break;
@@ -210,6 +211,24 @@ public class UnityUtility : GameBase
 			parentWorldPos.y = parentWorldPos.y / scale.y;
 		}
 		Vector2 pos = (effectDepth / -camera.getPosition().z + 1) * screenPos - parentWorldPos;
+		return new Vector2(pos.x / parentWorldScale.x, pos.y / parentWorldScale.y);
+	}
+	public static Vector2 worldPosToScreenPos(Vector3 worldPos)
+	{
+		Camera camera = mCameraManager.getUICamera().getCamera();
+		return camera.WorldToScreenPoint(worldPos);
+	}
+	public static Vector2 screenPosToWindowPos(Vector2 screenPos, txUIObject parent)
+	{
+		Camera camera = mCameraManager.getUICamera().getCamera();
+		screenPos.x = screenPos.x / camera.pixelWidth * UnityEngine.Screen.currentResolution.width;
+		screenPos.y = screenPos.y / camera.pixelHeight * UnityEngine.Screen.currentResolution.height;
+		Vector3 parentWorldPosition = parent != null ? parent.getWorldPosition() : Vector3.zero;
+		Vector3 scale = mLayoutManager.getUIRoot().getScale();
+		parentWorldPosition.x = parentWorldPosition.x / scale.x;
+		parentWorldPosition.y = parentWorldPosition.y / scale.y;
+		Vector2 parentWorldScale = parent != null ? parent.getWorldScale() : Vector2.one;
+		Vector2 pos = new Vector2(screenPos.x - parentWorldPosition.x, screenPos.y - parentWorldPosition.y);
 		return new Vector2(pos.x / parentWorldScale.x, pos.y / parentWorldScale.y);
 	}
 	public static void setGameObjectLayer(txUIObject obj, string layerName)

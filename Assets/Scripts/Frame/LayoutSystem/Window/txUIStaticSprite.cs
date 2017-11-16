@@ -11,9 +11,9 @@ public class txUIStaticSprite : txUIObject
 	{
 		mType = UI_OBJECT_TYPE.UBT_STATIC_SPRITE;
 	}
-	public override void init(GameLayout layout, GameObject go)
+	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{
-		base.init(layout, go);
+		base.init(layout, go, parent);
 		mSprite = mObject.GetComponent<UISprite>();
 		if (mSprite == null)
 		{
@@ -44,11 +44,12 @@ public class txUIStaticSprite : txUIObject
 	{
 		mSprite.SetDimensions((int)size.x, (int)size.y);
 	}
-	public virtual void setDepth(int depth)
+	public override void setDepth(int depth)
 	{
 		mSprite.depth = depth;
+		base.setDepth(depth);
 	}
-	public int getDepth()
+	public override int getDepth()
 	{
 		return mSprite.depth;
 	}

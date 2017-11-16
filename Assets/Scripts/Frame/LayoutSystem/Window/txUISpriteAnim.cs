@@ -25,9 +25,9 @@ public class txUISpriteAnim : txUIStaticSprite
 		mType = UI_OBJECT_TYPE.UBT_SPRITE_ANIM;
 		mInverseInterval = 1.0f / mInterval;
 	}
-	public override void init(GameLayout layout, GameObject go)
+	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{
-		base.init(layout, go);
+		base.init(layout, go, parent);
 		string spriteName = getSpriteName();
 		string textureSetName = spriteName.Substring(0, spriteName.LastIndexOf('_'));
 		setTextureSet(textureSetName);

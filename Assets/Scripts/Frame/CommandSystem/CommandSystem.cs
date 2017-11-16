@@ -131,7 +131,7 @@ public class CommandSystem : GameBase
 		}
 		if(!cmd.isValid())
 		{
-			UnityUtility.logError("cmd is invalid! make sure create cmd use CommandSystem.newCmd!");
+			UnityUtility.logError("cmd is invalid! make sure create cmd use CommandSystem.newCmd! cmd type : " + cmd.GetType().ToString());
 			return;
 		}
 		if(cmd.isDelayCommand())
@@ -160,7 +160,7 @@ public class CommandSystem : GameBase
 		}
 		if(!cmd.isValid())
 		{
-			UnityUtility.logError("cmd is invalid! make sure create cmd use CommandSystem.newCmd!");
+			UnityUtility.logError("cmd is invalid! make sure create cmd use CommandSystem.newCmd! cmd type : " + cmd.GetType().ToString());
 			return;
 		}
 		if(!cmd.isDelayCommand())

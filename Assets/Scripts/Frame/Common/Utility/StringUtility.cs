@@ -32,57 +32,51 @@ public class StringUtility : GameBase
 		{
 			return 0;
 		}
-		return int.Parse(numStr);
+		return stringToInt(numStr); ;
 	}
 	public static int stringToInt(string str)
 	{
+		str = checkIntString(str);
 		return int.Parse(str);
 	}
 	public static Vector2 stringToVector2(string value)
 	{
-		string[] spitList = value.Split(new char[] { ',' });
-
+		string[] spitList = split(value, true, ",");
 		if (spitList.Length < 2)
 		{
-			return new Vector2();
+			return Vector2.zero;
 		}
-
-		Vector2 v2 = new Vector2();
-		v2.x = float.Parse(spitList[0]);
-		v2.y = float.Parse(spitList[1]);
-
-		return v2;
+		Vector2 v = new Vector2();
+		v.x = stringToFloat(spitList[0]);
+		v.y = stringToFloat(spitList[1]);
+		return v;
 	}
 	public static Vector3 stringToVector3(string value)
 	{
-		string[] spitList = value.Split(new char[] { ',' });
-
+		string[] spitList = split(value, true, ",");
 		if (spitList.Length < 3)
 		{
-			return new Vector3();
+			return Vector3.zero;
 		}
-
-		Vector3 v2 = new Vector3();
-		v2.x = float.Parse(spitList[0]);
-		v2.y = float.Parse(spitList[1]);
-		v2.z = float.Parse(spitList[2]);
-		return v2;
+		Vector3 v = new Vector3();
+		v.x = stringToFloat(spitList[0]);
+		v.y = stringToFloat(spitList[1]);
+		v.z = stringToFloat(spitList[2]);
+		return v;
 	}
 	public static Vector4 stringToVector4(string value)
 	{
-		string[] spitList = value.Split(new char[] { ',' });
-
+		string[] spitList = split(value, true, ",");
 		if (spitList.Length < 4)
 		{
-			return new Vector4();
+			return Vector4.zero;
 		}
-
-		Vector4 v2 = new Vector4();
-		v2.x = float.Parse(spitList[0]);
-		v2.y = float.Parse(spitList[1]);
-		v2.z = float.Parse(spitList[2]);
-		v2.w = float.Parse(spitList[3]);
-		return v2;
+		Vector4 v = new Vector4();
+		v.x = stringToFloat(spitList[0]);
+		v.y = stringToFloat(spitList[1]);
+		v.z = stringToFloat(spitList[2]);
+		v.w = stringToFloat(spitList[3]);
+		return v;
 	}
 	public static void removeLast(ref string stream, char key)
 	{
@@ -400,7 +394,7 @@ public class StringUtility : GameBase
 	}
 	public static float stringToFloat(string str)
 	{
-		str = checkNumberString(str, "");
+		str = checkFloatString(str);
 		if(str == "")
 		{
 			return 0.0f;
@@ -442,8 +436,12 @@ public class StringUtility : GameBase
 		}
 		return newString;
 	}
-	public static string checkNumberString(string str, string valid)
+	public static string checkFloatString(string str, string valid = "")
 	{
-		return checkString(str, "0123456789." + valid);
+		return checkIntString(str, ".");
+	}
+	public static string checkIntString(string str, string valid = "")
+	{
+		return checkString(str, "0123456789" + valid);
 	}
 }

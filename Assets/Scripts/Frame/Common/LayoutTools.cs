@@ -389,6 +389,16 @@ public class LayoutTools : GameBase
 		script.addDelayCmd(cmd);
 		return cmd;
 	}
+	//------------------------------------------------------------------------------------------------------------------
+	public static void TRACK_TARGET(txUIObject obj, float speed, txUIObject target, TrackDoneCallback doneCallback, CheckPosition checkPosition)
+	{
+		CommandWindowTrackTarget cmd = mCommandSystem.newCmd<CommandWindowTrackTarget>(false);
+		cmd.mObject = target;
+		cmd.mSpeed = speed;
+		cmd.mDoneCallback = doneCallback;
+		cmd.mCheckPosition = checkPosition;
+		mCommandSystem.pushCommand(cmd, obj);
+	}
 	//----------------------------------------------------------------------------------------------------------------------------------------------------------
 	// 显示
 	// 窗口的显示和隐藏()

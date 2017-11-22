@@ -18,10 +18,10 @@ public class DelayCommand
 public class CommandSystem : GameBase
 {
 	protected CommandPool mCommandPool;
-	protected List<DelayCommand> mCommandBufferProcess = new List<DelayCommand>();	// 用于处理的命令列表
-	protected List<DelayCommand> mCommandBufferInput = new List<DelayCommand>();		// 用于放入命令的命令列表
+	protected List<DelayCommand> mCommandBufferProcess = new List<DelayCommand>();  // 用于处理的命令列表
+	protected List<DelayCommand> mCommandBufferInput = new List<DelayCommand>();        // 用于放入命令的命令列表
 	protected ThreadLock mBufferLock;
-	protected bool mTraceCommand;	// 是否追踪命令的来源
+	protected bool mTraceCommand;   // 是否追踪命令的来源
 	public CommandSystem()
 	{
 		mBufferLock = new ThreadLock();
@@ -66,7 +66,7 @@ public class CommandSystem : GameBase
 				--i;
 			}
 		}
-		foreach(var cmd in executeList)
+		foreach (var cmd in executeList)
 		{
 			cmd.mCommand.setDelayCommand(false);
 			pushCommand(cmd.mCommand, cmd.mReceiver);
@@ -77,7 +77,7 @@ public class CommandSystem : GameBase
 	{
 		T cmd = mCommandPool.newCmd<T>(show, delay);
 #if UNITY_EDITOR
-		if(mTraceCommand)
+		if (mTraceCommand)
 		{
 			int line = 0;
 			string file = "";
@@ -101,7 +101,7 @@ public class CommandSystem : GameBase
 	// 中断命令
 	public bool interruptCommand(int assignID)
 	{
-		if(assignID < 0)
+		if (assignID < 0)
 		{
 			UnityUtility.logError("assignID invalid!");
 			return false;
@@ -129,20 +129,21 @@ public class CommandSystem : GameBase
 			UnityUtility.logError("cmd or receiver is null!");
 			return;
 		}
-		if(!cmd.isValid())
+		if (!cmd.isValid())
 		{
-			UnityUtility.logError("cmd is invalid! make sure create cmd use CommandSystem.newCmd! cmd type : " + cmd.GetType().ToString());
+			UnityUtility.logError("cmd is invalid! make sure create cmd use CommandSystem.newCmd! pushCommand cmd type : "
+				+ cmd.GetType().ToString() + "cmd id : " + cmd.mAssignID);
 			return;
 		}
-		if(cmd.isDelayCommand())
+		if (cmd.isDelayCommand())
 		{
-			UnityUtility.logError("cmd is a delay cmd! can not use pushCommand!");
+			UnityUtility.logError("cmd is a delay cmd! can not use pushCommand!" + cmd.mAssignID + ", " + cmd.showDebugInfo());
 			return;
 		}
 		cmd.setReceiver(cmdReceiver);
 		if (cmd.getShowDebugInfo())
 		{
-			UnityUtility.logInfo("CommandSystem : " + cmd.showDebugInfo() + ", receiver : " + cmdReceiver.getName(), LOG_LEVEL.LL_NORMAL);				
+			UnityUtility.logInfo("CommandSystem : " + cmd.mAssignID + ", " + cmd.showDebugInfo() + ", receiver : " + cmdReceiver.getName(), LOG_LEVEL.LL_NORMAL);
 		}
 		cmdReceiver.receiveCommand(cmd);
 
@@ -158,14 +159,15 @@ public class CommandSystem : GameBase
 			UnityUtility.logError("cmd or receiver is null!");
 			return;
 		}
-		if(!cmd.isValid())
+		if (!cmd.isValid())
 		{
-			UnityUtility.logError("cmd is invalid! make sure create cmd use CommandSystem.newCmd! cmd type : " + cmd.GetType().ToString());
+			UnityUtility.logError("cmd is invalid! make sure create cmd use CommandSystem.newCmd! pushDelayCommand cmd type : "
+				+ cmd.GetType().ToString() + "cmd id : " + cmd.mAssignID);
 			return;
 		}
-		if(!cmd.isDelayCommand())
+		if (!cmd.isDelayCommand())
 		{
-			UnityUtility.logError("cmd is not a delay command, Command : " + cmd.showDebugInfo());
+			UnityUtility.logError("cmd is not a delay command, Command : " + cmd.mAssignID + ", " + cmd.showDebugInfo());
 			return;
 		}
 		if (delayExecute < 0.0f)
@@ -174,10 +176,10 @@ public class CommandSystem : GameBase
 		}
 		if (cmd.getShowDebugInfo())
 		{
-			UnityUtility.logInfo("CommandSystem : delay cmd : " + delayExecute + ", info : " + cmd.showDebugInfo() + ", receiver : " + cmdReceiver.getName(), LOG_LEVEL.LL_NORMAL);
+			UnityUtility.logInfo("CommandSystem : delay cmd : " + cmd.mAssignID + ", " + delayExecute + ", info : " + cmd.showDebugInfo() + ", receiver : " + cmdReceiver.getName(), LOG_LEVEL.LL_NORMAL);
 		}
 		DelayCommand delayCommand = new DelayCommand(delayExecute, cmd, cmdReceiver);
-		
+
 		mBufferLock.waitForUnlock(LOCK_TYPE.LT_READ);
 		mCommandBufferInput.Add(delayCommand);
 		mBufferLock.unlock(LOCK_TYPE.LT_READ);
@@ -210,15 +212,6 @@ public class CommandSystem : GameBase
 				mCommandBufferProcess.Remove(mCommandBufferProcess[i]);
 				--i;
 			}
-		}
-	}
-	//------------------------------------------------------------------------------------------------------------------------------------
-	protected void destroyCmd(Command cmd)
-	{
-		if(!cmd.isValid())
-		{
-			UnityUtility.logError("cmd is invalid, can not destroy it!");
-			return;
 		}
 	}
 }

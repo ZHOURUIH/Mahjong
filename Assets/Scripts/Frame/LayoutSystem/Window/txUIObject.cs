@@ -61,6 +61,7 @@ public class txUIObject : ComponentOwner
 		addComponent<ComponentRotateFixed>("RotateFixed").setActive(false);
 		addComponent<WindowComponentHSLTrembling>("HSLTrembling").setActive(false);
 		addComponent<WindowComponentDrag>("Drag").setActive(false);
+		addComponent<WindowComponentTrackTarget>("TrackTarget").setActive(false);
 	}
 	public AudioSource createAudioSource()
 	{

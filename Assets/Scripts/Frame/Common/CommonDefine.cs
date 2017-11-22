@@ -72,6 +72,8 @@ public delegate void AssetLoadDoneCallback(UnityEngine.Object res, object userDa
 public delegate void AssetBundleLoadDoneCallback(List<UnityEngine.Object> resList);
 public delegate void LayoutAsyncDone(GameLayout layout);
 public delegate void VideoPlayEndCallback(string videoName, bool isBreak);
+public delegate void TrackDoneCallback(WindowComponentTrackTarget component);
+public delegate Vector3 CheckPosition(txUIObject obj);
 
 // 游戏常量定义-------------------------------------------------------------------------------------------------------------
 public class CommonDefine

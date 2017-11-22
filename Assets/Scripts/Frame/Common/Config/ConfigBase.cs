@@ -210,7 +210,7 @@ public abstract class ConfigBase : GameBase
 		string text = "";
 		FileUtility.openTxtFile(fileName, ref text);
 
-		string[] lineList = text.Split(new char[] { '\r', '\n' });
+		string[] lineList = StringUtility.split(text, true, "\r\n");
 		Dictionary<string, ConfigInfo> valueList = new Dictionary<string, ConfigInfo>();
 		string comment = "";
 		// 前4行需要被丢弃
@@ -233,7 +233,7 @@ public abstract class ConfigBase : GameBase
 				}
 				else
 				{
-					string[] value = line.Split('=');
+					string[] value = StringUtility.split(line, true, "=");
 					ConfigInfo info = new ConfigInfo();
 					info.mComment = comment;
 					info.mName = value[0];

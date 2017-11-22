@@ -40,7 +40,7 @@ public class MathUtility : GameBase
 	public static float calculateFloat(string str)
 	{
 		// 判断字符串是否含有非法字符,也就是除数字,小数点,运算符以外的字符
-		str = StringUtility.checkNumberString(str, "+-*/()");
+		str = StringUtility.checkFloatString(str, "+-*/()");
 		// 判断左右括号数量是否相等
 		int leftBracketCount = 0;
 		int rightBracketCount = 0;
@@ -136,8 +136,8 @@ public class MathUtility : GameBase
 			if (i == str.Length - 1)
 			{
 				string num = str.Substring(beginpos, str.Length - beginpos);
-					float fNum = float.Parse(num);
-					numbers.Add(fNum);
+				float fNum = StringUtility.stringToFloat(num);
+				numbers.Add(fNum);
 				break;
 			}
 			// 找到第一个运算符
@@ -146,7 +146,7 @@ public class MathUtility : GameBase
 				if (i != 0)
 				{
 					string num = str.Substring(beginpos, i - beginpos);
-					float fNum = float.Parse(num);
+					float fNum = StringUtility.stringToFloat(num);
 					numbers.Add(fNum);
 				}
 				// 如果在表达式的开始就发现了运算符,则表示第一个数是负数,那就处理为0减去这个数的绝对值

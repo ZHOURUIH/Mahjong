@@ -438,7 +438,7 @@ public class StringUtility : GameBase
 	}
 	public static string checkFloatString(string str, string valid = "")
 	{
-		return checkIntString(str, ".");
+		return checkIntString(str, "." + valid);
 	}
 	public static string checkIntString(string str, string valid = "")
 	{

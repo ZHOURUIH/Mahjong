@@ -41,6 +41,8 @@ public abstract class SceneProcedure : GameBase
 	protected virtual void onExitToChild(SceneProcedure nextProcedure) { }
 	// 退出当前流程进入其他任何流程时调用
 	protected virtual void onExitSelf() { }
+	// 进入的目标流程已经准备完成(资源加载完毕等等)时的回调
+	public virtual void onNextProcedurePrepared(SceneProcedure nextPreocedure) { }
 	// 由GameScene调用
 	// 进入流程
 	public void init(SceneProcedure lastProcedure, string intent)

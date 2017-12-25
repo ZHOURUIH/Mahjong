@@ -21,17 +21,15 @@ public class RequestThreadParam
 	public Thread mThread;
 }
 
-public class PluginUtility : GameBase
+public class PluginUtility : FrameComponent
 {
-	static List<Thread> mHttpThreadList;
-	public void init() 
+	protected static List<Thread> mHttpThreadList;
+	public PluginUtility(string name)
+		:base(name)
 	{
-		if (mHttpThreadList == null)
-		{
-			mHttpThreadList = new List<Thread>();
-		}
+		mHttpThreadList = new List<Thread>();
 	}
-	public void destroy()
+	public override void destroy()
 	{
 		int count = mHttpThreadList.Count;
 		for(int i = 0; i < count; ++i)
@@ -40,6 +38,7 @@ public class PluginUtility : GameBase
 			mHttpThreadList[i] = null;
 		}
 		mHttpThreadList.Clear();
+		base.destroy();
 	}
 	public static Color32[] stringToBinaryCodeColour(string textForEncoding, int width, int height)
 	{

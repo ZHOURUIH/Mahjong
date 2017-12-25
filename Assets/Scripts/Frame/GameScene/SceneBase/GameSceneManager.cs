@@ -3,21 +3,20 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class GameSceneManager : CommandReceiver
+public class GameSceneManager : FrameComponent
 {
 	public GameScene			mCurScene;
 	public List<GameScene>		mLastSceneList;
 	public GameObject			mManagerObject;
 	protected SceneFactoryManager	mSceneFactoryManager;
-	public GameSceneManager()
-	:
-	base(typeof(GameSceneManager).ToString())
+	public GameSceneManager(string name)
+	:base(name)
 	{
 		mCurScene = null;
 		mLastSceneList = new List<GameScene>();
 		mSceneFactoryManager = new SceneFactoryManager();
 	}
-	public void init() 
+	public override void init() 
 	{
 		mManagerObject = UnityUtility.getGameObject(mGameFramework.getGameFrameObject(), "GameSceneManager");
 		if(mManagerObject == null)
@@ -25,14 +24,8 @@ public class GameSceneManager : CommandReceiver
 			UnityUtility.logError("can not find GameSceneManager under GameFramework!");
 		}
 	}
-	public GameScene getCurScene()
-	{ 
-		return mCurScene; 
-	}
-	public GameObject getManagerObject()
-	{
-		return mManagerObject;
-	}
+	public GameScene getCurScene(){ return mCurScene; }
+	public GameObject getManagerObject(){return mManagerObject;}
 	public bool enterScene(GAME_SCENE_TYPE type)
 	{
 		GameScene pScene = createScene(type);
@@ -47,7 +40,7 @@ public class GameSceneManager : CommandReceiver
 		mCurScene.init();
 		return true;
 	}
-    public void update(float elapsedTime)
+    public override void update(float elapsedTime)
 	{
 		// 如果上一个场景不为空,则将上一个场景销毁
 		foreach (var scene in mLastSceneList)
@@ -73,10 +66,15 @@ public class GameSceneManager : CommandReceiver
 			mCurScene = null;
 		}
 		mManagerObject = null;
+		base.destroy();
 	}
 	public void registeGameScene(Type classType, GAME_SCENE_TYPE type)
 	{
 		mSceneFactoryManager.addFactory(classType, type);
+	}
+	public int getSceneCount()
+	{
+		return mSceneFactoryManager.getFactoryCount();
 	}
 	//----------------------------------------------------------------------------------------------
 	protected GameScene createScene(GAME_SCENE_TYPE type)

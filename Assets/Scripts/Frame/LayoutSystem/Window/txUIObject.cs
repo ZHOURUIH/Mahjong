@@ -14,6 +14,7 @@ public class txUIObject : ComponentOwner
 	protected bool mPassRay = true;
 	protected bool mMouseHovered = false;
 	protected txUIObject mParent;
+	protected List<txUIObject> mChildList;
 	public GameLayout mLayout;
 	public GameObject mObject;
 	public int mID;
@@ -22,18 +23,30 @@ public class txUIObject : ComponentOwner
 		base("")
 	{
 		mID = mIDSeed++;
+		mChildList = new List<txUIObject>();
 	}
 	public override void destroy()
 	{
 		base.destroy();
 		base.destroyAllComponents();
-		if (mLayout != null)
+		destroyWindow(this);
+	}
+	protected static void destroyWindow(txUIObject window)
+	{
+		// 先销毁所有子节点
+		int childCount = window.mChildList.Count;
+		for(int i = 0; i < childCount; ++i)
 		{
-			mLayout.unregisterUIObject(this);
-			mLayout = null;
+			destroyWindow(window.mChildList[i]);
 		}
-		GameObject.Destroy(mObject);
-		mObject = null;
+		// 再销毁自己
+		if(window.mLayout != null)
+		{
+			window.mLayout.unregisterUIObject(window);
+			window.mLayout = null;
+		}
+		UnityUtility.destroyGameObject(window.mObject);
+		window.mObject = null;
 	}
 	public virtual void init(GameLayout layout, GameObject go, txUIObject parent)
 	{
@@ -52,17 +65,25 @@ public class txUIObject : ComponentOwner
 	{
 		addComponent<WindowComponentAudio>("Audio");
 		addComponent<WindowComponentRotateSpeed>("RotateSpeed").setActive(false);
-		addComponent<WindowComponentKeyFrameMove>("KeyFrameMove").setActive(false);
-		addComponent<WindowComponentScaleTrembling>("ScaleTrembling").setActive(false);
-		addComponent<WindowComponentAlphaTrembling>("AlphaTrembling").setActive(false);
-		addComponent<WindowComponentKeyFrameRotate>("KeyFrameRotate").setActive(false);
+		addComponent<WindowComponentMove>("Move").setActive(false);
+		addComponent<WindowComponentScale>("Scale").setActive(false);
+		addComponent<WindowComponentAlpha>("Alpha").setActive(false);
+		addComponent<WindowComponentRotate>("Rotate").setActive(false);
 		addComponent<WindowComponentSmoothSlider>("slider").setActive(false);
 		addComponent<WindowComponentSmoothFillAmount>("fillAmount").setActive(false);
-		addComponent<ComponentRotateFixed>("RotateFixed").setActive(false);
-		addComponent<WindowComponentHSLTrembling>("HSLTrembling").setActive(false);
+		addComponent<WindowComponentRotateFixed>("RotateFixed").setActive(false);
+		addComponent<WindowComponentHSL>("HSL").setActive(false);
 		addComponent<WindowComponentDrag>("Drag").setActive(false);
 		addComponent<WindowComponentTrackTarget>("TrackTarget").setActive(false);
 	}
+	public void addChild(txUIObject child)
+	{
+		if(!mChildList.Contains(child))
+		{
+			mChildList.Add(child);
+		}
+	}
+	
 	public AudioSource createAudioSource()
 	{
 		mAudioSource = mObject.AddComponent<AudioSource>();
@@ -87,13 +108,13 @@ public class txUIObject : ComponentOwner
 	public Vector3 getRotationEuler()
 	{
 		Vector3 vector3 = mTransform.localEulerAngles;
-		MathUtility.adjustAngle180(ref vector3.z, false);
+		MathUtility.adjustAngle180(ref vector3.z);
 		return vector3;
 	}
 	public Vector3 getRotationRadian()
 	{
 		Vector3 vector3 = mTransform.localEulerAngles * 0.0055f;
-		MathUtility.adjustAngle180(ref vector3.z, true);
+		MathUtility.adjustRadian180(ref vector3.z);
 		return vector3;
 	}
 	public Vector3 getPosition() { return mTransform.localPosition; }
@@ -119,6 +140,7 @@ public class txUIObject : ComponentOwner
 	public bool getMouseHovered() { return mMouseHovered; }
 	//set
 	//-------------------------------------------------------------------------------------------------------------------------------------
+	public List<txUIObject> getChildList() { return mChildList; }
 	public txUIObject getParent() { return mParent; }
 	private void setGameObject(GameObject go)
 	{

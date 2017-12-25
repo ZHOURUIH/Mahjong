@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public class BinaryUtility : GameBase
+public class BinaryUtility
 {
 	protected static Encoding ENCODING_GB2312;
-	public void init()
+	public static Encoding getGB2312()
 	{
-		ENCODING_GB2312 = Encoding.GetEncoding("gb2312");
+		if(ENCODING_GB2312 == null)
+		{
+			ENCODING_GB2312 = Encoding.GetEncoding("gb2312");
+		}
+		return ENCODING_GB2312;
 	}
 	// 计算 16进制的c中1的个数
 	public static int crc_check(byte c)
@@ -398,7 +402,7 @@ public class BinaryUtility : GameBase
 	}
 	public static byte[] stringToBytes(string str)
 	{
-		return stringToBytes(str, ENCODING_GB2312);
+		return stringToBytes(str, getGB2312());
 	}
 	public static byte[] stringToBytes(string str, Encoding encoding)
 	{
@@ -422,7 +426,7 @@ public class BinaryUtility : GameBase
 	}
 	public static string UTF8ToGB2312(string str)
 	{
-		return convertStringFormat(str, Encoding.UTF8, ENCODING_GB2312);
+		return convertStringFormat(str, Encoding.UTF8, getGB2312());
 	}
 	public static string UnicodeToUTF8(string str)
 	{
@@ -430,15 +434,15 @@ public class BinaryUtility : GameBase
 	}
 	public static string UnicodeToGB2312(string str)
 	{
-		return convertStringFormat(str, Encoding.Unicode, ENCODING_GB2312);
+		return convertStringFormat(str, Encoding.Unicode, getGB2312());
 	}
 	public static string GB2312ToUTF8(string str)
 	{
-		return convertStringFormat(str, ENCODING_GB2312, Encoding.UTF8);
+		return convertStringFormat(str, getGB2312(), Encoding.UTF8);
 	}
 	public static string GB2312ToUnicode(string str)
 	{
-		return convertStringFormat(str, ENCODING_GB2312, Encoding.Unicode);
+		return convertStringFormat(str, getGB2312(), Encoding.Unicode);
 	}
 	// 字节数组转换为字符串时,末尾可能会带有数字0,此时在字符串比较时会出现错误,所以需要移除字符串末尾的0
 	public static string removeLastZero(string str)

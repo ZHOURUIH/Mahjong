@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
-
-public class ResourceManager : GameBase
+using UnityEngine.SceneManagement;
+public class ResourceManager : FrameComponent
 {
 	protected GameObject mManagerObject;
 	public AssetBundleLoader mAssetBundleLoader;
 	public ResourceLoader mResourceLoader;
 	public int mLoadSource;
-	public ResourceManager()
+	public ResourceManager(string name)
+		:base(name)
 	{
 		;
 	}
-	public void init()
+	public override void init()
 	{
 		mManagerObject = UnityUtility.getGameObject(mGameFramework.getGameFrameObject(), "ResourceManager");
 		GameObject abLoaderObject = UnityUtility.getGameObject(mManagerObject, "AssetBundleLoader");
@@ -29,15 +30,16 @@ public class ResourceManager : GameBase
 		mLoadSource = 1;
 #endif
 	}
-	public void update(float elapsedTime)
+	public override void update(float elapsedTime)
 	{
 		mAssetBundleLoader.update(elapsedTime);
 		mResourceLoader.update(elapsedTime);
 	}
-	public void destroy()
+	public override void destroy()
 	{
 		mAssetBundleLoader.destroy();
 		mResourceLoader.destroy();
+		base.destroy();
 	}
 	public void unload(string name)
 	{

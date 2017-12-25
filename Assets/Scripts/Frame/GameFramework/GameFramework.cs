@@ -14,32 +14,16 @@ using System.Net;
 public class GameFramework : MonoBehaviour
 {
 	public static GameFramework		instance;
+	protected Dictionary<string, FrameComponent> mFrameComponentMap;	// 存储框架组件,用于查找
+	protected List<FrameComponent> mFrameComponentList;					// 存储框架组件,用于初始化,更新,销毁
 	protected GameObject			mGameFrameObject;
-	protected ApplicationConfig		mApplicationConfig;
-	protected BinaryUtility			mBinaryUtility;
-	protected FileUtility			mFileUtility;
-	protected MathUtility			mMathUtility;
-	protected StringUtility			mStringUtility;
-	protected UnityUtility			mUnityUtility;
-	protected PluginUtility			mPluginUtility;
-	protected CommandSystem			mCommandSystem;
-	protected GameLayoutManager		mLayoutManager;
-	protected AudioManager			mAudioManager;
-	protected GameSceneManager		mGameSceneManager;
-	protected CharacterManager		mCharacterManager;
-	protected FrameConfig			mFrameConfig;
-	protected KeyFrameManager		mKeyFrameManager;
-	protected GlobalTouchSystem		mGlobalTouchSystem;
-	protected DllImportExtern		mDllImportExtern;
-	protected ShaderManager			mShaderManager;
-	protected DataBase				mDataBase;
-	protected CameraManager			mCameraManager;
-	protected ResourceManager		mResourceManager;
-	protected LayoutPrefabManager	mLayoutPrefabManager;
+	protected SceneSystem			mSceneSystem;
 	protected bool					mPauseFrame;
 	public void Start()
 	{
 		UnityUtility.logInfo("start game!", LOG_LEVEL.LL_FORCE);
+		mFrameComponentMap = new Dictionary<string, FrameComponent>();
+		mFrameComponentList = new List<FrameComponent>();
 		start();
 		notifyBase();
 		registe();
@@ -47,65 +31,60 @@ public class GameFramework : MonoBehaviour
 		// 初始化完毕后启动游戏
 		launch();
 	}
+	public virtual void initComponent()
+	{
+		registeComponent<ApplicationConfig>();
+		registeComponent<UnityUtility>();
+		registeComponent<PluginUtility>();
+		registeComponent<CommandSystem>();
+		registeComponent<GameLayoutManager>();
+		registeComponent<AudioManager>();
+		registeComponent<GameSceneManager>();
+		registeComponent<CharacterManager>();
+		registeComponent<KeyFrameManager>();
+		registeComponent<GlobalTouchSystem>();
+		registeComponent<DllImportExtern>();
+		registeComponent<ShaderManager>();
+		registeComponent<DataBase>();
+		registeComponent<CameraManager>();
+		registeComponent<LayoutPrefabManager>();
+		registeComponent<FrameConfig>();
+		registeComponent<ModelManager>();
+		registeComponent<InputManager>();
+	}
 	public virtual void start()
 	{
 		mPauseFrame = false;
 		instance = this;
 		mGameFrameObject = this.transform.gameObject;
-		mApplicationConfig = new ApplicationConfig();
-		mResourceManager = new ResourceManager();
-		mBinaryUtility = new BinaryUtility();
-		mFileUtility = new FileUtility();
-		mMathUtility = new MathUtility();
-		mStringUtility = new StringUtility();
-		mUnityUtility = new UnityUtility();
-		mPluginUtility = new PluginUtility();
-		mCommandSystem = new CommandSystem();
-		mLayoutManager = new GameLayoutManager();
-		mAudioManager = new AudioManager();
-		mGameSceneManager = new GameSceneManager();
-		mCharacterManager = new CharacterManager();
-		mKeyFrameManager = new KeyFrameManager();
-		mGlobalTouchSystem = new GlobalTouchSystem();
-		mDllImportExtern = new DllImportExtern();
-		mShaderManager = new ShaderManager();
-		mDataBase = new DataBase();
-		mCameraManager = new CameraManager();
-		mLayoutPrefabManager = new LayoutPrefabManager();
-		mFrameConfig = new FrameConfig();
+		initComponent();
+		// 资源管理器必须最后注册
+		registeComponent<ResourceManager>();
+		GameObject sceneSystemObj = UnityUtility.getGameObject(mGameFrameObject, "SceneSystem");
+		if (sceneSystemObj == null)
+		{
+			UnityUtility.logError("can not find SceneSystem under GameFramework!");
+			return;
+		}
+		mSceneSystem = sceneSystemObj.GetComponent<SceneSystem>();
 	}
 	public virtual void registe(){}
 	public virtual void init()
 	{
 		// 必须先初始化配置文件
-		mApplicationConfig.init();
-		mDllImportExtern.init();
-		mFrameConfig.init();
-		mDataBase.init();
-		mResourceManager.init();
-		mShaderManager.init();
-		mBinaryUtility.init();
-		mFileUtility.init();
-		mMathUtility.init();
-		mStringUtility.init();
-		mUnityUtility.init();
-		mPluginUtility.init();
-		mGlobalTouchSystem.init();
-		mAudioManager.init();
-		mLayoutManager.init();
-		bool showDebug = (int)mFrameConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SHOW_COMMAND_DEBUG_INFO) != 0;
-		mCommandSystem.init(showDebug);
-		mGameSceneManager.init();
-		mCharacterManager.init();
-		mKeyFrameManager.init();
-		mCameraManager.init();
-		mLayoutPrefabManager.init();
+		int count = mFrameComponentList.Count;
+		for(int i = 0; i < count; ++i)
+		{
+			mFrameComponentList[i].init();
+		}
+		mSceneSystem.init();
 		System.Net.ServicePointManager.DefaultConnectionLimit = 200;
-		int width = (int)mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SCREEN_WIDTH);
-		int height = (int)mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SCREEN_HEIGHT);
-		int fullscreen = (int)mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_FULL_SCREEN);
+		ApplicationConfig applicationConfig = getSystem<ApplicationConfig>();
+		int width = (int)applicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SCREEN_WIDTH);
+		int height = (int)applicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SCREEN_HEIGHT);
+		int fullscreen = (int)applicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_FULL_SCREEN);
 		Screen.SetResolution(width, height, fullscreen == 1);
-		int screenCount = (int)mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SCREEN_COUNT);
+		int screenCount = (int)applicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SCREEN_COUNT);
 		processResolution(width, height, screenCount);
 		// 设置为无边框窗口
 		if (fullscreen == 2)
@@ -137,16 +116,36 @@ public class GameFramework : MonoBehaviour
 			UnityUtility.logError(e.Message + ", stack : " + e.StackTrace);
 		}
 	}
+	public void FixedUpdate()
+	{
+		try
+		{
+			if (mPauseFrame)
+			{
+				return;
+			}
+			fixedUpdate(Time.fixedDeltaTime);
+		}
+		catch (Exception e)
+		{
+			UnityUtility.logError(e.Message + ", stack : " + e.StackTrace);
+		}
+	}
 	public virtual void update(float elapsedTime)
 	{
-		mResourceManager.update(elapsedTime);
-		mGlobalTouchSystem.update(elapsedTime);
-		mCommandSystem.update(elapsedTime);
-		mAudioManager.update(elapsedTime);
-		mGameSceneManager.update(elapsedTime);
-		mCharacterManager.update(elapsedTime);
-		mLayoutManager.update(elapsedTime);
-		mCameraManager.update(elapsedTime);
+		int count = mFrameComponentList.Count;
+		for (int i = 0; i < count; ++i)
+		{
+			mFrameComponentList[i].update(elapsedTime);
+		}
+	}
+	public virtual void fixedUpdate(float elapsedTime)
+	{
+		int count = mFrameComponentList.Count;
+		for (int i = 0; i < count; ++i)
+		{
+			mFrameComponentList[i].fixedUpdate(elapsedTime);
+		}
 	}
 	public void OnDestroy()
 	{
@@ -155,39 +154,17 @@ public class GameFramework : MonoBehaviour
 	}
 	public virtual void destroy()
 	{
-		mLayoutPrefabManager.destroy();
-		mCharacterManager.destroy();
-		mGameSceneManager.destroy();
-		mAudioManager.destroy();
-		mLayoutManager.destroy();
-		mCommandSystem.destroy();
-		mKeyFrameManager.destroy();
-		mGlobalTouchSystem.destroy();
-		mDllImportExtern.destroy();
-		mShaderManager.destroy();
-		mDataBase.destroy();
-		mCameraManager.destroy();
-		mPluginUtility.destroy();
-		mResourceManager.destroy();         // 资源管理器必须最后销毁,作为最后的资源清理
-		mLayoutPrefabManager = null;
-		mResourceManager = null;
-		mBinaryUtility = null;
-		mFileUtility = null;
-		mMathUtility = null;
-		mStringUtility = null;
-		mUnityUtility = null;
-		mPluginUtility = null;
-		mCommandSystem = null;
-		mLayoutManager = null;
-		mAudioManager = null;
-		mGameSceneManager = null;
-		mCharacterManager = null;
-		mKeyFrameManager = null;
-		mGlobalTouchSystem = null;
-		mDllImportExtern = null;
-		mShaderManager = null;
-		mDataBase = null;
-		mCameraManager = null;
+		mSceneSystem.destroy();
+		mSceneSystem = null;
+		// 资源管理器必须最后销毁,作为最后的资源清理
+		int count = mFrameComponentList.Count;
+		for (int i = 0; i < count; ++i)
+		{
+			mFrameComponentList[i].destroy();
+			mFrameComponentList[i] = null;
+		}
+		mFrameComponentList.Clear();
+		mFrameComponentMap.Clear();
 	}
 	public void stop()
 	{
@@ -206,24 +183,28 @@ public class GameFramework : MonoBehaviour
 			UnityUtility.setLogLevel((LOG_LEVEL)newLevel);
 		}
 	}
+	public T getSystem<T>()where T : FrameComponent
+	{
+		string name = typeof(T).ToString();
+		if(mFrameComponentMap.ContainsKey(name))
+		{
+			return mFrameComponentMap[name] as T;
+		}
+		return null;
+	}
 	public void setPasueFrame(bool value) { mPauseFrame = value; }
 	public bool getPasueFrame() { return mPauseFrame; }
-	public CommandSystem getCommandSystem() { return mCommandSystem; }
-	public GameLayoutManager getLayoutManager() { return mLayoutManager; }
-	public AudioManager getAudioManager() { return mAudioManager; }
-	public GameSceneManager getGameSceneManager() { return mGameSceneManager; }
-	public CharacterManager getCharacterManager() { return mCharacterManager; }
-	public KeyFrameManager getKeyFrameManager() { return mKeyFrameManager; }
 	public GameObject getGameFrameObject() { return mGameFrameObject; }
-	public FrameConfig getFrameConfig() { return mFrameConfig; }
-	public GlobalTouchSystem getGlobalTouchSystem() { return mGlobalTouchSystem; }
-	public ShaderManager getShaderManager() { return mShaderManager; }
-	public DataBase getDataBase() { return mDataBase; }
-	public CameraManager getCameraManager() { return mCameraManager; }
-	public ResourceManager getResourceManager() { return mResourceManager;}
-	public LayoutPrefabManager getLayoutPrefabManager() { return mLayoutPrefabManager; }
-	public ApplicationConfig getApplicationConfig() { return mApplicationConfig; }
-	public void setCameraTargetTexture(GameObject parent, string cameraName, UITexture renderTexture)
+	public SceneSystem getSceneSystem() { return mSceneSystem; }
+	//------------------------------------------------------------------------------------------------------
+	protected void registeComponent<T>() where T : FrameComponent
+	{
+		string name = typeof(T).ToString();
+		T component = UnityUtility.createInstance<T>(typeof(T), new object[] { name });
+		mFrameComponentMap.Add(name, component);
+		mFrameComponentList.Add(component);
+	}
+	protected void setCameraTargetTexture(GameObject parent, string cameraName, UITexture renderTexture)
 	{
 		GameObject cameraObject = UnityUtility.getGameObject(parent, cameraName);
 		Camera camera = cameraObject.GetComponent<Camera>();
@@ -236,14 +217,14 @@ public class GameFramework : MonoBehaviour
 			camera.targetTexture = null;
 		}
 	}
-	public void setTextureWindowSize(GameObject go, int positionX, int width, int height)
+	protected void setTextureWindowSize(GameObject go, int positionX, int width, int height)
 	{
 		go.transform.localPosition = new Vector3((float)positionX, 0.0f, 0.0f);
 		UIWidget widget0 = go.GetComponent<UIWidget>();
 		widget0.width = width;
 		widget0.height = height;
 	}
-	public void setCameraPosition(string cameraName, GameObject parent, Vector3 pos)
+	protected void setCameraPosition(string cameraName, GameObject parent, Vector3 pos)
 	{
 		GameObject camera = UnityUtility.getGameObject(parent, cameraName);
 		camera.transform.localPosition = pos;

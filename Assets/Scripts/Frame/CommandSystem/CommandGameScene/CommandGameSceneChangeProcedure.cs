@@ -15,6 +15,7 @@ public class CommandGameSceneChangeProcedure : Command
 	{
 		GameScene gameScene = mReceiver as GameScene;
 		gameScene.changeProcedure(mProcedure, mIntent);
+		mLogSystem.logProcedure("进入流程 : " + mProcedure.ToString());
 	}
 	public override string showDebugInfo()
 	{

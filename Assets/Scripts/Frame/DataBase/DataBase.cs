@@ -4,16 +4,15 @@ using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 
-public class DataBase : CommandReceiver
+public class DataBase : FrameComponent
 {
 	protected Dictionary<DATA_TYPE, List<Data>> mDataStructList;
 	protected Dictionary<string, DATA_TYPE> mDataFileDefine;
 	protected Dictionary<DATA_TYPE, string> mDataDefineFile;
 	protected Dictionary<DATA_TYPE, int> mDataSizeMap;
 	protected DataFactoryManager mDataFactoryManager;
-	public DataBase()
-		:
-		base(typeof(DataBase).ToString())
+	public DataBase(string name)
+		:base(name)
 	{
 		mDataStructList = new Dictionary<DATA_TYPE,List<Data>>();
 		mDataFileDefine = new Dictionary<string, DATA_TYPE>();
@@ -22,13 +21,10 @@ public class DataBase : CommandReceiver
 		mDataFactoryManager = new DataFactoryManager();
 	}
 	// 初始化所有数据
-	public virtual void init(bool loadAllData = true)
+	public override void init()
 	{
 		mDataFactoryManager.init();
-		if (loadAllData)
-		{
-			loadAllDataFromFile();
-		}
+		loadAllDataFromFile();
 	}
 	public override void destroy() 
 	{

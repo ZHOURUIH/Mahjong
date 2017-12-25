@@ -29,7 +29,7 @@ public class ConfigInfo
 	public string mValue;
 }
 
-public abstract class ConfigBase : GameBase
+public abstract class ConfigBase : FrameComponent
 {
 	protected Dictionary<string, GAME_DEFINE_FLOAT> mFloatNameToDefine;
 	protected Dictionary<GAME_DEFINE_FLOAT, string> mFloatDefineToName;
@@ -37,7 +37,8 @@ public abstract class ConfigBase : GameBase
 	protected Dictionary<GAME_DEFINE_STRING, string> mStringDefineToName;
 	protected Dictionary<GAME_DEFINE_FLOAT, FloatParameter> mFloatList;
 	protected Dictionary<GAME_DEFINE_STRING, StringParameter> mStringList;
-	public ConfigBase() 
+	public ConfigBase(string name)
+		:base(name) 
 	{
 		mFloatNameToDefine = new Dictionary<string, GAME_DEFINE_FLOAT>();
 		mFloatDefineToName = new Dictionary<GAME_DEFINE_FLOAT, string>();
@@ -46,16 +47,16 @@ public abstract class ConfigBase : GameBase
 		mFloatList = new Dictionary<GAME_DEFINE_FLOAT, FloatParameter>();
 		mStringList = new Dictionary<GAME_DEFINE_STRING, StringParameter>();
 	}
-	public void init()
+	public override void init()
 	{
 		addFloat();
 		addString();
 		readConfig();
 	}
 	public abstract void writeConfig();
-	public void destory()
+	public override void destroy()
 	{
-		;
+		base.destroy();
 	}
 	public float getFloatParam(GAME_DEFINE_FLOAT param)
 	{
@@ -234,6 +235,11 @@ public abstract class ConfigBase : GameBase
 				else
 				{
 					string[] value = StringUtility.split(line, true, "=");
+					if(value.Length != 2)
+					{
+						UnityUtility.logError("配置文件错误 : line : " + line);
+						return;
+					}
 					ConfigInfo info = new ConfigInfo();
 					info.mComment = comment;
 					info.mName = value[0];

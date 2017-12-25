@@ -20,4 +20,8 @@ public class SceneFactoryManager
 		}
 		return null;
 	}
+	public int getFactoryCount()
+	{
+		return mFactoryList.Count;
+	}
 }

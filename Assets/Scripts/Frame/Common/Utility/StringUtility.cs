@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
-public class StringUtility : GameBase
+public class StringUtility
 {
 	public void init() { }
 	public static int getLastNotNumberPos(string str)

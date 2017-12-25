@@ -12,9 +12,10 @@ abstract public class GameScene : ComponentOwner
 	protected PROCEDURE_TYPE								mLastProcedureType;
 	protected SceneProcedure								mCurProcedure;
 	protected bool											mDestroyEngineScene;
-	protected List<PROCEDURE_TYPE>							mLastProcedureList;	// 所进入过的所有流程
+	protected List<SceneProcedure>							mLastProcedureList;	// 所进入过的所有流程
 	protected GameObject									mSceneObject;
 	protected AudioSource									mAudioSource;
+	protected int											mMaxLastProcedureCount = 8;
     public GameScene(GAME_SCENE_TYPE type, string name) 
         :
         base(name)
@@ -25,7 +26,7 @@ abstract public class GameScene : ComponentOwner
 		mLastProcedureType = PROCEDURE_TYPE.PT_NONE;
 		mDestroyEngineScene = false;
 		mSceneProcedureList = new Dictionary<PROCEDURE_TYPE, SceneProcedure>();
-		mLastProcedureList = new List<PROCEDURE_TYPE>();
+		mLastProcedureList = new List<SceneProcedure>();
 		// 创建场景对应的物体,并挂接到场景管理器下
 		mSceneObject = new GameObject(name);
 		mSceneObject.transform.parent = mGameSceneManager.getManagerObject().transform;
@@ -40,7 +41,7 @@ abstract public class GameScene : ComponentOwner
 		// 设置起始流程名
 		assignStartExitProcedure();
 		// 开始执行起始流程
-		CommandGameSceneChangeProcedure cmd = mCommandSystem.newCmd<CommandGameSceneChangeProcedure>(false, false);
+		CommandGameSceneChangeProcedure cmd = mCommandSystem.newCmd<CommandGameSceneChangeProcedure>(true, false);
         cmd.mProcedure = mStartProcedure;
         mCommandSystem.pushCommand(cmd, this);
     }
@@ -53,7 +54,7 @@ abstract public class GameScene : ComponentOwner
 	{
 		base.destroy();
 		base.destroyAllComponents();
-		GameObject.Destroy(mSceneObject);
+		UnityUtility.destroyGameObject(mSceneObject);
 		mSceneObject = null;
 	}
 	public virtual void update(float elapsedTime)
@@ -62,10 +63,17 @@ abstract public class GameScene : ComponentOwner
 		base.updateComponents(elapsedTime);
 
 		// 更新当前流程
+		keyProcess(elapsedTime);
+		if (mCurProcedure != null)
+		{
+			mCurProcedure.update(elapsedTime);
+		}
+	}
+	public virtual void keyProcess(float elapsedTime)
+	{
 		if (mCurProcedure != null)
 		{
 			mCurProcedure.keyProcess(elapsedTime);
-			mCurProcedure.update(elapsedTime);
 		}
 	}
 	// 退出场景
@@ -113,7 +121,7 @@ abstract public class GameScene : ComponentOwner
 			return;
 		}
 		// 获得上一次进入的流程
-		PROCEDURE_TYPE lastType = mLastProcedureList[mLastProcedureList.Count - 1];
+		PROCEDURE_TYPE lastType = mLastProcedureList[mLastProcedureList.Count - 1].getProcedureType();
 		changeProcedure(lastType, intend, false);
 		mLastProcedureList.RemoveAt(mLastProcedureList.Count - 1);
 	}
@@ -124,7 +132,11 @@ abstract public class GameScene : ComponentOwner
 			// 将上一个流程记录到返回列表中
 			if (mCurProcedure != null && addToLastList)
 			{
-				mLastProcedureList.Add(mCurProcedure.getProcedureType());
+				mLastProcedureList.Add(mCurProcedure);
+				if(mLastProcedureList.Count > mMaxLastProcedureCount)
+				{
+					mLastProcedureList.RemoveAt(0);
+				}
 			}
 			if (mCurProcedure == null || mCurProcedure.getProcedureType() != procedure)
 			{
@@ -149,6 +161,14 @@ abstract public class GameScene : ComponentOwner
         }
         return false;
     }
+	// 流程调用,通知场景当前流程已经准备完毕
+	public void notifyProcedurePrepared()
+	{
+		if(mLastProcedureList.Count > 0)
+		{
+			mLastProcedureList[mLastProcedureList.Count - 1].onNextProcedurePrepared(mCurProcedure);
+		}
+	}
     public virtual void notifySceneObjectDestroy(string objectName) { } // 通知场景一个场景物体被销毁了
     public bool getDestroyEngineScene() { return mDestroyEngineScene; }
     public void setDestroyEngineScene(bool value) { mDestroyEngineScene = value; }

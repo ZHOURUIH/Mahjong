@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class CharacterManager : CommandReceiver
+public class CharacterManager : FrameComponent
 {
 	protected Dictionary<CHARACTER_TYPE, Dictionary<string, Character>> mCharacterTypeList;    // 角色分类列表
 	protected Dictionary<string, Character>		mCharacterList;     // 角色名字索引表
@@ -10,16 +10,15 @@ public class CharacterManager : CommandReceiver
 	protected CharacterMyself					mMyself;            // 玩家自己,方便获取
 	protected GameObject						mManagerObject;     // 角色管理器物体
 	protected CharacterFactoryManager			mCharacterFactoryManager;                             // 角色工厂
-	public CharacterManager()
-		:
-		base(typeof(CharacterManager).ToString())
+	public CharacterManager(string name)
+		:base(name)
 	{
 		mCharacterList = new Dictionary<string, Character>();
 		mCharacterTypeList = new Dictionary<CHARACTER_TYPE, Dictionary<string, Character>>();
 		mCharacterGUIDList = new Dictionary<int, Character>();
 		mCharacterFactoryManager = new CharacterFactoryManager();
 	}
-	public void init()
+	public override void init()
 	{
 		mManagerObject = UnityUtility.getGameObject(mGameFramework.getGameFrameObject(), "CharacterManager");
 		if (mManagerObject == null)
@@ -39,17 +38,29 @@ public class CharacterManager : CommandReceiver
 		mCharacterGUIDList = null;
 		mMyself = null;
 	}
-	public void update(float fElapsedTime)
+	public override void update(float elapsedTime)
 	{
-		foreach (var characterIter in mCharacterList)
+		foreach (var item in mCharacterList)
 		{
-			Character character = characterIter.Value;
-			if (character != null)
+			Character character = item.Value;
+			if (character != null && character.getActive())
 			{
-				character.update(fElapsedTime);
+				character.update(elapsedTime);
 			}
 		}
 	}
+	public override void fixedUpdate(float elapsedTime)
+	{
+		foreach (var item in mCharacterList)
+		{
+			Character character = item.Value;
+			if (character != null && character.getActive())
+			{
+				character.fixedUpdate(elapsedTime);
+			}
+		}
+	}
+	public GameObject getManagerNode() { return mManagerObject; }
 	public CharacterMyself getMyself() { return mMyself; }
 	public void registeCharacter<T>(CHARACTER_TYPE type) where T : Character
 	{
@@ -70,6 +81,18 @@ public class CharacterManager : CommandReceiver
 			return null;
 		}
 		return mCharacterGUIDList[characterID];
+	}
+	public void activeCharacter(int id, bool active)
+	{
+		activeCharacter(getCharacter(id), active);
+	}
+	public void activeCharacter(string name, bool active)
+	{
+		activeCharacter(getCharacter(name), active);
+	}
+	public void activeCharacter(Character character, bool active)
+	{
+		character.setActive(active);
 	}
 	public void getCharacterListByType(CHARACTER_TYPE type, ref Dictionary<string, Character> characterList)
 	{
@@ -104,8 +127,9 @@ public class CharacterManager : CommandReceiver
 		if (newCharacter != null)
 		{
 			// 将角色挂接到管理器下
-			newCharacter.getObject().transform.parent = mManagerObject.transform;
-			newCharacter.init(id);
+			newCharacter.setParent(mManagerObject);
+			newCharacter.init();
+			newCharacter.setID(id);
 			addCharacterToList(newCharacter);
 		}
 		return newCharacter;

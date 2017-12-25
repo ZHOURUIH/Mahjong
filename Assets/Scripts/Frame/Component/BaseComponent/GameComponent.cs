@@ -11,7 +11,7 @@ public abstract class GameComponent : GameBase
 	protected string					mName;					// 组件名
 	protected bool						mActive;				// 是否激活组件
 	protected bool						mLockOneFrame;			// 是否将组件锁定一次
-	protected bool						mPreUpdate;				// 是否为预更新组件
+	protected bool						mPreUpdate;				// 是否为预更新组件,暂时废弃
 	protected GameComponent				mParent;				// 父级组件
 	Dictionary<string, GameComponent>	mChildComponentMap;		// 用于查找组件
 	List<GameComponent>					mChildComponentList; // 该组件下的子组件列表,保存了子组件之间的顺序
@@ -58,6 +58,19 @@ public abstract class GameComponent : GameBase
 		for (int i = 0; i < childCount; ++i)
 		{
 			mChildComponentList[i].update(elapsedTime);
+		}
+	}
+	public virtual void fixedUpdate(float elapsedTime)
+	{
+		if (mLockOneFrame || !isActive())
+		{
+			return;
+		}
+		// 更新子组件
+		int childCount = mChildComponentList.Count;
+		for (int i = 0; i < childCount; ++i)
+		{
+			mChildComponentList[i].fixedUpdate(elapsedTime);
 		}
 	}
 	public virtual void lateUpdate(float elapsedTime)
@@ -200,7 +213,7 @@ public abstract class GameComponent : GameBase
 		{
 			mComponentOwner = owner;
 			mComponentOwner.notifyComponentAttached(this);
-			// 使自己所有的子窗口都建立与布局的联系
+			// 使自己所有的子组件都建立与拥有者的联系
 			int childCount = mChildComponentList.Count;
 			for (int i = 0; i < childCount; ++i)
 			{

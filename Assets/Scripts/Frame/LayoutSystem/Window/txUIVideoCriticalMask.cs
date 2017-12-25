@@ -28,7 +28,7 @@ public class txUIVideoCriticalMask : txUIVideo
 		if (mat != null && mat.shader != null)
 		{
 			string shaderName = mat.shader.name;
-			if (shaderName == "CriticalMask")
+			if (shaderName == "CriticalMask" || shaderName == "MotionBlurCriticalMask")
 			{
 				mat.SetFloat("_CriticalValue", mCriticalValue);
 				mat.SetInt("_InverseVertical", mInverseVertical ? 1 : 0);

@@ -2,18 +2,18 @@
 using System;
 using System.Collections;
 
-public class WindowComponentRotateSpeed : ComponentRotateSpeed  
+public class WindowComponentRotateSpeed : ComponentRotateSpeedNormal  
 {
 	public WindowComponentRotateSpeed(Type type, string name)
 		:
 		base(type, name)
 	{ }
-	public override void applyRotation(Vector3 rotation, bool done = false, bool refreshNow = false) 
+	//-------------------------------------------------------------------------------------------------------------
+	protected override bool isType(Type type) { return base.isType(type) || type == typeof(WindowComponentRotateSpeed); }
+	protected override void applyRotation(Vector3 rotation, bool done = false, bool refreshNow = false)
 	{
 		txUIObject window = mComponentOwner as txUIObject;
 		window.setLocalRotation(rotation);
 	}
-	public override Vector3 getCurRotation(){return (mComponentOwner as txUIObject).getRotationEuler();}
-	//-------------------------------------------------------------------------------------------------------------
-	protected override bool isType(Type type) { return base.isType(type) || type == typeof(WindowComponentRotateSpeed); }
+	protected override Vector3 getCurRotation() { return (mComponentOwner as txUIObject).getRotationEuler(); }
 }

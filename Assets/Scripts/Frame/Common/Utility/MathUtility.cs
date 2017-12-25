@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class MathUtility : GameBase
+public class MathUtility
 {
 	protected static float[] sin_tb = null;
 	protected static float[] cos_tb = null;
@@ -136,8 +136,8 @@ public class MathUtility : GameBase
 			if (i == str.Length - 1)
 			{
 				string num = str.Substring(beginpos, str.Length - beginpos);
-				float fNum = StringUtility.stringToFloat(num);
-				numbers.Add(fNum);
+					float fNum = float.Parse(num);
+					numbers.Add(fNum);
 				break;
 			}
 			// 找到第一个运算符
@@ -146,7 +146,7 @@ public class MathUtility : GameBase
 				if (i != 0)
 				{
 					string num = str.Substring(beginpos, i - beginpos);
-					float fNum = StringUtility.stringToFloat(num);
+					float fNum = float.Parse(num);
 					numbers.Add(fNum);
 				}
 				// 如果在表达式的开始就发现了运算符,则表示第一个数是负数,那就处理为0减去这个数的绝对值
@@ -332,6 +332,69 @@ public class MathUtility : GameBase
 			max += 1;
 		}
 		return UnityEngine.Random.Range(min, max);
+	}
+	public static Vector3 getDirectionFromDegreeYawPitch(float yaw, float pitch)
+	{
+		yaw *= Mathf.Deg2Rad;
+		pitch *= Mathf.Deg2Rad;
+		return getDirectionFromRadianYawPitch(yaw, pitch);
+	}
+	public static Vector3 getDirectionFromRadianYawPitch(float yaw, float pitch)
+	{
+		// 如果pitch为90°或者-90°,则直接返回向量,此时无论航向角为多少,向量都是竖直向上或者竖直向下
+		if (isFloatZero(pitch - Mathf.PI / 2.0f))
+		{
+			return Vector3.down;
+		}
+		else if (isFloatZero(pitch + Mathf.PI / 2.0f))
+		{
+			return Vector3.up;
+		}
+		else
+		{
+			// 在unity的坐标系中航向角需要取反
+			yaw = -yaw;
+			Vector3 dir = new Vector3();
+			dir.z = Mathf.Cos(yaw);
+			dir.x = -Mathf.Sin(yaw);
+			dir.y = -Mathf.Tan(pitch);
+			dir = normalize(dir);
+			return dir;
+		}
+	}
+	public static void getDegreeYawPitchFromDirection(Vector3 dir, ref float fYaw, ref float fPitch)
+	{
+		getRadianYawPitchFromDirection(dir, ref fYaw, ref fPitch);
+		fYaw *= Mathf.Rad2Deg;
+		fPitch *= Mathf.Rad2Deg;
+	}
+	// fYaw是-PI到PI之间
+	public static void getRadianYawPitchFromDirection(Vector3 dir, ref float fYaw, ref float fPitch)
+	{
+		dir = normalize(dir);
+		// 首先计算俯仰角,俯仰角是向量与X-Z平面的夹角,在上面为负,在下面为正
+		fPitch = -Mathf.Asin(dir.y);
+
+		// 再计算航向角,航向角是向量与在X-Z平面上的投影与Z轴正方向的夹角,从上往下看是顺时针为正,逆时针为负
+		Vector3 projectionXZ = new Vector3(dir.x, 0.0f, dir.z);
+		float len = getLength(projectionXZ);
+		// 如果投影的长度为0,则表示俯仰角为90°或者-90°,航向角为0
+		if (isFloatZero(len))
+		{
+			fYaw = 0.0f;
+		}
+		else
+		{
+			projectionXZ = normalize(projectionXZ);
+			fYaw = Mathf.Acos(Vector3.Dot(projectionXZ, Vector3.forward));
+			// 判断航向角的正负,如果x为正,则航向角为负,如果x为,则航向角为正
+			if (dir.x > 0.0f)
+			{
+				fYaw = -fYaw;
+			}
+		}
+		// 在unity的坐标系中航向角需要取反
+		fYaw = -fYaw;
 	}
 	// 给定一段圆弧,以及圆弧圆心角的百分比,计算对应的圆弧上的一个点以及该点的切线方向
 	public static void getPosOnArc(Vector3 circleCenter, Vector3 startArcPos, Vector3 endArcPos, float radius, float anglePercent, ref Vector3 pos, ref Vector3 tangencyDir)
@@ -608,10 +671,27 @@ public class MathUtility : GameBase
 	{
 		return a > b ? a : b;
 	}
+	public static float lerp(float start, float end, float t)
+	{
+		return start + (end - start) * t;
+	}
+	public static Vector2 lerp(Vector2 start, Vector2 end, float t)
+	{
+		return start + (end - start) * t;
+	}
+	public static Vector3 lerp(Vector3 start, Vector3 end, float t)
+	{
+		return start + (end - start) * t;
+	}
+	public static Color lerp(Color start, Color end, float t)
+	{
+		return start + (end - start) * t;
+	}
 	public static void clamp(ref float value, float min, float max)
 	{
-		if (min >= max)
+		if (min > max || isFloatEqual(min, max))
 		{
+			value = min;
 			return;
 		}
 		if (value < min)
@@ -649,7 +729,7 @@ public class MathUtility : GameBase
 	}
 	public static bool isFloatEqual(float value1, float value2, float precision = 0.0001f)
 	{
-		return isFloatZero(value1 - value2);
+		return isFloatZero(value1 - value2, precision);
 	}
 	public static float getAngleFromVectorToVector(Vector2 from, Vector2 to)
 	{
@@ -674,46 +754,54 @@ public class MathUtility : GameBase
 		}
 		return angle;
 	}
-	public static void adjustAngle180(ref float radianAngle, bool radian)
+	public static void clampValue(ref float value, float min, float max, float cycle)
 	{
-		float pi = radian ? Mathf.PI : 180.0f;
-		// 如果小于-PI,则循环加上PI * 2
-		while (radianAngle < -pi)
+		while (value < min)
 		{
-			radianAngle += pi * 2.0f;
+			value += cycle;
 		}
-		// 如果大于PI,则循环减去PI * 2
-		while (radianAngle > pi)
+		while (value > max)
 		{
-			radianAngle -= pi * 2.0f;
+			value -= cycle;
 		}
 	}
-	public static void adjustAngle180(ref Vector3 radianAngle, bool radian)
+	public static void clampAngle(ref float angle, float min, float max, float pi)
 	{
-		adjustAngle180(ref radianAngle.x, radian);
-		adjustAngle180(ref radianAngle.y, radian);
-		adjustAngle180(ref radianAngle.z, radian);
+		clampValue(ref angle, min, max, pi * 2.0f);
 	}
-	public static void adjustAngle360(ref float radianAngle, bool radian)
+	public static void adjustRadian180(ref float radianAngle)
 	{
-		float pi = radian ? Mathf.PI : 180.0f;
-
-		// 如果小于0,则循环加上PI * 2
-		while (radianAngle < 0.0f)
-		{
-			radianAngle += pi * 2.0f;
-		}
-		// 如果大于PI * 2,则循环减去PI * 2
-		while (radianAngle > pi * 2.0f)
-		{
-			radianAngle -= pi * 2.0f;
-		}
+		clampAngle(ref radianAngle, -Mathf.PI, Mathf.PI, Mathf.PI);
 	}
-	public static void adjustAngle360(ref Vector3 radianAngle, bool radian)
+	public static void adjustAngle180(ref float radianAngle)
 	{
-		adjustAngle360(ref radianAngle.x, radian);
-		adjustAngle360(ref radianAngle.y, radian);
-		adjustAngle360(ref radianAngle.z, radian);
+		clampAngle(ref radianAngle, -180.0f, 180.0f, 180.0f);
+	}
+	public static void adjustRadian180(ref Vector3 radianAngle)
+	{
+		adjustRadian180(ref radianAngle.x);
+		adjustRadian180(ref radianAngle.y);
+		adjustRadian180(ref radianAngle.z);
+	}
+	public static void adjustAngle180(ref Vector3 radianAngle)
+	{
+		adjustAngle180(ref radianAngle.x);
+		adjustAngle180(ref radianAngle.y);
+		adjustAngle180(ref radianAngle.z);
+	}
+	public static void adjustRadian360(ref float radianAngle)
+	{
+		clampAngle(ref radianAngle, 0.0f, Mathf.PI * 2.0f, Mathf.PI);
+	}
+	public static void adjustAngle360(ref float radianAngle)
+	{
+		clampAngle(ref radianAngle, 0.0f, 360.0f, 180.0f);
+	}
+	public static void adjustAngle360(ref Vector3 radianAngle)
+	{
+		adjustAngle360(ref radianAngle.x);
+		adjustAngle360(ref radianAngle.y);
+		adjustAngle360(ref radianAngle.z);
 	}
 	// 求从z轴到指定向量的水平方向上的顺时针角度,角度范围是-MATH_PI 到 MATH_PI
 	public static float getAngleFromVector(Vector3 vec)
@@ -721,13 +809,11 @@ public class MathUtility : GameBase
 		vec.y = 0.0f;
 		vec = Vector3.Normalize(vec);
 		float angle = Mathf.Acos(vec.z);
-
 		if (vec.x > 0.0f)
 		{
 			angle = -angle;
 		}
-		adjustAngle180(ref angle, true);
-
+		adjustRadian180(ref angle);
 		return angle;
 	}
 	public static Vector3 rotateVector3(Vector3 vec, Matrix4x4 transMat3)
@@ -747,7 +833,7 @@ public class MathUtility : GameBase
 		float tempLength = getLength(temp);
 		float questAngle = getAngleFromVector(temp);
 		questAngle += angle;
-		adjustAngle180(ref questAngle, true);
+		adjustRadian180(ref questAngle);
 		temp = getVectorFromAngle(questAngle) * tempLength;
 		temp.y = vec.y;
 		return temp;

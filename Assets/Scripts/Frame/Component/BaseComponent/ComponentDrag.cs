@@ -39,7 +39,7 @@ public class ComponentDrag : GameComponent
 		applyScreenPosition(mousePosition);
 	}
 	//--------------------------------------------------------------------------------------------------------------
-	protected override bool isType(Type type) { return base.isType(type) || type == typeof(ComponentDrag); }
+	protected override bool isType(Type type) { return type == typeof(ComponentDrag); }
 	protected override void setBaseType(){mBaseType = typeof(ComponentDrag);}
 	protected virtual void applyScreenPosition(Vector3 screenPos) { }
 	protected virtual Vector3 getScreenPosition() { return Vector3.zero; }

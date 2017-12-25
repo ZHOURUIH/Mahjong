@@ -8,8 +8,8 @@ public abstract class ComponentOwner : CommandReceiver
 {
 	protected List<GameComponent>									mRootComponentList;				// 一级组件列表,保存着组件之间的更新顺序
 	protected Dictionary<string, GameComponent>						mAllComponentList;				// 组件拥有者当前的所有组件列表
-	protected Dictionary<Type, Dictionary<string, GameComponent>> mAllComponentTypeList;		    // 组件类型列表,first是组件的类型名
-	protected Dictionary<Type, Dictionary<string, GameComponent>> mAllComponentBaseTypeList;	    // 根据组件的基础类型分组的组件列表,first是基础组件类型名
+	protected Dictionary<Type, Dictionary<string, GameComponent>>	mAllComponentTypeList;		    // 组件类型列表,first是组件的类型名
+	protected Dictionary<Type, Dictionary<string, GameComponent>>	mAllComponentBaseTypeList;	    // 根据组件的基础类型分组的组件列表,first是基础组件类型名
 	protected bool mUsePreLateUpdate = false;	// 是否对组件预更新和后更新
 	public ComponentOwner(string name)
 		:
@@ -21,66 +21,6 @@ public abstract class ComponentOwner : CommandReceiver
 		mAllComponentBaseTypeList = new Dictionary<Type, Dictionary<string, GameComponent>>();
 	}
 	public abstract void initComponents();
-	// 更新需要最先更新的组件
-	public virtual void updatePreComponent(float elapsedTime)
-	{
-		if (mAllComponentList.Count == 0)
-		{
-			return;
-		}
-		int rootComponentCount = mRootComponentList.Count;
-		if (mUsePreLateUpdate)
-		{
-			// 预更新基础类型组件
-			for (int i = 0; i < rootComponentCount; ++i)
-			{
-				GameComponent component = mRootComponentList[i];
-				if (component.isPreUpdate())
-				{
-					if (component != null && component.isActive() && !component.isLockOneFrame())
-					{
-						component.preUpdate(elapsedTime);
-					}
-				}
-			}
-		}
-		
-		// 更新基础类型组件
-		for (int i = 0; i < rootComponentCount; ++i)
-		{
-			GameComponent component = mRootComponentList[i];
-			if (component.isPreUpdate())
-			{
-				if (component != null && component.isActive() && !component.isLockOneFrame())
-				{
-					component.update(elapsedTime);
-				}
-			}
-		}
-		if (mUsePreLateUpdate)
-		{
-			// 补充更新基础类型组件
-			for (int i = 0; i < rootComponentCount; ++i)
-			{
-				GameComponent component = mRootComponentList[i];
-				if (component.isPreUpdate())
-				{
-					if (component != null && component.isActive())
-					{
-						// 如果组件被锁定了一帧,则不更新,解除锁定
-						if (component.isLockOneFrame())
-						{
-							component.setLockOneFrame(false);
-						}
-						else
-						{
-							component.lateUpdate(elapsedTime);
-						}
-					}
-				}
-			}
-		}
-	}
 	// 更新正常更新的组件
 	public virtual void updateComponents(float elapsedTime)
 	{
@@ -95,12 +35,9 @@ public abstract class ComponentOwner : CommandReceiver
 			for (int i = 0; i < rootComponentCount; ++i)
 			{
 				GameComponent component = mRootComponentList[i];
-				if (!component.isPreUpdate())
+				if (component != null && component.isActive() && !component.isLockOneFrame())
 				{
-					if (component != null && component.isActive() && !component.isLockOneFrame())
-					{
-						component.preUpdate(elapsedTime);
-					}
+					component.preUpdate(elapsedTime);
 				}
 			}
 		}
@@ -108,12 +45,9 @@ public abstract class ComponentOwner : CommandReceiver
 		for (int i = 0; i < rootComponentCount; ++i)
 		{
 			GameComponent component = mRootComponentList[i];
-			if (!component.isPreUpdate())
+			if (component != null && component.isActive() && !component.isLockOneFrame())
 			{
-				if (component != null && component.isActive() && !component.isLockOneFrame())
-				{
-					component.update(elapsedTime);
-				}
+				component.update(elapsedTime);
 			}
 		}
 		if (mUsePreLateUpdate)
@@ -122,28 +56,40 @@ public abstract class ComponentOwner : CommandReceiver
 			for (int i = 0; i < rootComponentCount; ++i)
 			{
 				GameComponent component = mRootComponentList[i];
-				if (!component.isPreUpdate())
+				if (component != null && component.isActive())
 				{
-					if (component != null && component.isActive())
+					// 如果组件被锁定了一帧,则不更新,解除锁定
+					if (component.isLockOneFrame())
 					{
-						// 如果组件被锁定了一帧,则不更新,解除锁定
-						if (component.isLockOneFrame())
-						{
-							component.setLockOneFrame(false);
-						}
-						else
-						{
-							component.lateUpdate(elapsedTime);
-						}
+						component.setLockOneFrame(false);
+					}
+					else
+					{
+						component.lateUpdate(elapsedTime);
 					}
 				}
 			}
 		}
 	}
+	// 物理更新
+	public virtual void fixedUpdate(float elapsedTime)
+	{
+		if (mAllComponentList.Count == 0)
+		{
+			return;
+		}
+		int rootComponentCount = mRootComponentList.Count;
+		for (int i = 0; i < rootComponentCount; ++i)
+		{
+			GameComponent component = mRootComponentList[i];
+			if (component != null && component.isActive() && !component.isLockOneFrame())
+			{
+				component.fixedUpdate(elapsedTime);
+			}
+		}
+	}
 	public virtual void notifyAddComponent(GameComponent component) { }
-	// 通知布局窗口断开了与布局的联系,由窗口发出
 	public virtual void notifyComponentDetached(GameComponent component) { removeComponentFromList(component); }
-	// 通知布局窗口建立了与布局的联系,由窗口发出
 	public virtual void notifyComponentAttached(GameComponent component)
 	{
 		if (null == component)

@@ -11,31 +11,33 @@ public class AudioInfo
 	public bool mIsResource;	// 是否为固定资源,如果为false则是通过链接加载的,可以是网络链接也可以是本地链接
 }
 
-public class AudioManager : GameBase
+public class AudioManager : FrameComponent
 {
 	protected Dictionary<string, AudioInfo> mAudioClipList;	// 音效资源列表
 	protected int mLoadedCount;
-	public AudioManager()
+	public AudioManager(string name)
+		:base(name)
 	{
 		mAudioClipList = new Dictionary<string, AudioInfo>();
 	}
-	public virtual void init()
+	public override void init()
 	{
 		;
 	}
-	public void destroy()
+	public override void destroy()
 	{
 		foreach(var item in mAudioClipList)
 		{
 			// 只销毁通过链接加载的音频
 			if(!item.Value.mIsResource)
 			{
-				GameObject.Destroy(item.Value.mClip);
+				UnityUtility.destroyGameObject(item.Value.mClip);
 			}
 		}
 		mAudioClipList.Clear();
+		base.destroy();
 	}
-	public virtual void update(float elapsedTime)
+	public override void update(float elapsedTime)
 	{}
 	// 参数为Sound下的相对路径,并且不带后缀
 	public void createAudio(string fileName, bool load = true, bool async = true)

@@ -4,17 +4,18 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class LayoutPrefabManager : GameBase
+public class LayoutPrefabManager : FrameComponent
 {
 	protected GameObject mManagerObject;
 	protected Dictionary<string, GameObject> mPrefabList;
 	protected int mLoadedCount;	// 已加载的布局使用的预设数量
-	public LayoutPrefabManager()
+	public LayoutPrefabManager(string name)
+		:base(name)
 	{
 		mPrefabList = new Dictionary<string, GameObject>();
 		mLoadedCount = 0;
 	}
-	public void init()
+	public override void init()
 	{
 		mManagerObject = UnityUtility.getGameObject(mGameFramework.getGameFrameObject(), "LayoutPrefabManager");
 		if (mManagerObject == null)
@@ -45,9 +46,9 @@ public class LayoutPrefabManager : GameBase
 			}
 		}
 	}
-	public void destroy()
+	public override void destroy()
 	{
-		;
+		base.destroy();
 	}
 	public UnityEngine.Object getPrefab(string name)
 	{

@@ -15,7 +15,7 @@ public class LayoutAsyncInfo
 	public LayoutAsyncDone mCallback;
 }
 
-public class GameLayoutManager : CommandReceiver
+public class GameLayoutManager : FrameComponent
 {
 	protected ScriptFactoryManager				  mScriptFactoryManager;
 	protected Dictionary<LAYOUT_TYPE, string>	  mLayoutTypeToName;
@@ -24,9 +24,9 @@ public class GameLayoutManager : CommandReceiver
 	protected Dictionary<string, GameLayout>	  mLayoutNameList;
 	protected txUIObject						  mUIRoot;
 	protected Dictionary<string, LayoutAsyncInfo> mLayoutAsyncList;
-	public GameLayoutManager()
+	public GameLayoutManager(string name)
 		:
-		base(typeof(GameLayoutManager).ToString())
+		base(name)
 	{
 		mScriptFactoryManager = new ScriptFactoryManager();
 		mLayoutTypeToName = new Dictionary<LAYOUT_TYPE, string>();
@@ -35,10 +35,9 @@ public class GameLayoutManager : CommandReceiver
 		mLayoutNameList = new Dictionary<string, GameLayout>();
 		mLayoutAsyncList = new Dictionary<string, LayoutAsyncInfo>();
 	}
-	public void init()
+	public override void init()
 	{
-		mUIRoot = new txUIObject();
-		mUIRoot.init(null, UnityUtility.getGameObject(null, "UI Root"), null);
+		mUIRoot = LayoutScript.newUIObject<txUIObject>("UI Root", null, null, UnityUtility.getGameObject(null, "UI Root"));
 		if (mUIRoot.mObject == null)
 		{
 			UnityUtility.logError("can not find ui root! please add it to scene!");
@@ -53,7 +52,7 @@ public class GameLayoutManager : CommandReceiver
 	{
 		return mUIRoot;
 	}
-	public void update(float elapsedTime)
+	public override void update(float elapsedTime)
 	{
 		foreach (var layout in mLayoutTypeList)
 		{
@@ -73,6 +72,7 @@ public class GameLayoutManager : CommandReceiver
 		mLayoutTypeList.Clear();
 		mLayoutAsyncList.Clear();
 		mUIRoot = null;
+		base.destroy();
 	}
 	public string getLayoutNameByType(LAYOUT_TYPE type)
 	{

@@ -7,7 +7,8 @@ public class txUIVideo : txUIStaticTexture
 {
 	protected MediaPlayer mMediaPlayer;
 	protected string mFileName;
-	protected VideoPlayEndCallback mVideoEndCallback;
+	protected VideoCallback mVideoEndCallback;
+	protected VideoCallback mVideoReadyCallback;
 	protected bool mReady = false;
 	// 刚设置视频文件,还未加载时,要设置播放状态就需要先保存状态,然后等到视频准备完毕后再设置
 	protected bool mNextLoop = false;
@@ -49,6 +50,12 @@ public class txUIVideo : txUIStaticTexture
 							mTexture.flip = UIBasicSprite.Flip.Nothing;
 						}
 						mTexture.mainTexture = texture;
+						// 只有当真正开始渲染时才认为是准备完毕
+						if (mVideoReadyCallback != null)
+						{
+							mVideoReadyCallback(mFileName, false);
+							mVideoReadyCallback = null;
+						}
 					}
 				}
 			}
@@ -166,11 +173,15 @@ public class txUIVideo : txUIStaticTexture
 			mNextSeekTime = timeMS;
 		}
 	}
-	public void setVideoEndCallback(VideoPlayEndCallback callback)
+	public void setVideoEndCallback(VideoCallback callback)
 	{
 		// 重新设置回调之前,先调用之前的回调
-		clearAndCallEvent(true);
+		clearAndCallEvent(ref mVideoEndCallback, true);
 		mVideoEndCallback = callback;
+	}
+	public void setVideoReadyCallback(VideoCallback callback)
+	{
+		mVideoReadyCallback = callback;
 	}
 	//----------------------------------------------------------------------------------------------------------------------------------------
 	protected void notifyVideoReady(bool ready)
@@ -194,10 +205,10 @@ public class txUIVideo : txUIStaticTexture
 			mNextSeekTime = 0.0f;
 		}
 	}
-	protected void clearAndCallEvent(bool isBreak)
+	protected void clearAndCallEvent(ref VideoCallback callback, bool isBreak)
 	{
-		VideoPlayEndCallback temp = mVideoEndCallback;
-		mVideoEndCallback = null;
+		VideoCallback temp = callback;
+		callback = null;
 		if (temp != null)
 		{
 			temp(mFileName, isBreak);
@@ -208,7 +219,7 @@ public class txUIVideo : txUIStaticTexture
 		if (eventType == MediaPlayerEvent.EventType.FinishedPlaying)
 		{
 			// 播放完后设置为停止状态
-			clearAndCallEvent(false);
+			clearAndCallEvent(ref mVideoEndCallback, false);
 		}
 		else if (eventType == MediaPlayerEvent.EventType.ReadyToPlay)
 		{

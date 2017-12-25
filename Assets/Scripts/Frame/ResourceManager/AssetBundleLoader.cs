@@ -6,6 +6,7 @@ using System.Text;
 using System.IO;
 using System.Xml;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class AssetBundleLoader : MonoBehaviour
 {
@@ -25,10 +26,12 @@ public class AssetBundleLoader : MonoBehaviour
 			mTypeSuffixList = new Dictionary<Type, List<string>>();
 			registeSuffix(typeof(Texture), ".png");
 			registeSuffix(typeof(GameObject), ".prefab");
+			registeSuffix(typeof(GameObject), ".fbx");
 			registeSuffix(typeof(Material), ".mat");
 			registeSuffix(typeof(Shader), ".shader");
 			registeSuffix(typeof(AudioClip), ".wav");
 			registeSuffix(typeof(AudioClip), ".mp3");
+			registeSuffix(typeof(RuntimeAnimatorController), ".controller");
 		}
 	}
 	public bool init()
@@ -292,7 +295,7 @@ public class AssetBundleLoader : MonoBehaviour
 	{
 		StartCoroutine(loadAssetsFromUrl(url, assetsType, callback, userData));
 	}
-	//-----------------------------------------------------------------------------------------------
+	//-------------------------------------------------------------------------------------------------------------------------------------
 	protected IEnumerator loadAssetsFromUrl(string url, Type assetsType, AssetLoadDoneCallback callback, object userData)
 	{
 		WWW www = new WWW(url);

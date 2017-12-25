@@ -10,6 +10,7 @@ public class CommandLayoutManagerLoadLayout : Command
 	public bool			mAsync = false;
 	public LayoutAsyncDone mCallback = null;
 	public string		mParam = "";
+	public bool			mImmediatelyShow = false;
 	public override void init()
 	{
 		base.init();
@@ -20,6 +21,7 @@ public class CommandLayoutManagerLoadLayout : Command
 		mAsync = false;
 		mCallback = null;
 		mParam = "";
+		mImmediatelyShow = false;
 	}
 	public override void execute()
 	{
@@ -28,11 +30,11 @@ public class CommandLayoutManagerLoadLayout : Command
 		// 只有同步加载时才能立即设置布局的显示和渲染顺序
 		if (mResultLayout != null && !mAsync)
 		{
-			// 加载时设置显示状态是需要立即生效的,显示时会立即生效,隐藏时需要设置强制隐藏,不通知脚本
 			if (mVisible)
 			{
-				mResultLayout.setVisible(mVisible, true, mParam);
+				mResultLayout.setVisible(mVisible, mImmediatelyShow, mParam);
 			}
+			// 隐藏时需要设置强制隐藏,不通知脚本,因为通常这种情况只是想后台加载布局
 			else
 			{
 				mResultLayout.setVisibleForce(mVisible);

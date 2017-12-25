@@ -4,11 +4,8 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class WindowComponentTrackTarget : GameComponent
+public class WindowComponentTrackTarget : ComponentTrackTargetNormal
 {
-	protected txUIObject mTarget;
-	protected float mSpeed;
-	protected TrackDoneCallback mDoneCallback;
 	protected CheckPosition mCheckPosition;
 	public WindowComponentTrackTarget(Type type, string name)
 		:
@@ -16,41 +13,27 @@ public class WindowComponentTrackTarget : GameComponent
 	{
 		;
 	}
-	public override void update(float elapsedTime)
+	public override void setMoveDoneTrack(object target, TrackDoneCallback doneCallback)
 	{
-		if(mTarget != null)
-		{
-			Vector3 targetPos = mCheckPosition(mTarget);
-			Vector3 curPos = (mComponentOwner as txUIObject).getPosition();
-			float remainDis = (targetPos - curPos).magnitude;
-			Vector3 newPos;
-			bool done = false;
-			if (remainDis > mSpeed * elapsedTime)
-			{
-				newPos = Vector3.Normalize(targetPos - curPos) * mSpeed + curPos;
-			}
-			else
-			{
-				newPos = targetPos;
-				done = true;
-			}
-			(mComponentOwner as txUIObject).setLocalPosition(newPos);
-
-			if (done && mDoneCallback != null)
-			{
-				mDoneCallback(this);
-			}
-		}
-		base.update(elapsedTime);
+		UnityUtility.logError("please use void setMoveDoneTrack(txUIObject target, TrackDoneCallback doneCallback, CheckPosition checkPosition)");
 	}
 	public void setMoveDoneTrack(txUIObject target, TrackDoneCallback doneCallback, CheckPosition checkPosition)
 	{
-		mTarget = target;
-		mDoneCallback = doneCallback;
+		base.setMoveDoneTrack(target, doneCallback);
 		mCheckPosition = checkPosition;
 	}
-	public float setSpeed(float speed) { return mSpeed = speed; }
 	//-----------------------------------------------------------------------------------------------------------------
 	protected override bool isType(Type type) { return base.isType(type) || type == typeof(WindowComponentTrackTarget); }
-	protected override void setBaseType(){mBaseType = typeof(WindowComponentTrackTarget);}
+	protected override Vector3 getPosition()
+	{
+		return (mComponentOwner as txUIObject).getPosition();
+	}
+	protected override void setPosition(Vector3 pos)
+	{
+		(mComponentOwner as txUIObject).setLocalPosition(pos);
+	}
+	protected override Vector3 getTargetPosition()
+	{
+		return mCheckPosition(mTarget as txUIObject);
+	}
 }

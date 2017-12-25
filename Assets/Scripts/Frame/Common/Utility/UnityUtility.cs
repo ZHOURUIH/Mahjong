@@ -18,12 +18,17 @@ public enum LOG_LEVEL
 	LL_MAX,
 }
 
-public class UnityUtility : GameBase
+public class UnityUtility : FrameComponent
 {
 	protected static GameCamera mForeEffectCamera;
 	protected static GameCamera mBackEffectCamera;
 	protected static LOG_LEVEL mLogLevel;
-	public void init()
+	public UnityUtility(string name)
+		:base(name)
+	{
+		;
+	}
+	public override void init()
 	{
 		mForeEffectCamera = mCameraManager.getCamera("UIForeEffectCamera");
 		mBackEffectCamera = mCameraManager.getCamera("UIBackEffectCamera");
@@ -125,6 +130,17 @@ public class UnityUtility : GameBase
 			}
 		}
 		return retList;
+	}
+	public static void destroyGameObject(UnityEngine.Object obj, bool immediately = false, bool allowDestroyAssets = false)
+	{
+		if(immediately)
+		{
+			GameObject.DestroyImmediate(obj, allowDestroyAssets);
+		}
+		else
+		{
+			GameObject.Destroy(obj);
+		}
 	}
 	public static GameObject getGameObject(GameObject parent, string name)
 	{
@@ -254,5 +270,19 @@ public class UnityUtility : GameBase
 	{
 	    System.Diagnostics.StackTrace st = new System.Diagnostics.StackTrace(preFrameCount, true);
 	    return st.GetFrame(0).GetFileName();
+	}
+	public static void playAnimation(Animation animation, string anim, bool loop, string nextAnim = "", bool nextLoop = true)
+	{
+		if (animation != null)
+		{
+			animation.CrossFade(anim);
+			animation.wrapMode = loop ? UnityEngine.WrapMode.Loop : UnityEngine.WrapMode.Once;
+			// 非循环播放动作时才能连接下一个动作
+			if (!loop && nextAnim != "")
+			{
+				AnimationState state = animation.CrossFadeQueued(nextAnim);//QueueMode.CompleteOthers
+				state.wrapMode = nextLoop ? UnityEngine.WrapMode.Loop : UnityEngine.WrapMode.Once;
+			}
+		}
 	}
 }

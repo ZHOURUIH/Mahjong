@@ -11,12 +11,13 @@ public class Curve
 	public AnimationCurve mCurve;
 }
 
-public class KeyFrameManager : GameBase
+public class KeyFrameManager : FrameComponent
 {
 	protected GameObject mManagerObject;
 	protected Dictionary<string, Curve> mCurveList;
 	protected int mLoadedCount;	// 已加载的关键帧数量
-	public KeyFrameManager()
+	public KeyFrameManager(string name)
+		:base(name)
 	{
 		mCurveList = new Dictionary<string, Curve>();
 		mLoadedCount = 0;
@@ -37,7 +38,7 @@ public class KeyFrameManager : GameBase
 		}
 		return null;
 	}
-	public void init()
+	public override void init()
 	{
 		// 查找关键帧管理器物体
 		mManagerObject = UnityUtility.getGameObject(mGameFramework.getGameFrameObject(), "KeyFrameManager");
@@ -68,17 +69,18 @@ public class KeyFrameManager : GameBase
 			}
 		}
 	}
-	public void destroy()
+	public override void destroy()
 	{
 		// 将实例化出的所有物体销毁
 		foreach(var item in mCurveList)
 		{
-			GameObject.Destroy(item.Value.mObject);
+			UnityUtility.destroyGameObject(item.Value.mObject);
 		}
 		mCurveList.Clear();
 		mLoadedCount = 0;
-		GameObject.Destroy(mManagerObject);
+		UnityUtility.destroyGameObject(mManagerObject);
 		mManagerObject = null;
+		base.destroy();
 	}
 	public bool isLoadDone()
 	{

@@ -184,7 +184,7 @@ public class txUINumber : txUIStaticSprite
 	}
 	public void setNumber(string num)
 	{
-		mNumber = StringUtility.checkFloatString(num, "");
+		mNumber = StringUtility.checkFloatString(num);
 		// 设置的数字字符串不能超过最大数量
 		if (mNumber.Length > mMaxCount)
 		{

@@ -30,26 +30,28 @@ public class CompareFunc : IComparer<int>
 	}
 }
 
-public class GlobalTouchSystem : GameBase
+public class GlobalTouchSystem : FrameComponent
 {
 	protected Dictionary<txUIObject, ColliderCallBack> mButtonCallbackList;
 	protected SortedDictionary<int, List<txUIObject>> mButtonOrderList;	// 深度由大到小的列表
 	protected Vector3 mLastMousePosition;
 	protected txUIObject mHoverButton;
 	protected bool mUseHover = true;		// 是否判断鼠标悬停在某个窗口
-	public GlobalTouchSystem()
+	public GlobalTouchSystem(string name)
+		:base(name)
 	{
 		mButtonCallbackList = new Dictionary<txUIObject, ColliderCallBack>();
 		mButtonOrderList = new SortedDictionary<int, List<txUIObject>>(new CompareFunc());
 	}
-	public void init()
+	public override void init()
 	{
 		;
 	}
-	public void destroy()
+	public override void destroy()
 	{
 		mButtonCallbackList.Clear();
 		mButtonOrderList.Clear();
+		base.destroy();
 	}
 	public Vector3 getCurMousePosition()
 	{
@@ -70,7 +72,7 @@ public class GlobalTouchSystem : GameBase
 		}
 		return forwardButton;
 	}
-	public void update(float elapsedTime)
+	public override void update(float elapsedTime)
 	{
 		if (!mUseHover)
 		{

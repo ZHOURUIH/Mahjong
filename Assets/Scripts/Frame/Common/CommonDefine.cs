@@ -63,16 +63,18 @@ public enum CHARACTER_TYPE
 // 游戏委托定义-------------------------------------------------------------------------------------------------------------
 public delegate void SpriteAnimCallBack(txUISpriteAnim window, object userData, bool isBreak);
 public delegate void TextureAnimCallBack(txUITextureAnim window, object userData, bool isBreak);
-public delegate void KeyFrameCallback(ComponentKeyFrame component, object userData, bool breakTremling, bool done);
+public delegate void KeyFrameCallback(ComponentKeyFrameBase component, object userData, bool breakTremling, bool done);
 public delegate void CommandCallback(object user_data, Command cmd);
 public delegate void BoxColliderClickCallback(txUIObject obj);
 public delegate void BoxColliderHoverCallback(txUIObject obj, bool hover);
 public delegate void BoxColliderPressCallback(txUIObject obj, bool press);
 public delegate void AssetLoadDoneCallback(UnityEngine.Object res, object userData);
+public delegate void SceneLoadCallback(AsyncOperation operation, bool done, object userData);
+public delegate void SceneActiveCallback(object userData);
 public delegate void AssetBundleLoadDoneCallback(List<UnityEngine.Object> resList);
 public delegate void LayoutAsyncDone(GameLayout layout);
-public delegate void VideoPlayEndCallback(string videoName, bool isBreak);
-public delegate void TrackDoneCallback(WindowComponentTrackTarget component);
+public delegate void VideoCallback(string videoName, bool isBreak);
+public delegate void TrackDoneCallback(ComponentTrackTargetBase component);
 public delegate Vector3 CheckPosition(txUIObject obj);
 
 // 游戏常量定义-------------------------------------------------------------------------------------------------------------
@@ -109,6 +111,10 @@ public class CommonDefine
 	public const string PARTICLE = "Particle";
 	public const string HELPER_EXE = "HelperExe";
 	public const string CUSTOM_SOUND = "CustomSound";
+	public const string DATA_BASE = "DataBase";
+	public const string MODEL = "Model";
+	public const string CHARACTER = "Character";
+	public const string WEAPON = "Weapon";
 	// 相对路径,相对于项目,以P_开头,表示Project
 	public const string P_ASSETS_PATH = ASSETS + "/";
 	public const string P_RESOURCE_PATH = P_ASSETS_PATH + RESOURCES + "/";
@@ -137,9 +143,13 @@ public class CommonDefine
 	public const string R_TEXTURE_ANIM_PATH = R_TEXTURE_PATH + TEXTURE_ANIM + "/";
 	public const string R_MATERIAL_PATH = MATERIAL + "/";
 	public const string R_PARTICLE_PATH = PARTICLE + "/";
+	public const string R_MODEL = MODEL + "/";
+	public const string R_MODEL_WEAPON = R_MODEL + WEAPON + "/";
+	public const string R_MODEL_CHARACTER = R_MODEL + CHARACTER + "/";
 	// 绝对路径,以F_开头,表示Full
 	public static string F_ASSETS_PATH = Application.dataPath + "/";
 	public static string F_STREAMING_ASSETS_PATH = F_ASSETS_PATH + STREAMING_ASSETS + "/";
+	public static string F_DATA_BASE_PATH = F_STREAMING_ASSETS_PATH + DATA_BASE + "/";
 	public static string F_VIDEO_PATH = F_STREAMING_ASSETS_PATH + VIDEO + "/";
 	public static string F_CONFIG_PATH = F_STREAMING_ASSETS_PATH + CONFIG + "/";
 	public static string F_GAME_DATA_FILE_PATH = F_STREAMING_ASSETS_PATH + GAME_DATA_FILE + "/";

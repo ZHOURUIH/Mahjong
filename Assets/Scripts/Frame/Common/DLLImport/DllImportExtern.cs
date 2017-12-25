@@ -4,10 +4,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-public class DllImportExtern : GameBase
+public class DllImportExtern : FrameComponent
 {
-	protected static Dictionary<string, Dll> mDllLibraryList = new Dictionary<string, Dll>();
-	
+	protected static Dictionary<string, Dll> mDllLibraryList;
+	public DllImportExtern(string name)
+		:base(name)
+	{
+		mDllLibraryList = new Dictionary<string, Dll>();
+	}
+
 	//将要执行的函数转换为委托
 	public static Delegate Invoke(string library, string funcName, Type t)
 	{
@@ -17,17 +22,18 @@ public class DllImportExtern : GameBase
 		}
 		return null;
 	}
-	public void init()
+	public override void init()
 	{
 		registerDLL(Winmm.WINMM_DLL);
 	}
-	public void destroy()
+	public override void destroy()
 	{
 		foreach (var library in mDllLibraryList)
 		{
 			library.Value.destroy();
 		}
 		mDllLibraryList.Clear();
+		base.destroy();
 	}
 	protected void registerDLL(string name)
 	{

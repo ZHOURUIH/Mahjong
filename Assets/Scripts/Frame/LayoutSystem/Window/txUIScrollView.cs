@@ -53,7 +53,7 @@ public class txUIScrollView : txUIObject
 		{
 			return;
 		}
-		GameObject.Destroy(mItemList[index].mObject);
+		UnityUtility.destroyGameObject(mItemList[index].mObject);
 		mItemList.RemoveAt(index);
 	}
 	public void clearItem()
@@ -61,7 +61,7 @@ public class txUIScrollView : txUIObject
 		int itemCount = mItemList.Count;
 		for (int i = 0; i < itemCount; ++i)
 		{
-			GameObject.Destroy(mItemList[i].mObject);
+			UnityUtility.destroyGameObject(mItemList[i].mObject);
 		}
 		mItemList.Clear();
 	}

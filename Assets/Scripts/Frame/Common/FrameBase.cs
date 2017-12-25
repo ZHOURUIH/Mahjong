@@ -20,25 +20,31 @@ public class FrameBase
 	public static LayoutPrefabManager	mLayoutPrefabManager	= null;
 	public static ApplicationConfig		mApplicationConfig		= null;
 	public static FrameConfig			mFrameConfig			= null;
+	public static ModelManager			mModelManager			= null;
+	public static InputManager			mInputManager			= null;
+	public static SceneSystem			mSceneSystem			= null;
 	public virtual void notifyConstructDone()
 	{
 		if (mGameFramework == null)
 		{
 			mGameFramework = GameFramework.instance;
-			mCommandSystem = mGameFramework.getCommandSystem();
-			mAudioManager = mGameFramework.getAudioManager();
-			mGameSceneManager = mGameFramework.getGameSceneManager();
-			mCharacterManager = mGameFramework.getCharacterManager();
-			mLayoutManager = mGameFramework.getLayoutManager();
-			mKeyFrameManager = mGameFramework.getKeyFrameManager();
-			mGlobalTouchSystem = mGameFramework.getGlobalTouchSystem();
-			mShaderManager = mGameFramework.getShaderManager();
-			mDataBase = mGameFramework.getDataBase();
-			mCameraManager = mGameFramework.getCameraManager();
-			mResourceManager = mGameFramework.getResourceManager();
-			mLayoutPrefabManager = mGameFramework.getLayoutPrefabManager();
-			mApplicationConfig = mGameFramework.getApplicationConfig();
-			mFrameConfig = mGameFramework.getFrameConfig();
+			mCommandSystem = mGameFramework.getSystem<CommandSystem>();
+			mAudioManager = mGameFramework.getSystem<AudioManager>();
+			mGameSceneManager = mGameFramework.getSystem<GameSceneManager>();
+			mCharacterManager = mGameFramework.getSystem<CharacterManager>();
+			mLayoutManager = mGameFramework.getSystem<GameLayoutManager>();
+			mKeyFrameManager = mGameFramework.getSystem<KeyFrameManager>();
+			mGlobalTouchSystem = mGameFramework.getSystem<GlobalTouchSystem>();
+			mShaderManager = mGameFramework.getSystem<ShaderManager>();
+			mDataBase = mGameFramework.getSystem<DataBase>();
+			mCameraManager = mGameFramework.getSystem<CameraManager>();
+			mResourceManager = mGameFramework.getSystem<ResourceManager>();
+			mLayoutPrefabManager = mGameFramework.getSystem<LayoutPrefabManager>();
+			mApplicationConfig = mGameFramework.getSystem<ApplicationConfig>();
+			mFrameConfig = mGameFramework.getSystem<FrameConfig>();
+			mModelManager = mGameFramework.getSystem<ModelManager>();
+			mInputManager = mGameFramework.getSystem<InputManager>();
+			mSceneSystem = mGameFramework.getSceneSystem();
 		}
 	}
 }

@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-public class FileUtility : GameBase
+public class FileUtility
 {
-	public void init() { }
 	// 打开一个二进制文件,fileName为绝对路径
 	public static void openFile(string fileName, ref byte[] fileBuffer, ref int fileSize)
 	{
@@ -29,9 +28,16 @@ public class FileUtility : GameBase
 			UnityUtility.logError("fileName should be a absolute path!");
 			return;
 		}
-		StreamReader streamReader = new StreamReader(fileName, Encoding.UTF8);
-		fileBuffer = streamReader.ReadToEnd();
-		streamReader.Close();
+		try
+		{
+			StreamReader streamReader = new StreamReader(fileName, Encoding.UTF8);
+			fileBuffer = streamReader.ReadToEnd();
+			streamReader.Close();
+		}
+		catch(Exception)
+		{
+			UnityUtility.logInfo("open file failed! filename : " + fileName);
+		}
 	}
 	// 写一个文本文件,fileName为绝对路径,content是写入的字符串
 	public static void writeFile(string fileName, string content)
@@ -66,6 +72,10 @@ public class FileUtility : GameBase
 	}
 	public static void createDir(string dir)
 	{
+		if(isDirExist(dir))
+		{
+			return;
+		}
 		Directory.CreateDirectory(dir);
 	}
 	// path为相对于Assets的相对路径
@@ -118,5 +128,14 @@ public class FileUtility : GameBase
 			dirList.Add(StringUtility.getFolderName(ret[i]));
 		}
 		return true;
+	}
+	public static void deleteFile(string path)
+	{
+		if (!path.StartsWith(CommonDefine.F_ASSETS_PATH))
+		{
+			UnityUtility.logError("fileName should be a absolute path!");
+			return;
+		}
+		File.Delete(path);
 	}
 }

@@ -10,7 +10,7 @@ public enum EXECUTE_STATE
 	ES_EXECUTED,
 }
 
-public abstract class Command : GameBase
+public class Command : GameBase
 {
 	public CommandReceiver			mReceiver;		// 命令接受者
 	public bool						mShowDebugInfo;	// 是否显示调试信息
@@ -49,7 +49,7 @@ public abstract class Command : GameBase
 		mStartUserData.Clear();
 	}
 	// 命令执行
-	public abstract void execute();
+	public virtual void execute() { }
 	// 调试信息，由CommandSystem调用
 	public virtual string showDebugInfo() 
 	{

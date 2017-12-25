@@ -15,20 +15,25 @@ public class DelayCommand
 	}
 };
 
-public class CommandSystem : GameBase
+public class CommandSystem : FrameComponent
 {
 	protected CommandPool mCommandPool;
-	protected List<DelayCommand> mCommandBufferProcess = new List<DelayCommand>();  // 用于处理的命令列表
-	protected List<DelayCommand> mCommandBufferInput = new List<DelayCommand>();        // 用于放入命令的命令列表
+	protected List<DelayCommand> mCommandBufferProcess; // 用于处理的命令列表
+	protected List<DelayCommand> mCommandBufferInput;   // 用于放入命令的命令列表
+	protected List<DelayCommand> mExecuteList;			// 即将在这一帧执行的命令
 	protected ThreadLock mBufferLock;
 	protected bool mTraceCommand;   // 是否追踪命令的来源
-	public CommandSystem()
+	public CommandSystem(string name)
+		:base(name)
 	{
 		mBufferLock = new ThreadLock();
 		mTraceCommand = false;
 		mCommandPool = new CommandPool();
+		mCommandBufferProcess = new List<DelayCommand>();
+		mCommandBufferInput = new List<DelayCommand>();
+		mExecuteList = new List<DelayCommand>();
 	}
-	public virtual void init(bool showDebug = true)
+	public override void init()
 	{
 		mCommandPool.init();
 	}
@@ -43,7 +48,7 @@ public class CommandSystem : GameBase
 		mCommandBufferInput.Clear();
 		mBufferLock.unlock(LOCK_TYPE.LT_READ);
 	}
-	public void update(float elapsedTime)
+	public override void update(float elapsedTime)
 	{
 		// 同步命令输入列表到命令处理列表中
 		syncCommandBuffer();
@@ -53,7 +58,8 @@ public class CommandSystem : GameBase
 		{
 			return;
 		}
-		List<DelayCommand> executeList = new List<DelayCommand>();
+		// 执行之前需要先清空列表
+		mExecuteList.Clear();
 		// 开始处理命令处理列表
 		for (int i = 0; i < mCommandBufferProcess.Count; ++i)
 		{
@@ -61,16 +67,18 @@ public class CommandSystem : GameBase
 			if (mCommandBufferProcess[i].mDelayTime <= 0.0f)
 			{
 				// 命令的延迟执行时间到了,则执行命令
-				executeList.Add(mCommandBufferProcess[i]);
+				mExecuteList.Add(mCommandBufferProcess[i]);
 				mCommandBufferProcess.Remove(mCommandBufferProcess[i]);
 				--i;
 			}
 		}
-		foreach (var cmd in executeList)
+		foreach (var cmd in mExecuteList)
 		{
 			cmd.mCommand.setDelayCommand(false);
 			pushCommand(cmd.mCommand, cmd.mReceiver);
 		}
+		// 执行完后清空列表
+		mExecuteList.Clear();
 	}
 	// 创建命令
 	public T newCmd<T>(bool show = true, bool delay = false) where T : Command, new()
@@ -103,7 +111,7 @@ public class CommandSystem : GameBase
 	{
 		if (assignID < 0)
 		{
-			UnityUtility.logError("assignID invalid!");
+			UnityUtility.logError("assignID invalid! : " + assignID);
 			return false;
 		}
 		syncCommandBuffer();
@@ -111,15 +119,29 @@ public class CommandSystem : GameBase
 		{
 			if (item.mCommand.mAssignID == assignID)
 			{
-				UnityUtility.logInfo("CommandSystem : interrupt command : " + item.mCommand.showDebugInfo() + ", receiver : " + item.mReceiver.getName(), LOG_LEVEL.LL_HIGH);
+				UnityUtility.logInfo("CommandSystem : interrupt command " + assignID + " : " + item.mCommand.showDebugInfo() + ", receiver : " + item.mReceiver.getName(), LOG_LEVEL.LL_HIGH);
 				mCommandBufferProcess.Remove(item);
 				// 销毁回收命令
 				mCommandPool.destroyCmd(item.mCommand);
 				return true;
 			}
 		}
-		UnityUtility.logError("not find cmd with assignID!");
+		// 在即将执行的列表中查找
+		foreach (var item in mExecuteList)
+		{
+			if (item.mCommand.mAssignID == assignID)
+			{
+				UnityUtility.logError("cmd is in execute list! can not interrupt!");
+				break;
+			}
+		}
+		UnityUtility.logError("not find cmd with assignID! " + assignID);
 		return false;
+	}
+	public void pushCommand<T>(CommandReceiver cmdReceiver, bool show = true) where T : Command, new()
+	{
+		T cmd = newCmd<T>(show, false);
+		pushCommand(cmd, cmdReceiver);
 	}
 	// 执行命令
 	public void pushCommand(Command cmd, CommandReceiver cmdReceiver)
@@ -149,6 +171,11 @@ public class CommandSystem : GameBase
 
 		// 销毁回收命令
 		mCommandPool.destroyCmd(cmd);
+	}
+	public void pushDelayCommand<T>(CommandReceiver cmdReceiver, float delayExecute = 0.001f, bool show = true) where T : Command, new()
+	{
+		T cmd = newCmd<T>(show, true);
+		pushDelayCommand(cmd, cmdReceiver, delayExecute);
 	}
 	// delayExecute是命令延时执行的时间,默认为0,只有new出来的命令才能延时执行
 	// 子线程中发出的命令必须是延时执行的命令!
@@ -184,11 +211,12 @@ public class CommandSystem : GameBase
 		mCommandBufferInput.Add(delayCommand);
 		mBufferLock.unlock(LOCK_TYPE.LT_READ);
 	}
-	public void destroy()
+	public override void destroy()
 	{
 		mCommandPool.destroy();
 		mCommandBufferInput.Clear();
 		mCommandBufferProcess.Clear();
+		base.destroy();
 	}
 	public virtual void notifyReceiverDestroied(CommandReceiver receiver)
 	{

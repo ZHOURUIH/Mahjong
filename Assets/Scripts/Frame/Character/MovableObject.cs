@@ -3,24 +3,41 @@ using System.Collections;
 
 public class MovableObject : ComponentOwner
 {
+	protected Vector3 mAcceleration;
+	protected Vector3 mLastSpeed;
+	protected Vector3 mSpeed;
+	protected Vector3 mLastPosition;
 	protected GameObject mObject;
-	public Vector3 mSpeed;
+	protected Transform mTransform;
+	protected bool mDestroyObject = true;
 	public MovableObject(string name)
 		:
 		base(name)
 	{
 		mObject = new GameObject(name);
+		mTransform = mObject.transform;
 	}
 	public override void destroy()
 	{
 		base.destroy();
 		base.destroyAllComponents();
-		GameObject.Destroy(mObject);
+		if(mDestroyObject)
+		{
+			UnityUtility.destroyGameObject(mObject);
+		}
 		mObject = null;
+		mTransform = null;
 	}
-	public GameObject getObject()
+	public virtual void setObject(GameObject obj, bool destroyOld = true)
 	{
-		return mObject;
+		if(destroyOld && mObject != null)
+		{
+			UnityUtility.destroyGameObject(mObject);
+			mObject = null;
+		}
+		mObject = obj;
+		mObject.name = mName;
+		mTransform = mObject.transform;
 	}
 	public virtual void init() 
 	{
@@ -28,59 +45,162 @@ public class MovableObject : ComponentOwner
 	}
 	public override void initComponents()
 	{
-		;
+		addComponent<MovableObjectComponentRotateSpeed>("RotateSpeed").setActive(false);
+		addComponent<MovableObjectComponentRotateSpeedPhysics>("RotateSpeedPhysics").setActive(false);
+		addComponent<MovableObjectComponentRotate>("Rotate").setActive(false);
+		addComponent<MovableObjectComponentRotatePhysics>("RotatePhysics").setActive(false);
+		addComponent<MovableObjectComponentRotateFixed>("RotateFixed").setActive(false);
+		addComponent<MovableObjectComponentRotateFixedPhysics>("RotateFixedPhysics").setActive(false);
+		addComponent<MovableObjectComponentMove>("Move").setActive(false);
+		addComponent<MovableObjectComponentMovePhysics>("MovePhysics").setActive(false);
+		addComponent<MovableObjectComponentScale>("Scale").setActive(false);
+		addComponent<MovableObjectComponentTrackTarget>("TrackTarget").setActive(false);
+		addComponent<MovableObjectComponentTrackTargetPhysics>("TrackTargetPhysics").setActive(false);
 	}
-
 	public virtual void update(float elapsedTime) 
 	{ 
 		base.updateComponents(elapsedTime);
-		Vector3 curPos = getRotation();
-		curPos += mSpeed;
-		setPosition(curPos);
 	}
-
+	public override void fixedUpdate(float elapsedTime)
+	{
+		base.fixedUpdate(elapsedTime);
+		Vector3 curPos = mTransform.localPosition;
+		mSpeed = (curPos - mLastPosition) / elapsedTime;
+		mLastPosition = curPos;
+		mAcceleration = (mSpeed - mLastSpeed) / elapsedTime;
+		mLastSpeed = mSpeed;
+	}
+	// get
+	//-------------------------------------------------------------------------------------------------------------------------
+	public GameObject getObject() { return mObject; }
+	public Vector3 getPosition()
+	{
+		return mTransform.localPosition;
+	}
+	public Vector3 getWorldPosition()
+	{
+		return mTransform.position;
+	}
+	public Vector3 getRotation()
+	{
+		return mTransform.localEulerAngles;
+	}
+	public Vector3 getScale()
+	{
+		return mTransform.localScale;
+	}
+	public Vector3 getSpeed() { return mSpeed; }
+	public Vector3 getAcceleration() { return mAcceleration; }
+	public Quaternion getQuaternionRotation()
+	{
+		Vector3 rot = getRotation();
+		return Quaternion.Euler(rot.x, rot.y, rot.z);
+	}
+	public Vector3 getWorldRotation()
+	{
+		return mTransform.rotation.eulerAngles;
+	}
+	public string getLayer()
+	{
+		return LayerMask.LayerToName(mObject.layer);
+	}
+	public Transform getTransform() { return mTransform; }
+	public bool getActive()
+	{
+		return mObject.activeSelf;
+	}
+	// set
+	//-------------------------------------------------------------------------------------------------------------------------
+	public virtual void setActive(bool active)
+	{
+		mObject.SetActive(active);
+	}
 	public virtual void setPosition(Vector3 position)
 	{
-		mObject.transform.localPosition = position;
+		mTransform.localPosition = position;
+	}
+	public virtual void setWorldPosition(Vector3 position)
+	{
+		mTransform.position = position;
 	}
 	// 角度制的欧拉角,分别是绕xyz轴的旋转角度
 	public virtual void setRotation(Vector3 eulerAngle)
 	{
-		mObject.transform.localEulerAngles = eulerAngle;
+		mTransform.localEulerAngles = eulerAngle;
+	}
+	public void setWorldRotation(Vector3 eulerAngle)
+	{
+		mTransform.eulerAngles = eulerAngle;
 	}
 	public virtual void setScale(Vector3 scale)
 	{
-		mObject.transform.localScale = scale;
+		mTransform.localScale = scale;
 	}
-	public Vector3 getPosition()
+	public virtual void move(Vector3 moveDelta, Space space = Space.Self)
 	{
-		return mObject.transform.localPosition;
-	}
-	public Vector3 getRotation()
-	{
-		return mObject.transform.localEulerAngles;
-	}
-	public Vector3 getScale()
-	{
-		return mObject.transform.localScale;
+		if (space == Space.Self)
+		{
+			moveDelta = MathUtility.rotateVector3(moveDelta, getQuaternionRotation());
+		}
+		setPosition(getPosition() + moveDelta);
 	}
 	public void rotate(Vector3 rotation)
 	{
-		mObject.transform.Rotate(rotation, Space.Self);
+		mTransform.Rotate(rotation, Space.Self);
 	}
 	public void rotateWorld(Vector3 rotation)
 	{
-		mObject.transform.Rotate(rotation, Space.World);
+		mTransform.Rotate(rotation, Space.World);
 	}
 	// angle为角度制
 	public void rotateAround(Vector3 axis, float angle)
 	{
-		mObject.transform.Rotate(axis, angle, Space.Self);
+		mTransform.Rotate(axis, angle, Space.Self);
 	}
 	public void rotateAroundWorld(Vector3 axis, float angle)
 	{
-		mObject.transform.Rotate(axis, angle, Space.World);
+		mTransform.Rotate(axis, angle, Space.World);
 	}
-	public Vector3 getSpeed() { return mSpeed; }
-	public void setSpeed(Vector3 speed) { mSpeed = speed; }
+	public void lookAt(Vector3 lookat)
+	{
+		setRotation(Quaternion.LookRotation(lookat).eulerAngles);
+	}
+	public void yawpitch(float fYaw, float fPitch)
+	{
+		Vector3 curRot = getRotation();
+		curRot.x += fPitch;
+		curRot.y += fYaw;
+		setRotation(curRot);
+	}
+	public void resetLocalTransform()
+	{
+		mTransform.localPosition = Vector3.zero;
+		mTransform.localEulerAngles = Vector3.zero;
+		mTransform.localScale = Vector3.one;
+	}
+	public void resetRotation()
+	{
+		setRotation(Vector3.zero);
+	}
+	public void setParent(GameObject parent, bool resetTrans = true)
+	{
+		if (parent == null)
+		{
+			mTransform.parent = null;
+		}
+		else
+		{
+			mTransform.parent = parent.transform;
+		}
+		if(resetTrans)
+		{
+			resetLocalTransform();
+		}
+	}
+	public void copyObjectTransform(GameObject obj)
+	{
+		mTransform.localPosition = obj.transform.localPosition;
+		mTransform.localEulerAngles = obj.transform.localEulerAngles;
+		mTransform.localScale = obj.transform.localScale;
+	}
 }

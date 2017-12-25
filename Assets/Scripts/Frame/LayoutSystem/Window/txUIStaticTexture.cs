@@ -31,7 +31,7 @@ public class txUIStaticTexture : txUIObject
 	public override void destroy()
 	{
 		// 卸载创建出的材质
-		GameObject.Destroy(mTexture.material);
+		UnityUtility.destroyGameObject(mTexture.material);
 		base.destroy();
 	}
 	public void setTexture(Texture tex)

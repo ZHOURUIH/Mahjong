@@ -8,6 +8,9 @@ using System.Text.RegularExpressions;
 
 public class ApplicationConfig : ConfigBase
 {
+	public ApplicationConfig(string name)
+		:base(name)
+	{ }
 	public override void writeConfig()
 	{
 		FileUtility.writeFile(CommonDefine.F_CONFIG_PATH + "ApplicationSetting.txt", generateFloatFile());

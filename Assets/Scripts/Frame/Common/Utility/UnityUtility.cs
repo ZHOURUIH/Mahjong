@@ -23,6 +23,7 @@ public class UnityUtility : FrameComponent
 	protected static GameCamera mForeEffectCamera;
 	protected static GameCamera mBackEffectCamera;
 	protected static LOG_LEVEL mLogLevel;
+	protected static bool mShowMessageBox = true;
 	public UnityUtility(string name)
 		:base(name)
 	{
@@ -49,9 +50,11 @@ public class UnityUtility : FrameComponent
 	}
 	public static void logError(string info, bool isMainThread = true)
 	{
-		if (isMainThread)
+		if (isMainThread && mShowMessageBox)
 		{
 			messageBox(info, true);
+			// 运行一次只显示一次提示框,避免在循环中报错时一直弹窗
+			mShowMessageBox = false;
 		}
 		Debug.LogError("error : " + info);
 	}

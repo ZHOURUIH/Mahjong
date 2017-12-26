@@ -146,11 +146,6 @@ public abstract class SceneProcedure : GameBase
 	}
 	public void keyProcess(float elapsedTime)
 	{
-		// 在准备退出当前流程时,不响应任何按键操作
-		if(isPreparingExit())
-		{
-			return;
-		}
 		// 先处理父节点按键响应
 		if (mParentProcedure != null)
 		{

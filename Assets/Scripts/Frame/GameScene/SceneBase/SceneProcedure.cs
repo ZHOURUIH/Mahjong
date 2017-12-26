@@ -12,6 +12,11 @@ public abstract class SceneProcedure : GameBase
 	protected SceneProcedure	mParentProcedure;		// 父流程
 	protected SceneProcedure	mCurChildProcedure;		// 当前正在运行的子流程
 	protected bool				mInited;				// 是否已经初始化,子节点在初始化时需要先确保父节点已经初始化
+	// 以下变量为准备退出时使用的
+	protected float				mExitTime;				// 从准备退出到真正退出流程所需要的时间,小于等于0表示不需要准备退出
+	protected float				mCurPrepareTime;        // 准备退出的计时,大于等于0表示正在准备退出,小于0表示没有正在准备退出
+	protected SceneProcedure	mPrepareNext;
+	protected string			mPrepareIntent;
 	public SceneProcedure()
 	{
 		UnityUtility.logError("error : can not create SceneProcedure without parameters!");
@@ -25,6 +30,10 @@ public abstract class SceneProcedure : GameBase
 		mCurChildProcedure = null;
 		mDelayCmdList = new List<int>();
 		mChildProcedureList = new Dictionary<PROCEDURE_TYPE, SceneProcedure>();
+		mCurPrepareTime = -1.0f;
+		mExitTime = -1.0f;
+		mPrepareNext = null;
+		mPrepareIntent = "";
 	}
 	// 从自己的子流程进入当前流程
 	protected virtual void onInitFromChild(SceneProcedure lastProcedure, string intent) { }
@@ -43,6 +52,7 @@ public abstract class SceneProcedure : GameBase
 	protected virtual void onExitSelf() { }
 	// 进入的目标流程已经准备完成(资源加载完毕等等)时的回调
 	public virtual void onNextProcedurePrepared(SceneProcedure nextPreocedure) { }
+	protected virtual void onPrepareExit(SceneProcedure nextPreocedure) { }
 	// 由GameScene调用
 	// 进入流程
 	public void init(SceneProcedure lastProcedure, string intent)
@@ -73,6 +83,21 @@ public abstract class SceneProcedure : GameBase
 		}
 		// 再更新自己
 		onUpdate(elapsedTime);
+
+		// 正在准备退出流程时,累计时间,
+		if (mCurPrepareTime >= 0.0f)
+		{
+			mCurPrepareTime += elapsedTime;
+			if(mCurPrepareTime >= mExitTime)
+			{
+				// 超过了准备时间,强制跳转流程
+				CommandGameSceneChangeProcedure cmd = mCommandSystem.newCmd<CommandGameSceneChangeProcedure>();
+				cmd.mProcedure = mPrepareNext.getProcedureType();
+				cmd.mIntent = mPrepareIntent;
+				cmd.mForceChange = true;
+				mCommandSystem.pushCommand(cmd, mGameScene);
+			}
+		}
 	}
 	// 退出流程
 	public void exit(SceneProcedure exitTo, SceneProcedure nextPro)
@@ -106,9 +131,26 @@ public abstract class SceneProcedure : GameBase
 		{
 			mParentProcedure.exit(exitTo, nextPro);
 		}
+		// 退出完毕后就修改标记
+		mCurPrepareTime = -1.0f;
+		mPrepareNext = null;
+		mPrepareIntent = "";
+	}
+	public void prepareExit(SceneProcedure next, string intent)
+	{
+		mCurPrepareTime = 0.0f;
+		mPrepareNext = next;
+		mPrepareIntent = intent;
+		// 通知自己准备退出
+		onPrepareExit(next);
 	}
 	public void keyProcess(float elapsedTime)
 	{
+		// 在准备退出当前流程时,不响应任何按键操作
+		if(isPreparingExit())
+		{
+			return;
+		}
 		// 先处理父节点按键响应
 		if (mParentProcedure != null)
 		{
@@ -171,6 +213,10 @@ public abstract class SceneProcedure : GameBase
 	public PROCEDURE_TYPE getProcedureType() { return mProcedureType; }
 	public GameScene getGameScene() { return mGameScene; }
 	public SceneProcedure getParent() { return mParentProcedure; }
+	// 是否正在准备退出流程
+	public bool isPreparingExit() { return mCurPrepareTime >= 0.0f; }
+	// 是否为具有准备退出的流程
+	public bool hasPrepareExit() { return mExitTime > 0.0f; }
 	public SceneProcedure getParent(PROCEDURE_TYPE type)
 	{
 		// 没有父节点,返回null

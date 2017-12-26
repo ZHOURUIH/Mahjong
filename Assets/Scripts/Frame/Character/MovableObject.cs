@@ -199,8 +199,9 @@ public class MovableObject : ComponentOwner
 	}
 	public void copyObjectTransform(GameObject obj)
 	{
-		mTransform.localPosition = obj.transform.localPosition;
-		mTransform.localEulerAngles = obj.transform.localEulerAngles;
-		mTransform.localScale = obj.transform.localScale;
+		Transform objTrans = obj.transform;
+		ObjectTools.MOVE_OBJECT(this, objTrans.localPosition);
+		ObjectTools.ROTATE_OBJECT(this, objTrans.localEulerAngles);
+		ObjectTools.SCALE_OBJECT(this, objTrans.localScale);
 	}
 }

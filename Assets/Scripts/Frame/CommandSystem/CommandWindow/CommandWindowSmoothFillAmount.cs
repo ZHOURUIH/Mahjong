@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-class CommandWindowSmoothFillAmount : Command
+public class CommandWindowSmoothFillAmount : Command
 {
 	public float mStartFillAmount = 1.0f;
 	public float mTargetFillAmount = 1.0f;

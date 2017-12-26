@@ -36,8 +36,8 @@ public class CommandMovableObjectRotatePhysics : Command
 	}
 	public override void execute()
 	{
-		txUIObject window = (mReceiver) as txUIObject;
-		MovableObjectComponentRotatePhysics component = window.getFirstComponent<MovableObjectComponentRotatePhysics>();
+		MovableObject obj = (mReceiver) as MovableObject;
+		MovableObjectComponentRotatePhysics component = obj.getFirstComponent<MovableObjectComponentRotatePhysics>();
 		if (component != null)
 		{
 			component.setTremblingCallback(mTremblingCallBack, mTremblingUserData);

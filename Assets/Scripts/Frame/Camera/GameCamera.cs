@@ -149,4 +149,11 @@ public class GameCamera : MovableObject
 	public void setKeyProcess(bool process) { mKeyProcess = process; }
 	public bool getKeyProcess() { return mKeyProcess; }
 	public CameraLinker getCurLinker() { return mCurLinker; }
+	public void setFOV(float fov) { mCamera.fieldOfView = fov; }
+	public void copyCamera(GameObject obj)
+	{
+		copyObjectTransform(obj);
+		Camera camera = obj.GetComponent<Camera>();
+		mCamera.fieldOfView = camera.fieldOfView;
+	}
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-class CommandWindowSmoothSlider :Command
+public class CommandWindowSmoothSlider : Command
 {
 	public float mStartSliderValue = 1.0f;
 	public float mTargetSliderValue = 1.0f;

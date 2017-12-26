@@ -6,7 +6,7 @@ public class ObjectTools : GameBase
 {
 	//--------------------------------------------------------------------------------------------------------------------------------------------
 	// 旋转
-	#region 用关键帧旋转物体,在普通更新中,与物理更新的函数不能混用,否则效果会混合
+	#region 在普通更新中用关键帧旋转物体,与物理更新的函数不能混用,否则效果会混合
 	public static void ROTATE_FIXED_OBJECT(MovableObject obj, bool lockRotation = true)
 	{
 		CommandMovableObjectRotateFixed cmd = mCommandSystem.newCmd<CommandMovableObjectRotateFixed>(false, false);
@@ -142,7 +142,7 @@ public class ObjectTools : GameBase
 		return cmd;
 	}
 	#endregion
-	#region 用关键帧旋转物体,在物理更新中,与普通更新的函数不能混用,否则效果会混合
+	#region 在物理更新中用关键帧旋转物体,与普通更新的函数不能混用,否则效果会混合
 	public static void ROTATE_FIXED_OBJECT_PHY(MovableObject obj, bool lockRotation = true)
 	{
 		CommandMovableObjectRotateFixedPhysics cmd = mCommandSystem.newCmd<CommandMovableObjectRotateFixedPhysics>(false, false);
@@ -278,9 +278,9 @@ public class ObjectTools : GameBase
 		return cmd;
 	}
 	#endregion
-	//-------------------------------------------------------------------------------------------------------------------------------------------------------
+	//--------------------------------------------------------------------------------------------------------------------------------------------
 	// 移动
-	#region 用关键帧移动物体,在普通更新中
+	#region 在普通更新中用关键帧移动物体,与物理更新的函数不能混用,否则效果会混合
 	public static void MOVE_OBJECT(MovableObject obj, Vector3 pos)
 	{
 		CommandMovableObjectMove cmd = mCommandSystem.newCmd<CommandMovableObjectMove>(false, false);
@@ -400,7 +400,7 @@ public class ObjectTools : GameBase
 		return cmd;
 	}
 	#endregion
-	#region 用关键帧移动物体,在物理更新中
+	#region 在物理更新中用关键帧移动物体,与普通更新的函数不能混用,否则效果会混合
 	public static void MOVE_OBJECT_PHY(MovableObject obj, Vector3 pos)
 	{
 		CommandMovableObjectMovePhysics cmd = mCommandSystem.newCmd<CommandMovableObjectMovePhysics>(false, false);
@@ -520,7 +520,7 @@ public class ObjectTools : GameBase
 		return cmd;
 	}
 	#endregion
-	//---------------------------------------------------------------------------------------------------------------------------------------------------------
+	//--------------------------------------------------------------------------------------------------------------------------------------------
 	#region 追踪物体
 	public static void TRACK_TARGET(MovableObject obj, float speed, MovableObject target, TrackDoneCallback doneCallback)
 	{
@@ -531,20 +531,20 @@ public class ObjectTools : GameBase
 		mCommandSystem.pushCommand(cmd, obj);
 	}
 	#endregion
-	//----------------------------------------------------------------------------------------------------------------------------------------------------------
+	//--------------------------------------------------------------------------------------------------------------------------------------------
 	// 显示
 	#region 物体的显示和隐藏
-	public static void ACTIVE_OBJECT(txUIObject obj, bool active = true)
+	public static void ACTIVE_OBJECT(MovableObject obj, bool active = true)
 	{
 		CommandMovableObjectActive cmd = mCommandSystem.newCmd<CommandMovableObjectActive>(false);
 		cmd.mActive = active;
 		mCommandSystem.pushCommand(cmd, obj);
 	}
-	public static CommandMovableObjectActive ACTIVE_OBJECT_DELAY(txUIObject obj, bool active, float delayTime)
+	public static CommandMovableObjectActive ACTIVE_OBJECT_DELAY(MovableObject obj, bool active, float delayTime)
 	{
 		return ACTIVE_OBJECT_DELAY_EX(obj, active, delayTime, null, null);
 	}
-	public static CommandMovableObjectActive ACTIVE_OBJECT_DELAY_EX(txUIObject obj, bool active, float dealyTime, CommandCallback startCallback, object userData = null)
+	public static CommandMovableObjectActive ACTIVE_OBJECT_DELAY_EX(MovableObject obj, bool active, float dealyTime, CommandCallback startCallback, object userData = null)
 	{
 		CommandMovableObjectActive cmd = mCommandSystem.newCmd<CommandMovableObjectActive>(false, true);
 		cmd.mActive = active;
@@ -553,69 +553,69 @@ public class ObjectTools : GameBase
 		return cmd;
 	}
 	#endregion
-	//----------------------------------------------------------------------------------------------------------------------------------------------------------
+	//--------------------------------------------------------------------------------------------------------------------------------------------
 	// 缩放
 	#region 用关键帧缩放物体
-	public static void SCALE_OBJECT(txUIObject obj, Vector2 scale)
+	public static void SCALE_OBJECT(MovableObject obj, Vector2 scale)
 	{
-		CommandWindowScaleTrembling cmd = mCommandSystem.newCmd<CommandWindowScaleTrembling>(false);
+		CommandMovableObjectScale cmd = mCommandSystem.newCmd<CommandMovableObjectScale>(false);
 		cmd.mName = "";
 		cmd.mOnceLength = 0.0f;
 		cmd.mStartScale = scale;
 		cmd.mTargetScale = scale;
 		mCommandSystem.pushCommand(cmd, obj);
 	}
-	public static void SCALE_OBJECT(txUIObject obj, Vector2 start, Vector2 target, float onceLength)
+	public static void SCALE_OBJECT(MovableObject obj, Vector2 start, Vector2 target, float onceLength)
 	{
 		SCALE_OBJECT_EX(obj, CommonDefine.ZERO_ONE, start, target, onceLength, false, 0.0f, null, null);
 	}
-	public static void SCALE_OBJECT_EX(txUIObject obj, Vector2 start, Vector2 target, float onceLength, KeyFrameCallback doneCallback)
+	public static void SCALE_OBJECT_EX(MovableObject obj, Vector2 start, Vector2 target, float onceLength, KeyFrameCallback doneCallback)
 	{
 		SCALE_OBJECT_EX(obj, CommonDefine.ZERO_ONE, start, target, onceLength, false, 0.0f, null, doneCallback);
 	}
-	public static void SCALE_OBJECT_EX(txUIObject obj, Vector2 start, Vector2 target, float onceLength, KeyFrameCallback scalingCallback, KeyFrameCallback doneCallback)
+	public static void SCALE_OBJECT_EX(MovableObject obj, Vector2 start, Vector2 target, float onceLength, KeyFrameCallback scalingCallback, KeyFrameCallback doneCallback)
 	{
 		SCALE_OBJECT_EX(obj, CommonDefine.ZERO_ONE, start, target, onceLength, false, 0.0f, scalingCallback, doneCallback);
 	}
-	public static void SCALEOBJECT(txUIObject obj, string fileName, Vector2 start, Vector2 target, float onceLength)
+	public static void SCALE_OBJECT(MovableObject obj, string fileName, Vector2 start, Vector2 target, float onceLength)
 	{
 		SCALE_OBJECT_EX(obj, fileName, start, target, onceLength, false, 0.0f, null, null);
 	}
-	public static void SCALE_OBJECT(txUIObject obj, string fileName, Vector2 start, Vector2 target, float onceLength, bool loop)
+	public static void SCALE_OBJECT(MovableObject obj, string fileName, Vector2 start, Vector2 target, float onceLength, bool loop)
 	{
 		SCALE_OBJECT_EX(obj, fileName, start, target, onceLength, loop, 0.0f, null, null);
 	}
-	public static void SCALE_OBJECT(txUIObject obj, string fileName, Vector2 start, Vector2 target, float onceLength, bool loop, float offset)
+	public static void SCALE_OBJECT(MovableObject obj, string fileName, Vector2 start, Vector2 target, float onceLength, bool loop, float offset)
 	{
 		SCALE_OBJECT_EX(obj, fileName, start, target, onceLength, loop, offset, null, null);
 	}
-	public static void SCALE_OBJECT_EX(txUIObject obj, string fileName, Vector2 start, Vector2 target, float onceLength, KeyFrameCallback scaleTrembleDoneCallback)
+	public static void SCALE_OBJECT_EX(MovableObject obj, string fileName, Vector2 start, Vector2 target, float onceLength, KeyFrameCallback scaleTrembleDoneCallback)
 	{
 		SCALE_OBJECT_EX(obj, fileName, start, target, onceLength, false, 0.0f, null, scaleTrembleDoneCallback);
 	}
-	public static void SCALE_OBJECT_EX(txUIObject obj, string fileName, Vector2 start, Vector2 target, float onceLength, bool loop, KeyFrameCallback scaleTrembleDoneCallback)
+	public static void SCALE_OBJECT_EX(MovableObject obj, string fileName, Vector2 start, Vector2 target, float onceLength, bool loop, KeyFrameCallback scaleTrembleDoneCallback)
 	{
 		SCALE_OBJECT_EX(obj, fileName, start, target, onceLength, loop, 0.0f, null, scaleTrembleDoneCallback);
 	}
-	public static void SCALE_OBJECT_EX(txUIObject obj, string fileName, Vector2 start, Vector2 target, float onceLength, bool loop, float offset, KeyFrameCallback scaleTrembleDoneCallback)
+	public static void SCALE_OBJECT_EX(MovableObject obj, string fileName, Vector2 start, Vector2 target, float onceLength, bool loop, float offset, KeyFrameCallback scaleTrembleDoneCallback)
 	{
 		SCALE_OBJECT_EX(obj, fileName, start, target, onceLength, loop, offset, null, scaleTrembleDoneCallback);
 	}
-	public static void SCALE_OBJECT_EX(txUIObject obj, string fileName, Vector2 start, Vector2 target, float onceLength, KeyFrameCallback scaleTremblingCallback, KeyFrameCallback scaleTrembleDoneCallback)
+	public static void SCALE_OBJECT_EX(MovableObject obj, string fileName, Vector2 start, Vector2 target, float onceLength, KeyFrameCallback scaleTremblingCallback, KeyFrameCallback scaleTrembleDoneCallback)
 	{
 		SCALE_OBJECT_EX(obj, fileName, start, target, onceLength, false, 0.0f, scaleTremblingCallback, scaleTrembleDoneCallback);
 	}
-	public static void SCALE_OBJECT_EX(txUIObject obj, string fileName, Vector2 start, Vector2 target, float onceLength, bool loop, KeyFrameCallback scaleTremblingCallback, KeyFrameCallback scaleTrembleDoneCallback)
+	public static void SCALE_OBJECT_EX(MovableObject obj, string fileName, Vector2 start, Vector2 target, float onceLength, bool loop, KeyFrameCallback scaleTremblingCallback, KeyFrameCallback scaleTrembleDoneCallback)
 	{
 		SCALE_OBJECT_EX(obj, fileName, start, target, onceLength, loop, 0.0f, scaleTremblingCallback, scaleTrembleDoneCallback);
 	}
-	public static void SCALE_OBJECT_EX(txUIObject obj, string fileName, Vector2 start, Vector2 target, float onceLength, bool loop, float offset, KeyFrameCallback scaleTremblingCallback, KeyFrameCallback scaleTrembleDoneCallback)
+	public static void SCALE_OBJECT_EX(MovableObject obj, string fileName, Vector2 start, Vector2 target, float onceLength, bool loop, float offset, KeyFrameCallback scaleTremblingCallback, KeyFrameCallback scaleTrembleDoneCallback)
 	{
 		if (fileName == "" || MathUtility.isFloatZero(onceLength))
 		{
-			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用void SCALE_WINDOW(txUIObject obj, Vector2 scale)");
+			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用void SCALE_OBJECT(MovableObject obj, Vector2 scale)");
 		}
-		CommandWindowScaleTrembling cmd = mCommandSystem.newCmd<CommandWindowScaleTrembling>(false);
+		CommandMovableObjectScale cmd = mCommandSystem.newCmd<CommandMovableObjectScale>(false);
 		cmd.mName = fileName;
 		cmd.mOnceLength = onceLength;
 		cmd.mOffset = offset;
@@ -626,9 +626,9 @@ public class ObjectTools : GameBase
 		cmd.setTrembleDoneCallback(scaleTrembleDoneCallback, null);
 		mCommandSystem.pushCommand(cmd, obj);
 	}
-	public static CommandWindowScaleTrembling SCALE_OBJECT_DELAY(txUIObject obj, float delayTime, Vector2 scale)
+	public static CommandMovableObjectScale SCALE_OBJECT_DELAY(MovableObject obj, float delayTime, Vector2 scale)
 	{
-		CommandWindowScaleTrembling cmd = mCommandSystem.newCmd<CommandWindowScaleTrembling>(false, true);
+		CommandMovableObjectScale cmd = mCommandSystem.newCmd<CommandMovableObjectScale>(false, true);
 		cmd.mName = "";
 		cmd.mOnceLength = 0.0f;
 		cmd.mStartScale = scale;
@@ -636,41 +636,41 @@ public class ObjectTools : GameBase
 		mCommandSystem.pushDelayCommand(cmd, obj, delayTime);
 		return cmd;
 	}
-	public static CommandWindowScaleTrembling SCALE_OBJECT_DELAY(txUIObject obj, float delayTime, Vector2 start, Vector2 target, float onceLength)
+	public static CommandMovableObjectScale SCALE_OBJECT_DELAY(MovableObject obj, float delayTime, Vector2 start, Vector2 target, float onceLength)
 	{
 		return SCALE_OBJECT_DELAY_EX(obj, delayTime, CommonDefine.ZERO_ONE, start, target, onceLength, false, 0.0f, null, null);
 	}
-	public static CommandWindowScaleTrembling SCALE_OBJECT_DELAY_EX(txUIObject obj, float delayTime, Vector2 start, Vector2 target, float onceLength, KeyFrameCallback scalingCallback, KeyFrameCallback doneCallback)
+	public static CommandMovableObjectScale SCALE_OBJECT_DELAY_EX(MovableObject obj, float delayTime, Vector2 start, Vector2 target, float onceLength, KeyFrameCallback scalingCallback, KeyFrameCallback doneCallback)
 	{
 		return SCALE_OBJECT_DELAY_EX(obj, delayTime, CommonDefine.ZERO_ONE, start, target, onceLength, false, 0.0f, scalingCallback, doneCallback);
 	}
-	public static CommandWindowScaleTrembling SCALE_OBJECT_DELAY(txUIObject obj, float delayTime, string keyframe, Vector2 start, Vector2 target, float onceLength)
+	public static CommandMovableObjectScale SCALE_OBJECT_DELAY(MovableObject obj, float delayTime, string keyframe, Vector2 start, Vector2 target, float onceLength)
 	{
 		return SCALE_OBJECT_DELAY_EX(obj, delayTime, keyframe, start, target, onceLength, false, 0.0f, null, null);
 	}
-	public static CommandWindowScaleTrembling SCALE_OBJECT_DELAY(txUIObject obj, float delayTime, string keyframe, Vector2 start, Vector2 target, float onceLength, bool loop)
+	public static CommandMovableObjectScale SCALE_OBJECT_DELAY(MovableObject obj, float delayTime, string keyframe, Vector2 start, Vector2 target, float onceLength, bool loop)
 	{
 		return SCALE_OBJECT_DELAY_EX(obj, delayTime, keyframe, start, target, onceLength, loop, 0.0f, null, null);
 	}
-	public static CommandWindowScaleTrembling SCALE_OBJECT_DELAY(txUIObject obj, float delayTime, string keyframe, Vector2 start, Vector2 target, float onceLength, bool loop, float offset)
+	public static CommandMovableObjectScale SCALE_OBJECT_DELAY(MovableObject obj, float delayTime, string keyframe, Vector2 start, Vector2 target, float onceLength, bool loop, float offset)
 	{
 		return SCALE_OBJECT_DELAY_EX(obj, delayTime, keyframe, start, target, onceLength, loop, offset, null, null);
 	}
-	public static CommandWindowScaleTrembling SCALE_OBJECT_DELAY_EX(txUIObject obj, float delayTime, string keyframe, Vector2 start, Vector2 target, float onceLength, KeyFrameCallback scaleTremblingCallback, KeyFrameCallback scaleTrembleDoneCallback)
+	public static CommandMovableObjectScale SCALE_OBJECT_DELAY_EX(MovableObject obj, float delayTime, string keyframe, Vector2 start, Vector2 target, float onceLength, KeyFrameCallback scaleTremblingCallback, KeyFrameCallback scaleTrembleDoneCallback)
 	{
 		return SCALE_OBJECT_DELAY_EX(obj, delayTime, keyframe, start, target, onceLength, false, 0.0f, scaleTremblingCallback, scaleTrembleDoneCallback);
 	}
-	public static CommandWindowScaleTrembling SCALE_OBJECT_DELAY_EX(txUIObject obj, float delayTime, string keyframe, Vector2 start, Vector2 target, float onceLength, bool loop, KeyFrameCallback scaleTremblingCallback, KeyFrameCallback scaleTrembleDoneCallback)
+	public static CommandMovableObjectScale SCALE_OBJECT_DELAY_EX(MovableObject obj, float delayTime, string keyframe, Vector2 start, Vector2 target, float onceLength, bool loop, KeyFrameCallback scaleTremblingCallback, KeyFrameCallback scaleTrembleDoneCallback)
 	{
 		return SCALE_OBJECT_DELAY_EX(obj, delayTime, keyframe, start, target, onceLength, loop, 0.0f, scaleTremblingCallback, scaleTrembleDoneCallback);
 	}
-	public static CommandWindowScaleTrembling SCALE_OBJECT_DELAY_EX(txUIObject obj, float delayTime, string keyframe, Vector2 start, Vector2 target, float onceLength, bool loop, float offset, KeyFrameCallback scaleTremblingCallback, KeyFrameCallback scaleTrembleDoneCallback)
+	public static CommandMovableObjectScale SCALE_OBJECT_DELAY_EX(MovableObject obj, float delayTime, string keyframe, Vector2 start, Vector2 target, float onceLength, bool loop, float offset, KeyFrameCallback scaleTremblingCallback, KeyFrameCallback scaleTrembleDoneCallback)
 	{
 		if (keyframe == "" || MathUtility.isFloatZero(onceLength))
 		{
-			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用CommandWindowScaleTrembling SCALE_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, Vector2 scale)");
+			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用CommandMovableObjectScale SCALE_OBJECT_DELAY(MovableObject obj, float delayTime, Vector2 scale)");
 		}
-		CommandWindowScaleTrembling cmd = mCommandSystem.newCmd<CommandWindowScaleTrembling>(false, true);
+		CommandMovableObjectScale cmd = mCommandSystem.newCmd<CommandMovableObjectScale>(false, true);
 		cmd.mName = keyframe;
 		cmd.mOnceLength = onceLength;
 		cmd.mOffset = offset;

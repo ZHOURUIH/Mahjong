@@ -44,8 +44,8 @@ public class CommandMovableObjectScale : Command
 	}
 	public override void execute()
 	{
-		MovableObject window = mReceiver as MovableObject;
-		MovableObjectComponentScale comTrembling = window.getFirstComponent<MovableObjectComponentScale>();
+		MovableObject obj = mReceiver as MovableObject;
+		MovableObjectComponentScale comTrembling = obj.getFirstComponent<MovableObjectComponentScale>();
 		if (null != comTrembling)
 		{
 			comTrembling.setActive(true);

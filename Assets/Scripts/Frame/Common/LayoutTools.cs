@@ -433,7 +433,7 @@ public class LayoutTools : GameBase
 	// 缩放
 	public static void SCALE_WINDOW(txUIObject obj, Vector2 scale)
 	{
-		CommandWindowScaleTrembling cmd = mCommandSystem.newCmd<CommandWindowScaleTrembling>(false);
+		CommandWindowScale cmd = mCommandSystem.newCmd<CommandWindowScale>(false);
 		cmd.mName = "";
 		cmd.mOnceLength = 0.0f;
 		cmd.mStartScale = scale;
@@ -490,7 +490,7 @@ public class LayoutTools : GameBase
 		{
 			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用void SCALE_WINDOW(txUIObject obj, Vector2 scale)");
 		}
-		CommandWindowScaleTrembling cmd = mCommandSystem.newCmd<CommandWindowScaleTrembling>(false);
+		CommandWindowScale cmd = mCommandSystem.newCmd<CommandWindowScale>(false);
 		cmd.mName = fileName;
 		cmd.mOnceLength = onceLength;
 		cmd.mOffset = offset;
@@ -501,9 +501,9 @@ public class LayoutTools : GameBase
 		cmd.setTrembleDoneCallback(scaleTrembleDoneCallback, null);
 		mCommandSystem.pushCommand(cmd, obj);
 	}
-	public static CommandWindowScaleTrembling SCALE_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, Vector2 scale)
+	public static CommandWindowScale SCALE_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, Vector2 scale)
 	{
-		CommandWindowScaleTrembling cmd = mCommandSystem.newCmd<CommandWindowScaleTrembling>(false, true);
+		CommandWindowScale cmd = mCommandSystem.newCmd<CommandWindowScale>(false, true);
 		cmd.mName = "";
 		cmd.mOnceLength = 0.0f;
 		cmd.mStartScale = scale;
@@ -512,41 +512,41 @@ public class LayoutTools : GameBase
 		script.addDelayCmd(cmd);
 		return cmd;
 	}
-	public static CommandWindowScaleTrembling SCALE_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, Vector2 start, Vector2 target, float onceLength)
+	public static CommandWindowScale SCALE_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, Vector2 start, Vector2 target, float onceLength)
 	{
 		return SCALE_KEYFRAME_WINDOW_DELAY_EX(script, obj, delayTime, CommonDefine.ZERO_ONE, start, target, onceLength, false, 0.0f, null, null);
 	}
-	public static CommandWindowScaleTrembling SCALE_WINDOW_DELAY_EX(LayoutScript script, txUIObject obj, float delayTime, Vector2 start, Vector2 target, float onceLength, KeyFrameCallback scalingCallback, KeyFrameCallback doneCallback)
+	public static CommandWindowScale SCALE_WINDOW_DELAY_EX(LayoutScript script, txUIObject obj, float delayTime, Vector2 start, Vector2 target, float onceLength, KeyFrameCallback scalingCallback, KeyFrameCallback doneCallback)
 	{
 		return SCALE_KEYFRAME_WINDOW_DELAY_EX(script, obj, delayTime, CommonDefine.ZERO_ONE, start, target, onceLength, false, 0.0f, scalingCallback, doneCallback);
 	}
-	public static CommandWindowScaleTrembling SCALE_KEYFRAME_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, string keyframe, Vector2 start, Vector2 target, float onceLength)
+	public static CommandWindowScale SCALE_KEYFRAME_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, string keyframe, Vector2 start, Vector2 target, float onceLength)
 	{
 		return SCALE_KEYFRAME_WINDOW_DELAY_EX(script, obj, delayTime, keyframe, start, target, onceLength, false, 0.0f, null, null);
 	}
-	public static CommandWindowScaleTrembling SCALE_KEYFRAME_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, string keyframe, Vector2 start, Vector2 target, float onceLength, bool loop)
+	public static CommandWindowScale SCALE_KEYFRAME_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, string keyframe, Vector2 start, Vector2 target, float onceLength, bool loop)
 	{
 		return SCALE_KEYFRAME_WINDOW_DELAY_EX(script, obj, delayTime, keyframe, start, target, onceLength, loop, 0.0f, null, null);
 	}
-	public static CommandWindowScaleTrembling SCALE_KEYFRAME_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, string keyframe, Vector2 start, Vector2 target, float onceLength, bool loop, float offset)
+	public static CommandWindowScale SCALE_KEYFRAME_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, string keyframe, Vector2 start, Vector2 target, float onceLength, bool loop, float offset)
 	{
 		return SCALE_KEYFRAME_WINDOW_DELAY_EX(script, obj, delayTime, keyframe, start, target, onceLength, loop, offset, null, null);
 	}
-	public static CommandWindowScaleTrembling SCALE_KEYFRAME_WINDOW_DELAY_EX(LayoutScript script, txUIObject obj, float delayTime, string keyframe, Vector2 start, Vector2 target, float onceLength, KeyFrameCallback scaleTremblingCallback, KeyFrameCallback scaleTrembleDoneCallback)
+	public static CommandWindowScale SCALE_KEYFRAME_WINDOW_DELAY_EX(LayoutScript script, txUIObject obj, float delayTime, string keyframe, Vector2 start, Vector2 target, float onceLength, KeyFrameCallback scaleTremblingCallback, KeyFrameCallback scaleTrembleDoneCallback)
 	{
 		return SCALE_KEYFRAME_WINDOW_DELAY_EX(script, obj, delayTime, keyframe, start, target, onceLength, false, 0.0f, scaleTremblingCallback, scaleTrembleDoneCallback);
 	}
-	public static CommandWindowScaleTrembling SCALE_KEYFRAME_WINDOW_DELAY_EX(LayoutScript script, txUIObject obj, float delayTime, string keyframe, Vector2 start, Vector2 target, float onceLength, bool loop, KeyFrameCallback scaleTremblingCallback, KeyFrameCallback scaleTrembleDoneCallback)
+	public static CommandWindowScale SCALE_KEYFRAME_WINDOW_DELAY_EX(LayoutScript script, txUIObject obj, float delayTime, string keyframe, Vector2 start, Vector2 target, float onceLength, bool loop, KeyFrameCallback scaleTremblingCallback, KeyFrameCallback scaleTrembleDoneCallback)
 	{
 		return SCALE_KEYFRAME_WINDOW_DELAY_EX(script, obj, delayTime, keyframe, start, target, onceLength, loop, 0.0f, scaleTremblingCallback, scaleTrembleDoneCallback);
 	}
-	public static CommandWindowScaleTrembling SCALE_KEYFRAME_WINDOW_DELAY_EX(LayoutScript script, txUIObject obj, float delayTime, string keyframe, Vector2 start, Vector2 target, float onceLength, bool loop, float offset, KeyFrameCallback scaleTremblingCallback, KeyFrameCallback scaleTrembleDoneCallback)
+	public static CommandWindowScale SCALE_KEYFRAME_WINDOW_DELAY_EX(LayoutScript script, txUIObject obj, float delayTime, string keyframe, Vector2 start, Vector2 target, float onceLength, bool loop, float offset, KeyFrameCallback scaleTremblingCallback, KeyFrameCallback scaleTrembleDoneCallback)
 	{
 		if (keyframe == "" || MathUtility.isFloatZero(onceLength))
 		{
-			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用CommandWindowScaleTrembling SCALE_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, Vector2 scale)");
+			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,CommandWindowScale SCALE_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, Vector2 scale)");
 		}
-		CommandWindowScaleTrembling cmd = mCommandSystem.newCmd<CommandWindowScaleTrembling>(false, true);
+		CommandWindowScale cmd = mCommandSystem.newCmd<CommandWindowScale>(false, true);
 		cmd.mName = keyframe;
 		cmd.mOnceLength = onceLength;
 		cmd.mOffset = offset;

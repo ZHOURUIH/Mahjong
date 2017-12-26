@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class CommandWindowScaleTrembling : Command
+public class CommandWindowScale : Command
 {
 	public string mName;
 	public float mOnceLength;

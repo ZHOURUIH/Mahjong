@@ -43,8 +43,6 @@ public class CharacterComponentModel : GameComponent
 			mAnimator = mModel.GetComponent<Animator>();
 			mModelTransform = mModel.GetComponent<Transform>();
 			mAnimation = mModel.GetComponent<Animation>();
-			GameObject posNode = UnityUtility.getGameObject(null, "RolePosition1");
-			model.transform.localPosition = posNode.transform.localPosition;
 		}
 	}
 	public GameObject getModel()
@@ -60,6 +58,7 @@ public class CharacterComponentModel : GameComponent
 		}
 	}
 	public void setScale(Vector3 scale) { mModelTransform.localScale = scale; }
+	public void setRotation(Vector3 euler) { mModelTransform.localEulerAngles = euler; }
 	//-----------------------------------------------------------------------------------------------------------------------
 	protected override bool isType(Type type){ return type == typeof(CharacterComponentModel);}
 	protected override void setBaseType(){mBaseType = typeof(CharacterComponentModel);}

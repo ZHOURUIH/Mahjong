@@ -90,11 +90,12 @@ public abstract class SceneProcedure : GameBase
 			mCurPrepareTime += elapsedTime;
 			if(mCurPrepareTime >= mExitTime)
 			{
+				mExitTime = -1.0f;
+				mCurPrepareTime = -1.0f;
 				// 超过了准备时间,强制跳转流程
 				CommandGameSceneChangeProcedure cmd = mCommandSystem.newCmd<CommandGameSceneChangeProcedure>();
 				cmd.mProcedure = mPrepareNext.getProcedureType();
 				cmd.mIntent = mPrepareIntent;
-				cmd.mForceChange = true;
 				mCommandSystem.pushCommand(cmd, mGameScene);
 			}
 		}
@@ -132,13 +133,15 @@ public abstract class SceneProcedure : GameBase
 			mParentProcedure.exit(exitTo, nextPro);
 		}
 		// 退出完毕后就修改标记
+		mExitTime = -1.0f;
 		mCurPrepareTime = -1.0f;
 		mPrepareNext = null;
 		mPrepareIntent = "";
 	}
-	public void prepareExit(SceneProcedure next, string intent)
+	public void prepareExit(SceneProcedure next, float time, string intent)
 	{
 		mCurPrepareTime = 0.0f;
+		mExitTime = time;
 		mPrepareNext = next;
 		mPrepareIntent = intent;
 		// 通知自己准备退出

@@ -115,10 +115,10 @@ abstract public class GameScene : ComponentOwner
 		}
 		return mCurProcedure.getProcedureType() == type;
 	}
-	public void prepareChangeProcedure(PROCEDURE_TYPE procedure, string intent)
+	public void prepareChangeProcedure(PROCEDURE_TYPE procedure, float time, string intent)
 	{
 		SceneProcedure targetProcedure = mSceneProcedureList[procedure];
-		mCurProcedure.prepareExit(targetProcedure, intent);
+		mCurProcedure.prepareExit(targetProcedure, time, intent);
 	}
 	public void backToLastProcedure(string intend)
 	{

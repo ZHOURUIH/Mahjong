@@ -444,4 +444,46 @@ public class StringUtility
 	{
 		return checkString(str, "0123456789" + valid);
 	}
+	public static string charToHex(byte b)
+	{
+		char[] byteHex = new char[3];
+		char[] charPool = new char[]{ 'A', 'B', 'C', 'D', 'E', 'F' };
+		byte highBit = (byte)(b >> 4);
+		// 高字节的十六进制
+		if (highBit < (byte)10)
+		{
+			byteHex[0] = (char)('0' + highBit);
+		}
+		else
+		{
+			byteHex[0] = charPool[highBit - 10];
+		}
+		// 低字节的十六进制
+		byte lowBit = (byte)(b & 0x0F);
+		if (lowBit < (byte)10)
+		{
+			byteHex[1] = (char)('0' + lowBit);
+		}
+		else
+		{
+			byteHex[1] = charPool[lowBit - 10];
+		}
+		return new string(byteHex);
+	}
+	public static string charArrayToHexString(byte[] data, int count)
+	{
+		int dataCount = Mathf.Min(data.Length, count);
+		int showCount = dataCount * 3 + 1;
+		char[] byteData = new char[showCount];
+		for (int j = 0; j < dataCount; ++j)
+		{
+			byte curByte = data[j];
+			string byteStr = charToHex(curByte);
+			byteData[j * 3 + 0] = byteStr[0];
+			byteData[j * 3 + 1] = byteStr[1];
+			byteData[j * 3 + 2] = ' ';
+		}
+		string str = new string(byteData);
+		return str;
+	}
 }

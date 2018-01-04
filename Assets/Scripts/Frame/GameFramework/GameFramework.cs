@@ -34,6 +34,7 @@ public class GameFramework : MonoBehaviour
 	public virtual void initComponent()
 	{
 		registeComponent<ApplicationConfig>();
+		registeComponent<FrameConfig>();
 		registeComponent<UnityUtility>();
 		registeComponent<PluginUtility>();
 		registeComponent<CommandSystem>();
@@ -48,7 +49,6 @@ public class GameFramework : MonoBehaviour
 		registeComponent<DataBase>();
 		registeComponent<CameraManager>();
 		registeComponent<LayoutPrefabManager>();
-		registeComponent<FrameConfig>();
 		registeComponent<ModelManager>();
 		registeComponent<InputManager>();
 	}

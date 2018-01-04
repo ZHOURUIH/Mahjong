@@ -11,9 +11,9 @@ public class ComponentDrag : GameComponent
 	{}
 	public override void update(float elapsedTime)
 	{
-		// 左键在窗口中按下
+		// 左键按下时,鼠标悬停在物体上,则开始拖动
 		Vector3 mousePosition = Input.mousePosition;
-		if (mouseHovered(mousePosition) && Input.GetMouseButtonDown(0))
+		if(Input.GetMouseButtonDown(0) && mouseHovered(mousePosition))
 		{
 			onMouseDown(mousePosition);
 		}

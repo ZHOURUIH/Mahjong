@@ -82,7 +82,7 @@ public class CommandPool : GameBase
 	//------------------------------------------------------------------------------------------------------------------
 	protected void addInuse(Command cmd)
 	{
-		mInuseLock.waitForUnlock(LOCK_TYPE.LT_WRITE);
+		mInuseLock.waitForUnlock();
 		// 添加到使用列表中
 		Type t = cmd.getType();
 		if (!mInusedList.ContainsKey(t))
@@ -91,11 +91,11 @@ public class CommandPool : GameBase
 		}
 		List<Command> list = mInusedList[t];
 		list.Add(cmd);
-		mInuseLock.unlock(LOCK_TYPE.LT_WRITE);
+		mInuseLock.unlock();
 	}
 	protected void addUnuse(Command cmd)
 	{
-		mUnuseLock.waitForUnlock(LOCK_TYPE.LT_WRITE);
+		mUnuseLock.waitForUnlock();
 		// 添加到未使用列表中
 		Type t = cmd.getType();
 		if (!mUnusedList.ContainsKey(t))
@@ -103,26 +103,26 @@ public class CommandPool : GameBase
 			mUnusedList.Add(t, new List<Command>());
 		}
 		mUnusedList[t].Add(cmd);
-		mUnuseLock.unlock(LOCK_TYPE.LT_WRITE);
+		mUnuseLock.unlock();
 	}
 	protected void removeInuse(Command cmd)
 	{
-		mInuseLock.waitForUnlock(LOCK_TYPE.LT_WRITE);
+		mInuseLock.waitForUnlock();
 		Type t = cmd.getType();
 		if (mInusedList.ContainsKey(t))
 		{
 			mInusedList[t].Remove(cmd);
 		}
-		mInuseLock.unlock(LOCK_TYPE.LT_WRITE);
+		mInuseLock.unlock();
 	}
 	protected void removeUnuse(Command cmd)
 	{
-		mUnuseLock.waitForUnlock(LOCK_TYPE.LT_WRITE);
+		mUnuseLock.waitForUnlock();
 		Type t = cmd.getType();
 		if (mUnusedList.ContainsKey(t))
 		{
 			mUnusedList[t].Remove(cmd);
 		}
-		mUnuseLock.unlock(LOCK_TYPE.LT_WRITE);
+		mUnuseLock.unlock();
 	}
 }

@@ -39,14 +39,14 @@ public class CommandSystem : FrameComponent
 	}
 	protected void syncCommandBuffer()
 	{
-		mBufferLock.waitForUnlock(LOCK_TYPE.LT_READ);
+		mBufferLock.waitForUnlock();
 		int inputCount = mCommandBufferInput.Count;
 		for (int i = 0; i < inputCount; ++i)
 		{
 			mCommandBufferProcess.Add(mCommandBufferInput[i]);
 		}
 		mCommandBufferInput.Clear();
-		mBufferLock.unlock(LOCK_TYPE.LT_READ);
+		mBufferLock.unlock();
 	}
 	public override void update(float elapsedTime)
 	{
@@ -207,9 +207,9 @@ public class CommandSystem : FrameComponent
 		}
 		DelayCommand delayCommand = new DelayCommand(delayExecute, cmd, cmdReceiver);
 
-		mBufferLock.waitForUnlock(LOCK_TYPE.LT_READ);
+		mBufferLock.waitForUnlock();
 		mCommandBufferInput.Add(delayCommand);
-		mBufferLock.unlock(LOCK_TYPE.LT_READ);
+		mBufferLock.unlock();
 	}
 	public override void destroy()
 	{
@@ -220,7 +220,7 @@ public class CommandSystem : FrameComponent
 	}
 	public virtual void notifyReceiverDestroied(CommandReceiver receiver)
 	{
-		mBufferLock.waitForUnlock(LOCK_TYPE.LT_READ);
+		mBufferLock.waitForUnlock();
 		for (int i = 0; i < mCommandBufferInput.Count; ++i)
 		{
 			if (mCommandBufferInput[i].mReceiver == receiver)
@@ -230,7 +230,7 @@ public class CommandSystem : FrameComponent
 				--i;
 			}
 		}
-		mBufferLock.unlock(LOCK_TYPE.LT_READ);
+		mBufferLock.unlock();
 
 		for (int i = 0; i < mCommandBufferProcess.Count; ++i)
 		{

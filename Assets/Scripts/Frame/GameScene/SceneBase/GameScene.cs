@@ -41,14 +41,14 @@ abstract public class GameScene : ComponentOwner
 		// 设置起始流程名
 		assignStartExitProcedure();
 		// 开始执行起始流程
-		CommandGameSceneChangeProcedure cmd = mCommandSystem.newCmd<CommandGameSceneChangeProcedure>(true, false);
+		CommandGameSceneChangeProcedure cmd = newCmd<CommandGameSceneChangeProcedure>(true, false);
         cmd.mProcedure = mStartProcedure;
-        mCommandSystem.pushCommand(cmd, this);
+        pushCommand(cmd, this);
     }
 	public override void initComponents()
 	{
 		// 添加音效组件
-		addComponent<GameSceneComponentAudio>("audio");
+		addComponent<GameSceneComponentAudio>("audio", true);
 	}
 	public override void destroy()
 	{
@@ -81,9 +81,9 @@ abstract public class GameScene : ComponentOwner
 	public virtual void exit()
 	{
 		// 首先进入退出流程,然后再退出最后的流程
-		CommandGameSceneChangeProcedure cmd = mCommandSystem.newCmd<CommandGameSceneChangeProcedure>();
+		CommandGameSceneChangeProcedure cmd = newCmd<CommandGameSceneChangeProcedure>();
 		cmd.mProcedure = mExitProcedure;
-		mCommandSystem.pushCommand(cmd, this);
+		pushCommand(cmd, this);
 		if (mCurProcedure != null)
 		{
 			mCurProcedure.exit(null, null);
@@ -194,8 +194,7 @@ abstract public class GameScene : ComponentOwner
 	public GAME_SCENE_TYPE getSceneType() { return mSceneType; }
 	public static SceneProcedure createProcedure<T>(GameScene gameScene, PROCEDURE_TYPE type) where T : SceneProcedure, new()
 	{
-		object[] procedureParams = new object[] { type, gameScene };
-		T procedure = UnityUtility.createInstance<T>(typeof(T), procedureParams);
+		T procedure = UnityUtility.createInstance<T>(typeof(T), type, gameScene);
 		return procedure;
 	}
 	public T addProcedure<T>(PROCEDURE_TYPE type, SceneProcedure parent = null) where T : SceneProcedure, new()

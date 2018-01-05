@@ -119,8 +119,7 @@ public abstract class ComponentOwner : CommandReceiver
 	}
 	public static GameComponent createIndependentComponent(string name, Type type, bool initComponent = true)
 	{
-		object[] constructParms = new object[] { type, name };  //构造器参数
-		GameComponent component = UnityUtility.createInstance<GameComponent>(type, constructParms);
+		GameComponent component = UnityUtility.createInstance<GameComponent>(type, type, name);
 		// 创建组件并且设置拥有者,然后初始化
 		if (initComponent && component != null)
 		{
@@ -128,7 +127,7 @@ public abstract class ComponentOwner : CommandReceiver
 		}
 		return component;
 	}
-	public T addComponent<T>(string name) where T : GameComponent
+	public T addComponent<T>(string name, bool active = false) where T : GameComponent
 	{
 		// 不能创建重名的组件
 		if (mAllComponentList.ContainsKey(name))
@@ -146,6 +145,7 @@ public abstract class ComponentOwner : CommandReceiver
 		addComponentToList(component);
 		// 通知创建了组件
 		notifyAddComponent(component);
+		component.setActive(active);
 		return component as T;
 	}
 	public static void destroyComponent(GameComponent component)

@@ -24,10 +24,17 @@ public class GameFramework : MonoBehaviour
 		UnityUtility.logInfo("start game!", LOG_LEVEL.LL_FORCE);
 		mFrameComponentMap = new Dictionary<string, FrameComponent>();
 		mFrameComponentList = new List<FrameComponent>();
-		start();
-		notifyBase();
-		registe();
-		init();
+		try
+		{
+			start();
+			notifyBase();
+			registe();
+			init();
+		}
+		catch(Exception e)
+		{
+			UnityUtility.logError("init failed! " + e.Message + ", stack : " + e.StackTrace);
+		}
 		// 初始化完毕后启动游戏
 		launch();
 	}
@@ -58,7 +65,7 @@ public class GameFramework : MonoBehaviour
 		instance = this;
 		mGameFrameObject = this.transform.gameObject;
 		initComponent();
-		// 资源管理器必须最后注册
+		// 资源管理器必须最后注册,以便最后销毁,作为最后的资源清理
 		registeComponent<ResourceManager>();
 		GameObject sceneSystemObj = UnityUtility.getGameObject(mGameFrameObject, "SceneSystem");
 		if (sceneSystemObj == null)
@@ -79,12 +86,11 @@ public class GameFramework : MonoBehaviour
 		}
 		mSceneSystem.init();
 		System.Net.ServicePointManager.DefaultConnectionLimit = 200;
-		ApplicationConfig applicationConfig = getSystem<ApplicationConfig>();
-		int width = (int)applicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SCREEN_WIDTH);
-		int height = (int)applicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SCREEN_HEIGHT);
-		int fullscreen = (int)applicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_FULL_SCREEN);
+		int width = (int)FrameBase.mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SCREEN_WIDTH);
+		int height = (int)FrameBase.mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SCREEN_HEIGHT);
+		int fullscreen = (int)FrameBase.mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_FULL_SCREEN);
 		Screen.SetResolution(width, height, fullscreen == 1);
-		int screenCount = (int)applicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SCREEN_COUNT);
+		int screenCount = (int)FrameBase.mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SCREEN_COUNT);
 		processResolution(width, height, screenCount);
 		// 设置为无边框窗口
 		if (fullscreen == 2)
@@ -158,7 +164,6 @@ public class GameFramework : MonoBehaviour
 	{
 		mSceneSystem.destroy();
 		mSceneSystem = null;
-		// 资源管理器必须最后销毁,作为最后的资源清理
 		int count = mFrameComponentList.Count;
 		for (int i = 0; i < count; ++i)
 		{
@@ -202,7 +207,7 @@ public class GameFramework : MonoBehaviour
 	protected void registeComponent<T>() where T : FrameComponent
 	{
 		string name = typeof(T).ToString();
-		T component = UnityUtility.createInstance<T>(typeof(T), new object[] { name });
+		T component = UnityUtility.createInstance<T>(typeof(T), name);
 		mFrameComponentMap.Add(name, component);
 		mFrameComponentList.Add(component);
 	}

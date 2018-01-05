@@ -37,9 +37,9 @@ public class GameCamera : MovableObject
 	public override void initComponents()
 	{
 		base.initComponents();
-		addComponent<CameraLinkerAcceleration>("acceleration").setActive(false);
-		addComponent<CameraLinkerFixed>("fixed").setActive(false);
-		addComponent<CameraLinkerFixedTime>("fixedTime").setActive(false);
+		addComponent<CameraLinkerAcceleration>("acceleration");
+		addComponent<CameraLinkerFixed>("fixed");
+		addComponent<CameraLinkerFixedTime>("fixedTime");
 	}
 	public override void update(float elapsedTime)
 	{

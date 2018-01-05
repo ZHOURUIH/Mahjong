@@ -63,18 +63,18 @@ public class txUIObject : ComponentOwner
 	}
 	public override void initComponents()
 	{
-		addComponent<WindowComponentAudio>("Audio");
-		addComponent<WindowComponentRotateSpeed>("RotateSpeed").setActive(false);
-		addComponent<WindowComponentMove>("Move").setActive(false);
-		addComponent<WindowComponentScale>("Scale").setActive(false);
-		addComponent<WindowComponentAlpha>("Alpha").setActive(false);
-		addComponent<WindowComponentRotate>("Rotate").setActive(false);
-		addComponent<WindowComponentSmoothSlider>("slider").setActive(false);
-		addComponent<WindowComponentSmoothFillAmount>("fillAmount").setActive(false);
-		addComponent<WindowComponentRotateFixed>("RotateFixed").setActive(false);
-		addComponent<WindowComponentHSL>("HSL").setActive(false);
-		addComponent<WindowComponentDrag>("Drag").setActive(false);
-		addComponent<WindowComponentTrackTarget>("TrackTarget").setActive(false);
+		addComponent<WindowComponentAudio>("Audio", true);
+		addComponent<WindowComponentRotateSpeed>("RotateSpeed");
+		addComponent<WindowComponentMove>("Move");
+		addComponent<WindowComponentScale>("Scale");
+		addComponent<WindowComponentAlpha>("Alpha");
+		addComponent<WindowComponentRotate>("Rotate");
+		addComponent<WindowComponentSmoothSlider>("slider");
+		addComponent<WindowComponentSmoothFillAmount>("fillAmount");
+		addComponent<WindowComponentRotateFixed>("RotateFixed");
+		addComponent<WindowComponentHSL>("HSL");
+		addComponent<WindowComponentDrag>("Drag");
+		addComponent<WindowComponentTrackTarget>("TrackTarget");
 	}
 	public void addChild(txUIObject child)
 	{

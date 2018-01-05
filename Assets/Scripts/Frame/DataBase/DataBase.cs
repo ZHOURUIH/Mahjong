@@ -6,40 +6,33 @@ using System.Collections.Generic;
 
 public class DataBase : FrameComponent
 {
+	protected Dictionary<DATA_TYPE, Type> mDataRegisteList;
 	protected Dictionary<DATA_TYPE, List<Data>> mDataStructList;
 	protected Dictionary<string, DATA_TYPE> mDataFileDefine;
 	protected Dictionary<DATA_TYPE, string> mDataDefineFile;
 	protected Dictionary<DATA_TYPE, int> mDataSizeMap;
-	protected DataFactoryManager mDataFactoryManager;
 	public DataBase(string name)
 		:base(name)
 	{
+		mDataRegisteList = new Dictionary<DATA_TYPE, Type>();
 		mDataStructList = new Dictionary<DATA_TYPE,List<Data>>();
 		mDataFileDefine = new Dictionary<string, DATA_TYPE>();
 		mDataDefineFile = new Dictionary<DATA_TYPE, string>();
 		mDataSizeMap = new Dictionary<DATA_TYPE, int>();
-		mDataFactoryManager = new DataFactoryManager();
 	}
 	// 初始化所有数据
 	public override void init()
 	{
-		mDataFactoryManager.init();
 		loadAllDataFromFile();
 	}
 	public override void destroy() 
 	{
 		base.destroy();
 		mDataStructList.Clear();
-		mDataFactoryManager = null;
 	}
 	public Data createData(DATA_TYPE type)
 	{
-		DataFactory factory = mDataFactoryManager.getFactory(type);
-		if (factory != null)
-		{
-			return factory.createData();
-		}
-		return null;
+		return UnityUtility.createInstance<Data>(mDataRegisteList[type], type);
 	}
 	public void loadAllDataFromFile()
 	{
@@ -90,14 +83,6 @@ public class DataBase : FrameComponent
 			}
 		}
 
-		// 查找工厂
-		DataFactory factory = mDataFactoryManager.getFactory(type);
-		if(factory == null)
-		{
-			UnityUtility.logError("error : can not find factory, type : " + type + ", filename : " + fileName + ", filePath : " + filePath);
-			return;
-		}
-
 		// 打开文件
 		int fileSize = 0;
 		byte[] fileBuffer = null;
@@ -110,17 +95,17 @@ public class DataBase : FrameComponent
 		int dataCount = fileSize / dataSize;
 		for (int i = 0; i < dataCount; ++i)
 		{
-			Data newData = factory.createData();
+			Data newData = createData(type);
 			if(newData == null)
 			{
-				UnityUtility.logError("error : can not create data ,type : " + factory.getType());
+				UnityUtility.logError("error : can not create data ,type : " + type);
 				return;
 			}
 			BinaryUtility.memcpy(dataBuffer, fileBuffer, 0, i * dataSize, dataSize);
 			newData.read(dataBuffer, dataSize);
 			dataList.Add(newData);
 		}
-		mDataStructList.Add(factory.getType(), dataList);
+		mDataStructList.Add(type, dataList);
 	}
 	// 得到数据数量
 	public int getDataCount(DATA_TYPE type)
@@ -164,11 +149,11 @@ public class DataBase : FrameComponent
 			mDataStructList.Add(type, datalist);
 		}
 	}
-	public void registeData(Type data, DATA_TYPE type)
+	public void registeData(Type classType, DATA_TYPE type)
 	{
-		DataFactory factory = mDataFactoryManager.addFactory(data, type);
-		Data temp = factory.createData();
-		string dataName = data.ToString();
+		mDataRegisteList.Add(type, classType);
+		Data temp = createData(type);
+		string dataName = classType.ToString();
 		mDataFileDefine.Add(dataName, type);
 		mDataDefineFile.Add(type, dataName);
 		mDataSizeMap.Add(type, temp.getDataSize());

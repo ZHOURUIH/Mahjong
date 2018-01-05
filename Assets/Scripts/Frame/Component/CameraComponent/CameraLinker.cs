@@ -65,18 +65,17 @@ public class CameraLinker : GameComponent
 	{
 		if (mLinkObject != null)
 		{
+			// 如果使用目标物体的航向角,则对相对位置进行旋转
+			if (mUseTargetYaw)
+			{
+				relative = MathUtility.rotateVector3(relative, -mLinkObject.getRotation().y * Mathf.Deg2Rad);
+			}
 			mCamera.setPosition(mLinkObject.getWorldPosition() + relative);
 			if (mLookAtTarget)
 			{
 				//让摄像机朝向
 				Vector3 cameraDir = mLinkObject.getWorldPosition() + mLookAtOffset - mCamera.getPosition();
 				mCamera.setRotation(Quaternion.LookRotation(cameraDir).eulerAngles);
-			}
-			if (mUseTargetYaw)
-			{
-				Vector3 curRot = mCamera.getRotation();
-				curRot.x = mLinkObject.getRotation().x;
-				mCamera.setRotation(curRot);
 			}
 		}
 	}

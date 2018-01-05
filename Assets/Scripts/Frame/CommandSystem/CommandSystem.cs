@@ -18,8 +18,8 @@ public class DelayCommand
 public class CommandSystem : FrameComponent
 {
 	protected CommandPool mCommandPool;
-	protected List<DelayCommand> mCommandBufferProcess; // 用于处理的命令列表
-	protected List<DelayCommand> mCommandBufferInput;   // 用于放入命令的命令列表
+	protected List<DelayCommand> mCommandBufferProcess;	// 用于处理的命令列表
+	protected List<DelayCommand> mCommandBufferInput;	// 用于放入命令的命令列表
 	protected List<DelayCommand> mExecuteList;			// 即将在这一帧执行的命令
 	protected ThreadLock mBufferLock;
 	protected bool mTraceCommand;   // 是否追踪命令的来源
@@ -36,6 +36,13 @@ public class CommandSystem : FrameComponent
 	public override void init()
 	{
 		mCommandPool.init();
+	}
+	public override void destroy()
+	{
+		mCommandPool.destroy();
+		mCommandBufferInput.Clear();
+		mCommandBufferProcess.Clear();
+		base.destroy();
 	}
 	protected void syncCommandBuffer()
 	{
@@ -72,16 +79,20 @@ public class CommandSystem : FrameComponent
 				--i;
 			}
 		}
-		foreach (var cmd in mExecuteList)
+		int executeCount = mExecuteList.Count;
+		for (int i = 0; i < executeCount; ++i)
 		{
-			cmd.mCommand.setDelayCommand(false);
-			pushCommand(cmd.mCommand, cmd.mReceiver);
+			mExecuteList[i].mCommand.setDelayCommand(false);
+			if(mExecuteList[i].mReceiver != null)
+			{
+				pushCommand(mExecuteList[i].mCommand, mExecuteList[i].mReceiver);
+			}
 		}
 		// 执行完后清空列表
 		mExecuteList.Clear();
 	}
 	// 创建命令
-	public T newCmd<T>(bool show = true, bool delay = false) where T : Command, new()
+	public new T newCmd<T>(bool show = true, bool delay = false) where T : Command, new()
 	{
 		T cmd = mCommandPool.newCmd<T>(show, delay);
 #if UNITY_EDITOR
@@ -138,13 +149,13 @@ public class CommandSystem : FrameComponent
 		UnityUtility.logError("not find cmd with assignID! " + assignID);
 		return false;
 	}
-	public void pushCommand<T>(CommandReceiver cmdReceiver, bool show = true) where T : Command, new()
+	public new void pushCommand<T>(CommandReceiver cmdReceiver, bool show = true) where T : Command, new()
 	{
 		T cmd = newCmd<T>(show, false);
 		pushCommand(cmd, cmdReceiver);
 	}
 	// 执行命令
-	public void pushCommand(Command cmd, CommandReceiver cmdReceiver)
+	public new void pushCommand(Command cmd, CommandReceiver cmdReceiver)
 	{
 		if (cmd == null || cmdReceiver == null)
 		{
@@ -172,14 +183,14 @@ public class CommandSystem : FrameComponent
 		// 销毁回收命令
 		mCommandPool.destroyCmd(cmd);
 	}
-	public void pushDelayCommand<T>(CommandReceiver cmdReceiver, float delayExecute = 0.001f, bool show = true) where T : Command, new()
+	public new void pushDelayCommand<T>(CommandReceiver cmdReceiver, float delayExecute = 0.001f, bool show = true) where T : Command, new()
 	{
 		T cmd = newCmd<T>(show, true);
 		pushDelayCommand(cmd, cmdReceiver, delayExecute);
 	}
 	// delayExecute是命令延时执行的时间,默认为0,只有new出来的命令才能延时执行
 	// 子线程中发出的命令必须是延时执行的命令!
-	public void pushDelayCommand(Command cmd, CommandReceiver cmdReceiver, float delayExecute = 0.001f)
+	public new void pushDelayCommand(Command cmd, CommandReceiver cmdReceiver, float delayExecute = 0.001f)
 	{
 		if (cmd == null || cmdReceiver == null)
 		{
@@ -211,34 +222,36 @@ public class CommandSystem : FrameComponent
 		mCommandBufferInput.Add(delayCommand);
 		mBufferLock.unlock();
 	}
-	public override void destroy()
-	{
-		mCommandPool.destroy();
-		mCommandBufferInput.Clear();
-		mCommandBufferProcess.Clear();
-		base.destroy();
-	}
 	public virtual void notifyReceiverDestroied(CommandReceiver receiver)
 	{
+		// 异步列表中
 		mBufferLock.waitForUnlock();
 		for (int i = 0; i < mCommandBufferInput.Count; ++i)
 		{
 			if (mCommandBufferInput[i].mReceiver == receiver)
 			{
-				// 命令的延迟执行时间到了,则执行命令
 				mCommandBufferInput.Remove(mCommandBufferInput[i]);
 				--i;
 			}
 		}
 		mBufferLock.unlock();
-
+		// 同步列表中
 		for (int i = 0; i < mCommandBufferProcess.Count; ++i)
 		{
 			if (mCommandBufferProcess[i].mReceiver == receiver)
 			{
-				// 命令的延迟执行时间到了,则执行命令
 				mCommandBufferProcess.Remove(mCommandBufferProcess[i]);
 				--i;
+			}
+		}
+		// 执行列表中
+		int count = mExecuteList.Count;
+		for(int i = 0; i < count; ++i)
+		{
+			// 已执行或正在执行的命令不作判断,该列表无法删除元素,只能将接收者设置为null
+			if (mExecuteList[i].mReceiver == receiver && mExecuteList[i].mCommand.mExecuteState == EXECUTE_STATE.ES_NOT_EXECUTE)
+			{
+				mExecuteList[i].mReceiver = null;
 			}
 		}
 	}

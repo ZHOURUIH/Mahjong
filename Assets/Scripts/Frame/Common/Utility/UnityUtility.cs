@@ -208,7 +208,6 @@ public class UnityUtility : FrameComponent
 		setNormalProperty(ref obj, parent, name, scale, rot, pos);
 		return obj;
 	}
-
 	public static void setNormalProperty(ref GameObject obj, GameObject parent, string name, Vector3 scale, Vector3 rot, Vector3 pos)
 	{
 		obj.transform.parent = parent.transform;
@@ -217,10 +216,9 @@ public class UnityUtility : FrameComponent
 		obj.transform.localScale = scale;
 		obj.transform.name = name;
 	}
-	public static T createInstance<T>(Type classType, object[] param) where T : class
+	public static T createInstance<T>(Type classType, params object[] param) where T : class
 	{
-		T instance = Activator.CreateInstance(classType, param) as T;
-		return instance;
+		return Activator.CreateInstance(classType, param) as T;
 	}
 	public static Vector2 screenPosToEffectPos(Vector2 screenPos, Vector2 parentWorldPos, Vector2 parentWorldScale, float effectDepth, bool isBack, bool isRelative = true)
 	{

@@ -1,22 +1,23 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class CharacterManager : FrameComponent
 {
+	protected Dictionary<CHARACTER_TYPE, Type> mCharacterRegisteList;
 	protected Dictionary<CHARACTER_TYPE, Dictionary<string, Character>> mCharacterTypeList;    // 角色分类列表
 	protected Dictionary<string, Character>		mCharacterList;     // 角色名字索引表
 	protected Dictionary<int, Character>		mCharacterGUIDList; // 角色ID索引表
 	protected CharacterMyself					mMyself;            // 玩家自己,方便获取
 	protected GameObject						mManagerObject;     // 角色管理器物体
-	protected CharacterFactoryManager			mCharacterFactoryManager;                             // 角色工厂
 	public CharacterManager(string name)
 		:base(name)
 	{
 		mCharacterList = new Dictionary<string, Character>();
 		mCharacterTypeList = new Dictionary<CHARACTER_TYPE, Dictionary<string, Character>>();
 		mCharacterGUIDList = new Dictionary<int, Character>();
-		mCharacterFactoryManager = new CharacterFactoryManager();
+		mCharacterRegisteList = new Dictionary<CHARACTER_TYPE, Type>();
 	}
 	public override void init()
 	{
@@ -64,7 +65,7 @@ public class CharacterManager : FrameComponent
 	public CharacterMyself getMyself() { return mMyself; }
 	public void registeCharacter<T>(CHARACTER_TYPE type) where T : Character
 	{
-		mCharacterFactoryManager.addFactory<T>(type);
+		mCharacterRegisteList.Add(type, typeof(T));
 	}
 	public Character getCharacter(string name)
 	{
@@ -113,12 +114,11 @@ public class CharacterManager : FrameComponent
 		{
 			if(mMyself != null)
 			{
-				Debug .LogError ("error : Myself has exist ! can not create again ,name " + name);
+				Debug .LogError ("error : Myself has exist ! can not create again, name : " + name);
 				return null;
 			}
 		}
-		CharacterFactory factory = mCharacterFactoryManager.getFactory(type);
-		Character newCharacter = factory.createCharacter(name);
+		Character newCharacter = createCharacter(type, name);
 		// 如果是玩家自己,则记录下来
 		if (type == CHARACTER_TYPE.CT_MYSELF)
 		{
@@ -246,5 +246,9 @@ public class CharacterManager : FrameComponent
 		{
 			mMyself = null;
 		}
+	}
+	protected Character createCharacter(CHARACTER_TYPE type, string name)
+	{
+		return UnityUtility.createInstance<Character>(mCharacterRegisteList[type], type, name);
 	}
 }

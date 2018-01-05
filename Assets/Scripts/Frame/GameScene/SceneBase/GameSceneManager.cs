@@ -5,16 +5,16 @@ using System.Collections.Generic;
 
 public class GameSceneManager : FrameComponent
 {
+	protected Dictionary<GAME_SCENE_TYPE, Type> mGameSceneRegisteList;
 	public GameScene			mCurScene;
 	public List<GameScene>		mLastSceneList;
 	public GameObject			mManagerObject;
-	protected SceneFactoryManager	mSceneFactoryManager;
 	public GameSceneManager(string name)
-	:base(name)
+		:base(name)
 	{
 		mCurScene = null;
 		mLastSceneList = new List<GameScene>();
-		mSceneFactoryManager = new SceneFactoryManager();
+		mGameSceneRegisteList = new Dictionary<GAME_SCENE_TYPE, Type>();
 	}
 	public override void init() 
 	{
@@ -68,23 +68,18 @@ public class GameSceneManager : FrameComponent
 		mManagerObject = null;
 		base.destroy();
 	}
-	public void registeGameScene(Type classType, GAME_SCENE_TYPE type)
+	public void registeGameScene<T>(GAME_SCENE_TYPE type)
 	{
-		mSceneFactoryManager.addFactory(classType, type);
+		mGameSceneRegisteList.Add(type, typeof(T));
 	}
 	public int getSceneCount()
 	{
-		return mSceneFactoryManager.getFactoryCount();
+		return mGameSceneRegisteList.Count;
 	}
 	//----------------------------------------------------------------------------------------------
 	protected GameScene createScene(GAME_SCENE_TYPE type)
 	{
-		SceneFactory factory = mSceneFactoryManager.getFactory(type);
-		if (factory != null)
-		{
-			string name = factory.getClassType().ToString();
-			return factory.createScene(name);
-		}
-		return null;
+		Type classType = mGameSceneRegisteList[type];
+		return UnityUtility.createInstance<GameScene>(classType, type, classType.ToString());
 	}
 }

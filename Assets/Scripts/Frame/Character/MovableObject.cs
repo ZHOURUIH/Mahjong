@@ -45,17 +45,17 @@ public class MovableObject : ComponentOwner
 	}
 	public override void initComponents()
 	{
-		addComponent<MovableObjectComponentRotateSpeed>("RotateSpeed").setActive(false);
-		addComponent<MovableObjectComponentRotateSpeedPhysics>("RotateSpeedPhysics").setActive(false);
-		addComponent<MovableObjectComponentRotate>("Rotate").setActive(false);
-		addComponent<MovableObjectComponentRotatePhysics>("RotatePhysics").setActive(false);
-		addComponent<MovableObjectComponentRotateFixed>("RotateFixed").setActive(false);
-		addComponent<MovableObjectComponentRotateFixedPhysics>("RotateFixedPhysics").setActive(false);
-		addComponent<MovableObjectComponentMove>("Move").setActive(false);
-		addComponent<MovableObjectComponentMovePhysics>("MovePhysics").setActive(false);
-		addComponent<MovableObjectComponentScale>("Scale").setActive(false);
-		addComponent<MovableObjectComponentTrackTarget>("TrackTarget").setActive(false);
-		addComponent<MovableObjectComponentTrackTargetPhysics>("TrackTargetPhysics").setActive(false);
+		addComponent<MovableObjectComponentRotateSpeed>("RotateSpeed");
+		addComponent<MovableObjectComponentRotateSpeedPhysics>("RotateSpeedPhysics");
+		addComponent<MovableObjectComponentRotate>("Rotate");
+		addComponent<MovableObjectComponentRotatePhysics>("RotatePhysics");
+		addComponent<MovableObjectComponentRotateFixed>("RotateFixed");
+		addComponent<MovableObjectComponentRotateFixedPhysics>("RotateFixedPhysics");
+		addComponent<MovableObjectComponentMove>("Move");
+		addComponent<MovableObjectComponentMovePhysics>("MovePhysics");
+		addComponent<MovableObjectComponentScale>("Scale");
+		addComponent<MovableObjectComponentTrackTarget>("TrackTarget");
+		addComponent<MovableObjectComponentTrackTargetPhysics>("TrackTargetPhysics");
 	}
 	public virtual void update(float elapsedTime) 
 	{ 

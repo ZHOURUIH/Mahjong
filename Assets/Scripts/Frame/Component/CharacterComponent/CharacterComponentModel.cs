@@ -33,16 +33,11 @@ public class CharacterComponentModel : GameComponent
 		mModel = model;
 		if (mModel != null)
 		{
-			if(mModel.GetComponent<DontDestryed>())
-			{
-				mModel.AddComponent<DontDestryed>();
-			}
 			mModel.SetActive(mActive);
-			Character character = mComponentOwner as Character;
-			mModel.transform.parent = character.getObject().transform;
 			mAnimator = mModel.GetComponent<Animator>();
 			mModelTransform = mModel.GetComponent<Transform>();
 			mAnimation = mModel.GetComponent<Animation>();
+			mModelTransform.parent = (mComponentOwner as Character).getTransform();
 		}
 	}
 	public GameObject getModel()

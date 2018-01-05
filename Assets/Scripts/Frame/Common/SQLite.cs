@@ -20,8 +20,16 @@ public class SQLite
 	}
 	public void destroy()
 	{
-		mConnection.Close();
-		mCommand.Cancel();
+		if(mConnection != null)
+		{
+			mConnection.Close();
+			mConnection = null;
+		}
+		if(mCommand != null)
+		{
+			mCommand.Cancel();
+			mCommand = null;
+		}
 	}
 	public SqliteDataReader createTable(string tableName, string format, bool needReader = false)
 	{

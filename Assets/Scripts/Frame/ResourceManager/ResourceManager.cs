@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+
 public class ResourceManager : FrameComponent
 {
 	protected GameObject mManagerObject;
@@ -37,8 +34,14 @@ public class ResourceManager : FrameComponent
 	}
 	public override void destroy()
 	{
-		mAssetBundleLoader.destroy();
-		mResourceLoader.destroy();
+		if (mAssetBundleLoader != null)
+		{
+			mAssetBundleLoader.destroy();
+		}
+		if (mResourceLoader != null)
+		{
+			mResourceLoader.destroy();
+		}
 		base.destroy();
 	}
 	public void unload(string name)

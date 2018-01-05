@@ -9,25 +9,25 @@ public class ObjectTools : GameBase
 	#region 在普通更新中用关键帧旋转物体,与物理更新的函数不能混用,否则效果会混合
 	public static void ROTATE_FIXED_OBJECT(MovableObject obj, bool lockRotation = true)
 	{
-		CommandMovableObjectRotateFixed cmd = mCommandSystem.newCmd<CommandMovableObjectRotateFixed>(false, false);
+		CommandMovableObjectRotateFixed cmd = newCmd<CommandMovableObjectRotateFixed>(false, false);
 		cmd.mActive = lockRotation;
-		mCommandSystem.pushCommand(cmd, obj);
+		pushCommand(cmd, obj);
 	}
 	public static void ROTATE_FIXED_OBJECT(MovableObject obj, Vector3 rot, bool lockRotation = true)
 	{
-		CommandMovableObjectRotateFixed cmd = mCommandSystem.newCmd<CommandMovableObjectRotateFixed>(false, false);
+		CommandMovableObjectRotateFixed cmd = newCmd<CommandMovableObjectRotateFixed>(false, false);
 		cmd.mActive = lockRotation;
 		cmd.mFixedEuler = rot;
-		mCommandSystem.pushCommand(cmd, obj);
+		pushCommand(cmd, obj);
 	}
 	public static void ROTATE_OBJECT(MovableObject obj, Vector3 rotation)
 	{
-		CommandMovableObjectRotate cmd = mCommandSystem.newCmd<CommandMovableObjectRotate>(false, false);
+		CommandMovableObjectRotate cmd = newCmd<CommandMovableObjectRotate>(false, false);
 		cmd.mName = "";
 		cmd.mOnceLength = 0.0f;
 		cmd.mStartRotation = rotation;
 		cmd.mTargetRotation = rotation;
-		mCommandSystem.pushCommand(cmd, obj);
+		pushCommand(cmd, obj);
 	}
 	public static void ROTATE_OBJECT(MovableObject obj, Vector3 start, Vector3 target, float time)
 	{
@@ -55,7 +55,7 @@ public class ObjectTools : GameBase
 		{
 			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用void ROTATE_OBJECT(txUIObject obj, Vector3 rotation)");
 		}
-		CommandMovableObjectRotate cmd = mCommandSystem.newCmd<CommandMovableObjectRotate>(false, false);
+		CommandMovableObjectRotate cmd = newCmd<CommandMovableObjectRotate>(false, false);
 		cmd.mName = keyframe;
 		cmd.mOnceLength = onceLength;
 		cmd.mStartRotation = start;
@@ -64,16 +64,16 @@ public class ObjectTools : GameBase
 		cmd.mLoop = loop;
 		cmd.setTremblingCallback(rotatingCallback, null);
 		cmd.setTrembleDoneCallback(doneCallback, null);
-		mCommandSystem.pushCommand(cmd, obj);
+		pushCommand(cmd, obj);
 	}
 	public static CommandMovableObjectRotate ROTATE_OBJECT_DELAY(MovableObject obj, float delayTime, Vector3 rotation)
 	{
-		CommandMovableObjectRotate cmd = mCommandSystem.newCmd<CommandMovableObjectRotate>(false, true);
+		CommandMovableObjectRotate cmd = newCmd<CommandMovableObjectRotate>(false, true);
 		cmd.mName = "";
 		cmd.mOnceLength = 0.0f;
 		cmd.mStartRotation = rotation;
 		cmd.mTargetRotation = rotation;
-		mCommandSystem.pushDelayCommand(cmd, obj, delayTime);
+		pushDelayCommand(cmd, obj, delayTime);
 		return cmd;
 	}
 	public static CommandMovableObjectRotate ROTATE_OBJECT_DELAY(MovableObject obj, float delayTime, Vector3 start, Vector3 target, float time)
@@ -94,14 +94,14 @@ public class ObjectTools : GameBase
 		{
 			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用CommandMovableObjectRotate ROTATE_OBJECT_DELAY(MovableObject obj, float delayTime, Vector3 rotation)");
 		}
-		CommandMovableObjectRotate cmd = mCommandSystem.newCmd<CommandMovableObjectRotate>(false, true);
+		CommandMovableObjectRotate cmd = newCmd<CommandMovableObjectRotate>(false, true);
 		cmd.mName = keyframe;
 		cmd.mOnceLength = onceLength;
 		cmd.mStartRotation = start;
 		cmd.mTargetRotation = target;
 		cmd.mOffset = offset;
 		cmd.mLoop = loop;
-		mCommandSystem.pushDelayCommand(cmd, obj, delayTime);
+		pushDelayCommand(cmd, obj, delayTime);
 		return cmd;
 	}
 	public static void ROTATE_SPEED_OBJECT(MovableObject obj)
@@ -118,11 +118,11 @@ public class ObjectTools : GameBase
 	}
 	public static void ROTATE_SPEED_OBJECT(MovableObject obj, Vector3 speed, Vector3 startAngle, Vector3 rotateAccelerationValue)
 	{
-		CommandMovableObjectRotateSpeed cmd = mCommandSystem.newCmd<CommandMovableObjectRotateSpeed>(false, false);
+		CommandMovableObjectRotateSpeed cmd = newCmd<CommandMovableObjectRotateSpeed>(false, false);
 		cmd.mRotateSpeed = speed;
 		cmd.mStartAngle = startAngle;
 		cmd.mRotateAcceleration = rotateAccelerationValue;
-		mCommandSystem.pushCommand(cmd, obj);
+		pushCommand(cmd, obj);
 	}
 	public static CommandMovableObjectRotateSpeed ROTATE_SPEED_OBJECT_DELAY(MovableObject obj, float delayTime, Vector3 speed)
 	{
@@ -134,36 +134,36 @@ public class ObjectTools : GameBase
 	}
 	public static CommandMovableObjectRotateSpeed ROTATE_SPEED_OBJECT_DELAY(MovableObject obj, float delayTime, Vector3 speed, Vector3 startAngle, Vector3 rotateAccelerationValue)
 	{
-		CommandMovableObjectRotateSpeed cmd = mCommandSystem.newCmd<CommandMovableObjectRotateSpeed>(false, true);
+		CommandMovableObjectRotateSpeed cmd = newCmd<CommandMovableObjectRotateSpeed>(false, true);
 		cmd.mRotateSpeed = speed;
 		cmd.mStartAngle = startAngle;
 		cmd.mRotateAcceleration = rotateAccelerationValue;
-		mCommandSystem.pushDelayCommand(cmd, obj, delayTime);
+		pushDelayCommand(cmd, obj, delayTime);
 		return cmd;
 	}
 	#endregion
 	#region 在物理更新中用关键帧旋转物体,与普通更新的函数不能混用,否则效果会混合
 	public static void ROTATE_FIXED_OBJECT_PHY(MovableObject obj, bool lockRotation = true)
 	{
-		CommandMovableObjectRotateFixedPhysics cmd = mCommandSystem.newCmd<CommandMovableObjectRotateFixedPhysics>(false, false);
+		CommandMovableObjectRotateFixedPhysics cmd = newCmd<CommandMovableObjectRotateFixedPhysics>(false, false);
 		cmd.mActive = lockRotation;
-		mCommandSystem.pushCommand(cmd, obj);
+		pushCommand(cmd, obj);
 	}
 	public static void ROTATE_FIXED_OBJECT_PHY(MovableObject obj, Vector3 rot, bool lockRotation = true)
 	{
-		CommandMovableObjectRotateFixedPhysics cmd = mCommandSystem.newCmd<CommandMovableObjectRotateFixedPhysics>(false, false);
+		CommandMovableObjectRotateFixedPhysics cmd = newCmd<CommandMovableObjectRotateFixedPhysics>(false, false);
 		cmd.mActive = lockRotation;
 		cmd.mFixedEuler = rot;
-		mCommandSystem.pushCommand(cmd, obj);
+		pushCommand(cmd, obj);
 	}
 	public static void ROTATE_OBJECT_PHY(MovableObject obj, Vector3 rotation)
 	{
-		CommandMovableObjectRotatePhysics cmd = mCommandSystem.newCmd<CommandMovableObjectRotatePhysics>(false, false);
+		CommandMovableObjectRotatePhysics cmd = newCmd<CommandMovableObjectRotatePhysics>(false, false);
 		cmd.mName = "";
 		cmd.mOnceLength = 0.0f;
 		cmd.mStartRotation = rotation;
 		cmd.mTargetRotation = rotation;
-		mCommandSystem.pushCommand(cmd, obj);
+		pushCommand(cmd, obj);
 	}
 	public static void ROTATE_OBJECT_PHY(MovableObject obj, Vector3 start, Vector3 target, float time)
 	{
@@ -191,7 +191,7 @@ public class ObjectTools : GameBase
 		{
 			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用void ROTATE_OBJECT_PHY(txUIObject obj, Vector3 rotation)");
 		}
-		CommandMovableObjectRotatePhysics cmd = mCommandSystem.newCmd<CommandMovableObjectRotatePhysics>(false, false);
+		CommandMovableObjectRotatePhysics cmd = newCmd<CommandMovableObjectRotatePhysics>(false, false);
 		cmd.mName = keyframe;
 		cmd.mOnceLength = onceLength;
 		cmd.mStartRotation = start;
@@ -200,16 +200,16 @@ public class ObjectTools : GameBase
 		cmd.mLoop = loop;
 		cmd.setTremblingCallback(rotatingCallback, null);
 		cmd.setTrembleDoneCallback(doneCallback, null);
-		mCommandSystem.pushCommand(cmd, obj);
+		pushCommand(cmd, obj);
 	}
 	public static CommandMovableObjectRotatePhysics ROTATE_OBJECT_PHY_DELAY(MovableObject obj, float delayTime, Vector3 rotation)
 	{
-		CommandMovableObjectRotatePhysics cmd = mCommandSystem.newCmd<CommandMovableObjectRotatePhysics>(false, true);
+		CommandMovableObjectRotatePhysics cmd = newCmd<CommandMovableObjectRotatePhysics>(false, true);
 		cmd.mName = "";
 		cmd.mOnceLength = 0.0f;
 		cmd.mStartRotation = rotation;
 		cmd.mTargetRotation = rotation;
-		mCommandSystem.pushDelayCommand(cmd, obj, delayTime);
+		pushDelayCommand(cmd, obj, delayTime);
 		return cmd;
 	}
 	public static CommandMovableObjectRotatePhysics ROTATE_OBJECT_PHY_DELAY(MovableObject obj, float delayTime, Vector3 start, Vector3 target, float time)
@@ -230,14 +230,14 @@ public class ObjectTools : GameBase
 		{
 			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用CommandMovableObjectRotatePhysics ROTATE_OBJECT_PHY_DELAY(MovableObject obj, float delayTime, Vector3 rotation)");
 		}
-		CommandMovableObjectRotatePhysics cmd = mCommandSystem.newCmd<CommandMovableObjectRotatePhysics>(false, true);
+		CommandMovableObjectRotatePhysics cmd = newCmd<CommandMovableObjectRotatePhysics>(false, true);
 		cmd.mName = keyframe;
 		cmd.mOnceLength = onceLength;
 		cmd.mStartRotation = start;
 		cmd.mTargetRotation = target;
 		cmd.mOffset = offset;
 		cmd.mLoop = loop;
-		mCommandSystem.pushDelayCommand(cmd, obj, delayTime);
+		pushDelayCommand(cmd, obj, delayTime);
 		return cmd;
 	}
 	public static void ROTATE_SPEED_OBJECT_PHY(MovableObject obj)
@@ -254,11 +254,11 @@ public class ObjectTools : GameBase
 	}
 	public static void ROTATE_SPEED_OBJECT_PHY(MovableObject obj, Vector3 speed, Vector3 startAngle, Vector3 rotateAccelerationValue)
 	{
-		CommandMovableObjectRotateSpeedPhysics cmd = mCommandSystem.newCmd<CommandMovableObjectRotateSpeedPhysics>(false, false);
+		CommandMovableObjectRotateSpeedPhysics cmd = newCmd<CommandMovableObjectRotateSpeedPhysics>(false, false);
 		cmd.mRotateSpeed = speed;
 		cmd.mStartAngle = startAngle;
 		cmd.mRotateAcceleration = rotateAccelerationValue;
-		mCommandSystem.pushCommand(cmd, obj);
+		pushCommand(cmd, obj);
 	}
 	public static CommandMovableObjectRotateSpeedPhysics ROTATE_SPEED_OBJECT_PHY_DELAY(MovableObject obj, float delayTime, Vector3 speed)
 	{
@@ -270,11 +270,11 @@ public class ObjectTools : GameBase
 	}
 	public static CommandMovableObjectRotateSpeedPhysics ROTATE_SPEED_OBJECT_PHY_DELAY(MovableObject obj, float delayTime, Vector3 speed, Vector3 startAngle, Vector3 rotateAccelerationValue)
 	{
-		CommandMovableObjectRotateSpeedPhysics cmd = mCommandSystem.newCmd<CommandMovableObjectRotateSpeedPhysics>(false, true);
+		CommandMovableObjectRotateSpeedPhysics cmd = newCmd<CommandMovableObjectRotateSpeedPhysics>(false, true);
 		cmd.mRotateSpeed = speed;
 		cmd.mStartAngle = startAngle;
 		cmd.mRotateAcceleration = rotateAccelerationValue;
-		mCommandSystem.pushDelayCommand(cmd, obj, delayTime);
+		pushDelayCommand(cmd, obj, delayTime);
 		return cmd;
 	}
 	#endregion
@@ -283,12 +283,12 @@ public class ObjectTools : GameBase
 	#region 在普通更新中用关键帧移动物体,与物理更新的函数不能混用,否则效果会混合
 	public static void MOVE_OBJECT(MovableObject obj, Vector3 pos)
 	{
-		CommandMovableObjectMove cmd = mCommandSystem.newCmd<CommandMovableObjectMove>(false, false);
+		CommandMovableObjectMove cmd = newCmd<CommandMovableObjectMove>(false, false);
 		cmd.mName = "";
 		cmd.mOnceLength = 0.0f;
 		cmd.mStartPos = pos;
 		cmd.mTargetPos = pos;
-		mCommandSystem.pushCommand(cmd, obj);
+		pushCommand(cmd, obj);
 	}
 	public static void MOVE_OBJECT(MovableObject obj, Vector3 start, Vector3 target, float onceLength)
 	{
@@ -336,7 +336,7 @@ public class ObjectTools : GameBase
 		{
 			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用void MOVE_OBJECT(MovableObject obj, Vector3 pos)");
 		}
-		CommandMovableObjectMove cmd = mCommandSystem.newCmd<CommandMovableObjectMove>(false, false);
+		CommandMovableObjectMove cmd = newCmd<CommandMovableObjectMove>(false, false);
 		cmd.mName = fileName;
 		cmd.mOnceLength = onceLength;
 		cmd.mStartPos = startPos;
@@ -345,16 +345,16 @@ public class ObjectTools : GameBase
 		cmd.mLoop = loop;
 		cmd.setTremblingCallback(TremblingCallBack, null);
 		cmd.setTrembleDoneCallback(TrembleDoneCallBack, null);
-		mCommandSystem.pushCommand(cmd, obj);
+		pushCommand(cmd, obj);
 	}
 	public static CommandMovableObjectMove MOVE_OBJECT_DELAY(MovableObject obj, float delayTime, Vector3 pos)
 	{
-		CommandMovableObjectMove cmd = mCommandSystem.newCmd<CommandMovableObjectMove>(false, true);
+		CommandMovableObjectMove cmd = newCmd<CommandMovableObjectMove>(false, true);
 		cmd.mName = "";
 		cmd.mStartPos = pos;
 		cmd.mTargetPos = pos;
 		cmd.mOnceLength = 0.0f;
-		mCommandSystem.pushDelayCommand(cmd, obj, delayTime);
+		pushDelayCommand(cmd, obj, delayTime);
 		return cmd;
 	}
 	public static CommandMovableObjectMove MOVE_OBJECT_DELAY(MovableObject obj, float delayTime, Vector3 start, Vector3 target, float onceLength)
@@ -387,7 +387,7 @@ public class ObjectTools : GameBase
 		{
 			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用CommandMovableObjectMove MOVE_OBJECT_DELAY(MovableObject obj, float delayTime, Vector3 pos)");
 		}
-		CommandMovableObjectMove cmd = mCommandSystem.newCmd<CommandMovableObjectMove>(false, true);
+		CommandMovableObjectMove cmd = newCmd<CommandMovableObjectMove>(false, true);
 		cmd.mName = keyframe;
 		cmd.mStartPos = startPos;
 		cmd.mTargetPos = targetPos;
@@ -396,19 +396,19 @@ public class ObjectTools : GameBase
 		cmd.mLoop = loop;
 		cmd.setTremblingCallback(movingCallback, null);
 		cmd.setTrembleDoneCallback(moveDoneCallback, null);
-		mCommandSystem.pushDelayCommand(cmd, obj, delayTime);
+		pushDelayCommand(cmd, obj, delayTime);
 		return cmd;
 	}
 	#endregion
 	#region 在物理更新中用关键帧移动物体,与普通更新的函数不能混用,否则效果会混合
 	public static void MOVE_OBJECT_PHY(MovableObject obj, Vector3 pos)
 	{
-		CommandMovableObjectMovePhysics cmd = mCommandSystem.newCmd<CommandMovableObjectMovePhysics>(false, false);
+		CommandMovableObjectMovePhysics cmd = newCmd<CommandMovableObjectMovePhysics>(false, false);
 		cmd.mName = "";
 		cmd.mOnceLength = 0.0f;
 		cmd.mStartPos = pos;
 		cmd.mTargetPos = pos;
-		mCommandSystem.pushCommand(cmd, obj);
+		pushCommand(cmd, obj);
 	}
 	public static void MOVE_OBJECT_PHY(MovableObject obj, Vector3 start, Vector3 target, float onceLength)
 	{
@@ -456,7 +456,7 @@ public class ObjectTools : GameBase
 		{
 			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用void MOVE_OBJECT_PHY(MovableObject obj, Vector3 pos)");
 		}
-		CommandMovableObjectMovePhysics cmd = mCommandSystem.newCmd<CommandMovableObjectMovePhysics>(false, false);
+		CommandMovableObjectMovePhysics cmd = newCmd<CommandMovableObjectMovePhysics>(false, false);
 		cmd.mName = fileName;
 		cmd.mOnceLength = onceLength;
 		cmd.mStartPos = startPos;
@@ -465,16 +465,16 @@ public class ObjectTools : GameBase
 		cmd.mLoop = loop;
 		cmd.setTremblingCallback(TremblingCallBack, null);
 		cmd.setTrembleDoneCallback(TrembleDoneCallBack, null);
-		mCommandSystem.pushCommand(cmd, obj);
+		pushCommand(cmd, obj);
 	}
 	public static CommandMovableObjectMovePhysics MOVE_OBJECT_PHY_DELAY(MovableObject obj, float delayTime, Vector3 pos)
 	{
-		CommandMovableObjectMovePhysics cmd = mCommandSystem.newCmd<CommandMovableObjectMovePhysics>(false, true);
+		CommandMovableObjectMovePhysics cmd = newCmd<CommandMovableObjectMovePhysics>(false, true);
 		cmd.mName = "";
 		cmd.mStartPos = pos;
 		cmd.mTargetPos = pos;
 		cmd.mOnceLength = 0.0f;
-		mCommandSystem.pushDelayCommand(cmd, obj, delayTime);
+		pushDelayCommand(cmd, obj, delayTime);
 		return cmd;
 	}
 	public static CommandMovableObjectMovePhysics MOVE_OBJECT_PHY_DELAY(MovableObject obj, float delayTime, Vector3 start, Vector3 target, float onceLength)
@@ -507,7 +507,7 @@ public class ObjectTools : GameBase
 		{
 			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,CommandMovableObjectMovePhysics MOVE_OBJECT_PHY_DELAY(MovableObject obj, float delayTime, Vector3 pos)");
 		}
-		CommandMovableObjectMovePhysics cmd = mCommandSystem.newCmd<CommandMovableObjectMovePhysics>(false, true);
+		CommandMovableObjectMovePhysics cmd = newCmd<CommandMovableObjectMovePhysics>(false, true);
 		cmd.mName = keyframe;
 		cmd.mStartPos = startPos;
 		cmd.mTargetPos = targetPos;
@@ -516,7 +516,7 @@ public class ObjectTools : GameBase
 		cmd.mLoop = loop;
 		cmd.setTremblingCallback(movingCallback, null);
 		cmd.setTrembleDoneCallback(moveDoneCallback, null);
-		mCommandSystem.pushDelayCommand(cmd, obj, delayTime);
+		pushDelayCommand(cmd, obj, delayTime);
 		return cmd;
 	}
 	#endregion
@@ -524,11 +524,11 @@ public class ObjectTools : GameBase
 	#region 追踪物体
 	public static void TRACK_TARGET(MovableObject obj, float speed, MovableObject target, TrackDoneCallback doneCallback)
 	{
-		CommandMovableObjectTrackTarget cmd = mCommandSystem.newCmd<CommandMovableObjectTrackTarget>(false);
+		CommandMovableObjectTrackTarget cmd = newCmd<CommandMovableObjectTrackTarget>(false);
 		cmd.mObject = target;
 		cmd.mSpeed = speed;
 		cmd.mDoneCallback = doneCallback;
-		mCommandSystem.pushCommand(cmd, obj);
+		pushCommand(cmd, obj);
 	}
 	#endregion
 	//--------------------------------------------------------------------------------------------------------------------------------------------
@@ -536,9 +536,9 @@ public class ObjectTools : GameBase
 	#region 物体的显示和隐藏
 	public static void ACTIVE_OBJECT(MovableObject obj, bool active = true)
 	{
-		CommandMovableObjectActive cmd = mCommandSystem.newCmd<CommandMovableObjectActive>(false);
+		CommandMovableObjectActive cmd = newCmd<CommandMovableObjectActive>(false);
 		cmd.mActive = active;
-		mCommandSystem.pushCommand(cmd, obj);
+		pushCommand(cmd, obj);
 	}
 	public static CommandMovableObjectActive ACTIVE_OBJECT_DELAY(MovableObject obj, bool active, float delayTime)
 	{
@@ -546,10 +546,10 @@ public class ObjectTools : GameBase
 	}
 	public static CommandMovableObjectActive ACTIVE_OBJECT_DELAY_EX(MovableObject obj, bool active, float dealyTime, CommandCallback startCallback, object userData = null)
 	{
-		CommandMovableObjectActive cmd = mCommandSystem.newCmd<CommandMovableObjectActive>(false, true);
+		CommandMovableObjectActive cmd = newCmd<CommandMovableObjectActive>(false, true);
 		cmd.mActive = active;
 		cmd.addStartCommandCallback(startCallback, userData);
-		mCommandSystem.pushDelayCommand(cmd, obj, dealyTime);
+		pushDelayCommand(cmd, obj, dealyTime);
 		return cmd;
 	}
 	#endregion
@@ -558,12 +558,12 @@ public class ObjectTools : GameBase
 	#region 用关键帧缩放物体
 	public static void SCALE_OBJECT(MovableObject obj, Vector2 scale)
 	{
-		CommandMovableObjectScale cmd = mCommandSystem.newCmd<CommandMovableObjectScale>(false);
+		CommandMovableObjectScale cmd = newCmd<CommandMovableObjectScale>(false);
 		cmd.mName = "";
 		cmd.mOnceLength = 0.0f;
 		cmd.mStartScale = scale;
 		cmd.mTargetScale = scale;
-		mCommandSystem.pushCommand(cmd, obj);
+		pushCommand(cmd, obj);
 	}
 	public static void SCALE_OBJECT(MovableObject obj, Vector2 start, Vector2 target, float onceLength)
 	{
@@ -615,7 +615,7 @@ public class ObjectTools : GameBase
 		{
 			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用void SCALE_OBJECT(MovableObject obj, Vector2 scale)");
 		}
-		CommandMovableObjectScale cmd = mCommandSystem.newCmd<CommandMovableObjectScale>(false);
+		CommandMovableObjectScale cmd = newCmd<CommandMovableObjectScale>(false);
 		cmd.mName = fileName;
 		cmd.mOnceLength = onceLength;
 		cmd.mOffset = offset;
@@ -624,16 +624,16 @@ public class ObjectTools : GameBase
 		cmd.mTargetScale = target;
 		cmd.setTremblingCallback(scaleTremblingCallback, null);
 		cmd.setTrembleDoneCallback(scaleTrembleDoneCallback, null);
-		mCommandSystem.pushCommand(cmd, obj);
+		pushCommand(cmd, obj);
 	}
 	public static CommandMovableObjectScale SCALE_OBJECT_DELAY(MovableObject obj, float delayTime, Vector2 scale)
 	{
-		CommandMovableObjectScale cmd = mCommandSystem.newCmd<CommandMovableObjectScale>(false, true);
+		CommandMovableObjectScale cmd = newCmd<CommandMovableObjectScale>(false, true);
 		cmd.mName = "";
 		cmd.mOnceLength = 0.0f;
 		cmd.mStartScale = scale;
 		cmd.mTargetScale = scale;
-		mCommandSystem.pushDelayCommand(cmd, obj, delayTime);
+		pushDelayCommand(cmd, obj, delayTime);
 		return cmd;
 	}
 	public static CommandMovableObjectScale SCALE_OBJECT_DELAY(MovableObject obj, float delayTime, Vector2 start, Vector2 target, float onceLength)
@@ -670,7 +670,7 @@ public class ObjectTools : GameBase
 		{
 			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用CommandMovableObjectScale SCALE_OBJECT_DELAY(MovableObject obj, float delayTime, Vector2 scale)");
 		}
-		CommandMovableObjectScale cmd = mCommandSystem.newCmd<CommandMovableObjectScale>(false, true);
+		CommandMovableObjectScale cmd = newCmd<CommandMovableObjectScale>(false, true);
 		cmd.mName = keyframe;
 		cmd.mOnceLength = onceLength;
 		cmd.mOffset = offset;
@@ -679,7 +679,7 @@ public class ObjectTools : GameBase
 		cmd.mTargetScale = target;
 		cmd.setTremblingCallback(scaleTremblingCallback, null);
 		cmd.setTrembleDoneCallback(scaleTrembleDoneCallback, null);
-		mCommandSystem.pushDelayCommand(cmd, obj, delayTime);
+		pushDelayCommand(cmd, obj, delayTime);
 		return cmd;
 	}
 	#endregion

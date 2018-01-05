@@ -47,4 +47,25 @@ public class FrameBase
 			mSceneSystem = mGameFramework.getSceneSystem();
 		}
 	}
+	// 方便书写代码添加的命令相关函数
+	public static T newCmd<T>(bool show = true, bool delay = false) where T : Command, new()
+	{
+		return mCommandSystem.newCmd<T>(show, delay);
+	}
+	public static void pushCommand<T>(CommandReceiver cmdReceiver, bool show = true) where T : Command, new()
+	{
+		mCommandSystem.pushCommand<T>(cmdReceiver, show);
+	}
+	public static void pushCommand(Command cmd, CommandReceiver cmdReceiver)
+	{
+		mCommandSystem.pushCommand(cmd, cmdReceiver);
+	}
+	public static void pushDelayCommand<T>(CommandReceiver cmdReceiver, float delayExecute = 0.001f, bool show = true) where T : Command, new()
+	{
+		mCommandSystem.pushDelayCommand<T>(cmdReceiver, delayExecute);
+	}
+	public static void pushDelayCommand(Command cmd, CommandReceiver cmdReceiver, float delayExecute = 0.001f)
+	{
+		mCommandSystem.pushDelayCommand(cmd, cmdReceiver, delayExecute);
+	}
 }

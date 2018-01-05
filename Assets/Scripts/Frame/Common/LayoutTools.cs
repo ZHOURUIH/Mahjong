@@ -8,37 +8,37 @@ public class LayoutTools : GameBase
 	//------------------------------------------------------------------------------------------------------------------------------------
 	public static void LOAD_LAYOUT(LAYOUT_TYPE type, int renderOrder, bool visible, bool immediately, string param)
 	{
-		CommandLayoutManagerLoadLayout cmd = mCommandSystem.newCmd<CommandLayoutManagerLoadLayout>(true, false);
+		CommandLayoutManagerLoadLayout cmd = newCmd<CommandLayoutManagerLoadLayout>(true, false);
 		cmd.mLayoutType = type;
 		cmd.mVisible = visible;
 		cmd.mRenderOrder = renderOrder;
 		cmd.mAsync = false;
 		cmd.mImmediatelyShow = immediately;
 		cmd.mParam = param;
-		mCommandSystem.pushCommand(cmd, mLayoutManager);
+		pushCommand(cmd, mLayoutManager);
 	}
 	public static void UNLOAD_LAYOUT(LAYOUT_TYPE type)
 	{
 		// 需要首先强制隐藏布局
 		HIDE_LAYOUT_FORCE(type);
-		CommandLayoutManagerUnloadLayout cmd = mCommandSystem.newCmd<CommandLayoutManagerUnloadLayout>(true, false);
+		CommandLayoutManagerUnloadLayout cmd = newCmd<CommandLayoutManagerUnloadLayout>(true, false);
 		cmd.mLayoutType = type;
-		mCommandSystem.pushCommand(cmd, mLayoutManager);
+		pushCommand(cmd, mLayoutManager);
 	}
 	public static void UNLOAD_LAYOUT_DELAY(LAYOUT_TYPE type, float delayTime)
 	{
-		CommandLayoutManagerUnloadLayout cmd = mCommandSystem.newCmd<CommandLayoutManagerUnloadLayout>(true, true);
+		CommandLayoutManagerUnloadLayout cmd = newCmd<CommandLayoutManagerUnloadLayout>(true, true);
 		cmd.mLayoutType = type;
-		mCommandSystem.pushDelayCommand(cmd, mLayoutManager, delayTime);
+		pushDelayCommand(cmd, mLayoutManager, delayTime);
 	}
 	public static void LOAD_LAYOUT_ASYNC(LAYOUT_TYPE type, int renderOrder, LayoutAsyncDone callback)
 	{
-		CommandLayoutManagerLoadLayout cmd = mCommandSystem.newCmd<CommandLayoutManagerLoadLayout>(true, false);
+		CommandLayoutManagerLoadLayout cmd = newCmd<CommandLayoutManagerLoadLayout>(true, false);
 		cmd.mLayoutType = type;
 		cmd.mRenderOrder = renderOrder;
 		cmd.mAsync = true;
 		cmd.mCallback = callback;
-		mCommandSystem.pushCommand(cmd, mLayoutManager);
+		pushCommand(cmd, mLayoutManager);
 	}
 	public static void LOAD_LAYOUT_HIDE(LAYOUT_TYPE type, int renderOrder)
 	{
@@ -70,22 +70,22 @@ public class LayoutTools : GameBase
 	}
 	public static void VISIBLE_LAYOUT(LAYOUT_TYPE type, bool visible, bool immediately = false, string param = "")
 	{
-		CommandLayoutManagerLayoutVisible cmd = mCommandSystem.newCmd<CommandLayoutManagerLayoutVisible>(true, false);
+		CommandLayoutManagerLayoutVisible cmd = newCmd<CommandLayoutManagerLayoutVisible>(true, false);
 		cmd.mLayoutType = type;
 		cmd.mForce = false;
 		cmd.mVisibility = visible;
 		cmd.mImmediately = immediately;
 		cmd.mParam = param;
-		mCommandSystem.pushCommand(cmd, mLayoutManager);
+		pushCommand(cmd, mLayoutManager);
 	}
 	public static void VISIBLE_LAYOUT_FORCE(LAYOUT_TYPE type, bool visible)
 	{
-		CommandLayoutManagerLayoutVisible cmd = mCommandSystem.newCmd<CommandLayoutManagerLayoutVisible>(true, false);
+		CommandLayoutManagerLayoutVisible cmd = newCmd<CommandLayoutManagerLayoutVisible>(true, false);
 		cmd.mLayoutType = type;
 		cmd.mForce = true;
 		cmd.mVisibility = visible;
 		cmd.mImmediately = false;
-		mCommandSystem.pushCommand(cmd, mLayoutManager);
+		pushCommand(cmd, mLayoutManager);
 	}
 	public static CommandLayoutManagerLayoutVisible HIDE_LAYOUT_DELAY(SceneProcedure procedure, float delayTime, LAYOUT_TYPE type, bool immediately = false, string param = "")
 	{
@@ -109,55 +109,55 @@ public class LayoutTools : GameBase
 	}
 	public static CommandLayoutManagerLayoutVisible VISIBLE_LAYOUT_DELAY(SceneProcedure procedure, float delayTime, LAYOUT_TYPE type, bool visible, bool immediately = false, string param = "")
 	{
-		CommandLayoutManagerLayoutVisible cmd = mCommandSystem.newCmd<CommandLayoutManagerLayoutVisible>(true, true);
+		CommandLayoutManagerLayoutVisible cmd = newCmd<CommandLayoutManagerLayoutVisible>(true, true);
 		cmd.mLayoutType = type;
 		cmd.mForce = false;
 		cmd.mVisibility = visible;
 		cmd.mImmediately = immediately;
 		cmd.mParam = param;
-		mCommandSystem.pushDelayCommand(cmd, mLayoutManager, delayTime);
+		pushDelayCommand(cmd, mLayoutManager, delayTime);
 		procedure.addDelayCmd(cmd);
 		return cmd;
 	}
 	public static CommandLayoutManagerLayoutVisible VISIBLE_LAYOUT_DELAY_EX(SceneProcedure procedure, float delayTime, LAYOUT_TYPE type, bool visible, CommandCallback start, bool immediately = false, string param = "")
 	{
-		CommandLayoutManagerLayoutVisible cmd = mCommandSystem.newCmd<CommandLayoutManagerLayoutVisible>(true, true);
+		CommandLayoutManagerLayoutVisible cmd = newCmd<CommandLayoutManagerLayoutVisible>(true, true);
 		cmd.mLayoutType = type;
 		cmd.mForce = false;
 		cmd.mVisibility = visible;
 		cmd.mImmediately = immediately;
 		cmd.mParam = param;
 		cmd.addStartCommandCallback(start, null);
-		mCommandSystem.pushDelayCommand(cmd, mLayoutManager, delayTime);
+		pushDelayCommand(cmd, mLayoutManager, delayTime);
 		procedure.addDelayCmd(cmd);
 		return cmd;
 	}
 	public static CommandLayoutManagerLayoutVisible VISIBLE_LAYOUT_DELAY_FORCE(float delayTime, LAYOUT_TYPE type, bool visible)
 	{
-		CommandLayoutManagerLayoutVisible cmd = mCommandSystem.newCmd<CommandLayoutManagerLayoutVisible>(true, true);
+		CommandLayoutManagerLayoutVisible cmd = newCmd<CommandLayoutManagerLayoutVisible>(true, true);
 		cmd.mLayoutType = type;
 		cmd.mForce = true;
 		cmd.mVisibility = visible;
 		cmd.mImmediately = false;
-		mCommandSystem.pushDelayCommand(cmd, mLayoutManager, delayTime);
+		pushDelayCommand(cmd, mLayoutManager, delayTime);
 		return cmd;
 	}
 	//--------------------------------------------------------------------------------------------------------------------------------------------
 	// 旋转
 	public static void ROTATE_LOCK_WINDOW(txUIObject obj, bool lockRotation = true)
 	{
-		CommandWindowRotateFixed cmd = mCommandSystem.newCmd<CommandWindowRotateFixed>(false);
+		CommandWindowRotateFixed cmd = newCmd<CommandWindowRotateFixed>(false);
 		cmd.mActive = lockRotation;
-		mCommandSystem.pushCommand(cmd, obj);
+		pushCommand(cmd, obj);
 	}
 	public static void ROTATE_WINDOW(txUIObject obj, Vector3 rotation)
 	{
-		CommandWindowRotate cmd = mCommandSystem.newCmd<CommandWindowRotate>(false, false);
+		CommandWindowRotate cmd = newCmd<CommandWindowRotate>(false, false);
 		cmd.mName = "";
 		cmd.mOnceLength = 0.0f;
 		cmd.mStartRotation = rotation;
 		cmd.mTargetRotation = rotation;
-		mCommandSystem.pushCommand(cmd, obj);
+		pushCommand(cmd, obj);
 	}
 	public static void ROTATE_WINDOW(txUIObject obj, Vector3 start, Vector3 target, float time)
 	{
@@ -185,7 +185,7 @@ public class LayoutTools : GameBase
 		{
 			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用void ROTATE_WINDOW(txUIObject obj, Vector3 rotation)");
 		}
-		CommandWindowRotate cmd = mCommandSystem.newCmd<CommandWindowRotate>(false, false);
+		CommandWindowRotate cmd = newCmd<CommandWindowRotate>(false, false);
 		cmd.mName = keyframe;
 		cmd.mOnceLength = onceLength;
 		cmd.mStartRotation = start;
@@ -194,16 +194,16 @@ public class LayoutTools : GameBase
 		cmd.mLoop = loop;
 		cmd.setTremblingCallback(rotatingCallback, null);
 		cmd.setTrembleDoneCallback(doneCallback, null);
-		mCommandSystem.pushCommand(cmd, obj);
+		pushCommand(cmd, obj);
 	}
 	public static CommandWindowRotate ROTATE_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, Vector3 rotation)
 	{
-		CommandWindowRotate cmd = mCommandSystem.newCmd<CommandWindowRotate>(false, true);
+		CommandWindowRotate cmd = newCmd<CommandWindowRotate>(false, true);
 		cmd.mName = "";
 		cmd.mOnceLength = 0.0f;
 		cmd.mStartRotation = rotation;
 		cmd.mTargetRotation = rotation;
-		mCommandSystem.pushDelayCommand(cmd, obj, delayTime);
+		pushDelayCommand(cmd, obj, delayTime);
 		script.addDelayCmd(cmd);
 		return cmd;
 	}
@@ -225,14 +225,14 @@ public class LayoutTools : GameBase
 		{
 			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用CommandWindowKeyFrameRotate ROTATE_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, Vector3 rotation)");
 		}
-		CommandWindowRotate cmd = mCommandSystem.newCmd<CommandWindowRotate>(false, true);
+		CommandWindowRotate cmd = newCmd<CommandWindowRotate>(false, true);
 		cmd.mName = keyframe;
 		cmd.mOnceLength = onceLength;
 		cmd.mStartRotation = start;
 		cmd.mTargetRotation = target;
 		cmd.mOffset = offset;
 		cmd.mLoop = loop;
-		mCommandSystem.pushDelayCommand(cmd, obj, delayTime);
+		pushDelayCommand(cmd, obj, delayTime);
 		script.addDelayCmd(cmd);
 		return cmd;
 	}
@@ -250,11 +250,11 @@ public class LayoutTools : GameBase
 	}
 	public static void ROTATE_SPEED_WINDOW(txUIObject obj, Vector3 speed, Vector3 startAngle, Vector3 rotateAccelerationValue)
 	{
-		CommandWindowRotateSpeed cmd = mCommandSystem.newCmd<CommandWindowRotateSpeed>(false);
+		CommandWindowRotateSpeed cmd = newCmd<CommandWindowRotateSpeed>(false);
 		cmd.mRotateSpeed = speed;
 		cmd.mStartAngle = startAngle;
 		cmd.mRotateAcceleration = rotateAccelerationValue;
-		mCommandSystem.pushCommand(cmd, obj);
+		pushCommand(cmd, obj);
 	}
 	public static CommandWindowRotateSpeed ROTATE_SPEED_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, Vector3 speed)
 	{
@@ -266,11 +266,11 @@ public class LayoutTools : GameBase
 	}
 	public static CommandWindowRotateSpeed ROTATE_SPEED_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, Vector3 speed, Vector3 startAngle, Vector3 rotateAccelerationValue)
 	{
-		CommandWindowRotateSpeed cmd = mCommandSystem.newCmd<CommandWindowRotateSpeed>(false, true);
+		CommandWindowRotateSpeed cmd = newCmd<CommandWindowRotateSpeed>(false, true);
 		cmd.mRotateSpeed = speed;
 		cmd.mStartAngle = startAngle;
 		cmd.mRotateAcceleration = rotateAccelerationValue;
-		mCommandSystem.pushDelayCommand(cmd, obj, delayTime);
+		pushDelayCommand(cmd, obj, delayTime);
 		script.addDelayCmd(cmd);
 		return cmd;
 	}
@@ -279,12 +279,12 @@ public class LayoutTools : GameBase
 	// 用关键帧移动窗口
 	public static void MOVE_WINDOW(txUIObject obj, Vector3 pos)
 	{
-		CommandWindowMove cmd = mCommandSystem.newCmd<CommandWindowMove>(false);
+		CommandWindowMove cmd = newCmd<CommandWindowMove>(false);
 		cmd.mName = "";
 		cmd.mOnceLength = 0.0f;
 		cmd.mStartPos = pos;
 		cmd.mTargetPos = pos;
-		mCommandSystem.pushCommand(cmd, obj);
+		pushCommand(cmd, obj);
 	}
 	public static void MOVE_WINDOW(txUIObject obj, Vector3 start, Vector3 target, float onceLength)
 	{
@@ -332,7 +332,7 @@ public class LayoutTools : GameBase
 		{
 			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用void MOVE_WINDOW(txUIObject obj, Vector3 pos)");
 		}
-		CommandWindowMove cmd = mCommandSystem.newCmd<CommandWindowMove>(false);
+		CommandWindowMove cmd = newCmd<CommandWindowMove>(false);
 		cmd.mName = fileName;
 		cmd.mOnceLength = onceLength;
 		cmd.mStartPos = startPos;
@@ -341,16 +341,16 @@ public class LayoutTools : GameBase
 		cmd.mLoop = loop;
 		cmd.setTremblingCallback(TremblingCallBack, null);
 		cmd.setTrembleDoneCallback(TrembleDoneCallBack, null);
-		mCommandSystem.pushCommand(cmd, obj);
+		pushCommand(cmd, obj);
 	}
 	public static CommandWindowMove MOVE_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, Vector3 pos)
 	{
-		CommandWindowMove cmd = mCommandSystem.newCmd<CommandWindowMove>(false, true);
+		CommandWindowMove cmd = newCmd<CommandWindowMove>(false, true);
 		cmd.mName = "";
 		cmd.mStartPos = pos;
 		cmd.mTargetPos = pos;
 		cmd.mOnceLength = 0.0f;
-		mCommandSystem.pushDelayCommand(cmd, obj, delayTime);
+		pushDelayCommand(cmd, obj, delayTime);
 		script.addDelayCmd(cmd);
 		return cmd;
 	}
@@ -384,7 +384,7 @@ public class LayoutTools : GameBase
 		{
 			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用CommandWindowKeyFrameMove MOVE_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, Vector3 pos)");
 		}
-		CommandWindowMove cmd = mCommandSystem.newCmd<CommandWindowMove>(false, true);
+		CommandWindowMove cmd = newCmd<CommandWindowMove>(false, true);
 		cmd.mName = keyframe;
 		cmd.mStartPos = startPos;
 		cmd.mTargetPos = targetPos;
@@ -393,28 +393,28 @@ public class LayoutTools : GameBase
 		cmd.mLoop = loop;
 		cmd.setTremblingCallback(movingCallback, null);
 		cmd.setTrembleDoneCallback(moveDoneCallback, null);
-		mCommandSystem.pushDelayCommand(cmd, obj, delayTime);
+		pushDelayCommand(cmd, obj, delayTime);
 		script.addDelayCmd(cmd);
 		return cmd;
 	}
 	//------------------------------------------------------------------------------------------------------------------
 	public static void TRACK_TARGET(txUIObject obj, float speed, txUIObject target, TrackDoneCallback doneCallback, CheckPosition checkPosition)
 	{
-		CommandWindowTrackTarget cmd = mCommandSystem.newCmd<CommandWindowTrackTarget>(false);
+		CommandWindowTrackTarget cmd = newCmd<CommandWindowTrackTarget>(false);
 		cmd.mObject = target;
 		cmd.mSpeed = speed;
 		cmd.mDoneCallback = doneCallback;
 		cmd.mCheckPosition = checkPosition;
-		mCommandSystem.pushCommand(cmd, obj);
+		pushCommand(cmd, obj);
 	}
 	//----------------------------------------------------------------------------------------------------------------------------------------------------------
 	// 显示
 	// 窗口的显示和隐藏()
 	public static void ACTIVE_WINDOW(txUIObject obj, bool active = true)
 	{
-		CommandWindowActive cmd = mCommandSystem.newCmd<CommandWindowActive>(false);
+		CommandWindowActive cmd = newCmd<CommandWindowActive>(false);
 		cmd.mActive = active;
-		mCommandSystem.pushCommand(cmd, obj);
+		pushCommand(cmd, obj);
 	}
 	public static CommandWindowActive ACTIVE_WINDOW_DELAY(LayoutScript script, txUIObject obj, bool active, float delayTime)
 	{
@@ -422,10 +422,10 @@ public class LayoutTools : GameBase
 	}
 	public static CommandWindowActive ACTIVE_WINDOW_DELAY_EX(LayoutScript script, txUIObject obj, bool active, float dealyTime, CommandCallback startCallback, object userData = null)
 	{
-		CommandWindowActive cmd = mCommandSystem.newCmd<CommandWindowActive>(false, true);
+		CommandWindowActive cmd = newCmd<CommandWindowActive>(false, true);
 		cmd.mActive = active;
 		cmd.addStartCommandCallback(startCallback, userData);
-		mCommandSystem.pushDelayCommand(cmd, obj, dealyTime);
+		pushDelayCommand(cmd, obj, dealyTime);
 		script.addDelayCmd(cmd);
 		return cmd;
 	}
@@ -433,12 +433,12 @@ public class LayoutTools : GameBase
 	// 缩放
 	public static void SCALE_WINDOW(txUIObject obj, Vector2 scale)
 	{
-		CommandWindowScale cmd = mCommandSystem.newCmd<CommandWindowScale>(false);
+		CommandWindowScale cmd = newCmd<CommandWindowScale>(false);
 		cmd.mName = "";
 		cmd.mOnceLength = 0.0f;
 		cmd.mStartScale = scale;
 		cmd.mTargetScale = scale;
-		mCommandSystem.pushCommand(cmd, obj);
+		pushCommand(cmd, obj);
 	}
 	public static void SCALE_WINDOW(txUIObject obj, Vector2 start, Vector2 target, float onceLength)
 	{
@@ -490,7 +490,7 @@ public class LayoutTools : GameBase
 		{
 			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用void SCALE_WINDOW(txUIObject obj, Vector2 scale)");
 		}
-		CommandWindowScale cmd = mCommandSystem.newCmd<CommandWindowScale>(false);
+		CommandWindowScale cmd = newCmd<CommandWindowScale>(false);
 		cmd.mName = fileName;
 		cmd.mOnceLength = onceLength;
 		cmd.mOffset = offset;
@@ -499,16 +499,16 @@ public class LayoutTools : GameBase
 		cmd.mTargetScale = target;
 		cmd.setTremblingCallback(scaleTremblingCallback, null);
 		cmd.setTrembleDoneCallback(scaleTrembleDoneCallback, null);
-		mCommandSystem.pushCommand(cmd, obj);
+		pushCommand(cmd, obj);
 	}
 	public static CommandWindowScale SCALE_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, Vector2 scale)
 	{
-		CommandWindowScale cmd = mCommandSystem.newCmd<CommandWindowScale>(false, true);
+		CommandWindowScale cmd = newCmd<CommandWindowScale>(false, true);
 		cmd.mName = "";
 		cmd.mOnceLength = 0.0f;
 		cmd.mStartScale = scale;
 		cmd.mTargetScale = scale;
-		mCommandSystem.pushDelayCommand(cmd, obj, delayTime);
+		pushDelayCommand(cmd, obj, delayTime);
 		script.addDelayCmd(cmd);
 		return cmd;
 	}
@@ -546,7 +546,7 @@ public class LayoutTools : GameBase
 		{
 			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,CommandWindowScale SCALE_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, Vector2 scale)");
 		}
-		CommandWindowScale cmd = mCommandSystem.newCmd<CommandWindowScale>(false, true);
+		CommandWindowScale cmd = newCmd<CommandWindowScale>(false, true);
 		cmd.mName = keyframe;
 		cmd.mOnceLength = onceLength;
 		cmd.mOffset = offset;
@@ -555,54 +555,54 @@ public class LayoutTools : GameBase
 		cmd.mTargetScale = target;
 		cmd.setTremblingCallback(scaleTremblingCallback, null);
 		cmd.setTrembleDoneCallback(scaleTrembleDoneCallback, null);
-		mCommandSystem.pushDelayCommand(cmd, obj, delayTime);
+		pushDelayCommand(cmd, obj, delayTime);
 		script.addDelayCmd(cmd);
 		return cmd;
 	}
 	//-----------------------------------------------------------------------------------------------------------------------------------------------------------
 	public static void SMOOTH_WINDOW_SLIDER(txUIObject obj, float value)
 	{
-		CommandWindowSmoothSlider cmd = mCommandSystem.newCmd<CommandWindowSmoothSlider>(false);
+		CommandWindowSmoothSlider cmd = newCmd<CommandWindowSmoothSlider>(false);
 		cmd.mStartSliderValue = value;
 		cmd.mTargetSliderValue = value;
 		cmd.mFadeTime = 0.0f;
-		mCommandSystem.pushCommand(cmd, obj);
+		pushCommand(cmd, obj);
 	}
 	// 进度条
 	public static void SMOOTH_WINDOW_SLIDER(txUIObject obj, float start, float target, float time) 
 	{
-		CommandWindowSmoothSlider cmd = mCommandSystem.newCmd<CommandWindowSmoothSlider>(false);
+		CommandWindowSmoothSlider cmd = newCmd<CommandWindowSmoothSlider>(false);
 		cmd.mStartSliderValue = start;
 		cmd.mTargetSliderValue = target;
 		cmd.mFadeTime = time;
-		mCommandSystem.pushCommand(cmd, obj);
+		pushCommand(cmd, obj);
 	}
 	public static void SMOOTH_WINDOW_FILL_AMOUNT(txUIObject obj, float start, float target, float time)
 	{
-		CommandWindowSmoothFillAmount cmd = mCommandSystem.newCmd<CommandWindowSmoothFillAmount>(false);
+		CommandWindowSmoothFillAmount cmd = newCmd<CommandWindowSmoothFillAmount>(false);
 		cmd.mStartFillAmount = start;
 		cmd.mTargetFillAmount = target;
 		cmd.mFadeTime = time;
-		mCommandSystem.pushCommand(cmd, obj);
+		pushCommand(cmd, obj);
 	}
 	public static void SMOOTH_WINDOW_FILL_AMOUNT_DELAY(LayoutScript script, txUIObject obj, float delayTime, float start, float target, float time)
 	{
-		CommandWindowSmoothFillAmount cmd = mCommandSystem.newCmd<CommandWindowSmoothFillAmount>(false, true);
+		CommandWindowSmoothFillAmount cmd = newCmd<CommandWindowSmoothFillAmount>(false, true);
 		cmd.mStartFillAmount = start;
 		cmd.mTargetFillAmount = target;
 		cmd.mFadeTime = time;
-		mCommandSystem.pushDelayCommand(cmd, obj, delayTime);
+		pushDelayCommand(cmd, obj, delayTime);
 	}
 	//----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	// 透明度
 	public static void ALPHA_WINDOW(txUIObject obj, float alpha)
 	{
-		CommandWindowAlpha cmd = mCommandSystem.newCmd<CommandWindowAlpha>(false);
+		CommandWindowAlpha cmd = newCmd<CommandWindowAlpha>(false);
 		cmd.mName = "";
 		cmd.mOnceLength = 0.0f;
 		cmd.mStartAlpha = alpha;
 		cmd.mTargetAlpha = alpha;
-		mCommandSystem.pushCommand(cmd, obj);
+		pushCommand(cmd, obj);
 	}
 	public static void ALPHA_WINDOW(txUIObject obj, float start, float target, float onceLength)
 	{
@@ -642,7 +642,7 @@ public class LayoutTools : GameBase
 		{
 			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用void ALPHA_WINDOW(txUIObject obj, float alpha)");
 		}
-		CommandWindowAlpha cmd = mCommandSystem.newCmd<CommandWindowAlpha>(false);
+		CommandWindowAlpha cmd = newCmd<CommandWindowAlpha>(false);
 		cmd.mName = name;
 		cmd.mLoop = loop;
 		cmd.mOnceLength = onceLength;
@@ -651,16 +651,16 @@ public class LayoutTools : GameBase
 		cmd.mTargetAlpha = target;
 		cmd.setTremblingCallback(tremblingCallback, null);
 		cmd.setTrembleDoneCallback(trembleDoneCallback, null);
-		mCommandSystem.pushCommand(cmd, obj);
+		pushCommand(cmd, obj);
 	}
 	public static CommandWindowAlpha ALPHA_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, float alpha)
 	{
-		CommandWindowAlpha cmd = mCommandSystem.newCmd<CommandWindowAlpha>(false, true);
+		CommandWindowAlpha cmd = newCmd<CommandWindowAlpha>(false, true);
 		cmd.mName = "";
 		cmd.mOnceLength = 0.0f;
 		cmd.mStartAlpha = alpha;
 		cmd.mTargetAlpha = alpha;
-		mCommandSystem.pushDelayCommand(cmd, obj, delayTime);
+		pushDelayCommand(cmd, obj, delayTime);
 		script.addDelayCmd(cmd);
 		return cmd;
 	}
@@ -698,7 +698,7 @@ public class LayoutTools : GameBase
 		{
 			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用CommandWindowAlphaTremble ALPHA_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, float alpha)");
 		}
-		CommandWindowAlpha cmd = mCommandSystem.newCmd<CommandWindowAlpha>(false, true);
+		CommandWindowAlpha cmd = newCmd<CommandWindowAlpha>(false, true);
 		cmd.mName = keyframe;
 		cmd.mLoop = loop;
 		cmd.mOnceLength = onceLength;
@@ -707,7 +707,7 @@ public class LayoutTools : GameBase
 		cmd.mTargetAlpha = target;
 		cmd.setTremblingCallback(tremblingCallback, null);
 		cmd.setTrembleDoneCallback(trembleDoneCallback, null);
-		mCommandSystem.pushDelayCommand(cmd, obj, delayTime);
+		pushDelayCommand(cmd, obj, delayTime);
 		script.addDelayCmd(cmd);
 		return cmd;
 	}
@@ -715,12 +715,12 @@ public class LayoutTools : GameBase
 	// HSL
 	public static void HSL_WINDOW(txUIObject obj, Vector3 hsl)
 	{
-		CommandWindowHSL cmd = mCommandSystem.newCmd<CommandWindowHSL>(false, false);
+		CommandWindowHSL cmd = newCmd<CommandWindowHSL>(false, false);
 		cmd.mName = "";
 		cmd.mOnceLength = 0.0f;
 		cmd.mStartHSL = hsl;
 		cmd.mTargetHSL = hsl;
-		mCommandSystem.pushCommand(cmd, obj);
+		pushCommand(cmd, obj);
 	}
 	public static void HSL_WINDOW(txUIObject obj, Vector3 start, Vector3 target, float onceLength)
 	{
@@ -736,41 +736,41 @@ public class LayoutTools : GameBase
 		{
 			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用void HSL_WINDOW(txUIObject obj, Vector3 hsl)");
 		}
-		CommandWindowHSL cmd = mCommandSystem.newCmd<CommandWindowHSL>(false, false);
+		CommandWindowHSL cmd = newCmd<CommandWindowHSL>(false, false);
 		cmd.mName = keyframe;
 		cmd.mLoop = loop;
 		cmd.mOnceLength = onceLength;
 		cmd.mOffset = offset;
 		cmd.mStartHSL = start;
 		cmd.mTargetHSL = target;
-		mCommandSystem.pushCommand(cmd, obj);
+		pushCommand(cmd, obj);
 	}
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------
 	// 音效
 	public static void PLAY_AUDIO_WINDOW(txUIObject obj, SOUND_DEFINE sound, bool loop, float volume)
 	{
-		CommandWindowPlayAudio cmd = mCommandSystem.newCmd<CommandWindowPlayAudio>(false);
+		CommandWindowPlayAudio cmd = newCmd<CommandWindowPlayAudio>(false);
 		cmd.mSound = sound;
 		cmd.mLoop = loop;
 		cmd.mVolume = volume;
-		mCommandSystem.pushCommand(cmd, obj);
+		pushCommand(cmd, obj);
 	}
 	// fileName为sound文件夹的相对路径,
 	public static void PLAY_AUDIO_WINDOW(txUIObject obj, string fileName, bool loop, float volume)
 	{
-		CommandWindowPlayAudio cmd = mCommandSystem.newCmd<CommandWindowPlayAudio>(false);
+		CommandWindowPlayAudio cmd = newCmd<CommandWindowPlayAudio>(false);
 		cmd.mSoundFileName = fileName;
 		cmd.mLoop = loop;
 		cmd.mVolume = volume;
-		mCommandSystem.pushCommand(cmd, obj);
+		pushCommand(cmd, obj);
 	}
 	public static CommandWindowPlayAudio PLAY_AUDIO_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, SOUND_DEFINE sound, bool loop, float volume)
 	{
-		CommandWindowPlayAudio cmd = mCommandSystem.newCmd<CommandWindowPlayAudio>(false, true);
+		CommandWindowPlayAudio cmd = newCmd<CommandWindowPlayAudio>(false, true);
 		cmd.mSound = sound;
 		cmd.mLoop = loop;
 		cmd.mVolume = volume;
-		mCommandSystem.pushDelayCommand(cmd, obj, delayTime);
+		pushDelayCommand(cmd, obj, delayTime);
 		script.addDelayCmd(cmd);
 		return cmd;
 	}

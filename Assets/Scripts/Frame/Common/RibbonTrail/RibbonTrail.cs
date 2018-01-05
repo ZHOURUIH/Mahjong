@@ -25,6 +25,7 @@ public class RibbonTrail
 	public virtual void init(GameObject obj)
 	{
 		mObject = obj;
+		mObject.SetActive(true);
 		mTransform = mObject.GetComponent<Transform>();
 		MeshFilter filter = mObject.GetComponent<MeshFilter>();
 		mMesh = filter.mesh;
@@ -135,6 +136,8 @@ public class RibbonTrail
 	public virtual void destroy()
 	{
 		mSectionList.Clear();
+		mMesh.Clear();
+		mObject.SetActive(false);
 	}
 	public void addSection(Vector3 start, Vector3 end)
 	{

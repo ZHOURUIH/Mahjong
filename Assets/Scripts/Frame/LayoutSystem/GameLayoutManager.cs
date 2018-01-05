@@ -17,7 +17,7 @@ public class LayoutAsyncInfo
 
 public class GameLayoutManager : FrameComponent
 {
-	protected ScriptFactoryManager				  mScriptFactoryManager;
+	protected Dictionary<LAYOUT_TYPE, Type>		  mScriptRegisteList;
 	protected Dictionary<LAYOUT_TYPE, string>	  mLayoutTypeToName;
 	protected Dictionary<string, LAYOUT_TYPE>	  mLayoutNameToType;
 	protected Dictionary<LAYOUT_TYPE, GameLayout> mLayoutTypeList;
@@ -28,7 +28,7 @@ public class GameLayoutManager : FrameComponent
 		:
 		base(name)
 	{
-		mScriptFactoryManager = new ScriptFactoryManager();
+		mScriptRegisteList = new Dictionary<LAYOUT_TYPE, Type>();
 		mLayoutTypeToName = new Dictionary<LAYOUT_TYPE, string>();
 		mLayoutNameToType = new Dictionary<string, LAYOUT_TYPE>();
 		mLayoutTypeList = new Dictionary<LAYOUT_TYPE, GameLayout>();
@@ -68,7 +68,6 @@ public class GameLayoutManager : FrameComponent
 		mLayoutNameList.Clear();
 		mLayoutTypeToName.Clear();
 		mLayoutNameToType.Clear();
-		mScriptFactoryManager.destroy();
 		mLayoutTypeList.Clear();
 		mLayoutAsyncList.Clear();
 		mUIRoot = null;
@@ -169,12 +168,7 @@ public class GameLayoutManager : FrameComponent
 	}
 	public LayoutScript createScript(LAYOUT_TYPE type, string name, GameLayout layout)
 	{
-		ScriptFactory factory = mScriptFactoryManager.getFactory(type);
-		if (factory != null)
-		{
-			return factory.createScript(layout, name);
-		}
-		return null;
+		return UnityUtility.createInstance<LayoutScript>(mScriptRegisteList[type], type, name, layout);
 	}
 	public List<BoxCollider> getAllLayoutBoxCollider()
 	{
@@ -193,7 +187,7 @@ public class GameLayoutManager : FrameComponent
 	{
 		mLayoutTypeToName.Add(type, name);
 		mLayoutNameToType.Add(name, type);
-		mScriptFactoryManager.addFactory(classType, type);
+		mScriptRegisteList.Add(type, classType);
 	}
 	public int getLayoutCount()
 	{

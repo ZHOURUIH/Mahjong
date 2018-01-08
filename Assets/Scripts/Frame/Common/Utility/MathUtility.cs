@@ -814,6 +814,8 @@ public class MathUtility
 			angle = -angle;
 		}
 		adjustRadian180(ref angle);
+		// 在unity的坐标系中航向角需要取反
+		angle = -angle;
 		return angle;
 	}
 	public static Vector3 rotateVector3(Vector3 vec, Matrix4x4 transMat3)

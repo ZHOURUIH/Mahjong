@@ -32,6 +32,10 @@ public class RibbonTrail
 	}
 	public virtual void update(float elapsedTime)
 	{
+		if(!mObject.activeSelf)
+		{
+			return;
+		}
 		// 先将模型数据清空
 		mMesh.Clear();
 		// 更新所有片段的生命周期
@@ -151,5 +155,9 @@ public class RibbonTrail
 	public void setTrialLifeTime(float time)
 	{
 		mTrailLifeTime = time;
+	}
+	public void setActive(bool active)
+	{
+		mObject.SetActive(active);
 	}
 }

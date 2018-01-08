@@ -7,7 +7,7 @@ public class RibbonTrailDynamic : RibbonTrail
 {
 	public override void update(float elapsedTime)
 	{
-		if(mObject == null)
+		if(mObject == null || !mObject.activeSelf)
 		{
 			return;
 		}

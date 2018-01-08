@@ -8,7 +8,7 @@ public class RibbonTrailStatic : RibbonTrail
 	protected float mSpeed = 1.0f;
 	public override void update(float elapsedTime)
 	{
-		if(mObject == null)
+		if(mObject == null || !mObject.activeSelf)
 		{
 			return;
 		}

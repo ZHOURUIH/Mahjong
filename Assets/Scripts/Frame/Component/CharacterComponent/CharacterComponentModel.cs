@@ -8,6 +8,7 @@ public class CharacterComponentModel : GameComponent
 	public Transform mModelTransform;
 	public Animator mAnimator;
 	public Animation mAnimation;
+	protected string mModelPath;
 	public CharacterComponentModel(Type type, string name)
 		:
 		base(type, name)
@@ -24,12 +25,13 @@ public class CharacterComponentModel : GameComponent
 		//character.setPosition(mModel.transform.localPosition);
 		//mModel.transform.localPosition = Vector3.zero;
 	}
-	public void setModel(GameObject model, bool destroyOld = true)
+	public void setModel(GameObject model, string modelPath, bool destroyOld = true)
 	{
 		if(destroyOld && mModel != null)
 		{
 			mModelManager.destroyModel(mModel.name);
 		}
+		mModelPath = modelPath;
 		mModel = model;
 		if (mModel != null)
 		{
@@ -43,6 +45,10 @@ public class CharacterComponentModel : GameComponent
 	public GameObject getModel()
 	{
 		return mModel;
+	}
+	public string getModelPath()
+	{
+		return mModelPath;
 	}
 	public override void setActive(bool active)
 	{

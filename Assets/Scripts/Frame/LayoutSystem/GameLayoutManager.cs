@@ -17,22 +17,22 @@ public class LayoutAsyncInfo
 
 public class GameLayoutManager : FrameComponent
 {
+	protected Dictionary<Type, List<LAYOUT_TYPE>> mScriptMappingList;
 	protected Dictionary<LAYOUT_TYPE, Type>		  mScriptRegisteList;
 	protected Dictionary<LAYOUT_TYPE, string>	  mLayoutTypeToName;
 	protected Dictionary<string, LAYOUT_TYPE>	  mLayoutNameToType;
 	protected Dictionary<LAYOUT_TYPE, GameLayout> mLayoutTypeList;
-	protected Dictionary<string, GameLayout>	  mLayoutNameList;
 	protected txUIObject						  mUIRoot;
 	protected Dictionary<string, LayoutAsyncInfo> mLayoutAsyncList;
 	public GameLayoutManager(string name)
 		:
 		base(name)
 	{
+		mScriptMappingList = new Dictionary<Type, List<LAYOUT_TYPE>>();
 		mScriptRegisteList = new Dictionary<LAYOUT_TYPE, Type>();
 		mLayoutTypeToName = new Dictionary<LAYOUT_TYPE, string>();
 		mLayoutNameToType = new Dictionary<string, LAYOUT_TYPE>();
 		mLayoutTypeList = new Dictionary<LAYOUT_TYPE, GameLayout>();
-		mLayoutNameList = new Dictionary<string, GameLayout>();
 		mLayoutAsyncList = new Dictionary<string, LayoutAsyncInfo>();
 	}
 	public override void init()
@@ -56,14 +56,13 @@ public class GameLayoutManager : FrameComponent
 	}
 	public override void destroy()
 	{
-		foreach(var item in mLayoutNameList)
+		foreach(var item in mLayoutTypeList)
 		{
 			item.Value.destroy();
 		}
-		mLayoutNameList.Clear();
+		mLayoutTypeList.Clear();
 		mLayoutTypeToName.Clear();
 		mLayoutNameToType.Clear();
-		mLayoutTypeList.Clear();
 		mLayoutAsyncList.Clear();
 		mUIRoot = null;
 		base.destroy();
@@ -100,14 +99,18 @@ public class GameLayoutManager : FrameComponent
 		}
 		return null;
 	}
-	public LayoutScript getScript(LAYOUT_TYPE type)
+	public T getScript<T>(LAYOUT_TYPE type) where T : LayoutScript
 	{
 		GameLayout layout = getGameLayout(type);
 		if (layout != null)
 		{
-			return layout.getScript();
+			return layout.getScript() as T;
 		}
 		return null;
+	}
+	public int getScriptMappingCount(Type classType)
+	{
+		return mScriptMappingList[classType].Count;
 	}
 	public GameLayout createLayout(LAYOUT_TYPE type, int renderOrder, bool async, LayoutAsyncDone callback)
 	{
@@ -183,6 +186,12 @@ public class GameLayoutManager : FrameComponent
 		mLayoutTypeToName.Add(type, name);
 		mLayoutNameToType.Add(name, type);
 		mScriptRegisteList.Add(type, classType);
+		if(!mScriptMappingList.ContainsKey(classType))
+		{
+			List<LAYOUT_TYPE> list = new List<LAYOUT_TYPE>();
+			mScriptMappingList.Add(classType, list);
+		}
+		mScriptMappingList[classType].Add(type);
 	}
 	public int getLayoutCount()
 	{
@@ -192,19 +201,18 @@ public class GameLayoutManager : FrameComponent
 	protected void addLayoutToList(GameLayout layout, string name, LAYOUT_TYPE type)
 	{
 		mLayoutTypeList.Add(type, layout);
-		mLayoutNameList.Add(name, layout);
 	}
 	protected void removeLayoutFromList(GameLayout layout)
 	{
 		if (layout != null)
 		{
 			mLayoutTypeList.Remove(layout.getType());
-			mLayoutNameList.Remove(layout.getName());
 		}
 	}
 	protected void onLayoutPrefabAsyncDone(UnityEngine.Object res, object userData)
 	{
 		LayoutAsyncInfo info = mLayoutAsyncList[res.name];
+		mLayoutAsyncList.Remove(res.name);
 		info.mLayoutObject = UnityUtility.instantiatePrefab(null, (GameObject)res);
 		info.mLayout = new GameLayout();
 		addLayoutToList(info.mLayout, info.mName, info.mType);

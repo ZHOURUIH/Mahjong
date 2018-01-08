@@ -82,10 +82,16 @@ public class GameLayout : GameBase
 	}
 	public void destroy()
 	{
-		mLayoutPanel.destroy();
-		mLayoutPanel = null;
-		mScript.destroy();
-		mScript = null;
+		if(mLayoutPanel != null)
+		{
+			mLayoutPanel.destroy();
+			mLayoutPanel = null;
+		}
+		if(mScript != null)
+		{
+			mScript.destroy();
+			mScript = null;
+		}
 	}
 	public List<BoxCollider> getAllBoxCollider()
 	{

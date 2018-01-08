@@ -26,6 +26,7 @@ public abstract class LayoutScript : CommandReceiver
 	protected txUIObject mRoot;
 	protected LAYOUT_TYPE mType;
 	protected Dictionary<string, List<WindowInfo>> mAllWindowList;
+	protected static LayoutRegister mLayoutRegister;
 	public LayoutScript(LAYOUT_TYPE type, string name, GameLayout layout)
 		:
 		base(name)
@@ -34,6 +35,16 @@ public abstract class LayoutScript : CommandReceiver
 		mLayout = layout;
 		mDelayCmdList = new List<int>();
 		mAllWindowList = new Dictionary<string, List<WindowInfo>>();
+		if (mLayoutRegister == null)
+		{
+			mLayoutRegister = new LayoutRegister();
+		}
+		mLayoutRegister.onScriptCreated(this);
+	}
+	public override void destroy()
+	{
+		mLayoutRegister.onScriptDestroy(this);
+		base.destroy();
 	}
 	public LAYOUT_TYPE getType() { return mType; }
 	public GameLayout getLayout() { return mLayout; }

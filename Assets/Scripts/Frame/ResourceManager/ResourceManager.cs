@@ -3,22 +3,17 @@ using UnityEngine;
 
 public class ResourceManager : FrameComponent
 {
-	protected GameObject mManagerObject;
 	public AssetBundleLoader mAssetBundleLoader;
 	public ResourceLoader mResourceLoader;
 	public int mLoadSource;
 	public ResourceManager(string name)
 		:base(name)
 	{
-		;
+		mAssetBundleLoader = new AssetBundleLoader();
+		mResourceLoader = new ResourceLoader();
 	}
 	public override void init()
 	{
-		mManagerObject = UnityUtility.getGameObject(mGameFramework.getGameFrameObject(), "ResourceManager");
-		GameObject abLoaderObject = UnityUtility.getGameObject(mManagerObject, "AssetBundleLoader");
-		GameObject resLoaderObject = UnityUtility.getGameObject(mManagerObject, "ResourceLoader");
-		mAssetBundleLoader = abLoaderObject.GetComponent<AssetBundleLoader>();
-		mResourceLoader = resLoaderObject.GetComponent<ResourceLoader>();
 		mAssetBundleLoader.init();
 		mResourceLoader.init();
 #if UNITY_EDITOR

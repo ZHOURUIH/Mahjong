@@ -17,12 +17,7 @@ public class LayoutPrefabManager : FrameComponent
 	}
 	public override void init()
 	{
-		mManagerObject = UnityUtility.getGameObject(mGameFramework.getGameFrameObject(), "LayoutPrefabManager");
-		if (mManagerObject == null)
-		{
-			UnityUtility.logError("error: can not find LayoutPrefabManager!");
-			return;
-		}
+		mManagerObject = UnityUtility.getGameObject(mGameFramework.getGameFrameObject(), "LayoutPrefabManager", true);
 	}
 	// 加载所有LayoutPrefab下的预设
 	public void loadAll(bool async)

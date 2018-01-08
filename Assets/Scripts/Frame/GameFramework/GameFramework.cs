@@ -15,9 +15,9 @@ public class GameFramework : MonoBehaviour
 {
 	public static GameFramework		instance;
 	protected Dictionary<string, FrameComponent> mFrameComponentMap;	// 存储框架组件,用于查找
-	protected List<FrameComponent> mFrameComponentList;					// 存储框架组件,用于初始化,更新,销毁
+	protected List<FrameComponent>	mFrameComponentList;				// 存储框架组件,用于初始化,更新,销毁
 	protected GameObject			mGameFrameObject;
-	protected SceneSystem			mSceneSystem;
+	protected MonoUtility			mMonoUtility;
 	protected bool					mPauseFrame;
 	public void Start()
 	{
@@ -58,22 +58,18 @@ public class GameFramework : MonoBehaviour
 		registeComponent<LayoutPrefabManager>();
 		registeComponent<ModelManager>();
 		registeComponent<InputManager>();
+		registeComponent<SceneSystem>();
 	}
 	public virtual void start()
 	{
 		mPauseFrame = false;
 		instance = this;
-		mGameFrameObject = this.transform.gameObject;
+		mGameFrameObject = gameObject;
 		initComponent();
 		// 资源管理器必须最后注册,以便最后销毁,作为最后的资源清理
 		registeComponent<ResourceManager>();
-		GameObject sceneSystemObj = UnityUtility.getGameObject(mGameFrameObject, "SceneSystem");
-		if (sceneSystemObj == null)
-		{
-			UnityUtility.logError("can not find SceneSystem under GameFramework!");
-			return;
-		}
-		mSceneSystem = sceneSystemObj.GetComponent<SceneSystem>();
+		GameObject monoUtility = UnityUtility.getGameObject(mGameFrameObject, "MonoUtility", true);
+		mMonoUtility = monoUtility.GetComponent<MonoUtility>();
 	}
 	public virtual void registe(){}
 	public virtual void init()
@@ -84,7 +80,6 @@ public class GameFramework : MonoBehaviour
 		{
 			mFrameComponentList[i].init();
 		}
-		mSceneSystem.init();
 		System.Net.ServicePointManager.DefaultConnectionLimit = 200;
 		int width = (int)FrameBase.mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SCREEN_WIDTH);
 		int height = (int)FrameBase.mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SCREEN_HEIGHT);
@@ -162,8 +157,6 @@ public class GameFramework : MonoBehaviour
 	}
 	public virtual void destroy()
 	{
-		mSceneSystem.destroy();
-		mSceneSystem = null;
 		int count = mFrameComponentList.Count;
 		for (int i = 0; i < count; ++i)
 		{
@@ -202,7 +195,7 @@ public class GameFramework : MonoBehaviour
 	public void setPasueFrame(bool value) { mPauseFrame = value; }
 	public bool getPasueFrame() { return mPauseFrame; }
 	public GameObject getGameFrameObject() { return mGameFrameObject; }
-	public SceneSystem getSceneSystem() { return mSceneSystem; }
+	public MonoUtility getMonoUtility() { return mMonoUtility; }
 	//------------------------------------------------------------------------------------------------------
 	protected void registeComponent<T>() where T : FrameComponent
 	{

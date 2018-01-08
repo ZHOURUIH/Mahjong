@@ -8,6 +8,7 @@ using System.IO;
 using System.Windows.Forms;
 #endif
 using UnityEngine;
+using System.Diagnostics;
 
 // 日志等级
 public enum LOG_LEVEL
@@ -56,14 +57,14 @@ public class UnityUtility : FrameComponent
 			// 运行一次只显示一次提示框,避免在循环中报错时一直弹窗
 			mShowMessageBox = false;
 		}
-		Debug.LogError("error : " + info);
+		UnityEngine.Debug.LogError("error : " + info);
 	}
 	// force表示是否强制输出日志
 	public static void logInfo(string info, LOG_LEVEL level = LOG_LEVEL.LL_NORMAL)
 	{
 		if ((int)level <= (int)mLogLevel)
 		{
-			Debug.Log(getTime() + " : " + info);
+			UnityEngine.Debug.Log(getTime() + " : " + info);
 		}
 	}
 	public static string getTime()
@@ -98,10 +99,6 @@ public class UnityUtility : FrameComponent
 	}
 	public static Ray getRay(Vector2 screenPos)
 	{
-		if (mLayoutManager.getUIRootObject() == null)
-		{
-			return new Ray();
-		}
 		Camera camera = mCameraManager.getUICamera().getCamera();
 		return camera.ScreenPointToRay(screenPos);
 	}
@@ -150,7 +147,7 @@ public class UnityUtility : FrameComponent
 			GameObject.Destroy(obj);
 		}
 	}
-	public static GameObject getGameObject(GameObject parent, string name)
+	public static GameObject getGameObject(GameObject parent, string name, bool errorIfNull = false)
 	{
 		GameObject go = null;
 		if (parent == null)
@@ -164,6 +161,12 @@ public class UnityUtility : FrameComponent
 			{
 				go = trans.gameObject;
 			}
+		}
+		if(go == null && errorIfNull)
+		{
+			string file = getCurSourceFileName(2);
+			int line = getLineNum(2);
+			logError("can not find " + name + ". file : " + file + ", line : " + line);
 		}
 		return go;
 	}
@@ -191,7 +194,6 @@ public class UnityUtility : FrameComponent
 		string name = StringUtility.getFileName(prefabName);
 		return instantiatePrefab(parent, prefabName, name, Vector3.one, Vector3.zero, Vector3.zero);
 	}
-
 	// 根据预设对象实例化
 	public static GameObject instantiatePrefab(GameObject parent, GameObject prefab)
 	{
@@ -210,7 +212,10 @@ public class UnityUtility : FrameComponent
 	}
 	public static void setNormalProperty(ref GameObject obj, GameObject parent, string name, Vector3 scale, Vector3 rot, Vector3 pos)
 	{
-		obj.transform.parent = parent.transform;
+		if(parent != null)
+		{
+			obj.transform.parent = parent.transform;
+		}
 		obj.transform.localPosition = pos;
 		obj.transform.localEulerAngles = rot;
 		obj.transform.localScale = scale;
@@ -267,14 +272,16 @@ public class UnityUtility : FrameComponent
 			t.gameObject.layer = layer;
 		}
 	}
+	// preFrameCount为1表示返回调用getLineNum的行号
 	public static int getLineNum(int preFrameCount = 1)
 	{
-	    System.Diagnostics.StackTrace st = new System.Diagnostics.StackTrace(preFrameCount, true);
+		StackTrace st = new StackTrace(preFrameCount, true);
 	    return st.GetFrame(0).GetFileLineNumber();
 	}
+	// preFrameCount为1表示返回调用getCurSourceFileName的文件名
 	public static string getCurSourceFileName(int preFrameCount = 1)
 	{
-	    System.Diagnostics.StackTrace st = new System.Diagnostics.StackTrace(preFrameCount, true);
+	   StackTrace st = new StackTrace(preFrameCount, true);
 	    return st.GetFrame(0).GetFileName();
 	}
 	public static void playAnimation(Animation animation, string anim, bool loop, string nextAnim = "", bool nextLoop = true)

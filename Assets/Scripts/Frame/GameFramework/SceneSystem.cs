@@ -6,21 +6,23 @@ using System.Threading;
 using System.Net;
 using UnityEngine.SceneManagement;
 
-public class SceneSystem : MonoBehaviour
+public class SceneSystem : FrameComponent
 {
 	protected Dictionary<string, SceneInstance> mSceneList;
 	protected Dictionary<string, Type> mSceneRegisteList;
-	public SceneSystem()
+	public SceneSystem(string name)
+		:base(name)
 	{
 		mSceneList = new Dictionary<string, SceneInstance>();
 		mSceneRegisteList = new Dictionary<string, Type>();
 	}
-	public void init()
+	public override void init()
 	{
-		;
+		base.init();
 	}
-	public void destroy()
+	public override void destroy()
 	{
+		base.destroy();
 		Dictionary<string, SceneInstance> sceneList = new Dictionary<string, SceneInstance>(mSceneList);
 		foreach (var item in sceneList)
 		{
@@ -68,10 +70,11 @@ public class SceneSystem : MonoBehaviour
 	{
 		SceneInstance scene = createScene(name);
 		scene.mState = LOAD_STATE.LS_LOADING;
-		scene.mOperation = SceneManager.LoadSceneAsync(name, mode);
-		scene.mOperation.allowSceneActivation = true;
-		mSceneList.Add(name, scene);
-		StartCoroutine(loadSceneCoroutine(scene, active, callback, userData));
+		scene.mLoadCallback = callback;
+		scene.mUserData = userData;
+		scene.mLoadMode = mode;
+		mSceneList.Add(scene.mName, scene);
+		GameBase.mMonoUtility.StartCoroutine(loadSceneCoroutine(scene, active));
 	}
 	public void unloadScene(string name)
 	{
@@ -84,14 +87,15 @@ public class SceneSystem : MonoBehaviour
 		mSceneList.Remove(name);
 	}
 	//------------------------------------------------------------------------------------------------------------------------------
-	protected IEnumerator loadSceneCoroutine(SceneInstance scene, bool active, SceneLoadCallback callback, object userData)
+	protected IEnumerator loadSceneCoroutine(SceneInstance scene, bool active)
 	{
-		string sceneName = scene.mName;
+		scene.mOperation = SceneManager.LoadSceneAsync(scene.mName, scene.mLoadMode);
+		scene.mOperation.allowSceneActivation = true;
 		while(true)
 		{
-			if (callback != null)
+			if (scene.mLoadCallback != null)
 			{
-				callback(scene.mOperation, false, userData);
+				scene.mLoadCallback(scene.mOperation, false, scene.mUserData);
 			}
 			// 当allowSceneActivation为true时,加载到progress为1时停止,并且isDone为true
 			// 当allowSceneActivation为false时,加载到progress为0.9时就停止,并且isDone为false,当场景被激活时isDone变为true,progress也为1
@@ -101,17 +105,15 @@ public class SceneSystem : MonoBehaviour
 			}
 			yield return null;
 		}
-		scene.mRoot = UnityUtility.getGameObject(null, sceneName + "_Root");
-		if(scene.mRoot == null)
-		{
-			UnityUtility.logError(sceneName + " scene must have a root node with name : " + sceneName + "_Root");
-		}
-		activeScene(sceneName, active);
+		scene.mRoot = UnityUtility.getGameObject(null, scene.mName + "_Root", true);
+		activeScene(scene.mName, active);
 		scene.mState = LOAD_STATE.LS_LOADED;
-		scene.mScene = SceneManager.GetSceneByName(sceneName);
-		if (callback != null)
+		scene.mScene = SceneManager.GetSceneByName(scene.mName);
+		if (scene.mLoadCallback != null)
 		{
-			callback(scene.mOperation, true, userData);
+			scene.mLoadCallback(scene.mOperation, true, scene.mUserData);
+			scene.mLoadCallback = null;
+			scene.mUserData = null;
 		}
 	}
 	protected SceneInstance createScene(string sceneName)

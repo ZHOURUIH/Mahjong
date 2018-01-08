@@ -37,12 +37,7 @@ public class GameLayoutManager : FrameComponent
 	}
 	public override void init()
 	{
-		mUIRoot = LayoutScript.newUIObject<txUIObject>("UI Root", null, null, UnityUtility.getGameObject(null, "UI Root"));
-		if (mUIRoot.mObject == null)
-		{
-			UnityUtility.logError("can not find ui root! please add it to scene!");
-			return;
-		}
+		mUIRoot = LayoutScript.newUIObject<txUIObject>("UI Root", null, null, UnityUtility.getGameObject(null, "UI Root", true));
 	}
 	public GameObject getUIRootObject()
 	{
@@ -210,7 +205,7 @@ public class GameLayoutManager : FrameComponent
 	protected void onLayoutPrefabAsyncDone(UnityEngine.Object res, object userData)
 	{
 		LayoutAsyncInfo info = mLayoutAsyncList[res.name];
-		info.mLayoutObject = GameObject.Instantiate(res) as GameObject;
+		info.mLayoutObject = UnityUtility.instantiatePrefab(null, (GameObject)res);
 		info.mLayout = new GameLayout();
 		addLayoutToList(info.mLayout, info.mName, info.mType);
 		UnityUtility.setNormalProperty(ref info.mLayoutObject, mUIRoot.mObject, info.mName, Vector3.one, Vector3.zero, Vector3.zero);

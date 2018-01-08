@@ -23,6 +23,7 @@ public class FrameBase
 	public static ModelManager			mModelManager			= null;
 	public static InputManager			mInputManager			= null;
 	public static SceneSystem			mSceneSystem			= null;
+	public static MonoUtility			mMonoUtility			= null;
 	public virtual void notifyConstructDone()
 	{
 		if (mGameFramework == null)
@@ -44,7 +45,8 @@ public class FrameBase
 			mFrameConfig = mGameFramework.getSystem<FrameConfig>();
 			mModelManager = mGameFramework.getSystem<ModelManager>();
 			mInputManager = mGameFramework.getSystem<InputManager>();
-			mSceneSystem = mGameFramework.getSceneSystem();
+			mSceneSystem = mGameFramework.getSystem<SceneSystem>();
+			mMonoUtility = mGameFramework.getMonoUtility();
 		}
 	}
 	// 方便书写代码添加的命令相关函数

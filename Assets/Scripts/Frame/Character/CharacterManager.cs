@@ -21,11 +21,7 @@ public class CharacterManager : FrameComponent
 	}
 	public override void init()
 	{
-		mManagerObject = UnityUtility.getGameObject(mGameFramework.getGameFrameObject(), "CharacterManager");
-		if (mManagerObject == null)
-		{
-			UnityUtility.logError("can not find Character Manager under GameFramework!");
-		}
+		mManagerObject = UnityUtility.getGameObject(mGameFramework.getGameFrameObject(), "CharacterManager", true);
 	}
 	public override void destroy()
 	{

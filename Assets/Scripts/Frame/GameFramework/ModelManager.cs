@@ -46,7 +46,7 @@ public class ModelManager : FrameComponent
 		{
 			return null;
 		}
-		GameObject model = GameObject.Instantiate<GameObject>(prefab);
+		GameObject model = UnityUtility.instantiatePrefab(null, prefab);
 		model.name = modelName;
 		mModelInstanceList.Add(modelName, model);
 		return model;

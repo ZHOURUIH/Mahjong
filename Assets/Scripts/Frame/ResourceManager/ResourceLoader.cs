@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class ResourceLoader : MonoBehaviour
+public class ResourceLoader : GameBase
 {
 	protected Dictionary<string, Dictionary<string, UnityEngine.Object>> mLoadedPath;
 	public ResourceLoader()
@@ -102,7 +102,7 @@ public class ResourceLoader : MonoBehaviour
 		else
 		{
 			mLoadedPath[path].Add(name, null);
-			StartCoroutine(loadResourceCoroutine<T>(name, doneCallback));
+			mMonoUtility.StartCoroutine(loadResourceCoroutine<T>(name, doneCallback));
 		}
 		return true;
 	}
@@ -143,7 +143,7 @@ public class ResourceLoader : MonoBehaviour
 		else
 		{
 			mLoadedPath.Add(path, new Dictionary<string, UnityEngine.Object>());
-			StartCoroutine(loadPathCoroutine(path, callback));
+			mMonoUtility.StartCoroutine(loadPathCoroutine(path, callback));
 		}
 	}
 	//---------------------------------------------------------------------------------------------------------------------------------------

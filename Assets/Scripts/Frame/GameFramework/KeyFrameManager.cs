@@ -42,11 +42,6 @@ public class KeyFrameManager : FrameComponent
 	{
 		// 查找关键帧管理器物体
 		mManagerObject = UnityUtility.getGameObject(mGameFramework.getGameFrameObject(), "KeyFrameManager");
-		if (mManagerObject == null)
-		{
-			UnityUtility.logError("error: can not find KeyFrameManager!");
-			return;
-		}
 	}
 	// 加载所有KeyFrame下的关键帧
 	public void loadAll(bool async)

@@ -8,7 +8,7 @@ using System.Xml;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class AssetBundleLoader : MonoBehaviour
+public class AssetBundleLoader : GameBase
 {
 	protected Dictionary<string, AssetBundleInfo> mAssetBundleInfoList;
 	protected Dictionary<string, AssetInfo> mAssetToBundleInfo;
@@ -93,7 +93,7 @@ public class AssetBundleLoader : MonoBehaviour
 #elif UNITY_ANDROID
 			bool loadFromWWW = true;
 #endif
-			StartCoroutine(loadAssetBundleCoroutine(mRequestBundleList[0], loadFromWWW));
+			mMonoUtility.StartCoroutine(loadAssetBundleCoroutine(mRequestBundleList[0], loadFromWWW));
 			mRequestBundleList.RemoveAt(0);
 		}
 	}
@@ -293,7 +293,7 @@ public class AssetBundleLoader : MonoBehaviour
 	}
 	public void requestLoadAssetsFromUrl(string url, Type assetsType, AssetLoadDoneCallback callback, object userData)
 	{
-		StartCoroutine(loadAssetsFromUrl(url, assetsType, callback, userData));
+		mMonoUtility.StartCoroutine(loadAssetsFromUrl(url, assetsType, callback, userData));
 	}
 	//-------------------------------------------------------------------------------------------------------------------------------------
 	protected IEnumerator loadAssetsFromUrl(string url, Type assetsType, AssetLoadDoneCallback callback, object userData)

@@ -6,7 +6,7 @@ using System.Threading;
 
 public class ThreadLock
 {
-	public volatile int mLockCount = 0;         // 是否锁定
+	protected int mLockCount = 0;         // 是否锁定
 	public ThreadLock()
 	{
 		mLockCount = 0;

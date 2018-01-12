@@ -9,12 +9,14 @@ public class CameraLinkerAcceleration : CameraLinker
 	protected Spring mSpringX;
 	protected Spring mSpringY;
 	protected Spring mSpringZ;
+	protected bool mUseTargetYaw;           // 是否使用目标物体的旋转来旋转摄像机的位置
 	public CameraLinkerAcceleration(Type type, string name)
 		: base(type, name)
 	{
 		mSpringX = new Spring();
 		mSpringY = new Spring();
 		mSpringZ = new Spring();
+		mUseTargetYaw = true;
 	}
 	public override void preUpdate(float elapsedTime)
 	{
@@ -46,11 +48,17 @@ public class CameraLinkerAcceleration : CameraLinker
 		mSpringY.update(elapsedTime);
 		mSpringZ.update(elapsedTime);
 		float curX = 0.0f, curY = 0.0f, curZ = 0.0f;
+		// 如果使用目标物体的航向角,则对相对位置进行旋转
+		Vector3 relative = mRelativePosition;
+		if (mUseTargetYaw)
+		{
+			relative = MathUtility.rotateVector3(relative, mLinkObject.getRotation().y * Mathf.Deg2Rad);
+		}
 		//判断是否为零
 		Vector3 acceleration = mLinkObject.getAcceleration();
-		processRelative(mSpringX, mRelativePosition.x, acceleration.x, ref curX);
-		processRelative(mSpringY, mRelativePosition.y, acceleration.y, ref curY);
-		processRelative(mSpringZ, mRelativePosition.z, acceleration.z, ref curZ);
+		processRelative(mSpringX, relative.x, acceleration.x, ref curX);
+		processRelative(mSpringY, relative.y, acceleration.y, ref curY);
+		processRelative(mSpringZ, relative.z, acceleration.z, ref curZ);
 		// 改变摄像机位置
 		applyRelativePosition(new Vector3(curX, curY, curZ));
 	}
@@ -79,6 +87,8 @@ public class CameraLinkerAcceleration : CameraLinker
 		Vector3 curPos = targetPos + mRelativePosition;
 		(mComponentOwner as GameCamera).setPosition(curPos);
 	}
+	public void setUseTargetYaw(bool use) { mUseTargetYaw = use; }
+	public bool getUseTargetYaw() { return mUseTargetYaw; }
 	//----------------------------------------------------------------------------------------------------------------
 	protected override bool isType(Type type) { return base.isType(type) || type == typeof(CameraLinkerAcceleration); }
 	protected static void processRelative(Spring spring, float relative, float acceleration, ref float curRelative)

@@ -83,7 +83,11 @@ public class SceneSystem : FrameComponent
 			return;
 		}
 		mSceneList[name].destroy();
-		SceneManager.UnloadScene(name);
+		// 只有叠加的场景可以卸载,其他的只能通过加载其他场景来自动卸载
+		if(mSceneList[name].mLoadMode == LoadSceneMode.Additive)
+		{
+			SceneManager.UnloadScene(name);
+		}
 		mSceneList.Remove(name);
 	}
 	//------------------------------------------------------------------------------------------------------------------------------

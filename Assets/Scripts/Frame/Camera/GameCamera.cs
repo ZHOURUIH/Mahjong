@@ -39,7 +39,7 @@ public class GameCamera : MovableObject
 		base.initComponents();
 		addComponent<CameraLinkerAcceleration>("acceleration");
 		addComponent<CameraLinkerFixed>("fixed");
-		addComponent<CameraLinkerFixedTime>("fixedTime");
+		addComponent<CameraLinkerSmoothFollow>("SmoothFollow");
 	}
 	public override void update(float elapsedTime)
 	{

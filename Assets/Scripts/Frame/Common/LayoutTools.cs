@@ -116,7 +116,10 @@ public class LayoutTools : GameBase
 		cmd.mImmediately = immediately;
 		cmd.mParam = param;
 		pushDelayCommand(cmd, mLayoutManager, delayTime);
-		procedure.addDelayCmd(cmd);
+		if(procedure != null)
+		{
+			procedure.addDelayCmd(cmd);
+		}
 		return cmd;
 	}
 	public static CommandLayoutManagerLayoutVisible VISIBLE_LAYOUT_DELAY_EX(SceneProcedure procedure, float delayTime, LAYOUT_TYPE type, bool visible, CommandCallback start, bool immediately = false, string param = "")
@@ -129,7 +132,10 @@ public class LayoutTools : GameBase
 		cmd.mParam = param;
 		cmd.addStartCommandCallback(start, null);
 		pushDelayCommand(cmd, mLayoutManager, delayTime);
-		procedure.addDelayCmd(cmd);
+		if (procedure != null)
+		{
+			procedure.addDelayCmd(cmd);
+		}
 		return cmd;
 	}
 	public static CommandLayoutManagerLayoutVisible VISIBLE_LAYOUT_DELAY_FORCE(float delayTime, LAYOUT_TYPE type, bool visible)

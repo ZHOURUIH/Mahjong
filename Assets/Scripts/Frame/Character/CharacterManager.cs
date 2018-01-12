@@ -99,7 +99,7 @@ public class CharacterManager : FrameComponent
 		}
 		characterList = mCharacterTypeList[type];
 	}
-	public Character createCharacter(string name, CHARACTER_TYPE type, int id)
+	public Character createCharacter(string name, CHARACTER_TYPE type, int id, bool createNode)
 	{
 		if (mCharacterList.ContainsKey(name))
 		{
@@ -123,7 +123,13 @@ public class CharacterManager : FrameComponent
 		if (newCharacter != null)
 		{
 			// 将角色挂接到管理器下
-			newCharacter.setParent(mManagerObject);
+			if(createNode)
+			{
+				GameObject charNode = new GameObject();
+				charNode.name = newCharacter.getName();
+				newCharacter.setObject(charNode);
+				newCharacter.setParent(mManagerObject);
+			}
 			newCharacter.init();
 			newCharacter.setID(id);
 			addCharacterToList(newCharacter);

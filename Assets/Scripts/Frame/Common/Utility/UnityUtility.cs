@@ -102,11 +102,6 @@ public class UnityUtility : FrameComponent
 		Camera camera = mCameraManager.getUICamera().getCamera();
 		return camera.ScreenPointToRay(screenPos);
 	}
-	public static bool raycast(Ray ray, txUIObject window)
-	{
-		RaycastHit hit = new RaycastHit();
-		return window.Raycast(ray, out hit, 10000.0f);
-	}
 	public static List<txUIObject> raycast(Ray ray, SortedDictionary<int, List<txUIObject>> buttonList, int maxCount = 0)
 	{
 		bool cast = true;
@@ -118,7 +113,8 @@ public class UnityUtility : FrameComponent
 			for (int i = 0; i < count; ++i)
 			{
 				txUIObject window = box.Value[i];
-				if (window.getHandleInput() && window.Raycast(ray, out hit, 10000.0f))
+				BoxCollider collider = window.getBoxCollider();
+				if (window.getHandleInput() && collider.Raycast(ray, out hit, 10000.0f))
 				{
 					retList.Add(window);
 					// 如果射线不能穿透当前按钮,或者已经达到最大数量,则不再继续
@@ -160,6 +156,19 @@ public class UnityUtility : FrameComponent
 			if (trans != null)
 			{
 				go = trans.gameObject;
+			}
+			// 如果父节点的第一级子节点中找不到,就递归查找
+			else
+			{
+				int childCount = parent.transform.childCount;
+				for(int i = 0; i < childCount; ++i)
+				{
+					go = getGameObject(parent.transform.GetChild(i).gameObject, name, false);
+					if (go != null)
+					{
+						break;
+					}
+				}
 			}
 		}
 		if(go == null && errorIfNull)

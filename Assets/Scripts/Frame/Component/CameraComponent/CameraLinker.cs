@@ -17,7 +17,6 @@ public class CameraLinker : GameComponent
 	protected MovableObject mLinkObject;
 	protected Vector3 mRelativePosition;	//相对位置
 	protected bool mLookAtTarget;			// 是否在摄像机运动过程中一直看向目标位置
-	protected bool mUseTargetYaw;			// 是否使用目标物体的旋转来旋转摄像机,旋转不会影响到摄像机的位置
 	protected Vector3 mLookAtOffset;		// 焦点的偏移,实际摄像机的焦点是物体的位置加上偏移
 	protected Dictionary<CAMERA_LINKER_SWITCH, CameraLinkerSwitch> mSwitchList; // 转换器列表
 	protected CameraLinkerSwitch mCurSwitch;
@@ -29,7 +28,6 @@ public class CameraLinker : GameComponent
 		mLookAtOffset = new Vector3(0.0f, 2.0f, 0.0f);
 		mLookAtTarget = false;
 		mLinkObject = null;
-		mUseTargetYaw = false;
 		mSwitchList = new Dictionary<CAMERA_LINKER_SWITCH, CameraLinkerSwitch>();
 	}
 	public override void init(ComponentOwner owner)
@@ -50,26 +48,10 @@ public class CameraLinker : GameComponent
 			mCurSwitch.update(elapsedTime);
 		}
 	}
-	public Vector3 getCenterPosition()
-	{
-		if (mLookAtTarget)
-		{
-			return mLinkObject.getWorldPosition() + mLookAtOffset;
-		}
-		else
-		{
-			return mLinkObject.getWorldPosition();
-		}
-	}
 	public virtual void applyRelativePosition(Vector3 relative)
 	{
 		if (mLinkObject != null)
 		{
-			// 如果使用目标物体的航向角,则对相对位置进行旋转
-			if (mUseTargetYaw)
-			{
-				relative = MathUtility.rotateVector3(relative, -mLinkObject.getRotation().y * Mathf.Deg2Rad);
-			}
 			mCamera.setPosition(mLinkObject.getWorldPosition() + relative);
 			if (mLookAtTarget)
 			{
@@ -132,8 +114,10 @@ public class CameraLinker : GameComponent
 	public Vector3 getLookAtOffset() { return mLookAtOffset; }
 	public void setLookAtTarget(bool lookat) { mLookAtTarget = lookat; }
 	public bool getLookAtTarget() { return mLookAtTarget; }
-	public void setUseTargetYaw(bool use) { mUseTargetYaw = use; }
-	public bool getUseTargetYaw() { return mUseTargetYaw; }
+	public virtual Vector3 getNormalRelativePosition()
+	{
+		return MathUtility.rotateVector3(mRelativePosition, mLinkObject.getRotation().y * Mathf.Deg2Rad);
+	}
 	//------------------------------------------------------------------------------------------------------------------------------------------------
 	protected override void setBaseType() { mBaseType = typeof(CameraLinker); }
 	protected override bool isType(Type type) {	return type == typeof(CameraLinker);}

@@ -362,21 +362,12 @@ public class MathUtility
 			return dir;
 		}
 	}
-	public static void getDegreeYawPitchFromDirection(Vector3 dir, ref float fYaw, ref float fPitch)
+	public static float getVectorYaw(Vector3 vec)
 	{
-		getRadianYawPitchFromDirection(dir, ref fYaw, ref fPitch);
-		fYaw *= Mathf.Rad2Deg;
-		fPitch *= Mathf.Rad2Deg;
-	}
-	// fYaw是-PI到PI之间
-	public static void getRadianYawPitchFromDirection(Vector3 dir, ref float fYaw, ref float fPitch)
-	{
-		dir = normalize(dir);
-		// 首先计算俯仰角,俯仰角是向量与X-Z平面的夹角,在上面为负,在下面为正
-		fPitch = -Mathf.Asin(dir.y);
-
-		// 再计算航向角,航向角是向量与在X-Z平面上的投影与Z轴正方向的夹角,从上往下看是顺时针为正,逆时针为负
-		Vector3 projectionXZ = new Vector3(dir.x, 0.0f, dir.z);
+		vec = normalize(vec);
+		float fYaw = 0.0f;
+		// 计算航向角,航向角是向量与在X-Z平面上的投影与Z轴正方向的夹角,从上往下看是顺时针为正,逆时针为负
+		Vector3 projectionXZ = new Vector3(vec.x, 0.0f, vec.z);
 		float len = getLength(projectionXZ);
 		// 如果投影的长度为0,则表示俯仰角为90°或者-90°,航向角为0
 		if (isFloatZero(len))
@@ -388,13 +379,74 @@ public class MathUtility
 			projectionXZ = normalize(projectionXZ);
 			fYaw = Mathf.Acos(Vector3.Dot(projectionXZ, Vector3.forward));
 			// 判断航向角的正负,如果x为正,则航向角为负,如果x为,则航向角为正
-			if (dir.x > 0.0f)
+			if (vec.x > 0.0f)
 			{
 				fYaw = -fYaw;
 			}
 		}
 		// 在unity的坐标系中航向角需要取反
 		fYaw = -fYaw;
+		return fYaw;
+	}
+	// 计算向量的俯仰角,朝上时俯仰角小于0,朝下时俯仰角大于0
+	public static float getVectorPitch(Vector3 vec)
+	{
+		vec = normalize(vec);
+		return -Mathf.Asin(vec.y);
+	}
+	public static float getAngleFromVectorToVector(Vector3 from, Vector3 to)
+	{
+		float dotValue = Vector3.Dot(from, to);
+		float fromLength = from.magnitude;
+		float toLength = to.magnitude;
+		float angleValue = dotValue / (fromLength * toLength);
+		if (angleValue > 1.0f)
+		{
+			angleValue = 1.0f;
+		}
+		else if (angleValue < -1.0f)
+		{
+			angleValue = -1.0f;
+		}
+		float angle = Mathf.Acos(angleValue);
+		return angle;
+	}
+	public static float getAngleFromVectorToVector(Vector2 from, Vector2 to)
+	{
+		float dotValue = Vector2.Dot(from, to);
+		float fromLength = from.magnitude;
+		float toLength = to.magnitude;
+		float angleValue = dotValue / (fromLength * toLength);
+		if (angleValue > 1.0f)
+		{
+			angleValue = 1.0f;
+		}
+		else if (angleValue < -1.0f)
+		{
+			angleValue = -1.0f;
+		}
+		float angle = Mathf.Acos(angleValue);
+
+		Vector3 crossVec = Vector3.Cross(new Vector3(from.x, 0.0f, from.y), new Vector3(to.x, 0.0f, to.y));
+		if (crossVec.y > 0.0f)
+		{
+			angle = -angle;
+		}
+		return angle;
+	}
+	public static void getDegreeYawPitchFromDirection(Vector3 dir, ref float fYaw, ref float fPitch)
+	{
+		getRadianYawPitchFromDirection(dir, ref fYaw, ref fPitch);
+		fYaw *= Mathf.Rad2Deg;
+		fPitch *= Mathf.Rad2Deg;
+	}
+	// fYaw是-PI到PI之间
+	public static void getRadianYawPitchFromDirection(Vector3 dir, ref float fYaw, ref float fPitch)
+	{
+		dir = normalize(dir);
+		// 首先计算俯仰角,俯仰角是向量与X-Z平面的夹角,在上面为负,在下面为正
+		fPitch = getVectorPitch(dir);
+		fYaw = getVectorYaw(dir);
 	}
 	// 给定一段圆弧,以及圆弧圆心角的百分比,计算对应的圆弧上的一个点以及该点的切线方向
 	public static void getPosOnArc(Vector3 circleCenter, Vector3 startArcPos, Vector3 endArcPos, float radius, float anglePercent, ref Vector3 pos, ref Vector3 tangencyDir)
@@ -423,6 +475,22 @@ public class MathUtility
 				tangencyDir = -tangencyDir;
 			}
 		}
+	}
+	// 根据入射角和法线得到反射角
+	public static Vector3 getReflection(Vector3 inRay, Vector3 normal)
+	{
+		inRay = normalize(inRay);
+		normal = normalize(normal);
+		Vector3 outRay = inRay - 2 * (Vector3.Dot(inRay, normal)) * normal;
+		return outRay;
+	}
+	public static bool isVectorZero(Vector2 vec)
+	{
+		return isFloatZero(vec.x) && isFloatZero(vec.y);
+	}
+	public static bool isVectorZero(Vector3 vec)
+	{
+		return isFloatZero(vec.x) && isFloatZero(vec.y) && isFloatZero(vec.z);
 	}
 	public static float getLength(Vector3 vec)
 	{
@@ -571,6 +639,29 @@ public class MathUtility
 		clamp(ref dotValue, -1.0f, 1.0f);
 		return Mathf.Acos(dotValue);
 	}
+	// 计算点到线的距离
+	public static float getDistanceToLine(Vector3 point, Vector3 start, Vector3 end)
+	{
+		return MathUtility.getLength(point - getProjectPoint(point, start, end));
+	}
+	// 计算点在线上的投影
+	public static Vector3 getProjectPoint(Vector3 point, Vector3 start, Vector3 end)
+	{
+		// 计算出点到线一段的向量在线上的投影
+		Vector3 projectOnLine = MathUtility.getProjection(point - start, end - start);
+		// 点到线垂线的交点
+		return start + projectOnLine;
+	}
+	// 点在线上的投影是否在线段范围内
+	public static bool isPointProjectOnLine(Vector3 point, Vector3 start, Vector3 end)
+	{
+		return getAngleBetweenVector(point - start, end - start) <= Mathf.PI / 2.0f;
+	}
+	// 计算一个向量在另一个向量上的投影
+	public static Vector3 getProjection(Vector3 v1, Vector3 v2)
+	{
+		return normalize(v2) * getLength(v1) * Mathf.Cos(getAngleBetweenVector(v1, v2));
+	}
 	public static Vector3 normalize(Vector3 vec3)
 	{
 		float length = getLength(vec3);
@@ -578,10 +669,13 @@ public class MathUtility
 		{
 			return Vector3.zero;
 		}
+		if(isFloatEqual(length, 1.0f))
+		{
+			return vec3;
+		}
 		float inverseLen = 1.0f / length;
 		return new Vector3(vec3.x * inverseLen, vec3.y * inverseLen, vec3.z * inverseLen);
 	}
-
 	public static Matrix4x4 eulerAngleToMatrix3(Vector3 angle)
 	{
 		// 分别计算三个分量的旋转矩阵,然后相乘得出最后的结果
@@ -731,29 +825,6 @@ public class MathUtility
 	{
 		return isFloatZero(value1 - value2, precision);
 	}
-	public static float getAngleFromVectorToVector(Vector2 from, Vector2 to)
-	{
-		float dotValue = Vector2.Dot(from, to);
-		float fromLength = from.magnitude;
-		float toLength = to.magnitude;
-		float angleValue = dotValue / (fromLength * toLength);
-		if (angleValue > 1.0f)
-		{
-			angleValue = 1.0f;
-		}
-		else if (angleValue < -1.0f)
-		{
-			angleValue = -1.0f;
-		}
-		float angle = Mathf.Acos(angleValue);
-
-		Vector3 crossVec = Vector3.Cross(new Vector3(from.x, 0.0f, from.y), new Vector3(to.x, 0.0f, to.y));
-		if (crossVec.y > 0.0f)
-		{
-			angle = -angle;
-		}
-		return angle;
-	}
 	public static void clampValue(ref float value, float min, float max, float cycle)
 	{
 		while (value < min)
@@ -843,10 +914,13 @@ public class MathUtility
 	// 求Z轴顺时针旋转一定角度后的向量,角度范围是-MATH_PI 到 MATH_PI
 	public static Vector3 getVectorFromAngle(float angle)
 	{
+		adjustRadian180(ref angle);
 		Vector3 temp = new Vector3();
 		temp.x = -Mathf.Sin(angle);
 		temp.y = 0.0f;
 		temp.z = Mathf.Cos(angle);
+		// 在unity坐标系中x轴需要取反
+		temp.x = -temp.x;
 		return temp;
 	}
 	public static int pcm_db_count(short[] ptr, int size)

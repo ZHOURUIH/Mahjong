@@ -35,6 +35,7 @@ abstract public class GameScene : ComponentOwner
 	// 进入场景时初始化
     public virtual void init()
     {
+		mSceneObject.AddComponent<GameSceneInfo>();
         initComponents();
 		// 创建出所有的场景流程
 		createSceneProcedure();

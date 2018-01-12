@@ -83,7 +83,6 @@ public class txUIObject : ComponentOwner
 			mChildList.Add(child);
 		}
 	}
-	
 	public AudioSource createAudioSource()
 	{
 		mAudioSource = mObject.AddComponent<AudioSource>();
@@ -92,10 +91,6 @@ public class txUIObject : ComponentOwner
 	public virtual void update(float elapsedTime)
 	{
 		base.updateComponents(elapsedTime);
-	}
-	public bool Raycast(Ray ray, out RaycastHit hitInfo, float maxDistance)
-	{
-		return mBoxCollider.Raycast(ray, out hitInfo, maxDistance);
 	}
 	//get
 	//-------------------------------------------------------------------------------------------------------------------------------------

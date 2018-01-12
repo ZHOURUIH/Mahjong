@@ -6,29 +6,19 @@ public class CommandCharacterManagerCreateCharacter : Command
 	public CHARACTER_TYPE	mCharacterType;
 	public int				mID;
 	public string			mName;
-	public string			mModelPath;
-	public string			mAnimatorControllerPath;
-	public string			mCharacterNode;
+	public bool				mCreateNode;
 	public override void init()
 	{
 		base.init();
 		mCharacterType = CHARACTER_TYPE.CT_MAX;
 		mName = "";
 		mID = -1;
-		mModelPath = "";
-		mAnimatorControllerPath = "";
-		mCharacterNode = "";
+		mCreateNode = true;
 	}
 	public override void execute()
 	{
 		CharacterManager characterManager = mReceiver as CharacterManager;
-		Character character = characterManager.createCharacter(mName, mCharacterType, mID);
-		if(mCharacterNode != "")
-		{
-			GameObject charNode = UnityUtility.getGameObject(mCharacterManager.getManagerNode(), mCharacterNode);
-			character.setObject(charNode);
-		}
-		character.initModel(mModelPath, mAnimatorControllerPath);
+		characterManager.createCharacter(mName, mCharacterType, mID, mCreateNode);
 	}
 	public override string showDebugInfo()
 	{

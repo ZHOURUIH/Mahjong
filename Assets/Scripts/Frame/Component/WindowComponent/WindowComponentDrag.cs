@@ -27,6 +27,7 @@ public class WindowComponentDrag : ComponentDrag
 	protected override bool mouseHovered(Vector3 mousePosition)
 	{
 		// 使用当前鼠标位置判断是否悬停,暂时忽略被其他窗口覆盖的情况
-		return UnityUtility.raycast(UnityUtility.getRay(mousePosition), mComponentOwner as txUIObject);
+		RaycastHit hit;
+		return (mComponentOwner as txUIObject).getBoxCollider().Raycast(UnityUtility.getRay(mousePosition), out hit, 10000.0f);
 	}
 }

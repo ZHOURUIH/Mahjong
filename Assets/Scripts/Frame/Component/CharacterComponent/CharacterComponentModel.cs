@@ -58,8 +58,6 @@ public class CharacterComponentModel : GameComponent
 			mModel.SetActive(active);
 		}
 	}
-	public void setScale(Vector3 scale) { mModelTransform.localScale = scale; }
-	public void setRotation(Vector3 euler) { mModelTransform.localEulerAngles = euler; }
 	//-----------------------------------------------------------------------------------------------------------------------
 	protected override bool isType(Type type){ return type == typeof(CharacterComponentModel);}
 	protected override void setBaseType(){mBaseType = typeof(CharacterComponentModel);}

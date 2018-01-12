@@ -14,8 +14,7 @@ public class MovableObject : ComponentOwner
 		:
 		base(name)
 	{
-		mObject = new GameObject(name);
-		mTransform = mObject.transform;
+		;
 	}
 	public override void destroy()
 	{

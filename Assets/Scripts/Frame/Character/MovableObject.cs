@@ -114,6 +114,12 @@ public class MovableObject : ComponentOwner
 	{
 		mObject.SetActive(active);
 	}
+	public void setPositionY(float y)
+	{
+		Vector3 pos = getPosition();
+		pos.y = y;
+		setPosition(pos);
+	}
 	public virtual void setPosition(Vector3 position)
 	{
 		mTransform.localPosition = position;
@@ -130,6 +136,12 @@ public class MovableObject : ComponentOwner
 	public void setWorldRotation(Vector3 eulerAngle)
 	{
 		mTransform.eulerAngles = eulerAngle;
+	}
+	public void setPitch(float pitch)
+	{
+		Vector3 rot = getRotation();
+		rot.x = pitch;
+		setRotation(rot);
 	}
 	public virtual void setScale(Vector3 scale)
 	{

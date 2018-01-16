@@ -17,7 +17,6 @@ public class GameFramework : MonoBehaviour
 	protected Dictionary<string, FrameComponent> mFrameComponentMap;	// 存储框架组件,用于查找
 	protected List<FrameComponent>	mFrameComponentList;				// 存储框架组件,用于初始化,更新,销毁
 	protected GameObject			mGameFrameObject;
-	protected MonoUtility			mMonoUtility;
 	protected bool					mPauseFrame;
 	public void Start()
 	{
@@ -68,8 +67,6 @@ public class GameFramework : MonoBehaviour
 		initComponent();
 		// 资源管理器必须最后注册,以便最后销毁,作为最后的资源清理
 		registeComponent<ResourceManager>();
-		GameObject monoUtility = UnityUtility.getGameObject(mGameFrameObject, "MonoUtility", true);
-		mMonoUtility = monoUtility.GetComponent<MonoUtility>();
 	}
 	public virtual void registe(){}
 	public virtual void init()
@@ -195,7 +192,6 @@ public class GameFramework : MonoBehaviour
 	public void setPasueFrame(bool value) { mPauseFrame = value; }
 	public bool getPasueFrame() { return mPauseFrame; }
 	public GameObject getGameFrameObject() { return mGameFrameObject; }
-	public MonoUtility getMonoUtility() { return mMonoUtility; }
 	//------------------------------------------------------------------------------------------------------
 	protected void registeComponent<T>() where T : FrameComponent
 	{

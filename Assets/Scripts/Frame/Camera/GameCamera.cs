@@ -126,13 +126,13 @@ public class GameCamera : MovableObject
 	}
 	public void linkTarget(string linkerName, MovableObject target)
 	{
-		if (!mAllComponentList.ContainsKey(linkerName))
+		GameComponent com = null;
+		if (mAllComponentList.ContainsKey(linkerName))
 		{
-			return;
+			com = mAllComponentList[linkerName];
 		}
-		GameComponent com = mAllComponentList[linkerName];
 		// 如果不是连接器则直接返回
-		if (com.getBaseType() != typeof(CameraLinker))
+		if (com != null && com.getBaseType() != typeof(CameraLinker))
 		{
 			return;
 		}
@@ -143,7 +143,14 @@ public class GameCamera : MovableObject
 			item.Value.setActive(item.Value == com && target != null);
 		}
 		// 如果是要断开当前连接器,则将连接器名字清空,否则记录当前连接器
-		mCurLinker = target == null ? null : com as CameraLinker;
+		if(target != null && com != null)
+		{
+			mCurLinker = com as CameraLinker;
+		}
+		else
+		{
+			mCurLinker = null;
+		}
 	}
 	public Camera getCamera(){ return mCamera;}
 	public void setKeyProcess(bool process) { mKeyProcess = process; }

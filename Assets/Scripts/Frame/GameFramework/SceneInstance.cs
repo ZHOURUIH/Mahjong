@@ -14,10 +14,6 @@ public class SceneInstance : GameBase
 	public AsyncOperation mOperation;
 	public GameObject mRoot;
 	public bool mInited;
-	// 以下参数仅在加载时使用
-	public object mUserData;
-	public SceneLoadCallback mLoadCallback;
-	public LoadSceneMode mLoadMode;
 	public SceneInstance(string name)
 	{
 		mName = name;

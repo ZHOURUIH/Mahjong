@@ -17,13 +17,18 @@ public class CharacterComponentModel : GameComponent
 	{
 		base.init(owner);
 	}
+	public override void destroy()
+	{
+		if(mModel != null)
+		{
+			mModelManager.destroyModel(mModel.name);
+			mModel = null;
+		}
+		base.destroy();
+	}
 	public override void update(float elapsedTime)
 	{
 		base.update(elapsedTime);
-		//// 将模型自身的位置属性同步到角色(因为动作会自动改变模型的位置,需要同步给角色),同时重置模型自身的位置
-		//Character character = mComponentOwner as Character;
-		//character.setPosition(mModel.transform.localPosition);
-		//mModel.transform.localPosition = Vector3.zero;
 	}
 	public void setModel(GameObject model, string modelPath, bool destroyOld = true)
 	{

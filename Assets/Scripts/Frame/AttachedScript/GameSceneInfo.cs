@@ -20,8 +20,4 @@ public class GameSceneInfo : MonoBehaviour
 			mCurProcedure = sceneProcedure.getProcedureType();
 		}
 	}
-	public void FixedUpdate()
-	{
-		;
-	}
 }

@@ -254,6 +254,26 @@ public class UnityUtility : FrameComponent
 		Camera camera = mCameraManager.getUICamera().getCamera();
 		return camera.WorldToScreenPoint(worldPos);
 	}
+	//世界坐标转化为视口坐标
+	public static Vector2 worldPosToViewportPos(Vector3 worldPos)
+	{
+		Camera camera = mCameraManager.getMainCamera().getCamera();
+		Vector2 screenPoint = camera.WorldToScreenPoint(worldPos);
+		return camera.ScreenToViewportPoint(screenPoint);
+	}
+	public static bool whetherGameObjectInViewPort(Vector3 worldPos)
+	{
+		Rect screenRect = new Rect(0, 0, 1, 1);
+		Vector2 viewportPos = worldPosToViewportPos(worldPos);
+		if (screenRect.Contains(viewportPos))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 	public static Vector2 screenPosToWindowPos(Vector2 screenPos, txUIObject parent)
 	{
 		Camera camera = mCameraManager.getUICamera().getCamera();

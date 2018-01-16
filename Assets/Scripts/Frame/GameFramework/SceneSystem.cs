@@ -29,6 +29,10 @@ public class SceneSystem : FrameComponent
 			unloadScene(item.Key);
 		}
 	}
+	public override void update(float elapsedTime)
+	{
+		base.update(elapsedTime);
+	}
 	public void initScene(string name)
 	{
 		if (!mSceneList.ContainsKey(name) || mSceneList[name].mInited)
@@ -56,25 +60,29 @@ public class SceneSystem : FrameComponent
 			return;
 		}
 		mSceneList[name].setActive(active);
+		if(active && SceneManager.GetActiveScene().name != name)
+		{
+			SceneManager.SetActiveScene(mSceneList[name].mScene);
+		}
 	}
-	public void loadScene(string name, LoadSceneMode mode)
+	// 目前只支持异步加载,因为SceneManager.LoadScene并不是真正地同步加载
+	// 该方法只能保证在这一帧结束后场景能加载完毕,但是函数返回后场景并没有加载完毕
+	public void loadSceneAsync(string name, bool active, SceneLoadCallback callback, object userData = null)
 	{
-		SceneManager.LoadScene(name, mode);
-		SceneInstance scene = createScene(name);
-		scene.mState = LOAD_STATE.LS_LOADED;
-		scene.mOperation = null;
-		scene.mScene = SceneManager.GetSceneByName(name);
-		mSceneList.Add(name, scene);
-	}
-	public void loadSceneAsync(string name, LoadSceneMode mode, bool active, SceneLoadCallback callback, object userData = null)
-	{
+		// 如果场景已经加载,则直接返回
+		if (mSceneList.ContainsKey(name))
+		{
+			SceneInstance loadedScene = mSceneList[name];
+			if(callback != null)
+			{
+				callback(loadedScene.mOperation, true, userData);
+			}
+			return;
+		}
 		SceneInstance scene = createScene(name);
 		scene.mState = LOAD_STATE.LS_LOADING;
-		scene.mLoadCallback = callback;
-		scene.mUserData = userData;
-		scene.mLoadMode = mode;
 		mSceneList.Add(scene.mName, scene);
-		GameBase.mMonoUtility.StartCoroutine(loadSceneCoroutine(scene, active));
+		mGameFramework.StartCoroutine(loadSceneCoroutine(scene, active, callback, userData));
 	}
 	public void unloadScene(string name)
 	{
@@ -83,41 +91,52 @@ public class SceneSystem : FrameComponent
 			return;
 		}
 		mSceneList[name].destroy();
-		// 只有叠加的场景可以卸载,其他的只能通过加载其他场景来自动卸载
-		if(mSceneList[name].mLoadMode == LoadSceneMode.Additive)
-		{
-			SceneManager.UnloadScene(name);
-		}
+		SceneManager.UnloadScene(name);
 		mSceneList.Remove(name);
 	}
-	//------------------------------------------------------------------------------------------------------------------------------
-	protected IEnumerator loadSceneCoroutine(SceneInstance scene, bool active)
+	// 卸载除了dontUnloadSceneName以外的其他场景,初始默认场景除外
+	public void unloadOtherScene(string dontUnloadSceneName)
 	{
-		scene.mOperation = SceneManager.LoadSceneAsync(scene.mName, scene.mLoadMode);
+		Dictionary<string, SceneInstance> tempList = new Dictionary<string, SceneInstance>(mSceneList);
+		foreach(var item in tempList)
+		{
+			if(item.Key != dontUnloadSceneName)
+			{
+				unloadScene(item.Key);
+			}
+		}
+	}
+	//------------------------------------------------------------------------------------------------------------------------------
+	protected IEnumerator loadSceneCoroutine(SceneInstance scene, bool active, SceneLoadCallback callback, object userData = null)
+	{
+		// 所有场景都只能使用叠加的方式来加载,方便场景管理器来管理所有场景的加载和卸载
+		scene.mOperation = SceneManager.LoadSceneAsync(scene.mName, LoadSceneMode.Additive);
+		// allowSceneActivation指定了加载场景时是否需要调用场景中所有脚本的Awake和Start,以及贴图材质的引用等等
 		scene.mOperation.allowSceneActivation = true;
 		while(true)
 		{
-			if (scene.mLoadCallback != null)
+			if (callback != null)
 			{
-				scene.mLoadCallback(scene.mOperation, false, scene.mUserData);
+				callback(scene.mOperation, false, userData);
 			}
-			// 当allowSceneActivation为true时,加载到progress为1时停止,并且isDone为true
-			// 当allowSceneActivation为false时,加载到progress为0.9时就停止,并且isDone为false,当场景被激活时isDone变为true,progress也为1
-			if (scene.mOperation.isDone && scene.mOperation.progress >= 1.0f)
+			// 当allowSceneActivation为true时,加载到progress为1时停止,并且isDone为true,scene.isLoaded为true
+			// 当allowSceneActivation为false时,加载到progress为0.9时就停止,并且isDone为false, scene.isLoaded为false
+			// 当场景被激活时isDone变为true,progress也为1,scene.isLoaded为true
+			if (scene.mOperation.isDone || scene.mOperation.progress >= 1.0f)
 			{
 				break;
 			}
 			yield return null;
 		}
+		// 首先获得场景
+		scene.mScene = SceneManager.GetSceneByName(scene.mName);
+		// 获得了场景根节点才能使场景显示或隐藏
 		scene.mRoot = UnityUtility.getGameObject(null, scene.mName + "_Root", true);
 		activeScene(scene.mName, active);
 		scene.mState = LOAD_STATE.LS_LOADED;
-		scene.mScene = SceneManager.GetSceneByName(scene.mName);
-		if (scene.mLoadCallback != null)
+		if (callback != null)
 		{
-			scene.mLoadCallback(scene.mOperation, true, scene.mUserData);
-			scene.mLoadCallback = null;
-			scene.mUserData = null;
+			callback(scene.mOperation, true, userData);
 		}
 	}
 	protected SceneInstance createScene(string sceneName)

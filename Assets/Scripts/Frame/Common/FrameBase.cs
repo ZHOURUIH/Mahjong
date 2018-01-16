@@ -23,7 +23,6 @@ public class FrameBase
 	public static ModelManager			mModelManager			= null;
 	public static InputManager			mInputManager			= null;
 	public static SceneSystem			mSceneSystem			= null;
-	public static MonoUtility			mMonoUtility			= null;
 	public virtual void notifyConstructDone()
 	{
 		if (mGameFramework == null)
@@ -46,10 +45,14 @@ public class FrameBase
 			mModelManager = mGameFramework.getSystem<ModelManager>();
 			mInputManager = mGameFramework.getSystem<InputManager>();
 			mSceneSystem = mGameFramework.getSystem<SceneSystem>();
-			mMonoUtility = mGameFramework.getMonoUtility();
 		}
 	}
 	// 方便书写代码添加的命令相关函数
+	public static T newCmd<T>(out T cmd, bool show = true, bool delay = false) where T : Command, new()
+	{
+		cmd = null;
+		return mCommandSystem.newCmd<T>(show, delay);
+	}
 	public static T newCmd<T>(bool show = true, bool delay = false) where T : Command, new()
 	{
 		return mCommandSystem.newCmd<T>(show, delay);

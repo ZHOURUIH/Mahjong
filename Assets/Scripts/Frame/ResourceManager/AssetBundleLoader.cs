@@ -93,7 +93,7 @@ public class AssetBundleLoader : GameBase
 #elif UNITY_ANDROID
 			bool loadFromWWW = true;
 #endif
-			mMonoUtility.StartCoroutine(loadAssetBundleCoroutine(mRequestBundleList[0], loadFromWWW));
+			mGameFramework.StartCoroutine(loadAssetBundleCoroutine(mRequestBundleList[0], loadFromWWW));
 			mRequestBundleList.RemoveAt(0);
 		}
 	}
@@ -293,7 +293,7 @@ public class AssetBundleLoader : GameBase
 	}
 	public void requestLoadAssetsFromUrl(string url, Type assetsType, AssetLoadDoneCallback callback, object userData)
 	{
-		mMonoUtility.StartCoroutine(loadAssetsFromUrl(url, assetsType, callback, userData));
+		mGameFramework.StartCoroutine(loadAssetsFromUrl(url, assetsType, callback, userData));
 	}
 	//-------------------------------------------------------------------------------------------------------------------------------------
 	protected IEnumerator loadAssetsFromUrl(string url, Type assetsType, AssetLoadDoneCallback callback, object userData)

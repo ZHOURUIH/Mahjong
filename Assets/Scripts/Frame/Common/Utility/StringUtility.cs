@@ -386,6 +386,14 @@ public class StringUtility
 		}
 		return retString;
 	}
+	public static string vector2ToString(Vector2 value, int precision = 4)
+	{
+		return floatToString(value.x, precision) + "," + floatToString(value.y, precision);
+	}
+	public static string vector3ToString(Vector3 value, int precision = 4)
+	{
+		return floatToString(value.x, precision) + "," + floatToString(value.y, precision) + "," + floatToString(value.z, precision);
+	}
 	public static string strReplace(string str, int begin, int end, string reStr)
 	{
 		string sub1 = str.Substring(0, begin);

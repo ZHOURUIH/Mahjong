@@ -102,7 +102,7 @@ public class ResourceLoader : GameBase
 		else
 		{
 			mLoadedPath[path].Add(name, null);
-			mMonoUtility.StartCoroutine(loadResourceCoroutine<T>(name, doneCallback));
+			mGameFramework.StartCoroutine(loadResourceCoroutine<T>(name, doneCallback));
 		}
 		return true;
 	}
@@ -143,7 +143,7 @@ public class ResourceLoader : GameBase
 		else
 		{
 			mLoadedPath.Add(path, new Dictionary<string, UnityEngine.Object>());
-			mMonoUtility.StartCoroutine(loadPathCoroutine(path, callback));
+			mGameFramework.StartCoroutine(loadPathCoroutine(path, callback));
 		}
 	}
 	//---------------------------------------------------------------------------------------------------------------------------------------

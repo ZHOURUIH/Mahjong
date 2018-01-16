@@ -22,7 +22,7 @@ public class CommandCameraLinkTarget : Command
 		base.init();
 		mTarget = null;
 		mSwitchType = CAMERA_LINKER_SWITCH.CLS_NONE;
-		mLinkerName = "fixed";
+		mLinkerName = "";
 		mLookAtTarget = true;
 		mLookatOffset = Vector3.zero;
 		mUseOriginRelative = true;

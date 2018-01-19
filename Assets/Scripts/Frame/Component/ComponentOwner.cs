@@ -278,6 +278,14 @@ public abstract class ComponentOwner : CommandReceiver
 		}
 		return null;
 	}
+	public void activeFirstComponent<T>(bool active = true) where T : GameComponent
+	{
+		T component = getFirstComponent<T>();
+		if(component != null)
+		{
+			component.setActive(active);
+		}
+	}
 	public virtual void notifyComponentDestroied(GameComponent component)
 	{
 		removeComponentFromList(component);

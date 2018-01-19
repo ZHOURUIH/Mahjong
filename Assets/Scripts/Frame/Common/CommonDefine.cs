@@ -143,9 +143,9 @@ public class CommonDefine
 	public const string R_TEXTURE_ANIM_PATH = R_TEXTURE_PATH + TEXTURE_ANIM + "/";
 	public const string R_MATERIAL_PATH = MATERIAL + "/";
 	public const string R_PARTICLE_PATH = PARTICLE + "/";
-	public const string R_MODEL = MODEL + "/";
-	public const string R_MODEL_WEAPON = R_MODEL + WEAPON + "/";
-	public const string R_MODEL_CHARACTER = R_MODEL + CHARACTER + "/";
+	public const string R_MODEL_PATH = MODEL + "/";
+	public const string R_MODEL_WEAPON_PATH = R_MODEL_PATH + WEAPON + "/";
+	public const string R_MODEL_CHARACTER_PATH = R_MODEL_PATH + CHARACTER + "/";
 	// 绝对路径,以F_开头,表示Full
 	public static string F_ASSETS_PATH = Application.dataPath + "/";
 	public static string F_STREAMING_ASSETS_PATH = F_ASSETS_PATH + STREAMING_ASSETS + "/";

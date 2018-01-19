@@ -23,6 +23,10 @@ public class ComponentTrackTargetBase : GameComponent
 	{
 		mTarget = target;
 		mDoneCallback = doneCallback;
+		if(mTarget == null)
+		{
+			setActive(false);
+		}
 	}
 	public float setSpeed(float speed) { return mSpeed = speed; }
 	//-----------------------------------------------------------------------------------------------------------------

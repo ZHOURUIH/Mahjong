@@ -54,7 +54,7 @@ public enum SOUND_OWNER
 public enum CHARACTER_TYPE
 {
 	CT_NORMAL,
-	CT_NPC,
+	CT_AI,
 	CT_OTHER,
 	CT_MYSELF,
 	CT_MAX,

@@ -39,11 +39,11 @@ public abstract class LayoutScript : CommandReceiver
 		{
 			mLayoutRegister = new LayoutRegister();
 		}
-		mLayoutRegister.onScriptCreated(this);
+		mLayoutRegister.onScriptChanged(this);
 	}
 	public override void destroy()
 	{
-		mLayoutRegister.onScriptDestroy(this);
+		mLayoutRegister.onScriptChanged(this, false);
 		base.destroy();
 	}
 	public LAYOUT_TYPE getType() { return mType; }

@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class CharacterOther : CharacterNPC
+public class CharacterOther : Character
 {
 	public CharacterOther(CHARACTER_TYPE type, string name)
 		:

@@ -767,18 +767,22 @@ public class MathUtility
 	}
 	public static float lerp(float start, float end, float t)
 	{
+		clamp(ref t, 0.0f, 1.0f);
 		return start + (end - start) * t;
 	}
 	public static Vector2 lerp(Vector2 start, Vector2 end, float t)
 	{
+		clamp(ref t, 0.0f, 1.0f);
 		return start + (end - start) * t;
 	}
 	public static Vector3 lerp(Vector3 start, Vector3 end, float t)
 	{
+		clamp(ref t, 0.0f, 1.0f);
 		return start + (end - start) * t;
 	}
 	public static Color lerp(Color start, Color end, float t)
 	{
+		clamp(ref t, 0.0f, 1.0f);
 		return start + (end - start) * t;
 	}
 	public static void clamp(ref float value, float min, float max)

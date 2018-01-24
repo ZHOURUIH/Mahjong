@@ -29,77 +29,41 @@ public class LayoutRegister : GameBase
 			UnityUtility.logError("error : not all script added! max count : " + (int)LAYOUT_TYPE.LT_MAX + ", added count :" + mLayoutManager.getLayoutCount());
 		}
 	}
-	public void onScriptCreated(LayoutScript script)
+	public void onScriptChanged(LayoutScript script, bool created = true)
 	{
 		// 只有布局与脚本唯一对应的才能使用变量快速访问
 		if (mLayoutManager.getScriptMappingCount(script.GetType()) > 1)
 		{
 			return;
 		}
-		if (assign(ref mScriptGlobalTouch, script)) return;
-		if (assign(ref mScriptLogin, script)) return;
-		if (assign(ref mScriptRegister, script)) return;
-		if (assign(ref mScriptMainFrame, script)) return;
-		if (assign(ref mScriptBillboard, script)) return;
-		if (assign(ref mScriptCharacter, script)) return;
-		if (assign(ref mScriptRoomMenu, script)) return;
-		if (assign(ref mScriptMahjongHandIn, script)) return;
-		if (assign(ref mScriptMahjongDrop, script)) return;
-		if (assign(ref mScriptAllCharacterInfo, script)) return;
-		if (assign(ref mScriptDice, script)) return;
-		if (assign(ref mScriptMahjongBackFrame, script)) return;
-		if (assign(ref mScriptPlayerAction, script)) return;
-		if (assign(ref mScriptGameEnding, script)) return;
-		if (assign(ref mScriptAddPlayer, script)) return;
-		if (assign(ref mScriptMahjongFrame, script)) return;
-		if (assign(ref mScriptJoinRoomDialog, script)) return;
-	}
-	public void onScriptDestroy(LayoutScript script)
-	{
-		if (mLayoutManager.getScriptMappingCount(script.GetType()) > 1)
-		{
-			return;
-		}
-		if (clear(ref mScriptGlobalTouch, script)) return;
-		if (clear(ref mScriptLogin, script)) return;
-		if (clear(ref mScriptRegister, script)) return;
-		if (clear(ref mScriptMainFrame, script)) return;
-		if (clear(ref mScriptBillboard, script)) return;
-		if (clear(ref mScriptCharacter, script)) return;
-		if (clear(ref mScriptRoomMenu, script)) return;
-		if (clear(ref mScriptMahjongHandIn, script)) return;
-		if (clear(ref mScriptMahjongDrop, script)) return;
-		if (clear(ref mScriptAllCharacterInfo, script)) return;
-		if (clear(ref mScriptDice, script)) return;
-		if (clear(ref mScriptMahjongBackFrame, script)) return;
-		if (clear(ref mScriptPlayerAction, script)) return;
-		if (clear(ref mScriptGameEnding, script)) return;
-		if (clear(ref mScriptAddPlayer, script)) return;
-		if (clear(ref mScriptMahjongFrame, script)) return;
-		if (clear(ref mScriptJoinRoomDialog, script)) return;
+		if (assign(ref mScriptGlobalTouch, script, created)) return;
+		if (assign(ref mScriptLogin, script, created)) return;
+		if (assign(ref mScriptRegister, script, created)) return;
+		if (assign(ref mScriptMainFrame, script, created)) return;
+		if (assign(ref mScriptBillboard, script, created)) return;
+		if (assign(ref mScriptCharacter, script, created)) return;
+		if (assign(ref mScriptRoomMenu, script, created)) return;
+		if (assign(ref mScriptMahjongHandIn, script, created)) return;
+		if (assign(ref mScriptMahjongDrop, script, created)) return;
+		if (assign(ref mScriptAllCharacterInfo, script, created)) return;
+		if (assign(ref mScriptDice, script, created)) return;
+		if (assign(ref mScriptMahjongBackFrame, script, created)) return;
+		if (assign(ref mScriptPlayerAction, script, created)) return;
+		if (assign(ref mScriptGameEnding, script, created)) return;
+		if (assign(ref mScriptAddPlayer, script, created)) return;
+		if (assign(ref mScriptMahjongFrame, script, created)) return;
+		if (assign(ref mScriptJoinRoomDialog, script, created)) return;
 	}
 	//----------------------------------------------------------------------------------------------------------------------------------------------------------------
 	protected void registeLayout<T>(LAYOUT_TYPE layout, string name) where T : LayoutScript
 	{
 		mLayoutManager.registeLayout(typeof(T), layout, name);
 	}
-	protected bool assign<T>(ref T thisScript, LayoutScript value) where T : LayoutScript
+	protected bool assign<T>(ref T thisScript, LayoutScript value, bool created) where T : LayoutScript
 	{
 		if (typeof(T) == value.GetType())
 		{
-			thisScript = value as T;
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-	protected bool clear<T>(ref T thisScript, LayoutScript value) where T : LayoutScript
-	{
-		if (typeof(T) == value.GetType())
-		{
-			thisScript = null;
+			thisScript = created ? value as T : null;
 			return true;
 		}
 		else

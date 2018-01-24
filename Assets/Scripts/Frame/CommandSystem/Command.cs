@@ -26,6 +26,7 @@ public class Command : GameBase
 	public string					mFile;
 	public int						mCmdID;
 	public int						mAssignID;		// 重新分配时的ID,每次分配都会设置一个新的唯一执行ID
+	public BOOL						mResult;		// 命令的执行结果,只用于部分需要知道执行结果的命令使用
 	public Command()
 	{
 		mReceiver = null;
@@ -35,6 +36,7 @@ public class Command : GameBase
 		mStartUserData = new List<object>();
 		mValid = false;
 		mAssignID = -1;
+		mResult = null;
 	}
 	public virtual void init()
 	{
@@ -42,6 +44,7 @@ public class Command : GameBase
 		mShowDebugInfo = true;
 		mDelayCommand = false;
 		mValid = false;
+		mResult = null;
 		mExecuteState = EXECUTE_STATE.ES_NOT_EXECUTE;
 		mEndCallback.Clear();
 		mStartCallback.Clear();

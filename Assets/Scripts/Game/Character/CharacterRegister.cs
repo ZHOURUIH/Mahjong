@@ -6,7 +6,6 @@ public class CharacterRegister : GameBase
 	public void registeAllCharacter()
 	{
 		registeCharacter<Character>(CHARACTER_TYPE.CT_NORMAL);
-		registeCharacter<CharacterNPC>(CHARACTER_TYPE.CT_NPC);
 		registeCharacter<CharacterOther>(CHARACTER_TYPE.CT_OTHER);
 		registeCharacter<CharacterMyself>(CHARACTER_TYPE.CT_MYSELF);
 	}

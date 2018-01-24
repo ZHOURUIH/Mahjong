@@ -23,6 +23,7 @@ public class CommandSystem : FrameComponent
 	protected List<DelayCommand> mExecuteList;			// 即将在这一帧执行的命令
 	protected ThreadLock mBufferLock;
 	protected bool mTraceCommand;   // 是否追踪命令的来源
+	protected bool mSystemDestroy;	// 命令系统是否已经销毁
 	public CommandSystem(string name)
 		:base(name)
 	{
@@ -32,6 +33,7 @@ public class CommandSystem : FrameComponent
 		mCommandBufferProcess = new List<DelayCommand>();
 		mCommandBufferInput = new List<DelayCommand>();
 		mExecuteList = new List<DelayCommand>();
+		mSystemDestroy = false;
 	}
 	public override void init()
 	{
@@ -42,6 +44,7 @@ public class CommandSystem : FrameComponent
 		mCommandPool.destroy();
 		mCommandBufferInput.Clear();
 		mCommandBufferProcess.Clear();
+		mSystemDestroy = true;
 		base.destroy();
 	}
 	protected void syncCommandBuffer()
@@ -120,6 +123,11 @@ public class CommandSystem : FrameComponent
 	// 中断命令
 	public bool interruptCommand(int assignID)
 	{
+		// 如果命令系统已经销毁了,则不能再中断命令
+		if(mSystemDestroy)
+		{
+			return true;
+		}
 		if (assignID < 0)
 		{
 			UnityUtility.logError("assignID invalid! : " + assignID);
@@ -224,6 +232,10 @@ public class CommandSystem : FrameComponent
 	}
 	public virtual void notifyReceiverDestroied(CommandReceiver receiver)
 	{
+		if(mSystemDestroy)
+		{
+			return;
+		}
 		// 异步列表中
 		mBufferLock.waitForUnlock();
 		for (int i = 0; i < mCommandBufferInput.Count; ++i)

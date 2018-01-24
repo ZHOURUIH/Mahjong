@@ -29,4 +29,13 @@ public class txUIText : txUIObject
 	{
 		mLabel.alpha = alpha;
 	}
+	public override void setDepth(int depth)
+	{
+		mLabel.depth = depth;
+		base.setDepth(depth);
+	}
+	public override int getDepth()
+	{
+		return mLabel.depth;
+	}
 }

@@ -310,7 +310,7 @@ public class UnityUtility : FrameComponent
 	// preFrameCount为1表示返回调用getCurSourceFileName的文件名
 	public static string getCurSourceFileName(int preFrameCount = 1)
 	{
-	   StackTrace st = new StackTrace(preFrameCount, true);
+		StackTrace st = new StackTrace(preFrameCount, true);
 	    return st.GetFrame(0).GetFileName();
 	}
 	public static void playAnimation(Animation animation, string anim, bool loop, string nextAnim = "", bool nextLoop = true)
@@ -318,12 +318,12 @@ public class UnityUtility : FrameComponent
 		if (animation != null)
 		{
 			animation.CrossFade(anim);
-			animation.wrapMode = loop ? UnityEngine.WrapMode.Loop : UnityEngine.WrapMode.Once;
+			animation.wrapMode = loop ? WrapMode.Loop : WrapMode.Once;
 			// 非循环播放动作时才能连接下一个动作
 			if (!loop && nextAnim != "")
 			{
 				AnimationState state = animation.CrossFadeQueued(nextAnim);//QueueMode.CompleteOthers
-				state.wrapMode = nextLoop ? UnityEngine.WrapMode.Loop : UnityEngine.WrapMode.Once;
+				state.wrapMode = nextLoop ? WrapMode.Loop : WrapMode.Once;
 			}
 		}
 	}

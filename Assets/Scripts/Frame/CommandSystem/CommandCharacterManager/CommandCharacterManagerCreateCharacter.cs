@@ -18,6 +18,10 @@ public class CommandCharacterManagerCreateCharacter : Command
 	public override void execute()
 	{
 		CharacterManager characterManager = mReceiver as CharacterManager;
+		if(mID == -1)
+		{
+			mID = UnityUtility.makeID();
+		}
 		characterManager.createCharacter(mName, mCharacterType, mID, mCreateNode);
 	}
 	public override string showDebugInfo()

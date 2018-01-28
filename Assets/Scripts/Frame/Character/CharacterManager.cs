@@ -133,6 +133,7 @@ public class CharacterManager : FrameComponent
 			newCharacter.init();
 			newCharacter.setID(id);
 			addCharacterToList(newCharacter);
+			UnityUtility.notifyIDUsed(id);
 		}
 		return newCharacter;
 	}

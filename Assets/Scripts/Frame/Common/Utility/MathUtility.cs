@@ -396,39 +396,23 @@ public class MathUtility
 	}
 	public static float getAngleFromVectorToVector(Vector3 from, Vector3 to)
 	{
+		from = normalize(from);
+		to = normalize(to);
 		float dotValue = Vector3.Dot(from, to);
-		float fromLength = from.magnitude;
-		float toLength = to.magnitude;
-		float angleValue = dotValue / (fromLength * toLength);
-		if (angleValue > 1.0f)
-		{
-			angleValue = 1.0f;
-		}
-		else if (angleValue < -1.0f)
-		{
-			angleValue = -1.0f;
-		}
-		float angle = Mathf.Acos(angleValue);
+		clamp(ref dotValue, -1.0f, 1.0f);
+		float angle = Mathf.Acos(dotValue);
 		return angle;
 	}
+	// 顺时针旋转为正,逆时针为负
 	public static float getAngleFromVectorToVector(Vector2 from, Vector2 to)
 	{
-		float dotValue = Vector2.Dot(from, to);
-		float fromLength = from.magnitude;
-		float toLength = to.magnitude;
-		float angleValue = dotValue / (fromLength * toLength);
-		if (angleValue > 1.0f)
-		{
-			angleValue = 1.0f;
-		}
-		else if (angleValue < -1.0f)
-		{
-			angleValue = -1.0f;
-		}
-		float angle = Mathf.Acos(angleValue);
-
-		Vector3 crossVec = Vector3.Cross(new Vector3(from.x, 0.0f, from.y), new Vector3(to.x, 0.0f, to.y));
-		if (crossVec.y > 0.0f)
+		Vector3 from3 = new Vector3(from.x, 0.0f, from.y);
+		Vector3 to3 = new Vector3(to.x, 0.0f, to.y);
+		from3 = normalize(from3);
+		to3 = normalize(to3);
+		float angle = getAngleFromVectorToVector(from3, to3);
+		Vector3 crossVec = Vector3.Cross(from3, to3);
+		if (crossVec.y < 0.0f)
 		{
 			angle = -angle;
 		}
@@ -449,32 +433,32 @@ public class MathUtility
 		fYaw = getVectorYaw(dir);
 	}
 	// 给定一段圆弧,以及圆弧圆心角的百分比,计算对应的圆弧上的一个点以及该点的切线方向
-	public static void getPosOnArc(Vector3 circleCenter, Vector3 startArcPos, Vector3 endArcPos, float radius, float anglePercent, ref Vector3 pos, ref Vector3 tangencyDir)
+	public static void getPosOnArc(Vector3 circleCenter, Vector3 startArcPos, Vector3 endArcPos, float anglePercent, ref Vector3 pos, ref Vector3 tangencyDir)
 	{
-		Vector3 curStart = startArcPos;
+		float radius = getLength(startArcPos - circleCenter);
+		Vector3 relativeStart = startArcPos - circleCenter;
+		Vector3 relativeEnd = endArcPos - circleCenter;
 		clamp(ref anglePercent, 0.0f, 1.0f);
 		// 首先判断从起始半径线段到终止半径线段的角度的正负
-		float angleBetween = getAngleFromVectorToVector(new Vector2(curStart.x - circleCenter.x, curStart.z - circleCenter.z),
-														new Vector2(endArcPos.x - circleCenter.x, endArcPos.z - circleCenter.z));
+		float angleBetween = getAngleFromVectorToVector(new Vector2(relativeStart.x, relativeStart.z), new Vector2(relativeEnd.x, relativeEnd.z));
 		if (isFloatZero(angleBetween))
 		{
-			curStart = normalize(curStart - circleCenter) * radius;
-			pos = normalize(curStart) * radius;
-			tangencyDir = normalize(rotateVector3(circleCenter - pos, Mathf.PI / 2.0f));
-			return;
+			pos = normalize(relativeStart) * radius;
+			tangencyDir = normalize(rotateVector3(-pos, Mathf.PI / 2.0f));
 		}
 		// 根据夹角的正负,判断应该顺时针还是逆时针旋转起始半径线段
 		else
 		{
-			pos = normalize(rotateVector3(curStart - circleCenter, anglePercent * angleBetween)) * radius + circleCenter;
+			pos = normalize(rotateVector3(relativeStart, anglePercent * angleBetween)) * radius;
 			// 计算切线,如果顺时针计算出的切线与从起始点到终止点所成的角度大于90度,则使切线反向
-			tangencyDir = normalize(rotateVector3(circleCenter - pos, Mathf.PI / 2.0f));
-			Vector3 posToEnd = endArcPos - pos;
+			tangencyDir = normalize(rotateVector3(-pos, Mathf.PI / 2.0f));
+			Vector3 posToEnd = relativeEnd - pos;
 			if (Mathf.Abs(getAngleFromVectorToVector(new Vector2(tangencyDir.x, tangencyDir.z), new Vector2(posToEnd.x, posToEnd.z))) > Mathf.PI / 2.0f)
 			{
 				tangencyDir = -tangencyDir;
 			}
 		}
+		pos += circleCenter;
 	}
 	// 根据入射角和法线得到反射角
 	public static Vector3 getReflection(Vector3 inRay, Vector3 normal)

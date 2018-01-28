@@ -25,6 +25,7 @@ public class UnityUtility : FrameComponent
 	protected static GameCamera mBackEffectCamera;
 	protected static LOG_LEVEL mLogLevel;
 	protected static bool mShowMessageBox = true;
+	protected static int mIDMaker;
 	public UnityUtility(string name)
 		:base(name)
 	{
@@ -326,5 +327,10 @@ public class UnityUtility : FrameComponent
 				state.wrapMode = nextLoop ? WrapMode.Loop : WrapMode.Once;
 			}
 		}
+	}
+	public static int makeID() { return ++mIDMaker; }
+	public static void notifyIDUsed(int id)
+	{
+		mIDMaker = Mathf.Max(mIDMaker, id);
 	}
 }

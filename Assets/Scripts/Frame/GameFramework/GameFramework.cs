@@ -44,10 +44,10 @@ public class GameFramework : MonoBehaviour
 		registeComponent<UnityUtility>();
 		registeComponent<PluginUtility>();
 		registeComponent<CommandSystem>();
+		registeComponent<CharacterManager>();
 		registeComponent<GameLayoutManager>();
 		registeComponent<AudioManager>();
 		registeComponent<GameSceneManager>();
-		registeComponent<CharacterManager>();
 		registeComponent<KeyFrameManager>();
 		registeComponent<GlobalTouchSystem>();
 		registeComponent<DllImportExtern>();

@@ -143,6 +143,12 @@ public class MovableObject : ComponentOwner
 		rot.x = pitch;
 		setRotation(rot);
 	}
+	public void setYaw(float yaw)
+	{
+		Vector3 rot = getRotation();
+		rot.y = yaw;
+		setRotation(rot);
+	}
 	public virtual void setScale(Vector3 scale)
 	{
 		mTransform.localScale = scale;

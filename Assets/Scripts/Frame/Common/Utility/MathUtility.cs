@@ -394,23 +394,12 @@ public class MathUtility
 		vec = normalize(vec);
 		return -Mathf.Asin(vec.y);
 	}
-	public static float getAngleFromVectorToVector(Vector3 from, Vector3 to)
-	{
-		from = normalize(from);
-		to = normalize(to);
-		float dotValue = Vector3.Dot(from, to);
-		clamp(ref dotValue, -1.0f, 1.0f);
-		float angle = Mathf.Acos(dotValue);
-		return angle;
-	}
 	// 顺时针旋转为正,逆时针为负
 	public static float getAngleFromVectorToVector(Vector2 from, Vector2 to)
 	{
-		Vector3 from3 = new Vector3(from.x, 0.0f, from.y);
-		Vector3 to3 = new Vector3(to.x, 0.0f, to.y);
-		from3 = normalize(from3);
-		to3 = normalize(to3);
-		float angle = getAngleFromVectorToVector(from3, to3);
+		Vector3 from3 = normalize(new Vector3(from.x, 0.0f, from.y));
+		Vector3 to3 = normalize(new Vector3(to.x, 0.0f, to.y));
+		float angle = getAngleBetweenVector(from3, to3);
 		Vector3 crossVec = Vector3.Cross(from3, to3);
 		if (crossVec.y < 0.0f)
 		{

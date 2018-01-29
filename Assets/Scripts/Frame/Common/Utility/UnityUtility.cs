@@ -252,7 +252,7 @@ public class UnityUtility : FrameComponent
 	}
 	public static Vector2 worldPosToScreenPos(Vector3 worldPos)
 	{
-		Camera camera = mCameraManager.getUICamera().getCamera();
+		Camera camera = mCameraManager.getMainCamera().getCamera();
 		return camera.WorldToScreenPoint(worldPos);
 	}
 	//世界坐标转化为视口坐标
@@ -264,9 +264,9 @@ public class UnityUtility : FrameComponent
 	}
 	public static bool whetherGameObjectInViewPort(Vector3 worldPos)
 	{
-		Rect screenRect = new Rect(0, 0, 1, 1);
-		Vector2 viewportPos = worldPosToViewportPos(worldPos);
-		if (screenRect.Contains(viewportPos))
+
+		Vector2 screenPos = worldPosToScreenPos(worldPos);
+		if ((screenPos.x > 0 && screenPos.x < UnityEngine.Screen.currentResolution.width) && (screenPos.y > 0 && screenPos.y < UnityEngine.Screen.currentResolution.height))
 		{
 			return true;
 		}
@@ -274,6 +274,16 @@ public class UnityUtility : FrameComponent
 		{
 			return false;
 		}
+		//Rect screenRect = new Rect(0, 0, 1, 1);
+		//Vector2 viewportPos = worldPosToViewportPos(worldPos);
+		//if (screenRect.Contains(viewportPos))
+		//{
+		//	return true;
+		//}
+		//else
+		//{
+		//	return false;
+		//}
 	}
 	public static Vector2 screenPosToWindowPos(Vector2 screenPos, txUIObject parent)
 	{

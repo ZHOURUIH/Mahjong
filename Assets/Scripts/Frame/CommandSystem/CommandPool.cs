@@ -31,7 +31,7 @@ public class CommandPool : GameBase
 		mUnusedList = null;
 		GC.Collect();
 	}
-	public new T newCmd<T>(bool show = true, bool delay = false) where T : Command, new()
+	public T newCmd<T>(bool show = true, bool delay = false) where T : Command, new()
 	{
 		// 首先从未使用的列表中获取,获取不到再重新创建一个
 		T cmd = null;

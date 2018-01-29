@@ -42,7 +42,7 @@ abstract public class GameScene : ComponentOwner
 		// 设置起始流程名
 		assignStartExitProcedure();
 		// 开始执行起始流程
-		CommandGameSceneChangeProcedure cmd = newCmd<CommandGameSceneChangeProcedure>(true, false);
+		CommandGameSceneChangeProcedure cmd = newCmd(out cmd);
         cmd.mProcedure = mStartProcedure;
         pushCommand(cmd, this);
     }
@@ -82,7 +82,7 @@ abstract public class GameScene : ComponentOwner
 	public virtual void exit()
 	{
 		// 首先进入退出流程,然后再退出最后的流程
-		CommandGameSceneChangeProcedure cmd = newCmd<CommandGameSceneChangeProcedure>();
+		CommandGameSceneChangeProcedure cmd = newCmd(out cmd);
 		cmd.mProcedure = mExitProcedure;
 		pushCommand(cmd, this);
 		if (mCurProcedure != null)

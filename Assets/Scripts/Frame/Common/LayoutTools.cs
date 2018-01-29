@@ -8,7 +8,7 @@ public class LayoutTools : GameBase
 	//------------------------------------------------------------------------------------------------------------------------------------
 	public static void LOAD_LAYOUT(LAYOUT_TYPE type, int renderOrder, bool visible, bool immediately, string param)
 	{
-		CommandLayoutManagerLoadLayout cmd = newCmd<CommandLayoutManagerLoadLayout>(true, false);
+		CommandLayoutManagerLoadLayout cmd = newCmd(out cmd, true, false);
 		cmd.mLayoutType = type;
 		cmd.mVisible = visible;
 		cmd.mRenderOrder = renderOrder;
@@ -21,19 +21,19 @@ public class LayoutTools : GameBase
 	{
 		// 需要首先强制隐藏布局
 		HIDE_LAYOUT_FORCE(type);
-		CommandLayoutManagerUnloadLayout cmd = newCmd<CommandLayoutManagerUnloadLayout>(true, false);
+		CommandLayoutManagerUnloadLayout cmd = newCmd(out cmd, true, false);
 		cmd.mLayoutType = type;
 		pushCommand(cmd, mLayoutManager);
 	}
 	public static void UNLOAD_LAYOUT_DELAY(LAYOUT_TYPE type, float delayTime)
 	{
-		CommandLayoutManagerUnloadLayout cmd = newCmd<CommandLayoutManagerUnloadLayout>(true, true);
+		CommandLayoutManagerUnloadLayout cmd = newCmd(out cmd, true, true);
 		cmd.mLayoutType = type;
 		pushDelayCommand(cmd, mLayoutManager, delayTime);
 	}
 	public static void LOAD_LAYOUT_ASYNC(LAYOUT_TYPE type, int renderOrder, LayoutAsyncDone callback)
 	{
-		CommandLayoutManagerLoadLayout cmd = newCmd<CommandLayoutManagerLoadLayout>(true, false);
+		CommandLayoutManagerLoadLayout cmd = newCmd(out cmd, true, false);
 		cmd.mLayoutType = type;
 		cmd.mRenderOrder = renderOrder;
 		cmd.mAsync = true;
@@ -70,7 +70,7 @@ public class LayoutTools : GameBase
 	}
 	public static void VISIBLE_LAYOUT(LAYOUT_TYPE type, bool visible, bool immediately = false, string param = "")
 	{
-		CommandLayoutManagerLayoutVisible cmd = newCmd<CommandLayoutManagerLayoutVisible>(true, false);
+		CommandLayoutManagerLayoutVisible cmd = newCmd(out cmd, true, false);
 		cmd.mLayoutType = type;
 		cmd.mForce = false;
 		cmd.mVisibility = visible;
@@ -80,7 +80,7 @@ public class LayoutTools : GameBase
 	}
 	public static void VISIBLE_LAYOUT_FORCE(LAYOUT_TYPE type, bool visible)
 	{
-		CommandLayoutManagerLayoutVisible cmd = newCmd<CommandLayoutManagerLayoutVisible>(true, false);
+		CommandLayoutManagerLayoutVisible cmd = newCmd(out cmd, true, false);
 		cmd.mLayoutType = type;
 		cmd.mForce = true;
 		cmd.mVisibility = visible;
@@ -109,7 +109,7 @@ public class LayoutTools : GameBase
 	}
 	public static CommandLayoutManagerLayoutVisible VISIBLE_LAYOUT_DELAY(SceneProcedure procedure, float delayTime, LAYOUT_TYPE type, bool visible, bool immediately = false, string param = "")
 	{
-		CommandLayoutManagerLayoutVisible cmd = newCmd<CommandLayoutManagerLayoutVisible>(true, true);
+		CommandLayoutManagerLayoutVisible cmd = newCmd(out cmd, true, true);
 		cmd.mLayoutType = type;
 		cmd.mForce = false;
 		cmd.mVisibility = visible;
@@ -124,7 +124,7 @@ public class LayoutTools : GameBase
 	}
 	public static CommandLayoutManagerLayoutVisible VISIBLE_LAYOUT_DELAY_EX(SceneProcedure procedure, float delayTime, LAYOUT_TYPE type, bool visible, CommandCallback start, bool immediately = false, string param = "")
 	{
-		CommandLayoutManagerLayoutVisible cmd = newCmd<CommandLayoutManagerLayoutVisible>(true, true);
+		CommandLayoutManagerLayoutVisible cmd = newCmd(out cmd, true, true);
 		cmd.mLayoutType = type;
 		cmd.mForce = false;
 		cmd.mVisibility = visible;
@@ -140,7 +140,7 @@ public class LayoutTools : GameBase
 	}
 	public static CommandLayoutManagerLayoutVisible VISIBLE_LAYOUT_DELAY_FORCE(float delayTime, LAYOUT_TYPE type, bool visible)
 	{
-		CommandLayoutManagerLayoutVisible cmd = newCmd<CommandLayoutManagerLayoutVisible>(true, true);
+		CommandLayoutManagerLayoutVisible cmd = newCmd(out cmd, true, true);
 		cmd.mLayoutType = type;
 		cmd.mForce = true;
 		cmd.mVisibility = visible;
@@ -152,13 +152,13 @@ public class LayoutTools : GameBase
 	// 旋转
 	public static void ROTATE_LOCK_WINDOW(txUIObject obj, bool lockRotation = true)
 	{
-		CommandWindowRotateFixed cmd = newCmd<CommandWindowRotateFixed>(false);
+		CommandWindowRotateFixed cmd = newCmd(out cmd, false);
 		cmd.mActive = lockRotation;
 		pushCommand(cmd, obj);
 	}
 	public static void ROTATE_WINDOW(txUIObject obj, Vector3 rotation)
 	{
-		CommandWindowRotate cmd = newCmd<CommandWindowRotate>(false, false);
+		CommandWindowRotate cmd = newCmd(out cmd, false, false);
 		cmd.mName = "";
 		cmd.mOnceLength = 0.0f;
 		cmd.mStartRotation = rotation;
@@ -191,7 +191,7 @@ public class LayoutTools : GameBase
 		{
 			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用void ROTATE_WINDOW(txUIObject obj, Vector3 rotation)");
 		}
-		CommandWindowRotate cmd = newCmd<CommandWindowRotate>(false, false);
+		CommandWindowRotate cmd = newCmd(out cmd, false, false);
 		cmd.mName = keyframe;
 		cmd.mOnceLength = onceLength;
 		cmd.mStartRotation = start;
@@ -204,7 +204,7 @@ public class LayoutTools : GameBase
 	}
 	public static CommandWindowRotate ROTATE_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, Vector3 rotation)
 	{
-		CommandWindowRotate cmd = newCmd<CommandWindowRotate>(false, true);
+		CommandWindowRotate cmd = newCmd(out cmd, false, true);
 		cmd.mName = "";
 		cmd.mOnceLength = 0.0f;
 		cmd.mStartRotation = rotation;
@@ -231,7 +231,7 @@ public class LayoutTools : GameBase
 		{
 			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用CommandWindowKeyFrameRotate ROTATE_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, Vector3 rotation)");
 		}
-		CommandWindowRotate cmd = newCmd<CommandWindowRotate>(false, true);
+		CommandWindowRotate cmd = newCmd(out cmd, false, true);
 		cmd.mName = keyframe;
 		cmd.mOnceLength = onceLength;
 		cmd.mStartRotation = start;
@@ -256,7 +256,7 @@ public class LayoutTools : GameBase
 	}
 	public static void ROTATE_SPEED_WINDOW(txUIObject obj, Vector3 speed, Vector3 startAngle, Vector3 rotateAccelerationValue)
 	{
-		CommandWindowRotateSpeed cmd = newCmd<CommandWindowRotateSpeed>(false);
+		CommandWindowRotateSpeed cmd = newCmd(out cmd, false);
 		cmd.mRotateSpeed = speed;
 		cmd.mStartAngle = startAngle;
 		cmd.mRotateAcceleration = rotateAccelerationValue;
@@ -272,7 +272,7 @@ public class LayoutTools : GameBase
 	}
 	public static CommandWindowRotateSpeed ROTATE_SPEED_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, Vector3 speed, Vector3 startAngle, Vector3 rotateAccelerationValue)
 	{
-		CommandWindowRotateSpeed cmd = newCmd<CommandWindowRotateSpeed>(false, true);
+		CommandWindowRotateSpeed cmd = newCmd(out cmd, false, true);
 		cmd.mRotateSpeed = speed;
 		cmd.mStartAngle = startAngle;
 		cmd.mRotateAcceleration = rotateAccelerationValue;
@@ -285,7 +285,7 @@ public class LayoutTools : GameBase
 	// 用关键帧移动窗口
 	public static void MOVE_WINDOW(txUIObject obj, Vector3 pos)
 	{
-		CommandWindowMove cmd = newCmd<CommandWindowMove>(false);
+		CommandWindowMove cmd = newCmd(out cmd, false);
 		cmd.mName = "";
 		cmd.mOnceLength = 0.0f;
 		cmd.mStartPos = pos;
@@ -338,7 +338,7 @@ public class LayoutTools : GameBase
 		{
 			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用void MOVE_WINDOW(txUIObject obj, Vector3 pos)");
 		}
-		CommandWindowMove cmd = newCmd<CommandWindowMove>(false);
+		CommandWindowMove cmd = newCmd(out cmd, false);
 		cmd.mName = fileName;
 		cmd.mOnceLength = onceLength;
 		cmd.mStartPos = startPos;
@@ -351,7 +351,7 @@ public class LayoutTools : GameBase
 	}
 	public static CommandWindowMove MOVE_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, Vector3 pos)
 	{
-		CommandWindowMove cmd = newCmd<CommandWindowMove>(false, true);
+		CommandWindowMove cmd = newCmd(out cmd, false, true);
 		cmd.mName = "";
 		cmd.mStartPos = pos;
 		cmd.mTargetPos = pos;
@@ -390,7 +390,7 @@ public class LayoutTools : GameBase
 		{
 			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用CommandWindowKeyFrameMove MOVE_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, Vector3 pos)");
 		}
-		CommandWindowMove cmd = newCmd<CommandWindowMove>(false, true);
+		CommandWindowMove cmd = newCmd(out cmd, false, true);
 		cmd.mName = keyframe;
 		cmd.mStartPos = startPos;
 		cmd.mTargetPos = targetPos;
@@ -406,7 +406,7 @@ public class LayoutTools : GameBase
 	//------------------------------------------------------------------------------------------------------------------
 	public static void TRACK_TARGET(txUIObject obj, float speed, txUIObject target, TrackDoneCallback doneCallback, CheckPosition checkPosition)
 	{
-		CommandWindowTrackTarget cmd = newCmd<CommandWindowTrackTarget>(false);
+		CommandWindowTrackTarget cmd = newCmd(out cmd, false);
 		cmd.mObject = target;
 		cmd.mSpeed = speed;
 		cmd.mDoneCallback = doneCallback;
@@ -418,7 +418,7 @@ public class LayoutTools : GameBase
 	// 窗口的显示和隐藏()
 	public static void ACTIVE_WINDOW(txUIObject obj, bool active = true)
 	{
-		CommandWindowActive cmd = newCmd<CommandWindowActive>(false);
+		CommandWindowActive cmd = newCmd(out cmd, false);
 		cmd.mActive = active;
 		pushCommand(cmd, obj);
 	}
@@ -428,7 +428,7 @@ public class LayoutTools : GameBase
 	}
 	public static CommandWindowActive ACTIVE_WINDOW_DELAY_EX(LayoutScript script, txUIObject obj, bool active, float dealyTime, CommandCallback startCallback, object userData = null)
 	{
-		CommandWindowActive cmd = newCmd<CommandWindowActive>(false, true);
+		CommandWindowActive cmd = newCmd(out cmd, false, true);
 		cmd.mActive = active;
 		cmd.addStartCommandCallback(startCallback, userData);
 		pushDelayCommand(cmd, obj, dealyTime);
@@ -439,7 +439,7 @@ public class LayoutTools : GameBase
 	// 缩放
 	public static void SCALE_WINDOW(txUIObject obj, Vector2 scale)
 	{
-		CommandWindowScale cmd = newCmd<CommandWindowScale>(false);
+		CommandWindowScale cmd = newCmd(out cmd, false);
 		cmd.mName = "";
 		cmd.mOnceLength = 0.0f;
 		cmd.mStartScale = scale;
@@ -496,7 +496,7 @@ public class LayoutTools : GameBase
 		{
 			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用void SCALE_WINDOW(txUIObject obj, Vector2 scale)");
 		}
-		CommandWindowScale cmd = newCmd<CommandWindowScale>(false);
+		CommandWindowScale cmd = newCmd(out cmd, false);
 		cmd.mName = fileName;
 		cmd.mOnceLength = onceLength;
 		cmd.mOffset = offset;
@@ -509,7 +509,7 @@ public class LayoutTools : GameBase
 	}
 	public static CommandWindowScale SCALE_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, Vector2 scale)
 	{
-		CommandWindowScale cmd = newCmd<CommandWindowScale>(false, true);
+		CommandWindowScale cmd = newCmd(out cmd, false, true);
 		cmd.mName = "";
 		cmd.mOnceLength = 0.0f;
 		cmd.mStartScale = scale;
@@ -552,7 +552,7 @@ public class LayoutTools : GameBase
 		{
 			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,CommandWindowScale SCALE_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, Vector2 scale)");
 		}
-		CommandWindowScale cmd = newCmd<CommandWindowScale>(false, true);
+		CommandWindowScale cmd = newCmd(out cmd, false, true);
 		cmd.mName = keyframe;
 		cmd.mOnceLength = onceLength;
 		cmd.mOffset = offset;
@@ -568,7 +568,7 @@ public class LayoutTools : GameBase
 	//-----------------------------------------------------------------------------------------------------------------------------------------------------------
 	public static void SMOOTH_WINDOW_SLIDER(txUIObject obj, float value)
 	{
-		CommandWindowSmoothSlider cmd = newCmd<CommandWindowSmoothSlider>(false);
+		CommandWindowSmoothSlider cmd = newCmd(out cmd, false);
 		cmd.mStartSliderValue = value;
 		cmd.mTargetSliderValue = value;
 		cmd.mFadeTime = 0.0f;
@@ -577,7 +577,7 @@ public class LayoutTools : GameBase
 	// 进度条
 	public static void SMOOTH_WINDOW_SLIDER(txUIObject obj, float start, float target, float time) 
 	{
-		CommandWindowSmoothSlider cmd = newCmd<CommandWindowSmoothSlider>(false);
+		CommandWindowSmoothSlider cmd = newCmd(out cmd, false);
 		cmd.mStartSliderValue = start;
 		cmd.mTargetSliderValue = target;
 		cmd.mFadeTime = time;
@@ -585,7 +585,7 @@ public class LayoutTools : GameBase
 	}
 	public static void SMOOTH_WINDOW_FILL_AMOUNT(txUIObject obj, float start, float target, float time)
 	{
-		CommandWindowSmoothFillAmount cmd = newCmd<CommandWindowSmoothFillAmount>(false);
+		CommandWindowSmoothFillAmount cmd = newCmd(out cmd, false);
 		cmd.mStartFillAmount = start;
 		cmd.mTargetFillAmount = target;
 		cmd.mFadeTime = time;
@@ -593,7 +593,7 @@ public class LayoutTools : GameBase
 	}
 	public static void SMOOTH_WINDOW_FILL_AMOUNT_DELAY(LayoutScript script, txUIObject obj, float delayTime, float start, float target, float time)
 	{
-		CommandWindowSmoothFillAmount cmd = newCmd<CommandWindowSmoothFillAmount>(false, true);
+		CommandWindowSmoothFillAmount cmd = newCmd(out cmd, false, true);
 		cmd.mStartFillAmount = start;
 		cmd.mTargetFillAmount = target;
 		cmd.mFadeTime = time;
@@ -603,7 +603,7 @@ public class LayoutTools : GameBase
 	// 透明度
 	public static void ALPHA_WINDOW(txUIObject obj, float alpha)
 	{
-		CommandWindowAlpha cmd = newCmd<CommandWindowAlpha>(false);
+		CommandWindowAlpha cmd = newCmd(out cmd, false);
 		cmd.mName = "";
 		cmd.mOnceLength = 0.0f;
 		cmd.mStartAlpha = alpha;
@@ -648,7 +648,7 @@ public class LayoutTools : GameBase
 		{
 			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用void ALPHA_WINDOW(txUIObject obj, float alpha)");
 		}
-		CommandWindowAlpha cmd = newCmd<CommandWindowAlpha>(false);
+		CommandWindowAlpha cmd = newCmd(out cmd, false);
 		cmd.mName = name;
 		cmd.mLoop = loop;
 		cmd.mOnceLength = onceLength;
@@ -661,7 +661,7 @@ public class LayoutTools : GameBase
 	}
 	public static CommandWindowAlpha ALPHA_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, float alpha)
 	{
-		CommandWindowAlpha cmd = newCmd<CommandWindowAlpha>(false, true);
+		CommandWindowAlpha cmd = newCmd(out cmd, false, true);
 		cmd.mName = "";
 		cmd.mOnceLength = 0.0f;
 		cmd.mStartAlpha = alpha;
@@ -704,7 +704,7 @@ public class LayoutTools : GameBase
 		{
 			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用CommandWindowAlphaTremble ALPHA_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, float alpha)");
 		}
-		CommandWindowAlpha cmd = newCmd<CommandWindowAlpha>(false, true);
+		CommandWindowAlpha cmd = newCmd(out cmd, false, true);
 		cmd.mName = keyframe;
 		cmd.mLoop = loop;
 		cmd.mOnceLength = onceLength;
@@ -721,7 +721,7 @@ public class LayoutTools : GameBase
 	// HSL
 	public static void HSL_WINDOW(txUIObject obj, Vector3 hsl)
 	{
-		CommandWindowHSL cmd = newCmd<CommandWindowHSL>(false, false);
+		CommandWindowHSL cmd = newCmd(out cmd, false, false);
 		cmd.mName = "";
 		cmd.mOnceLength = 0.0f;
 		cmd.mStartHSL = hsl;
@@ -742,7 +742,7 @@ public class LayoutTools : GameBase
 		{
 			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用void HSL_WINDOW(txUIObject obj, Vector3 hsl)");
 		}
-		CommandWindowHSL cmd = newCmd<CommandWindowHSL>(false, false);
+		CommandWindowHSL cmd = newCmd(out cmd, false, false);
 		cmd.mName = keyframe;
 		cmd.mLoop = loop;
 		cmd.mOnceLength = onceLength;
@@ -755,7 +755,7 @@ public class LayoutTools : GameBase
 	// 音效
 	public static void PLAY_AUDIO_WINDOW(txUIObject obj, SOUND_DEFINE sound, bool loop, float volume)
 	{
-		CommandWindowPlayAudio cmd = newCmd<CommandWindowPlayAudio>(false);
+		CommandWindowPlayAudio cmd = newCmd(out cmd, false);
 		cmd.mSound = sound;
 		cmd.mLoop = loop;
 		cmd.mVolume = volume;
@@ -764,7 +764,7 @@ public class LayoutTools : GameBase
 	// fileName为sound文件夹的相对路径,
 	public static void PLAY_AUDIO_WINDOW(txUIObject obj, string fileName, bool loop, float volume)
 	{
-		CommandWindowPlayAudio cmd = newCmd<CommandWindowPlayAudio>(false);
+		CommandWindowPlayAudio cmd = newCmd(out cmd, false);
 		cmd.mSoundFileName = fileName;
 		cmd.mLoop = loop;
 		cmd.mVolume = volume;
@@ -772,7 +772,7 @@ public class LayoutTools : GameBase
 	}
 	public static CommandWindowPlayAudio PLAY_AUDIO_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, SOUND_DEFINE sound, bool loop, float volume)
 	{
-		CommandWindowPlayAudio cmd = newCmd<CommandWindowPlayAudio>(false, true);
+		CommandWindowPlayAudio cmd = newCmd(out cmd, false, true);
 		cmd.mSound = sound;
 		cmd.mLoop = loop;
 		cmd.mVolume = volume;

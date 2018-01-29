@@ -20,9 +20,17 @@ class CommandMovableObjectTrackTarget : Command
 		MovableObjectComponentTrackTarget component = obj.getFirstComponent<MovableObjectComponentTrackTarget>();
 		if (component != null)
 		{
-			component.setSpeed(mSpeed);
-			component.setActive(true);
-			component.setMoveDoneTrack(mObject, mDoneCallback);
+			//如果Object 是 null 的时候,就把组件隐藏掉
+			if (mObject == null)
+			{
+				component.setActive(false);
+			}
+			else
+			{
+				component.setSpeed(mSpeed);
+				component.setActive(true);
+				component.setMoveDoneTrack(mObject, mDoneCallback);
+			}	
 		}
 	}
 	public override string showDebugInfo()

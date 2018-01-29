@@ -93,7 +93,7 @@ public abstract class SceneProcedure : GameBase
 				mExitTime = -1.0f;
 				mCurPrepareTime = -1.0f;
 				// 超过了准备时间,强制跳转流程
-				CommandGameSceneChangeProcedure cmd = newCmd<CommandGameSceneChangeProcedure>();
+				CommandGameSceneChangeProcedure cmd = newCmd(out cmd);
 				cmd.mProcedure = mPrepareNext.getProcedureType();
 				cmd.mIntent = mPrepareIntent;
 				pushCommand(cmd, mGameScene);

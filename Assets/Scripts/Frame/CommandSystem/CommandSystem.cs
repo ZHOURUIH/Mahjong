@@ -95,7 +95,7 @@ public class CommandSystem : FrameComponent
 		mExecuteList.Clear();
 	}
 	// 创建命令
-	public new T newCmd<T>(bool show = true, bool delay = false) where T : Command, new()
+	public T newCmd<T>(bool show = true, bool delay = false) where T : Command, new()
 	{
 		T cmd = mCommandPool.newCmd<T>(show, delay);
 #if UNITY_EDITOR

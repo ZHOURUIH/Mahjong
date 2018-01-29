@@ -53,10 +53,6 @@ public class FrameBase
 		cmd = null;
 		return mCommandSystem.newCmd<T>(show, delay);
 	}
-	public static T newCmd<T>(bool show = true, bool delay = false) where T : Command, new()
-	{
-		return mCommandSystem.newCmd<T>(show, delay);
-	}
 	public static void pushCommand<T>(CommandReceiver cmdReceiver, bool show = true) where T : Command, new()
 	{
 		mCommandSystem.pushCommand<T>(cmdReceiver, show);

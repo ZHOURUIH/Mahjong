@@ -530,6 +530,15 @@ public class ObjectTools : GameBase
 		cmd.mDoneCallback = doneCallback;
 		pushCommand(cmd, obj);
 	}
+	public static void TRACK_TARGET(MovableObject obj, float speed, Vector3 offset, MovableObject target, TrackDoneCallback doneCallback)
+	{
+		CommandMovableObjectTrackTarget cmd = newCmd<CommandMovableObjectTrackTarget>(out cmd,false);
+		cmd.mObject = target;
+		cmd.mSpeed = speed;
+		cmd.mOffset = offset;
+		cmd.mDoneCallback = doneCallback;
+		pushCommand(cmd, obj);
+	}
 	#endregion
 	//--------------------------------------------------------------------------------------------------------------------------------------------
 	// 显示

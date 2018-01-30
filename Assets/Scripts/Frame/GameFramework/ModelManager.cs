@@ -44,6 +44,7 @@ public class ModelManager : FrameComponent
 		GameObject prefab = getModelPrefab(fileWithPath);
 		if(prefab == null)
 		{
+			UnityUtility.logError("can not find model : " + fileWithPath);
 			return null;
 		}
 		GameObject model = UnityUtility.instantiatePrefab(null, prefab);

@@ -8,6 +8,7 @@ public class ComponentTrackTargetBase : GameComponent
 {
 	protected object mTarget;
 	protected float mSpeed;
+	protected Vector3 mTargetOffset;
 	protected TrackDoneCallback mDoneCallback;
 	public ComponentTrackTargetBase(Type type, string name)
 		:
@@ -28,7 +29,8 @@ public class ComponentTrackTargetBase : GameComponent
 			setActive(false);
 		}
 	}
-	public float setSpeed(float speed) { return mSpeed = speed; }
+	public void setSpeed(float speed) { mSpeed = speed; }
+	public void setTargetOffset(Vector3 offset) { mTargetOffset = offset; }
 	//-----------------------------------------------------------------------------------------------------------------
 	protected override bool isType(Type type) { return type == typeof(ComponentTrackTargetBase); }
 	protected override void setBaseType(){mBaseType = typeof(ComponentTrackTargetBase);}

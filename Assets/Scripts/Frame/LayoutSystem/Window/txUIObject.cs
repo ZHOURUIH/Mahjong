@@ -69,8 +69,8 @@ public class txUIObject : ComponentOwner
 		addComponent<WindowComponentScale>("Scale");
 		addComponent<WindowComponentAlpha>("Alpha");
 		addComponent<WindowComponentRotate>("Rotate");
-		addComponent<WindowComponentSmoothSlider>("slider");
-		addComponent<WindowComponentSmoothFillAmount>("fillAmount");
+		addComponent<WindowComponentSlider>("slider");
+		addComponent<WindowComponentFill>("fill");
 		addComponent<WindowComponentRotateFixed>("RotateFixed");
 		addComponent<WindowComponentHSL>("HSL");
 		addComponent<WindowComponentDrag>("Drag");

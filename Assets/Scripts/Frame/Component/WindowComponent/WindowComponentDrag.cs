@@ -22,7 +22,8 @@ public class WindowComponentDrag : ComponentDrag
 	}
 	protected override Vector3 getScreenPosition()
 	{
-		return UnityUtility.worldPosToScreenPos((mComponentOwner as txUIObject).getWorldPosition());
+		Camera camera = mCameraManager.getUICamera().getCamera();
+		return camera.WorldToScreenPoint((mComponentOwner as txUIObject).getWorldPosition());
 	}
 	protected override bool mouseHovered(Vector3 mousePosition)
 	{

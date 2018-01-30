@@ -69,7 +69,7 @@ public delegate void BoxColliderClickCallback(txUIObject obj);
 public delegate void BoxColliderHoverCallback(txUIObject obj, bool hover);
 public delegate void BoxColliderPressCallback(txUIObject obj, bool press);
 public delegate void AssetLoadDoneCallback(UnityEngine.Object res, object userData);
-public delegate void SceneLoadCallback(AsyncOperation operation, bool done, object userData);
+public delegate void SceneLoadCallback(float progress, bool done, object userData);
 public delegate void SceneActiveCallback(object userData);
 public delegate void AssetBundleLoadDoneCallback(List<UnityEngine.Object> resList);
 public delegate void LayoutAsyncDone(GameLayout layout);

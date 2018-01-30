@@ -75,7 +75,7 @@ public class SceneSystem : FrameComponent
 			SceneInstance loadedScene = mSceneList[name];
 			if(callback != null)
 			{
-				callback(loadedScene.mOperation, true, userData);
+				callback(1.0f, true, userData);
 			}
 			return;
 		}
@@ -117,7 +117,7 @@ public class SceneSystem : FrameComponent
 		{
 			if (callback != null)
 			{
-				callback(scene.mOperation, false, userData);
+				callback(scene.mOperation.progress, false, userData);
 			}
 			// 当allowSceneActivation为true时,加载到progress为1时停止,并且isDone为true,scene.isLoaded为true
 			// 当allowSceneActivation为false时,加载到progress为0.9时就停止,并且isDone为false, scene.isLoaded为false
@@ -126,6 +126,7 @@ public class SceneSystem : FrameComponent
 			{
 				break;
 			}
+			
 			yield return null;
 		}
 		// 首先获得场景
@@ -136,7 +137,7 @@ public class SceneSystem : FrameComponent
 		scene.mState = LOAD_STATE.LS_LOADED;
 		if (callback != null)
 		{
-			callback(scene.mOperation, true, userData);
+			callback(1.0f, true, userData);
 		}
 	}
 	protected SceneInstance createScene(string sceneName)

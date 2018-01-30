@@ -12,7 +12,7 @@ public class MovableObjectComponentTrackTarget : ComponentTrackTargetNormal
 	{}
 	public override void setMoveDoneTrack(object target, TrackDoneCallback doneCallback)
 	{
-		if(!(target is MovableObject))
+		if(target != null && !(target is MovableObject))
 		{
 			UnityUtility.logError("track target must be a MovableObject!");
 			return;
@@ -31,6 +31,9 @@ public class MovableObjectComponentTrackTarget : ComponentTrackTargetNormal
 	}
 	protected override Vector3 getTargetPosition()
 	{
-		return (mTarget as MovableObject).getWorldPosition();
+		MovableObject movable = mTarget as MovableObject;
+		Vector3 pos = movable.getWorldPosition();
+		pos += movable.getTransform().localToWorldMatrix.MultiplyVector(mTargetOffset);
+		return pos;
 	}
 }

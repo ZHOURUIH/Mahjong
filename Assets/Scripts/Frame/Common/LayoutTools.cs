@@ -566,38 +566,64 @@ public class LayoutTools : GameBase
 		return cmd;
 	}
 	//-----------------------------------------------------------------------------------------------------------------------------------------------------------
-	public static void SMOOTH_WINDOW_SLIDER(txUIObject obj, float value)
+	public static void SLIDER_WINDOW(txUIObject obj, float value)
 	{
-		CommandWindowSmoothSlider cmd = newCmd(out cmd, false);
-		cmd.mStartSliderValue = value;
-		cmd.mTargetSliderValue = value;
-		cmd.mFadeTime = 0.0f;
+		CommandWindowSlider cmd = newCmd(out cmd, false);
+		cmd.mStartValue = value;
+		cmd.mTargetValue = value;
+		cmd.mOnceLength = 0.0f;
+		cmd.mTremblingName = "";
 		pushCommand(cmd, obj);
 	}
 	// 进度条
-	public static void SMOOTH_WINDOW_SLIDER(txUIObject obj, float start, float target, float time) 
+	public static void SLIDER_WINDOW(txUIObject obj, float start, float target, float time) 
 	{
-		CommandWindowSmoothSlider cmd = newCmd(out cmd, false);
-		cmd.mStartSliderValue = start;
-		cmd.mTargetSliderValue = target;
-		cmd.mFadeTime = time;
+		CommandWindowSlider cmd = newCmd(out cmd, false);
+		cmd.mStartValue = start;
+		cmd.mTargetValue = target;
+		cmd.mOnceLength = time;
+		cmd.mTremblingName = CommonDefine.ZERO_ONE;
 		pushCommand(cmd, obj);
 	}
-	public static void SMOOTH_WINDOW_FILL_AMOUNT(txUIObject obj, float start, float target, float time)
+	public static void FILL_WINDOW(txUIObject obj, float value)
 	{
-		CommandWindowSmoothFillAmount cmd = newCmd(out cmd, false);
-		cmd.mStartFillAmount = start;
-		cmd.mTargetFillAmount = target;
-		cmd.mFadeTime = time;
+		CommandWindowFill cmd = newCmd(out cmd, false);
+		cmd.mStartValue = value;
+		cmd.mTargetValue = value;
+		cmd.mOnceLength = 0.0f;
+		cmd.mTremblingName = "";
 		pushCommand(cmd, obj);
 	}
-	public static void SMOOTH_WINDOW_FILL_AMOUNT_DELAY(LayoutScript script, txUIObject obj, float delayTime, float start, float target, float time)
+	public static void FILL_WINDOW(txUIObject obj, float start, float target, float time)
 	{
-		CommandWindowSmoothFillAmount cmd = newCmd(out cmd, false, true);
-		cmd.mStartFillAmount = start;
-		cmd.mTargetFillAmount = target;
-		cmd.mFadeTime = time;
+		CommandWindowFill cmd = newCmd(out cmd, false);
+		cmd.mStartValue = start;
+		cmd.mTargetValue = target;
+		cmd.mOnceLength = time;
+		cmd.mTremblingName = CommonDefine.ZERO_ONE;
+		pushCommand(cmd, obj);
+	}
+	public static CommandWindowFill FILL_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, float start, float target, float time)
+	{
+		CommandWindowFill cmd = newCmd(out cmd, false, true);
+		cmd.mStartValue = start;
+		cmd.mTargetValue = target;
+		cmd.mOnceLength = time;
+		cmd.mTremblingName = CommonDefine.ZERO_ONE;
 		pushDelayCommand(cmd, obj, delayTime);
+		script.addDelayCmd(cmd);
+		return cmd;
+	}
+	public static void FILL_WINDOW_EX(txUIObject obj, float start, float target, float time, KeyFrameCallback fillingCallback, KeyFrameCallback doneCallback)
+	{
+		CommandWindowFill cmd = newCmd(out cmd, false);
+		cmd.mStartValue = start;
+		cmd.mTargetValue = target;
+		cmd.mOnceLength = time;
+		cmd.mTremblingName = CommonDefine.ZERO_ONE;
+		cmd.mTremblingCallBack = fillingCallback;
+		cmd.mTrembleDoneCallBack = doneCallback;
+		pushCommand(cmd, obj);
 	}
 	//----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	// 透明度
@@ -753,6 +779,10 @@ public class LayoutTools : GameBase
 	}
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------
 	// 音效
+	public static void PLAY_AUDIO_WINDOW(txUIObject obj)
+	{
+		pushCommand<CommandWindowPlayAudio>(obj, false);
+	}
 	public static void PLAY_AUDIO_WINDOW(txUIObject obj, SOUND_DEFINE sound, bool loop, float volume)
 	{
 		CommandWindowPlayAudio cmd = newCmd(out cmd, false);

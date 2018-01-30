@@ -31,6 +31,9 @@ public class MovableObjectComponentTrackTargetPhysics : ComponentTrackTargetPhys
 	}
 	protected override Vector3 getTargetPosition()
 	{
-		return (mTarget as MovableObject).getWorldPosition();
+		MovableObject movable = mTarget as MovableObject;
+		Vector3 pos = movable.getWorldPosition();
+		pos += movable.getTransform().localToWorldMatrix.MultiplyVector(mTargetOffset);
+		return pos;
 	}
 }

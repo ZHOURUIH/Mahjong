@@ -60,8 +60,14 @@ public class ComponentAudio : GameComponent
 		{
 			assignAudioSource();
 		}
-		// 播放音效
-		mAudioManager.playClip(mAudioSource, name, isLoop, volume);
+		if (name == "")
+		{
+			stop();
+		}
+		else
+		{
+			mAudioManager.playClip(mAudioSource, name, isLoop, volume);
+		}
 	}
 	public void play(SOUND_DEFINE sound, bool loop, float volume)
 	{

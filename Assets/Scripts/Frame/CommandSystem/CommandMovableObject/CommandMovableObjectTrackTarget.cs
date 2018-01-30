@@ -2,17 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
+
 class CommandMovableObjectTrackTarget : Command
 {
 	public MovableObject mObject;
 	public TrackDoneCallback mDoneCallback;
 	public float mSpeed;
+	public Vector3 mOffset;
 	public override void init()
 	{
 		base.init();
 		mSpeed = 0.0f;
 		mDoneCallback = null;
 		mObject = null;
+		mOffset = Vector3.zero;
 	}
 	public override void execute()
 	{
@@ -20,21 +24,16 @@ class CommandMovableObjectTrackTarget : Command
 		MovableObjectComponentTrackTarget component = obj.getFirstComponent<MovableObjectComponentTrackTarget>();
 		if (component != null)
 		{
-			//如果Object 是 null 的时候,就把组件隐藏掉
-			if (mObject == null)
-			{
-				component.setActive(false);
-			}
-			else
-			{
-				component.setSpeed(mSpeed);
-				component.setActive(true);
-				component.setMoveDoneTrack(mObject, mDoneCallback);
-			}	
+
+			component.setSpeed(mSpeed);
+			component.setTargetOffset(mOffset);
+			component.setActive(true);
+			component.setMoveDoneTrack(mObject, mDoneCallback);
 		}
 	}
 	public override string showDebugInfo()
 	{
-		return this.GetType().ToString() + ": object name : " + mObject.getName() + ", speed value : " + mSpeed;
+		string target = mObject != null ? mObject.getName() : "";
+		return this.GetType().ToString() + ": object name : " + target + ", speed value : " + mSpeed;
 	}
 }

@@ -72,7 +72,6 @@ public class SceneSystem : FrameComponent
 		// 如果场景已经加载,则直接返回
 		if (mSceneList.ContainsKey(name))
 		{
-			SceneInstance loadedScene = mSceneList[name];
 			if(callback != null)
 			{
 				callback(1.0f, true, userData);

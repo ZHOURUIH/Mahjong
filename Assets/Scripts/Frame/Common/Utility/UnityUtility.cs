@@ -250,24 +250,19 @@ public class UnityUtility : FrameComponent
 		Vector2 pos = (effectDepth / -camera.getPosition().z + 1) * screenPos - parentWorldPos;
 		return new Vector2(pos.x / parentWorldScale.x, pos.y / parentWorldScale.y);
 	}
-	public static Vector2 worldPosToScreenPos(Vector3 worldPos)
+	public static Vector3 worldPosToScreenPos(Vector3 worldPos)
 	{
 		Camera camera = mCameraManager.getMainCamera().getCamera();
 		return camera.WorldToScreenPoint(worldPos);
 	}
 	public static bool whetherGameObjectInScreen(Vector3 worldPos)
 	{
-		Vector2 screenPos = worldPosToScreenPos(worldPos);
-		if ((screenPos.x > 0 && screenPos.x < UnityEngine.Screen.currentResolution.width) && (screenPos.y > 0 && screenPos.y < UnityEngine.Screen.currentResolution.height))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		Vector3 screenPos = worldPosToScreenPos(worldPos);
+		return screenPos.z >= 0.0f && 
+			(screenPos.x > 0 && screenPos.x < UnityEngine.Screen.currentResolution.width) && 
+			(screenPos.y > 0 && screenPos.y < UnityEngine.Screen.currentResolution.height);
 	}
-	public static Vector2 screenPosToWindowPos(Vector2 screenPos, txUIObject parent)
+	public static Vector2 screenPosToWindowPos(Vector2 screenPos, txUIObject parent, bool screenCenterOsZero = false)
 	{
 		Camera camera = mCameraManager.getUICamera().getCamera();
 		screenPos.x = screenPos.x / camera.pixelWidth * UnityEngine.Screen.currentResolution.width;
@@ -278,7 +273,12 @@ public class UnityUtility : FrameComponent
 		parentWorldPosition.y = parentWorldPosition.y / scale.y;
 		Vector2 parentWorldScale = parent != null ? parent.getWorldScale() : Vector2.one;
 		Vector2 pos = new Vector2(screenPos.x - parentWorldPosition.x, screenPos.y - parentWorldPosition.y);
-		return new Vector2(pos.x / parentWorldScale.x, pos.y / parentWorldScale.y);
+		Vector2 windowPos = new Vector2(pos.x / parentWorldScale.x, pos.y / parentWorldScale.y);
+		if(screenCenterOsZero)
+		{
+			windowPos -= new Vector2(UnityEngine.Screen.currentResolution.width / 2.0f, UnityEngine.Screen.currentResolution.height / 2.0f);
+		}
+		return windowPos;
 	}
 	public static void setGameObjectLayer(txUIObject obj, string layerName)
 	{
@@ -305,20 +305,6 @@ public class UnityUtility : FrameComponent
 	{
 		StackTrace st = new StackTrace(preFrameCount, true);
 	    return st.GetFrame(0).GetFileName();
-	}
-	public static void playAnimation(Animation animation, string anim, bool loop, string nextAnim = "", bool nextLoop = true)
-	{
-		if (animation != null)
-		{
-			animation.CrossFade(anim);
-			animation.wrapMode = loop ? WrapMode.Loop : WrapMode.Once;
-			// 非循环播放动作时才能连接下一个动作
-			if (!loop && nextAnim != "")
-			{
-				AnimationState state = animation.CrossFadeQueued(nextAnim);//QueueMode.CompleteOthers
-				state.wrapMode = nextLoop ? WrapMode.Loop : WrapMode.Once;
-			}
-		}
 	}
 	public static int makeID() { return ++mIDMaker; }
 	public static void notifyIDUsed(int id)

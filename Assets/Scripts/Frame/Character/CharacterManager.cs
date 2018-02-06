@@ -239,12 +239,11 @@ public class CharacterManager : FrameComponent
 		{
 			mCharacterGUIDList.Remove(character.getCharacterData().mGUID);
 		}
-		character.destroy();
 	}
 	protected void destroyCharacter(Character character)
 	{
-		character.destroy();
 		removeCharacterFromList(character);
+		character.destroy();
 		if (mMyself == character)
 		{
 			mMyself = null;

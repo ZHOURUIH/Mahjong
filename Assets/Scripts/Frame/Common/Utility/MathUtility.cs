@@ -628,7 +628,16 @@ public class MathUtility
 	// 点在线上的投影是否在线段范围内
 	public static bool isPointProjectOnLine(Vector3 point, Vector3 start, Vector3 end)
 	{
-		return getAngleBetweenVector(point - start, end - start) <= Mathf.PI / 2.0f;
+		float dis0 = getLength(point - start);
+		float dis1 = getLength(point - end);
+		Vector3 point0 = start;
+		Vector3 point1 = end;
+		if (dis0 > dis1)
+		{
+			point0 = end;
+			point1 = start;
+		}
+		return getAngleBetweenVector(point - point0, point1 - point0) <= Mathf.PI / 2.0f;
 	}
 	// 计算一个向量在另一个向量上的投影
 	public static Vector3 getProjection(Vector3 v1, Vector3 v2)
@@ -816,6 +825,15 @@ public class MathUtility
 	public static void clampAngle(ref float angle, float min, float max, float pi)
 	{
 		clampValue(ref angle, min, max, pi * 2.0f);
+	}
+	public static bool isInRange(float value, float range0, float range1)
+	{
+		return value >= getMin(range0, range1) && value <= getMax(range0, range1);
+	}
+	public static bool isInRange(Vector3 value, Vector3 point0, Vector3 point1, bool ignoreY = true)
+	{
+		return isInRange(value.x, point0.x, point1.x) && isInRange(value.z, point0.z, point1.z) && 
+			(ignoreY || isInRange(value.y, point0.y, point1.y));
 	}
 	public static void adjustRadian180(ref float radianAngle)
 	{

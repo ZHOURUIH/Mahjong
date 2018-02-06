@@ -614,6 +614,18 @@ public class LayoutTools : GameBase
 		script.addDelayCmd(cmd);
 		return cmd;
 	}
+	public static CommandWindowFill FILL_WINDOW_DELAY_EX(LayoutScript script, txUIObject obj, float delayTime, float start, float target, float time, KeyFrameCallback doneCallback)
+	{
+		CommandWindowFill cmd = newCmd(out cmd, false, true);
+		cmd.mStartValue = start;
+		cmd.mTargetValue = target;
+		cmd.mOnceLength = time;
+		cmd.mTremblingName = CommonDefine.ZERO_ONE;
+		cmd.mTrembleDoneCallBack = doneCallback;
+		pushDelayCommand(cmd, obj, delayTime);
+		script.addDelayCmd(cmd);
+		return cmd;
+	}
 	public static void FILL_WINDOW_EX(txUIObject obj, float start, float target, float time, KeyFrameCallback fillingCallback, KeyFrameCallback doneCallback)
 	{
 		CommandWindowFill cmd = newCmd(out cmd, false);

@@ -113,8 +113,6 @@ public class CommonDefine
 	public const string CUSTOM_SOUND = "CustomSound";
 	public const string DATA_BASE = "DataBase";
 	public const string MODEL = "Model";
-	public const string CHARACTER = "Character";
-	public const string WEAPON = "Weapon";
 	// 相对路径,相对于项目,以P_开头,表示Project
 	public const string P_ASSETS_PATH = ASSETS + "/";
 	public const string P_RESOURCE_PATH = P_ASSETS_PATH + RESOURCES + "/";
@@ -144,8 +142,6 @@ public class CommonDefine
 	public const string R_MATERIAL_PATH = MATERIAL + "/";
 	public const string R_PARTICLE_PATH = PARTICLE + "/";
 	public const string R_MODEL_PATH = MODEL + "/";
-	public const string R_MODEL_WEAPON_PATH = R_MODEL_PATH + WEAPON + "/";
-	public const string R_MODEL_CHARACTER_PATH = R_MODEL_PATH + CHARACTER + "/";
 	// 绝对路径,以F_开头,表示Full
 	public static string F_ASSETS_PATH = Application.dataPath + "/";
 	public static string F_STREAMING_ASSETS_PATH = F_ASSETS_PATH + STREAMING_ASSETS + "/";

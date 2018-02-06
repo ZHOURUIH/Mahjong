@@ -147,7 +147,7 @@ public class GameFramework : MonoBehaviour
 			mFrameComponentList[i].fixedUpdate(elapsedTime);
 		}
 	}
-	public void OnDestroy()
+	public void OnApplicationQuit()
 	{
 		destroy();
 		UnityUtility.logInfo("程序退出完毕!", LOG_LEVEL.LL_FORCE);
@@ -165,7 +165,11 @@ public class GameFramework : MonoBehaviour
 	}
 	public void stop()
 	{
+#if UNITY_EDITOR
+		UnityEditor.EditorApplication.isPlaying = false;
+#else
 		Application.Quit();
+#endif
 	}
 	public void keyProcess()
 	{

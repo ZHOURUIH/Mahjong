@@ -9,7 +9,7 @@ public class MovableObject : ComponentOwner
 	protected Vector3 mLastPosition;
 	protected GameObject mObject;
 	protected Transform mTransform;
-	protected bool mDestroyObject = true;
+	protected bool mDestroyObject = true;   // 如果是外部管理的节点,则一定不要在MovableObject自动销毁
 	public MovableObject(string name)
 		:
 		base(name)

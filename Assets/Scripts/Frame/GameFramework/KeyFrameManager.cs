@@ -73,11 +73,7 @@ public class KeyFrameManager : FrameComponent
 		}
 		mCurveList.Clear();
 		mLoadedCount = 0;
-		if(mManagerObject != null)
-		{
-			UnityUtility.destroyGameObject(mManagerObject);
-			mManagerObject = null;
-		}
+		mManagerObject = null;
 		base.destroy();
 	}
 	public bool isLoadDone()

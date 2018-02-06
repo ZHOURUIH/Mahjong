@@ -165,9 +165,14 @@ public class CommandSystem : FrameComponent
 	// 执行命令
 	public new void pushCommand(Command cmd, CommandReceiver cmdReceiver)
 	{
-		if (cmd == null || cmdReceiver == null)
+		if (cmd == null)
 		{
-			UnityUtility.logError("cmd or receiver is null!");
+			UnityUtility.logError("cmd is null! receiver : " + (cmdReceiver != null ? cmdReceiver.getName() : ""));
+			return;
+		}
+		if (cmdReceiver == null)
+		{
+			UnityUtility.logError("receiver is null! cmd : " + (cmd != null ? cmd.getType().ToString() : ""));
 			return;
 		}
 		if (!cmd.isValid())
@@ -200,9 +205,14 @@ public class CommandSystem : FrameComponent
 	// 子线程中发出的命令必须是延时执行的命令!
 	public new void pushDelayCommand(Command cmd, CommandReceiver cmdReceiver, float delayExecute = 0.001f)
 	{
-		if (cmd == null || cmdReceiver == null)
+		if (cmd == null)
 		{
-			UnityUtility.logError("cmd or receiver is null!");
+			UnityUtility.logError("cmd is null! receiver : " + (cmdReceiver != null ? cmdReceiver.getName() : ""));
+			return;
+		}
+		if(cmdReceiver == null)
+		{
+			UnityUtility.logError("receiver is null! cmd : " + (cmd != null ? cmd.getType().ToString() : ""));
 			return;
 		}
 		if (!cmd.isValid())

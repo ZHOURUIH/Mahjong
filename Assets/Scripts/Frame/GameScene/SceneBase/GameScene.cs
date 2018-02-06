@@ -128,7 +128,7 @@ abstract public class GameScene : ComponentOwner
 			return;
 		}
 		// 获得上一次进入的流程
-		PROCEDURE_TYPE lastType = mLastProcedureList[mLastProcedureList.Count - 1].getProcedureType();
+		PROCEDURE_TYPE lastType = getLastProcedureType();
 		changeProcedure(lastType, intend, false);
 		mLastProcedureList.RemoveAt(mLastProcedureList.Count - 1);
 	}
@@ -175,6 +175,11 @@ abstract public class GameScene : ComponentOwner
 		{
 			mLastProcedureList[mLastProcedureList.Count - 1].onNextProcedurePrepared(mCurProcedure);
 		}
+	}
+	//  获取上一个流程
+	public PROCEDURE_TYPE getLastProcedureType()
+	{
+		return mLastProcedureList[mLastProcedureList.Count - 1].getProcedureType();
 	}
     public virtual void notifySceneObjectDestroy(string objectName) { } // 通知场景一个场景物体被销毁了
     public bool getDestroyEngineScene() { return mDestroyEngineScene; }

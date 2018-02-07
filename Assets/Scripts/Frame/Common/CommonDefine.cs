@@ -103,7 +103,7 @@ public class CommonDefine
 	public const string NUMBER_STYLE = "NumberStyle";
 	public const string TEXTURE_ANIM = "TextureAnim";
 	public const string NGUI_SUB_PREFAB = "NGUISubPrefab";
-	public const string LOWER_LAYOUT_PREFAB = "layoutprefab";
+	public const string LOWER_NGUI_SUB_PREFAB = "nguisubprefab";
 	public const string NGUI_PREFAB = "NGUIPrefab";
 	public const string STREAMING_ASSETS = "StreamingAssets";
 	public const string CONFIG = "Config";

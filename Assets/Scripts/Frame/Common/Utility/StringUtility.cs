@@ -402,7 +402,7 @@ public class StringUtility
 	}
 	public static float stringToFloat(string str)
 	{
-		str = checkFloatString(str);
+		str = checkFloatString(str, "-");
 		if(str == "")
 		{
 			return 0.0f;

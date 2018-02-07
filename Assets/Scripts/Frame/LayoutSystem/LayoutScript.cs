@@ -178,7 +178,7 @@ public abstract class LayoutScript : CommandReceiver
 	}
 	public T newObject<T>(string name, int active = -1) where T : txUIObject, new()
 	{
-		return newObject<T>(mLayout.getRoot(), name, active);
+		return newObject<T>(mRoot, name, active);
 	}
 	public static T newUIObject<T>(string name, txUIObject parent, GameLayout layout, GameObject gameObj) where T : txUIObject, new()
 	{

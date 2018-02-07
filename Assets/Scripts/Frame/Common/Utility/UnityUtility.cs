@@ -294,6 +294,15 @@ public class UnityUtility : FrameComponent
 			t.gameObject.layer = layer;
 		}
 	}
+	public static void setGameObjectLayer(txUIObject obj, int layer)
+	{
+		GameObject go = obj.mObject;
+		go.layer = layer;
+		foreach (Transform t in go.transform.GetComponentsInChildren<Transform>(true))
+		{
+			t.gameObject.layer = layer;
+		}
+	}
 	// preFrameCount为1表示返回调用getLineNum的行号
 	public static int getLineNum(int preFrameCount = 1)
 	{

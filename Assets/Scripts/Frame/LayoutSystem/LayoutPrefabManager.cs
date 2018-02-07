@@ -22,7 +22,7 @@ public class LayoutPrefabManager : FrameComponent
 	// 加载所有LayoutPrefab下的预设
 	public void loadAll(bool async)
 	{
-		string path = CommonDefine.R_LAYOUT_PREFAB_PATH;
+		string path = CommonDefine.R_NGUI_SUB_PREFAB_PATH;
 		List<string> fileList = mResourceManager.getFileList(path);
 		int fileCount = fileList.Count;
 		for (int i = 0; i < fileCount; ++i)

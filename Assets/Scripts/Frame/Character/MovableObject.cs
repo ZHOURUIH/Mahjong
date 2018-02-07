@@ -84,6 +84,18 @@ public class MovableObject : ComponentOwner
 	{
 		return mTransform.localEulerAngles;
 	}
+	public float getYaw()
+	{
+		return getRotation().y;
+	}
+	public float getPitch()
+	{
+		return getRotation().x;
+	}
+	public float getRoll()
+	{
+		return getRotation().z;
+	}
 	public Vector3 getScale()
 	{
 		return mTransform.localScale;

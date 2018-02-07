@@ -15,6 +15,7 @@ public class txUIObject : ComponentOwner
 	protected bool mMouseHovered = false;
 	protected txUIObject mParent;
 	protected List<txUIObject> mChildList;
+	protected GameObject mConnectedParent;	// 重新指定挂接到的父节点
 	public GameLayout mLayout;
 	public GameObject mObject;
 	public int mID;
@@ -94,7 +95,9 @@ public class txUIObject : ComponentOwner
 	}
 	//get
 	//-------------------------------------------------------------------------------------------------------------------------------------
-	public void setParent(txUIObject parent) { mParent = parent; }
+	public List<txUIObject> getChildList() { return mChildList; }
+	public txUIObject getParent() { return mParent; }
+	public GameObject getConnectParent() { return mConnectedParent; }
 	public UI_OBJECT_TYPE getUIType() { return mType; }
 	public Transform getTransform() { return mTransform; }
 	public BoxCollider getBoxCollider() { return mBoxCollider; }
@@ -135,8 +138,24 @@ public class txUIObject : ComponentOwner
 	public bool getMouseHovered() { return mMouseHovered; }
 	//set
 	//-------------------------------------------------------------------------------------------------------------------------------------
-	public List<txUIObject> getChildList() { return mChildList; }
-	public txUIObject getParent() { return mParent; }
+	public void setParent(txUIObject parent) { mParent = parent; }
+	public void setConnectParent(GameObject obj)
+	{
+		mConnectedParent = obj;
+		// 把窗口挂到该节点下,然后将该窗口和所有子窗口都从布局中注销
+		mObject.transform.parent = mConnectedParent.transform;
+		UnityUtility.setGameObjectLayer(this, mConnectedParent.layer);
+		Transform[] allChild = mObject.GetComponentsInChildren<Transform>();
+		int count = allChild.Length;
+		for (int i = 0; i < count; ++i)
+		{
+			txUIObject uiObj = mLayout.getUIObject(allChild[i].gameObject);
+			if (uiObj != null)
+			{
+				mLayout.unregisterUIObject(uiObj);
+			}
+		}
+	}
 	private void setGameObject(GameObject go)
 	{
 		setName(go.name);

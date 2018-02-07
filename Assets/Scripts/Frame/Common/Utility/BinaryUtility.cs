@@ -229,26 +229,45 @@ public class BinaryUtility
 		buffer[index++] = value;
 		return true;
 	}
-	public static bool writeShort(byte[] buffer, ref int index, short value)
+	public static bool writeShort(byte[] buffer, ref int index, short value, bool inverse = false)
 	{
 		if (buffer.Length < 2)
 		{
 			return false;
 		}
-		buffer[index++] = (byte)((0x00ff & value) >> 0);
-		buffer[index++] = (byte)((0xff00 & value) >> 8);
+		if(inverse)
+		{
+			buffer[index++] = (byte)((0xff00 & value) >> 8);
+			buffer[index++] = (byte)((0x00ff & value) >> 0);	
+		}
+		else
+		{
+			buffer[index++] = (byte)((0x00ff & value) >> 0);
+			buffer[index++] = (byte)((0xff00 & value) >> 8);
+		}
 		return true;
 	}
-	public static bool writeInt(byte[] buffer, ref int index, int value)
+	public static bool writeInt(byte[] buffer, ref int index, int value, bool inverse = false)
 	{
 		if (buffer.Length < 4)
 		{
 			return false;
 		}
-		buffer[index++] = (byte)((0x000000ff & value) >> 0);
-		buffer[index++] = (byte)((0x0000ff00 & value) >> 8);
-		buffer[index++] = (byte)((0x00ff0000 & value) >> 16);
-		buffer[index++] = (byte)((0xff000000 & value) >> 24);
+		if(inverse)
+		{
+			buffer[index++] = (byte)((0xff000000 & value) >> 24);
+			buffer[index++] = (byte)((0x00ff0000 & value) >> 16);
+			buffer[index++] = (byte)((0x0000ff00 & value) >> 8);
+			buffer[index++] = (byte)((0x000000ff & value) >> 0);
+		}
+		else
+		{
+			buffer[index++] = (byte)((0x000000ff & value) >> 0);
+			buffer[index++] = (byte)((0x0000ff00 & value) >> 8);
+			buffer[index++] = (byte)((0x00ff0000 & value) >> 16);
+			buffer[index++] = (byte)((0xff000000 & value) >> 24);
+		}
+		
 		return true;
 	}
 

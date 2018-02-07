@@ -102,9 +102,9 @@ public class CommonDefine
 	public const string GAME_TEXTURE = "GameTexture";
 	public const string NUMBER_STYLE = "NumberStyle";
 	public const string TEXTURE_ANIM = "TextureAnim";
-	public const string LAYOUT_PREFAB = "LayoutPrefab";
+	public const string NGUI_SUB_PREFAB = "NGUISubPrefab";
 	public const string LOWER_LAYOUT_PREFAB = "layoutprefab";
-	public const string UI_PREFAB = "UIPrefab";
+	public const string NGUI_PREFAB = "NGUIPrefab";
 	public const string STREAMING_ASSETS = "StreamingAssets";
 	public const string CONFIG = "Config";
 	public const string VIDEO = "Video";
@@ -128,14 +128,14 @@ public class CommonDefine
 	public const string A_SOUND_PATH = A_RESOURCE_PATH + SOUND + "/";
 	public const string A_KEY_FRAME_PATH = A_RESOURCE_PATH + KEY_FRAME + "/";
 	public const string A_LAYOUT_PATH = A_RESOURCE_PATH + LAYOUT + "/";
-	public const string A_LAYOUT_PREFAB_PATH = A_LAYOUT_PATH + LAYOUT_PREFAB + "/";
-	public const string A_BUNDLE_LAYOUT_PREFAB_PATH = A_BUNDLE_LAYOU_PATH + LAYOUT_PREFAB + "/";
+	public const string A_NGUI_SUB_PREFAB_PATH = A_LAYOUT_PATH + NGUI_SUB_PREFAB + "/";
+	public const string A_BUNDLE_NGUI_SUB_PREFAB_PATH = A_BUNDLE_LAYOU_PATH + NGUI_SUB_PREFAB + "/";
 	// 相对路径,相对于Resources,R_开头,表示Resources
 	public const string R_SOUND_PATH = SOUND + "/";
 	public const string R_LAYOUT_PATH = LAYOUT + "/";
 	public const string R_KEY_FRAME_PATH = KEY_FRAME + "/";
-	public const string R_LAYOUT_PREFAB_PATH = R_LAYOUT_PATH + LAYOUT_PREFAB + "/";
-	public const string R_UI_PREFAB_PATH = R_LAYOUT_PATH + UI_PREFAB + "/";
+	public const string R_NGUI_SUB_PREFAB_PATH = R_LAYOUT_PATH + NGUI_SUB_PREFAB + "/";
+	public const string R_NGUI_PREFAB_PATH = R_LAYOUT_PATH + NGUI_PREFAB + "/";
 	public const string R_TEXTURE_PATH = TEXTURE + "/";
 	public const string R_GAME_TEXTURE_PATH = R_TEXTURE_PATH + GAME_TEXTURE + "/";
 	public const string R_TEXTURE_ANIM_PATH = R_TEXTURE_PATH + TEXTURE_ANIM + "/";

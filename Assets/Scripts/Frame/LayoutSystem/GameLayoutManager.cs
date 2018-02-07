@@ -138,7 +138,7 @@ public class GameLayoutManager : FrameComponent
 			info.mLayoutObject = null;
 			info.mCallback = callback;
 			mLayoutAsyncList.Add(info.mName, info);
-			bool ret = mResourceManager.loadResourceAsync<GameObject>(CommonDefine.R_UI_PREFAB_PATH + name, onLayoutPrefabAsyncDone, true);
+			bool ret = mResourceManager.loadResourceAsync<GameObject>(CommonDefine.R_NGUI_PREFAB_PATH + name, onLayoutPrefabAsyncDone, true);
 			if (!ret)
 			{
 				UnityUtility.logError("can not find layout : " + name);
@@ -147,7 +147,7 @@ public class GameLayoutManager : FrameComponent
 		}
 		else
 		{
-			UnityUtility.instantiatePrefab(mUIRoot.mObject, CommonDefine.R_UI_PREFAB_PATH + name);
+			UnityUtility.instantiatePrefab(mUIRoot.mObject, CommonDefine.R_NGUI_PREFAB_PATH + name);
 			GameLayout layout = new GameLayout();
 			addLayoutToList(layout, name, type);
 			layout.init(type, name, renderOrder);

@@ -10,9 +10,9 @@ public abstract class LayoutScriptAutoHide : LayoutScript
 	protected bool mAutoHide = true;
 	protected float mAutoHideTime = 3.0f;
 	protected float mCurTime = 0.0f;
-	public LayoutScriptAutoHide(LAYOUT_TYPE type, string name, GameLayout layout)
+	public LayoutScriptAutoHide(string name, GameLayout layout)
 		:
-		base(type, name, layout)
+		base(name, layout)
 	{
 		;
 	}

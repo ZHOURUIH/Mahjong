@@ -164,9 +164,10 @@ public class GameLayoutManager : FrameComponent
 		removeLayoutFromList(layout);
 		layout.destroy();
 	}
-	public LayoutScript createScript(LAYOUT_TYPE type, string name, GameLayout layout)
+	public LayoutScript createScript(string name, GameLayout layout)
 	{
-		return UnityUtility.createInstance<LayoutScript>(mScriptRegisteList[type], type, name, layout);
+		LAYOUT_TYPE type = layout.getType();
+		return UnityUtility.createInstance<LayoutScript>(mScriptRegisteList[type], name, layout);
 	}
 	public List<BoxCollider> getAllLayoutBoxCollider()
 	{

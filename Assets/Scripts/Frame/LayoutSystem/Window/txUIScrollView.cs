@@ -21,7 +21,7 @@ public class txUIScrollView : txUIObject
 			GameObject gridGo = mScrollView.transform.GetChild(i).gameObject;
 			if(gridGo.GetComponent<UIGrid>() != null)
 			{
-				mGrid = mLayout.getScript().newObject<txUIObject>(this, gridGo.name);
+				mLayout.getScript().newObject(ref mGrid, this, gridGo.name);
 				break;
 			}
 		}
@@ -34,7 +34,8 @@ public class txUIScrollView : txUIObject
 		for(int i = 0; i < itemCount; ++i)
 		{
 			GameObject child = mGrid.getChild(i);
-			txUIObject item = mLayout.getScript().newObject<txUIObject>(mGrid, child.name);
+			txUIObject item = null;
+			mLayout.getScript().newObject(ref item, mGrid, child.name);
 			mItemList.Add(item);
 		}
 	}

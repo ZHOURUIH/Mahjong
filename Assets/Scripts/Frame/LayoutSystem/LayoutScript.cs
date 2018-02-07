@@ -27,12 +27,12 @@ public abstract class LayoutScript : CommandReceiver
 	protected LAYOUT_TYPE mType;
 	protected Dictionary<string, List<WindowInfo>> mAllWindowList;
 	protected static LayoutRegister mLayoutRegister;
-	public LayoutScript(LAYOUT_TYPE type, string name, GameLayout layout)
+	public LayoutScript(string name, GameLayout layout)
 		:
 		base(name)
 	{
-		mType = type;
 		mLayout = layout;
+		mType = mLayout.getType();
 		mDelayCmdList = new List<int>();
 		mAllWindowList = new Dictionary<string, List<WindowInfo>>();
 		if (mLayoutRegister == null)
@@ -151,7 +151,7 @@ public abstract class LayoutScript : CommandReceiver
 	}
 	// 创建txUIObject,并且在布局中查找GameObject分配到txUIObject
 	// active为-1则表示不设置active,0表示false,1表示true
-	public T newObject<T>(txUIObject parent, string name, int active = -1) where T : txUIObject, new()
+	public void newObject<T>(ref T obj, txUIObject parent, string name, int active = -1) where T : txUIObject, new()
 	{
 		GameObject parentObj = (parent != null) ? parent.mObject : null;
 		GameObject gameObject = getObjectFromList(parentObj, name);
@@ -163,9 +163,9 @@ public abstract class LayoutScript : CommandReceiver
 		if (gameObject == null)
 		{
 			UnityUtility.logError("object is null, name : " + name);
-			return null;
+			return;
 		}
-		T obj = newUIObject<T>(name, parent, mLayout, gameObject);
+		obj = newUIObject<T>(name, parent, mLayout, gameObject);
 		if (active == 0)
 		{
 			obj.setActive(false);
@@ -174,11 +174,10 @@ public abstract class LayoutScript : CommandReceiver
 		{
 			obj.setActive(true);
 		}
-		return obj;
 	}
-	public T newObject<T>(string name, int active = -1) where T : txUIObject, new()
+	public void newObject<T>(ref T obj, string name, int active = -1) where T : txUIObject, new()
 	{
-		return newObject<T>(mRoot, name, active);
+		newObject<T>(ref obj, mRoot, name, active);
 	}
 	public static T newUIObject<T>(string name, txUIObject parent, GameLayout layout, GameObject gameObj) where T : txUIObject, new()
 	{

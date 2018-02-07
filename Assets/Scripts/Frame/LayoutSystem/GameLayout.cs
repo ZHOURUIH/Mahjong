@@ -39,24 +39,19 @@ public class GameLayout : GameBase
 		}
 		return null;
 	}
-	public LayoutScript createLayoutScript()
-	{
-		LayoutScript script = mLayoutManager.createScript(mType, mName, this);
-		if (script == null)
-		{
-			UnityUtility.logError("can not create layout script! type : " + mType);
-		}
-		return script;
-	}
 	public void init(LAYOUT_TYPE type, string name, int renderOrder)
 	{	
 		mName = name;
 		mType = type;
-		mScript = createLayoutScript();
+		mScript = mLayoutManager.createScript(mName, this);
+		if (mScript == null)
+		{
+			UnityUtility.logError("can not create layout script! type : " + mType);
+		}
 		// 初始化布局脚本
-		mLayoutPanel = mScript.newObject<txUIPanel>(mLayoutManager.getUIRoot(), mName);
+		mScript.newObject(ref mLayoutPanel, mLayoutManager.getUIRoot(), mName);
 		setRenderOrder(renderOrder);
-		mRoot = mScript.newObject<txUIObject>(mLayoutPanel, "Root");
+		mScript.newObject(ref mRoot, mLayoutPanel, "Root");
 		mScript.setRoot(mRoot);
 		mScript.findAllWindow();
 		mScript.assignWindow();

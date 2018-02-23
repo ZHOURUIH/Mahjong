@@ -61,8 +61,8 @@ public enum CHARACTER_TYPE
 }
 
 // 游戏委托定义-------------------------------------------------------------------------------------------------------------
-public delegate void SpriteAnimCallBack(txUISpriteAnim window, object userData, bool isBreak);
-public delegate void TextureAnimCallBack(txUITextureAnim window, object userData, bool isBreak);
+public delegate void SpriteAnimCallBack(txNGUISpriteAnim window, object userData, bool isBreak);
+public delegate void TextureAnimCallBack(txNGUITextureAnim window, object userData, bool isBreak);
 public delegate void KeyFrameCallback(ComponentKeyFrameBase component, object userData, bool breakTremling, bool done);
 public delegate void CommandCallback(object user_data, Command cmd);
 public delegate void BoxColliderClickCallback(txUIObject obj);

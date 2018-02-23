@@ -19,40 +19,19 @@ public class WindowComponentHSL : ComponentKeyFrameNormal
 	protected override void applyTrembling(float offset)
 	{
 		txUIObject uiObj = mComponentOwner as txUIObject;
-		if (uiObj == null)
+		txNGUIStaticTexture staticTexture = uiObj as txNGUIStaticTexture;
+		if(staticTexture == null)
 		{
-			UnityUtility.logError("ComponentOwner is not a window! name : " + mComponentOwner.getName());
+			UnityUtility.logError("window is not a texture window! can not offset hsl!");
 			return;
 		}
-		if(uiObj.getUIType() == UI_OBJECT_TYPE.UBT_STATIC_TEXTURE)
+		WindowShaderHSLOffset hslOffset = staticTexture.getWindowShader<WindowShaderHSLOffset>();
+		if(hslOffset == null)
 		{
-			txUIStaticTextureHSLOffset window = (mComponentOwner) as txUIStaticTextureHSLOffset;
-			if(window != null)
-			{
-				Vector3 hsl = mStartHSL + (mTargetHSL - mStartHSL) * offset;
-				window.setHSLOffset(hsl);
-			}
-			else
-			{
-				UnityUtility.logError("window is not a hsl window! name : " + mComponentOwner.getName() + ", layout : " + uiObj.mLayout.getName());
-			}
+			UnityUtility.logError("window has no hsl offset shader! can not offset hsl!");
+			return;
 		}
-		else if(uiObj.getUIType() == UI_OBJECT_TYPE.UBT_TEXTURE_ANIM)
-		{
-			txUITextureAnimHSLOffset window = (mComponentOwner) as txUITextureAnimHSLOffset;
-			if(window != null)
-			{
-				Vector3 hsl = mStartHSL + (mTargetHSL - mStartHSL) * offset;
-				window.setHSLOffset(hsl);
-			}
-			else
-			{
-				UnityUtility.logError("window is not a hsl window! name : " + mComponentOwner.getName() + ", layout : " + uiObj.mLayout.getName());
-			}
-		}
-		else
-		{
-			UnityUtility.logError("window is not a texture window! name : " + mComponentOwner.getName() + ", layout : " + uiObj.mLayout.getName());
-		}
+		Vector3 hsl = mStartHSL + (mTargetHSL - mStartHSL) * offset;
+		hslOffset.setHSLOffset(hsl);
 	}
 }

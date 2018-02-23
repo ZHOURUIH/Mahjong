@@ -23,6 +23,7 @@ public class GameLayoutManager : FrameComponent
 	protected Dictionary<string, LAYOUT_TYPE>	  mLayoutNameToType;
 	protected Dictionary<LAYOUT_TYPE, GameLayout> mLayoutTypeList;
 	protected txUIObject						  mUIRoot;
+	protected txUIObject						  mUGUICanvas;
 	protected Dictionary<string, LayoutAsyncInfo> mLayoutAsyncList;
 	public GameLayoutManager(string name)
 		:

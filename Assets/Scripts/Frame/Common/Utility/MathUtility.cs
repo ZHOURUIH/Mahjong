@@ -835,6 +835,12 @@ public class MathUtility
 		return isInRange(value.x, point0.x, point1.x) && isInRange(value.z, point0.z, point1.z) && 
 			(ignoreY || isInRange(value.y, point0.y, point1.y));
 	}
+	public static void swap<T>(ref T value0, ref T value1)
+	{
+		T temp = value0;
+		value0 = value1;
+		value1 = temp;
+	}
 	public static void adjustRadian180(ref float radianAngle)
 	{
 		clampAngle(ref radianAngle, -Mathf.PI, Mathf.PI, Mathf.PI);

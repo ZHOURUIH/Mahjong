@@ -18,8 +18,15 @@ public class WindowComponentSlider : ComponentKeyFrameNormal
 	protected override bool isType(Type type) { return base.isType(type) || type == typeof(WindowComponentSlider); }
 	protected override void applyTrembling(float value)
 	{
-		txUISlider window = mComponentOwner as txUISlider;
-		float curValue = mStartValue + (mTargetValue - mStartValue) * value;
-		window.setSliderValue(curValue);
+		txNGUISlider window = mComponentOwner as txNGUISlider;
+		if(window != null)
+		{
+			float curValue = mStartValue + (mTargetValue - mStartValue) * value;
+			window.setSliderValue(curValue);
+		}
+		else
+		{
+			UnityUtility.logError("window is not a Slider Window!");
+		}
 	}
 }

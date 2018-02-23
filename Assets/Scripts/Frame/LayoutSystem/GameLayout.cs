@@ -8,7 +8,7 @@ public class GameLayout : GameBase
 	protected LAYOUT_TYPE	mType;
 	protected LayoutScript	mScript;
 	protected string		mName;
-	protected txUIPanel		mLayoutPanel;
+	protected txNGUIPanel	mLayoutPanel;
 	protected txUIObject	mRoot;
 	protected int			mRenderOrder;		// 渲染顺序,越大则渲染优先级越高
 	protected bool			mScriptInited;		// 脚本是否已经初始化

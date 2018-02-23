@@ -33,7 +33,7 @@ public class CameraLinkerSmoothFollow : CameraLinker
 #if UNITY_EDITOR
 			Debug.DrawLine(ray.origin, ray.origin + ray.direction * 10.0f, Color.blue);
 #endif
-			bool ret = Physics.Raycast(ray, out hit, 1000.0f, mCheckGroundLayer);
+			bool ret = Physics.Raycast(ray, out hit, 1000.0f, 1 << mCheckGroundLayer);
 			if (ret && MathUtility.getLength(nextPos - hit.point) < mRelativePosition.y - 0.1f)
 			{
 				nextPos.y = hit.point.y + mRelativePosition.y - 0.1f;

@@ -9,7 +9,7 @@ public class txNGUIStaticSprite : txUIObject
 	public UISprite mSprite;
 	public txNGUIStaticSprite()
 	{
-		mType = UI_OBJECT_TYPE.UBT_STATIC_SPRITE;
+		mType = UI_TYPE.UT_NGUI_STATIC_SPRITE;
 	}
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{

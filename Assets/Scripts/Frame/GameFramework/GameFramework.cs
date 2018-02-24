@@ -231,7 +231,7 @@ public class GameFramework : MonoBehaviour
 	}
 	protected void processResolution(int width, int height, int screenCount)
 	{
-		GameObject uiRootObj = UnityUtility.getGameObject(null, "UI Root");
+		GameObject uiRootObj = UnityUtility.getGameObject(null, "NGUIRoot");
 		GameObject rootTarget = UnityUtility.getGameObject(null, "UIRootTarget");
 		if (rootTarget == null)
 		{

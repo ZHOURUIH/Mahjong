@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class txUIObject : ComponentOwner
 {
-	protected UI_OBJECT_TYPE mType = UI_OBJECT_TYPE.UBT_BASE;
+	protected UI_TYPE mType = UI_TYPE.UT_BASE;
 	protected AudioSource mAudioSource;
 	protected Transform mTransform;
 	protected BoxCollider mBoxCollider;
@@ -15,7 +15,6 @@ public class txUIObject : ComponentOwner
 	protected bool mMouseHovered = false;
 	protected txUIObject mParent;
 	protected List<txUIObject> mChildList;
-	protected GameObject mConnectedParent;	// 重新指定挂接到的父节点
 	public GameLayout mLayout;
 	public GameObject mObject;
 	public int mID;
@@ -97,8 +96,7 @@ public class txUIObject : ComponentOwner
 	//-------------------------------------------------------------------------------------------------------------------------------------
 	public List<txUIObject> getChildList() { return mChildList; }
 	public txUIObject getParent() { return mParent; }
-	public GameObject getConnectParent() { return mConnectedParent; }
-	public UI_OBJECT_TYPE getUIType() { return mType; }
+	public UI_TYPE getUIType() { return mType; }
 	public Transform getTransform() { return mTransform; }
 	public BoxCollider getBoxCollider() { return mBoxCollider; }
 	public AudioSource getAudioSource() { return mAudioSource; }
@@ -121,41 +119,24 @@ public class txUIObject : ComponentOwner
 	public Vector2 getWorldScale()
 	{
 		Vector3 scale = MathUtility.getMatrixScale(mTransform.localToWorldMatrix);
-		Vector3 uiRootScale = mLayoutManager.getUIRoot().getTransform().localScale;
+		txUIObject root = mLayout.isNGUI() ? mLayoutManager.getNGUIRoot() : mLayoutManager.getUGUIRoot();
+		Vector3 uiRootScale = root.getTransform().localScale;
 		Vector3 mTransformScale = mTransform.localScale;
-		return new Vector3(scale.x * mTransformScale.x / uiRootScale.x, scale.y * mTransformScale.y / uiRootScale.y, scale.z * mTransformScale.z / uiRootScale.z); ;
+		return new Vector3(scale.x * mTransformScale.x / uiRootScale.x, 
+							scale.y * mTransformScale.y / uiRootScale.y, 
+							scale.z * mTransformScale.z / uiRootScale.z);
 	}
 	public int getChildCount() { return mTransform.childCount; }
 	public GameObject getChild(int index) { return mTransform.GetChild(index).gameObject; }
 	public virtual float getAlpha() { return 1.0f; }
 	public virtual float getFillPercent() { return 1.0f; }
 	public virtual int getDepth() { return 0; }
-	public virtual bool getHandleInput()
-	{
-		return mBoxCollider != null && mBoxCollider.enabled;
-	}
+	public virtual bool getHandleInput(){return mBoxCollider != null && mBoxCollider.enabled;}
 	public bool getPassRay() { return mPassRay; }
 	public bool getMouseHovered() { return mMouseHovered; }
 	//set
 	//-------------------------------------------------------------------------------------------------------------------------------------
 	public void setParent(txUIObject parent) { mParent = parent; }
-	public void setConnectParent(GameObject obj)
-	{
-		mConnectedParent = obj;
-		// 把窗口挂到该节点下,然后将该窗口和所有子窗口都从布局中注销
-		mObject.transform.parent = mConnectedParent.transform;
-		UnityUtility.setGameObjectLayer(this, mConnectedParent.layer);
-		Transform[] allChild = mObject.GetComponentsInChildren<Transform>();
-		int count = allChild.Length;
-		for (int i = 0; i < count; ++i)
-		{
-			txUIObject uiObj = mLayout.getUIObject(allChild[i].gameObject);
-			if (uiObj != null)
-			{
-				mLayout.unregisterUIObject(uiObj);
-			}
-		}
-	}
 	private void setGameObject(GameObject go)
 	{
 		setName(go.name);

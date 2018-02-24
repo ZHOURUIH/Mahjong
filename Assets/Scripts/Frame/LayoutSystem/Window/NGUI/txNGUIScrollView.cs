@@ -9,7 +9,7 @@ public class txNGUIScrollView : txUIObject
 	public    List<txUIObject> mItemList = new List<txUIObject>();
 	public txNGUIScrollView()
 	{
-		mType = UI_OBJECT_TYPE.UBT_SCROLL_VIEW;
+		mType = UI_TYPE.UT_NGUI_SCROLL_VIEW;
 	}
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{

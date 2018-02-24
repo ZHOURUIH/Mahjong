@@ -6,7 +6,7 @@ public class LayoutTools : GameBase
 {
 	// 布局
 	//------------------------------------------------------------------------------------------------------------------------------------
-	public static void LOAD_LAYOUT(LAYOUT_TYPE type, int renderOrder, bool visible, bool immediately, string param)
+	public static void LOAD_NGUI(LAYOUT_TYPE type, int renderOrder, bool visible, bool immediately, string param)
 	{
 		CommandLayoutManagerLoadLayout cmd = newCmd(out cmd, true, false);
 		cmd.mLayoutType = type;
@@ -15,6 +15,39 @@ public class LayoutTools : GameBase
 		cmd.mAsync = false;
 		cmd.mImmediatelyShow = immediately;
 		cmd.mParam = param;
+		cmd.mIsNGUI = true;
+		pushCommand(cmd, mLayoutManager);
+	}
+	public static void LOAD_NGUI_ASYNC(LAYOUT_TYPE type, int renderOrder, LayoutAsyncDone callback)
+	{
+		CommandLayoutManagerLoadLayout cmd = newCmd(out cmd, true, false);
+		cmd.mLayoutType = type;
+		cmd.mRenderOrder = renderOrder;
+		cmd.mAsync = true;
+		cmd.mCallback = callback;
+		cmd.mIsNGUI = true;
+		pushCommand(cmd, mLayoutManager);
+	}
+	public static void LOAD_UGUI(LAYOUT_TYPE type, int renderOrder, bool visible, bool immediately, string param)
+	{
+		CommandLayoutManagerLoadLayout cmd = newCmd(out cmd, true, false);
+		cmd.mLayoutType = type;
+		cmd.mVisible = visible;
+		cmd.mRenderOrder = renderOrder;
+		cmd.mAsync = false;
+		cmd.mImmediatelyShow = immediately;
+		cmd.mParam = param;
+		cmd.mIsNGUI = false;
+		pushCommand(cmd, mLayoutManager);
+	}
+	public static void LOAD_UGUI_ASYNC(LAYOUT_TYPE type, int renderOrder, LayoutAsyncDone callback)
+	{
+		CommandLayoutManagerLoadLayout cmd = newCmd(out cmd, true, false);
+		cmd.mLayoutType = type;
+		cmd.mRenderOrder = renderOrder;
+		cmd.mAsync = true;
+		cmd.mCallback = callback;
+		cmd.mIsNGUI = false;
 		pushCommand(cmd, mLayoutManager);
 	}
 	public static void UNLOAD_LAYOUT(LAYOUT_TYPE type)
@@ -31,26 +64,29 @@ public class LayoutTools : GameBase
 		cmd.mLayoutType = type;
 		pushDelayCommand(cmd, mLayoutManager, delayTime);
 	}
-	public static void LOAD_LAYOUT_ASYNC(LAYOUT_TYPE type, int renderOrder, LayoutAsyncDone callback)
+	public static void LOAD_NGUI_HIDE(LAYOUT_TYPE type, int renderOrder)
 	{
-		CommandLayoutManagerLoadLayout cmd = newCmd(out cmd, true, false);
-		cmd.mLayoutType = type;
-		cmd.mRenderOrder = renderOrder;
-		cmd.mAsync = true;
-		cmd.mCallback = callback;
-		pushCommand(cmd, mLayoutManager);
+		LOAD_NGUI(type, renderOrder, false, false, "");
 	}
-	public static void LOAD_LAYOUT_HIDE(LAYOUT_TYPE type, int renderOrder)
+	public static void LOAD_NGUI_SHOW(LAYOUT_TYPE type, int renderOrder)
 	{
-		LOAD_LAYOUT(type, renderOrder, false, false, "");
+		LOAD_NGUI(type, renderOrder, true, false, "");
 	}
-	public static void LOAD_LAYOUT_SHOW(LAYOUT_TYPE type, int renderOrder)
+	public static void LOAD_NGUI_SHOW(LAYOUT_TYPE type, int renderOrder, bool immediately, string param = "")
 	{
-		LOAD_LAYOUT(type, renderOrder, true, false, "");
+		LOAD_NGUI(type, renderOrder, true, immediately, param);
 	}
-	public static void LOAD_LAYOUT_SHOW(LAYOUT_TYPE type, int renderOrder, bool immediately, string param = "")
+	public static void LOAD_UGUI_HIDE(LAYOUT_TYPE type, int renderOrder)
 	{
-		LOAD_LAYOUT(type, renderOrder, true, immediately, param);
+		LOAD_UGUI(type, renderOrder, false, false, "");
+	}
+	public static void LOAD_UGUI_SHOW(LAYOUT_TYPE type, int renderOrder)
+	{
+		LOAD_UGUI(type, renderOrder, true, false, "");
+	}
+	public static void LOAD_UGUI_SHOW(LAYOUT_TYPE type, int renderOrder, bool immediately, string param = "")
+	{
+		LOAD_UGUI(type, renderOrder, true, immediately, param);
 	}
 	public static void HIDE_LAYOUT(LAYOUT_TYPE type, bool immediately = false, string param = "")
 	{

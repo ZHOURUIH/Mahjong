@@ -5,22 +5,28 @@ using System.Collections.Generic;
 
 // 游戏枚举定义-----------------------------------------------------------------------------------------------
 // UI物体类型
-public enum UI_OBJECT_TYPE
+public enum UI_TYPE
 {
-	UBT_BASE,			// 窗口基类
-	UBT_STATIC_SPRITE,	// 静态图片窗口,需要图集
-	UBT_SPRITE_ANIM,	// 序列帧图片窗口,需要图集
-	UBT_STATIC_TEXTURE,	// 静态图片窗口,不需要图集
-	UBT_TEXTURE_ANIM,	// 序列帧图片窗口,不需要图集
-	UBT_NUMBER,			// 数字窗口
-	UBT_PARTICLE,		// 粒子特效窗口
-	UBT_BUTTON,         // 按钮窗口
-	UBT_SLIDER,			// 滑动条
-	UBT_SCROLL_VIEW,	// 包含多个按钮的滚动条
-	UBT_VIDEO,			// 用于播放视频的窗口
-	UBT_TEXT,			// 文本
-	UBT_EDITBOX,		// 文本编辑框
-	UBT_PANEL,			// 面板
+	UT_BASE,				// 窗口基类
+	UT_PARTICLE,			// 粒子特效窗口
+	// NGUI
+	UT_NGUI_STATIC_SPRITE,	// 静态图片窗口,需要图集
+	UT_NGUI_SPRITE_ANIM,	// 序列帧图片窗口,需要图集
+	UT_NGUI_STATIC_TEXTURE,	// 静态图片窗口,不需要图集
+	UT_NGUI_TEXTURE_ANIM,	// 序列帧图片窗口,不需要图集
+	UT_NGUI_NUMBER,			// 数字窗口
+	UT_NGUI_BUTTON,			// 按钮窗口
+	UT_NGUI_SLIDER,			// 滑动条
+	UT_NGUI_SCROLL_VIEW,	// 包含多个按钮的滚动条
+	UT_NGUI_VIDEO,			// 用于播放视频的窗口
+	UT_NGUI_TEXT,			// 文本
+	UT_NGUI_EDITBOX,        // 文本编辑框
+	UT_NGUI_PANEL,          // 面板
+	// UGUI
+	UT_UGUI_STATIC_IMAGE,   // 静态图片
+	UT_UGUI_CANVAS,			// 画布
+	UT_UGUI_NUMBER,			// 数字
+	
 }
 // 停靠位置
 public enum DOCKING_POSITION
@@ -105,6 +111,7 @@ public class CommonDefine
 	public const string NGUI_SUB_PREFAB = "NGUISubPrefab";
 	public const string LOWER_NGUI_SUB_PREFAB = "nguisubprefab";
 	public const string NGUI_PREFAB = "NGUIPrefab";
+	public const string UGUI_PREFAB = "UGUIPrefab";
 	public const string STREAMING_ASSETS = "StreamingAssets";
 	public const string CONFIG = "Config";
 	public const string VIDEO = "Video";
@@ -136,9 +143,11 @@ public class CommonDefine
 	public const string R_KEY_FRAME_PATH = KEY_FRAME + "/";
 	public const string R_NGUI_SUB_PREFAB_PATH = R_LAYOUT_PATH + NGUI_SUB_PREFAB + "/";
 	public const string R_NGUI_PREFAB_PATH = R_LAYOUT_PATH + NGUI_PREFAB + "/";
+	public const string R_UGUI_PREFAB_PATH = R_LAYOUT_PATH + UGUI_PREFAB + "/";
 	public const string R_TEXTURE_PATH = TEXTURE + "/";
 	public const string R_GAME_TEXTURE_PATH = R_TEXTURE_PATH + GAME_TEXTURE + "/";
 	public const string R_TEXTURE_ANIM_PATH = R_TEXTURE_PATH + TEXTURE_ANIM + "/";
+	public const string R_NUMBER_STYLE_PATH = R_TEXTURE_PATH + NUMBER_STYLE + "/";
 	public const string R_MATERIAL_PATH = MATERIAL + "/";
 	public const string R_PARTICLE_PATH = PARTICLE + "/";
 	public const string R_MODEL_PATH = MODEL + "/";

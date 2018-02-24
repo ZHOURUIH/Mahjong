@@ -20,10 +20,11 @@ public class CameraManager : FrameComponent
 	public override void init()
 	{
 		findMainCamera();
-		mUICamera = getCamera("UICamera", "UI Root");
-		mUIForeEffectCamera = getCamera("UIForeEffectCamera", "UI Root");
-		mUIBackEffectCamera = getCamera("UIBackEffectCamera", "UI Root");
-		mUIBlurCamera = getCamera("UIBlurCamera", "UI Root");
+		GameObject parent = mLayoutManager.getNGUIRoot().mObject;
+		mUICamera = getCamera("UICamera", parent);
+		mUIForeEffectCamera = getCamera("UIForeEffectCamera", parent);
+		mUIBackEffectCamera = getCamera("UIBackEffectCamera", parent);
+		mUIBlurCamera = getCamera("UIBlurCamera", parent);
 	}
 	public override void destroy()
 	{
@@ -37,7 +38,7 @@ public class CameraManager : FrameComponent
 		}
 	}
 	// 获得摄像机,名字是场景中摄像机的名字
-	public GameCamera getCamera(string name, string parentName = "", bool createIfNull = true)
+	public GameCamera getCamera(string name, GameObject parent = null, bool createIfNull = true)
 	{
 		if(mCameraList.ContainsKey(name))
 		{
@@ -45,13 +46,12 @@ public class CameraManager : FrameComponent
 		}
 		else if(createIfNull)
 		{
-			return createCamera(name, parentName);
+			return createCamera(name, parent);
 		}
 		return null;
 	}
-	public GameCamera createCamera(string name, string parentName = "")
+	public GameCamera createCamera(string name, GameObject parent = null)
 	{
-		GameObject parent = UnityUtility.getGameObject(null, parentName);
 		GameCamera camera = null;
 		GameObject obj = UnityUtility.getGameObject(parent, name);
 		if (obj != null)
@@ -66,7 +66,7 @@ public class CameraManager : FrameComponent
 	public void findMainCamera()
 	{
 		string name = "MainCamera";
-		if(getCamera(name, "", false) != null)
+		if(getCamera(name, null, false) != null)
 		{
 			destroyCamera(name);
 		}

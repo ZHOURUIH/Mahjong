@@ -9,10 +9,12 @@ public class GameLayout : GameBase
 	protected LayoutScript	mScript;
 	protected string		mName;
 	protected txNGUIPanel	mLayoutPanel;
+	protected txUGUICanvas	mLayoutCanvas;
 	protected txUIObject	mRoot;
 	protected int			mRenderOrder;		// 渲染顺序,越大则渲染优先级越高
 	protected bool			mScriptInited;		// 脚本是否已经初始化
 	protected bool			mScriptControlHide;	// 是否由脚本来控制隐藏
+	protected bool			mIsNGUI;			// 是否为NGUI布局,true为NGUI,false为UGUI
 	protected Dictionary<int, txUIObject> mObjectList;
 	protected Dictionary<GameObject, txUIObject> mGameObjectSearchList;
 	public GameLayout()
@@ -25,7 +27,7 @@ public class GameLayout : GameBase
 	public void setRenderOrder(int renderOrder)
 	{
 		mRenderOrder = renderOrder;
-		mLayoutPanel.setDepth(mRenderOrder);
+		getLayoutPanel().setDepth(mRenderOrder);
 	}
 	public int getRenderOrder()
 	{
@@ -39,19 +41,27 @@ public class GameLayout : GameBase
 		}
 		return null;
 	}
-	public void init(LAYOUT_TYPE type, string name, int renderOrder)
+	public void init(LAYOUT_TYPE type, string name, int renderOrder, bool isNGUI)
 	{	
 		mName = name;
 		mType = type;
+		mIsNGUI = isNGUI;
 		mScript = mLayoutManager.createScript(mName, this);
 		if (mScript == null)
 		{
 			UnityUtility.logError("can not create layout script! type : " + mType);
 		}
 		// 初始化布局脚本
-		mScript.newObject(ref mLayoutPanel, mLayoutManager.getUIRoot(), mName);
+		if (mIsNGUI)
+		{
+			mScript.newObject(ref mLayoutPanel, mLayoutManager.getNGUIRoot(), mName);
+		}
+		else
+		{
+			mScript.newObject(ref mLayoutCanvas, mLayoutManager.getUGUIRoot(), mName);
+		}
+		mScript.newObject(ref mRoot, getLayoutPanel(), "Root");
 		setRenderOrder(renderOrder);
-		mScript.newObject(ref mRoot, mLayoutPanel, "Root");
 		mScript.setRoot(mRoot);
 		mScript.findAllWindow();
 		mScript.assignWindow();
@@ -82,6 +92,11 @@ public class GameLayout : GameBase
 			mLayoutPanel.destroy();
 			mLayoutPanel = null;
 		}
+		if(mLayoutCanvas != null)
+		{
+			mLayoutCanvas.destroy();
+			mLayoutCanvas = null;
+		}
 		if(mScript != null)
 		{
 			mScript.destroy();
@@ -101,7 +116,6 @@ public class GameLayout : GameBase
 		}
 		return boxList;
 	}
-	public txUIObject getRoot(){ return mRoot; }
 	// 设置是否会立即隐藏,应该由布局脚本调用
 	public void setScriptControlHide(bool control) { mScriptControlHide = control; }
 	public void setVisible(bool visible, bool immediately, string param)
@@ -115,7 +129,7 @@ public class GameLayout : GameBase
 		// 显示布局时立即显示
 		if (visible)
 		{
-			mLayoutPanel.setActive(visible);
+			getLayoutPanel().setActive(visible);
 			mScript.onReset();
 			mScript.onGameState();
 			mScript.onShow(immediately, param);
@@ -125,7 +139,7 @@ public class GameLayout : GameBase
 		{
 			if (!mScriptControlHide)
 			{
-				mLayoutPanel.setActive(visible);
+				getLayoutPanel().setActive(visible);
 			}
 			mScript.onHide(immediately, param);
 		}
@@ -137,19 +151,17 @@ public class GameLayout : GameBase
 			return;
 		}
 		// 直接设置布局显示或隐藏
-		mLayoutPanel.setActive(visible);
+		getLayoutPanel().setActive(visible);
 	}
 	public bool isVisible()
 	{
-		if (mLayoutPanel != null)
-		{
-			return mLayoutPanel.isActive();
-		}
-		return false;
+		return getLayoutPanel().isActive();
 	}
+	public txUIObject getRoot() { return mRoot; }
 	public LayoutScript getScript() { return mScript; }
 	public LAYOUT_TYPE getType() { return mType; }
 	public string getName() { return mName; }
+	public bool isNGUI() { return mIsNGUI; }
 	public void registerUIObject(txUIObject uiObj)
 	{
 		mObjectList.Add(uiObj.mID, uiObj);
@@ -168,6 +180,17 @@ public class GameLayout : GameBase
 	}
 	public void setLayer(string layer)
 	{
-		UnityUtility.setGameObjectLayer(mLayoutPanel, layer);
+		UnityUtility.setGameObjectLayer(getLayoutPanel(), layer);
+	}
+	public txUIObject getLayoutPanel()
+	{
+		if(mIsNGUI)
+		{
+			return mLayoutPanel;
+		}
+		else
+		{
+			return mLayoutCanvas;
+		}
 	}
 }

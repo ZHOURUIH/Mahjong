@@ -10,7 +10,7 @@ public class txNGUIStaticTexture : txUIObject
 	protected WindowShader mWindowShader;
 	public txNGUIStaticTexture()
 	{
-		mType = UI_OBJECT_TYPE.UBT_STATIC_TEXTURE;
+		mType = UI_TYPE.UT_NGUI_STATIC_TEXTURE;
 	}
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{

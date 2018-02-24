@@ -31,10 +31,10 @@ public class txNGUITextureAnim : txNGUIStaticTexture
 	protected bool				  mAutoHide = true;		// 是否在播放完毕后自动隐藏并且重置当前帧下标
 	protected TextureAnimCallBack mPlayEndCallback = null;	// 一个序列播放完时的回调函数,只在非循环播放状态下有效
 	protected object			  mPlayEndUserData;
-	protected bool				  mAutoAdjustWindowSize = true;	// 是否根据图片大小自动调整窗口大小
+	protected bool				  mAutoAdjustWindowSize = false;	// 是否根据图片大小自动调整窗口大小
 	public txNGUITextureAnim()
 	{
-		mType = UI_OBJECT_TYPE.UBT_TEXTURE_ANIM;
+		mType = UI_TYPE.UT_NGUI_TEXTURE_ANIM;
 		mTextureNameList = new List<TextureInfo>();
 		mInverseInterval = 1.0f / mInterval;
 	}

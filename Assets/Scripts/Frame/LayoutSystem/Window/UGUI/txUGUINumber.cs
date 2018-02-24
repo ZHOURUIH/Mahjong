@@ -1,65 +1,59 @@
-﻿using System;
+﻿using UnityEngine;
+using UnityEngine.UI;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
 
-public class txNGUINumber : txNGUIStaticSprite
+public class txUGUINumber : txUGUIStaticImage
 {
-	protected int					 mMaxCount = 0;
-	protected string[]				 mSpriteNameList;		// 前10个是0~9,第11个是小数点
-	protected UISpriteData[]		 mSpriteDataList;
-	protected List<txNGUIStaticSprite> mNumberList;
-	protected string                 mNumberStyle = "";
-	protected int                    mInterval = 5;
-	protected DOCKING_POSITION		 mDockingPosition = DOCKING_POSITION.DP_LEFT;
-	protected string				 mNumber = "";
-	public txNGUINumber()
+	protected int mMaxCount = 0;
+	protected string[] mSpriteNameList;     // 前10个是0~9,第11个是小数点
+	protected Sprite[] mSpriteList;
+	protected List<txUGUIStaticImage> mNumberList;
+	protected string mNumberStyle = "";
+	protected int mInterval = 5;
+	protected DOCKING_POSITION mDockingPosition = DOCKING_POSITION.DP_LEFT;
+	protected string mNumber = "";
+	public txUGUINumber()
 	{
-		mType = UI_TYPE.UT_NGUI_NUMBER;
+		mType = UI_TYPE.UT_UGUI_NUMBER;
 		mSpriteNameList = new string[11];
-		mSpriteDataList = new UISpriteData[11];
-		mNumberList = new List<txNGUIStaticSprite>();
+		mSpriteList = new Sprite[11];
+		mNumberList = new List<txUGUIStaticImage>();
 	}
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{
 		base.init(layout, go, parent);
-		if(mSprite == null || mSprite.atlas == null)
+		if (mImage == null)
 		{
 			return;
 		}
-		// 将atlas中的所有图片放到一个map中,方便查找
-		Dictionary<string, UISpriteData> spriteMap = new Dictionary<string, UISpriteData>();
-		List<UISpriteData> sprites = mSprite.atlas.spriteList;
-		int spriteCount = sprites.Count;
-		for (int i = 0; i < spriteCount; ++i)
-		{
-			spriteMap.Add(sprites[i].name, sprites[i]);
-		}
-		// 获得所有数字图片的名字和图片
-		string spriteName = getSpriteName();
-		int lastPos = spriteName.LastIndexOf('_');
+		string imageName = mImage.sprite.name;
+		int lastPos = imageName.LastIndexOf('_');
 		if (lastPos == -1)
 		{
 			return;
 		}
-		mNumberStyle = spriteName.Substring(0, lastPos);
+		mNumberStyle = imageName.Substring(0, lastPos);
+		string path = CommonDefine.R_NUMBER_STYLE_PATH + mNumberStyle;
+		List<string> fileList = mResourceManager.getFileList(path);
 		for (int i = 0; i < 10; ++i)
 		{
 			mSpriteNameList[i] = mNumberStyle + "_" + StringUtility.intToString(i);
 			// 在atlas中查找对应名字的图片
-			if (spriteMap.ContainsKey(mSpriteNameList[i]))
+			if (fileList.Contains(mSpriteNameList[i]))
 			{
-				mSpriteDataList[i] = spriteMap[mSpriteNameList[i]];
+				string resourceName = path + "/" + mSpriteNameList[i];
+				mSpriteList[i] = UnityUtility.texture2DToSprite(mResourceManager.loadResource<Texture2D>(resourceName, false));
 			}
 		}
 		mSpriteNameList[10] = mNumberStyle + "_dot";
-		if (spriteMap.ContainsKey(mSpriteNameList[10]))
+		if (fileList.Contains(mSpriteNameList[10]))
 		{
-			mSpriteDataList[10] = spriteMap[mSpriteNameList[10]];
+			string resourceName = path + "/" + mSpriteNameList[10];
+			mSpriteList[10] = UnityUtility.texture2DToSprite(mResourceManager.loadResource<Texture2D>(resourceName, false));
 		}
 		setMaxCount(10);
-		mSprite.spriteName = "";
+		mImage.enabled = false;
 	}
 	public int getContentWidth()
 	{
@@ -70,7 +64,7 @@ public class txNGUINumber : txNGUIStaticSprite
 			{
 				break;
 			}
-			width += mNumberList[i].mSprite.width;
+			width += (int)mNumberList[i].mImage.sprite.rect.width;
 		}
 		width += mInterval * (mNumber.Length - 1);
 		return width;
@@ -88,36 +82,34 @@ public class txNGUINumber : txNGUIStaticSprite
 		string intPart = dotPos != -1 ? mNumber.Substring(0, dotPos) : mNumber;
 		for (int i = 0; i < intPart.Length; ++i)
 		{
-			mNumberList[i].setSpriteName(mSpriteNameList[intPart[i] - '0']);
+			mNumberList[i].setSprite(mSpriteList[intPart[i] - '0']);
 		}
 		// 小数点和小数部分
-		if(dotPos != -1)
+		if (dotPos != -1)
 		{
-			mNumberList[dotPos].setSpriteName(mSpriteNameList[10]);
+			mNumberList[dotPos].setSprite(mSpriteList[10]);
 			string floatPart = mNumber.Substring(dotPos + 1, mNumber.Length - dotPos - 1);
-			for(int i = 0; i < floatPart.Length; ++i)
+			for (int i = 0; i < floatPart.Length; ++i)
 			{
-				mNumberList[i + dotPos + 1].setSpriteName(mSpriteNameList[floatPart[i] - '0']);
+				mNumberList[i + dotPos + 1].setSprite(mSpriteList[floatPart[i] - '0']);
 			}
 		}
-		// 调整所有数字的大小,此处的aspectRatio可能没有更新
+		// 根据当前窗口的大小调整所有数字的大小
 		Vector2 numberSize = Vector2.zero;
 		float numberScale = 0.0f;
 		int numberLength = mNumber.Length;
 		if (numberLength > 0)
 		{
-			int firstNumber = mNumber[0] - '0';
 			numberSize.y = windowSize.y;
-			UISpriteData spriteData = mSpriteDataList[firstNumber];
-			float inverseHeight = 1.0f / spriteData.height;
-			float ratio = (float)spriteData.width * inverseHeight;
+			Sprite sprite = mSpriteList[mNumber[0] - '0'];
+			float inverseHeight = 1.0f / sprite.rect.height;
+			float ratio = sprite.rect.width * inverseHeight;
 			numberSize.x = ratio * numberSize.y;
 			numberScale = windowSize.y * inverseHeight;
 		}
 		if (dotPos != -1)
 		{
-			Vector2 dotTextureSize = new Vector2(mSpriteDataList[10].width, mSpriteDataList[10].height);
-			mNumberList[dotPos].setWindowSize(dotTextureSize * numberScale);
+			mNumberList[dotPos].setWindowSize(mSpriteList[10].rect.size * numberScale);
 		}
 		for (int i = 0; i < numberLength; ++i)
 		{
@@ -175,9 +167,7 @@ public class txNGUINumber : txNGUIStaticSprite
 		for (int i = 0; i < mMaxCount + 1; ++i)
 		{
 			string name = mName + "_" + StringUtility.intToString(i);
-			mNumberList.Add(mLayout.getScript().createObject<txNGUIStaticSprite>(this, name, false));
-			mNumberList[i].mSprite.atlas = mSprite.atlas;
-			mNumberList[i].mSprite.depth = mSprite.depth + 1;
+			mNumberList.Add(mLayout.getScript().createObject<txUGUIStaticImage>(this, name, false));
 		}
 		refreshNumber();
 	}
@@ -195,9 +185,9 @@ public class txNGUINumber : txNGUIStaticSprite
 		}
 		refreshNumber();
 	}
-	public int getMaxCount(){return mMaxCount;}
-	public string getNumber(){return mNumber;}
-	public int getInterval(){return mInterval;}
-	public string getNumberStyle(){return mNumberStyle;}
-	public DOCKING_POSITION getDockingPosition(){return mDockingPosition;}
+	public int getMaxCount() { return mMaxCount; }
+	public string getNumber() { return mNumber; }
+	public int getInterval() { return mInterval; }
+	public string getNumberStyle() { return mNumberStyle; }
+	public DOCKING_POSITION getDockingPosition() { return mDockingPosition; }
 }

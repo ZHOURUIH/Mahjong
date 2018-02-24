@@ -6,7 +6,7 @@ public class txNGUIText : txUIObject
 	protected UILabel mLabel;
 	public txNGUIText()
 	{
-		mType = UI_OBJECT_TYPE.UBT_TEXT;
+		mType = UI_TYPE.UT_NGUI_TEXT;
 	}
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{

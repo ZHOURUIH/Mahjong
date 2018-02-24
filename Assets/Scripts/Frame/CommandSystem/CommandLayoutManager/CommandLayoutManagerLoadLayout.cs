@@ -11,6 +11,7 @@ public class CommandLayoutManagerLoadLayout : Command
 	public LayoutAsyncDone mCallback = null;
 	public string		mParam = "";
 	public bool			mImmediatelyShow = false;
+	public bool			mIsNGUI = true;
 	public override void init()
 	{
 		base.init();
@@ -22,12 +23,13 @@ public class CommandLayoutManagerLoadLayout : Command
 		mCallback = null;
 		mParam = "";
 		mImmediatelyShow = false;
+		mIsNGUI = true;
 	}
 	public override void execute()
 	{
 		GameLayoutManager layoutManager = mReceiver as GameLayoutManager;
-		mResultLayout = layoutManager.createLayout(mLayoutType, mRenderOrder, mAsync, mCallback);
-		// 只有同步加载时才能立即设置布局的显示和渲染顺序
+		mResultLayout = layoutManager.createLayout(mLayoutType, mRenderOrder, mAsync, mCallback, mIsNGUI);
+		// 只有同步加载时才能立即设置布局的显示
 		if (mResultLayout != null && !mAsync)
 		{
 			if (mVisible)

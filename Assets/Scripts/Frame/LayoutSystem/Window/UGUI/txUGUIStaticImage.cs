@@ -2,14 +2,15 @@
 using UnityEngine.UI;
 using System.Collections;
 
+// UGUI的静态图片不支持递归变化透明度
 public class txUGUIStaticImage : txUIObject
 {
-	protected Image mImage;
+	public Image mImage;
 	protected RectTransform mRectTransform;
 	protected WindowShader mWindowShader;
 	public txUGUIStaticImage()
 	{
-		mType = UI_OBJECT_TYPE.UBT_STATIC_TEXTURE;
+		mType = UI_TYPE.UT_UGUI_STATIC_IMAGE;
 	}
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{
@@ -20,8 +21,10 @@ public class txUGUIStaticImage : txUIObject
 			mImage = mObject.AddComponent<Image>();
 		}
 		mRectTransform = mObject.GetComponent<RectTransform>();
+		// 因为添加Image组件后,原来的Transform会被替换为RectTransform,所以需要重新设置Transform组件
+		mTransform = mRectTransform;
 		string materialName = getMaterialName();
-		if (materialName != "")
+		if (materialName != "" && materialName != "Default UI Material")
 		{
 			setMaterial(getMaterialName(), true);
 		}
@@ -46,13 +49,21 @@ public class txUGUIStaticImage : txUIObject
 			mWindowShader.applyShader(mImage.material);
 		}
 	}
-	public void setTexture(Sprite tex)
+	public void setSprite(Sprite tex)
 	{
 		if (mImage == null)
 		{
 			return;
 		}
 		mImage.sprite = tex;
+	}
+	public void setTexture(Texture2D tex)
+	{
+		if(mImage == null)
+		{
+			return;
+		}
+		mImage.sprite = Sprite.Create(tex, new Rect(Vector2.zero, tex.texelSize), new Vector2(0.5f, 0.5f));
 	}
 	public Sprite getTexture()
 	{
@@ -96,7 +107,7 @@ public class txUGUIStaticImage : txUIObject
 	{
 		if (name != "")
 		{
-			setTexture(mResourceManager.loadResource<Sprite>(name, true));
+			setTexture(mResourceManager.loadResource<Texture2D>(name, true));
 		}
 		else
 		{
@@ -164,5 +175,9 @@ public class txUGUIStaticImage : txUIObject
 	public Vector2 getWindowSize()
 	{
 		return mRectTransform.rect.size;
+	}
+	public void setWindowSize(Vector2 size)
+	{
+		mRectTransform.sizeDelta = size;
 	}
 }

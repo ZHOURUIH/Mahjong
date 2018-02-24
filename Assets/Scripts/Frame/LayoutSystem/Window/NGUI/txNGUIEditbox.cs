@@ -6,7 +6,7 @@ public class txNGUIEditbox : txNGUIStaticSprite
 	protected UIInput mInput;
 	public txNGUIEditbox()
 	{
-		mType = UI_OBJECT_TYPE.UBT_EDITBOX;
+		mType = UI_TYPE.UT_NGUI_EDITBOX;
 	}
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{

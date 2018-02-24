@@ -224,7 +224,7 @@ public class UnityUtility : FrameComponent
 	{
 		if(parent != null)
 		{
-			obj.transform.parent = parent.transform;
+			obj.transform.SetParent(parent.transform);
 		}
 		obj.transform.localPosition = pos;
 		obj.transform.localEulerAngles = rot;
@@ -235,13 +235,14 @@ public class UnityUtility : FrameComponent
 	{
 		return Activator.CreateInstance(classType, param) as T;
 	}
-	public static Vector2 screenPosToEffectPos(Vector2 screenPos, Vector2 parentWorldPos, Vector2 parentWorldScale, float effectDepth, bool isBack, bool isRelative = true)
+	public static Vector2 screenPosToEffectPos(Vector2 screenPos, Vector2 parentWorldPos, Vector2 parentWorldScale, float effectDepth, bool isBack, bool isRelative = true, bool isNGUI = true)
 	{
 		GameCamera camera = isBack ? mBackEffectCamera : mForeEffectCamera;
 		if (isRelative)
 		{
 			// 转到世界坐标系下,首先计算UI根节点的缩放值
-			Vector3 scale = mLayoutManager.getUIRoot().getScale();
+			txUIObject root = isNGUI ? mLayoutManager.getNGUIRoot() : mLayoutManager.getUGUIRoot();
+			Vector3 scale = root.getScale();
 			screenPos.x = screenPos.x / scale.x;
 			screenPos.y = screenPos.y / scale.y;
 			parentWorldPos.x = parentWorldPos.x / scale.x;
@@ -262,13 +263,14 @@ public class UnityUtility : FrameComponent
 			(screenPos.x > 0 && screenPos.x < UnityEngine.Screen.currentResolution.width) && 
 			(screenPos.y > 0 && screenPos.y < UnityEngine.Screen.currentResolution.height);
 	}
-	public static Vector2 screenPosToWindowPos(Vector2 screenPos, txUIObject parent, bool screenCenterOsZero = false)
+	public static Vector2 screenPosToWindowPos(Vector2 screenPos, txUIObject parent, bool screenCenterOsZero = false, bool isNGUI = true)
 	{
 		Camera camera = mCameraManager.getUICamera().getCamera();
 		screenPos.x = screenPos.x / camera.pixelWidth * UnityEngine.Screen.currentResolution.width;
 		screenPos.y = screenPos.y / camera.pixelHeight * UnityEngine.Screen.currentResolution.height;
 		Vector3 parentWorldPosition = parent != null ? parent.getWorldPosition() : Vector3.zero;
-		Vector3 scale = mLayoutManager.getUIRoot().getScale();
+		txUIObject root = isNGUI ? mLayoutManager.getNGUIRoot() : mLayoutManager.getUGUIRoot();
+		Vector3 scale = root.getScale();
 		parentWorldPosition.x = parentWorldPosition.x / scale.x;
 		parentWorldPosition.y = parentWorldPosition.y / scale.y;
 		Vector2 parentWorldScale = parent != null ? parent.getWorldScale() : Vector2.one;
@@ -319,5 +321,9 @@ public class UnityUtility : FrameComponent
 	public static void notifyIDUsed(int id)
 	{
 		mIDMaker = Mathf.Max(mIDMaker, id);
+	}
+	public static Sprite texture2DToSprite(Texture2D tex)
+	{
+		return Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f));
 	}
 }

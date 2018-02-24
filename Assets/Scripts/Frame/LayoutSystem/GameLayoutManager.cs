@@ -7,24 +7,25 @@ using System.Text;
 
 public class LayoutAsyncInfo
 {
-	public string		   mName;
-	public int			   mRenderOrder;
-	public LAYOUT_TYPE     mType;
-	public GameLayout	   mLayout;
-	public GameObject	   mLayoutObject;
-	public LayoutAsyncDone mCallback;
+	public string			mName;
+	public int				mRenderOrder;
+	public bool				mIsNGUI;
+	public LAYOUT_TYPE		mType;
+	public GameLayout		mLayout;
+	public GameObject		mLayoutObject;
+	public LayoutAsyncDone	mCallback;
 }
 
 public class GameLayoutManager : FrameComponent
 {
-	protected Dictionary<Type, List<LAYOUT_TYPE>> mScriptMappingList;
-	protected Dictionary<LAYOUT_TYPE, Type>		  mScriptRegisteList;
-	protected Dictionary<LAYOUT_TYPE, string>	  mLayoutTypeToName;
-	protected Dictionary<string, LAYOUT_TYPE>	  mLayoutNameToType;
-	protected Dictionary<LAYOUT_TYPE, GameLayout> mLayoutTypeList;
-	protected txUIObject						  mUIRoot;
-	protected txUIObject						  mUGUICanvas;
-	protected Dictionary<string, LayoutAsyncInfo> mLayoutAsyncList;
+	protected Dictionary<Type, List<LAYOUT_TYPE>>	mScriptMappingList;
+	protected Dictionary<LAYOUT_TYPE, Type>			mScriptRegisteList;
+	protected Dictionary<LAYOUT_TYPE, string>		mLayoutTypeToName;
+	protected Dictionary<string, LAYOUT_TYPE>		mLayoutNameToType;
+	protected Dictionary<LAYOUT_TYPE, GameLayout>	mLayoutTypeList;
+	protected txUIObject							mNGUIRoot;
+	protected txUIObject							mUGUIRoot;
+	protected Dictionary<string, LayoutAsyncInfo>	mLayoutAsyncList;
 	public GameLayoutManager(string name)
 		:
 		base(name)
@@ -38,15 +39,24 @@ public class GameLayoutManager : FrameComponent
 	}
 	public override void init()
 	{
-		mUIRoot = LayoutScript.newUIObject<txUIObject>("UI Root", null, null, UnityUtility.getGameObject(null, "UI Root", true));
+		mNGUIRoot = LayoutScript.newUIObject<txUIObject>("NGUIRoot", null, null, UnityUtility.getGameObject(null, "NGUIRoot", true));
+		mUGUIRoot = LayoutScript.newUIObject<txUIObject>("UGUIRoot", null, null, UnityUtility.getGameObject(null, "UGUIRoot", true));
 	}
-	public GameObject getUIRootObject()
+	public GameObject getNGUIRootObject()
 	{
-		return mUIRoot.mObject;
+		return mNGUIRoot.mObject;
 	}
-	public txUIObject getUIRoot()
+	public txUIObject getNGUIRoot()
 	{
-		return mUIRoot;
+		return mNGUIRoot;
+	}
+	public GameObject getUGUIRootObject()
+	{
+		return mUGUIRoot.mObject;
+	}
+	public txUIObject getUGUIRoot()
+	{
+		return mUGUIRoot;
 	}
 	public override void update(float elapsedTime)
 	{
@@ -65,7 +75,8 @@ public class GameLayoutManager : FrameComponent
 		mLayoutTypeToName.Clear();
 		mLayoutNameToType.Clear();
 		mLayoutAsyncList.Clear();
-		mUIRoot = null;
+		mNGUIRoot = null;
+		mUGUIRoot = null;
 		base.destroy();
 	}
 	public string getLayoutNameByType(LAYOUT_TYPE type)
@@ -113,7 +124,7 @@ public class GameLayoutManager : FrameComponent
 	{
 		return mScriptMappingList[classType].Count;
 	}
-	public GameLayout createLayout(LAYOUT_TYPE type, int renderOrder, bool async, LayoutAsyncDone callback)
+	public GameLayout createLayout(LAYOUT_TYPE type, int renderOrder, bool async, LayoutAsyncDone callback, bool isNGUI)
 	{
 		if (mLayoutTypeList.ContainsKey(type))
 		{
@@ -128,6 +139,8 @@ public class GameLayoutManager : FrameComponent
 			}
 		}
 		string name = getLayoutNameByType(type);
+		string path = isNGUI ? CommonDefine.R_NGUI_PREFAB_PATH : CommonDefine.R_UGUI_PREFAB_PATH;
+		GameObject layoutParent = isNGUI ? mNGUIRoot.mObject : mUGUIRoot.mObject;
 		// 如果是异步加载则,则先加入列表中
 		if (async)
 		{
@@ -137,9 +150,10 @@ public class GameLayoutManager : FrameComponent
 			info.mRenderOrder = renderOrder;
 			info.mLayout = null;
 			info.mLayoutObject = null;
+			info.mIsNGUI = isNGUI;
 			info.mCallback = callback;
 			mLayoutAsyncList.Add(info.mName, info);
-			bool ret = mResourceManager.loadResourceAsync<GameObject>(CommonDefine.R_NGUI_PREFAB_PATH + name, onLayoutPrefabAsyncDone, true);
+			bool ret = mResourceManager.loadResourceAsync<GameObject>(path + name, onLayoutPrefabAsyncDone, true);
 			if (!ret)
 			{
 				UnityUtility.logError("can not find layout : " + name);
@@ -148,10 +162,10 @@ public class GameLayoutManager : FrameComponent
 		}
 		else
 		{
-			UnityUtility.instantiatePrefab(mUIRoot.mObject, CommonDefine.R_NGUI_PREFAB_PATH + name);
+			UnityUtility.instantiatePrefab(layoutParent, path + name);
 			GameLayout layout = new GameLayout();
 			addLayoutToList(layout, name, type);
-			layout.init(type, name, renderOrder);
+			layout.init(type, name, renderOrder, isNGUI);
 			return layout;
 		}
 	}
@@ -167,8 +181,7 @@ public class GameLayoutManager : FrameComponent
 	}
 	public LayoutScript createScript(string name, GameLayout layout)
 	{
-		LAYOUT_TYPE type = layout.getType();
-		return UnityUtility.createInstance<LayoutScript>(mScriptRegisteList[type], name, layout);
+		return UnityUtility.createInstance<LayoutScript>(mScriptRegisteList[layout.getType()], name, layout);
 	}
 	public List<BoxCollider> getAllLayoutBoxCollider()
 	{
@@ -218,8 +231,9 @@ public class GameLayoutManager : FrameComponent
 		info.mLayoutObject = UnityUtility.instantiatePrefab(null, (GameObject)res);
 		info.mLayout = new GameLayout();
 		addLayoutToList(info.mLayout, info.mName, info.mType);
-		UnityUtility.setNormalProperty(ref info.mLayoutObject, mUIRoot.mObject, info.mName, Vector3.one, Vector3.zero, Vector3.zero);
-		info.mLayout.init(info.mType, info.mName, info.mRenderOrder);
+		GameObject layoutParent = info.mIsNGUI ? mNGUIRoot.mObject : mUGUIRoot.mObject;
+		UnityUtility.setNormalProperty(ref info.mLayoutObject, layoutParent, info.mName, Vector3.one, Vector3.zero, Vector3.zero);
+		info.mLayout.init(info.mType, info.mName, info.mRenderOrder, info.mIsNGUI);
 		info.mCallback(info.mLayout);
 	}
 }

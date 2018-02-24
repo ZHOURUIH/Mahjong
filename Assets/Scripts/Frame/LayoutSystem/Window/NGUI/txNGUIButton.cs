@@ -7,7 +7,7 @@ public class txNGUIButton : txNGUIStaticSprite
 	protected bool		  mHandleInput = true;
 	public txNGUIButton()
 	{
-		mType = UI_OBJECT_TYPE.UBT_BUTTON;
+		mType = UI_TYPE.UT_NGUI_BUTTON;
 	}
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{

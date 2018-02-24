@@ -22,7 +22,7 @@ public class txNGUISpriteAnim : txNGUIStaticSprite
 	protected object			 mPlayEndUserData;
 	public txNGUISpriteAnim()
 	{
-		mType = UI_OBJECT_TYPE.UBT_SPRITE_ANIM;
+		mType = UI_TYPE.UT_NGUI_SPRITE_ANIM;
 		mInverseInterval = 1.0f / mInterval;
 	}
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)

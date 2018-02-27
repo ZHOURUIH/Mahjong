@@ -24,7 +24,12 @@ public class txUGUIStaticImage : txUIObject
 		// 因为添加Image组件后,原来的Transform会被替换为RectTransform,所以需要重新设置Transform组件
 		mTransform = mRectTransform;
 		string materialName = getMaterialName();
-		if (materialName != "" && materialName != "Default UI Material")
+		// 将默认材质替换为自定义的默认材质
+		if (materialName == "Default UI Material")
+		{
+			setMaterial("UGUIDefault", true);
+		}
+		else if (materialName != "")
 		{
 			setMaterial(getMaterialName(), true);
 		}

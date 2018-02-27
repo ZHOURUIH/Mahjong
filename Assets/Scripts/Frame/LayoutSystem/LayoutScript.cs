@@ -151,8 +151,9 @@ public abstract class LayoutScript : CommandReceiver
 	}
 	// 创建txUIObject,并且在布局中查找GameObject分配到txUIObject
 	// active为-1则表示不设置active,0表示false,1表示true
-	public void newObject<T>(ref T obj, txUIObject parent, string name, int active = -1) where T : txUIObject, new()
+	public T newObject<T>(out T obj, txUIObject parent, string name, int active = -1) where T : txUIObject, new()
 	{
+		obj = null;
 		GameObject parentObj = (parent != null) ? parent.mObject : null;
 		GameObject gameObject = getObjectFromList(parentObj, name);
 		// 先在全部子窗口列表中查找,查找不到,再去场景中查找
@@ -163,7 +164,7 @@ public abstract class LayoutScript : CommandReceiver
 		if (gameObject == null)
 		{
 			UnityUtility.logError("object is null, name : " + name);
-			return;
+			return obj;
 		}
 		obj = newUIObject<T>(name, parent, mLayout, gameObject);
 		if (active == 0)
@@ -174,10 +175,11 @@ public abstract class LayoutScript : CommandReceiver
 		{
 			obj.setActive(true);
 		}
+		return obj;
 	}
-	public void newObject<T>(ref T obj, string name, int active = -1) where T : txUIObject, new()
+	public T newObject<T>(out T obj, string name, int active = -1) where T : txUIObject, new()
 	{
-		newObject<T>(ref obj, mRoot, name, active);
+		return newObject<T>(out obj, mRoot, name, active);
 	}
 	public static T newUIObject<T>(string name, txUIObject parent, GameLayout layout, GameObject gameObj) where T : txUIObject, new()
 	{

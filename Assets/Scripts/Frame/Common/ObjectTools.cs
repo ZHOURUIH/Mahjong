@@ -522,23 +522,28 @@ public class ObjectTools : GameBase
 	#endregion
 	//--------------------------------------------------------------------------------------------------------------------------------------------
 	#region 追踪物体
+	public static void TRACK_TARGET(MovableObject obj, float speed, MovableObject target)
+	{
+		TRACK_TARGET(obj, speed, target, Vector3.zero, null);
+	}
 	public static void TRACK_TARGET(MovableObject obj, float speed, MovableObject target, TrackDoneCallback doneCallback)
 	{
-		CommandMovableObjectTrackTarget cmd = newCmd(out cmd, false);
-		cmd.mObject = target;
-		cmd.mSpeed = speed;
-		cmd.mDoneCallback = doneCallback;
-		pushCommand(cmd, obj);
+		TRACK_TARGET(obj, speed, target, Vector3.zero, doneCallback);
 	}
-	public static void TRACK_TARGET(MovableObject obj, float speed, Vector3 offset, MovableObject target, TrackDoneCallback doneCallback)
+	public static void TRACK_TARGET(MovableObject obj, float speed, MovableObject target, Vector3 offset)
 	{
-		CommandMovableObjectTrackTarget cmd = newCmd<CommandMovableObjectTrackTarget>(out cmd,false);
+		TRACK_TARGET(obj, speed, target, offset, null);
+	}
+	public static void TRACK_TARGET(MovableObject obj, float speed, MovableObject target, Vector3 offset, TrackDoneCallback doneCallback)
+	{
+		CommandMovableObjectTrackTarget cmd = newCmd(out cmd,false);
 		cmd.mObject = target;
 		cmd.mSpeed = speed;
 		cmd.mOffset = offset;
 		cmd.mDoneCallback = doneCallback;
 		pushCommand(cmd, obj);
 	}
+	
 	#endregion
 	//--------------------------------------------------------------------------------------------------------------------------------------------
 	// 显示

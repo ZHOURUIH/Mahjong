@@ -81,17 +81,27 @@ public class ResourceManager : FrameComponent
 	}
 	// path为resources下相对路径,返回的列表中文件名不带路径不带后缀
 	// 如果从Resource中加载,则区分大小写,如果从AssetBundle中加载,传入的路径不区分大小写,返回的文件列表全部为小写
-	public List<string> getFileList(string path)
+	// lower表示是否将返回列表中的字符串全部转为小写
+	public List<string> getFileList(string path, bool lower = false)
 	{
+		List<string> fileList = null;
 		if (mLoadSource == 0)
 		{
-			return mResourceLoader.getFileList(path);
+			fileList = mResourceLoader.getFileList(path);
+			if(lower)
+			{
+				int count = fileList.Count;
+				for (int i = 0; i < count; ++i)
+				{
+					fileList[i] = fileList[i].ToLower();
+				}
+			}
 		}
 		else if (mLoadSource == 1)
 		{
-			return mAssetBundleLoader.getFileList(path.ToLower());
+			fileList = mAssetBundleLoader.getFileList(path.ToLower());
 		}
-		return null;
+		return fileList;
 	}
 	// 异步加载指定的资源包
 	public void loadPathOrBundleAsync(string path, AssetBundleLoadDoneCallback callback)

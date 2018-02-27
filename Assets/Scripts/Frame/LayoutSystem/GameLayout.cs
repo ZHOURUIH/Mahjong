@@ -54,13 +54,13 @@ public class GameLayout : GameBase
 		// 初始化布局脚本
 		if (mIsNGUI)
 		{
-			mScript.newObject(ref mLayoutPanel, mLayoutManager.getNGUIRoot(), mName);
+			mScript.newObject(out mLayoutPanel, mLayoutManager.getNGUIRoot(), mName);
 		}
 		else
 		{
-			mScript.newObject(ref mLayoutCanvas, mLayoutManager.getUGUIRoot(), mName);
+			mScript.newObject(out mLayoutCanvas, mLayoutManager.getUGUIRoot(), mName);
 		}
-		mScript.newObject(ref mRoot, getLayoutPanel(), "Root");
+		mScript.newObject(out mRoot, getLayoutPanel(), "Root");
 		setRenderOrder(renderOrder);
 		mScript.setRoot(mRoot);
 		mScript.findAllWindow();

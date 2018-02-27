@@ -35,12 +35,12 @@ public class txUGUINumber : txUGUIStaticImage
 		}
 		mNumberStyle = imageName.Substring(0, lastPos);
 		string path = CommonDefine.R_NUMBER_STYLE_PATH + mNumberStyle;
-		List<string> fileList = mResourceManager.getFileList(path);
+		List<string> fileList = mResourceManager.getFileList(path, true);
 		for (int i = 0; i < 10; ++i)
 		{
 			mSpriteNameList[i] = mNumberStyle + "_" + StringUtility.intToString(i);
 			// 在atlas中查找对应名字的图片
-			if (fileList.Contains(mSpriteNameList[i]))
+			if (fileList.Contains(mSpriteNameList[i].ToLower()))
 			{
 				string resourceName = path + "/" + mSpriteNameList[i];
 				mSpriteList[i] = UnityUtility.texture2DToSprite(mResourceManager.loadResource<Texture2D>(resourceName, false));

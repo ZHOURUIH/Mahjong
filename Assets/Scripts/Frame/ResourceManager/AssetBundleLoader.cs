@@ -25,6 +25,7 @@ public class AssetBundleLoader : GameBase
 		{
 			mTypeSuffixList = new Dictionary<Type, List<string>>();
 			registeSuffix(typeof(Texture), ".png");
+			registeSuffix(typeof(Texture2D), ".png");
 			registeSuffix(typeof(GameObject), ".prefab");
 			registeSuffix(typeof(GameObject), ".fbx");
 			registeSuffix(typeof(Material), ".mat");

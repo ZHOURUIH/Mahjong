@@ -107,6 +107,14 @@ public class DataBase : FrameComponent
 		}
 		mDataStructList.Add(type, dataList);
 	}
+	public List<Data> getAllData(DATA_TYPE type)
+	{
+		if(mDataStructList.ContainsKey(type))
+		{
+			return mDataStructList[type];
+		}
+		return null;
+	}
 	// 得到数据数量
 	public int getDataCount(DATA_TYPE type)
 	{

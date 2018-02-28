@@ -8,6 +8,14 @@ using UnityEngine;
 public class StringUtility
 {
 	public void init() { }
+	public static bool startWith(string str, string pattern)
+	{
+		if(str.Length < pattern.Length)
+		{
+			return false;
+		}
+		return str.Substring(0, pattern.Length) == pattern;
+	}
 	public static int getLastNotNumberPos(string str)
 	{
 		int strLen = str.Length;

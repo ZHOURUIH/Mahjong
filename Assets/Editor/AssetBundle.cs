@@ -27,7 +27,9 @@ class AssetBuildBundleInfo
 public class AssetBundleBuild
 {
 	// 清理时需要保留的目录和目录的meta
-	protected static string[] mKeepFolder = new string[] {"Config", "GameDataFile", "Video", "DataTemplate", "HelperExe", "CustomSound"};
+	protected static string[] mKeepFolder = new string[] {"Config", "GameDataFile", "DataBase", "Video", "DataTemplate", "HelperExe", "CustomSound"};
+	// Resources下的目录,带相对路径,且如果前缀符合,也会认为是不打包的目录
+	protected static string[] mUnPackFolder = new string[] {"Scene" };
 	protected const string mAssetMenuRoot = "AssetBundle/";
 	private static string RES_SRC_PATH = "Assets/Resources/";
 	// 打包输出目录
@@ -57,12 +59,12 @@ public class AssetBundleBuild
 		DateTime time0 = DateTime.Now;
 		// 设置bunderName
 		bundleMap.Clear();
-		List<string> resList = GetAllResDirs(RES_SRC_PATH);
+		List<string> resList = new List<string>();
+		GetAllSubResDirs(RES_SRC_PATH, resList);
 		foreach (string dir in resList)
 		{
 			setAssetBundleName(dir);
 		}
-
 		// 打包
 		BuildPipeline.BuildAssetBundles(RES_OUTPUT_PATH, BuildAssetBundleOptions.ChunkBasedCompression, BuildTarget.StandaloneWindows);
 		AssetDatabase.Refresh();
@@ -125,29 +127,38 @@ public class AssetBundleBuild
 	}
 	protected static void setAssetBundleName(string fullPath)
 	{
-		string[] files = System.IO.Directory.GetFiles(fullPath);
+		string[] files = Directory.GetFiles(fullPath);
 		if (files == null || files.Length == 0)
 		{
 			return;
 		}
-
+		string pathUnderResources = fullPath.Substring(RES_SRC_PATH.Length);
+		int unpackCount = mUnPackFolder.Length;
+		for(int i = 0; i < unpackCount; ++i)
+		{
+			// 如果该文件夹是不打包的文件夹,则直接返回
+			if (StringUtility.startWith(pathUnderResources, mUnPackFolder[i]))
+			{
+				return;
+			}
+		}
 		Debug.Log("Set AssetBundleName Start......");
-		string dirBundleName = fullPath.Substring(RES_SRC_PATH.Length);
-		dirBundleName = dirBundleName.Replace("/", "@") + ASSET_BUNDLE_SUFFIX;
+		string dirBundleName = pathUnderResources.Replace("/", "@") + ASSET_BUNDLE_SUFFIX;
 		foreach (string file in files)
 		{
-			if (file.EndsWith(".meta"))
+			// .asset文件和.meta不打包
+			if (file.EndsWith(".meta") || file.EndsWith(".asset"))
 			{
 				continue;
 			}
 			AssetImporter importer = AssetImporter.GetAtPath(file);
 			if (importer != null)
 			{
-				string ext = System.IO.Path.GetExtension(file);
+				string ext = Path.GetExtension(file);
 				string bundleName = dirBundleName;
-				if (null != ext && (ext.Equals(".prefab") || ext.Equals(".unity")))
+				// prefab和unity(但是一般情况下unity场景文件不打包)单个文件打包
+				if (ext != null && (ext.Equals(".prefab") || ext.Equals(".unity")))
 				{
-					// prefab单个文件打包
 					bundleName = file.Substring(RES_SRC_PATH.Length);
 					bundleName = bundleName.Replace("/", "@");
 					if (null != ext)
@@ -199,21 +210,13 @@ public class AssetBundleBuild
 		}
 		Debug.Log("Set AssetBundleName End......");
 	}
-	// 获取所有资源目录
-	protected static List<string> GetAllResDirs(string fullPath)
-	{
-		List<string> dirList = new List<string>();
-
-		// 获取所有子文件
-		GetAllSubResDirs(fullPath, dirList);
-
-		return dirList;
-	}
 	// 递归获取所有子目录文件夹
 	protected static void GetAllSubResDirs(string fullPath, List<string> dirList)
 	{
 		if ((dirList == null) || (string.IsNullOrEmpty(fullPath)))
+		{
 			return;
+		}
 
 		string[] dirs = Directory.GetDirectories(fullPath);
 		if (dirs != null && dirs.Length > 0)
@@ -223,10 +226,7 @@ public class AssetBundleBuild
 				GetAllSubResDirs(dirs[i], dirList);
 			}
 		}
-		else
-		{
-			dirList.Add(fullPath);
-		}
+		dirList.Add(fullPath);
 	}
 	// 创建和清理输出目录
 	protected static void CreateOrClearOutPath()

@@ -84,7 +84,7 @@
 				sampleCount = clamp(sampleCount, _SampleInterval, _MaxSample) / _SampleInterval;
 				fixed4 finalColor = float4(0.0f, 0.0f, 0.0f, 0.0f);
 				[unroll(100)]
-				for (uint k = 0; k < (uint)sampleCount; ++k)
+				for (int k = 0; k < sampleCount; ++k)
 				{
 					float2 samplePos = pixelPos + dir * k * _SampleInterval;
 					samplePos.x = clamp(samplePos.x * _MainTex_TexelSize.x, 0.0f, 1.0f);

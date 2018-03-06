@@ -827,11 +827,11 @@ public class LayoutTools : GameBase
 	}
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------
 	// 音效
-	public static void PLAY_AUDIO_WINDOW(txUIObject obj)
+	public static void PLAY_AUDIO(txUIObject obj)
 	{
 		pushCommand<CommandWindowPlayAudio>(obj, false);
 	}
-	public static void PLAY_AUDIO_WINDOW(txUIObject obj, SOUND_DEFINE sound, bool loop, float volume)
+	public static void PLAY_AUDIO(txUIObject obj, SOUND_DEFINE sound, bool loop, float volume)
 	{
 		CommandWindowPlayAudio cmd = newCmd(out cmd, false);
 		cmd.mSound = sound;
@@ -840,7 +840,7 @@ public class LayoutTools : GameBase
 		pushCommand(cmd, obj);
 	}
 	// fileName为sound文件夹的相对路径,
-	public static void PLAY_AUDIO_WINDOW(txUIObject obj, string fileName, bool loop, float volume)
+	public static void PLAY_AUDIO(txUIObject obj, string fileName, bool loop, float volume)
 	{
 		CommandWindowPlayAudio cmd = newCmd(out cmd, false);
 		cmd.mSoundFileName = fileName;
@@ -848,7 +848,7 @@ public class LayoutTools : GameBase
 		cmd.mVolume = volume;
 		pushCommand(cmd, obj);
 	}
-	public static CommandWindowPlayAudio PLAY_AUDIO_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, SOUND_DEFINE sound, bool loop, float volume)
+	public static CommandWindowPlayAudio PLAY_AUDIO_DELAY(LayoutScript script, txUIObject obj, float delayTime, SOUND_DEFINE sound, bool loop, float volume)
 	{
 		CommandWindowPlayAudio cmd = newCmd(out cmd, false, true);
 		cmd.mSound = sound;

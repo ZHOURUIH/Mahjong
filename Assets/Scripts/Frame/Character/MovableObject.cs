@@ -9,6 +9,7 @@ public class MovableObject : ComponentOwner
 	protected Vector3 mLastPosition;
 	protected GameObject mObject;
 	protected Transform mTransform;
+	protected AudioSource mAudioSource;
 	protected bool mDestroyObject = true;   // 如果是外部管理的节点,则一定不要在MovableObject自动销毁
 	public MovableObject(string name)
 		:
@@ -37,6 +38,7 @@ public class MovableObject : ComponentOwner
 		mObject = obj;
 		mObject.name = mName;
 		mTransform = mObject.transform;
+		mAudioSource = mObject.GetComponent<AudioSource>();
 	}
 	public virtual void init() 
 	{
@@ -55,6 +57,7 @@ public class MovableObject : ComponentOwner
 		addComponent<MovableObjectComponentScale>("Scale");
 		addComponent<MovableObjectComponentTrackTarget>("TrackTarget");
 		addComponent<MovableObjectComponentTrackTargetPhysics>("TrackTargetPhysics");
+		addComponent<MovableObjectComponentAudio>("Audio", true);
 	}
 	public virtual void update(float elapsedTime) 
 	{ 
@@ -69,8 +72,14 @@ public class MovableObject : ComponentOwner
 		mAcceleration = (mSpeed - mLastSpeed) / elapsedTime;
 		mLastSpeed = mSpeed;
 	}
+	public AudioSource createAudioSource()
+	{
+		mAudioSource = mObject.AddComponent<AudioSource>();
+		return mAudioSource;
+	}
 	// get
 	//-------------------------------------------------------------------------------------------------------------------------
+	public AudioSource getAudioSource() { return mAudioSource; }
 	public GameObject getObject() { return mObject; }
 	public Vector3 getPosition()
 	{
@@ -122,6 +131,7 @@ public class MovableObject : ComponentOwner
 	}
 	// set
 	//-------------------------------------------------------------------------------------------------------------------------
+	public void setDestroyObject(bool value) { mDestroyObject = value; }
 	public virtual void setActive(bool active)
 	{
 		mObject.SetActive(active);

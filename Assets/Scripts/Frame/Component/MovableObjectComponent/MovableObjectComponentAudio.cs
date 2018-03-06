@@ -2,9 +2,9 @@
 using System;
 using System.Collections;
 
-public class GameSceneComponentAudio : ComponentAudio
+public class MovableObjectComponentAudio : ComponentAudio
 {
-	public GameSceneComponentAudio(Type type, string name)
+	public MovableObjectComponentAudio(Type type, string name)
 		:
 		base(type, name)
 	{}
@@ -12,11 +12,11 @@ public class GameSceneComponentAudio : ComponentAudio
 	protected override bool isType(Type type){return base.isType(type) || type == typeof(GameSceneComponentAudio);}
 	protected override void assignAudioSource()
 	{
-		GameScene gameScene = mComponentOwner as GameScene;
-		AudioSource audioSource = gameScene.getAudioSource();
+		MovableObject movableObject = mComponentOwner as MovableObject;
+		AudioSource audioSource = movableObject.getAudioSource();
 		if (audioSource == null)
 		{
-			audioSource = gameScene.createAudioSource();
+			audioSource = movableObject.createAudioSource();
 		}
 		setAudioSource(audioSource);
 	}

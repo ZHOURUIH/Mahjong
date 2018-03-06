@@ -153,7 +153,7 @@ public class GameLayoutManager : FrameComponent
 			info.mIsNGUI = isNGUI;
 			info.mCallback = callback;
 			mLayoutAsyncList.Add(info.mName, info);
-			bool ret = mResourceManager.loadResourceAsync<GameObject>(path + name, onLayoutPrefabAsyncDone, true);
+			bool ret = mResourceManager.loadResourceAsync<GameObject>(path + name, onLayoutPrefabAsyncDone, null, true);
 			if (!ret)
 			{
 				UnityUtility.logError("can not find layout : " + name);

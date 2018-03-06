@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using UnityEngine;
+using System.Collections;
 
-public class CommandWindowPlayAudio : Command
+public class CommandMovableObjectPlayAudio : Command
 {
 	public SOUND_DEFINE mSound;
 	public string mSoundFileName;
@@ -21,8 +19,8 @@ public class CommandWindowPlayAudio : Command
 	}
 	public override void execute()
 	{
-		txUIObject window = mReceiver as txUIObject;
-		WindowComponentAudio audioComponent = window.getFirstActiveComponent<WindowComponentAudio>();
+		MovableObject movableObject = mReceiver as MovableObject;
+		MovableObjectComponentAudio audioComponent = movableObject.getFirstActiveComponent<MovableObjectComponentAudio>();
 		if (audioComponent != null)
 		{
 			string soundName = mSound != SOUND_DEFINE.SD_MAX ? mAudioManager.getAudioName(mSound) : mSoundFileName;
@@ -36,6 +34,6 @@ public class CommandWindowPlayAudio : Command
 	public override string showDebugInfo()
 	{
 		string soundName = mSound != SOUND_DEFINE.SD_MAX ? mAudioManager.getAudioName(mSound) : mSoundFileName;
-		return this.GetType().ToString() + " : sound : " + mSound + ", name : " + soundName + ", loop : " + mLoop + ", volume : " + mVolume + ", sound file name : " + mSoundFileName + ", use volume coe : " + mUseVolumeCoe;
+		return this.GetType().ToString() + " : sound : " + mSound + ", name : " + soundName + ", loop : " + mLoop + ", volume : " + mVolume;
 	}
 }

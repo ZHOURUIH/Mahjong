@@ -55,7 +55,7 @@ public class KeyFrameManager : FrameComponent
 			mCurveList.Add(fileNameNoSuffix.ToLower(), null);
 			if (async)
 			{
-				mResourceManager.loadResourceAsync<GameObject>(path + fileNameNoSuffix, onKeyFrameLoaded, true);
+				mResourceManager.loadResourceAsync<GameObject>(path + fileNameNoSuffix, onKeyFrameLoaded, null, true);
 			}
 			else
 			{

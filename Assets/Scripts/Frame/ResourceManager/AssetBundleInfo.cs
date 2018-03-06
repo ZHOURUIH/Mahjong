@@ -10,6 +10,7 @@ public class AsyncLoadInfo
 	public string mName;
 	public AssetInfo mAssetInfo;
 	public AssetLoadDoneCallback mCallback;
+	public object mUserData;
 }
 
 public enum LOAD_STATE
@@ -135,7 +136,7 @@ public class AssetBundleInfo : GameBase
 		return mAssetList[fileNameWithSuffix].mAssetObject as T;
 	}
 	// 异步加载资源
-	public bool loadAssetAsync(ref string fileNameWithSuffix, AssetLoadDoneCallback callback)
+	public bool loadAssetAsync(ref string fileNameWithSuffix, AssetLoadDoneCallback callback, object userData)
 	{
 		if (!mAssetList.ContainsKey(fileNameWithSuffix))
 		{
@@ -150,6 +151,7 @@ public class AssetBundleInfo : GameBase
 				AsyncLoadInfo loadInfo = new AsyncLoadInfo();
 				loadInfo.mAssetInfo = mAssetList[fileNameWithSuffix];
 				loadInfo.mCallback = callback;
+				loadInfo.mUserData = userData;
 				mLoadAsyncList.Add(fileNameWithSuffix, loadInfo);
 			}
 			else
@@ -165,7 +167,7 @@ public class AssetBundleInfo : GameBase
 		// 如果资源包已经加载,则可以直接异步加载资源
 		else
 		{
-			callback(mAssetList[fileNameWithSuffix].mAssetObject, null);
+			callback(mAssetList[fileNameWithSuffix].mAssetObject, userData);
 		}
 		return true;
 	}
@@ -226,7 +228,7 @@ public class AssetBundleInfo : GameBase
 		{
 			if (assetInfo.Value.mCallback != null)
 			{
-				assetInfo.Value.mCallback(assetInfo.Value.mAssetInfo.mAssetObject, null);
+				assetInfo.Value.mCallback(assetInfo.Value.mAssetInfo.mAssetObject, assetInfo.Value.mUserData);
 			}
 		}
 		mLoadAsyncList.Clear();

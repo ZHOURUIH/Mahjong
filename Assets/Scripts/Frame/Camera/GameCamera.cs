@@ -23,7 +23,7 @@ public class GameCamera : MovableObject
 		mMouseSpeed = 0.1f;
 		mKeyProcess = false;
 		mLinkerList = new Dictionary<string, CameraLinker>();
-		mDestroyObject = false;
+		setDestroyObject(false);
 	}
 	public override void init()
 	{

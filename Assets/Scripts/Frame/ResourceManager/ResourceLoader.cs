@@ -82,7 +82,7 @@ public class ResourceLoader : GameBase
 		return mLoadedPath[path][name];
 	}
 	// 异步加载资源,name为Resources下的相对路径,不带后缀
-	public bool loadResourcesAsync<T>(string name, AssetLoadDoneCallback doneCallback) where T : UnityEngine.Object
+	public bool loadResourcesAsync<T>(string name, AssetLoadDoneCallback doneCallback, object userData) where T : UnityEngine.Object
 	{
 		string path = StringUtility.getFilePath(name);
 		// 如果文件夹还未加载,则先加载文件夹
@@ -102,7 +102,7 @@ public class ResourceLoader : GameBase
 		else
 		{
 			mLoadedPath[path].Add(name, null);
-			mGameFramework.StartCoroutine(loadResourceCoroutine<T>(name, doneCallback));
+			mGameFramework.StartCoroutine(loadResourceCoroutine<T>(name, doneCallback, userData));
 		}
 		return true;
 	}
@@ -147,14 +147,14 @@ public class ResourceLoader : GameBase
 		}
 	}
 	//---------------------------------------------------------------------------------------------------------------------------------------
-	protected IEnumerator loadResourceCoroutine<T>(string resName, AssetLoadDoneCallback doneCallback) where T : UnityEngine.Object
+	protected IEnumerator loadResourceCoroutine<T>(string resName, AssetLoadDoneCallback doneCallback, object userData) where T : UnityEngine.Object
 	{
 		UnityUtility.logInfo(resName + " start load!", LOG_LEVEL.LL_NORMAL);
 		ResourceRequest request = Resources.LoadAsync<T>(resName);
 		yield return request;
 		string path = StringUtility.getFilePath(resName);
 		mLoadedPath[path][resName] = request.asset;
-		doneCallback(request.asset, null);
+		doneCallback(request.asset, userData);
 		UnityUtility.logInfo(resName + " load done!", LOG_LEVEL.LL_NORMAL);
 	}
 	protected IEnumerator loadPathCoroutine(string path, AssetBundleLoadDoneCallback callback)

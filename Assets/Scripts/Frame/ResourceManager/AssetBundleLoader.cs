@@ -265,7 +265,7 @@ public class AssetBundleLoader : GameBase
 		return res;
 	}
 	// 异步加载资源
-	public bool loadAssetAsync<T>(string fileName, AssetLoadDoneCallback doneCallback) where T : UnityEngine.Object
+	public bool loadAssetAsync<T>(string fileName, AssetLoadDoneCallback doneCallback, object userData) where T : UnityEngine.Object
 	{
 		List<string> fileNameList = adjustResourceName<T>(fileName);
 		// 只加载第一个找到的资源,所以不允许有重名的同类资源
@@ -277,7 +277,7 @@ public class AssetBundleLoader : GameBase
 			if (mAssetToBundleInfo.ContainsKey(fileNameWithSuffix))
 			{
 				AssetBundleInfo bundleInfo = mAssetToBundleInfo[fileNameWithSuffix].mParentAssetBundle;
-				bool ret = bundleInfo.loadAssetAsync(ref fileNameWithSuffix, doneCallback);
+				bool ret = bundleInfo.loadAssetAsync(ref fileNameWithSuffix, doneCallback, userData);
 				if (ret)
 				{
 					++loadedCount;

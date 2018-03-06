@@ -125,7 +125,7 @@ public class SceneSystem : FrameComponent
 			{
 				break;
 			}
-			
+
 			yield return null;
 		}
 		// 首先获得场景

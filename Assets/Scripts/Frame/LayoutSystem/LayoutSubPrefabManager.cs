@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class LayoutPrefabManager : FrameComponent
+public class LayoutSubPrefabManager : FrameComponent
 {
 	protected GameObject mManagerObject;
 	protected Dictionary<string, GameObject> mPrefabList;
 	protected int mLoadedCount;	// 已加载的布局使用的预设数量
-	public LayoutPrefabManager(string name)
+	public LayoutSubPrefabManager(string name)
 		:base(name)
 	{
 		mPrefabList = new Dictionary<string, GameObject>();
@@ -17,7 +17,7 @@ public class LayoutPrefabManager : FrameComponent
 	}
 	public override void init()
 	{
-		mManagerObject = UnityUtility.getGameObject(mGameFramework.getGameFrameObject(), "LayoutPrefabManager", true);
+		mManagerObject = UnityUtility.getGameObject(mGameFramework.getGameFrameObject(), "LayoutSubPrefabManager", true);
 	}
 	// 加载所有LayoutPrefab下的预设
 	public void loadAll(bool async)
@@ -31,7 +31,7 @@ public class LayoutPrefabManager : FrameComponent
 			mPrefabList.Add(fileNameNoSuffix.ToLower(), null);
 			if (async)
 			{
-				mResourceManager.loadResourceAsync<GameObject>(path + fileNameNoSuffix, onLayoutPrefabLoaded, true);
+				mResourceManager.loadResourceAsync<GameObject>(path + fileNameNoSuffix, onLayoutPrefabLoaded, null, true);
 			}
 			else
 			{

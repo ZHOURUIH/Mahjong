@@ -21,7 +21,7 @@ public class CharacterComponentModel : GameComponent
 	{
 		if(mModel != null)
 		{
-			mModelManager.destroyModel(mModel.name);
+			mObjectManager.destroyObject(mModel);
 			mModel = null;
 		}
 		base.destroy();
@@ -30,11 +30,12 @@ public class CharacterComponentModel : GameComponent
 	{
 		base.update(elapsedTime);
 	}
-	public void setModel(GameObject model, string modelPath, bool destroyOld = true)
+	public void setModel(GameObject model, string modelPath)
 	{
-		if(destroyOld && mModel != null)
+		if(mModel != null)
 		{
-			mModelManager.destroyModel(mModel.name);
+			UnityUtility.logError("model is not null! can not set again!");
+			return;
 		}
 		mModelPath = modelPath;
 		mModel = model;
@@ -44,17 +45,10 @@ public class CharacterComponentModel : GameComponent
 			mAnimator = mModel.GetComponent<Animator>();
 			mModelTransform = mModel.GetComponent<Transform>();
 			mAnimation = mModel.GetComponent<Animation>();
-			mModelTransform.parent = (mComponentOwner as Character).getTransform();
 		}
 	}
-	public GameObject getModel()
-	{
-		return mModel;
-	}
-	public string getModelPath()
-	{
-		return mModelPath;
-	}
+	public GameObject getModel(){return mModel;}
+	public string getModelPath(){return mModelPath;}
 	public override void setActive(bool active)
 	{
 		base.setActive(active);

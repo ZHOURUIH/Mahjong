@@ -134,16 +134,16 @@ public class ResourceManager : FrameComponent
 		return res;
 	}
 	// name是Resources下的相对路径,errorIfNull表示当找不到资源时是否报错提示
-	public bool loadResourceAsync<T>(string name, AssetLoadDoneCallback doneCallback, bool errorIfNull) where T : UnityEngine.Object
+	public bool loadResourceAsync<T>(string name, AssetLoadDoneCallback doneCallback, object userData, bool errorIfNull) where T : UnityEngine.Object
 	{
 		bool ret = false;
 		if (mLoadSource == 0)
 		{
-			ret = mResourceLoader.loadResourcesAsync<T>(name, doneCallback);
+			ret = mResourceLoader.loadResourcesAsync<T>(name, doneCallback, userData);
 		}
 		else if (mLoadSource == 1)
 		{
-			ret = mAssetBundleLoader.loadAssetAsync<T>(name, doneCallback);
+			ret = mAssetBundleLoader.loadAssetAsync<T>(name, doneCallback, userData);
 		}
 		if (!ret && errorIfNull)
 		{

@@ -198,7 +198,7 @@ public abstract class LayoutScript : CommandReceiver
 	}
 	public void instantiateObject(txUIObject parent, string name)
 	{
-		GameObject gameObject = mLayoutPrefabManager.instantiate(name, parent.mObject, name);
+		GameObject gameObject = mLayoutSubPrefabManager.instantiate(name, parent.mObject, name);
 		gameObject.SetActive(false);
 		findWindow(parent.mObject, gameObject, ref mAllWindowList);
 	}

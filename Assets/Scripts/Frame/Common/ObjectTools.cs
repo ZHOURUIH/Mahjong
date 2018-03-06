@@ -697,4 +697,52 @@ public class ObjectTools : GameBase
 		return cmd;
 	}
 	#endregion
+	//--------------------------------------------------------------------------------------------------------------------------------------------
+	// 场景音效
+	#region 播放场景音效
+	public static void PLAY_AUDIO_SCENE()
+	{
+		pushCommand<CommandGameScenePlayAudio>(mGameSceneManager.getCurScene(), false);
+	}
+	public static void PLAY_AUDIO_SCENE(SOUND_DEFINE sound, bool loop, float volume)
+	{
+		CommandGameScenePlayAudio cmd = newCmd(out cmd, false);
+		cmd.mSound = sound;
+		cmd.mLoop = loop;
+		cmd.mVolume = volume;
+		pushCommand(cmd, mGameSceneManager.getCurScene());
+	}
+	public static void PLAY_AUDIO_SCENE(string sound, bool loop, float volume)
+	{
+		CommandGameScenePlayAudio cmd = newCmd(out cmd, false);
+		cmd.mSoundFileName = sound;
+		cmd.mLoop = loop;
+		cmd.mVolume = volume;
+		pushCommand(cmd, mGameSceneManager.getCurScene());
+	}
+	#endregion
+	//--------------------------------------------------------------------------------------------------------------------------------------------
+	// 物体音效
+	#region 播放物体音效
+	public static void PLAY_AUDIO_OBJECT(MovableObject obj)
+	{
+		pushCommand<CommandMovableObjectPlayAudio>(obj, false);
+	}
+	public static void PLAY_AUDIO_OBJECT(MovableObject obj, string sound, bool loop, float volume)
+	{
+		CommandMovableObjectPlayAudio cmd = newCmd(out cmd, false);
+		cmd.mSoundFileName = sound;
+		cmd.mLoop = loop;
+		cmd.mVolume = volume;
+		pushCommand(cmd, obj);
+	}
+	public static void PLAY_AUDIO_OBJECT(MovableObject obj, SOUND_DEFINE sound, bool loop, float volume)
+	{
+		CommandMovableObjectPlayAudio cmd = newCmd(out cmd, false);
+		cmd.mSound = sound;
+		cmd.mLoop = loop;
+		cmd.mVolume = volume;
+		pushCommand(cmd, obj);
+	}
+	#endregion
 }

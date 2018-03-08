@@ -171,7 +171,7 @@ public class GameFramework : MonoBehaviour
 		Application.Quit();
 #endif
 	}
-	public void keyProcess()
+	public virtual void keyProcess()
 	{
 		if(Input.GetKeyDown(KeyCode.Escape))
 		{

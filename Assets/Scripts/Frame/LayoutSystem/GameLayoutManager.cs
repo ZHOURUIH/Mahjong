@@ -234,6 +234,9 @@ public class GameLayoutManager : FrameComponent
 		GameObject layoutParent = info.mIsNGUI ? mNGUIRoot.mObject : mUGUIRoot.mObject;
 		UnityUtility.setNormalProperty(ref info.mLayoutObject, layoutParent, info.mName, Vector3.one, Vector3.zero, Vector3.zero);
 		info.mLayout.init(info.mType, info.mName, info.mRenderOrder, info.mIsNGUI);
-		info.mCallback(info.mLayout);
+		if(info.mCallback != null)
+		{
+			info.mCallback(info.mLayout);
+		}
 	}
 }

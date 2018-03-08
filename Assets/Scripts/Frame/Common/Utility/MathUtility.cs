@@ -747,6 +747,18 @@ public class MathUtility
 	{
 		return a > b ? a : b;
 	}
+	public static float inverseLerp(float a, float b, float value)
+	{
+		return (value - a) / (b - a);
+	}
+	public static float inverseLerp(Vector2 a, Vector2 b, Vector2 value)
+	{
+		return getLength(value - a) / getLength(b - a);
+	}
+	public static float inverseLerp(Vector3 a, Vector3 b, Vector3 value)
+	{
+		return getLength(value - a) / getLength(b - a);
+	}
 	public static float lerp(float start, float end, float t)
 	{
 		clamp(ref t, 0.0f, 1.0f);

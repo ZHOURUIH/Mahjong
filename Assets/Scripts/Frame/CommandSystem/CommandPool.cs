@@ -9,6 +9,7 @@ public class CommandPool : GameBase
 	protected Dictionary<Type, List<Command>> mUnusedList;
 	protected ThreadLock mInuseLock;
 	protected ThreadLock mUnuseLock;
+	protected ThreadLock mNewCmdLock;	// 只需要添加创建命令的锁就可以,只要不分配出重复的命令,回收命令时就不会发生冲突
 	protected int mNewCount;
 	protected static int mIDSeed = 0;
 	protected static int mAssignIDSeed = 0;
@@ -18,6 +19,7 @@ public class CommandPool : GameBase
 		mUnusedList = new Dictionary<Type, List<Command>>();
 		mInuseLock = new ThreadLock();
 		mUnuseLock = new ThreadLock();
+		mNewCmdLock = new ThreadLock();
 	}
 	public void init()
 	{
@@ -33,6 +35,7 @@ public class CommandPool : GameBase
 	}
 	public T newCmd<T>(bool show = true, bool delay = false) where T : Command, new()
 	{
+		mNewCmdLock.waitForUnlock();
 		// 首先从未使用的列表中获取,获取不到再重新创建一个
 		T cmd = null;
 		Type t = typeof(T);
@@ -69,6 +72,7 @@ public class CommandPool : GameBase
 		cmd.setDelayCommand(delay);
 		// 加入已使用列表
 		addInuse(cmd);
+		mNewCmdLock.unlock();
 		return cmd;
 	}
 	public void destroyCmd(Command cmd) 

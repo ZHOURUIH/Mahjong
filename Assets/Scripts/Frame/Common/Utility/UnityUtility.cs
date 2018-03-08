@@ -103,7 +103,7 @@ public class UnityUtility : FrameComponent
 		Camera camera = mCameraManager.getUICamera().getCamera();
 		return camera.ScreenPointToRay(screenPos);
 	}
-	public static List<txUIObject> raycast(Ray ray, SortedDictionary<int, List<txUIObject>> buttonList, int maxCount = 0)
+	public static List<txUIObject> raycast(Ray ray, SortedDictionary<UIDepth, List<txUIObject>> buttonList, int maxCount = 0)
 	{
 		bool cast = true;
 		List<txUIObject> retList = new List<txUIObject>();

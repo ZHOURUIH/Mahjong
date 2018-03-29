@@ -8,13 +8,37 @@ using UnityEngine;
 public class StringUtility
 {
 	public void init() { }
-	public static bool startWith(string str, string pattern)
+	public static bool startWith(string oriString, string pattern, bool sensitive = true)
 	{
-		if(str.Length < pattern.Length)
+		if (oriString.Length < pattern.Length)
 		{
 			return false;
 		}
-		return str.Substring(0, pattern.Length) == pattern;
+		string startString = oriString.Substring(0, pattern.Length);
+		if (sensitive)
+		{
+			return startString == pattern;
+		}
+		else
+		{
+			return startString.ToLower() == pattern.ToLower();
+		}
+	}
+	public static bool endWith(string oriString, string pattern, bool sensitive = true)
+	{
+		if (oriString.Length < pattern.Length)
+		{
+			return false;
+		}
+		string endString = oriString.Substring(oriString.Length - pattern.Length, pattern.Length);
+		if (sensitive)
+		{
+			return endString == pattern;
+		}
+		else
+		{
+			return endString.ToLower() == pattern.ToLower();
+		}
 	}
 	public static int getLastNotNumberPos(string str)
 	{
@@ -402,6 +426,7 @@ public class StringUtility
 	{
 		return floatToString(value.x, precision) + "," + floatToString(value.y, precision) + "," + floatToString(value.z, precision);
 	}
+	// 将str中的[begin,end)替换为reStr
 	public static string strReplace(string str, int begin, int end, string reStr)
 	{
 		string sub1 = str.Substring(0, begin);

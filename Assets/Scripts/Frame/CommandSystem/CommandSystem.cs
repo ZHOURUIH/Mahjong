@@ -47,17 +47,6 @@ public class CommandSystem : FrameComponent
 		mSystemDestroy = true;
 		base.destroy();
 	}
-	protected void syncCommandBuffer()
-	{
-		mBufferLock.waitForUnlock();
-		int inputCount = mCommandBufferInput.Count;
-		for (int i = 0; i < inputCount; ++i)
-		{
-			mCommandBufferProcess.Add(mCommandBufferInput[i]);
-		}
-		mCommandBufferInput.Clear();
-		mBufferLock.unlock();
-	}
 	public override void update(float elapsedTime)
 	{
 		// 同步命令输入列表到命令处理列表中
@@ -145,12 +134,12 @@ public class CommandSystem : FrameComponent
 				return true;
 			}
 		}
-		// 在即将执行的列表中查找
+		// 在即将执行的列表中查找,不能删除列表元素，只能将接收者设置为空来阻止命令执行
 		foreach (var item in mExecuteList)
 		{
 			if (item.mCommand.mAssignID == assignID)
 			{
-				UnityUtility.logError("cmd is in execute list! can not interrupt!");
+				item.mReceiver = null;
 				break;
 			}
 		}
@@ -246,18 +235,8 @@ public class CommandSystem : FrameComponent
 		{
 			return;
 		}
-		// 异步列表中
-		mBufferLock.waitForUnlock();
-		for (int i = 0; i < mCommandBufferInput.Count; ++i)
-		{
-			if (mCommandBufferInput[i].mReceiver == receiver)
-			{
-				mCommandBufferInput.Remove(mCommandBufferInput[i]);
-				--i;
-			}
-		}
-		mBufferLock.unlock();
-		// 同步列表中
+		// 先同步命令列表
+		syncCommandBuffer();
 		for (int i = 0; i < mCommandBufferProcess.Count; ++i)
 		{
 			if (mCommandBufferProcess[i].mReceiver == receiver)
@@ -276,5 +255,17 @@ public class CommandSystem : FrameComponent
 				mExecuteList[i].mReceiver = null;
 			}
 		}
+	}
+	//-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+	protected void syncCommandBuffer()
+	{
+		mBufferLock.waitForUnlock();
+		int inputCount = mCommandBufferInput.Count;
+		for (int i = 0; i < inputCount; ++i)
+		{
+			mCommandBufferProcess.Add(mCommandBufferInput[i]);
+		}
+		mCommandBufferInput.Clear();
+		mBufferLock.unlock();
 	}
 }

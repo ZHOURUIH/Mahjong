@@ -290,7 +290,7 @@ public class BinaryUtility
 		int floatCount = sourceBuffer.Length;
 		for (int i = 0; i < floatCount; ++i)
 		{
-			ret = ret && writeBool(buffer, ref index, sourceBuffer[i]);
+			ret = writeBool(buffer, ref index, sourceBuffer[i]) && ret;
 		}
 		return ret;
 	}
@@ -322,7 +322,7 @@ public class BinaryUtility
 		int floatCount = sourceBuffer.Length;
 		for (int i = 0; i < floatCount; ++i)
 		{
-			ret = ret && writeShort(buffer, ref index, sourceBuffer[i]);
+			ret = writeShort(buffer, ref index, sourceBuffer[i]) && ret;
 		}
 		return ret;
 	}
@@ -332,7 +332,7 @@ public class BinaryUtility
 		int floatCount = sourceBuffer.Length;
 		for (int i = 0; i < floatCount; ++i)
 		{
-			ret = ret && writeInt(buffer, ref index, sourceBuffer[i]);
+			ret = writeInt(buffer, ref index, sourceBuffer[i]) && ret;
 		}
 		return ret;
 	}
@@ -342,7 +342,7 @@ public class BinaryUtility
 		int floatCount = sourceBuffer.Length;
 		for(int i = 0; i < floatCount; ++i)
 		{
-			ret = ret && writeFloat(buffer, ref index, sourceBuffer[i]);
+			ret = writeFloat(buffer, ref index, sourceBuffer[i]) && ret;
 		}
 		return ret;
 	}

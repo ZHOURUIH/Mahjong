@@ -99,7 +99,7 @@ public class FileUtility
 			{
 				for (int j = 0; j < patternCount; ++j)
 				{
-					if (fileName.EndsWith(pattern[j]))
+					if (StringUtility.endWith(fileName, pattern[j], false))
 					{
 						fileList.Add(fileName);
 					}

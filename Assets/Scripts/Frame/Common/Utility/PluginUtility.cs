@@ -82,7 +82,7 @@ public class PluginUtility : FrameComponent
 		webRequest.ContentType = "application/x-www-form-urlencoded";
 		webRequest.ContentLength = byteArray.Length;
 		webRequest.Credentials = CredentialCache.DefaultCredentials;
-		webRequest.Timeout = 5000;
+		webRequest.Timeout = 10000;
 		// 异步
 		if(callback != null)
 		{
@@ -139,9 +139,10 @@ public class PluginUtility : FrameComponent
             response.Close();
             threadParam.mCallback(JsonMapper.ToObject(phpend), threadParam.mUserData);
 		}
-		catch (Exception)
+		catch (Exception e)
 		{
 			threadParam.mCallback(null, threadParam.mUserData);
+			UnityUtility.logInfo("post result exception : " + e.Message);
 		}
 		finally
 		{

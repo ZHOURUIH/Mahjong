@@ -121,11 +121,7 @@ public class StringUtility
 	// 去掉最后一个逗号
 	public static void removeLastComma(ref string stream)
 	{
-		int lastCommaPos = stream.LastIndexOf(',');
-		if (lastCommaPos != -1)
-		{
-			stream = stream.Remove(lastCommaPos, 1);
-		}
+		removeLast(ref stream, ',');
 	}
 	// json
 	public static void jsonStartArray(ref string str, int preTableCount = 0, bool returnLine = false)

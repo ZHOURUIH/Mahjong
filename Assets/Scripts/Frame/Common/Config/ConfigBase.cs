@@ -208,9 +208,7 @@ public abstract class ConfigBase : FrameComponent
 	}
 	protected void readFile(string fileName, bool floatParam)
 	{
-		string text = "";
-		FileUtility.openTxtFile(fileName, ref text);
-
+		string text = FileUtility.openTxtFile(fileName);
 		string[] lineList = StringUtility.split(text, true, "\r\n");
 		Dictionary<string, ConfigInfo> valueList = new Dictionary<string, ConfigInfo>();
 		string comment = "";
@@ -234,7 +232,7 @@ public abstract class ConfigBase : FrameComponent
 				}
 				else
 				{
-					string[] value = StringUtility.split(line, true, "=");
+					string[] value = StringUtility.split(line, false, "=");
 					if(value.Length != 2)
 					{
 						UnityUtility.logError("配置文件错误 : line : " + line);

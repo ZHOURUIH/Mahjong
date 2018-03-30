@@ -21,22 +21,29 @@ public class FileUtility
 		fs.Close();
 	}
 	// 打开一个文本文件,fileName为绝对路径
-	public static void openTxtFile(string fileName, ref string fileBuffer)
+	public static string openTxtFile(string fileName)
 	{
 		if (!fileName.StartsWith(CommonDefine.F_ASSETS_PATH))
 		{
 			UnityUtility.logError("fileName should be a absolute path!");
-			return;
+			return "";
 		}
 		try
 		{
 			StreamReader streamReader = new StreamReader(fileName, Encoding.UTF8);
-			fileBuffer = streamReader.ReadToEnd();
+			if(streamReader == null)
+			{
+				UnityUtility.logInfo("open file failed! filename : " + fileName);
+				return "";
+			}
+			string fileBuffer = streamReader.ReadToEnd();
 			streamReader.Close();
+			return fileBuffer;
 		}
 		catch(Exception)
 		{
 			UnityUtility.logInfo("open file failed! filename : " + fileName);
+			return "";
 		}
 	}
 	// 写一个文本文件,fileName为绝对路径,content是写入的字符串

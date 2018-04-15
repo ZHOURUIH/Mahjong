@@ -18,18 +18,15 @@ public class CommandCharacterGang : Command
 
 		if (character != mDroppedPlayer)
 		{
-			CommandCharacterTakeDrop cmdTakeDrop = mCommandSystem.newCmd<CommandCharacterTakeDrop>();
-			mCommandSystem.pushCommand(cmdTakeDrop, mDroppedPlayer);
+			pushCommand<CommandCharacterTakeDrop>(mDroppedPlayer);
 		}
 
 		// 通知布局
 		CharacterData data = character.getCharacterData();
-		ScriptMahjongHandIn handIn = mLayoutManager.getScript(LAYOUT_TYPE.LT_MAHJONG_HAND_IN) as ScriptMahjongHandIn;
-		handIn.notifyPengOrGang(data.mPosition, data.mPengGangList);
+		mScriptMahjongHandIn.notifyPengOrGang(data.mPosition, data.mPengGangList);
 
 		// 然后重新排列玩家手里的牌
-		CommandCharacterReorderMahjong cmdReorder = mCommandSystem.newCmd<CommandCharacterReorderMahjong>();
-		mCommandSystem.pushCommand(cmdReorder, character);
+		pushCommand<CommandCharacterReorderMahjong>(character);
 	}
 	public override string showDebugInfo()
 	{

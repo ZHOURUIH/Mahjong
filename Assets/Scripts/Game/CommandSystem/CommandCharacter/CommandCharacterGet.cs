@@ -16,8 +16,7 @@ public class CommandCharacterGet : Command
 		character.getMahjong(mMahjong);
 		CharacterData data = character.getCharacterData();
 		// 通知布局
-		ScriptMahjongHandIn handIn = mLayoutManager.getScript(LAYOUT_TYPE.LT_MAHJONG_HAND_IN) as ScriptMahjongHandIn;
-		handIn.notifyGetMahjong(data.mPosition, mMahjong);
+		mScriptMahjongHandIn.notifyGetMahjong(data.mPosition, mMahjong);
 	}
 	public override string showDebugInfo()
 	{

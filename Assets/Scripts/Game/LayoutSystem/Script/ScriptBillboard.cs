@@ -5,9 +5,9 @@ using System.Text;
 
 public class ScriptBillboard : LayoutScript
 {
-	public ScriptBillboard(LAYOUT_TYPE type, string name, GameLayout layout)
+	public ScriptBillboard(string name, GameLayout layout)
 		:
-		base(type, name, layout)
+		base(name, layout)
 	{
 		;
 	}

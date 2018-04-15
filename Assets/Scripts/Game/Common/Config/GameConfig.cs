@@ -8,6 +8,11 @@ using System.Text.RegularExpressions;
 
 public class GameConfig : ConfigBase
 {
+	public GameConfig(string name)
+		:base(name)
+	{
+		;
+	}
 	public override void writeConfig()
 	{
 		FileUtility.writeFile(CommonDefine.F_CONFIG_PATH + "GameFloatConfig.txt", generateFloatFile());

@@ -6,20 +6,20 @@ using UnityEngine;
 
 public class ScriptDice : LayoutScript
 {
-	protected txUISpriteAnim mDiceAnim;
-	protected txUIStaticSprite mDice0;
-	protected txUIStaticSprite mDice1;
-	public ScriptDice(LAYOUT_TYPE type, string name, GameLayout layout)
+	protected txNGUISpriteAnim mDiceAnim;
+	protected txNGUIStaticSprite mDice0;
+	protected txNGUIStaticSprite mDice1;
+	public ScriptDice(string name, GameLayout layout)
 		:
-		base(type, name, layout)
+		base(name, layout)
 	{
 		;
 	}
 	public override void assignWindow()
 	{
-		mDiceAnim = newObject<txUISpriteAnim>("DiceAnim");
-		mDice0 = newObject<txUIStaticSprite>("Dice0", 0);
-		mDice1 = newObject<txUIStaticSprite>("Dice1", 0);
+		newObject(out mDiceAnim, "DiceAnim");
+		newObject(out mDice0, "Dice0", 0);
+		newObject(out mDice1, "Dice1", 0);
 	}
 	public override void init()
 	{
@@ -35,7 +35,7 @@ public class ScriptDice : LayoutScript
 	{
 		mDiceAnim.stop();
 		mDiceAnim.play();
-		mDiceAnim.setPlayEndCallback(onDiceAnimDone, this);
+		mDiceAnim.setPlayEndCallback(onDiceAnimDone);
 	}
 	public override void onHide(bool immediately, string param)
 	{
@@ -51,12 +51,12 @@ public class ScriptDice : LayoutScript
 		mDice1.setSpriteName("Dice" + dice[1]);
 	}
 	//-----------------------------------------------------------------------------------
-	protected void onDiceAnimDone(txUISpriteAnim window, object userData, bool isBreak)
+	protected void onDiceAnimDone(txNGUISpriteAnim window, object userData, bool isBreak)
 	{
 		LayoutTools.ACTIVE_WINDOW(mDice0);
 		LayoutTools.ACTIVE_WINDOW(mDice1);
 		// 骰子停留0.2秒后再通知场景
-		CommandMahjongSceneNotifyDiceDone cmd = mCommandSystem.newCmd<CommandMahjongSceneNotifyDiceDone>(true, true);
-		mCommandSystem.pushDelayCommand(cmd, mGameSceneManager.getCurScene(), 0.2f);
+		CommandMahjongSceneNotifyDiceDone cmd = newCmd(out cmd, true, true);
+		pushDelayCommand(cmd, mGameSceneManager.getCurScene(), 0.2f);
 	}
 }

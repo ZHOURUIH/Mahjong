@@ -3,8 +3,6 @@ using System.Collections;
 
 public class LogoSceneRegister : SceneProcedure
 {
-    public LogoSceneRegister()
-    { }
 	public LogoSceneRegister(PROCEDURE_TYPE type, GameScene gameScene)
 		:
 		base(type, gameScene)

@@ -64,9 +64,9 @@ public class GameSceneManager : FrameComponent
 		mManagerObject = null;
 		base.destroy();
 	}
-	public void registeGameScene<T>(GAME_SCENE_TYPE type)
+	public void registeGameScene(Type classType, GAME_SCENE_TYPE type)
 	{
-		mGameSceneRegisteList.Add(type, typeof(T));
+		mGameSceneRegisteList.Add(type, classType);
 	}
 	public int getSceneCount()
 	{

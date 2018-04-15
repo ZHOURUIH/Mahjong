@@ -5,15 +5,15 @@ using System.Collections.Generic;
 
 public class GameSceneRegister : GameBase
 {
-	public void registerAllGameScene()
+	public static void registerAllGameScene()
 	{
-		registeGameScene(typeof(StartScene), GAME_SCENE_TYPE.GST_START);
-		registeGameScene(typeof(MainScene), GAME_SCENE_TYPE.GST_MAIN);
-		registeGameScene(typeof(MahjongScene), GAME_SCENE_TYPE.GST_MAHJONG);
+		registeGameScene<StartScene>(GAME_SCENE_TYPE.GST_START);
+		registeGameScene<MainScene>(GAME_SCENE_TYPE.GST_MAIN);
+		registeGameScene<MahjongScene>(GAME_SCENE_TYPE.GST_MAHJONG);
 	}
 	//-------------------------------------------------------------------------------------------------------------
-	protected void registeGameScene(Type scene, GAME_SCENE_TYPE type)
+	protected static void registeGameScene<T>(GAME_SCENE_TYPE type) where T : GameScene
 	{
-		mGameSceneManager.registeGameScene(scene, type);
+		mGameSceneManager.registeGameScene(typeof(T), type);
 	}
 }

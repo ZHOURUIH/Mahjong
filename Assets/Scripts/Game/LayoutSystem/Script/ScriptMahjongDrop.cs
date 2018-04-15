@@ -7,17 +7,17 @@ using UnityEngine;
 public class ScriptMahjongDrop : LayoutScript
 {
 	protected txUIObject[] mRootList;
-	protected List<txUIStaticSprite>[] mDropList;
+	protected List<txNGUIStaticSprite>[] mDropList;
 	protected int mMaxDropCount = 30;
-	public ScriptMahjongDrop(LAYOUT_TYPE type, string name, GameLayout layout)
+	public ScriptMahjongDrop(string name, GameLayout layout)
 		:
-		base(type, name, layout)
+		base(name, layout)
 	{
 		mRootList = new txUIObject[GameDefine.MAX_PLAYER_COUNT];
-		mDropList = new List<txUIStaticSprite>[GameDefine.MAX_PLAYER_COUNT];
+		mDropList = new List<txNGUIStaticSprite>[GameDefine.MAX_PLAYER_COUNT];
 		for(int i = 0; i < GameDefine.MAX_PLAYER_COUNT; ++i)
 		{
-			mDropList[i] = new List<txUIStaticSprite>();
+			mDropList[i] = new List<txNGUIStaticSprite>();
 		}
 	}
 	public override void assignWindow()
@@ -25,11 +25,11 @@ public class ScriptMahjongDrop : LayoutScript
 		string[] rootName = new string[] { "MyDropRoot", "LeftDropRoot", "OppositeDropRoot", "RightDropRoot"};
 		for (int i = 0; i < GameDefine.MAX_PLAYER_COUNT; ++i)
 		{
-			mRootList[i] = newObject<txUIObject>(rootName[i], 1);
+			newObject(out mRootList[i], rootName[i], 1);
 			for(int j = 0; j < mMaxDropCount; ++j)
 			{
-				string name = "Mahjong" + StringUtility.intToString(j);
-				mDropList[i].Add(newObject<txUIStaticSprite>(mRootList[i], name, 0));
+				txNGUIStaticSprite obj = newObject(out obj, mRootList[i], "Mahjong" + j, 0);
+				mDropList[i].Add(obj);
 			}
 		}
 	}

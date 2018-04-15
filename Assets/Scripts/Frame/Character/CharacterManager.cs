@@ -59,9 +59,9 @@ public class CharacterManager : FrameComponent
 	}
 	public GameObject getManagerNode() { return mManagerObject; }
 	public CharacterMyself getMyself() { return mMyself; }
-	public void registeCharacter<T>(CHARACTER_TYPE type) where T : Character
+	public void registeCharacter(Type classType, CHARACTER_TYPE type)
 	{
-		mCharacterRegisteList.Add(type, typeof(T));
+		mCharacterRegisteList.Add(type, classType);
 	}
 	public Character getCharacter(string name)
 	{

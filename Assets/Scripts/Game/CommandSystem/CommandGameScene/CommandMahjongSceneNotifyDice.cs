@@ -17,8 +17,7 @@ public class CommandMahjongSceneNotifyDice : Command
 			return;
 		}
 		// 开始掷骰子
-		ScriptDice diceScript = mLayoutManager.getScript(LAYOUT_TYPE.LT_DICE) as ScriptDice;
-		diceScript.setDiceResult(mDice);
+		mScriptDice.setDiceResult(mDice);
 	}
 	public override string showDebugInfo()
 	{

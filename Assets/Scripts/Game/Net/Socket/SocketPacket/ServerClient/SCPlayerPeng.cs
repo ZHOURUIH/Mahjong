@@ -25,9 +25,9 @@ public class SCPlayerPeng : SocketPacket
 		{
 			return;
 		}
-		CommandCharacterPeng cmdGang = mCommandSystem.newCmd<CommandCharacterPeng>();
+		CommandCharacterPeng cmdGang = newCmd(out cmdGang);
 		cmdGang.mDroppedPlayer = mCharacterManager.getCharacter(mDroppedPlayerGUID.mValue);
 		cmdGang.mMahjong = (MAHJONG)mMahjong.mValue;
-		mCommandSystem.pushCommand(cmdGang, mCharacterManager.getMyself());
+		pushCommand(cmdGang, mCharacterManager.getMyself());
 	}
 }

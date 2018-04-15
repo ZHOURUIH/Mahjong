@@ -23,7 +23,7 @@ public class WaitActionInfo
 	public MahjongAction mConfirmedAction;	// 玩家确认选择的一种操作
 }
 
-public class MahjongSystem : CommandReceiver
+public class MahjongSystem : FrameComponent
 {
 	protected Dictionary<int, Character> mPlayerIDList;	// key是玩家GUID,value是玩家对象,只用于查找
 	protected Dictionary<PLAYER_POSITION, Character> mPlayerPositionList;          // 玩家列表,保存着玩家之间的顺序
@@ -34,9 +34,8 @@ public class MahjongSystem : CommandReceiver
 	protected PLAYER_POSITION mCurAssignPos;			// 开局发牌时当前发到牌的玩家的位置
 	protected float mCurInterval;                       // 当前间隔时间计时
 	protected Dictionary<Character, WaitActionInfo> mWaitList;
-	public MahjongSystem()
-		:
-		base(typeof(MahjongSystem).ToString())
+	public MahjongSystem(string name)
+		:base(name)
 	{
 		mPlayerIDList = new Dictionary<int, Character>();
 		mPlayerPositionList = new Dictionary<PLAYER_POSITION, Character>();
@@ -48,15 +47,16 @@ public class MahjongSystem : CommandReceiver
 		mDice = new int[GameDefine.DICE_COUNT];
 		mWaitList = new Dictionary<Character, WaitActionInfo>();
 	}
-	public void init()
+	public override void init()
 	{
+		base.init();
 		notifyPlayState(MAHJONG_PLAY_STATE.MPS_WAITING);
 	}
 	public override void destroy()
 	{
 		base.destroy();
 	}
-	public void update(float elapsedTime)
+	public override void update(float elapsedTime)
 	{
 		// 开始拿牌时,需要由麻将系统给玩家分发牌
 		if(mPlayState == MAHJONG_PLAY_STATE.MPS_GET_START)
@@ -68,9 +68,9 @@ public class MahjongSystem : CommandReceiver
 				mCurInterval = GameDefine.ASSIGN_MAHJONG_INTERVAL;
 				Character curPlayer = mPlayerPositionList[mCurAssignPos];
 				// 给玩家发牌
-				CommandCharacterGetStart cmd = mCommandSystem.newCmd<CommandCharacterGetStart>();
+				CommandCharacterGetStart cmd = newCmd(out cmd);
 				cmd.mMahjong = requestGet();
-				mCommandSystem.pushCommand(cmd, curPlayer);
+				pushCommand(cmd, curPlayer);
 
 				bool isDone = false;
 				int palyerHandInCount = curPlayer.getCharacterData().mHandIn.Count;
@@ -87,18 +87,13 @@ public class MahjongSystem : CommandReceiver
 				// 牌拿完时需要重新排列
 				if (isDone)
 				{
-					CommandCharacterReorderMahjong cmdReorder = mCommandSystem.newCmd<CommandCharacterReorderMahjong>();
-					mCommandSystem.pushCommand(cmdReorder, curPlayer);
-
+					pushCommand<CommandCharacterReorderMahjong>(curPlayer);
 					// 如果是庄家拿完了牌,则进入正常游戏流程
 					if(mCurAssignPos == mBankerPos)
 					{
-						CommandMahjongSceneNotifyStartDone cmdStartDone = mCommandSystem.newCmd<CommandMahjongSceneNotifyStartDone>();
-						mCommandSystem.pushCommand(cmdStartDone, mGameSceneManager.getCurScene());
-
+						pushCommand<CommandMahjongSceneNotifyStartDone>(mGameSceneManager.getCurScene());
 						// 通知玩家打出一张牌
-						CommandCharacterAskDrop cmdAskDrop = mCommandSystem.newCmd<CommandCharacterAskDrop>();
-						mCommandSystem.pushCommand(cmdAskDrop, curPlayer);
+						pushCommand<CommandCharacterAskDrop>(curPlayer);
 						return;
 					}
 				}
@@ -311,9 +306,9 @@ public class MahjongSystem : CommandReceiver
 				{
 					PLAYER_POSITION nextPosition = (PLAYER_POSITION)(((int)(player.getCharacterData().mPosition) + 1) % (int)PLAYER_POSITION.PP_MAX);
 					Character nextPlayer = getCharacterByPosition(nextPosition);
-					CommandCharacterGet cmdGet = mCommandSystem.newCmd<CommandCharacterGet>();
+					CommandCharacterGet cmdGet = newCmd(out cmdGet);
 					cmdGet.mMahjong = requestGet();
-					mCommandSystem.pushCommand(cmdGet, nextPlayer);
+					pushCommand(cmdGet, nextPlayer);
 				}
 				// 牌已经摸完了,则本局为平局
 				else
@@ -357,8 +352,7 @@ public class MahjongSystem : CommandReceiver
 		else
 		{
 			// 没有任何操作则通知玩家需要打一张牌出来
-			CommandCharacterAskDrop cmdAskDrop = mCommandSystem.newCmd<CommandCharacterAskDrop>();
-			mCommandSystem.pushCommand(cmdAskDrop, player);
+			pushCommand<CommandCharacterAskDrop>(player);
 		}
 	}
 	// 询问玩家要选择哪种操作
@@ -379,9 +373,9 @@ public class MahjongSystem : CommandReceiver
 		// 设置状态为等待玩家确认操作
 		notifyPlayState(MAHJONG_PLAY_STATE.MPS_WAIT_FOR_ACTION);
 		// 询问玩家进行什么操作
-		CommandCharacterAskAction cmd = mCommandSystem.newCmd<CommandCharacterAskAction>();
+		CommandCharacterAskAction cmd = newCmd(out cmd);
 		cmd.mActionList = actionList;
-		mCommandSystem.pushCommand(cmd, player);
+		pushCommand(cmd, player);
 	}
 	// 玩家请求确认操作
 	public void playerConfirmAction(Character player, ACTION_TYPE type)
@@ -389,6 +383,7 @@ public class MahjongSystem : CommandReceiver
 		if(!mWaitList.ContainsKey(player))
 		{
 			UnityUtility.logError("player has no action : name : " + player.getName() + ", action : " + type);
+			return;
 		}
 		MahjongAction action = null;
 		List<MahjongAction> actionList = mWaitList[player].mActionList;
@@ -411,8 +406,7 @@ public class MahjongSystem : CommandReceiver
 		{
 			// 游戏状态设置为正常游戏
 			notifyPlayState(MAHJONG_PLAY_STATE.MPS_NORMAL_GAMING);
-			CommandCharacterHu cmd = mCommandSystem.newCmd<CommandCharacterHu>();
-			mCommandSystem.pushCommand(cmd, player);
+			pushCommand<CommandCharacterHu>(player);
 			
 			// 有玩家胡牌后则结束游戏
 			//End;
@@ -454,17 +448,17 @@ public class MahjongSystem : CommandReceiver
 					{
 						;
 					}
-					CommandCharacterGang cmd = mCommandSystem.newCmd<CommandCharacterGang>();
+					CommandCharacterGang cmd = newCmd(out cmd);
 					cmd.mDroppedPlayer = info.mDroppedPlayer;
 					cmd.mMahjong = info.mMahjong;
-					mCommandSystem.pushCommand(cmd, info.mPlayer);
+					pushCommand(cmd, info.mPlayer);
 
 					// 还有牌,玩家杠了一张牌以后需要再摸一张
 					if (mMahjongPool.Count > 0)
 					{
-						CommandCharacterGet cmdGet = mCommandSystem.newCmd<CommandCharacterGet>();
+						CommandCharacterGet cmdGet = newCmd(out cmdGet);
 						cmdGet.mMahjong = requestGet();
-						mCommandSystem.pushCommand(cmdGet, info.mPlayer);
+						pushCommand(cmdGet, info.mPlayer);
 					}
 					// 没有牌了则平局
 					else
@@ -474,21 +468,19 @@ public class MahjongSystem : CommandReceiver
 				}
 				else if (highestAction.mType == ACTION_TYPE.AT_PENG)
 				{
-					CommandCharacterPeng cmd = mCommandSystem.newCmd<CommandCharacterPeng>();
+					CommandCharacterPeng cmd = newCmd(out cmd);
 					cmd.mDroppedPlayer = info.mDroppedPlayer;
 					cmd.mMahjong = info.mMahjong;
-					mCommandSystem.pushCommand(cmd, info.mPlayer);
+					pushCommand(cmd, info.mPlayer);
 
-					CommandCharacterAskDrop cmdAskDrop = mCommandSystem.newCmd<CommandCharacterAskDrop>();
-					mCommandSystem.pushCommand(cmdAskDrop, info.mPlayer);
+					pushCommand<CommandCharacterAskDrop>(info.mPlayer);
 				}
 				else if (highestAction.mType == ACTION_TYPE.AT_PASS)
 				{
 					// 如果是自己摸了一张牌,选择了pass,则需要自己打一张牌出来
 					if (info.mDroppedPlayer == info.mPlayer)
 					{
-						CommandCharacterAskDrop cmd = mCommandSystem.newCmd<CommandCharacterAskDrop>();
-						mCommandSystem.pushCommand(cmd, info.mPlayer);
+						pushCommand<CommandCharacterAskDrop>(info.mPlayer);
 					}
 					else
 					{
@@ -496,9 +488,9 @@ public class MahjongSystem : CommandReceiver
 						if(mMahjongPool.Count > 0)
 						{
 							PLAYER_POSITION nextPosition = (PLAYER_POSITION)(((int)(info.mDroppedPlayer.getCharacterData().mPosition) + 1) % (int)PLAYER_POSITION.PP_MAX);
-							CommandCharacterGet cmdGet = mCommandSystem.newCmd<CommandCharacterGet>();
+							CommandCharacterGet cmdGet = newCmd(out cmdGet);
 							cmdGet.mMahjong = requestGet();
-							mCommandSystem.pushCommand(cmdGet, getCharacterByPosition(nextPosition));
+							pushCommand(cmdGet, getCharacterByPosition(nextPosition));
 						}
 						// 没有牌了则平局
 						else

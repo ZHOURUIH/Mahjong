@@ -32,8 +32,8 @@ public class SCNotifyMahjongEnd : SocketPacket
 		{
 			moneyDeltaList.Add(mCharacterManager.getCharacter(mCharacterGUIDList.mValue[i]), mMoneyDeltaList.mValue[i]);
 		}
-		CommandRoomEnd cmdEnd = mCommandSystem.newCmd<CommandRoomEnd>();
+		CommandRoomEnd cmdEnd = newCmd(out cmdEnd);
 		cmdEnd.mMoneyDeltaList = moneyDeltaList;
-		mCommandSystem.pushCommand(cmdEnd, room);
+		pushCommand(cmdEnd, room);
 	}
 }

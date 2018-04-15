@@ -4,8 +4,6 @@ using System.Collections.Generic;
 
 public class MainSceneRunning : SceneProcedure
 {
-	public MainSceneRunning()
-	{ }
 	public MainSceneRunning(PROCEDURE_TYPE type, GameScene gameScene)
 		:
 	base(type, gameScene)
@@ -22,8 +20,7 @@ public class MainSceneRunning : SceneProcedure
 		if (myself != null)
 		{
 			CharacterData data = myself.getCharacterData();
-			ScriptCharacter scriptChar = mLayoutManager.getScript(LAYOUT_TYPE.LT_CHARACTER) as ScriptCharacter;
-			scriptChar.setCharacterInfo(data.mHead, data.mName, data.mGUID, data.mMoney);
+			mScriptCharacter.setCharacterInfo(data.mHead, data.mName, data.mGUID, data.mMoney);
 		}
 	}
 	protected override void onUpdate(float elapsedTime)

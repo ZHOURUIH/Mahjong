@@ -39,7 +39,7 @@ public class INPUT_ELEMENT
 	public byte[] mData;
 };
 
-public class SocketManager : GameBase
+public class SocketManager : FrameComponent
 {
 	protected int mMaxReceiveCount;
 	protected Socket mServerSocket;
@@ -48,29 +48,30 @@ public class SocketManager : GameBase
 	protected List<OUTPUT_ELEMENT> mOutputList;
 	protected List<INPUT_ELEMENT> mRecieveList;
 	protected List<SEND_ELEMENT> mSendList;
-	protected SocketFactoryManager mSocketFactoryManager;
+	protected SocketFactory mSocketFactory;
 	protected bool mRun;
 	protected int mHeartBeatTimes;
 	protected float mHeartBeatTimeCount = 0.0f;
 	protected float mHeartBeatMaxTime = 0.0f;
 	protected bool mReceiveFinish;
 	protected bool mSendFinish;
-	public SocketManager()
+	public SocketManager(string name)
+		:base(name)
 	{
 		mMaxReceiveCount = 1024;
 		mOutputList = new List<OUTPUT_ELEMENT>();
 		mRecieveList = new List<INPUT_ELEMENT>();
 		mSendList = new List<SEND_ELEMENT>();
-		mSocketFactoryManager = new SocketFactoryManager();
+		mSocketFactory = new SocketFactory();
 		mRun = true;
 	}
-	public void init()
+	public override void init()
 	{
 		mReceiveFinish = false;
 		mSendFinish = false;
 		try
 		{
-			mSocketFactoryManager.init();
+			mSocketFactory.init();
 			mHeartBeatMaxTime = mGameConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_HEART_BEAT_NITERVAL);
 			// 创建socket  
 			mServerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -91,7 +92,7 @@ public class SocketManager : GameBase
 			mGameFramework.stop();
 		}
 	}
-	public void update(float elapsedTime)
+	public override void update(float elapsedTime)
 	{
 		if (mHeartBeatTimeCount >= 0.0f)
 		{
@@ -106,7 +107,7 @@ public class SocketManager : GameBase
 		processInput();
 		processOutput();
 	}
-	public void destroy()
+	public override void destroy()
 	{
 		mRun = false;
 		while (!mReceiveFinish) { }
@@ -129,7 +130,15 @@ public class SocketManager : GameBase
 	}
 	public SocketPacket createPacket(PACKET_TYPE type)
 	{
-		return mSocketFactoryManager.createPacket(type);
+		return mSocketFactory.createPacket(type);
+	}
+	public T createPacket<T>() where T : SocketPacket
+	{
+		return mSocketFactory.createPacket(typeof(T)) as T;
+	}
+	public void sendMessage<T>() where T : SocketPacket
+	{
+		sendMessage(createPacket<T>());
 	}
 	public void sendMessage(SocketPacket packet)
 	{
@@ -244,7 +253,7 @@ public class SocketManager : GameBase
 						UnityUtility.logInfo("packet type error : " + type);
 						break;
 					}
-					int packetSize = mSocketFactoryManager.getPacketSize(type);
+					int packetSize = mSocketFactory.getPacketSize(type);
 					if (packetSize >= 0)
 					{
 						// 读取消息长度(short)

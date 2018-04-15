@@ -41,9 +41,9 @@ public class CommandCharacterAutoDrop : Command
 		{
 			dropIndex = data.mHandIn.Count - 1;
 		}
-		CommandCharacterDrop cmd = mCommandSystem.newCmd<CommandCharacterDrop>();
+		CommandCharacterDrop cmd = newCmd(out cmd);
 		cmd.mIndex = dropIndex;
 		cmd.mMah = data.mHandIn[dropIndex];
-		mCommandSystem.pushCommand(cmd, character);
+		pushCommand(cmd, character);
 	}
 }

@@ -18,20 +18,16 @@ public class CommandCharacterDrop : Command
 		CharacterData data = character.getCharacterData();
 		character.dropMahjong(mMah);
 
-		ScriptMahjongHandIn handIn = mLayoutManager.getScript(LAYOUT_TYPE.LT_MAHJONG_HAND_IN) as ScriptMahjongHandIn;
-		handIn.notifyDropMahjong(data.mPosition, mMah, mIndex);
-		ScriptMahjongDrop scriptDrop = mLayoutManager.getScript(LAYOUT_TYPE.LT_MAHJONG_DROP) as ScriptMahjongDrop;
-		scriptDrop.notifyDropMahjong(data.mPosition, data.mDropList, mMah);
+		mScriptMahjongHandIn.notifyDropMahjong(data.mPosition, mMah, mIndex);
+		mScriptMahjongDrop.notifyDropMahjong(data.mPosition, data.mDropList, mMah);
 		if (character.getType() == CHARACTER_TYPE.CT_MYSELF)
 		{
-			ScriptMahjongFrame mahjongFrame = mLayoutManager.getScript(LAYOUT_TYPE.LT_MAHJONG_FRAME) as ScriptMahjongFrame;
-			mahjongFrame.notifyInfo("");
+			mScriptMahjongFrame.notifyInfo("");
 
 			// 打出一张牌后,锁定玩家手里的牌,玩家不能点击手里的麻将
-			handIn.notifyCanDrop(false);
+			mScriptMahjongHandIn.notifyCanDrop(false);
 			// 确认麻将操作按钮已经隐藏
-			ScriptPlayerAction playerAction = mLayoutManager.getScript(LAYOUT_TYPE.LT_PLAYER_ACTION) as ScriptPlayerAction;
-			playerAction.notifyActionAsk(null);
+			mScriptPlayerAction.notifyActionAsk(null);
 		}
 	}
 	public override string showDebugInfo()

@@ -17,14 +17,11 @@ public class CommandCharacterShowHua : Command
 		Character character = (mReceiver) as Character;
 		CharacterData data = character.getCharacterData();
 		character.showHua(mMah);
-
-		ScriptMahjongHandIn handIn = mLayoutManager.getScript(LAYOUT_TYPE.LT_MAHJONG_HAND_IN) as ScriptMahjongHandIn;
-		handIn.notifyShowHua(data.mPosition, mMah, mIndex);
-		handIn.notifyShowHua(data.mPosition, data.mHuaList);
+		mScriptMahjongHandIn.notifyShowHua(data.mPosition, mMah, mIndex);
+		mScriptMahjongHandIn.notifyShowHua(data.mPosition, data.mHuaList);
 
 		// 打一张牌以后需要重新排列
-		CommandCharacterReorderMahjong reorder = mCommandSystem.newCmd<CommandCharacterReorderMahjong>();
-		mCommandSystem.pushCommand(reorder, character);
+		pushCommand<CommandCharacterReorderMahjong>(character);
 	}
 	public override string showDebugInfo()
 	{

@@ -18,7 +18,7 @@ public class Room : CommandReceiver
 	protected List<ResultInfo> mResultInfoList;
 	public Room(int id)
 		:
-		base("room")
+		base(typeof(Room).ToString())
 	{
 		mID = id;
 		mNoneJoinPlayerList = new List<Character>();
@@ -70,9 +70,9 @@ public class Room : CommandReceiver
 		int count = mNoneJoinPlayerList.Count;
 		for(int i = 0; i < count; ++i)
 		{
-			CommandRoomJoin cmd = mCommandSystem.newCmd<CommandRoomJoin>();
+			CommandRoomJoin cmd = newCmd(out cmd);
 			cmd.mCharacter = mNoneJoinPlayerList[i];
-			mCommandSystem.pushCommand(cmd, this);
+			pushCommand(cmd, this);
 		}
 		mNoneJoinPlayerList.Clear();
 	}
@@ -84,9 +84,9 @@ public class Room : CommandReceiver
 		foreach (var item in listCopy)
 		{
 			// 离开房间时会自动销毁其他玩家
-			CommandRoomLeave cmdLeave = mCommandSystem.newCmd<CommandRoomLeave>();
+			CommandRoomLeave cmdLeave = newCmd(out cmdLeave);
 			cmdLeave.mCharacter = item.Value;
-			mCommandSystem.pushCommand(cmdLeave, this);
+			pushCommand(cmdLeave, this);
 		}
 	}
 	// 有玩家胡牌

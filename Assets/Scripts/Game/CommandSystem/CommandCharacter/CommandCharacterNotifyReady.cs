@@ -19,13 +19,11 @@ public class CommandCharacterNotifyReady : Command
 		}
 		data.mReady = mReady;
 		// 通知布局
-		ScriptAllCharacterInfo allInfo = mLayoutManager.getScript(LAYOUT_TYPE.LT_ALL_CHARACTER_INFO) as ScriptAllCharacterInfo;
-		allInfo.notifyCharacterReady(character, mReady);
+		mScriptAllCharacterInfo.notifyCharacterReady(character, mReady);
 		// 如果是自己的准备状态改变
 		if(character.getType() == CHARACTER_TYPE.CT_MYSELF)
 		{
-			ScriptMahjongFrame mahjongFrame = mLayoutManager.getScript(LAYOUT_TYPE.LT_MAHJONG_FRAME) as ScriptMahjongFrame;
-			mahjongFrame.notifyReady(mReady);
+			mScriptMahjongFrame.notifyReady(mReady);
 		}
 	}
 }

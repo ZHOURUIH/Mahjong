@@ -7,8 +7,6 @@ public class MahjongSceneLoading : SceneProcedure
 {
 	protected Dictionary<LAYOUT_TYPE, LayoutLoadInfo> mLoadInfo;
 	protected int mLoadedCount;
-	public MahjongSceneLoading()
-	{ }
 	public MahjongSceneLoading(PROCEDURE_TYPE type, GameScene gameScene)
 		:
 	base(type, gameScene)
@@ -29,7 +27,7 @@ public class MahjongSceneLoading : SceneProcedure
 		mLoadedCount = 0;
 		foreach (var item in mLoadInfo)
 		{
-			LayoutTools.LOAD_LAYOUT_ASYNC(item.Key, item.Value.mOrder, onLayoutLoaded);
+			LayoutTools.LOAD_NGUI_ASYNC(item.Key, item.Value.mOrder, onLayoutLoaded);
 		}
 	}
 	protected override void onUpdate(float elapsedTime)
@@ -55,8 +53,8 @@ public class MahjongSceneLoading : SceneProcedure
 	}
 	protected void allLayoutLoaded()
 	{
-		CommandGameSceneChangeProcedure cmd = mCommandSystem.newCmd<CommandGameSceneChangeProcedure>(true, true);
+		CommandGameSceneChangeProcedure cmd = newCmd(out cmd, true, true);
 		cmd.mProcedure = PROCEDURE_TYPE.PT_MAHJONG_WAITING;
-		mCommandSystem.pushDelayCommand(cmd, mGameScene);
+		pushDelayCommand(cmd, mGameScene);
 	}
 }

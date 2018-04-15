@@ -6,31 +6,29 @@ using UnityEngine;
 
 public class ScriptRoomMenu : LayoutScript
 {
-	protected txUIStaticSprite mBackground;
-	protected txUIButton mCreateRoomButton;
-	protected txUIStaticSprite mCreateLabel;
-	protected txUIButton mJoinRoomButton;
-	protected txUIStaticSprite mJoinLabel;
-	public ScriptRoomMenu(LAYOUT_TYPE type, string name, GameLayout layout)
+	protected txNGUIStaticSprite mBackground;
+	protected txNGUIButton mCreateRoomButton;
+	protected txNGUIStaticSprite mCreateLabel;
+	protected txNGUIButton mJoinRoomButton;
+	protected txNGUIStaticSprite mJoinLabel;
+	public ScriptRoomMenu(string name, GameLayout layout)
 		:
-		base(type, name, layout)
+		base(name, layout)
 	{
 		;
 	}
 	public override void assignWindow()
 	{
-		mBackground = newObject<txUIStaticSprite>("Background");
-		mCreateRoomButton = newObject<txUIButton>(mBackground, "CreateRoomButton");
-		mCreateLabel = newObject<txUIStaticSprite>(mCreateRoomButton, "CreateLabel");
-		mJoinRoomButton = newObject<txUIButton>(mBackground, "JoinRoomButton");
-		mJoinLabel = newObject<txUIStaticSprite>(mJoinRoomButton, "JoinLabel");
+		newObject(out mBackground, "Background");
+		newObject(out mCreateRoomButton, mBackground, "CreateRoomButton");
+		newObject(out mCreateLabel, mCreateRoomButton, "CreateLabel");
+		newObject(out mJoinRoomButton, mBackground, "JoinRoomButton");
+		newObject(out mJoinLabel, mJoinRoomButton, "JoinLabel");
 	}
 	public override void init()
 	{
-		mCreateRoomButton.setClickCallback(onCreateClicked);
-		mCreateRoomButton.setPressCallback(onButtonPress);
-		mJoinRoomButton.setClickCallback(onJoinClicked);
-		mJoinRoomButton.setPressCallback(onButtonPress);
+		mGlobalTouchSystem.registeBoxCollider(mCreateRoomButton, onCreateClicked, null, onButtonPress);
+		mGlobalTouchSystem.registeBoxCollider(mJoinRoomButton, onJoinClicked, null, onButtonPress);
 	}
 	public override void onReset()
 	{
@@ -50,20 +48,18 @@ public class ScriptRoomMenu : LayoutScript
 		;
 	}
 	//-----------------------------------------------------------------------------------
-	protected void onCreateClicked(GameObject obj)
+	protected void onCreateClicked(txUIObject obj)
 	{
 		// 向服务器发送创建房间的消息
-		CSCreateRoom createRoom = mSocketNetManager.createPacket(PACKET_TYPE.PT_CS_CREATE_ROOM) as CSCreateRoom;
-		mSocketNetManager.sendMessage(createRoom);
+		mSocketNetManager.sendMessage<CSCreateRoom>();
 	}
-	protected void onJoinClicked(GameObject obj)
+	protected void onJoinClicked(txUIObject obj)
 	{
 		// 显示加入房间对话框
 		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_JOIN_ROOM_DIALOG);
 	}
-	protected void onButtonPress(GameObject obj, bool press)
+	protected void onButtonPress(txUIObject obj, bool press)
 	{
-		txUIObject button = mLayout.getUIObject(obj);
-		LayoutTools.SCALE_WINDOW(button, button.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
+		LayoutTools.SCALE_WINDOW(obj, obj.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
 	}
 }

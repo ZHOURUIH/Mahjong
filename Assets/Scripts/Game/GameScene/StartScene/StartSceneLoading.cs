@@ -7,8 +7,6 @@ public class LogoSceneLoading : SceneProcedure
 {
 	protected Dictionary<LAYOUT_TYPE, LayoutLoadInfo> mLoadInfo;
 	protected int mLoadedCount;
-	public LogoSceneLoading()
-	{ }
 	public LogoSceneLoading(PROCEDURE_TYPE type, GameScene gameScene)
 		:
 	base(type, gameScene)
@@ -24,21 +22,21 @@ public class LogoSceneLoading : SceneProcedure
 		mLoadedCount = 0;
 		foreach (var item in mLoadInfo)
 		{
-			LayoutTools.LOAD_LAYOUT_ASYNC(item.Key, item.Value.mOrder, onLayoutLoaded);
+			LayoutTools.LOAD_NGUI_ASYNC(item.Key, item.Value.mOrder, onLayoutLoaded);
 		}
 		// 开始加载关键帧资源,音效资源,布局使用预设资源
 		mKeyFrameManager.loadAll(true);
 		mAudioManager.loadAll(true);
-		mLayoutPrefabManager.loadAll(true);
+		mLayoutSubPrefabManager.loadAll(true);
 	}
 	protected override void onUpdate(float elapsedTime)
 	{
-		if (mLoadedCount == mLoadInfo.Count && mKeyFrameManager.isLoadDone() && mAudioManager.isLoadDone() && mLayoutPrefabManager.isLoadDone())
+		if (mLoadedCount == mLoadInfo.Count && mKeyFrameManager.isLoadDone() && mAudioManager.isLoadDone() && mLayoutSubPrefabManager.isLoadDone())
 		{
 			// 加载结束后进入登录流程
-			CommandGameSceneChangeProcedure cmd = mCommandSystem.newCmd<CommandGameSceneChangeProcedure>(true, true);
+			CommandGameSceneChangeProcedure cmd = newCmd(out cmd, true, true);
 			cmd.mProcedure = PROCEDURE_TYPE.PT_START_LOGIN;
-			mCommandSystem.pushDelayCommand(cmd, mGameScene);
+			pushDelayCommand(cmd, mGameScene);
 		}
 	}
 	protected override void onExit(SceneProcedure nextProcedure)

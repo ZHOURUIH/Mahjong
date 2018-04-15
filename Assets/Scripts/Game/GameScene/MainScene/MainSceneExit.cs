@@ -4,8 +4,6 @@ using System.Collections.Generic;
 
 public class MainSceneExit : SceneProcedure
 {
-	public MainSceneExit()
-	{ }
 	public MainSceneExit(PROCEDURE_TYPE type, GameScene gameScene)
 		:
 	base(type, gameScene)

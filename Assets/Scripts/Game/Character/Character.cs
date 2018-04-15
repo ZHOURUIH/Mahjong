@@ -11,21 +11,20 @@ public class Character : MovableObject
 		base(name)
 	{
 		mCharacterType = type;
-		mCharacterData = null;
-	}
-	public virtual void init(int guid)
-	{
-		if (null == mCharacterData)
-		{
-			mCharacterData = new CharacterData();
-		}
-		mCharacterData.mGUID = guid;
+		mCharacterData = new CharacterData();
 		mCharacterData.mName = mName;
-		initComponents();
+	}
+	public override void init()
+	{
+		base.init();
+	}
+	public void setID(int guid)
+	{
+		mCharacterData.mGUID = guid;
 	}
 	public override void initComponents()
 	{
-        ;
+       base.initComponents();
 	}
 	public override void update(float elaspedTime)
 	{

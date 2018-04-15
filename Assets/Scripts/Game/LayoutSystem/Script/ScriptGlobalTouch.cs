@@ -4,15 +4,14 @@ using System.Collections.Generic;
 
 public class ScriptGlobalTouch : LayoutScript
 {
-	protected txUIButton mGlobalTouch;
-	
-	public ScriptGlobalTouch(LAYOUT_TYPE type, string name, GameLayout layout)
+	protected txNGUIButton mGlobalTouch;
+	public ScriptGlobalTouch(string name, GameLayout layout)
 		:
-		base(type, name, layout)
+		base(name, layout)
 	{}
 	public override void assignWindow()
 	{
-		mGlobalTouch = newObject<txUIButton>("GlobalTouch", -1);
+		newObject(out mGlobalTouch, "GlobalTouch");
 	}
 	public override void init()
 	{

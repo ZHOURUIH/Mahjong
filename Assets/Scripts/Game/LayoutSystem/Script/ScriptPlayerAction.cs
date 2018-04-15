@@ -6,28 +6,27 @@ using UnityEngine;
 
 public class ScriptPlayerAction : LayoutScript
 {
-	protected txUIButton[] mAction;
-	public ScriptPlayerAction(LAYOUT_TYPE type, string name, GameLayout layout)
+	protected txNGUIButton[] mAction;
+	public ScriptPlayerAction(string name, GameLayout layout)
 		:
-		base(type, name, layout)
+		base(name, layout)
 	{
-		mAction = new txUIButton[(int)ACTION_TYPE.AT_MAX];
+		mAction = new txNGUIButton[(int)ACTION_TYPE.AT_MAX];
 	}
 	public override void assignWindow()
 	{
 		int count = mAction.Length;
 		for (int i = 0; i < count; ++i)
 		{
-			mAction[i] = newObject<txUIButton>("Action" + i);
+			newObject(out mAction[i], "Action" + i);
 		}
 	}
 	public override void init()
 	{
-		UIEventListener.VoidDelegate[] callbackArray = new UIEventListener.VoidDelegate[] { onHuClicked, onGangClicked, onPengClicked, onPassClicked };
 		int count = mAction.Length;
 		for (int i = 0; i < count; ++i)
 		{
-			mAction[i].setClickCallback(callbackArray[i]);
+			mGlobalTouchSystem.registeBoxCollider(mAction[i], onActionClicked);
 		}
 	}
 	public override void onReset()
@@ -65,33 +64,25 @@ public class ScriptPlayerAction : LayoutScript
 		}
 	}
 	//------------------------------------------------------------------------------------------------------
-	protected void onHuClicked(GameObject obj)
+	protected void onActionClicked(txUIObject obj)
 	{
-		CSConfirmAction confirm = mSocketNetManager.createPacket(PACKET_TYPE.PT_CS_CONFIRM_ACTION) as CSConfirmAction;
-		confirm.mAction.mValue = (byte)ACTION_TYPE.AT_HU;
-		mSocketNetManager.sendMessage(confirm);
-		afterActionSelected();
-	}
-	protected void onGangClicked(GameObject obj)
-	{
-		CSConfirmAction confirm = mSocketNetManager.createPacket(PACKET_TYPE.PT_CS_CONFIRM_ACTION) as CSConfirmAction;
-		confirm.mAction.mValue = (byte)ACTION_TYPE.AT_GANG;
-		mSocketNetManager.sendMessage(confirm);
-		afterActionSelected();
-	}
-	protected void onPengClicked(GameObject obj)
-	{
-		CSConfirmAction confirm = mSocketNetManager.createPacket(PACKET_TYPE.PT_CS_CONFIRM_ACTION) as CSConfirmAction;
-		confirm.mAction.mValue = (byte)ACTION_TYPE.AT_PENG;
-		mSocketNetManager.sendMessage(confirm);
-		afterActionSelected();
-	}
-	protected void onPassClicked(GameObject obj)
-	{
-		CSConfirmAction confirm = mSocketNetManager.createPacket(PACKET_TYPE.PT_CS_CONFIRM_ACTION) as CSConfirmAction;
-		confirm.mAction.mValue = (byte)ACTION_TYPE.AT_PASS;
-		mSocketNetManager.sendMessage(confirm);
-		afterActionSelected();
+		ACTION_TYPE action = ACTION_TYPE.AT_MAX;
+		int count = mAction.Length;
+		for (int i = 0; i < count; ++i)
+		{
+			if (obj == mAction[i])
+			{
+				action = (ACTION_TYPE)i;
+				break;
+			}
+		}
+		if(action != ACTION_TYPE.AT_MAX)
+		{
+			CSConfirmAction confirm = mSocketNetManager.createPacket<CSConfirmAction>();
+			confirm.mAction.mValue = (byte)action;
+			mSocketNetManager.sendMessage(confirm);
+			afterActionSelected();
+		}
 	}
 	protected void afterActionSelected()
 	{

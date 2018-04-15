@@ -19,8 +19,6 @@ public class MainSceneLoading : SceneProcedure
 {
 	protected Dictionary<LAYOUT_TYPE, LayoutLoadInfo> mLoadInfo;
 	protected int mLoadedCount;
-	public MainSceneLoading()
-	{ }
 	public MainSceneLoading(PROCEDURE_TYPE type, GameScene gameScene)
 		:
 	base(type, gameScene)
@@ -39,7 +37,7 @@ public class MainSceneLoading : SceneProcedure
 		mLoadedCount = 0;
 		foreach (var item in mLoadInfo)
 		{
-			LayoutTools.LOAD_LAYOUT_ASYNC(item.Key, item.Value.mOrder, onLayoutLoaded);
+			LayoutTools.LOAD_NGUI_ASYNC(item.Key, item.Value.mOrder, onLayoutLoaded);
 		}
 	}
 	protected override void onUpdate(float elapsedTime)
@@ -64,8 +62,8 @@ public class MainSceneLoading : SceneProcedure
 	}
 	protected void allLayoutLoaded()
 	{
-		CommandGameSceneChangeProcedure cmd = mCommandSystem.newCmd<CommandGameSceneChangeProcedure>(true, true);
+		CommandGameSceneChangeProcedure cmd = newCmd(out cmd, true, true);
 		cmd.mProcedure = PROCEDURE_TYPE.PT_MAIN_RUNNING;
-		mCommandSystem.pushDelayCommand(cmd, mGameScene);
+		pushDelayCommand(cmd, mGameScene);
 	}
 }

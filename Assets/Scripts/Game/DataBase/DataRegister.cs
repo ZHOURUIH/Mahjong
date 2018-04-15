@@ -5,13 +5,13 @@ using System.Text;
 
 public class DataRegister : GameBase
 {
-	public void registeAllData()
+	public static void registeAllData()
 	{
-		registeData(typeof(DataGameSound), DATA_TYPE.DT_GAME_SOUND);
+		registeData<DataGameSound>(DATA_TYPE.DT_GAME_SOUND);
 	}
 	//-------------------------------------------------------------------------------------------------
-	protected void registeData(Type data, DATA_TYPE type)
+	protected static void registeData<T>(DATA_TYPE type) where T : Data
 	{
-		mDataBase.registeData(data, type);
+		mDataBase.registeData(typeof(T), type);
 	}
 }

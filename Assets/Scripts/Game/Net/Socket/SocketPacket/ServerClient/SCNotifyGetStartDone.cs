@@ -19,7 +19,6 @@ public class SCNotifyGetStartDone : SocketPacket
 		{
 			return;
 		}
-		CommandMahjongSceneNotifyStartDone cmd = mCommandSystem.newCmd<CommandMahjongSceneNotifyStartDone>();
-		mCommandSystem.pushCommand(cmd, gameScene);
+		pushCommand<CommandMahjongSceneNotifyStartDone>(gameScene);
 	}
 }

@@ -14,7 +14,6 @@ public class CommandCharacterNotifyBanker : Command
 		Character character = mReceiver as Character;
 		CharacterData data = character.getCharacterData();
 		data.mBanker = mBanker;
-		ScriptAllCharacterInfo allInfo = mLayoutManager.getScript(LAYOUT_TYPE.LT_ALL_CHARACTER_INFO) as ScriptAllCharacterInfo;
-		allInfo.notifyCharacterBanker(character, mBanker);
+		mScriptAllCharacterInfo.notifyCharacterBanker(character, mBanker);
 	}
 }

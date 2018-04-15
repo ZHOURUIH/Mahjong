@@ -26,8 +26,8 @@ public class SCOtherPlayerBackToMahjongHall : SocketPacket
 		
 		MahjongScene mahjongScene = gameScene as MahjongScene;
 		Room room = mahjongScene.getRoom();
-		CommandRoomLeave cmdLeave = mCommandSystem.newCmd<CommandRoomLeave>();
+		CommandRoomLeave cmdLeave = newCmd(out cmdLeave);
 		cmdLeave.mCharacter = mCharacterManager.getCharacter(mOtherPlayerGUID.mValue);
-		mCommandSystem.pushCommand(cmdLeave, room);
+		pushCommand(cmdLeave, room);
 	}
 }

@@ -17,8 +17,7 @@ public class CommandCharacterAskAction : Command
 		// 如果是自己则通知布局
 		if (character.getType() == CHARACTER_TYPE.CT_MYSELF)
 		{
-			ScriptPlayerAction playerAction = mLayoutManager.getScript(LAYOUT_TYPE.LT_PLAYER_ACTION) as ScriptPlayerAction;
-			playerAction.notifyActionAsk(mActionList);
+			mScriptPlayerAction.notifyActionAsk(mActionList);
 		}
 	}
 	public override string showDebugInfo()

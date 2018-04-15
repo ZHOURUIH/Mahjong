@@ -4,8 +4,6 @@ using System.Collections.Generic;
 
 public class MahjongSceneWaiting : SceneProcedure
 {
-	public MahjongSceneWaiting()
-	{ }
 	public MahjongSceneWaiting(PROCEDURE_TYPE type, GameScene gameScene)
 		:
 	base(type, gameScene)
@@ -23,9 +21,8 @@ public class MahjongSceneWaiting : SceneProcedure
 
 		// 设置显示房间号
 		CharacterMyself myself = mCharacterManager.getMyself();
-		ScriptMahjongFrame mahjongFrame = mLayoutManager.getScript(LAYOUT_TYPE.LT_MAHJONG_FRAME) as ScriptMahjongFrame;
-		mahjongFrame.setRoomID(myself.getCharacterData().mRoomID);
-		mahjongFrame.notifyInfo("正在等待其他玩家准备");
+		mScriptMahjongFrame.setRoomID(myself.getCharacterData().mRoomID);
+		mScriptMahjongFrame.notifyInfo("正在等待其他玩家准备");
 	}
 	protected override void onUpdate(float elapsedTime)
 	{
@@ -33,8 +30,7 @@ public class MahjongSceneWaiting : SceneProcedure
 	}
 	protected override void onExit(SceneProcedure nextProcedure)
 	{
-		ScriptMahjongFrame mahjongFrame = mLayoutManager.getScript(LAYOUT_TYPE.LT_MAHJONG_FRAME) as ScriptMahjongFrame;
-		mahjongFrame.notifyInfo("");
+		mScriptMahjongFrame.notifyInfo("");
 	}
 	protected override void onKeyProcess(float elapsedTime)
 	{

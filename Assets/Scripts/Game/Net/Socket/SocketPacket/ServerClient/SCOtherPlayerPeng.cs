@@ -28,11 +28,10 @@ public class SCOtherPlayerPeng : SocketPacket
 			return;
 		}
 		// 清空提示信息
-		ScriptMahjongFrame mahjongFrame = mLayoutManager.getScript(LAYOUT_TYPE.LT_MAHJONG_FRAME) as ScriptMahjongFrame;
-		mahjongFrame.notifyInfo("");
-		CommandCharacterPeng cmdGang = mCommandSystem.newCmd<CommandCharacterPeng>();
+		mScriptMahjongFrame.notifyInfo("");
+		CommandCharacterPeng cmdGang = newCmd(out cmdGang);
 		cmdGang.mDroppedPlayer = mCharacterManager.getCharacter(mDroppedPlayerGUID.mValue);
 		cmdGang.mMahjong = (MAHJONG)mMahjong.mValue;
-		mCommandSystem.pushCommand(cmdGang, mCharacterManager.getCharacter(mOtherPlayerGUID.mValue));
+		pushCommand(cmdGang, mCharacterManager.getCharacter(mOtherPlayerGUID.mValue));
 	}
 }

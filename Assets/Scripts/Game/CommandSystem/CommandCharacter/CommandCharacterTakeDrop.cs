@@ -13,7 +13,6 @@ public class CommandCharacterTakeDrop : Command
 		character.takeDrop();
 		CharacterData data = character.getCharacterData();
 		// 通知布局
-		ScriptMahjongDrop scriptDrop = mLayoutManager.getScript(LAYOUT_TYPE.LT_MAHJONG_DROP) as ScriptMahjongDrop;
-		scriptDrop.notifyTakeDroppedMahjong(data.mPosition, data.mDropList.Count);
+		mScriptMahjongDrop.notifyTakeDroppedMahjong(data.mPosition, data.mDropList.Count);
 	}
 }

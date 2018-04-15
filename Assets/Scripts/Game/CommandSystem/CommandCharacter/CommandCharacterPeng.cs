@@ -17,17 +17,14 @@ public class CommandCharacterPeng : Command
 		character.pengMahjong(mMahjong);
 		
 		// 从已经打出的牌中拿走已经碰的那张牌
-		CommandCharacterTakeDrop cmdTakeDrop = mCommandSystem.newCmd<CommandCharacterTakeDrop>();
-		mCommandSystem.pushCommand(cmdTakeDrop, mDroppedPlayer);
+		pushCommand<CommandCharacterTakeDrop>(mDroppedPlayer);
 
 		CharacterData data = character.getCharacterData();
 		// 通知布局
-		ScriptMahjongHandIn handIn = mLayoutManager.getScript(LAYOUT_TYPE.LT_MAHJONG_HAND_IN) as ScriptMahjongHandIn;
-		handIn.notifyPengOrGang(data.mPosition, data.mPengGangList);
+		mScriptMahjongHandIn.notifyPengOrGang(data.mPosition, data.mPengGangList);
 
 		// 然后重新排列玩家手里的牌
-		CommandCharacterReorderMahjong cmdReorder = mCommandSystem.newCmd<CommandCharacterReorderMahjong>();
-		mCommandSystem.pushCommand(cmdReorder, character);
+		pushCommand<CommandCharacterReorderMahjong>(character);
 	}
 	public override string showDebugInfo()
 	{

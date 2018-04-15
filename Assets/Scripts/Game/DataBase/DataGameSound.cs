@@ -10,7 +10,7 @@ public class DataGameSound : Data
 	public int mSoundType;
 	public byte[] mSoundFileName = new byte[64];
 	public byte[] mDescribe = new byte[64];
-	public float mVolumeCoe;
+	public float mVolumeScale;
 	public DataGameSound(DATA_TYPE type)
 		:
 		base(type)
@@ -23,7 +23,7 @@ public class DataGameSound : Data
 		seri.read(ref mSoundType);
 		seri.readBuffer(mSoundFileName, 64, 64);
 		seri.readBuffer(mDescribe, 64, 64);
-		seri.read(ref mVolumeCoe);
+		seri.read(ref mVolumeScale);
 	}
 	public override int getDataSize()
 	{

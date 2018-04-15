@@ -2,24 +2,26 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class HeadTextureManager : GameBase
+public class HeadTextureManager : FrameComponent
 {
 	protected Dictionary<string, Texture> mHeadTextureList;
-	public HeadTextureManager()
+	public HeadTextureManager(string name)
+		:base(name)
 	{
 		mHeadTextureList = new Dictionary<string, Texture>();
 	}
-	public virtual void init()
+	public override void init()
 	{
-		;
+		base.init();
 	}
-	public void destroy()
+	public override void destroy()
 	{
 		foreach (var item in mHeadTextureList)
 		{
 			GameObject.Destroy(item.Value);
 		}
 		mHeadTextureList.Clear();
+		base.destroy();
 	}
 	public void requestLoadTexture(string url, string openID)
 	{
@@ -45,9 +47,9 @@ public class HeadTextureManager : GameBase
 	}
 	protected void notifyTextureLoaded(Texture tex, string openID)
 	{
-		//CommandMatchSystemNotifyWeChatHeadLoaded cmd = mCommandSystem.newCmd<CommandMatchSystemNotifyWeChatHeadLoaded>();
+		//CommandMatchSystemNotifyWeChatHeadLoaded cmd = newCmd(out cmd);
 		//cmd.mHead = tex as Texture;
 		//cmd.mID = openID;
-		//mCommandSystem.pushCommand(cmd, mCurMatchSystem);
+		//pushCommand(cmd, mCurMatchSystem);
 	}
 }

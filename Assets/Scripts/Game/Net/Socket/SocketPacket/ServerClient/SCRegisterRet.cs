@@ -20,9 +20,9 @@ public class SCRegisterRet : SocketPacket
 	{
 		if (mResult.mValue == 0)
 		{
-			CommandGameSceneChangeProcedure cmd = mCommandSystem.newCmd<CommandGameSceneChangeProcedure>(true, true);
+			CommandGameSceneChangeProcedure cmd = newCmd(out cmd, true, true);
 			cmd.mProcedure = PROCEDURE_TYPE.PT_START_LOGIN;
-			mCommandSystem.pushDelayCommand(cmd, mGameSceneManager.getCurScene());
+			pushDelayCommand(cmd, mGameSceneManager.getCurScene());
 		}
 		else if (mResult.mValue == 1)
 		{

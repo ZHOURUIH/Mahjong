@@ -74,7 +74,7 @@ class TextureModifier : AssetPostprocessor
 		var importer = (assetImporter as TextureImporter);
 		if (Dither.isDither(assetPath))
 		{
-			importer.textureType = TextureImporterType.Default;
+			importer.textureType = TextureImporterType.Advanced;
 			importer.npotScale = TextureImporterNPOTScale.ToNearest;
 			importer.isReadable = false;
 			importer.textureFormat = TextureImporterFormat.RGBA32;

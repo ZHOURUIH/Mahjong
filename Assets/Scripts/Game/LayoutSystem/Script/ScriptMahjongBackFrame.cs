@@ -6,10 +6,10 @@ using UnityEngine;
 
 public class ScriptMahjongBackFrame : LayoutScript
 {
-	protected txUIStaticTexture mBackground;
-	public ScriptMahjongBackFrame(LAYOUT_TYPE type, string name, GameLayout layout)
+	protected txNGUIStaticTexture mBackground;
+	public ScriptMahjongBackFrame(string name, GameLayout layout)
 		:
-		base(type, name, layout)
+		base(name, layout)
 	{
 		;
 	}
@@ -19,7 +19,7 @@ public class ScriptMahjongBackFrame : LayoutScript
 	}
 	public override void init()
 	{
-		mBackground = newObject<txUIStaticTexture>("Background");
+		newObject(out mBackground, "Background");
 	}
 	public override void onReset()
 	{

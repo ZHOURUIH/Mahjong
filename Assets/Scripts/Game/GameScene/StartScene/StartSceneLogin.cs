@@ -3,8 +3,6 @@ using System.Collections;
 
 public class LogoSceneLogin : SceneProcedure
 {
-    public LogoSceneLogin()
-    { }
 	public LogoSceneLogin(PROCEDURE_TYPE type, GameScene gameScene)
 		:
 		base(type, gameScene)

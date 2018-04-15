@@ -20,6 +20,11 @@ public class GameFramework : MonoBehaviour
 	protected bool					mPauseFrame;
 	public void Start()
 	{
+		if (instance != null)
+		{
+			UnityUtility.logError("game framework can not start again!");
+			return;
+		}
 		UnityUtility.logInfo("start game!", LOG_LEVEL.LL_FORCE);
 		mFrameComponentMap = new Dictionary<string, FrameComponent>();
 		mFrameComponentList = new List<FrameComponent>();
@@ -37,66 +42,6 @@ public class GameFramework : MonoBehaviour
 		// 初始化完毕后启动游戏
 		launch();
 	}
-	public virtual void initComponent()
-	{
-		registeComponent<ApplicationConfig>();
-		registeComponent<FrameConfig>();
-		registeComponent<UnityUtility>();
-		registeComponent<PluginUtility>();
-		registeComponent<DataBase>();
-		registeComponent<CommandSystem>();
-		registeComponent<CharacterManager>();
-		registeComponent<GameLayoutManager>();
-		registeComponent<AudioManager>();
-		registeComponent<GameSceneManager>();
-		registeComponent<KeyFrameManager>();
-		registeComponent<GlobalTouchSystem>();
-		registeComponent<DllImportExtern>();
-		registeComponent<ShaderManager>();
-		registeComponent<CameraManager>();
-		registeComponent<LayoutSubPrefabManager>();
-		registeComponent<InputManager>();
-		registeComponent<SceneSystem>();
-	}
-	public virtual void start()
-	{
-		mPauseFrame = false;
-		instance = this;
-		mGameFrameObject = gameObject;
-		initComponent();
-		// 物体管理器和资源管理器必须最后注册,以便最后销毁,作为最后的资源清理
-		registeComponent<ObjectManager>();
-		registeComponent<ResourceManager>();
-	}
-	public virtual void registe(){}
-	public virtual void init()
-	{
-		// 必须先初始化配置文件
-		int count = mFrameComponentList.Count;
-		for(int i = 0; i < count; ++i)
-		{
-			mFrameComponentList[i].init();
-		}
-		System.Net.ServicePointManager.DefaultConnectionLimit = 200;
-		int width = (int)FrameBase.mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SCREEN_WIDTH);
-		int height = (int)FrameBase.mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SCREEN_HEIGHT);
-		int fullscreen = (int)FrameBase.mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_FULL_SCREEN);
-		Screen.SetResolution(width, height, fullscreen == 1);
-		int screenCount = (int)FrameBase.mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SCREEN_COUNT);
-		processResolution(width, height, screenCount);
-		// 设置为无边框窗口
-		if (fullscreen == 2)
-		{
-			User32.SetWindowLong(User32.GetForegroundWindow(), -16, CommonDefine.WS_POPUP | CommonDefine.WS_VISIBLE);
-		}
-	}
-	public virtual void notifyBase()
-	{
-		// 所有类都构造完成后通知FrameBase
-		FrameBase frameBase = new FrameBase();
-		frameBase.notifyConstructDone();
-	}
-	public virtual void launch() { }
 	public void Update()
 	{
 		try
@@ -197,6 +142,66 @@ public class GameFramework : MonoBehaviour
 	public bool getPasueFrame() { return mPauseFrame; }
 	public GameObject getGameFrameObject() { return mGameFrameObject; }
 	//------------------------------------------------------------------------------------------------------
+	protected virtual void notifyBase()
+	{
+		// 所有类都构造完成后通知FrameBase
+		FrameBase frameBase = new FrameBase();
+		frameBase.notifyConstructDone();
+	}
+	protected virtual void start()
+	{
+		mPauseFrame = false;
+		instance = this;
+		mGameFrameObject = gameObject;
+		initComponent();
+		// 物体管理器和资源管理器必须最后注册,以便最后销毁,作为最后的资源清理
+		registeComponent<ObjectManager>();
+		registeComponent<ResourceManager>();
+	}
+	protected virtual void init()
+	{
+		// 必须先初始化配置文件
+		int count = mFrameComponentList.Count;
+		for (int i = 0; i < count; ++i)
+		{
+			mFrameComponentList[i].init();
+		}
+		System.Net.ServicePointManager.DefaultConnectionLimit = 200;
+		int width = (int)FrameBase.mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SCREEN_WIDTH);
+		int height = (int)FrameBase.mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SCREEN_HEIGHT);
+		int fullscreen = (int)FrameBase.mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_FULL_SCREEN);
+		Screen.SetResolution(width, height, fullscreen == 1);
+		int screenCount = (int)FrameBase.mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SCREEN_COUNT);
+		processResolution(width, height, screenCount);
+		// 设置为无边框窗口
+		if (fullscreen == 2)
+		{
+			User32.SetWindowLong(User32.GetForegroundWindow(), -16, CommonDefine.WS_POPUP | CommonDefine.WS_VISIBLE);
+		}
+	}
+	protected virtual void registe() { }
+	protected virtual void launch() { }
+	protected virtual void initComponent()
+	{
+		registeComponent<ApplicationConfig>();
+		registeComponent<FrameConfig>();
+		registeComponent<UnityUtility>();
+		registeComponent<PluginUtility>();
+		registeComponent<DataBase>();
+		registeComponent<CommandSystem>();
+		registeComponent<CharacterManager>();
+		registeComponent<GameLayoutManager>();
+		registeComponent<AudioManager>();
+		registeComponent<GameSceneManager>();
+		registeComponent<KeyFrameManager>();
+		registeComponent<GlobalTouchSystem>();
+		registeComponent<DllImportExtern>();
+		registeComponent<ShaderManager>();
+		registeComponent<CameraManager>();
+		registeComponent<LayoutSubPrefabManager>();
+		registeComponent<InputManager>();
+		registeComponent<SceneSystem>();
+	}
 	protected void registeComponent<T>() where T : FrameComponent
 	{
 		string name = typeof(T).ToString();

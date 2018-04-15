@@ -23,11 +23,10 @@ public class SCOtherPlayerDrop : SocketPacket
 	public override void execute()
 	{
 		// 清空提示信息
-		ScriptMahjongFrame mahjongFrame = mLayoutManager.getScript(LAYOUT_TYPE.LT_MAHJONG_FRAME) as ScriptMahjongFrame;
-		mahjongFrame.notifyInfo("");
-		CommandCharacterDrop cmd = mCommandSystem.newCmd<CommandCharacterDrop>();
+		mScriptMahjongFrame.notifyInfo("");
+		CommandCharacterDrop cmd = newCmd(out cmd);
 		cmd.mMah = (MAHJONG)mMahjong.mValue;
 		cmd.mIndex = mIndex.mValue;
-		mCommandSystem.pushCommand(cmd, mCharacterManager.getCharacter(mPlayerGUID.mValue));
+		pushCommand(cmd, mCharacterManager.getCharacter(mPlayerGUID.mValue));
 	}
 }

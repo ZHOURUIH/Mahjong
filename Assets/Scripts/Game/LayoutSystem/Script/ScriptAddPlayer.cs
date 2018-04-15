@@ -7,14 +7,14 @@ using UnityEngine;
 public class ScriptAddPlayer : LayoutScript
 {
 	protected List<string> mNameList;
-	protected txUIButton mAdd;
-	protected txUIButton mLeftReady;
-	protected txUIButton mOppositeReady;
-	protected txUIButton mRightReady;
-	protected txUIButton mMyselfReady;
-	public ScriptAddPlayer(LAYOUT_TYPE type, string name, GameLayout layout)
+	protected txNGUIButton mAdd;
+	protected txNGUIButton mLeftReady;
+	protected txNGUIButton mOppositeReady;
+	protected txNGUIButton mRightReady;
+	protected txNGUIButton mMyselfReady;
+	public ScriptAddPlayer(string name, GameLayout layout)
 		:
-		base(type, name, layout)
+		base(name, layout)
 	{
 		mNameList = new List<string>();
 		mNameList.Add("player0");
@@ -23,17 +23,21 @@ public class ScriptAddPlayer : LayoutScript
 	}
 	public override void assignWindow()
 	{
-		mAdd = newObject<txUIButton>("AddButton");
-		mLeftReady = newObject<txUIButton>("LeftReadyButton");
-		mOppositeReady = newObject<txUIButton>("OppositeReadyButton");
-		mRightReady = newObject<txUIButton>("RightReadyButton");
-		mMyselfReady = newObject<txUIButton>("MyselfReadyButton");
+		newObject(out mAdd, "AddButton");
+		newObject(out mLeftReady, "LeftReadyButton");
+		newObject(out mOppositeReady, "OppositeReadyButton");
+		newObject(out mRightReady, "RightReadyButton");
+		newObject(out mMyselfReady, "MyselfReadyButton");
 	}
 	public override void init()
 	{
 		;
 	}
 	public override void onReset()
+	{
+		;
+	}
+	public override void onGameState()
 	{
 		;
 	}

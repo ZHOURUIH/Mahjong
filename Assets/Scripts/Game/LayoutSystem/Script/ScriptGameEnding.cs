@@ -7,9 +7,9 @@ using UnityEngine;
 public class EndingCharacter
 {
 	public txUIObject mRoot;
-	public txUIStaticTexture mHead;
-	public txUIText mName;
-	public txUIText mMoneyDelta;
+	public txNGUIStaticTexture mHead;
+	public txNGUIText mName;
+	public txNGUIText mMoneyDelta;
 	public ScriptGameEnding mScript;
 	public EndingCharacter(ScriptGameEnding script)
 	{
@@ -17,10 +17,10 @@ public class EndingCharacter
 	}
 	public void assignWindow(txUIObject parent, string rootName)
 	{
-		mRoot = mScript.newObject<txUIObject>(parent, rootName);
-		mHead = mScript.newObject<txUIStaticTexture>(mRoot, "Head");
-		mName = mScript.newObject<txUIText>(mRoot, "Name");
-		mMoneyDelta = mScript.newObject<txUIText>(mRoot, "MoneyDelta");
+		mScript.newObject(out mRoot, parent, rootName);
+		mScript.newObject(out mHead, mRoot, "Head");
+		mScript.newObject(out mName, mRoot, "Name");
+		mScript.newObject(out mMoneyDelta, mRoot, "MoneyDelta");
 	}
 	public void init()
 	{
@@ -52,8 +52,8 @@ public class EndingCharacter
 public class Multiple
 {
 	public txUIObject mRoot;
-	public txUIText mDescribe;
-	public txUIText mMultipleCount;
+	public txNGUIText mDescribe;
+	public txNGUIText mMultipleCount;
 	public ScriptGameEnding mScript;
 	public Multiple(ScriptGameEnding script)
 	{
@@ -61,9 +61,9 @@ public class Multiple
 	}
 	public void assignWindow(txUIObject parent, string rootName)
 	{
-		mRoot = mScript.newObject<txUIObject>(parent, rootName);
-		mDescribe = mScript.newObject<txUIText>(mRoot, "Describe");
-		mMultipleCount = mScript.newObject<txUIText>(mRoot, "MultipleCount");
+		mScript.newObject(out mRoot, parent, rootName);
+		mScript.newObject(out mDescribe, mRoot, "Describe");
+		mScript.newObject(out mMultipleCount, mRoot, "MultipleCount");
 	}
 	public void init()
 	{
@@ -90,19 +90,19 @@ public class Multiple
 public class ScriptGameEnding : LayoutScript
 {
 	protected txUIObject mHuResultRoot;
-	protected txUIStaticSprite mHu;
-	protected txUIStaticSprite mPingJu;
+	protected txNGUIStaticSprite mHu;
+	protected txNGUIStaticSprite mPingJu;
 	protected txUIObject mMoneyResultRoot;
 	protected List<EndingCharacter> mEndingCharacterList;
 	protected txUIObject mDetailRoot;
-	protected txUIText mMultipleTitle;
+	protected txNGUIText mMultipleTitle;
 	protected List<Multiple> mMultipleList;
 	protected txUIObject mButtonRoot;
-	protected txUIButton mContinueButton;
-	protected txUIButton mReturnButton;
-	public ScriptGameEnding(LAYOUT_TYPE type, string name, GameLayout layout)
+	protected txNGUIButton mContinueButton;
+	protected txNGUIButton mReturnButton;
+	public ScriptGameEnding(string name, GameLayout layout)
 		:
-		base(type, name, layout)
+		base(name, layout)
 	{
 		mEndingCharacterList = new List<EndingCharacter>();
 		mMultipleList = new List<Multiple>();
@@ -117,25 +117,25 @@ public class ScriptGameEnding : LayoutScript
 	}
 	public override void assignWindow()
 	{
-		mHuResultRoot = newObject<txUIObject>("HuResultRoot");
-		mHu = newObject<txUIStaticSprite>(mHuResultRoot, "Hu", 1);
-		mPingJu = newObject<txUIStaticSprite>(mHuResultRoot, "PingJu", 1);
-		mMoneyResultRoot = newObject<txUIObject>("MoneyResultRoot");
+		newObject(out mHuResultRoot, "HuResultRoot");
+		newObject(out mHu, mHuResultRoot, "Hu", 1);
+		newObject(out mPingJu, mHuResultRoot, "PingJu", 1);
+		newObject(out mMoneyResultRoot, "MoneyResultRoot");
 		int charCount = mEndingCharacterList.Count;
 		for(int i = 0; i < charCount; ++i)
 		{
 			mEndingCharacterList[i].assignWindow(mMoneyResultRoot, "Character" + i);
 		}
-		mDetailRoot = newObject<txUIObject>("DetailRoot");
-		mMultipleTitle = newObject<txUIText>(mDetailRoot, "MultipleTitle");
+		newObject(out mDetailRoot, "DetailRoot");
+		newObject(out mMultipleTitle, mDetailRoot, "MultipleTitle");
 		int multipleCount = mMultipleList.Count;
 		for(int i = 0; i < multipleCount; ++i)
 		{
 			mMultipleList[i].assignWindow(mDetailRoot, "Multiple" + i);
 		}
-		mButtonRoot = newObject<txUIObject>("ButtonRoot");
-		mContinueButton = newObject<txUIButton>(mButtonRoot, "Continue");
-		mReturnButton = newObject<txUIButton>(mButtonRoot, "Return");
+		newObject(out mButtonRoot, "ButtonRoot");
+		newObject(out mContinueButton, mButtonRoot, "Continue");
+		newObject(out mReturnButton, mButtonRoot, "Return");
 	}
 	public override void init()
 	{
@@ -149,10 +149,8 @@ public class ScriptGameEnding : LayoutScript
 		{
 			mMultipleList[i].init();
 		}
-		mContinueButton.setClickCallback(onContinueClick);
-		mContinueButton.setPressCallback(onButtonPress);
-		mReturnButton.setClickCallback(onReturnClick);
-		mReturnButton.setPressCallback(onButtonPress);
+		mGlobalTouchSystem.registeBoxCollider(mContinueButton, onContinueClick, null, onButtonPress);
+		mGlobalTouchSystem.registeBoxCollider(mReturnButton, onReturnClick, null, onButtonPress);
 	}
 	public override void onReset()
 	{
@@ -223,19 +221,16 @@ public class ScriptGameEnding : LayoutScript
 		}
 	}
 	//---------------------------------------------------------------------------------
-	protected void onContinueClick(GameObject go)
+	protected void onContinueClick(txUIObject go)
 	{
-		CSContinueGame continueGame = mSocketNetManager.createPacket(PACKET_TYPE.PT_CS_CONTINUE_GAME) as CSContinueGame;
-		mSocketNetManager.sendMessage(continueGame);
+		mSocketNetManager.sendMessage<CSContinueGame>();
 	}
-	protected void onReturnClick(GameObject go)
+	protected void onReturnClick(txUIObject go)
 	{
-		CSBackToMahjongHall backToMahjongHall = mSocketNetManager.createPacket(PACKET_TYPE.PT_CS_BACK_TO_MAHJONG_HALL) as CSBackToMahjongHall;
-		mSocketNetManager.sendMessage(backToMahjongHall);
+		mSocketNetManager.sendMessage<CSBackToMahjongHall>();
 	}
-	protected void onButtonPress(GameObject go, bool press)
+	protected void onButtonPress(txUIObject go, bool press)
 	{
-		txUIObject button = mLayout.getUIObject(go);
-		LayoutTools.SCALE_WINDOW(button, button.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
+		LayoutTools.SCALE_WINDOW(go, go.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
 	}
 }

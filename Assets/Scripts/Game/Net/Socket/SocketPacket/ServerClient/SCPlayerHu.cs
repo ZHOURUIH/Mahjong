@@ -42,10 +42,10 @@ public class SCPlayerHu : SocketPacket
 			}
 			if(huList.Count > 0)
 			{
-				CommandRoomPlayerHu cmdHu = mCommandSystem.newCmd<CommandRoomPlayerHu>();
+				CommandRoomPlayerHu cmdHu = newCmd(out cmdHu);
 				cmdHu.mHuList = huList;
 				cmdHu.mPlayer = mCharacterManager.getCharacter(mHuPlayerGUID.mValue[i]);
-				mCommandSystem.pushCommand(cmdHu, room);
+				pushCommand(cmdHu, room);
 			}
 		}
 	}

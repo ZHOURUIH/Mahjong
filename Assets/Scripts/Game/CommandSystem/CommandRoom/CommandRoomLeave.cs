@@ -16,17 +16,15 @@ public class CommandRoomLeave : Command
 		Room room = mReceiver as Room;
 		room.notifyPlayerLeave(mCharacter);
 		// 通知界面
-		ScriptAllCharacterInfo allInfo = mLayoutManager.getScript(LAYOUT_TYPE.LT_ALL_CHARACTER_INFO) as ScriptAllCharacterInfo;
-		allInfo.notifyCharacterLeave(mCharacter);
+		mScriptAllCharacterInfo.notifyCharacterLeave(mCharacter);
 		// 通知玩家已经离开房间
-		CommandCharacterNotifyLeave cmdLeave = mCommandSystem.newCmd<CommandCharacterNotifyLeave>();
-		mCommandSystem.pushCommand(cmdLeave, mCharacter);
+		pushCommand<CommandCharacterNotifyLeave>(mCharacter);
 		// 如果不是玩家自己,则需要销毁玩家
 		if (mCharacter.getType() != CHARACTER_TYPE.CT_MYSELF)
 		{
-			CommandCharacterManagerDestroy cmd = mCommandSystem.newCmd<CommandCharacterManagerDestroy>();
+			CommandCharacterManagerDestroy cmd = newCmd(out cmd);
 			cmd.mGUID = mCharacter.getCharacterData().mGUID;
-			mCommandSystem.pushCommand(cmd, mCharacterManager);
+			pushCommand(cmd, mCharacterManager);
 		}
 	}
 	public override string showDebugInfo()

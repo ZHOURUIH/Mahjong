@@ -5,24 +5,24 @@ using System.Text;
 
 public class ScriptCharacter : LayoutScript
 {
-	protected txUIStaticSprite mCharacterHead;
-	protected txUIText mCharacterName;
-	protected txUIText mCharacterID;
-	protected txUIStaticSprite mMoneyIcon;
-	protected txUIText mMoney;
-	public ScriptCharacter(LAYOUT_TYPE type, string name, GameLayout layout)
+	protected txNGUIStaticSprite mCharacterHead;
+	protected txNGUIText mCharacterName;
+	protected txNGUIText mCharacterID;
+	protected txNGUIStaticSprite mMoneyIcon;
+	protected txNGUIText mMoney;
+	public ScriptCharacter(string name, GameLayout layout)
 		:
-		base(type, name, layout)
+		base(name, layout)
 	{
 		;
 	}
 	public override void assignWindow()
 	{
-		mCharacterHead = newObject<txUIStaticSprite>("CharacterHead");
-		mCharacterName = newObject<txUIText>("CharacterName");
-		mCharacterID = newObject<txUIText>("CharacterID");
-		mMoneyIcon = newObject<txUIStaticSprite>("MoneyIcon");
-		mMoney = newObject<txUIText>(mMoneyIcon, "Money");
+		newObject(out mCharacterHead, "CharacterHead");
+		newObject(out mCharacterName, "CharacterName");
+		newObject(out mCharacterID, "CharacterID");
+		newObject(out mMoneyIcon, "MoneyIcon");
+		newObject(out mMoney, mMoneyIcon, "Money");
 	}
 	public override void init()
 	{

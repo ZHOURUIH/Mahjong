@@ -20,8 +20,8 @@ public class SCNotifyGetMahjong : SocketPacket
 	}
 	public override void execute()
 	{
-		CommandCharacterGet cmd = mCommandSystem.newCmd<CommandCharacterGet>();
+		CommandCharacterGet cmd = newCmd(out cmd);
 		cmd.mMahjong = (MAHJONG)mMahjong.mValue;
-		mCommandSystem.pushCommand(cmd, mCharacterManager.getCharacter(mPlayerGUID.mValue));
+		pushCommand(cmd, mCharacterManager.getCharacter(mPlayerGUID.mValue));
 	}
 }

@@ -6,10 +6,6 @@ using System.Collections.Generic;
 public abstract class SocketPacket : SerializedData
 {
 	protected PACKET_TYPE mType;
-	public SocketPacket()
-	{
-		;
-	}
 	public SocketPacket(PACKET_TYPE type)
 	{
 		mType = type;

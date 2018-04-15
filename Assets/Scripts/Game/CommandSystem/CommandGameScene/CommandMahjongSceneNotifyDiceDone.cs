@@ -15,7 +15,6 @@ public class CommandMahjongSceneNotifyDiceDone : Command
 			return;
 		}
 		// 发消息通知服务器掷骰子完毕
-		CSDiceDone diceDone = mSocketNetManager.createPacket(PACKET_TYPE.PT_CS_DICE_DONE) as CSDiceDone;
-		mSocketNetManager.sendMessage(diceDone);
+		mSocketNetManager.sendMessage<CSDiceDone>();
 	}
 }

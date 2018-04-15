@@ -21,10 +21,6 @@ public class MahInfo
 public class GameUtility : GameBase
 {
 	protected static int mIDMaker;
-	public void init()
-	{
-		;
-	}
 	public static float calcuteConfigExpression(GAME_DEFINE_STRING CommonDefine, float variableValue)
 	{
 		string variableStr = "(" + StringUtility.floatToString(variableValue, 2) + ")";
@@ -66,7 +62,6 @@ public class GameUtility : GameBase
 		}
 		return new List<MahInfo>(groupMap.Values);
 	}
-
 	// 得到指定牌的花色
 	public static MAHJONG_HUASE getHuaSe(MAHJONG mah)
 	{
@@ -80,7 +75,6 @@ public class GameUtility : GameBase
 			return MAHJONG_HUASE.MH_TONG + huaseIndex;
 		}
 	}
-
 	public static bool isShunzi(List<MahInfo> mahjongList, int startIndex)
 	{
 		if (mahjongList.Count <= startIndex + 2)
@@ -132,7 +126,6 @@ public class GameUtility : GameBase
 		}
 		return huaseList;
 	}
-
 	public static bool canHu(List<MahInfo> mahjongList, ref List<List<MAHJONG>> devideList)
 	{
 		// 必须至少缺一色牌才能胡,

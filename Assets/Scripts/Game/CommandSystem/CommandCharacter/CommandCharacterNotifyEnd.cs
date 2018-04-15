@@ -12,7 +12,6 @@ public class CommandCharacterNotifyEnd : Command
 	{
 		Character character = mReceiver as Character;
 		CharacterData data = character.getCharacterData();
-		ScriptMahjongHandIn handIn = mLayoutManager.getScript(LAYOUT_TYPE.LT_MAHJONG_HAND_IN) as ScriptMahjongHandIn;
-		handIn.notifyEnd(data.mPosition, data.mHandIn);
+		mScriptMahjongHandIn.notifyEnd(data.mPosition, data.mHandIn);
 	}
 }

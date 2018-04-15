@@ -14,8 +14,8 @@ public class CommandMahjongSceneNotifyStartDone : Command
 		{
 			return;
 		}
-		CommandGameSceneChangeProcedure cmd = mCommandSystem.newCmd<CommandGameSceneChangeProcedure>();
+		CommandGameSceneChangeProcedure cmd = newCmd(out cmd);
 		cmd.mProcedure = PROCEDURE_TYPE.PT_MAHJONG_RUNNING_GAMING;
-		mCommandSystem.pushCommand(cmd, gameScene);
+		pushCommand(cmd, gameScene);
 	}
 }

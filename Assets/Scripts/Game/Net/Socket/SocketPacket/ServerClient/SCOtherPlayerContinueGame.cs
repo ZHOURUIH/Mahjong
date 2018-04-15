@@ -28,12 +28,12 @@ public class SCOtherPlayerContinueGame : SocketPacket
 		MahjongScene mahjongScene = gameScene as MahjongScene;
 		Room room = mahjongScene.getRoom();
 		Character player = mCharacterManager.getCharacter(mOtherPlayerGUID.mValue);
-		CommandRoomJoin cmdJoin = mCommandSystem.newCmd<CommandRoomJoin>();
+		CommandRoomJoin cmdJoin = newCmd(out cmdJoin);
 		cmdJoin.mCharacter = player;
-		mCommandSystem.pushCommand(cmdJoin, room);
+		pushCommand(cmdJoin, room);
 
-		CommandCharacterNotifyBanker cmdBanker = mCommandSystem.newCmd<CommandCharacterNotifyBanker>();
+		CommandCharacterNotifyBanker cmdBanker = newCmd(out cmdBanker);
 		cmdBanker.mBanker = mBanker.mValue;
-		mCommandSystem.pushCommand(cmdBanker, player);
+		pushCommand(cmdBanker, player);
 	}
 }

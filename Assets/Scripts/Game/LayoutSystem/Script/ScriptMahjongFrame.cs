@@ -7,34 +7,31 @@ using UnityEngine;
 public class ScriptMahjongFrame : LayoutScript
 {
 	protected txUIObject mRoomInfoRoot;
-	protected txUIText mRoomIDLabel;
-	protected txUIButton mLeaveRoomButton;
-	protected txUIButton mReadyButton;
-	protected txUIButton mCancelReadyButton;
-	protected txUIText mInfo;
-	public ScriptMahjongFrame(LAYOUT_TYPE type, string name, GameLayout layout)
+	protected txNGUIText mRoomIDLabel;
+	protected txNGUIButton mLeaveRoomButton;
+	protected txNGUIButton mReadyButton;
+	protected txNGUIButton mCancelReadyButton;
+	protected txNGUIText mInfo;
+	public ScriptMahjongFrame(string name, GameLayout layout)
 		:
-		base(type, name, layout)
+		base(name, layout)
 	{
 		;
 	}
 	public override void assignWindow()
 	{
-		mRoomInfoRoot = newObject<txUIObject>("RoomInfoRoot");
-		mRoomIDLabel = newObject<txUIText>(mRoomInfoRoot, "RoomID");
-		mLeaveRoomButton = newObject<txUIButton>("LeaveRoom");
-		mReadyButton = newObject<txUIButton>("Ready");
-		mCancelReadyButton = newObject<txUIButton>("CancelReady");
-		mInfo = newObject<txUIText>("Info");
+		newObject(out mRoomInfoRoot, "RoomInfoRoot");
+		newObject(out mRoomIDLabel, mRoomInfoRoot, "RoomID");
+		newObject(out mLeaveRoomButton, "LeaveRoom");
+		newObject(out mReadyButton, "Ready");
+		newObject(out mCancelReadyButton, "CancelReady");
+		newObject(out mInfo, "Info");
 	}
 	public override void init()
 	{
-		mLeaveRoomButton.setClickCallback(onLeaveRoomClick);
-		mLeaveRoomButton.setPressCallback(onButtonPress);
-		mReadyButton.setClickCallback(onReadyClick);
-		mReadyButton.setPressCallback(onButtonPress);
-		mCancelReadyButton.setClickCallback(onCancelReadyClick);
-		mCancelReadyButton.setPressCallback(onButtonPress);
+		mGlobalTouchSystem.registeBoxCollider(mLeaveRoomButton, onLeaveRoomClick, null, onButtonPress);
+		mGlobalTouchSystem.registeBoxCollider(mReadyButton, onReadyClick, null, onButtonPress);
+		mGlobalTouchSystem.registeBoxCollider(mCancelReadyButton, onCancelReadyClick, null, onButtonPress);
 	}
 	public override void onReset()
 	{
@@ -71,28 +68,26 @@ public class ScriptMahjongFrame : LayoutScript
 		mInfo.setLabel(info);
 	}
 	//-----------------------------------------------------------------------------------
-	protected void onReadyClick(GameObject go)
+	protected void onReadyClick(txUIObject go)
 	{
 		// 发送消息通知服务器玩家已经准备
-		CSReady packetReady = mSocketNetManager.createPacket(PACKET_TYPE.PT_CS_READY) as CSReady;
+		CSReady packetReady = mSocketNetManager.createPacket<CSReady>();
 		packetReady.mReady.mValue = true;
 		mSocketNetManager.sendMessage(packetReady);
 	}
-	protected void onCancelReadyClick(GameObject go)
+	protected void onCancelReadyClick(txUIObject go)
 	{
 		// 发送消息通知服务器玩家已经准备
-		CSReady packetReady = mSocketNetManager.createPacket(PACKET_TYPE.PT_CS_READY) as CSReady;
+		CSReady packetReady = mSocketNetManager.createPacket<CSReady>();
 		packetReady.mReady.mValue = false;
 		mSocketNetManager.sendMessage(packetReady);
 	}
-	protected void onLeaveRoomClick(GameObject go)
+	protected void onLeaveRoomClick(txUIObject go)
 	{
-		CSLeaveRoom packetLeave = mSocketNetManager.createPacket(PACKET_TYPE.PT_CS_LEAVE_ROOM) as CSLeaveRoom;
-		mSocketNetManager.sendMessage(packetLeave);
+		mSocketNetManager.sendMessage<CSLeaveRoom>();
 	}
-	protected void onButtonPress(GameObject go, bool press)
+	protected void onButtonPress(txUIObject go, bool press)
 	{
-		txUIObject button = mLayout.getUIObject(go);
-		LayoutTools.SCALE_WINDOW(button, button.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
+		LayoutTools.SCALE_WINDOW(go, go.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
 	}
 }

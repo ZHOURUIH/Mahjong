@@ -4,8 +4,6 @@ using System.Collections.Generic;
 
 public class MahjongSceneExit : SceneProcedure
 {
-	public MahjongSceneExit()
-	{ }
 	public MahjongSceneExit(PROCEDURE_TYPE type, GameScene gameScene)
 		:
 	base(type, gameScene)

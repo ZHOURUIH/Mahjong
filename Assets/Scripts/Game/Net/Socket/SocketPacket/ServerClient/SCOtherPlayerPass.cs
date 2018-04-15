@@ -22,7 +22,6 @@ public class SCOtherPlayerPass : SocketPacket
 	}
 	public override void execute()
 	{
-		ScriptMahjongFrame mahjongFrame = mLayoutManager.getScript(LAYOUT_TYPE.LT_MAHJONG_FRAME) as ScriptMahjongFrame;
-		mahjongFrame.notifyInfo("");
+		mScriptMahjongFrame.notifyInfo("");
 	}
 }

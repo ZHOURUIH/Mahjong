@@ -3,8 +3,6 @@ using System.Collections;
 
 public class LogoSceneExit : SceneProcedure
 {
-    public LogoSceneExit()
-    { }
 	public LogoSceneExit(PROCEDURE_TYPE type, GameScene gameScene)
 		:
 		base(type, gameScene)

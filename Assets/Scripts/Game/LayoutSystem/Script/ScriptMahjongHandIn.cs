@@ -10,31 +10,33 @@ public class PengGangMahjong
 	protected string mMahjongPreName;
 	protected txUIObject mPengGangRoot;
 	protected List<txUIObject> mPengGangSingleRoot;
-	protected List<List<txUIStaticSprite>> mMahjongWindows;
+	protected List<List<txNGUIStaticSprite>> mMahjongWindows;
 	public PengGangMahjong(ScriptMahjongHandIn script, string preName)
 	{
 		mScript = script;
 		mMahjongPreName = preName;
 		mPengGangSingleRoot = new List<txUIObject>();
-		mMahjongWindows = new List<List<txUIStaticSprite>>();
+		mMahjongWindows = new List<List<txNGUIStaticSprite>>();
 		for (int i = 0; i < GameDefine.MAX_PENG_TIMES; ++i)
 		{
-			mMahjongWindows.Add(new List<txUIStaticSprite>());
+			mMahjongWindows.Add(new List<txNGUIStaticSprite>());
 		}
 	}
 	public void assignWindow(string rootName)
 	{
-		mPengGangRoot = mScript.newObject<txUIObject>(rootName);
+		mScript.newObject(out mPengGangRoot, rootName);
 		for (int i = 0; i < GameDefine.MAX_PENG_TIMES; ++i)
 		{
-			mPengGangSingleRoot.Add(mScript.newObject<txUIObject>(mPengGangRoot, "PengGang" + i));
+			txUIObject obj = mScript.newObject(out obj, mPengGangRoot, "PengGang" + i);
+			mPengGangSingleRoot.Add(obj);
 		}
 		int pengTimes = mMahjongWindows.Count;
 		for (int i = 0; i < pengTimes; ++i)
 		{
 			for (int j = 0; j < GameDefine.MAX_SINGLE_COUNT; ++j)
 			{
-				mMahjongWindows[i].Add(mScript.newObject<txUIStaticSprite>(mPengGangSingleRoot[i], "Mahjong" + j, 0));
+				txNGUIStaticSprite obj = mScript.newObject(out obj, mPengGangSingleRoot[i], "Mahjong" + j, 0);
+				mMahjongWindows[i].Add(obj);
 			}
 		}
 	}
@@ -106,19 +108,20 @@ public class ShowMahjong
 	protected ScriptMahjongHandIn mScript;
 	protected string mMahjongPreName;
 	protected txUIObject mShowRoot;
-	protected List<txUIStaticSprite> mShowMahjong;
+	protected List<txNGUIStaticSprite> mShowMahjong;
 	public ShowMahjong(ScriptMahjongHandIn script, string mahjongPreName)
 	{
 		mScript = script;
 		mMahjongPreName = mahjongPreName;
-		mShowMahjong = new List<txUIStaticSprite>();
+		mShowMahjong = new List<txNGUIStaticSprite>();
 	}
 	public void assignWindow(string showRoot)
 	{
-		mShowRoot = mScript.newObject<txUIObject>(showRoot, 0);
+		mScript.newObject(out mShowRoot, showRoot, 0);
 		for(int i = 0; i < GameDefine.MAX_HAND_IN_COUNT; ++i)
 		{
-			mShowMahjong.Add(mScript.newObject<txUIStaticSprite>(mShowRoot, "Mahjong" + i));
+			txNGUIStaticSprite obj = mScript.newObject(out obj, mShowRoot, "Mahjong" + i);
+			mShowMahjong.Add(obj);
 		}
 	}
 	public void init()
@@ -151,19 +154,20 @@ public class HuaMahjong
 	protected ScriptMahjongHandIn mScript;
 	protected string mMahjongPreName;
 	protected txUIObject mHuaRoot;
-	protected List<txUIStaticSprite> mHuaMahjong;
+	protected List<txNGUIStaticSprite> mHuaMahjong;
 	public HuaMahjong(ScriptMahjongHandIn script, string mahjongPreName)
 	{
 		mScript = script;
 		mMahjongPreName = mahjongPreName;
-		mHuaMahjong = new List<txUIStaticSprite>();
+		mHuaMahjong = new List<txNGUIStaticSprite>();
 	}
 	public void assignWindow(string huaRoot)
 	{
-		mHuaRoot = mScript.newObject<txUIObject>(huaRoot, 0);
+		mScript.newObject(out mHuaRoot, huaRoot, 0);
 		for (int i = 0; i < GameDefine.MAX_HUA_COUNT; ++i)
 		{
-			mHuaMahjong.Add(mScript.newObject<txUIStaticSprite>(mHuaRoot, "Mahjong" + i));
+			txNGUIStaticSprite obj = mScript.newObject(out obj, mHuaRoot, "Mahjong" + i);
+			mHuaMahjong.Add(obj);
 		}
 	}
 	public void init()
@@ -200,7 +204,7 @@ public enum HANDIN_STATE
 
 public class HandInMahjongInfo
 {
-	public txUIButton mWindow;
+	public txNGUIButton mWindow;
 	public MAHJONG mMahjong;
 	public HANDIN_STATE mState;
 }
@@ -233,11 +237,11 @@ public class HandInMahjong : GameBase
 	}
 	public void assignWindow(string handInRoot)
 	{
-		mHandInRoot = mScript.newObject<txUIObject>(handInRoot);
+		mScript.newObject(out mHandInRoot, handInRoot);
 		int handInCount = mHandInMahjong.Count;
 		for (int i = 0; i < handInCount; ++i)
 		{
-			mHandInMahjong[i].mWindow = mScript.newObject<txUIButton>(mHandInRoot, "Mahjong" + i);
+			mScript.newObject(out mHandInMahjong[i].mWindow, mHandInRoot, "Mahjong" + i);
 		}
 	}
 	public void init()
@@ -262,7 +266,6 @@ public class HandInMahjong : GameBase
 				mHandInMahjong[i].mWindow.setHandleInput(false);
 			}
 		}
-		
 	}
 	public void onReset()
 	{
@@ -400,7 +403,7 @@ public class HandInMahjong : GameBase
 		// 点击准备打出的牌,则请求将牌打出
 		else if(mHandInMahjong[index].mState == HANDIN_STATE.HS_PREPARE_DROP)
 		{
-			CSRequestDrop requestDrop = mSocketNetManager.createPacket(PACKET_TYPE.PT_CS_REQUEST_DROP) as CSRequestDrop;
+			CSRequestDrop requestDrop = mSocketNetManager.createPacket<CSRequestDrop>();
 			requestDrop.mIndex.mValue = (byte)index;
 			mSocketNetManager.sendMessage(requestDrop);
 		}
@@ -515,9 +518,9 @@ public class PlayerMahjong : GameBase
 public class ScriptMahjongHandIn : LayoutScript
 {
 	protected List<PlayerMahjong> mPlayerMahjong;
-	public ScriptMahjongHandIn(LAYOUT_TYPE type, string name, GameLayout layout)
+	public ScriptMahjongHandIn(string name, GameLayout layout)
 		:
-		base(type, name, layout)
+		base(name, layout)
 	{
 		mPlayerMahjong = new List<PlayerMahjong>();
 		for (int i = 0; i < GameDefine.MAX_PLAYER_COUNT; ++i)

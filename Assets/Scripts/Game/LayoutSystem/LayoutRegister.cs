@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class LayoutRegister : GameBase
 {
-	public void registeAllLayout()
+	public static void registeAllLayout()
 	{
         registeLayout<ScriptGlobalTouch>(LAYOUT_TYPE.LT_GLOBAL_TOUCH, "UIGlobalTouch");
         registeLayout<ScriptLogin>(LAYOUT_TYPE.LT_LOGIN, "UILogin");
@@ -29,7 +29,7 @@ public class LayoutRegister : GameBase
 			UnityUtility.logError("error : not all script added! max count : " + (int)LAYOUT_TYPE.LT_MAX + ", added count :" + mLayoutManager.getLayoutCount());
 		}
 	}
-	public void onScriptChanged(LayoutScript script, bool created = true)
+	public static void onScriptChanged(LayoutScript script, bool created = true)
 	{
 		// 只有布局与脚本唯一对应的才能使用变量快速访问
 		if (mLayoutManager.getScriptMappingCount(script.GetType()) > 1)
@@ -55,11 +55,11 @@ public class LayoutRegister : GameBase
 		if (assign(ref mScriptJoinRoomDialog, script, created)) return;
 	}
 	//----------------------------------------------------------------------------------------------------------------------------------------------------------------
-	protected void registeLayout<T>(LAYOUT_TYPE layout, string name) where T : LayoutScript
+	protected static void registeLayout<T>(LAYOUT_TYPE layout, string name) where T : LayoutScript
 	{
 		mLayoutManager.registeLayout(typeof(T), layout, name);
 	}
-	protected bool assign<T>(ref T thisScript, LayoutScript value, bool created) where T : LayoutScript
+	protected static bool assign<T>(ref T thisScript, LayoutScript value, bool created) where T : LayoutScript
 	{
 		if (typeof(T) == value.GetType())
 		{

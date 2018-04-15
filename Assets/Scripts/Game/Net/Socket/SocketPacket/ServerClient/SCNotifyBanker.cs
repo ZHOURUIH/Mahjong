@@ -28,9 +28,9 @@ public class SCNotifyBanker : SocketPacket
 		Dictionary<int, Character> playerList = room.getPlayerList();
 		foreach(var item in playerList)
 		{
-			CommandCharacterNotifyBanker cmdBanker = mCommandSystem.newCmd<CommandCharacterNotifyBanker>();
+			CommandCharacterNotifyBanker cmdBanker = newCmd(out cmdBanker);
 			cmdBanker.mBanker = (item.Value.getCharacterData().mGUID == mPlayerGUID.mValue);
-			mCommandSystem.pushCommand(cmdBanker, item.Value);
+			pushCommand(cmdBanker, item.Value);
 		}
 	}
 }

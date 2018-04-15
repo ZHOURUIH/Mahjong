@@ -18,8 +18,8 @@ public class SCReadyRet : SocketPacket
 	}
 	public override void execute()
 	{
-		CommandCharacterNotifyReady cmd = mCommandSystem.newCmd<CommandCharacterNotifyReady>();
+		CommandCharacterNotifyReady cmd = newCmd(out cmd);
 		cmd.mReady = mReady.mValue;
-		mCommandSystem.pushCommand(cmd, mCharacterManager.getMyself());
+		pushCommand(cmd, mCharacterManager.getMyself());
 	}
 }

@@ -26,18 +26,18 @@ public class SCContinueGameRet : SocketPacket
 		MahjongScene mahjongScene = gameScene as MahjongScene;
 
 		// 跳转到等待流程
-		CommandGameSceneChangeProcedure cmdProcedure = mCommandSystem.newCmd<CommandGameSceneChangeProcedure>();
+		CommandGameSceneChangeProcedure cmdProcedure = newCmd(out cmdProcedure);
 		cmdProcedure.mProcedure = PROCEDURE_TYPE.PT_MAHJONG_WAITING;
-		mCommandSystem.pushCommand(cmdProcedure, mahjongScene);
+		pushCommand(cmdProcedure, mahjongScene);
 
 		// 将自己加入房间
 		CharacterMyself myself = mCharacterManager.getMyself();
-		CommandRoomJoin cmdJoin = mCommandSystem.newCmd<CommandRoomJoin>();
+		CommandRoomJoin cmdJoin = newCmd(out cmdJoin);
 		cmdJoin.mCharacter = myself;
-		mCommandSystem.pushCommand(cmdJoin, mahjongScene.getRoom());
+		pushCommand(cmdJoin, mahjongScene.getRoom());
 
-		CommandCharacterNotifyBanker cmdBanker = mCommandSystem.newCmd<CommandCharacterNotifyBanker>();
+		CommandCharacterNotifyBanker cmdBanker = newCmd(out cmdBanker);
 		cmdBanker.mBanker = mBanker.mValue;
-		mCommandSystem.pushCommand(cmdBanker, myself);
+		pushCommand(cmdBanker, myself);
 	}
 }

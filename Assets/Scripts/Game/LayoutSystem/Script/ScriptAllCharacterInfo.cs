@@ -7,27 +7,26 @@ using UnityEngine;
 public class CharacterInfoPanel
 {
 	public txUIObject mRoot;
-	public txUIStaticSprite mHead;
-	public txUIText mName;
-	public txUIStaticSprite mMoneyIcon;
-	public txUINumber mMoneyValue;
-	public txUIStaticSprite mReady;
-	public txUIStaticSprite mBanker;
+	public txNGUIStaticSprite mHead;
+	public txNGUIText mName;
+	public txNGUIStaticSprite mMoneyIcon;
+	public txNGUINumber mMoneyValue;
+	public txNGUIStaticSprite mReady;
+	public txNGUIStaticSprite mBanker;
 	public ScriptAllCharacterInfo mScript;
-	public CharacterInfoPanel()
-	{
-		;
-	}
-	public void assignWindow(ScriptAllCharacterInfo script, string rootName)
+	public CharacterInfoPanel(ScriptAllCharacterInfo script)
 	{
 		mScript = script;
-		mRoot = mScript.newObject<txUIObject>(rootName);
-		mHead = mScript.newObject<txUIStaticSprite>(mRoot, "Head");
-		mName = mScript.newObject<txUIText>(mRoot, "Name");
-		mMoneyIcon = mScript.newObject<txUIStaticSprite>(mRoot, "MoneyIcon");
-		mMoneyValue = mScript.newObject<txUINumber>(mMoneyIcon, "MoneyValue");
-		mReady = mScript.newObject<txUIStaticSprite>(mRoot, "Ready", 0);
-		mBanker = mScript.newObject<txUIStaticSprite>(mRoot, "Banker", 0);
+	}
+	public void assignWindow(string rootName)
+	{
+		mScript.newObject(out mRoot, rootName);
+		mScript.newObject(out mHead, mRoot, "Head");
+		mScript.newObject(out mName, mRoot, "Name");
+		mScript.newObject(out mMoneyIcon, mRoot, "MoneyIcon");
+		mScript.newObject(out mMoneyValue, mMoneyIcon, "MoneyValue");
+		mScript.newObject(out mReady, mRoot, "Ready", 0);
+		mScript.newObject(out mBanker, mRoot, "Banker", 0);
 	}
 	public void init()
 	{
@@ -81,14 +80,14 @@ public class CharacterInfoPanel
 public class ScriptAllCharacterInfo : LayoutScript
 {
 	protected CharacterInfoPanel[] mInfoPanelList;
-	public ScriptAllCharacterInfo(LAYOUT_TYPE type, string name, GameLayout layout)
+	public ScriptAllCharacterInfo(string name, GameLayout layout)
 		:
-		base(type, name, layout)
+		base(name, layout)
 	{
 		mInfoPanelList = new CharacterInfoPanel[GameDefine.MAX_PLAYER_COUNT];
 		for (int i = 0; i < GameDefine.MAX_PLAYER_COUNT; ++i)
 		{
-			mInfoPanelList[i] = new CharacterInfoPanel();
+			mInfoPanelList[i] = new CharacterInfoPanel(this);
 		}
 	}
 	public override void assignWindow()
@@ -96,7 +95,7 @@ public class ScriptAllCharacterInfo : LayoutScript
 		string[] rootNameList = new string[] { "MyInfoRoot", "LeftInfoRoot", "OppositeInfoRoot", "RightInfoRoot" };
 		for (int i = 0; i < GameDefine.MAX_PLAYER_COUNT; ++i)
 		{
-			mInfoPanelList[i].assignWindow(this, rootNameList[i]);
+			mInfoPanelList[i].assignWindow(rootNameList[i]);
 		}
 	}
 	public override void init()

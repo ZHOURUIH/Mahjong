@@ -20,9 +20,9 @@ public class SCShowHua : SocketPacket
 	}
 	public override void execute()
 	{
-		CommandCharacterShowHua cmdShowHua = mCommandSystem.newCmd<CommandCharacterShowHua>();
+		CommandCharacterShowHua cmdShowHua = newCmd(out cmdShowHua);
 		cmdShowHua.mIndex = mIndex.mValue;
 		cmdShowHua.mMah = (MAHJONG)mMahjong.mValue;
-		mCommandSystem.pushCommand(cmdShowHua, mCharacterManager.getMyself());
+		pushCommand(cmdShowHua, mCharacterManager.getMyself());
 	}
 }

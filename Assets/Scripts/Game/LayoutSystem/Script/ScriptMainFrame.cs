@@ -6,73 +6,64 @@ using UnityEngine;
 
 public class ScriptMainFrame : LayoutScript
 {
-	protected txUIStaticSprite mBackground;
+	protected txNGUIStaticSprite mBackground;
 	protected txUIObject mBottomButtonRoot;
 	protected txUIObject mLeftTopButtonRoot;
-	protected txUIStaticSprite mFrameTitle;
-	protected txUIButton mMailButton;
-	protected txUIButton mCompetitionButton;
-	protected txUIButton mShareButton;
-	protected txUIButton mStandingButton;
-	protected txUIButton mRuleButton;
-	protected txUIButton mContactButton;
-	protected txUIButton mRechargeButton;
-	protected txUIButton mSettingButton;
-	protected txUIButton mQuitButton;
-	public ScriptMainFrame(LAYOUT_TYPE type, string name, GameLayout layout)
+	protected txNGUIStaticSprite mFrameTitle;
+	protected txNGUIButton mMailButton;
+	protected txNGUIButton mCompetitionButton;
+	protected txNGUIButton mShareButton;
+	protected txNGUIButton mStandingButton;
+	protected txNGUIButton mRuleButton;
+	protected txNGUIButton mContactButton;
+	protected txNGUIButton mRechargeButton;
+	protected txNGUIButton mSettingButton;
+	protected txNGUIButton mQuitButton;
+	public ScriptMainFrame(string name, GameLayout layout)
 		:
-		base(type, name, layout)
+		base(name, layout)
 	{
 		;
 	}
 	public override void assignWindow()
 	{
-		mBackground = newObject<txUIStaticSprite>("Background");
-		mBottomButtonRoot = newObject<txUIObject>(mBackground, "BottomButtonRoot");
-		mLeftTopButtonRoot = newObject<txUIObject>(mBackground, "LeftTopButtonRoot");
-		mFrameTitle = newObject<txUIStaticSprite>(mBackground, "FrameTitle");
-		mMailButton = newObject<txUIButton>(mBottomButtonRoot, "MailButton");
-		mCompetitionButton = newObject<txUIButton>(mBottomButtonRoot, "CompetitionButton");
-		mShareButton = newObject<txUIButton>(mBottomButtonRoot, "ShareButton");
-		mStandingButton = newObject<txUIButton>(mBottomButtonRoot, "StandingButton");
-		mRuleButton = newObject<txUIButton>(mBottomButtonRoot, "RuleButton");
-		mContactButton = newObject<txUIButton>(mBottomButtonRoot, "ContactButton");
-		mRechargeButton = newObject<txUIButton>(mLeftTopButtonRoot, "RechargeButton");
-		mSettingButton = newObject<txUIButton>(mLeftTopButtonRoot, "SettingButton");
-		mQuitButton = newObject<txUIButton>(mLeftTopButtonRoot, "QuitButton");
+		newObject(out mBackground, "Background");
+		newObject(out mBottomButtonRoot, mBackground, "BottomButtonRoot");
+		newObject(out mLeftTopButtonRoot, mBackground, "LeftTopButtonRoot");
+		newObject(out mFrameTitle, mBackground, "FrameTitle");
+		newObject(out mMailButton, mBottomButtonRoot, "MailButton");
+		newObject(out mCompetitionButton, mBottomButtonRoot, "CompetitionButton");
+		newObject(out mShareButton, mBottomButtonRoot, "ShareButton");
+		newObject(out mStandingButton, mBottomButtonRoot, "StandingButton");
+		newObject(out mRuleButton, mBottomButtonRoot, "RuleButton");
+		newObject(out mContactButton, mBottomButtonRoot, "ContactButton");
+		newObject(out mRechargeButton, mLeftTopButtonRoot, "RechargeButton");
+		newObject(out mSettingButton, mLeftTopButtonRoot, "SettingButton");
+		newObject(out mQuitButton, mLeftTopButtonRoot, "QuitButton");
 	}
 	public override void init()
 	{
-		mMailButton.setClickCallback(onMailButton);
-		mMailButton.setPressCallback(onButtonPress);
-		mCompetitionButton.setClickCallback(onCompetitionButton);
-		mCompetitionButton.setPressCallback(onButtonPress);
-		mShareButton.setClickCallback(onShareButton);
-		mShareButton.setPressCallback(onButtonPress);
-		mStandingButton.setClickCallback(onStandingButton);
-		mStandingButton.setPressCallback(onButtonPress);
-		mRuleButton.setClickCallback(onRuleButton);
-		mRuleButton.setPressCallback(onButtonPress);
-		mContactButton.setClickCallback(onContactButton);
-		mContactButton.setPressCallback(onButtonPress);
-		mRechargeButton.setClickCallback(onRechargeButton);
-		mRechargeButton.setPressCallback(onButtonPress);
-		mSettingButton.setClickCallback(onSettingButton);
-		mSettingButton.setPressCallback(onButtonPress);
-		mQuitButton.setClickCallback(onQuitButton);
-		mQuitButton.setPressCallback(onButtonPress);
+		mGlobalTouchSystem.registeBoxCollider(mMailButton, onMailButton, null, onButtonPress);
+		mGlobalTouchSystem.registeBoxCollider(mCompetitionButton, onCompetitionButton, null, onButtonPress);
+		mGlobalTouchSystem.registeBoxCollider(mShareButton, onShareButton, null, onButtonPress);
+		mGlobalTouchSystem.registeBoxCollider(mStandingButton, onStandingButton, null, onButtonPress);
+		mGlobalTouchSystem.registeBoxCollider(mRuleButton, onRuleButton, null, onButtonPress);
+		mGlobalTouchSystem.registeBoxCollider(mContactButton, onContactButton, null, onButtonPress);
+		mGlobalTouchSystem.registeBoxCollider(mRechargeButton, onRechargeButton, null, onButtonPress);
+		mGlobalTouchSystem.registeBoxCollider(mSettingButton, onSettingButton, null, onButtonPress);
+		mGlobalTouchSystem.registeBoxCollider(mQuitButton, onQuitButton, null, onButtonPress);
 	}
 	public override void onReset()
 	{
-		LayoutTools.SCALE_WINDOW(mMailButton, Vector2.one, Vector2.one, 0.0f);
-		LayoutTools.SCALE_WINDOW(mCompetitionButton, Vector2.one, Vector2.one, 0.0f);
-		LayoutTools.SCALE_WINDOW(mShareButton, Vector2.one, Vector2.one, 0.0f);
-		LayoutTools.SCALE_WINDOW(mStandingButton, Vector2.one, Vector2.one, 0.0f);
-		LayoutTools.SCALE_WINDOW(mRuleButton, Vector2.one, Vector2.one, 0.0f);
-		LayoutTools.SCALE_WINDOW(mContactButton, Vector2.one, Vector2.one, 0.0f);
-		LayoutTools.SCALE_WINDOW(mRechargeButton, Vector2.one, Vector2.one, 0.0f);
-		LayoutTools.SCALE_WINDOW(mSettingButton, Vector2.one, Vector2.one, 0.0f);
-		LayoutTools.SCALE_WINDOW(mQuitButton, Vector2.one, Vector2.one, 0.0f);
+		LayoutTools.SCALE_WINDOW(mMailButton, Vector2.one);
+		LayoutTools.SCALE_WINDOW(mCompetitionButton, Vector2.one);
+		LayoutTools.SCALE_WINDOW(mShareButton, Vector2.one);
+		LayoutTools.SCALE_WINDOW(mStandingButton, Vector2.one);
+		LayoutTools.SCALE_WINDOW(mRuleButton, Vector2.one);
+		LayoutTools.SCALE_WINDOW(mContactButton, Vector2.one);
+		LayoutTools.SCALE_WINDOW(mRechargeButton, Vector2.one);
+		LayoutTools.SCALE_WINDOW(mSettingButton, Vector2.one);
+		LayoutTools.SCALE_WINDOW(mQuitButton, Vector2.one);
 	}
 	public override void onShow(bool immediately, string param)
 	{
@@ -87,45 +78,44 @@ public class ScriptMainFrame : LayoutScript
 		;
 	}
 	//-------------------------------------------------------------------------------------------------------------------------
-	protected void onMailButton(GameObject obj)
+	protected void onMailButton(txUIObject obj)
 	{
 		;
 	}
-	protected void onCompetitionButton(GameObject obj)
+	protected void onCompetitionButton(txUIObject obj)
 	{
 		;
 	}
-	protected void onShareButton(GameObject obj)
+	protected void onShareButton(txUIObject obj)
 	{
 		;
 	}
-	protected void onStandingButton(GameObject obj)
+	protected void onStandingButton(txUIObject obj)
 	{
 		;
 	}
-	protected void onRuleButton(GameObject obj)
+	protected void onRuleButton(txUIObject obj)
 	{
 		;
 	}
-	protected void onContactButton(GameObject obj)
+	protected void onContactButton(txUIObject obj)
 	{
 		;
 	}
-	protected void onRechargeButton(GameObject obj)
+	protected void onRechargeButton(txUIObject obj)
 	{
 		;
 	}
-	protected void onSettingButton(GameObject obj)
+	protected void onSettingButton(txUIObject obj)
 	{
 		;
 	}
-	protected void onQuitButton(GameObject obj)
+	protected void onQuitButton(txUIObject obj)
 	{
 		;
 	}
-	protected void onButtonPress(GameObject obj, bool press)
+	protected void onButtonPress(txUIObject obj, bool press)
 	{
-		txUIObject button = mLayout.getUIObject(obj);
-		LayoutTools.SCALE_WINDOW(button, button.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
+		LayoutTools.SCALE_WINDOW(obj, obj.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
 	}
 }

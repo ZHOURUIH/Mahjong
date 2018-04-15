@@ -24,13 +24,13 @@ public class SCStartGame : SocketPacket
 			return;
 		}
 		// 跳转到掷骰子流程
-		CommandGameSceneChangeProcedure cmd = mCommandSystem.newCmd<CommandGameSceneChangeProcedure>();
+		CommandGameSceneChangeProcedure cmd = newCmd(out cmd);
 		cmd.mProcedure = PROCEDURE_TYPE.PT_MAHJONG_RUNNING_DICE;
-		mCommandSystem.pushCommand(cmd, mGameSceneManager.getCurScene());
+		pushCommand(cmd, mGameSceneManager.getCurScene());
 
 		// 通知麻将场景开始掷骰子
-		CommandMahjongSceneNotifyDice cmdDice = mCommandSystem.newCmd<CommandMahjongSceneNotifyDice>();
+		CommandMahjongSceneNotifyDice cmdDice = newCmd(out cmdDice);
 		cmdDice.mDice = mDice.mValue;
-		mCommandSystem.pushCommand(cmdDice, gameScene);
+		pushCommand(cmdDice, gameScene);
 	}
 }

@@ -28,8 +28,7 @@ public class CommandRoomJoin : Command
 		// 只能在麻将场景的等待流程才能通知加入
 		if (gameScene.atProcedure(PROCEDURE_TYPE.PT_MAHJONG_WAITING))
 		{
-			ScriptAllCharacterInfo allInfo = mLayoutManager.getScript(LAYOUT_TYPE.LT_ALL_CHARACTER_INFO) as ScriptAllCharacterInfo;
-			allInfo.notifyCharacterJoin(mCharacter);
+			mScriptAllCharacterInfo.notifyCharacterJoin(mCharacter);
 		}
 	}
 	public override string showDebugInfo()

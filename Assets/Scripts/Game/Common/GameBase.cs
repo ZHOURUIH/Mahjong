@@ -8,7 +8,6 @@ public class GameBase : FrameBase
 	public static Game mGame;
 	public static GameConfig mGameConfig;
 	public static MahjongSystem mMahjongSystem;
-	public static MaterialManager mMaterialManager;
 	public static HeadTextureManager mHeadTextureManager;
 	public static SocketManager mSocketNetManager;
 	// 以下是用于快速访问的布局脚本
@@ -35,11 +34,10 @@ public class GameBase : FrameBase
 		if (mGame == null)
 		{
 			mGame = Game.instance as Game;
-			mGameConfig = mGame.getGameConfig();
-			mMahjongSystem = mGame.getMahjongSystem();
-			mMaterialManager = mGame.getMaterialManager();
-			mHeadTextureManager = mGame.getHeadTextureManager();
-			mSocketNetManager = mGame.getSocketManager();
+			mGameConfig = mGame.getSystem<GameConfig>();
+			mMahjongSystem = mGame.getSystem<MahjongSystem>();
+			mHeadTextureManager = mGame.getSystem<HeadTextureManager>();
+			mSocketNetManager = mGame.getSystem<SocketManager>();
 		}
 	}
 }

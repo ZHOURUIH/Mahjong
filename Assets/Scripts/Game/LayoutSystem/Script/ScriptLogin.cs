@@ -6,35 +6,32 @@ using UnityEngine;
 
 public class ScriptLogin : LayoutScript
 {
-	protected txUIStaticSprite mBackground;
-	protected txUIEditbox mAccountEdit;
-	protected txUIEditbox mPasswordEdit;
-	protected txUIButton mLoginButton;
-	protected txUIButton mRegisterButton;
-	protected txUIButton mQuitButton;
-	public ScriptLogin(LAYOUT_TYPE type, string name, GameLayout layout)
+	protected txNGUIStaticSprite mBackground;
+	protected txNGUIEditbox mAccountEdit;
+	protected txNGUIEditbox mPasswordEdit;
+	protected txNGUIButton mLoginButton;
+	protected txNGUIButton mRegisterButton;
+	protected txNGUIButton mQuitButton;
+	public ScriptLogin(string name, GameLayout layout)
 		:
-		base(type, name, layout)
+		base(name, layout)
 	{
 		;
 	}
 	public override void assignWindow()
 	{
-		mBackground = newObject<txUIStaticSprite>("Background");
-		mAccountEdit = newObject<txUIEditbox>(mBackground, "AccountEdit");
-		mPasswordEdit = newObject<txUIEditbox>(mBackground, "PasswordEdit");
-		mLoginButton = newObject<txUIButton>(mBackground, "LoginButton");
-		mRegisterButton = newObject<txUIButton>(mBackground, "RegisterButton");
-		mQuitButton = newObject<txUIButton>(mBackground, "QuitButton");
+		newObject(out mBackground, "Background");
+		newObject(out mAccountEdit, mBackground, "AccountEdit");
+		newObject(out mPasswordEdit, mBackground, "PasswordEdit");
+		newObject(out mLoginButton, mBackground, "LoginButton");
+		newObject(out mRegisterButton, mBackground, "RegisterButton");
+		newObject(out mQuitButton, mBackground, "QuitButton");
 	}
 	public override void init()
 	{
-		mLoginButton.setClickCallback(onLoginClick);
-		mLoginButton.setPressCallback(onButtonPress);
-		mRegisterButton.setClickCallback(onRegisterClick);
-		mRegisterButton.setPressCallback(onButtonPress);
-		mQuitButton.setClickCallback(onQuitClick);
-		mQuitButton.setPressCallback(onButtonPress);
+		mGlobalTouchSystem.registeBoxCollider(mLoginButton, onLoginClick, null, onButtonPress);
+		mGlobalTouchSystem.registeBoxCollider(mRegisterButton, onRegisterClick, null, onButtonPress);
+		mGlobalTouchSystem.registeBoxCollider(mQuitButton, onQuitClick, null, onButtonPress);
 	}
 	public override void onReset()
 	{
@@ -53,25 +50,24 @@ public class ScriptLogin : LayoutScript
 		;
 	}
 	//---------------------------------------------------------------------------------------------------------------------
-	protected void onLoginClick(GameObject obj)
+	protected void onLoginClick(txUIObject obj)
 	{
-		CSLogin login = mSocketNetManager.createPacket(PACKET_TYPE.PT_CS_LOGIN) as CSLogin;
+		CSLogin login = mSocketNetManager.createPacket<CSLogin>();
 		login.setAccount(mAccountEdit.getText());
 		login.setPassword(mPasswordEdit.getText());
 		mSocketNetManager.sendMessage(login);
 	}
-	protected void onButtonPress(GameObject button, bool press)
+	protected void onButtonPress(txUIObject button, bool press)
 	{
-		txUIObject obj = mLayout.getUIObject(button);
-		LayoutTools.SCALE_WINDOW(obj, obj.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
+		LayoutTools.SCALE_WINDOW(button, button.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
 	}
-	protected void onRegisterClick(GameObject button)
+	protected void onRegisterClick(txUIObject button)
 	{
-		CommandGameSceneChangeProcedure cmd = mCommandSystem.newCmd<CommandGameSceneChangeProcedure>();
+		CommandGameSceneChangeProcedure cmd = newCmd(out cmd);
 		cmd.mProcedure = PROCEDURE_TYPE.PT_START_REGISTER;
-		mCommandSystem.pushCommand(cmd, mGameSceneManager.getCurScene());
+		pushCommand(cmd, mGameSceneManager.getCurScene());
 	}
-	protected void onQuitClick(GameObject button)
+	protected void onQuitClick(txUIObject button)
 	{
 		mGameFramework.stop();
 	}

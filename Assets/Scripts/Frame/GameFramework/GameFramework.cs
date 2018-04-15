@@ -79,9 +79,9 @@ public class GameFramework : MonoBehaviour
 		int count = mFrameComponentList.Count;
 		for (int i = 0; i < count; ++i)
 		{
-			Profiler.BeginSample(mFrameComponentList[i].getName());
+			UnityEngine.Profiling.Profiler.BeginSample(mFrameComponentList[i].getName());
 			mFrameComponentList[i].update(elapsedTime);
-			Profiler.EndSample();
+			UnityEngine.Profiling.Profiler.EndSample();
 		}
 	}
 	public virtual void fixedUpdate(float elapsedTime)

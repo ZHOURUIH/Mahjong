@@ -52,7 +52,12 @@ public abstract class LayoutScript : CommandReceiver
 	public void registeBoxCollider(txUIObject obj, BoxColliderClickCallback clickCallback = null,
 		BoxColliderHoverCallback hoverCallback = null, BoxColliderPressCallback pressCallback = null)
 	{
-		mGlobalTouchSystem.registeBoxCollider(obj, clickCallback, hoverCallback, pressCallback);
+		mGlobalTouchSystem.registeBoxCollider(obj, clickCallback, pressCallback, hoverCallback);
+	}
+	public void registeBoxCollider(txUIObject obj, UIEventListener.VoidDelegate clickCallback = null,
+		UIEventListener.BoolDelegate pressCallback = null, UIEventListener.BoolDelegate hoverCallback = null)
+	{
+		mGlobalTouchSystem.registeBoxCollider(obj, clickCallback, pressCallback, hoverCallback);
 	}
 	public void unregisteBoxCollider(txUIObject obj)
 	{

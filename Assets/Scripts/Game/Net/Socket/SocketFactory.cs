@@ -119,7 +119,7 @@ public class SocketFactory
 		PacketInfo info = new PacketInfo();
 		info.mClassType = typeof(T);
 		info.mType = type;
-		SocketPacket packet = UnityUtility.createInstance<SocketPacket>(typeof(SocketPacket), type);
+		SocketPacket packet = UnityUtility.createInstance<T>(typeof(T), type);
 		info.mPacketSize = packet.getSize();
 		mPacketTypeList.Add(type, info);
 		mClassTypeList.Add(info.mClassType, info);

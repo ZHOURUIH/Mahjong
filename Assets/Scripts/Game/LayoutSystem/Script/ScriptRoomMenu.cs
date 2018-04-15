@@ -27,13 +27,13 @@ public class ScriptRoomMenu : LayoutScript
 	}
 	public override void init()
 	{
-		mGlobalTouchSystem.registeBoxCollider(mCreateRoomButton, onCreateClicked, null, onButtonPress);
-		mGlobalTouchSystem.registeBoxCollider(mJoinRoomButton, onJoinClicked, null, onButtonPress);
+		registeBoxCollider(mCreateRoomButton, onCreateClicked, onButtonPress);
+		registeBoxCollider(mJoinRoomButton, onJoinClicked, onButtonPress);
 	}
 	public override void onReset()
 	{
-		LayoutTools.SCALE_WINDOW(mCreateRoomButton, Vector2.one, Vector2.one, 0.0f);
-		LayoutTools.SCALE_WINDOW(mJoinRoomButton, Vector2.one, Vector2.one, 0.0f);
+		LayoutTools.SCALE_WINDOW(mCreateRoomButton, Vector2.one);
+		LayoutTools.SCALE_WINDOW(mJoinRoomButton, Vector2.one);
 	}
 	public override void onShow(bool immediately, string param)
 	{
@@ -48,18 +48,19 @@ public class ScriptRoomMenu : LayoutScript
 		;
 	}
 	//-----------------------------------------------------------------------------------
-	protected void onCreateClicked(txUIObject obj)
+	protected void onCreateClicked(GameObject obj)
 	{
 		// 向服务器发送创建房间的消息
 		mSocketNetManager.sendMessage<CSCreateRoom>();
 	}
-	protected void onJoinClicked(txUIObject obj)
+	protected void onJoinClicked(GameObject obj)
 	{
 		// 显示加入房间对话框
 		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_JOIN_ROOM_DIALOG);
 	}
-	protected void onButtonPress(txUIObject obj, bool press)
+	protected void onButtonPress(GameObject obj, bool press)
 	{
-		LayoutTools.SCALE_WINDOW(obj, obj.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
+		txUIObject window = mLayout.getUIObject(obj);
+		LayoutTools.SCALE_WINDOW(window, window.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
 	}
 }

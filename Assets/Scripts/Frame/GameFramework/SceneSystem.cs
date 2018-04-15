@@ -90,7 +90,7 @@ public class SceneSystem : FrameComponent
 			return;
 		}
 		mSceneList[name].destroy();
-		SceneManager.UnloadScene(name);
+		SceneManager.UnloadSceneAsync(name);
 		mSceneList.Remove(name);
 	}
 	// 卸载除了dontUnloadSceneName以外的其他场景,初始默认场景除外

@@ -26,7 +26,7 @@ public class ScriptPlayerAction : LayoutScript
 		int count = mAction.Length;
 		for (int i = 0; i < count; ++i)
 		{
-			mGlobalTouchSystem.registeBoxCollider(mAction[i], onActionClicked);
+			registeBoxCollider(mAction[i], onActionClicked);
 		}
 	}
 	public override void onReset()
@@ -35,7 +35,11 @@ public class ScriptPlayerAction : LayoutScript
 	}
 	public override void onShow(bool immediately, string param)
 	{
-		;
+		int count = mAction.Length;
+		for (int i = 0; i < count; ++i)
+		{
+			LayoutTools.SCALE_WINDOW(mAction[i], Vector2.one);
+		}
 	}
 	public override void onHide(bool immediately, string param)
 	{
@@ -64,13 +68,13 @@ public class ScriptPlayerAction : LayoutScript
 		}
 	}
 	//------------------------------------------------------------------------------------------------------
-	protected void onActionClicked(txUIObject obj)
+	protected void onActionClicked(GameObject obj)
 	{
 		ACTION_TYPE action = ACTION_TYPE.AT_MAX;
 		int count = mAction.Length;
 		for (int i = 0; i < count; ++i)
 		{
-			if (obj == mAction[i])
+			if (mLayout.getUIObject(obj) == mAction[i])
 			{
 				action = (ACTION_TYPE)i;
 				break;

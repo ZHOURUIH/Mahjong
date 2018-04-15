@@ -299,9 +299,10 @@ public class UIInput : MonoBehaviour
 #if UNITY_4_3
 		if (Application.platform == RuntimePlatform.BB10Player)
 #else
-		if (Application.platform == RuntimePlatform.BlackBerryPlayer)
+		// 不再支持
+		//if (Application.platform == RuntimePlatform.BlackBerryPlayer)
 #endif
-			value = value.Replace("\\b", "\b");
+			//value = value.Replace("\\b", "\b");
 
 		// Validate all input
 		value = Validate(value);
@@ -895,8 +896,7 @@ public class UIInput : MonoBehaviour
 
 		bool isMac = (
 			rp == RuntimePlatform.OSXEditor ||
-			rp == RuntimePlatform.OSXPlayer ||
-			rp == RuntimePlatform.OSXWebPlayer);
+			rp == RuntimePlatform.OSXPlayer);
 
 		bool ctrl = isMac ?
 			((ev.modifiers & EventModifiers.Command) != 0) :

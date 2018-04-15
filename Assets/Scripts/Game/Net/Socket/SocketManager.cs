@@ -43,18 +43,15 @@ public class SocketManager : FrameComponent
 {
 	protected int mMaxReceiveCount;
 	protected Socket mServerSocket;
-	protected Thread mReceiveThread;
-	protected Thread mSendThread;
+	protected CustomThread mReceiveThread;
+	protected CustomThread mSendThread;
 	protected List<OUTPUT_ELEMENT> mOutputList;
 	protected List<INPUT_ELEMENT> mRecieveList;
 	protected List<SEND_ELEMENT> mSendList;
 	protected SocketFactory mSocketFactory;
-	protected bool mRun;
 	protected int mHeartBeatTimes;
 	protected float mHeartBeatTimeCount = 0.0f;
 	protected float mHeartBeatMaxTime = 0.0f;
-	protected bool mReceiveFinish;
-	protected bool mSendFinish;
 	public SocketManager(string name)
 		:base(name)
 	{
@@ -63,12 +60,11 @@ public class SocketManager : FrameComponent
 		mRecieveList = new List<INPUT_ELEMENT>();
 		mSendList = new List<SEND_ELEMENT>();
 		mSocketFactory = new SocketFactory();
-		mRun = true;
+		mReceiveThread = new CustomThread("Socket Receive");
+		mSendThread = new CustomThread("Socket Send");
 	}
 	public override void init()
 	{
-		mReceiveFinish = false;
-		mSendFinish = false;
 		try
 		{
 			mSocketFactory.init();
@@ -78,19 +74,15 @@ public class SocketManager : FrameComponent
 			int port = (int)mFrameConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SOCKET_PORT);
 			IPAddress serverIP = IPAddress.Parse(mGameConfig.getStringParam(GAME_DEFINE_STRING.GDS_TCP_SERVER_IP));
 			mServerSocket.Connect(serverIP, port);
-			mSendThread = new Thread(sendSocket);
-			mSendThread.Start();
-			mReceiveThread = new Thread(receiveSocket);
-			mReceiveThread.Start();
 		}
 		catch(Exception)
 		{
-			mReceiveFinish = true;
-			mSendFinish = true;
 			mServerSocket = null;
 			UnityUtility.logError("网络初始化失败!");
 			mGameFramework.stop();
 		}
+		mSendThread.start(sendSocket);
+		mReceiveThread.start(receiveSocket);
 	}
 	public override void update(float elapsedTime)
 	{
@@ -109,24 +101,13 @@ public class SocketManager : FrameComponent
 	}
 	public override void destroy()
 	{
-		mRun = false;
-		while (!mReceiveFinish) { }
-		if (mReceiveThread != null)
-		{
-			mReceiveThread.Abort();
-			mReceiveThread = null;
-		}
-		while (!mSendFinish) { }
-		if (mSendThread != null)
-		{
-			mSendThread.Abort();
-			mSendThread = null;
-		}
 		if (mServerSocket != null)
 		{
 			mServerSocket.Close();
 			mServerSocket = null;
 		}
+		mSendThread.destroy();
+		mReceiveThread.destroy();
 	}
 	public SocketPacket createPacket(PACKET_TYPE type)
 	{
@@ -199,117 +180,105 @@ public class SocketManager : FrameComponent
 	// 发送Socket消息
 	protected void sendSocket()
 	{
-		while (mRun)
+		lock (mOutputList)
 		{
-			lock (mOutputList)
+			int dataCount = mOutputList.Count;
+			for (int i = 0; i < dataCount; ++i)
 			{
-				int dataCount = mOutputList.Count;
-				for (int i = 0; i < dataCount; ++i)
-				{
-					mServerSocket.Send(mOutputList[i].mData);
-					PACKET_TYPE type = mOutputList[i].mType;
-					UnityUtility.logInfo("send socket : type : " + type + ", size : " + mOutputList[i].mDataSize);
-				}
-				mOutputList.Clear();
+				mServerSocket.Send(mOutputList[i].mData);
+				PACKET_TYPE type = mOutputList[i].mType;
+				//UnityUtility.logInfo("send socket : type : " + type + ", size : " + mOutputList[i].mDataSize);
 			}
-			Thread.Sleep(10);
+			mOutputList.Clear();
 		}
-		mSendFinish = true;
-		UnityUtility.logInfo("网络发送线程退出完毕!");
 	}
 	// 接收Socket消息
 	protected void receiveSocket()
 	{
-		IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, 0);
-		EndPoint ep = (EndPoint)endpoint;
-		while (mRun)
+		IPEndPoint endpoint = null;
+		if (endpoint == null)
 		{
-			try
+			endpoint = new IPEndPoint(IPAddress.Any, 0);
+		}
+		EndPoint ep = (EndPoint)endpoint;
+		byte[] recvBuff = null;
+		if(recvBuff == null)
+		{
+			recvBuff = new byte[mMaxReceiveCount];
+		}
+		int nRecv = mServerSocket.ReceiveFrom(recvBuff, ref ep);
+		if (nRecv < 0)
+		{
+			UnityUtility.logInfo("网络连接中断!");
+			return;
+		}
+		else if (nRecv == 0)
+		{
+			UnityUtility.logInfo("已与服务器断开连接!");
+			return;
+		}
+		int index = 0;
+		while (true)
+		{
+			if (index + sizeof(short) > nRecv)
 			{
-				byte[] recvBuff = new byte[mMaxReceiveCount];
-				int nRecv = mServerSocket.ReceiveFrom(recvBuff, ref ep);
-				if (nRecv < 0)
+				break;
+			}
+			// 读取包类型(short)
+			PACKET_TYPE type = (PACKET_TYPE)BinaryUtility.readShort(recvBuff, ref index);
+			// 客户端接收到的必须是SC类型的
+			if (type <= PACKET_TYPE.PT_SC_MIN || type >= PACKET_TYPE.PT_SC_MAX)
+			{
+				UnityUtility.logError("packet type error : " + type);
+				break;
+			}
+			int packetSize = mSocketFactory.getPacketSize(type);
+			if (packetSize >= 0)
+			{
+				// 读取消息长度(short)
+				short realDataSize = BinaryUtility.readShort(recvBuff, ref index);
+				if (realDataSize != packetSize)
 				{
-					UnityUtility.logInfo("网络连接中断!");
-					return;
+					UnityUtility.logError("error : wrong packet size! type : " + type + "readed : " + realDataSize + ", packet size : " + packetSize, false);
+					break;
 				}
-				else if (nRecv == 0)
+				if (packetSize > nRecv - sizeof(short))
 				{
-					UnityUtility.logInfo("已与服务器断开连接!");
-					return;
+					UnityUtility.logError("error : wrong packet data! packet : " + type + ", need size : " + packetSize + ", receive size : " + (nRecv - sizeof(PACKET_TYPE)), false);
+					break;
 				}
-				int index = 0;
-				while (true)
+				else
 				{
-					if (index + sizeof(short) > nRecv)
+					//UnityUtility.logInfo("receive : client : " + endpoint.Address.ToString() + ", type : " + type + ", size : " + packetSize);
+				}
+				lock (mRecieveList)
+				{
+					if (packetSize != 0)
 					{
-						break;
+						byte[] recvData = new byte[packetSize];
+						// 读取消息内容(byte[])
+						BinaryUtility.readBytes(recvBuff, ref index, recvData);
+						mRecieveList.Add(new INPUT_ELEMENT(type, recvData));
 					}
-					// 读取包类型(short)
-					PACKET_TYPE type = (PACKET_TYPE)BinaryUtility.readShort(recvBuff, ref index);
-					// 客户端接收到的必须是SC类型的
-					if (type <= PACKET_TYPE.PT_SC_MIN || type >= PACKET_TYPE.PT_SC_MAX)
-					{
-						UnityUtility.logInfo("packet type error : " + type);
-						break;
-					}
-					int packetSize = mSocketFactory.getPacketSize(type);
-					if (packetSize >= 0)
-					{
-						// 读取消息长度(short)
-						short realDataSize = BinaryUtility.readShort(recvBuff, ref index);
-						if (realDataSize != packetSize)
-						{
-							UnityUtility.logError("error : wrong packet size! type : " + type + "readed : " + realDataSize + ", packet size : " + packetSize, false);
-							break;
-						}
-						if (packetSize > nRecv - sizeof(short))
-						{
-							UnityUtility.logError("error : wrong packet data! packet : " + type + ", need size : " + packetSize + ", receive size : " + (nRecv - sizeof(PACKET_TYPE)), false);
-							break;
-						}
-						else
-						{
-							UnityUtility.logInfo("receive : client : " + endpoint.Address.ToString() + ", type : " + type + ", size : " + packetSize);
-						}
-						lock (mRecieveList)
-						{
-							if (packetSize != 0)
-							{
-								byte[] recvData = new byte[packetSize];
-								// 读取消息内容(byte[])
-								BinaryUtility.readBytes(recvBuff, ref index, recvData);
-								mRecieveList.Add(new INPUT_ELEMENT(type, recvData));
-							}
-							else
-							{
-								byte[] recvData = null;
-								mRecieveList.Add(new INPUT_ELEMENT(type, recvData));
-							}
-							UnityUtility.logInfo("receive : type : " + type + ", count : " + nRecv + ", client ip : " + endpoint.Address.ToString());
-						}
-						// 该段消息内存已经解析完了
-						if (index == nRecv)
-						{
-							break;
-						}
-					}
-					// 如果消息解析发生错误,则不再解析
 					else
 					{
-						break;
+						byte[] recvData = null;
+						mRecieveList.Add(new INPUT_ELEMENT(type, recvData));
 					}
+					//UnityUtility.logInfo("receive : type : " + type + ", count : " + nRecv + ", client ip : " + endpoint.Address.ToString());
 				}
-				Thread.Sleep(10);
+				// 该段消息内存已经解析完了
+				if (index == nRecv)
+				{
+					break;
+				}
 			}
-			catch (Exception)
+			// 如果消息解析发生错误,则不再解析
+			else
 			{
-				UnityUtility.logInfo("捕获空指针异常", LOG_LEVEL.LL_FORCE);
 				break;
 			}
 		}
-		mReceiveFinish = true;
-		UnityUtility.logInfo("网络接收线程退出完毕!");
 	}
 	protected void heartBeat()
 	{

@@ -281,7 +281,7 @@ namespace RenderHeads.Media.AVProVideo.Editor
 #endif*/
 					EditorUserBuildSettings.selectedBuildTargetGroup == BuildTargetGroup.Android)
 				{
-					showWarningMT = !UnityEditor.PlayerSettings.mobileMTRendering;
+					showWarningMT = !UnityEditor.PlayerSettings.GetMobileMTRendering(BuildTargetGroup.Android);
 				}
 				/*if (EditorUserBuildSettings.selectedBuildTargetGroup == BuildTargetGroup.WSA)
 				{

@@ -43,15 +43,15 @@ public class ScriptMainFrame : LayoutScript
 	}
 	public override void init()
 	{
-		mGlobalTouchSystem.registeBoxCollider(mMailButton, onMailButton, null, onButtonPress);
-		mGlobalTouchSystem.registeBoxCollider(mCompetitionButton, onCompetitionButton, null, onButtonPress);
-		mGlobalTouchSystem.registeBoxCollider(mShareButton, onShareButton, null, onButtonPress);
-		mGlobalTouchSystem.registeBoxCollider(mStandingButton, onStandingButton, null, onButtonPress);
-		mGlobalTouchSystem.registeBoxCollider(mRuleButton, onRuleButton, null, onButtonPress);
-		mGlobalTouchSystem.registeBoxCollider(mContactButton, onContactButton, null, onButtonPress);
-		mGlobalTouchSystem.registeBoxCollider(mRechargeButton, onRechargeButton, null, onButtonPress);
-		mGlobalTouchSystem.registeBoxCollider(mSettingButton, onSettingButton, null, onButtonPress);
-		mGlobalTouchSystem.registeBoxCollider(mQuitButton, onQuitButton, null, onButtonPress);
+		registeBoxCollider(mMailButton, onMailButton, onButtonPress);
+		registeBoxCollider(mCompetitionButton, onCompetitionButton, onButtonPress);
+		registeBoxCollider(mShareButton, onShareButton, onButtonPress);
+		registeBoxCollider(mStandingButton, onStandingButton, onButtonPress);
+		registeBoxCollider(mRuleButton, onRuleButton, onButtonPress);
+		registeBoxCollider(mContactButton, onContactButton, onButtonPress);
+		registeBoxCollider(mRechargeButton, onRechargeButton, onButtonPress);
+		registeBoxCollider(mSettingButton, onSettingButton, onButtonPress);
+		registeBoxCollider(mQuitButton, onQuitButton, onButtonPress);
 	}
 	public override void onReset()
 	{
@@ -78,44 +78,45 @@ public class ScriptMainFrame : LayoutScript
 		;
 	}
 	//-------------------------------------------------------------------------------------------------------------------------
-	protected void onMailButton(txUIObject obj)
+	protected void onMailButton(GameObject obj)
 	{
 		;
 	}
-	protected void onCompetitionButton(txUIObject obj)
+	protected void onCompetitionButton(GameObject obj)
 	{
 		;
 	}
-	protected void onShareButton(txUIObject obj)
+	protected void onShareButton(GameObject obj)
 	{
 		;
 	}
-	protected void onStandingButton(txUIObject obj)
+	protected void onStandingButton(GameObject obj)
 	{
 		;
 	}
-	protected void onRuleButton(txUIObject obj)
+	protected void onRuleButton(GameObject obj)
 	{
 		;
 	}
-	protected void onContactButton(txUIObject obj)
+	protected void onContactButton(GameObject obj)
 	{
 		;
 	}
-	protected void onRechargeButton(txUIObject obj)
+	protected void onRechargeButton(GameObject obj)
 	{
 		;
 	}
-	protected void onSettingButton(txUIObject obj)
+	protected void onSettingButton(GameObject obj)
 	{
 		;
 	}
-	protected void onQuitButton(txUIObject obj)
+	protected void onQuitButton(GameObject obj)
 	{
 		;
 	}
-	protected void onButtonPress(txUIObject obj, bool press)
+	protected void onButtonPress(GameObject obj, bool press)
 	{
-		LayoutTools.SCALE_WINDOW(obj, obj.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
+		txUIObject window = mLayout.getUIObject(obj);
+		LayoutTools.SCALE_WINDOW(window, window.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
 	}
 }

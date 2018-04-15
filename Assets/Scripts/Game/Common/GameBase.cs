@@ -10,6 +10,7 @@ public class GameBase : FrameBase
 	public static MahjongSystem mMahjongSystem;
 	public static HeadTextureManager mHeadTextureManager;
 	public static SocketManager mSocketNetManager;
+	public static LogSystem mLogSystem;
 	// 以下是用于快速访问的布局脚本
 	public static ScriptGlobalTouch mScriptGlobalTouch;
 	public static ScriptLogin mScriptLogin;
@@ -38,6 +39,7 @@ public class GameBase : FrameBase
 			mMahjongSystem = mGame.getSystem<MahjongSystem>();
 			mHeadTextureManager = mGame.getSystem<HeadTextureManager>();
 			mSocketNetManager = mGame.getSystem<SocketManager>();
+			mLogSystem = mGame.getSystem<LogSystem>();
 		}
 	}
 }

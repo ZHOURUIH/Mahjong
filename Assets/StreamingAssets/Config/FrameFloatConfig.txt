@@ -4,7 +4,7 @@
 // 变量命名应与代码中枚举命名相同
 
 // socket端口
-GDF_SOCKET_PORT = 60060
+GDF_SOCKET_PORT = 60777
 
 // 广播端口
 GDF_BROADCAST_PORT = 5000

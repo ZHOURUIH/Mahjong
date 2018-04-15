@@ -23,12 +23,13 @@ public class ScriptJoinRoomDialog : LayoutScript
 	}
 	public override void init()
 	{
-		mGlobalTouchSystem.registeBoxCollider(mJoinButton, onJoinRoom);
-		mGlobalTouchSystem.registeBoxCollider(mCancelButton, onCancel);
+		registeBoxCollider(mJoinButton, onJoinRoom);
+		registeBoxCollider(mCancelButton, onCancel);
 	}
 	public override void onReset()
 	{
-		;
+		LayoutTools.SCALE_WINDOW(mJoinButton, Vector2.one);
+		LayoutTools.SCALE_WINDOW(mCancelButton, Vector2.one);
 	}
 	public override void onShow(bool immediately, string param)
 	{
@@ -43,13 +44,13 @@ public class ScriptJoinRoomDialog : LayoutScript
 		;
 	}
 	//----------------------------------------------------------------------------------------------------------
-	protected void onJoinRoom(txUIObject go)
+	protected void onJoinRoom(GameObject go)
 	{
 		CSJoinRoom join = mSocketNetManager.createPacket<CSJoinRoom>();
 		join.mRoomID.mValue = StringUtility.stringToInt(mRoomIDEditbox.getText());
 		mSocketNetManager.sendMessage(join);
 	}
-	protected void onCancel(txUIObject go)
+	protected void onCancel(GameObject go)
 	{
 		LayoutTools.HIDE_LAYOUT(mType);
 	}

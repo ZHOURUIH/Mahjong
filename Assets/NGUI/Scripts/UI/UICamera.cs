@@ -1603,11 +1603,12 @@ public class UICamera : MonoBehaviour
 #if (UNITY_IPHONE || UNITY_ANDROID || UNITY_WP8 || UNITY_WP_8_1 || UNITY_BLACKBERRY || UNITY_WINRT || UNITY_METRO)
 		currentScheme = ControlScheme.Touch;
 #else
-		if (Application.platform == RuntimePlatform.PS3 ||
-			Application.platform == RuntimePlatform.XBOX360)
-		{
-			currentScheme = ControlScheme.Controller;
-		}
+		// 不再支持
+		//if (Application.platform == RuntimePlatform.PS3 ||
+		//	Application.platform == RuntimePlatform.XBOX360)
+		//{
+		//	currentScheme = ControlScheme.Controller;
+		//}
 #endif
 
 		// Save the starting mouse position

@@ -1618,11 +1618,11 @@ namespace RenderHeads.Media.AVProVideo
 #if UNITY_EDITOR
 		static MediaPlayer()
 		{
-			UnityEditor.EditorApplication.playmodeStateChanged -= OnUnityPlayModeChanged;
-			UnityEditor.EditorApplication.playmodeStateChanged += OnUnityPlayModeChanged;
+			UnityEditor.EditorApplication.playModeStateChanged -= OnUnityPlayModeChanged;
+			UnityEditor.EditorApplication.playModeStateChanged += OnUnityPlayModeChanged;
 		}
 
-		private static void OnUnityPlayModeChanged()
+		private static void OnUnityPlayModeChanged(UnityEditor.PlayModeStateChange action)
 		{
 			if (UnityEditor.EditorApplication.isPlaying)
 			{

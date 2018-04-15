@@ -15,6 +15,7 @@ public class Game : GameFramework
 		registeComponent<HeadTextureManager>();
 		registeComponent<MahjongSystem>();
 		registeComponent<SocketManager>();
+		registeComponent<LogSystem>();
 	}
 	protected override void notifyBase()
 	{

@@ -60,7 +60,8 @@ public class GlobalTouchSystem : FrameComponent
 	protected SortedDictionary<UIDepth, List<txUIObject>> mButtonOrderList;	// 深度由大到小的列表
 	protected Vector3 mLastMousePosition;
 	protected txUIObject mHoverButton;
-	protected bool mUseHover = true;		// 是否判断鼠标悬停在某个窗口
+	protected bool mUseHover = true;        // 是否判断鼠标悬停在某个窗口
+	protected bool mUseGlobalTouch = true;	// 是否使用全局触摸检测来进行界面的输入检测
 	public GlobalTouchSystem(string name)
 		:base(name)
 	{
@@ -98,7 +99,7 @@ public class GlobalTouchSystem : FrameComponent
 	}
 	public override void update(float elapsedTime)
 	{
-		if (!mUseHover)
+		if (!mUseHover || !mUseGlobalTouch)
 		{
 			return;
 		}
@@ -133,24 +134,41 @@ public class GlobalTouchSystem : FrameComponent
 			mLastMousePosition = curMousePosition;
 		}
 	}
+	public void registeBoxCollider(txUIObject button, UIEventListener.VoidDelegate clickCallback = null,
+		UIEventListener.BoolDelegate pressCallback = null, UIEventListener.BoolDelegate hoverCallback = null)
+	{
+		button.setClickCallback(clickCallback);
+		button.setPressCallback(pressCallback);
+		button.setHoverCallback(hoverCallback);
+	}
 	// 注册碰撞器,只有注册了的碰撞器才会进行检测
 	public void registeBoxCollider(txUIObject button, BoxColliderClickCallback clickCallback = null, 
-		BoxColliderHoverCallback hoverCallback = null, BoxColliderPressCallback pressCallback = null)
+		BoxColliderPressCallback pressCallback = null, BoxColliderHoverCallback hoverCallback = null)
 	{
-		if (!mButtonCallbackList.ContainsKey(button))
+		if(mUseGlobalTouch)
 		{
-			ColliderCallBack colliderCallback = new ColliderCallBack();
-			colliderCallback.mButton = button;
-			colliderCallback.mClickCallback = clickCallback;
-			colliderCallback.mHoverCallback = hoverCallback;
-			colliderCallback.mPressCallback = pressCallback;
-			mButtonCallbackList.Add(button, colliderCallback);
-			UIDepth depth = new UIDepth(button.mLayout.getRenderOrder(), button.getDepth());
-			if(!mButtonOrderList.ContainsKey(depth))
+			if (!mButtonCallbackList.ContainsKey(button))
 			{
-				mButtonOrderList.Add(depth, new List<txUIObject>());
+				ColliderCallBack colliderCallback = new ColliderCallBack();
+				colliderCallback.mButton = button;
+				colliderCallback.mClickCallback = clickCallback;
+				colliderCallback.mHoverCallback = hoverCallback;
+				colliderCallback.mPressCallback = pressCallback;
+				mButtonCallbackList.Add(button, colliderCallback);
+				UIDepth depth = new UIDepth(button.mLayout.getRenderOrder(), button.getDepth());
+				if (!mButtonOrderList.ContainsKey(depth))
+				{
+					mButtonOrderList.Add(depth, new List<txUIObject>());
+				}
+				mButtonOrderList[depth].Add(button);
 			}
-			mButtonOrderList[depth].Add(button);
+		}
+		// 如果不使用
+		else
+		{
+			UnityUtility.logError("Not Active Global Touch! use public void registeBoxCollider(txUIObject button, " + 
+				"UIEventListener.VoidDelegate clickCallback = null,UIEventListener.BoolDelegate pressCallback = null, " + 
+				"UIEventListener.BoolDelegate hoverCallback = null) instead");
 		}
 	}
 	// 注销碰撞器

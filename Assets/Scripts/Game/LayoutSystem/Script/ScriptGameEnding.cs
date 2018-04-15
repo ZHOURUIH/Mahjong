@@ -149,11 +149,13 @@ public class ScriptGameEnding : LayoutScript
 		{
 			mMultipleList[i].init();
 		}
-		mGlobalTouchSystem.registeBoxCollider(mContinueButton, onContinueClick, null, onButtonPress);
-		mGlobalTouchSystem.registeBoxCollider(mReturnButton, onReturnClick, null, onButtonPress);
+		registeBoxCollider(mContinueButton, onContinueClick, onButtonPress);
+		registeBoxCollider(mReturnButton, onReturnClick, onButtonPress);
 	}
 	public override void onReset()
 	{
+		LayoutTools.SCALE_WINDOW(mContinueButton, Vector2.one);
+		LayoutTools.SCALE_WINDOW(mReturnButton, Vector2.one);
 		int charCount = mEndingCharacterList.Count;
 		for (int i = 0; i < charCount; ++i)
 		{
@@ -221,16 +223,17 @@ public class ScriptGameEnding : LayoutScript
 		}
 	}
 	//---------------------------------------------------------------------------------
-	protected void onContinueClick(txUIObject go)
+	protected void onContinueClick(GameObject go)
 	{
 		mSocketNetManager.sendMessage<CSContinueGame>();
 	}
-	protected void onReturnClick(txUIObject go)
+	protected void onReturnClick(GameObject go)
 	{
 		mSocketNetManager.sendMessage<CSBackToMahjongHall>();
 	}
-	protected void onButtonPress(txUIObject go, bool press)
+	protected void onButtonPress(GameObject go, bool press)
 	{
-		LayoutTools.SCALE_WINDOW(go, go.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
+		txUIObject obj = mLayout.getUIObject(go);
+		LayoutTools.SCALE_WINDOW(obj, obj.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
 	}
 }

@@ -29,12 +29,13 @@ public class ScriptRegister : LayoutScript
 	}
 	public override void init()
 	{
-		mGlobalTouchSystem.registeBoxCollider(mRegisterButton, onRegisterClick, null, onButtonPress);
-		mGlobalTouchSystem.registeBoxCollider(mCancelButton, onCancelClick, null, onButtonPress);
+		registeBoxCollider(mRegisterButton, onRegisterClick, onButtonPress);
+		registeBoxCollider(mCancelButton, onCancelClick, onButtonPress);
 	}
 	public override void onReset()
 	{
-		;
+		LayoutTools.SCALE_WINDOW(mRegisterButton, Vector2.one);
+		LayoutTools.SCALE_WINDOW(mCancelButton, Vector2.one);
 	}
 	public override void onShow(bool immediately, string param)
 	{
@@ -49,7 +50,7 @@ public class ScriptRegister : LayoutScript
 		;
 	}
 	//-------------------------------------------------------------------------------------------------------
-	protected void onRegisterClick(txUIObject button)
+	protected void onRegisterClick(GameObject button)
 	{
 		// 发送注册消息
 		CSRegister register = mSocketNetManager.createPacket<CSRegister>();
@@ -59,15 +60,16 @@ public class ScriptRegister : LayoutScript
 		register.mHead.mValue = 0;
 		mSocketNetManager.sendMessage(register);
 	}
-	protected void onCancelClick(txUIObject button)
+	protected void onCancelClick(GameObject button)
 	{
 		// 取消时返回登录流程
 		CommandGameSceneChangeProcedure cmd = newCmd(out cmd);
 		cmd.mProcedure = PROCEDURE_TYPE.PT_START_LOGIN;
 		pushCommand(cmd, mGameSceneManager.getCurScene());
 	}
-	protected void onButtonPress(txUIObject button, bool press)
+	protected void onButtonPress(GameObject button, bool press)
 	{
-		LayoutTools.SCALE_WINDOW(button, button.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
+		txUIObject obj = mLayout.getUIObject(button);
+		LayoutTools.SCALE_WINDOW(obj, obj.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
 	}
 }

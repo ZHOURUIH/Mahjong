@@ -29,13 +29,15 @@ public class ScriptLogin : LayoutScript
 	}
 	public override void init()
 	{
-		mGlobalTouchSystem.registeBoxCollider(mLoginButton, onLoginClick, null, onButtonPress);
-		mGlobalTouchSystem.registeBoxCollider(mRegisterButton, onRegisterClick, null, onButtonPress);
-		mGlobalTouchSystem.registeBoxCollider(mQuitButton, onQuitClick, null, onButtonPress);
+		registeBoxCollider(mLoginButton, onLoginClick, onButtonPress);
+		registeBoxCollider(mRegisterButton, onRegisterClick, onButtonPress);
+		registeBoxCollider(mQuitButton, onQuitClick, onButtonPress);
 	}
 	public override void onReset()
 	{
-		;
+		LayoutTools.SCALE_WINDOW(mLoginButton, Vector2.one);
+		LayoutTools.SCALE_WINDOW(mRegisterButton, Vector2.one);
+		LayoutTools.SCALE_WINDOW(mQuitButton, Vector2.one);
 	}
 	public override void onShow(bool immediately, string param)
 	{
@@ -50,24 +52,25 @@ public class ScriptLogin : LayoutScript
 		;
 	}
 	//---------------------------------------------------------------------------------------------------------------------
-	protected void onLoginClick(txUIObject obj)
+	protected void onLoginClick(GameObject obj)
 	{
 		CSLogin login = mSocketNetManager.createPacket<CSLogin>();
 		login.setAccount(mAccountEdit.getText());
 		login.setPassword(mPasswordEdit.getText());
 		mSocketNetManager.sendMessage(login);
 	}
-	protected void onButtonPress(txUIObject button, bool press)
+	protected void onButtonPress(GameObject button, bool press)
 	{
-		LayoutTools.SCALE_WINDOW(button, button.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
+		txUIObject obj = mLayout.getUIObject(button);
+		LayoutTools.SCALE_WINDOW(obj, obj.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
 	}
-	protected void onRegisterClick(txUIObject button)
+	protected void onRegisterClick(GameObject button)
 	{
 		CommandGameSceneChangeProcedure cmd = newCmd(out cmd);
 		cmd.mProcedure = PROCEDURE_TYPE.PT_START_REGISTER;
 		pushCommand(cmd, mGameSceneManager.getCurScene());
 	}
-	protected void onQuitClick(txUIObject button)
+	protected void onQuitClick(GameObject button)
 	{
 		mGameFramework.stop();
 	}

@@ -29,12 +29,15 @@ public class ScriptMahjongFrame : LayoutScript
 	}
 	public override void init()
 	{
-		mGlobalTouchSystem.registeBoxCollider(mLeaveRoomButton, onLeaveRoomClick, null, onButtonPress);
-		mGlobalTouchSystem.registeBoxCollider(mReadyButton, onReadyClick, null, onButtonPress);
-		mGlobalTouchSystem.registeBoxCollider(mCancelReadyButton, onCancelReadyClick, null, onButtonPress);
+		registeBoxCollider(mLeaveRoomButton, onLeaveRoomClick, onButtonPress);
+		registeBoxCollider(mReadyButton, onReadyClick, onButtonPress);
+		registeBoxCollider(mCancelReadyButton, onCancelReadyClick, onButtonPress);
 	}
 	public override void onReset()
 	{
+		LayoutTools.SCALE_WINDOW(mLeaveRoomButton, Vector2.one);
+		LayoutTools.SCALE_WINDOW(mReadyButton, Vector2.one);
+		LayoutTools.SCALE_WINDOW(mCancelReadyButton, Vector2.one);
 		notifyReady(false);
 	}
 	public override void onShow(bool immediately, string param)
@@ -68,26 +71,27 @@ public class ScriptMahjongFrame : LayoutScript
 		mInfo.setLabel(info);
 	}
 	//-----------------------------------------------------------------------------------
-	protected void onReadyClick(txUIObject go)
+	protected void onReadyClick(GameObject go)
 	{
 		// 发送消息通知服务器玩家已经准备
 		CSReady packetReady = mSocketNetManager.createPacket<CSReady>();
 		packetReady.mReady.mValue = true;
 		mSocketNetManager.sendMessage(packetReady);
 	}
-	protected void onCancelReadyClick(txUIObject go)
+	protected void onCancelReadyClick(GameObject go)
 	{
 		// 发送消息通知服务器玩家已经准备
 		CSReady packetReady = mSocketNetManager.createPacket<CSReady>();
 		packetReady.mReady.mValue = false;
 		mSocketNetManager.sendMessage(packetReady);
 	}
-	protected void onLeaveRoomClick(txUIObject go)
+	protected void onLeaveRoomClick(GameObject go)
 	{
 		mSocketNetManager.sendMessage<CSLeaveRoom>();
 	}
-	protected void onButtonPress(txUIObject go, bool press)
+	protected void onButtonPress(GameObject go, bool press)
 	{
-		LayoutTools.SCALE_WINDOW(go, go.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
+		txUIObject obj = mLayout.getUIObject(go);
+		LayoutTools.SCALE_WINDOW(obj, obj.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
 	}
 }

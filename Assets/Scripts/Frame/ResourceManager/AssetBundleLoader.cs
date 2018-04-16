@@ -32,6 +32,7 @@ public class AssetBundleLoader : GameBase
 			registeSuffix(typeof(Shader), ".shader");
 			registeSuffix(typeof(AudioClip), ".wav");
 			registeSuffix(typeof(AudioClip), ".mp3");
+			registeSuffix(typeof(TextAsset), ".txt");
 			registeSuffix(typeof(RuntimeAnimatorController), ".controller");
 		}
 	}

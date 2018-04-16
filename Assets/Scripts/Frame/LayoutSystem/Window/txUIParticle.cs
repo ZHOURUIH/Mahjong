@@ -26,6 +26,7 @@ public class txUIParticle : txUIObject
 		ParticleSystem.MainModule main = mParticle.main;
 		main.loop = loop;
 #endif
+
 	}
 	public void play()
 	{

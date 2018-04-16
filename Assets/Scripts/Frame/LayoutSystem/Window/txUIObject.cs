@@ -113,8 +113,8 @@ public class txUIObject : ComponentOwner
 		MathUtility.adjustRadian180(ref vector3.z);
 		return vector3;
 	}
-	public Vector3 getPosition() { return mTransform.localPosition; }
-	public Vector3 getWorldPosition() { return mTransform.position; }
+	public virtual Vector3 getPosition() { return mTransform.localPosition; }
+	public virtual Vector3 getWorldPosition() { return mTransform.position; }
 	public Vector2 getScale() { return new Vector2(mTransform.localScale.x, mTransform.localScale.y); }
 	public Vector2 getWorldScale()
 	{
@@ -156,10 +156,10 @@ public class txUIObject : ComponentOwner
 	}
 	public void setActive(bool active) { mObject.SetActive(active); }
 	public void setLocalScale(Vector2 scale) { mTransform.localScale = new Vector3(scale.x, scale.y, 1.0f); }
-	public void setLocalPosition(Vector3 pos) { mTransform.localPosition = pos; }
+	public virtual void setLocalPosition(Vector3 pos) { mTransform.localPosition = pos; }
 	public void setLocalRotation(Vector3 rot) { mTransform.localEulerAngles = rot; }
 	public void setWorldRotation(Vector3 rot) { mTransform.eulerAngles = rot; }
-	public void setWorldPosition(Vector3 pos) { mTransform.position = pos; }
+	public virtual void setWorldPosition(Vector3 pos) { mTransform.position = pos; }
 	public virtual void setAlpha(float alpha) { }
 	public virtual void setFillPercent(float percent) { }
 	public void setPassRay(bool pass) { mPassRay = pass; }

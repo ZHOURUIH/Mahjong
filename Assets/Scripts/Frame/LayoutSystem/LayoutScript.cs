@@ -49,15 +49,17 @@ public abstract class LayoutScript : CommandReceiver
 	{
 		findWindow(null, mRoot.mObject, ref mAllWindowList);
 	}
+	// 用于接收GlobalTouchSystem处理的输入事件
 	public void registeBoxCollider(txUIObject obj, BoxColliderClickCallback clickCallback = null,
 		BoxColliderHoverCallback hoverCallback = null, BoxColliderPressCallback pressCallback = null)
 	{
 		mGlobalTouchSystem.registeBoxCollider(obj, clickCallback, pressCallback, hoverCallback);
 	}
-	public void registeBoxCollider(txUIObject obj, UIEventListener.VoidDelegate clickCallback = null,
+	// 用于接收NGUI处理的输入事件
+	public void registeBoxColliderNGUI(txUIObject obj, UIEventListener.VoidDelegate clickCallback,
 		UIEventListener.BoolDelegate pressCallback = null, UIEventListener.BoolDelegate hoverCallback = null)
 	{
-		mGlobalTouchSystem.registeBoxCollider(obj, clickCallback, pressCallback, hoverCallback);
+		mGlobalTouchSystem.registeBoxColliderNGUI(obj, clickCallback, pressCallback, hoverCallback);
 	}
 	public void unregisteBoxCollider(txUIObject obj)
 	{

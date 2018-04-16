@@ -78,6 +78,7 @@ public class GlobalTouchSystem : FrameComponent
 		mButtonOrderList.Clear();
 		base.destroy();
 	}
+	public void setUseGlobalTouch(bool use) { mUseGlobalTouch = use; }
 	public Vector3 getCurMousePosition()
 	{
 		return Input.mousePosition;
@@ -134,7 +135,8 @@ public class GlobalTouchSystem : FrameComponent
 			mLastMousePosition = curMousePosition;
 		}
 	}
-	public void registeBoxCollider(txUIObject button, UIEventListener.VoidDelegate clickCallback = null,
+	// 用于接收NGUI处理的输入事件,不经过GlobalTouchSystem
+	public void registeBoxColliderNGUI(txUIObject button, UIEventListener.VoidDelegate clickCallback,
 		UIEventListener.BoolDelegate pressCallback = null, UIEventListener.BoolDelegate hoverCallback = null)
 	{
 		button.setClickCallback(clickCallback);

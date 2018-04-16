@@ -479,7 +479,7 @@ public class StringUtility
 	}
 	public static string checkIntString(string str, string valid = "")
 	{
-		return checkString(str, "0123456789" + valid);
+		return checkString(str, "-0123456789" + valid);
 	}
 	public static string charToHex(byte b)
 	{

@@ -346,10 +346,10 @@ public class BinaryUtility
 		}
 		return ret;
 	}
-	public static string bytesToHEXString(byte[] byteList, bool addSpace = true, bool upperOrLower = true)
+	public static string bytesToHEXString(byte[] byteList, bool addSpace = true, bool upperOrLower = true, int count = 0)
 	{
 		string byteString = "";
-		int byteCount = byteList.Length;
+		int byteCount = count > 0 ? count : byteList.Length;
 		for (int i = 0; i < byteCount; ++i)
 		{
 			if (addSpace)
@@ -410,21 +410,21 @@ public class BinaryUtility
 	{
 		memcpy(dest, src, destOffset, 0, src.Length);
 	}
-	public static void memmove<T>(T[] data, int start0, int start1, int count)
+	public static void memmove<T>(ref T[] data, int dest, int src, int count)
 	{
-		if (start1 > start0 && (start0 + count > start1))
+		// 如果两个内存区有相交的部分,并且源地址在前面,则从后面往前拷贝字节
+		if (src < dest && src + count > dest)
 		{
-			// 如果源地址与目标地址有重叠,并且源地址在前面,则从后面往前拷贝字节
 			for (int i = 0; i < count; ++i)
 			{
-				data[count - i - 1 + start0] = data[count - i - 1 + start1];
+				data[count - i - 1 + dest] = data[count - i - 1 + src];
 			}
 		}
 		else
 		{
 			for (int i = 0; i < count; ++i)
 			{
-				data[i + start0] = data[i + start1];
+				data[i + dest] = data[i + src];
 			}
 		}
 	}

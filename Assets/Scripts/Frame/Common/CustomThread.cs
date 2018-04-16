@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 
-public delegate void CustomThreadCallback();
+// 返回值表示是否继续运行该线程
+public delegate bool CustomThreadCallback();
 
 public class CustomThread
 {
@@ -15,6 +16,7 @@ public class CustomThread
 	protected Thread mThread;
 	protected ThreadTimeLock mTimeLock;
 	protected string mName;
+	protected bool mForceAbortThread;	// 在终止线程时是否强制终止,false则在终止线程时等待线程执行结束再终止,true则表示终止线程时强制终止
 	public CustomThread(string name)
 	{
 		mName = name;
@@ -24,14 +26,20 @@ public class CustomThread
 		mThread = null;
 		mTimeLock = null;
 		mPause = false;
+		mForceAbortThread = false;
 	}
 	public void destroy()
 	{
 		stop();
 	}
+	public void setForceAbortThread(bool forceAbort)
+	{
+		mForceAbortThread = forceAbort;
+	}
 	public void start(CustomThreadCallback callback, int frameTimeMS = 15)
 	{
-		if(mThread != null)
+		UnityUtility.logInfo("准备启动线程 : " + mName, LOG_LEVEL.LL_FORCE);
+		if (mThread != null)
 		{
 			return;
 		}
@@ -40,6 +48,7 @@ public class CustomThread
 		mCallback = callback;
 		mThread = new Thread(run);
 		mThread.Start();
+		UnityUtility.logInfo("线程启动成功 : " + mName, LOG_LEVEL.LL_FORCE);
 	}
 	public void pause(bool isPause)
 	{
@@ -47,8 +56,9 @@ public class CustomThread
 	}
 	public void stop()
 	{
+		UnityUtility.logInfo("准备退出线程 : " + mName, LOG_LEVEL.LL_FORCE);
 		mRunning = false;
-		while (!mFinish) { }
+		while (!mForceAbortThread && !mFinish) { }
 		if (mThread != null)
 		{
 			mThread.Abort();
@@ -57,6 +67,7 @@ public class CustomThread
 		mCallback = null;
 		mTimeLock = null;
 		mPause = false;
+		UnityUtility.logInfo("线程退出完成! 线程名 : " + mName, LOG_LEVEL.LL_FORCE);
 	}
 	protected void run()
 	{
@@ -70,7 +81,10 @@ public class CustomThread
 				{
 					continue;
 				}
-				mCallback();
+				if(!mCallback())
+				{
+					break;
+				}
 			}
 			catch (Exception e)
 			{
@@ -78,6 +92,5 @@ public class CustomThread
 			}
 		}
 		mFinish = true;
-		UnityUtility.logInfo("线程退出完成! 线程名 : " + mName, LOG_LEVEL.LL_FORCE);
 	}
 };

@@ -72,7 +72,7 @@ public class RecorderParser
 		// 将已有的数据移到缓冲区头部,然后将新的数据加入尾部
 		if (mAllPCMCount > 0)
 		{
-			BinaryUtility.memmove(mAllPCMData, 0, dataSize, mRecorderDataBlockSize - dataSize);
+			BinaryUtility.memmove(ref mAllPCMData, 0, dataSize, mRecorderDataBlockSize - dataSize);
 			BinaryUtility.memcpy(mAllPCMData, data, mRecorderDataBlockSize - dataSize, 0, dataSize);
 		}
 		else

@@ -41,9 +41,9 @@ public class SceneSystem : FrameComponent
 		}
 		mSceneList[name].init();
 	}
-	public void registeScene<T>(string name) where T : SceneInstance
+	public void registeScene(Type type, string name)
 	{
-		mSceneRegisteList.Add(name, typeof(T));
+		mSceneRegisteList.Add(name, type);
 	}
 	public T getScene<T>(string name) where T : SceneInstance
 	{
@@ -90,7 +90,11 @@ public class SceneSystem : FrameComponent
 			return;
 		}
 		mSceneList[name].destroy();
+#if UNITY_5_3_5
+		SceneManager.UnloadScene(name);
+#else
 		SceneManager.UnloadSceneAsync(name);
+#endif
 		mSceneList.Remove(name);
 	}
 	// 卸载除了dontUnloadSceneName以外的其他场景,初始默认场景除外

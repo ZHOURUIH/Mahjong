@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections.Generic;
+#if !UNITY_5_3_5
+using UnityEngine.Profiling;
+#endif
 
 /// <summary>
 /// desc: 程序脚本的启动
@@ -76,9 +79,9 @@ public class GameFramework : MonoBehaviour
 		int count = mFrameComponentList.Count;
 		for (int i = 0; i < count; ++i)
 		{
-			UnityEngine.Profiling.Profiler.BeginSample(mFrameComponentList[i].getName());
+			Profiler.BeginSample(mFrameComponentList[i].getName());
 			mFrameComponentList[i].update(elapsedTime);
-			UnityEngine.Profiling.Profiler.EndSample();
+			Profiler.EndSample();
 		}
 	}
 	public virtual void fixedUpdate(float elapsedTime)

@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class CameraLinkerSmoothFollow : CameraLinker
 {
+	protected float mSpeedRecover = 0.5f;
+	protected float mNormalSpeed = 5.0f;
 	protected float mFollowPositionSpeed = 5.0f;
 	protected bool mIgnoreY = false;      // 是否忽略Y轴的变化,当Y轴变化时摄像机在Y轴上的位置不会根据时间改变
 	protected int mCheckGroundLayer;
@@ -20,6 +22,10 @@ public class CameraLinkerSmoothFollow : CameraLinker
 		if (mLinkObject == null)
 		{
 			return;
+		}
+		if(!MathUtility.isFloatEqual(mNormalSpeed, mFollowPositionSpeed))
+		{
+			mFollowPositionSpeed = MathUtility.lerp(mFollowPositionSpeed, mNormalSpeed, mSpeedRecover * elapsedTime);
 		}
 		Vector3 targetPos = mLinkObject.getWorldPosition();   // 获得目标当前坐标
 		// 摄像机的目标位置

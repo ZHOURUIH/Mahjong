@@ -429,6 +429,21 @@ public class StringUtility
 		string sub2 = str.Substring(end, str.Length - end);
 		return sub1 + reStr + sub2;
 	}
+	public static string strReplaceAll(string str, string key, string newWords)
+	{
+		int startPos = 0;
+		while (true)
+		{
+			INT pos = new INT();
+			if (!findSubstr(str, key, false, pos, startPos))
+			{
+				break;
+			}
+			str = strReplace(str, pos.mValue, pos.mValue + key.Length, newWords);
+			startPos = pos.mValue + newWords.Length;
+		}
+		return str;
+	}
 	public static float stringToFloat(string str)
 	{
 		str = checkFloatString(str, "-");
@@ -522,5 +537,49 @@ public class StringUtility
 		}
 		string str = new string(byteData);
 		return str;
+	}
+	public static bool findSubstr(string res, string dst, bool sensitive, INT pos = null, int startPos = 0, bool firstOrLast = true)
+	{
+		// 如果不区分大小写
+		if (!sensitive)
+		{
+			// 全转换为小写
+			res = res.ToLower();
+			dst = dst.ToLower();
+		}
+		int posFind = -1;
+		int subLen = dst.Length;
+		int sourceLength = res.Length;
+		int searchLength = sourceLength - subLen;
+		int start = firstOrLast ? startPos : searchLength;
+		int end = firstOrLast ? searchLength : startPos;
+		int delta = firstOrLast ? 1 : -1;
+		for (int i = start; i != end; i += delta)
+		{
+			if (Math.Max(start, end) - i < subLen)
+			{
+				continue;
+			}
+			int j = 0;
+			for (j = 0; j < subLen; ++j)
+			{
+				if (i + j >= 0 && i + j < sourceLength)
+				{
+					if (res[i + j] != dst[j])
+					{
+						break;
+					}
+				}
+			}
+			if (j == subLen)
+			{
+				posFind = i;
+			}
+		}
+		if (pos != null)
+		{
+			pos.mValue = posFind;
+		}
+		return posFind != -1;
 	}
 }

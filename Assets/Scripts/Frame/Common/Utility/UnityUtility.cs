@@ -186,6 +186,15 @@ public class UnityUtility : FrameComponent
 		obj.name = name;
 		return obj;
 	}
+	public static GameObject createObject(string name, GameObject parent = null)
+	{
+		GameObject obj = new GameObject(name);
+		if(parent != null)
+		{
+			obj.GetComponent<Transform>().SetParent(parent.GetComponent<Transform>());
+		}
+		return obj;
+	}
 	// 根据预设名实例化
 	public static GameObject instantiatePrefab(GameObject parent, string prefabName, string name, Vector3 scale, Vector3 rot, Vector3 pos)
 	{

@@ -13,7 +13,7 @@ public class FrameConfig : ConfigBase
 	{ }
 	public override void writeConfig()
 	{
-		FileUtility.writeFile(CommonDefine.F_CONFIG_PATH + "FrameFloatConfig.txt", generateFloatFile());
+		FileUtility.writeTxtFile(CommonDefine.F_CONFIG_PATH + "FrameFloatConfig.txt", generateFloatFile());
 	}
 	//-----------------------------------------------------------------------------------------------------------------------
 	protected override void addFloat()

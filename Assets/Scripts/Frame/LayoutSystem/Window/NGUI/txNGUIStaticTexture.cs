@@ -8,7 +8,6 @@ public class txNGUIStaticTexture : txUIObject
 {
 	protected UITexture mTexture;
 	protected WindowShader mWindowShader;
-	protected Vector3 mOriginalPosition;
 	public txNGUIStaticTexture()
 	{
 		mType = UI_TYPE.UT_NGUI_STATIC_TEXTURE;
@@ -27,13 +26,12 @@ public class txNGUIStaticTexture : txUIObject
 		{
 			setMaterial(getMaterialName(), true);
 		}
-		mOriginalPosition = mTransform.localPosition;
 	}
-	public void setWindowShader<T>() where T : WindowShader, new()
+	public virtual void setWindowShader<T>() where T : WindowShader, new()
 	{
 		mWindowShader = new T();
 	}
-	public T getWindowShader<T>() where T : WindowShader
+	public virtual T getWindowShader<T>() where T : WindowShader
 	{
 		return mWindowShader as T;
 	}
@@ -43,25 +41,13 @@ public class txNGUIStaticTexture : txUIObject
 		UnityUtility.destroyGameObject(mTexture.material);
 		base.destroy();
 	}
-	public void setTexture(Texture tex)
-	{
-		setTexture(tex, Vector2.zero, Vector2.zero);
-	}
-	public void setTexture(Texture tex, Vector2 windowSize, Vector2 windowPosOffset)
+	public virtual void setTexture(Texture tex)
 	{
 		if (mTexture == null)
 		{
 			return;
 		}
 		mTexture.mainTexture = tex;
-		if (!MathUtility.isVectorZero(windowSize))
-		{
-			setWindowSize(windowSize);
-		}
-		if (!MathUtility.isVectorZero(windowPosOffset))
-		{
-			mTransform.localPosition = mOriginalPosition + new Vector3(windowPosOffset.x, windowPosOffset.y, 0.0f);
-		}
 	}
 	public Texture getTexture()
 	{
@@ -198,18 +184,6 @@ public class txNGUIStaticTexture : txUIObject
 		}
 		mTexture.depth = depth;
 		base.setDepth(depth);
-	}
-	public override Vector3 getPosition(){return mOriginalPosition;}
-	public override Vector3 getWorldPosition() { return mTransform.parent.localToWorldMatrix.MultiplyPoint(mOriginalPosition); }
-	public override void setLocalPosition(Vector3 pos)
-	{
-		base.setLocalPosition(pos);
-		mOriginalPosition = pos;
-	}
-	public override void setWorldPosition(Vector3 pos)
-	{
-		base.setWorldPosition(pos);
-		mOriginalPosition = mTransform.parent.worldToLocalMatrix.MultiplyPoint(mTransform.localPosition);
 	}
 	//---------------------------------------------------------------------------------------------------
 	protected void onWidgetRender(Material mat)

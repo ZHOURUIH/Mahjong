@@ -73,8 +73,9 @@ public class PluginUtility : FrameComponent
 	}
 	public static LitJson.JsonData httpWebRequestPost(string url, string param, OnHttpWebRequestCallback callback, object callbakcUserData = null)
 	{
+		byte[] byteArray;
 		// 转换输入参数的编码类型，获取byte[]数组 
-		byte[] byteArray = BinaryUtility.stringToBytes("gamedata=" + param, Encoding.UTF8);
+		byteArray = BinaryUtility.stringToBytes(param, Encoding.UTF8);
 		// 初始化新的webRequst
 		// 1． 创建httpWebRequest对象
 		HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(new Uri(url));
@@ -221,6 +222,11 @@ public class PluginUtility : FrameComponent
 			if (response.StatusCode != HttpStatusCode.OK)
 			{
 				UnityUtility.logInfo("接受超时");
+				//http超时
+				if(mFrameLogSystem != null)
+				{
+					mFrameLogSystem.logHttpOverTime("Http接收超时");
+				}
 			}
 			Stream steam = response.GetResponseStream();
 			StreamReader reader = new StreamReader(steam, Encoding.UTF8);

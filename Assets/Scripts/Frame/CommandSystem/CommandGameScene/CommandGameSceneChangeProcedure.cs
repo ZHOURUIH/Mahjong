@@ -23,7 +23,10 @@ public class CommandGameSceneChangeProcedure : Command
 		else
 		{
 			gameScene.changeProcedure(mProcedure, mIntent);
-			mLogSystem.logProcedure("进入流程 : " + mProcedure.ToString());
+			if(mFrameLogSystem != null)
+			{
+				mFrameLogSystem.logProcedure("进入流程 : " + mProcedure.ToString());
+			}
 		}
 	}
 	public override string showDebugInfo()

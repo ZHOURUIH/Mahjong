@@ -23,6 +23,7 @@ public class FrameBase
 	public static ObjectManager				mObjectManager			= null;
 	public static InputManager				mInputManager			= null;
 	public static SceneSystem				mSceneSystem			= null;
+	public static IFrameLogSystem			mFrameLogSystem			= null;
 	public virtual void notifyConstructDone()
 	{
 		if (mGameFramework == null)

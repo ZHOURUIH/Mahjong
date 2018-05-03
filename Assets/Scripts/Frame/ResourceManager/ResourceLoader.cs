@@ -27,7 +27,7 @@ public class ResourceLoader : GameBase
 	public List<string> getFileList(string path)
 	{
 		List<string> fileList = new List<string>();
-		FileUtility.findFiles(CommonDefine.RESOURCES + "/" + path, ref fileList, null);
+		FileUtility.findFiles(CommonDefine.RESOURCES + "/" + path, ref fileList);
 		// 去除meta文件
 		List<string> newFileList = new List<string>();
 		int fileCount = fileList.Count;
@@ -161,7 +161,7 @@ public class ResourceLoader : GameBase
 	{
 		// 查找文件夹
 		List<string> fileList = new List<string>();
-		FileUtility.findFiles(path, ref fileList, null);
+		FileUtility.findFiles(path, ref fileList);
 		int fileCount = fileList.Count;
 		List<UnityEngine.Object> resList = new List<UnityEngine.Object>();
 		for (int i = 0; i < fileCount; ++i)
@@ -170,9 +170,9 @@ public class ResourceLoader : GameBase
 			{
 				continue;
 			}
-			ResourceRequest assetRequest = Resources.LoadAsync(path + "/" + fileList[i]);
+			ResourceRequest assetRequest = Resources.LoadAsync(fileList[i]);
 			yield return assetRequest;
-			mLoadedPath[path].Add(path + "/" + fileList[i], assetRequest.asset);
+			mLoadedPath[path].Add(fileList[i], assetRequest.asset);
 		}
 		callback(resList);
 	}

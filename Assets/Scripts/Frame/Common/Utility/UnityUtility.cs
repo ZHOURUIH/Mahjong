@@ -59,6 +59,11 @@ public class UnityUtility : FrameComponent
 			mShowMessageBox = false;
 		}
 		UnityEngine.Debug.LogError("error : " + info);
+		// 游戏中的错误日志
+		if (mFrameLogSystem != null)
+		{
+			mFrameLogSystem.logGameError(info);
+		}	
 	}
 	// force表示是否强制输出日志
 	public static void logInfo(string info, LOG_LEVEL level = LOG_LEVEL.LL_NORMAL)

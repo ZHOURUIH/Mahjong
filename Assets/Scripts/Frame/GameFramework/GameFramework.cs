@@ -18,6 +18,7 @@ public class GameFramework : MonoBehaviour
 	protected List<FrameComponent>	mFrameComponentList;				// 存储框架组件,用于初始化,更新,销毁
 	protected GameObject			mGameFrameObject;
 	protected bool					mPauseFrame;
+	protected bool					mEnableKeyboard;
 	public void Start()
 	{
 		if (instance != null)
@@ -141,6 +142,7 @@ public class GameFramework : MonoBehaviour
 	public void setPasueFrame(bool value) { mPauseFrame = value; }
 	public bool getPasueFrame() { return mPauseFrame; }
 	public GameObject getGameFrameObject() { return mGameFrameObject; }
+	public bool getEnableKeyboard() { return mEnableKeyboard; }
 	//------------------------------------------------------------------------------------------------------
 	protected virtual void notifyBase()
 	{
@@ -178,6 +180,7 @@ public class GameFramework : MonoBehaviour
 		{
 			User32.SetWindowLong(User32.GetForegroundWindow(), -16, CommonDefine.WS_POPUP | CommonDefine.WS_VISIBLE);
 		}
+		mEnableKeyboard = (int)FrameBase.mFrameConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_ENABLE_KEYBOARD) > 0;
 	}
 	protected virtual void registe() { }
 	protected virtual void launch() { }
@@ -201,6 +204,7 @@ public class GameFramework : MonoBehaviour
 		registeComponent<LayoutSubPrefabManager>();
 		registeComponent<InputManager>();
 		registeComponent<SceneSystem>();
+		registeComponent<GamePluginManager>();
 	}
 	protected void registeComponent<T>() where T : FrameComponent
 	{

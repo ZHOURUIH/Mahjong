@@ -39,9 +39,7 @@ public class DataBase : FrameComponent
 		// 读取配置文件，获得需要加载的所有数据列表
 		// 遍历每一个文件名，加载相应的文件
 		List<string> fileList = new List<string>();
-		List<string> patterns = new List<string>();
-		patterns.Add(CommonDefine.DATA_SUFFIX);
-		FileUtility.findFiles(CommonDefine.A_GAME_DATA_FILE_PATH, ref fileList, patterns);
+		FileUtility.findFiles(CommonDefine.A_GAME_DATA_FILE_PATH, ref fileList, CommonDefine.DATA_SUFFIX);
 		int fileCount = fileList.Count;
 		for (int i = 0; i < fileCount; ++i)
 		{
@@ -62,7 +60,7 @@ public class DataBase : FrameComponent
 	public void loadData(string filePath, bool forceCover)
 	{
 		// 根据文件名查找工厂类型
-		string fileName = StringUtility.getFileNameNoSuffix(filePath);
+		string fileName = StringUtility.getFileNameNoSuffix(filePath, true);
 		DATA_TYPE type = getDataTypeByDataName(fileName);
 		if (type == DATA_TYPE.DT_MAX)
 		{
@@ -86,7 +84,7 @@ public class DataBase : FrameComponent
 		// 打开文件
 		int fileSize = 0;
 		byte[] fileBuffer = null;
-		FileUtility.openFile(CommonDefine.F_GAME_DATA_FILE_PATH + filePath, ref fileBuffer, ref fileSize);
+		FileUtility.openFile(filePath, ref fileBuffer, ref fileSize);
 
 		// 解析文件
 		List<Data> dataList = new List<Data>();

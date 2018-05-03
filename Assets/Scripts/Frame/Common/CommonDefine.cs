@@ -120,6 +120,7 @@ public class CommonDefine
 	public const string CUSTOM_SOUND = "CustomSound";
 	public const string DATA_BASE = "DataBase";
 	public const string MODEL = "Model";
+	public const string GAME_PLUGIN = "GamePlugin";
 	// 相对路径,相对于项目,以P_开头,表示Project
 	public const string P_ASSETS_PATH = ASSETS + "/";
 	public const string P_RESOURCE_PATH = P_ASSETS_PATH + RESOURCES + "/";
@@ -137,6 +138,7 @@ public class CommonDefine
 	public const string A_LAYOUT_PATH = A_RESOURCE_PATH + LAYOUT + "/";
 	public const string A_NGUI_SUB_PREFAB_PATH = A_LAYOUT_PATH + NGUI_SUB_PREFAB + "/";
 	public const string A_BUNDLE_NGUI_SUB_PREFAB_PATH = A_BUNDLE_LAYOU_PATH + NGUI_SUB_PREFAB + "/";
+	public const string A_GAME_PLUGIN = GAME_PLUGIN + "/";
 	// 相对路径,相对于Resources,R_开头,表示Resources
 	public const string R_SOUND_PATH = SOUND + "/";
 	public const string R_LAYOUT_PATH = LAYOUT + "/";

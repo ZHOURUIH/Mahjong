@@ -30,7 +30,10 @@ public class CommandGameScenePrepareChangeProcedure : Command
 		else
 		{
 			gameScene.prepareChangeProcedure(mProcedure, mPrepareTime, mIntent);
-			mLogSystem.logProcedure("准备进入流程 : " + mProcedure.ToString());
+			if(mFrameLogSystem != null)
+			{
+				mFrameLogSystem.logProcedure("准备进入流程 : " + mProcedure.ToString());
+			}
 		}
 	}
 	public override string showDebugInfo()

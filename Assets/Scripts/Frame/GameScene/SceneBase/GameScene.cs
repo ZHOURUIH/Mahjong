@@ -72,6 +72,10 @@ abstract public class GameScene : ComponentOwner
 	}
 	public virtual void keyProcess(float elapsedTime)
 	{
+		if(!mGameFramework.getEnableKeyboard())
+		{
+			return;
+		}
 		// 在准备退出当前流程时,不响应任何按键操作
 		if (mCurProcedure != null && !mCurProcedure.isPreparingExit())
 		{

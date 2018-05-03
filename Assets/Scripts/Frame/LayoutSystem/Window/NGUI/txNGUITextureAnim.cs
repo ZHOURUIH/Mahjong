@@ -41,6 +41,7 @@ public class txNGUITextureAnim : txNGUIStaticTexture
 	protected TextureAnimCallBack mPlayEndCallback = null;  // 一个序列播放完时的回调函数,只在非循环播放状态下有效
 	protected object mPlayEndUserData;
 	protected txNGUIStaticTexture mInstanceWindow;
+	protected bool mIsCulling = true;
 	public txNGUITextureAnim()
 	{
 		mType = UI_TYPE.UT_NGUI_TEXTURE_ANIM;
@@ -57,10 +58,16 @@ public class txNGUITextureAnim : txNGUIStaticTexture
 		{
 			instanceObj = UnityUtility.cloneObject(go, go.name + "_Instance");
 			instanceObj.transform.SetParent(go.transform);
+			BoxCollider boxCollider = instanceObj.transform.GetComponent<BoxCollider>();
+			if (boxCollider != null)
+			{
+				boxCollider.enabled = false;
+			}
 		}
 		mInstanceWindow.init(layout, instanceObj, this);
 		mInstanceWindow.setLocalScale(Vector3.one);
 		mInstanceWindow.setLocalPosition(Vector3.zero);
+		setUnActiveInstanceWindowChildGameobj();
 		base.init(layout, go, parent);
 		string textureName = getTextureName();
 		int index = textureName.LastIndexOf('_');
@@ -235,12 +242,12 @@ public class txNGUITextureAnim : txNGUIStaticTexture
 			return false;
 		}
 		string[] valuePair = StringUtility.split(pair[1], true, key);
-		if(valuePair.Length != 2)
+		if (valuePair.Length != 2)
 		{
 			return false;
 		}
-		value.x = StringUtility.stringToInt(valuePair[0]);
-		value.y = StringUtility.stringToInt(valuePair[1]);
+		value.x = StringUtility.stringToFloat(valuePair[0]);
+		value.y = StringUtility.stringToFloat(valuePair[1]);
 		return true;
 	}
 	public void parseLine(string line, ref string name, ref Vector2 size, ref Vector2 pos, ref Vector2 textureSize)
@@ -251,14 +258,14 @@ public class txNGUITextureAnim : txNGUIStaticTexture
 		if (line.Length > 0)
 		{
 			string[] value = StringUtility.split(line, true, "=");
-			if(value.Length != 2)
+			if (value.Length != 2)
 			{
 				UnityUtility.logError("配置文件错误 : line : " + line);
 				return;
 			}
 			name = value[0];
 			string[] value0 = StringUtility.split(value[1], true, ";");
-			if(value0.Length != 3)
+			if (value0.Length != 3)
 			{
 				UnityUtility.logError("配置文件错误 : line : " + line);
 				return;
@@ -266,7 +273,7 @@ public class txNGUITextureAnim : txNGUIStaticTexture
 			bool ret = parseVector2(value0[0], "*", ref size);
 			ret = parseVector2(value0[1], ",", ref pos) && ret;
 			ret = parseVector2(value0[2], "*", ref textureSize) && ret;
-			if(!ret)
+			if (!ret)
 			{
 				UnityUtility.logError("配置文件错误 : line : " + line);
 				return;
@@ -278,6 +285,7 @@ public class txNGUITextureAnim : txNGUIStaticTexture
 		TextAsset res = mResourceManager.loadResource<TextAsset>(fileName, false);
 		if (res == null)
 		{
+			mIsCulling = false;
 			return;
 		}
 		string[] lineList = StringUtility.split(res.text, true, "\r\n");
@@ -314,7 +322,7 @@ public class txNGUITextureAnim : txNGUIStaticTexture
 			Vector2 targetSize = Vector2.zero;
 			Vector2 targetPos = Vector2.zero;
 			Vector2 originSize = Vector2.zero;
-			if(i < infoStringList.Count)
+			if (i < infoStringList.Count)
 			{
 				parseLine(infoStringList[i], ref texName, ref targetSize, ref targetPos, ref originSize);
 				string filename = StringUtility.getFileNameNoSuffix(name, true);
@@ -371,18 +379,32 @@ public class txNGUITextureAnim : txNGUIStaticTexture
 	}
 	public override void setTexture(Texture tex)
 	{
-		if(mInstanceWindow.mObject == null)
+		if (mInstanceWindow.mObject == null)
 		{
 			return;
 		}
 		// 不调用基类的方法
 		mInstanceWindow.setTexture(tex);
-		// 设置子窗口的大小和位置
-		TextureInfo info = mTextureSearchList[tex];
-		mInstanceWindow.setWindowSize(info.mSize);
-		mInstanceWindow.setLocalPosition(info.mPos);
+		if (mIsCulling)
+		{
+			// 设置子窗口的大小和位置
+			TextureInfo info = mTextureSearchList[tex];
+			mInstanceWindow.setWindowSize(info.mSize);
+			mInstanceWindow.setLocalPosition(info.mPos);
+		}
 	}
 	//---------------------------------------------------------------------------------------------------------------------------------------------------
+	protected void setUnActiveInstanceWindowChildGameobj()
+	{
+		if (mInstanceWindow != null)
+		{
+			int childCount = mInstanceWindow.getTransform().childCount;
+			for (int i = 0; i < childCount; i++)
+			{
+				mInstanceWindow.getTransform().GetChild(i).gameObject.SetActive(false);
+			}
+		}
+	}
 	protected void applyFrameIndex()
 	{
 		MathUtility.clamp(ref mCurTextureIndex, mStartIndex, getRealEndIndex());

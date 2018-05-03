@@ -115,7 +115,7 @@ public class FileUtility
 		bool isEmpty = true;
 		foreach (var item in dirList)
 		{
-			isEmpty = deleteEmptyFolder(path) && isEmpty;
+			isEmpty = deleteEmptyFolder(item) && isEmpty;
 		}
 		isEmpty = isEmpty && Directory.GetFiles(path).Length == 0;
 		if (isEmpty)
@@ -175,11 +175,20 @@ public class FileUtility
 		}
 		Directory.CreateDirectory(dir);
 	}
+	public static void findFiles(string path, ref List<string> fileList, string pattern, bool recursive = true)
+	{
+		List<string> patternList = new List<string>();
+		patternList.Add(pattern);
+		findFiles(path, ref fileList, patternList, recursive);
+	}
 	// path为相对于Assets的相对路径
 	public static void findFiles(string path, ref List<string> fileList, List<string> pattern = null, bool recursive = true)
 	{
 		validPath(ref path);
-		path = CommonDefine.F_ASSETS_PATH + path;
+		if(!StringUtility.startWith(path, CommonDefine.F_ASSETS_PATH))
+		{
+			path = CommonDefine.F_ASSETS_PATH + path;
+		}
 		if(!isDirExist(path))
 		{
 			UnityUtility.logError("path is invalid! path : " + path);
@@ -199,14 +208,14 @@ public class FileUtility
 				{
 					if (StringUtility.endWith(fileName, pattern[j], false))
 					{
-						fileList.Add(fileName);
+						fileList.Add(path + fileName);
 					}
 				}
 			}
 			// 不需要过滤,则直接放入列表
 			else
 			{
-				fileList.Add(fileName);
+				fileList.Add(path + fileName);
 			}
 		}
 		// 查找所有子目录

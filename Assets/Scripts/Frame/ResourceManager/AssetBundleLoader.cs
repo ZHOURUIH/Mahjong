@@ -105,7 +105,6 @@ public class AssetBundleLoader : GameBase
 		{
 			item.Value.unload();
 		}
-		GC.Collect();
 	}
 	public void unload(string name)
 	{
@@ -393,7 +392,6 @@ public class AssetBundleLoader : GameBase
 			item.Value.mAssetObject = assetRequest.asset;
 		}
 		UnityUtility.logInfo(bundleInfo.mBundleName + " load bundle done", LOG_LEVEL.LL_NORMAL);
-		GC.Collect();
 
 		// 通知AssetBundleInfo
 		bundleInfo.notifyAssetBundleAsyncLoadedDone(assetBundle);

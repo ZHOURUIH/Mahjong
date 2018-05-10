@@ -4,6 +4,16 @@ using System;
 
 public class LayoutTools : GameBase
 {
+	public static bool checkStaticPanel(txUIObject obj)
+	{
+		txUIObject panel = obj.mLayout.getLayoutPanel();
+		if (panel is txNGUIPanel && (panel as txNGUIPanel).getStatic())
+		{
+			UnityUtility.logError("layout is static! can not move/rotate/scale window! layout : " + obj.mLayout.getName());
+			return false;
+		}
+		return true;
+	}
 	// 布局
 	//------------------------------------------------------------------------------------------------------------------------------------
 	public static void LOAD_NGUI(LAYOUT_TYPE type, int renderOrder, bool visible, bool immediately, string param)
@@ -188,12 +198,20 @@ public class LayoutTools : GameBase
 	// 旋转
 	public static void ROTATE_LOCK_WINDOW(txUIObject obj, bool lockRotation = true)
 	{
+		if (!checkStaticPanel(obj))
+		{
+			return;
+		}
 		CommandWindowRotateFixed cmd = newCmd(out cmd, false);
 		cmd.mActive = lockRotation;
 		pushCommand(cmd, obj);
 	}
 	public static void ROTATE_WINDOW(txUIObject obj, Vector3 rotation)
 	{
+		if (!checkStaticPanel(obj))
+		{
+			return;
+		}
 		CommandWindowRotate cmd = newCmd(out cmd, false, false);
 		cmd.mName = "";
 		cmd.mOnceLength = 0.0f;
@@ -223,7 +241,11 @@ public class LayoutTools : GameBase
 	}
 	public static void ROTATE_KEYFRMAE_WINDOW_EX(txUIObject obj, string keyframe, Vector3 start, Vector3 target, float onceLength, bool loop, float offset, KeyFrameCallback rotatingCallback, KeyFrameCallback doneCallback)
 	{
-		if(keyframe == "" || MathUtility.isFloatZero(onceLength))
+		if (!checkStaticPanel(obj))
+		{
+			return;
+		}
+		if (keyframe == "" || MathUtility.isFloatZero(onceLength))
 		{
 			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用void ROTATE_WINDOW(txUIObject obj, Vector3 rotation)");
 		}
@@ -240,6 +262,10 @@ public class LayoutTools : GameBase
 	}
 	public static CommandWindowRotate ROTATE_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, Vector3 rotation)
 	{
+		if (!checkStaticPanel(obj))
+		{
+			return null;
+		}
 		CommandWindowRotate cmd = newCmd(out cmd, false, true);
 		cmd.mName = "";
 		cmd.mOnceLength = 0.0f;
@@ -263,6 +289,10 @@ public class LayoutTools : GameBase
 	}
 	public static CommandWindowRotate ROTATE_KEYFRMAE_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, string keyframe, Vector3 start, Vector3 target, float onceLength, bool loop, float offset)
 	{
+		if (!checkStaticPanel(obj))
+		{
+			return null;
+		}
 		if (keyframe == "" || MathUtility.isFloatZero(onceLength))
 		{
 			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用CommandWindowKeyFrameRotate ROTATE_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, Vector3 rotation)");
@@ -292,6 +322,10 @@ public class LayoutTools : GameBase
 	}
 	public static void ROTATE_SPEED_WINDOW(txUIObject obj, Vector3 speed, Vector3 startAngle, Vector3 rotateAccelerationValue)
 	{
+		if (!checkStaticPanel(obj))
+		{
+			return;
+		}
 		CommandWindowRotateSpeed cmd = newCmd(out cmd, false);
 		cmd.mRotateSpeed = speed;
 		cmd.mStartAngle = startAngle;
@@ -308,6 +342,10 @@ public class LayoutTools : GameBase
 	}
 	public static CommandWindowRotateSpeed ROTATE_SPEED_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, Vector3 speed, Vector3 startAngle, Vector3 rotateAccelerationValue)
 	{
+		if (!checkStaticPanel(obj))
+		{
+			return null;
+		}
 		CommandWindowRotateSpeed cmd = newCmd(out cmd, false, true);
 		cmd.mRotateSpeed = speed;
 		cmd.mStartAngle = startAngle;
@@ -321,6 +359,10 @@ public class LayoutTools : GameBase
 	// 用关键帧移动窗口
 	public static void MOVE_WINDOW(txUIObject obj, Vector3 pos)
 	{
+		if(!checkStaticPanel(obj))
+		{
+			return;
+		}
 		CommandWindowMove cmd = newCmd(out cmd, false);
 		cmd.mName = "";
 		cmd.mOnceLength = 0.0f;
@@ -370,6 +412,10 @@ public class LayoutTools : GameBase
 	}
 	public static void MOVE_KEYFRAME_WINDOW_EX(txUIObject obj, string fileName, Vector3 startPos, Vector3 targetPos, float onceLength, bool loop, float offset, KeyFrameCallback TremblingCallBack, KeyFrameCallback TrembleDoneCallBack)
 	{
+		if (!checkStaticPanel(obj))
+		{
+			return;
+		}
 		if (fileName == "" || MathUtility.isFloatZero(onceLength))
 		{
 			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用void MOVE_WINDOW(txUIObject obj, Vector3 pos)");
@@ -387,6 +433,10 @@ public class LayoutTools : GameBase
 	}
 	public static CommandWindowMove MOVE_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, Vector3 pos)
 	{
+		if (!checkStaticPanel(obj))
+		{
+			return null;
+		}
 		CommandWindowMove cmd = newCmd(out cmd, false, true);
 		cmd.mName = "";
 		cmd.mStartPos = pos;
@@ -422,6 +472,10 @@ public class LayoutTools : GameBase
 	}
 	public static CommandWindowMove MOVE_KEYFRAME_WINDOW_DELAY_EX(LayoutScript script, txUIObject obj, float delayTime, string keyframe, Vector3 startPos, Vector3 targetPos, float onceLength, bool loop, float offset, KeyFrameCallback movingCallback, KeyFrameCallback moveDoneCallback)
 	{
+		if (!checkStaticPanel(obj))
+		{
+			return null;
+		}
 		if (keyframe == "" || MathUtility.isFloatZero(onceLength))
 		{
 			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用CommandWindowKeyFrameMove MOVE_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, Vector3 pos)");
@@ -442,6 +496,10 @@ public class LayoutTools : GameBase
 	//------------------------------------------------------------------------------------------------------------------
 	public static void TRACK_TARGET(txUIObject obj, float speed, txUIObject target, TrackDoneCallback doneCallback, CheckPosition checkPosition)
 	{
+		if (!checkStaticPanel(obj))
+		{
+			return;
+		}
 		CommandWindowTrackTarget cmd = newCmd(out cmd, false);
 		cmd.mObject = target;
 		cmd.mSpeed = speed;
@@ -475,6 +533,10 @@ public class LayoutTools : GameBase
 	// 缩放
 	public static void SCALE_WINDOW(txUIObject obj, Vector2 scale)
 	{
+		if (!checkStaticPanel(obj))
+		{
+			return;
+		}
 		CommandWindowScale cmd = newCmd(out cmd, false);
 		cmd.mName = "";
 		cmd.mOnceLength = 0.0f;
@@ -528,6 +590,10 @@ public class LayoutTools : GameBase
 	}
 	public static void SCALE_KEYFRAME_WINDOW_EX(txUIObject obj, string fileName, Vector2 start, Vector2 target, float onceLength, bool loop, float offset, KeyFrameCallback scaleTremblingCallback, KeyFrameCallback scaleTrembleDoneCallback)
 	{
+		if (!checkStaticPanel(obj))
+		{
+			return;
+		}
 		if (fileName == "" || MathUtility.isFloatZero(onceLength))
 		{
 			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用void SCALE_WINDOW(txUIObject obj, Vector2 scale)");
@@ -545,6 +611,10 @@ public class LayoutTools : GameBase
 	}
 	public static CommandWindowScale SCALE_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, Vector2 scale)
 	{
+		if (!checkStaticPanel(obj))
+		{
+			return null;
+		}
 		CommandWindowScale cmd = newCmd(out cmd, false, true);
 		cmd.mName = "";
 		cmd.mOnceLength = 0.0f;
@@ -584,6 +654,10 @@ public class LayoutTools : GameBase
 	}
 	public static CommandWindowScale SCALE_KEYFRAME_WINDOW_DELAY_EX(LayoutScript script, txUIObject obj, float delayTime, string keyframe, Vector2 start, Vector2 target, float onceLength, bool loop, float offset, KeyFrameCallback scaleTremblingCallback, KeyFrameCallback scaleTrembleDoneCallback)
 	{
+		if (!checkStaticPanel(obj))
+		{
+			return null;
+		}
 		if (keyframe == "" || MathUtility.isFloatZero(onceLength))
 		{
 			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,CommandWindowScale SCALE_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, Vector2 scale)");

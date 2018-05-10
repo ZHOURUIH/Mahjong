@@ -13,6 +13,14 @@ public class WindowComponentDrag : ComponentDrag
 		base.update(elapsedTime);
 	}
 	//--------------------------------------------------------------------------------------------------------------
+	public override void setActive(bool active)
+	{
+		if (active && !LayoutTools.checkStaticPanel(mComponentOwner as txUIObject))
+		{
+			return;
+		}
+		base.setActive(active);
+	}
 	protected override bool isType(Type type) { return base.isType(type) || type == typeof(WindowComponentDrag); }
 	protected override void applyScreenPosition(Vector3 screenPos)
 	{

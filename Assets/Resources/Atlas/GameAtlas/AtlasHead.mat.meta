@@ -1,8 +1,7 @@
 fileFormatVersion: 2
 guid: a3c8894f96abcf14e987b227f10e15ef
-timeCreated: 1492786160
-licenseType: Free
 NativeFormatImporter:
+  externalObjects: {}
   mainObjectFileID: -1
   userData: 
   assetBundleName: atlas/gameatlas.unity3d

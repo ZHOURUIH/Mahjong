@@ -1,19 +1,30 @@
 ManifestFileVersion: 0
-CRC: 940945658
+CRC: 3429036076
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 80c5b9529052a1bb60e5d285699b53f4
+    Hash: 338a9d34033e5f54943f520d8ac99b93
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 60a7cae25bfd71c49bd2c87b5187f6b5
+    Hash: abb9b9167ab0d9f4af2beeb617361f49
 HashAppended: 0
 ClassTypes:
 - Class: 21
   Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
 - Class: 48
   Script: {instanceID: 0}
 Assets:
-- Assets/Resources/Material/Gray.mat
 - Assets/Resources/Material/MaskCut.mat
-Dependencies: []
+- Assets/Resources/Material/UGUIDefault.mat
+- Assets/Resources/Material/HSLOffsetLinearDodge.mat
+- Assets/Resources/Material/CriticalMaskFadeOutLinearDodge.mat
+- Assets/Resources/Material/CriticalMask.mat
+- Assets/Resources/Material/HSLOffset.mat
+- Assets/Resources/Material/Feather.mat
+- Assets/Resources/Material/MotionBlur.mat
+- Assets/Resources/Material/MotionBlurCriticalMask.mat
+Dependencies:
+- "E:/SOURCE_HOME/\u5916\u5305\u9879\u76EE/Mahjong/Assets/StreamingAssets/shader/frame.unity3d"
+- "E:/SOURCE_HOME/\u5916\u5305\u9879\u76EE/Mahjong/Assets/StreamingAssets/texture/gametexture/common.unity3d"

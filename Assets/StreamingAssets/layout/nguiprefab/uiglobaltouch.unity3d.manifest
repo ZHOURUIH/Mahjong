@@ -1,0 +1,26 @@
+ManifestFileVersion: 0
+CRC: 3536323490
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 407d9ad72ec4521de03f1ac874d81090
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 8627fc0f23ea97c10e22397fe8f1c26f
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1fdca5042b1d12a4890ec1bd4f04290d, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+Assets:
+- Assets/Resources/Layout/NGUIPrefab/UIGlobalTouch.prefab
+Dependencies: []

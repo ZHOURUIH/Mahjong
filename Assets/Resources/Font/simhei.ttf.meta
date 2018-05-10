@@ -1,8 +1,7 @@
 fileFormatVersion: 2
 guid: 0f8d4372236ff704991c858363c7f05f
-timeCreated: 1482288103
-licenseType: Pro
 TrueTypeFontImporter:
+  externalObjects: {}
   serializedVersion: 4
   fontSize: 16
   forceTextureCase: -2
@@ -16,6 +15,8 @@ TrueTypeFontImporter:
   customCharacters: 
   fontRenderingMode: 0
   ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
   userData: 
   assetBundleName: font.unity3d
   assetBundleVariant: 

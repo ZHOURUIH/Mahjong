@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 4195573244
+CRC: 3576873534
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -79,185 +79,156 @@ AssetBundleManifest:
       Dependencies:
         Dependency_0: font.unity3d
     Info_20:
-      Name: keyframe/allmatchingslider.unity3d
-      Dependencies: {}
-    Info_21:
-      Name: keyframe/alphaonetozero.unity3d
-      Dependencies: {}
-    Info_22:
-      Name: keyframe/alphaonezeroone.unity3d
-      Dependencies: {}
-    Info_23:
-      Name: keyframe/alphastargame.unity3d
-      Dependencies: {}
-    Info_24:
-      Name: keyframe/alphazerotoone.unity3d
-      Dependencies: {}
-    Info_25:
-      Name: keyframe/backscaleroot.unity3d
-      Dependencies: {}
-    Info_26:
-      Name: keyframe/coachsettingalpha.unity3d
-      Dependencies: {}
-    Info_27:
-      Name: keyframe/coachsettingscale.unity3d
-      Dependencies: {}
-    Info_28:
       Name: keyframe/gameendinghuscale.unity3d
       Dependencies: {}
-    Info_29:
-      Name: keyframe/modebuttonmove.unity3d
+    Info_21:
+      Name: keyframe/onezero.unity3d
       Dependencies: {}
-    Info_30:
-      Name: keyframe/movestargame.unity3d
-      Dependencies: {}
-    Info_31:
+    Info_22:
       Name: keyframe/onezeroone.unity3d
       Dependencies: {}
-    Info_32:
-      Name: keyframe/scaleonezeroone.unity3d
+    Info_23:
+      Name: keyframe/onezeroone_curve.unity3d
       Dependencies: {}
-    Info_33:
-      Name: keyframe/settingstart.unity3d
+    Info_24:
+      Name: keyframe/quadratic_curve.unity3d
       Dependencies: {}
-    Info_34:
-      Name: keyframe/sincurve.unity3d
+    Info_25:
+      Name: keyframe/sin_curve.unity3d
       Dependencies: {}
-    Info_35:
-      Name: keyframe/timealpha.unity3d
+    Info_26:
+      Name: keyframe/zeroone.unity3d
       Dependencies: {}
-    Info_36:
-      Name: keyframe/timescale.unity3d
-      Dependencies: {}
-    Info_37:
+    Info_27:
       Name: keyframe/zeroonezero.unity3d
       Dependencies: {}
-    Info_38:
-      Name: layout/uiprefab/uiaddplayer.unity3d
+    Info_28:
+      Name: keyframe/zeroone_delay.unity3d
+      Dependencies: {}
+    Info_29:
+      Name: layout/nguiprefab/uiaddplayer.unity3d
       Dependencies:
         Dependency_0: atlas/gameatlas/atlascommon.unity3d
-    Info_39:
-      Name: layout/uiprefab/uiallcharacterinfo.unity3d
+    Info_30:
+      Name: layout/nguiprefab/uiallcharacterinfo.unity3d
       Dependencies:
         Dependency_0: atlas/gameatlas/atlascommon.unity3d
         Dependency_1: atlas/gameatlas/atlashead.unity3d
         Dependency_2: atlas/gameatlas/atlasmainframe.unity3d
         Dependency_3: atlas/numberstyle/atlaswhitenumber.unity3d
         Dependency_4: font.unity3d
-    Info_40:
-      Name: layout/uiprefab/uibillboard.unity3d
+    Info_31:
+      Name: layout/nguiprefab/uibillboard.unity3d
       Dependencies:
         Dependency_0: atlas/gameatlas/atlascommon.unity3d
         Dependency_1: atlas/gameatlas/atlasroommenu.unity3d
         Dependency_2: font.unity3d
-    Info_41:
-      Name: layout/uiprefab/uicharacter.unity3d
+    Info_32:
+      Name: layout/nguiprefab/uicharacter.unity3d
       Dependencies:
         Dependency_0: atlas/gameatlas/atlashead.unity3d
         Dependency_1: atlas/gameatlas/atlasmainframe.unity3d
         Dependency_2: font/fzy3jw.unity3d
         Dependency_3: font.unity3d
-    Info_42:
-      Name: layout/uiprefab/uidice.unity3d
+    Info_33:
+      Name: layout/nguiprefab/uidice.unity3d
       Dependencies:
         Dependency_0: atlas/gameatlas/atlascommon.unity3d
         Dependency_1: atlas/textureanim/dice.unity3d
-    Info_43:
-      Name: layout/uiprefab/uigameending.unity3d
+    Info_34:
+      Name: layout/nguiprefab/uigameending.unity3d
       Dependencies:
         Dependency_0: atlas/gameatlas/atlasgameending.unity3d
         Dependency_1: font/fzy3jw.unity3d
         Dependency_2: texture/gametexture/mainframe.unity3d
-    Info_44:
-      Name: layout/uiprefab/uiglobaltouch.unity3d
+    Info_35:
+      Name: layout/nguiprefab/uiglobaltouch.unity3d
       Dependencies: {}
-    Info_45:
-      Name: layout/uiprefab/uijoinroomdialog.unity3d
+    Info_36:
+      Name: layout/nguiprefab/uijoinroomdialog.unity3d
       Dependencies:
         Dependency_0: font/fzy3jw.unity3d
         Dependency_1: font/fzzyjw.unity3d
-    Info_46:
-      Name: layout/uiprefab/uilogin.unity3d
+    Info_37:
+      Name: layout/nguiprefab/uilogin.unity3d
       Dependencies:
         Dependency_0: font/fzzyjw.unity3d
-    Info_47:
-      Name: layout/uiprefab/uimahjongbackframe.unity3d
+    Info_38:
+      Name: layout/nguiprefab/uimahjongbackframe.unity3d
       Dependencies:
         Dependency_0: texture/gametexture/common.unity3d
-    Info_48:
-      Name: layout/uiprefab/uimahjongdrop.unity3d
+    Info_39:
+      Name: layout/nguiprefab/uimahjongdrop.unity3d
       Dependencies:
         Dependency_0: atlas/gameatlas/atlasmahjongdrop.unity3d
-    Info_49:
-      Name: layout/uiprefab/uimahjongframe.unity3d
+    Info_40:
+      Name: layout/nguiprefab/uimahjongframe.unity3d
       Dependencies:
         Dependency_0: font/fzy3jw.unity3d
-    Info_50:
-      Name: layout/uiprefab/uimahjonghandin.unity3d
+    Info_41:
+      Name: layout/nguiprefab/uimahjonghandin.unity3d
       Dependencies:
         Dependency_0: atlas/gameatlas/atlasmahjongdrop.unity3d
         Dependency_1: atlas/gameatlas/atlasmahjonghandin.unity3d
-    Info_51:
-      Name: layout/uiprefab/uimainframe.unity3d
+    Info_42:
+      Name: layout/nguiprefab/uimainframe.unity3d
       Dependencies:
         Dependency_0: atlas/gameatlas/atlasmainframe.unity3d
-    Info_52:
-      Name: layout/uiprefab/uiplayeraction.unity3d
+    Info_43:
+      Name: layout/nguiprefab/uiplayeraction.unity3d
       Dependencies:
         Dependency_0: atlas/gameatlas/atlasplayeraction.unity3d
-    Info_53:
-      Name: layout/uiprefab/uiregister.unity3d
+    Info_44:
+      Name: layout/nguiprefab/uiregister.unity3d
       Dependencies:
         Dependency_0: font/fzzyjw.unity3d
-    Info_54:
-      Name: layout/uiprefab/uiroommenu.unity3d
+    Info_45:
+      Name: layout/nguiprefab/uiroommenu.unity3d
       Dependencies:
         Dependency_0: atlas/gameatlas/atlasroommenu.unity3d
-    Info_55:
+    Info_46:
       Name: material.unity3d
-      Dependencies: {}
-    Info_56:
-      Name: scene/start.unity3d
       Dependencies:
-        Dependency_0: skybox/assets_by_unluck_activeden/skyboxes/skyboxbluenebula/materials.unity3d
-    Info_57:
-      Name: shader.unity3d
+        Dependency_0: shader/frame.unity3d
+        Dependency_1: texture/gametexture/common.unity3d
+    Info_47:
+      Name: shader/frame.unity3d
       Dependencies: {}
-    Info_58:
+    Info_48:
       Name: skybox/assets_by_unluck_activeden/skyboxes/skyboxbluenebula/images.unity3d
       Dependencies: {}
-    Info_59:
+    Info_49:
       Name: skybox/assets_by_unluck_activeden/skyboxes/skyboxbluenebula/materials.unity3d
       Dependencies:
         Dependency_0: skybox/assets_by_unluck_activeden/skyboxes/skyboxbluenebula/images.unity3d
-    Info_60:
+    Info_50:
       Name: skybox/assets_by_unluck_activeden/skyboxes/skyboxbluenebula/scenes/skyboxbluenebula_scene.unity3d
       Dependencies:
         Dependency_0: skybox/assets_by_unluck_activeden/skyboxes/skyboxbluenebula/materials.unity3d
-    Info_61:
+    Info_51:
       Name: texture/gametexture/common.unity3d
       Dependencies: {}
-    Info_62:
+    Info_52:
       Name: texture/gametexture/gameending.unity3d
       Dependencies: {}
-    Info_63:
+    Info_53:
       Name: texture/gametexture/head.unity3d
       Dependencies: {}
-    Info_64:
+    Info_54:
       Name: texture/gametexture/mahjongdrop.unity3d
       Dependencies: {}
-    Info_65:
+    Info_55:
       Name: texture/gametexture/mahjonghandin.unity3d
       Dependencies: {}
-    Info_66:
+    Info_56:
       Name: texture/gametexture/mainframe.unity3d
       Dependencies: {}
-    Info_67:
+    Info_57:
       Name: texture/gametexture/playeraction.unity3d
       Dependencies: {}
-    Info_68:
+    Info_58:
       Name: texture/gametexture/roommenu.unity3d
       Dependencies: {}
-    Info_69:
+    Info_59:
       Name: texture/textureanim/dice.unity3d
       Dependencies: {}

@@ -1,9 +1,8 @@
 fileFormatVersion: 2
 guid: 738f8820ee20b324eb9a25dbfcc61d88
-timeCreated: 1495720114
-licenseType: Pro
 NativeFormatImporter:
+  externalObjects: {}
   mainObjectFileID: -1
   userData: 
-  assetBundleName: layout/uiprefab/uiaddplayer.unity3d
+  assetBundleName: layout/nguiprefab/uiaddplayer.unity3d
   assetBundleVariant: 

@@ -1,8 +1,7 @@
 fileFormatVersion: 2
 guid: 5cb6930853687b343a4d5c9e98245be9
-timeCreated: 1492786160
-licenseType: Free
 NativeFormatImporter:
+  externalObjects: {}
   mainObjectFileID: -1
   userData: 
   assetBundleName: atlas/gameatlas/atlashead.unity3d

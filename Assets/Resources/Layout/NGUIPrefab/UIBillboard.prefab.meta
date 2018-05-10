@@ -1,9 +1,8 @@
 fileFormatVersion: 2
 guid: 0f9d304d35b34cf49a331822f0ba477a
-timeCreated: 1492607733
-licenseType: Free
 NativeFormatImporter:
+  externalObjects: {}
   mainObjectFileID: -1
   userData: 
-  assetBundleName: layout/uiprefab/uibillboard.unity3d
+  assetBundleName: layout/nguiprefab/uibillboard.unity3d
   assetBundleVariant: 

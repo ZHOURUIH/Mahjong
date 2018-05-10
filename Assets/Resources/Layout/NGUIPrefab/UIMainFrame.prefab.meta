@@ -1,9 +1,8 @@
 fileFormatVersion: 2
 guid: 548a27cedfe4b304e817714f2d313c29
-timeCreated: 1492606550
-licenseType: Free
 NativeFormatImporter:
+  externalObjects: {}
   mainObjectFileID: -1
   userData: 
-  assetBundleName: layout/uiprefab/uimainframe.unity3d
+  assetBundleName: layout/nguiprefab/uimainframe.unity3d
   assetBundleVariant: 

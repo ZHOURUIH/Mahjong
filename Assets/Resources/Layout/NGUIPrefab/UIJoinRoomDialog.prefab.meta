@@ -1,9 +1,8 @@
 fileFormatVersion: 2
 guid: 8b3d648477916324ab8057b37975d412
-timeCreated: 1496935679
-licenseType: Pro
 NativeFormatImporter:
+  externalObjects: {}
   mainObjectFileID: -1
   userData: 
-  assetBundleName: layout/uiprefab/uijoinroomdialog.unity3d
+  assetBundleName: layout/nguiprefab/uijoinroomdialog.unity3d
   assetBundleVariant: 

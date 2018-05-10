@@ -1,8 +1,8 @@
 fileFormatVersion: 2
 guid: 28fd1bb71b3dcc44ba3863471fb7b18c
-timeCreated: 1499320770
-licenseType: Pro
 NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
   userData: 
   assetBundleName: keyframe/quadratic_curve.unity3d
   assetBundleVariant: 

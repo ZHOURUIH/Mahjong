@@ -1,0 +1,22 @@
+ManifestFileVersion: 0
+CRC: 322260453
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 5f1879044cec64b143b1404b82c3011d
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: e675afb3c876d07b3b1ad811b2358c60
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 75e7459110b9666449485c40f25362a5, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+Assets:
+- Assets/Resources/KeyFrame/ZeroOne.prefab
+Dependencies: []

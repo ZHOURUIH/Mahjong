@@ -1,28 +1,33 @@
 ManifestFileVersion: 0
-CRC: 4004127949
+CRC: 4062705716
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: c37367075dc93b140d531cd5a136ee36
+    Hash: 3391387ab09b11291110e4479599171d
   TypeTreeHash:
     serializedVersion: 2
-    Hash: c1642440719609290a7e09a50a7286f4
+    Hash: c73412a662fd4e4f36af34cbdf078b85
 HashAppended: 0
 ClassTypes:
 - Class: 28
   Script: {instanceID: 0}
 Assets:
 - Assets/Resources/Texture/GameTexture/Common/GameBackground.png
+- Assets/Resources/Texture/GameTexture/Common/FadeOut.png
 - Assets/Resources/Texture/GameTexture/Common/D_bt_youukedenglu1.png
+- Assets/Resources/Texture/GameTexture/Common/switch.png
 - Assets/Resources/Texture/GameTexture/Common/Background.png
 - Assets/Resources/Texture/GameTexture/Common/Dice1.png
 - Assets/Resources/Texture/GameTexture/Common/Dice4.png
+- Assets/Resources/Texture/GameTexture/Common/NumberRoot.png
 - Assets/Resources/Texture/GameTexture/Common/Dice5.png
 - Assets/Resources/Texture/GameTexture/Common/gonggao.png
+- Assets/Resources/Texture/GameTexture/Common/Overlay.png
 - Assets/Resources/Texture/GameTexture/Common/banker.png
 - Assets/Resources/Texture/GameTexture/Common/Dice2.png
 - Assets/Resources/Texture/GameTexture/Common/Dice3.png
 - Assets/Resources/Texture/GameTexture/Common/img_gonggao_title_words.png
+- Assets/Resources/Texture/GameTexture/Common/HeadMask.png
 - Assets/Resources/Texture/GameTexture/Common/Dice0.png
 - Assets/Resources/Texture/GameTexture/Common/vipicon1.png
 - Assets/Resources/Texture/GameTexture/Common/game_btn_zhunbei.png

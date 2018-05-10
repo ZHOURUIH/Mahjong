@@ -19,6 +19,9 @@ public class GameFramework : MonoBehaviour
 	protected GameObject			mGameFrameObject;
 	protected bool					mPauseFrame;
 	protected bool					mEnableKeyboard;
+	protected int					mFPS;
+	protected DateTime				mCurTime;
+	protected int					mCurFrameCount;
 	public void Start()
 	{
 		if (instance != null)
@@ -42,11 +45,21 @@ public class GameFramework : MonoBehaviour
 		}
 		// 初始化完毕后启动游戏
 		launch();
+		mCurTime = DateTime.Now;
 	}
 	public void Update()
 	{
 		try
 		{
+			++mCurFrameCount;
+			DateTime now = DateTime.Now;
+			if ((now - mCurTime).TotalMilliseconds >= 1000.0f)
+			{
+				mFPS = mCurFrameCount;
+				UnityUtility.logInfo("FPS : " + mFPS, LOG_LEVEL.LL_HIGH);
+				mCurFrameCount = 0;
+				mCurTime = now;
+			}
 			float elapsedTime = Time.deltaTime;
 			if (mPauseFrame)
 			{
@@ -143,6 +156,7 @@ public class GameFramework : MonoBehaviour
 	public bool getPasueFrame() { return mPauseFrame; }
 	public GameObject getGameFrameObject() { return mGameFrameObject; }
 	public bool getEnableKeyboard() { return mEnableKeyboard; }
+	public int getFPS() { return mFPS; }
 	//------------------------------------------------------------------------------------------------------
 	protected virtual void notifyBase()
 	{
@@ -189,7 +203,7 @@ public class GameFramework : MonoBehaviour
 		registeComponent<ApplicationConfig>();
 		registeComponent<FrameConfig>();
 		registeComponent<UnityUtility>();
-		registeComponent<PluginUtility>();
+		registeComponent<HttpUtility>();
 		registeComponent<DataBase>();
 		registeComponent<CommandSystem>();
 		registeComponent<CharacterManager>();

@@ -412,6 +412,10 @@ public class BinaryUtility
 	}
 	public static void memmove<T>(ref T[] data, int dest, int src, int count)
 	{
+		if(count <= 0)
+		{
+			return;
+		}
 		// 如果两个内存区有相交的部分,并且源地址在前面,则从后面往前拷贝字节
 		if (src < dest && src + count > dest)
 		{

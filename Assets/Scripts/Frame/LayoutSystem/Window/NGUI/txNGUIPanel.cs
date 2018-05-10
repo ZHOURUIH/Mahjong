@@ -26,4 +26,6 @@ public class txNGUIPanel : txUIObject
 	{
 		return mPanel.depth;
 	}
+	public bool getStatic() { return mPanel.widgetsAreStatic; }
+	public void setStatic(bool s) { mPanel.widgetsAreStatic = s; }
 }

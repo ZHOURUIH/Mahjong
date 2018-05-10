@@ -31,7 +31,6 @@ public class CommandPool : GameBase
 		mUnusedList.Clear();
 		mInusedList = null;
 		mUnusedList = null;
-		GC.Collect();
 	}
 	public T newCmd<T>(bool show = true, bool delay = false) where T : Command, new()
 	{

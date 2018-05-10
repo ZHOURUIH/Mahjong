@@ -89,6 +89,7 @@ public enum GAME_DEFINE_FLOAT
 	GDF_BROADCAST_PORT,             // 广播端口
 	GDF_LOAD_RESOURCES,             // 游戏加载资源的路径,0代表在Resources中读取,1代表从AssetBundle中读取 
 	GDF_LOG_LEVEL,                  // 是否关闭所有的日志输出
+	GDF_ENABLE_KEYBOARD,			// 是否启用键盘
 	GDF_FRAME_MAX,
 
 	// 游戏配置参数

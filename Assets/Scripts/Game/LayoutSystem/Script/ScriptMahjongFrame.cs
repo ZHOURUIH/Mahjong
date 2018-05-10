@@ -29,9 +29,9 @@ public class ScriptMahjongFrame : LayoutScript
 	}
 	public override void init()
 	{
-		registeBoxCollider(mLeaveRoomButton, onLeaveRoomClick, onButtonPress);
-		registeBoxCollider(mReadyButton, onReadyClick, onButtonPress);
-		registeBoxCollider(mCancelReadyButton, onCancelReadyClick, onButtonPress);
+		registeBoxColliderNGUI(mLeaveRoomButton, onLeaveRoomClick, onButtonPress);
+		registeBoxColliderNGUI(mReadyButton, onReadyClick, onButtonPress);
+		registeBoxColliderNGUI(mCancelReadyButton, onCancelReadyClick, onButtonPress);
 	}
 	public override void onReset()
 	{

@@ -26,7 +26,7 @@ public class ScriptPlayerAction : LayoutScript
 		int count = mAction.Length;
 		for (int i = 0; i < count; ++i)
 		{
-			registeBoxCollider(mAction[i], onActionClicked);
+			registeBoxColliderNGUI(mAction[i], onActionClicked);
 		}
 	}
 	public override void onReset()

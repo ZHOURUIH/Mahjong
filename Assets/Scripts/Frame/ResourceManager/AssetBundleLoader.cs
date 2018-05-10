@@ -316,7 +316,7 @@ public class AssetBundleLoader : GameBase
 #if UNITY_5_3_5
 				obj = www.audioClip;
 #else
-				obj = WWWAudioExtensions.GetAudioClip(www);
+				obj = www.GetAudioClip();
 #endif
 			}
 			else if(assetsType == typeof(Texture2D) || assetsType == typeof(Texture))
@@ -328,7 +328,7 @@ public class AssetBundleLoader : GameBase
 #if UNITY_5_3_5
 				obj = www.movie;
 #else
-				obj = WWWAudioExtensions.GetMovieTexture(www);
+				obj = www.GetMovieTexture();
 #endif
 			}
 			else if(assetsType == typeof(AssetBundle))

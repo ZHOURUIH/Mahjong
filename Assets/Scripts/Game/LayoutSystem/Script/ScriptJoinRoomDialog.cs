@@ -23,8 +23,8 @@ public class ScriptJoinRoomDialog : LayoutScript
 	}
 	public override void init()
 	{
-		registeBoxCollider(mJoinButton, onJoinRoom);
-		registeBoxCollider(mCancelButton, onCancel);
+		registeBoxColliderNGUI(mJoinButton, onJoinRoom);
+		registeBoxColliderNGUI(mCancelButton, onCancel);
 	}
 	public override void onReset()
 	{

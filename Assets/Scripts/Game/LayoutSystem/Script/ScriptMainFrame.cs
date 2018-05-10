@@ -43,15 +43,15 @@ public class ScriptMainFrame : LayoutScript
 	}
 	public override void init()
 	{
-		registeBoxCollider(mMailButton, onMailButton, onButtonPress);
-		registeBoxCollider(mCompetitionButton, onCompetitionButton, onButtonPress);
-		registeBoxCollider(mShareButton, onShareButton, onButtonPress);
-		registeBoxCollider(mStandingButton, onStandingButton, onButtonPress);
-		registeBoxCollider(mRuleButton, onRuleButton, onButtonPress);
-		registeBoxCollider(mContactButton, onContactButton, onButtonPress);
-		registeBoxCollider(mRechargeButton, onRechargeButton, onButtonPress);
-		registeBoxCollider(mSettingButton, onSettingButton, onButtonPress);
-		registeBoxCollider(mQuitButton, onQuitButton, onButtonPress);
+		registeBoxColliderNGUI(mMailButton, onMailButton, onButtonPress);
+		registeBoxColliderNGUI(mCompetitionButton, onCompetitionButton, onButtonPress);
+		registeBoxColliderNGUI(mShareButton, onShareButton, onButtonPress);
+		registeBoxColliderNGUI(mStandingButton, onStandingButton, onButtonPress);
+		registeBoxColliderNGUI(mRuleButton, onRuleButton, onButtonPress);
+		registeBoxColliderNGUI(mContactButton, onContactButton, onButtonPress);
+		registeBoxColliderNGUI(mRechargeButton, onRechargeButton, onButtonPress);
+		registeBoxColliderNGUI(mSettingButton, onSettingButton, onButtonPress);
+		registeBoxColliderNGUI(mQuitButton, onQuitButton, onButtonPress);
 	}
 	public override void onReset()
 	{

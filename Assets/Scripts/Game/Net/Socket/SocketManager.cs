@@ -178,7 +178,7 @@ public class SocketManager : FrameComponent
 		;
 	}
 	// 发送Socket消息
-	protected void sendSocket()
+	protected bool sendSocket()
 	{
 		lock (mOutputList)
 		{
@@ -191,9 +191,10 @@ public class SocketManager : FrameComponent
 			}
 			mOutputList.Clear();
 		}
+		return true;
 	}
 	// 接收Socket消息
-	protected void receiveSocket()
+	protected bool receiveSocket()
 	{
 		IPEndPoint endpoint = null;
 		if (endpoint == null)
@@ -210,12 +211,12 @@ public class SocketManager : FrameComponent
 		if (nRecv < 0)
 		{
 			UnityUtility.logInfo("网络连接中断!");
-			return;
+			return true;
 		}
 		else if (nRecv == 0)
 		{
 			UnityUtility.logInfo("已与服务器断开连接!");
-			return;
+			return true;
 		}
 		int index = 0;
 		while (true)
@@ -279,6 +280,7 @@ public class SocketManager : FrameComponent
 				break;
 			}
 		}
+		return true;
 	}
 	protected void heartBeat()
 	{

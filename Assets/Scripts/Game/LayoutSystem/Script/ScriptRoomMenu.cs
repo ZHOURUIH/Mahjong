@@ -27,8 +27,8 @@ public class ScriptRoomMenu : LayoutScript
 	}
 	public override void init()
 	{
-		registeBoxCollider(mCreateRoomButton, onCreateClicked, onButtonPress);
-		registeBoxCollider(mJoinRoomButton, onJoinClicked, onButtonPress);
+		registeBoxColliderNGUI(mCreateRoomButton, onCreateClicked, onButtonPress);
+		registeBoxColliderNGUI(mJoinRoomButton, onJoinClicked, onButtonPress);
 	}
 	public override void onReset()
 	{

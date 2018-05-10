@@ -29,8 +29,8 @@ public class ScriptRegister : LayoutScript
 	}
 	public override void init()
 	{
-		registeBoxCollider(mRegisterButton, onRegisterClick, onButtonPress);
-		registeBoxCollider(mCancelButton, onCancelClick, onButtonPress);
+		registeBoxColliderNGUI(mRegisterButton, onRegisterClick, onButtonPress);
+		registeBoxColliderNGUI(mCancelButton, onCancelClick, onButtonPress);
 	}
 	public override void onReset()
 	{

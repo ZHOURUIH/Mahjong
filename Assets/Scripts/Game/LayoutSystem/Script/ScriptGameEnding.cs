@@ -149,8 +149,8 @@ public class ScriptGameEnding : LayoutScript
 		{
 			mMultipleList[i].init();
 		}
-		registeBoxCollider(mContinueButton, onContinueClick, onButtonPress);
-		registeBoxCollider(mReturnButton, onReturnClick, onButtonPress);
+		registeBoxColliderNGUI(mContinueButton, onContinueClick, onButtonPress);
+		registeBoxColliderNGUI(mReturnButton, onReturnClick, onButtonPress);
 	}
 	public override void onReset()
 	{

@@ -29,9 +29,9 @@ public class ScriptLogin : LayoutScript
 	}
 	public override void init()
 	{
-		registeBoxCollider(mLoginButton, onLoginClick, onButtonPress);
-		registeBoxCollider(mRegisterButton, onRegisterClick, onButtonPress);
-		registeBoxCollider(mQuitButton, onQuitClick, onButtonPress);
+		registeBoxColliderNGUI(mLoginButton, onLoginClick, onButtonPress);
+		registeBoxColliderNGUI(mRegisterButton, onRegisterClick, onButtonPress);
+		registeBoxColliderNGUI(mQuitButton, onQuitClick, onButtonPress);
 	}
 	public override void onReset()
 	{

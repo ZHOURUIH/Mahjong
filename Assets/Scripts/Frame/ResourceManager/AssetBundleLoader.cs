@@ -322,14 +322,6 @@ public class AssetBundleLoader : GameBase
 			{
 				obj = www.texture;
 			}
-			else if(assetsType == typeof(MovieTexture))
-			{
-#if UNITY_5_3_5
-				obj = www.movie;
-#else
-				obj = www.GetMovieTexture();
-#endif
-			}
 			else if(assetsType == typeof(AssetBundle))
 			{
 				obj = www.assetBundle;

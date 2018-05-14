@@ -30,6 +30,7 @@ public class GameConfig : ConfigBase
 	protected override void addString()
 	{
 		addStringParam(GAME_DEFINE_STRING.GDS_TCP_SERVER_IP);
+		addStringParam(GAME_DEFINE_STRING.GDS_TCP_HOST_NAME);
 		addStringParam(GAME_DEFINE_STRING.GDS_ACCOUNT);
 		addStringParam(GAME_DEFINE_STRING.GDS_PASSWORD);
 		if (mStringNameToDefine.Count != (int)GAME_DEFINE_STRING.GDS_GAME_MAX - (int)GAME_DEFINE_STRING.GDS_GAME_MIN - 1)

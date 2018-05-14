@@ -110,11 +110,19 @@ public enum GAME_DEFINE_STRING
 
 	// 游戏配置参数
 	GDS_GAME_MIN,
-	GDS_TCP_SERVER_IP,
+	GDS_TCP_SERVER_IP,  // 服务器IP
+	GDS_TCP_HOST_NAME,	// 服务器域名,域名和IP只需要填一个,都填则使用IP
 	GDS_ACCOUNT,
 	GDS_PASSWORD,
 	GDS_GAME_MAX,
 };
+// 网络状态
+public enum NET_STATE
+{
+	NS_CONNECTED,       // 已连接
+	NS_SERVER_CLOSE,    // 服务器已关闭
+	NS_NET_CLOSE,       // 网络已断开
+}
 // 表格数据类型
 public enum DATA_TYPE
 {

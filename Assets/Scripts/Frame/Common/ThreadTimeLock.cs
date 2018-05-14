@@ -31,6 +31,6 @@ public class ThreadTimeLock
 		{
 			Thread.Sleep(mForceSleep);
 		}
-		mLastTime = DateTime.Now;
+		mLastTime = curTime;
 	}
 };

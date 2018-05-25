@@ -66,6 +66,14 @@ public enum CHARACTER_TYPE
 	CT_MAX,
 }
 
+// 屏幕适配方式
+public enum ADAPT_SCREEN
+{
+	AS_BASE_ON_ANCHOR,	// 基于NGUI锚点的自适应
+	AS_SIMPLE_STRETCH,	// 简单拉伸
+	AS_MULTI_SCREEN,	// 多屏拼接后复制显示
+}
+
 // 游戏委托定义-------------------------------------------------------------------------------------------------------------
 public delegate void SpriteAnimCallBack(txNGUISpriteAnim window, object userData, bool isBreak);
 public delegate void TextureAnimCallBack(txNGUITextureAnim window, object userData, bool isBreak);
@@ -165,26 +173,30 @@ public class CommonDefine
 	//-----------------------------------------------------------------------------------------------------------------
 	// 常量定义
 	// 常量数值定义
-	public const uint WS_OVERLAPPED = 0x00000000;
-	public const uint WS_POPUP = 0x80000000;
-	public const uint WS_CHILD = 0x40000000;
-	public const uint WS_MINIMIZE = 0x20000000;
-	public const uint WS_VISIBLE = 0x10000000;
-	public const uint WS_DISABLED = 0x08000000;
-	public const uint WS_CLIPSIBLINGS = 0x04000000;
-	public const uint WS_CLIPCHILDREN = 0x02000000;
-	public const uint WS_MAXIMIZE = 0x01000000;
-	public const uint WS_CAPTION = 0x00C00000;
-	public const uint WS_BORDER = 0x00800000;
-	public const uint WS_DLGFRAME = 0x00400000;
-	public const uint WS_VSCROLL = 0x00200000;
-	public const uint WS_HSCROLL = 0x00100000;
-	public const uint WS_SYSMENU = 0x00080000;
-	public const uint WS_THICKFRAME = 0x00040000;
-	public const uint WS_GROUP = 0x00020000;
-	public const uint WS_TABSTOP = 0x00010000;
-	public const uint WS_MINIMIZEBOX = 0x00020000;
-	public const uint WS_MAXIMIZEBOX = 0x00010000;
+	public const long WS_OVERLAPPED = 0x00000000;
+	public const long WS_POPUP = 0x80000000;
+	public const long WS_CHILD = 0x40000000;
+	public const long WS_MINIMIZE = 0x20000000;
+	public const long WS_VISIBLE = 0x10000000;
+	public const long WS_DISABLED = 0x08000000;
+	public const long WS_CLIPSIBLINGS = 0x04000000;
+	public const long WS_CLIPCHILDREN = 0x02000000;
+	public const long WS_MAXIMIZE = 0x01000000;
+	public const long WS_BORDER = 0x00800000;
+	public const long WS_DLGFRAME = 0x00400000;
+	public const long WS_CAPTION = WS_BORDER | WS_DLGFRAME;
+	public const long WS_VSCROLL = 0x00200000;
+	public const long WS_HSCROLL = 0x00100000;
+	public const long WS_SYSMENU = 0x00080000;
+	public const long WS_THICKFRAME = 0x00040000;
+	public const long WS_GROUP = 0x00020000;
+	public const long WS_TABSTOP = 0x00010000;
+	public const long WS_MINIMIZEBOX = 0x00020000;
+	public const long WS_MAXIMIZEBOX = 0x00010000;
+	public const int GWL_STYLE = -16;
+	// UI的制作标准,所有UI都是按1920*1080标准分辨率制作的
+	public const int STANDARD_WIDTH = 1920;
+	public const int STANDARD_HEIGHT = 1080;
 	//-----------------------------------------------------------------------------------------------------------------
 	// 表格数据文件后缀名
 	public const string DATA_SUFFIX = ".bytes";

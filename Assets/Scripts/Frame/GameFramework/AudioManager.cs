@@ -110,7 +110,7 @@ public class AudioManager : FrameComponent
 	}
 	public float getAudioLength(string name)
 	{
-		if (!mAudioClipList.ContainsKey(name) || mAudioClipList[name] == null)
+		if (!mAudioClipList.ContainsKey(name) || mAudioClipList[name] == null || mAudioClipList[name].mClip == null)
 		{
 			return 0.0f;
 		}

@@ -241,7 +241,7 @@ public class FileUtility
 		string[] dirs = Directory.GetDirectories(path);
 		foreach (var item in dirs)
 		{
-			dirList.Add(StringUtility.getFolderName(item));
+			dirList.Add(item);
 			if (recursive)
 			{
 				findDirectory(item, ref dirList, recursive);

@@ -77,12 +77,20 @@ public class txNGUINumber : txNGUIStaticSprite
 	}
 	protected void refreshNumber()
 	{
-		Vector2 windowSize = getWindowSize();
+		if (mNumber == "")
+		{
+			int numCount = mNumberList.Count;
+			for (int i = 0; i < numCount; ++i)
+			{
+				mNumberList[i].setActive(false);
+			}
+			return;
+		}
 		// 整数部分
 		int dotPos = mNumber.LastIndexOf('.');
 		if (mNumber.Length > 0 && (dotPos == 0 || dotPos == mNumber.Length - 1))
 		{
-			UnityUtility.logError("error : number can not start or end with dot!");
+			UnityUtility.logError("number can not start or end with dot!");
 			return;
 		}
 		string intPart = dotPos != -1 ? mNumber.Substring(0, dotPos) : mNumber;
@@ -91,11 +99,11 @@ public class txNGUINumber : txNGUIStaticSprite
 			mNumberList[i].setSpriteName(mSpriteNameList[intPart[i] - '0']);
 		}
 		// 小数点和小数部分
-		if(dotPos != -1)
+		if (dotPos != -1)
 		{
 			mNumberList[dotPos].setSpriteName(mSpriteNameList[10]);
 			string floatPart = mNumber.Substring(dotPos + 1, mNumber.Length - dotPos - 1);
-			for(int i = 0; i < floatPart.Length; ++i)
+			for (int i = 0; i < floatPart.Length; ++i)
 			{
 				mNumberList[i + dotPos + 1].setSpriteName(mSpriteNameList[floatPart[i] - '0']);
 			}
@@ -104,6 +112,7 @@ public class txNGUINumber : txNGUIStaticSprite
 		Vector2 numberSize = Vector2.zero;
 		float numberScale = 0.0f;
 		int numberLength = mNumber.Length;
+		Vector2 windowSize = getWindowSize();
 		if (numberLength > 0)
 		{
 			int firstNumber = mNumber[0] - '0';
@@ -114,16 +123,16 @@ public class txNGUINumber : txNGUIStaticSprite
 			numberSize.x = ratio * numberSize.y;
 			numberScale = windowSize.y * inverseHeight;
 		}
-		if (dotPos != -1)
-		{
-			Vector2 dotTextureSize = new Vector2(mSpriteDataList[10].width, mSpriteDataList[10].height);
-			mNumberList[dotPos].setWindowSize(dotTextureSize * numberScale);
-		}
 		for (int i = 0; i < numberLength; ++i)
 		{
 			if (mNumber[i] != '.')
 			{
 				mNumberList[i].setWindowSize(numberSize);
+			}
+			else
+			{
+				Vector2 dotTextureSize = new Vector2(mSpriteDataList[10].width, mSpriteDataList[10].height);
+				mNumberList[i].setWindowSize(dotTextureSize * numberScale);
 			}
 		}
 		// 调整窗口位置,隐藏不需要显示的窗口
@@ -178,6 +187,9 @@ public class txNGUINumber : txNGUIStaticSprite
 			mNumberList.Add(mLayout.getScript().createObject<txNGUIStaticSprite>(this, name, false));
 			mNumberList[i].mSprite.atlas = mSprite.atlas;
 			mNumberList[i].mSprite.depth = mSprite.depth + 1;
+			ScaleAnchor anchor = mNumberList[i].mObject.AddComponent<ScaleAnchor>();
+			anchor.mKeepAspect = mObject.GetComponent<ScaleAnchor>().mKeepAspect;
+			anchor.mAspectBase = mObject.GetComponent<ScaleAnchor>().mAspectBase;
 		}
 		refreshNumber();
 	}
@@ -187,7 +199,7 @@ public class txNGUINumber : txNGUIStaticSprite
 	}
 	public void setNumber(string num)
 	{
-		mNumber = StringUtility.checkFloatString(num);
+		mNumber = StringUtility.checkString(num, "0123456789.");
 		// 设置的数字字符串不能超过最大数量
 		if (mNumber.Length > mMaxCount)
 		{

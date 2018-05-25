@@ -22,10 +22,13 @@ public class CommandGameSceneChangeProcedure : Command
 		}
 		else
 		{
-			gameScene.changeProcedure(mProcedure, mIntent);
-			if(mFrameLogSystem != null)
+			if(curProcedure == null || curProcedure.getProcedureType() != mProcedure)
 			{
-				mFrameLogSystem.logProcedure("进入流程 : " + mProcedure.ToString());
+				gameScene.changeProcedure(mProcedure, mIntent);
+				if (mFrameLogSystem != null)
+				{
+					mFrameLogSystem.logProcedure("进入流程 : " + mProcedure.ToString());
+				}
 			}
 		}
 	}

@@ -186,13 +186,32 @@ public class GameFramework : MonoBehaviour
 		int width = (int)FrameBase.mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SCREEN_WIDTH);
 		int height = (int)FrameBase.mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SCREEN_HEIGHT);
 		int fullscreen = (int)FrameBase.mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_FULL_SCREEN);
-		Screen.SetResolution(width, height, fullscreen == 1);
-		int screenCount = (int)FrameBase.mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SCREEN_COUNT);
-		processResolution(width, height, screenCount);
+		// 使用屏幕最佳分辨率
+		if (fullscreen == 1)
+		{
+			width = Screen.width;
+			height = Screen.height;
+		}
+#if UNITY_EDITOR
+		width = CommonDefine.STANDARD_WIDTH;
+		height = CommonDefine.STANDARD_HEIGHT;
+#endif
+		Screen.SetResolution(width, height, fullscreen == 1 || fullscreen == 3);
 		// 设置为无边框窗口
 		if (fullscreen == 2)
 		{
-			User32.SetWindowLong(User32.GetForegroundWindow(), -16, CommonDefine.WS_POPUP | CommonDefine.WS_VISIBLE);
+			// 无边框的设置有时候会失效,并且同样的设置,如果上一次设置失效后,即便恢复设置也同样会失效,也就是说本次的是否生效与上一次的结果有关
+			// 当设置失效后,可以使用添加启动参数-popupwindow来实现无边框
+			long curStyle = User32.GetWindowLong(User32.GetForegroundWindow(), CommonDefine.GWL_STYLE);
+			curStyle &= ~CommonDefine.WS_BORDER;
+			curStyle &= ~CommonDefine.WS_DLGFRAME;
+			User32.SetWindowLong(User32.GetForegroundWindow(), CommonDefine.GWL_STYLE, curStyle);
+		}
+		int screenCount = (int)FrameBase.mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SCREEN_COUNT);
+		int adaptScreen = (int)FrameBase.mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_ADAPT_SCREEN);
+		if(adaptScreen >= 0 || adaptScreen <= (int)ADAPT_SCREEN.AS_MULTI_SCREEN)
+		{
+			processResolution(width, height, screenCount, (ADAPT_SCREEN)adaptScreen);
 		}
 		mEnableKeyboard = (int)FrameBase.mFrameConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_ENABLE_KEYBOARD) > 0;
 	}
@@ -252,48 +271,84 @@ public class GameFramework : MonoBehaviour
 		GameObject camera = UnityUtility.getGameObject(parent, cameraName);
 		camera.transform.localPosition = pos;
 	}
-	protected void processResolution(int width, int height, int screenCount)
+	// 如果screenCount只在adaptScreen为AS_MULTI_SCREEN时才有效,且screenCount不能小于2
+	protected void processResolution(int width, int height, int screenCount, ADAPT_SCREEN adaptScreen)
 	{
 		GameObject uiRootObj = UnityUtility.getGameObject(null, "NGUIRoot");
-		GameObject rootTarget = UnityUtility.getGameObject(null, "UIRootTarget");
-		if (rootTarget == null)
+		GameObject rootMultiScreen = UnityUtility.getGameObject(null, "NGUIRootMultiScreen");
+		GameObject rootStretch = UnityUtility.getGameObject(null, "NGUIRootStretch");
+		// 首先默认禁用
+		if (rootMultiScreen != null)
 		{
-			return;
+			rootMultiScreen.SetActive(false);
 		}
-		if (screenCount == 1)
+		if (rootMultiScreen != null)
 		{
-			setCameraTargetTexture(null, "MainCamera", null);
-			setCameraTargetTexture(uiRootObj, "UICamera", null);
-			setCameraTargetTexture(uiRootObj, "UIBackEffectCamera", null);
-			setCameraTargetTexture(uiRootObj, "UIForeEffectCamera", null);
-			setCameraTargetTexture(uiRootObj, "UIBlurCamera", null);
-			rootTarget.SetActive(false);
+			rootStretch.SetActive(false);
 		}
-		else
+		if (adaptScreen == ADAPT_SCREEN.AS_SIMPLE_STRETCH)
 		{
-			// 激活渲染目标
-			GameObject camera = UnityUtility.getGameObject(rootTarget, "Camera");
-			GameObject cameraTexture0 = UnityUtility.getGameObject(rootTarget, "UICameraTexture0");
-			GameObject cameraTexture1 = UnityUtility.getGameObject(rootTarget, "UICameraTexture1");
-			rootTarget.SetActive(true);
+			UIRoot uiRoot = uiRootObj.GetComponent<UIRoot>();
+			uiRoot.scalingStyle = UIRoot.Scaling.Flexible;
+			uiRoot.manualWidth = CommonDefine.STANDARD_WIDTH;
+			uiRoot.manualHeight = CommonDefine.STANDARD_HEIGHT;
+			rootStretch.SetActive(true);
+			GameObject camera = UnityUtility.getGameObject(rootStretch, "Camera");
+			GameObject cameraTexture = UnityUtility.getGameObject(rootStretch, "UICameraTexture");
 			camera.SetActive(true);
-			cameraTexture0.SetActive(true);
-			cameraTexture1.SetActive(true);
-			// 设置渲染目标属性
-			UIRoot uiRoot = rootTarget.GetComponent<UIRoot>();
-			uiRoot.scalingStyle = UIRoot.Scaling.Constrained;
-			uiRoot.manualWidth = width;
-			uiRoot.manualHeight = height;
+			cameraTexture.SetActive(true);
+			UIRoot stretchRoot = rootStretch.GetComponent<UIRoot>();
+			stretchRoot.scalingStyle = UIRoot.Scaling.Flexible;
+			stretchRoot.manualWidth = width;
+			stretchRoot.manualHeight = height;
 			camera.transform.localPosition = new Vector3(0.0f, 0.0f, -height / 2.0f);
-			setTextureWindowSize(cameraTexture0, -width / screenCount, width / screenCount, height);
-			setTextureWindowSize(cameraTexture1, -width / screenCount + width / 2, width / screenCount * (screenCount - 1), height);
+			setTextureWindowSize(cameraTexture, 0, width, height);
 			// 设置各个摄像机的渲染目标
-			UITexture uiTexture = cameraTexture0.GetComponent<UITexture>();
+			UITexture uiTexture = cameraTexture.GetComponent<UITexture>();
 			setCameraTargetTexture(null, "MainCamera", uiTexture);
 			setCameraTargetTexture(uiRootObj, "UICamera", uiTexture);
 			setCameraTargetTexture(uiRootObj, "UIBackEffectCamera", uiTexture);
 			setCameraTargetTexture(uiRootObj, "UIForeEffectCamera", uiTexture);
 			setCameraTargetTexture(uiRootObj, "UIBlurCamera", uiTexture);
+		}
+		else
+		{
+			if (adaptScreen == ADAPT_SCREEN.AS_BASE_ON_ANCHOR)
+			{
+				setCameraTargetTexture(null, "MainCamera", null);
+				setCameraTargetTexture(uiRootObj, "UICamera", null);
+				setCameraTargetTexture(uiRootObj, "UIBackEffectCamera", null);
+				setCameraTargetTexture(uiRootObj, "UIForeEffectCamera", null);
+				setCameraTargetTexture(uiRootObj, "UIBlurCamera", null);
+				UIRoot uiRoot = uiRootObj.GetComponent<UIRoot>();
+				uiRoot.scalingStyle = UIRoot.Scaling.Constrained;
+			}
+			else if(adaptScreen == ADAPT_SCREEN.AS_MULTI_SCREEN && screenCount > 1)
+			{
+				// 激活渲染目标
+				rootMultiScreen.SetActive(true);
+				GameObject camera = UnityUtility.getGameObject(rootMultiScreen, "Camera");
+				GameObject cameraTexture0 = UnityUtility.getGameObject(rootMultiScreen, "UICameraTexture0");
+				GameObject cameraTexture1 = UnityUtility.getGameObject(rootMultiScreen, "UICameraTexture1");
+				camera.SetActive(true);
+				cameraTexture0.SetActive(true);
+				cameraTexture1.SetActive(true);
+				// 设置渲染目标属性
+				UIRoot uiRoot = rootMultiScreen.GetComponent<UIRoot>();
+				uiRoot.scalingStyle = UIRoot.Scaling.Constrained;
+				uiRoot.manualWidth = width;
+				uiRoot.manualHeight = height;
+				camera.transform.localPosition = new Vector3(0.0f, 0.0f, -height / 2.0f);
+				setTextureWindowSize(cameraTexture0, -width / screenCount, width / screenCount, height);
+				setTextureWindowSize(cameraTexture1, -width / screenCount + width / 2, width / screenCount * (screenCount - 1), height);
+				// 设置各个摄像机的渲染目标
+				UITexture uiTexture = cameraTexture0.GetComponent<UITexture>();
+				setCameraTargetTexture(null, "MainCamera", uiTexture);
+				setCameraTargetTexture(uiRootObj, "UICamera", uiTexture);
+				setCameraTargetTexture(uiRootObj, "UIBackEffectCamera", uiTexture);
+				setCameraTargetTexture(uiRootObj, "UIForeEffectCamera", uiTexture);
+				setCameraTargetTexture(uiRootObj, "UIBlurCamera", uiTexture);
+			}
 		}
 	}
 }

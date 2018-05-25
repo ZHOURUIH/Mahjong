@@ -45,6 +45,8 @@ public class Kernel32
 	public static extern void GlobalMemoryStatusEx(ref MEMORY_STATUS_EX meminfo);
 	[DllImport(KERNEL32_DLL)]
 	public static extern int GetLastError();
+	[DllImport(KERNEL32_DLL)]
+	public static extern void SetLastError(int err);
 	[DllImport(KERNEL32_DLL, SetLastError = true)]
 	public static extern SafeFileHandle CreateFile(string lpFileName, uint dwDesiredAccess,
 	uint dwShareMode, IntPtr lpSecurityAttributes, uint dwCreationDisposition,

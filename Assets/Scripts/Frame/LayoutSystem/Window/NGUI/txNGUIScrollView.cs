@@ -41,6 +41,7 @@ public class txNGUIScrollView : txUIObject
 	public void addItem<T>(string name) where T : txUIObject, new()
 	{
 		T item = mLayout.getScript().createObject<T>(mGrid, name, true);
+		item.mObject.AddComponent<ScaleAnchor>();
 		mItemList.Add(item);
 	}
 	public void addItem(txUIObject obj)

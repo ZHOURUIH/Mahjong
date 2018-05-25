@@ -67,6 +67,9 @@ public class txNGUITextureAnim : txNGUIStaticTexture
 		mInstanceWindow.init(layout, instanceObj, this);
 		mInstanceWindow.setLocalScale(Vector3.one);
 		mInstanceWindow.setLocalPosition(Vector3.zero);
+		ScaleAnchor instanceAnchor = mInstanceWindow.mObject.AddComponent<ScaleAnchor>();
+		instanceAnchor.mKeepAspect = go.GetComponent<ScaleAnchor>().mKeepAspect;
+		instanceAnchor.mAspectBase = go.GetComponent<ScaleAnchor>().mAspectBase;
 		setUnActiveInstanceWindowChildGameobj();
 		base.init(layout, go, parent);
 		string textureName = getTextureName();

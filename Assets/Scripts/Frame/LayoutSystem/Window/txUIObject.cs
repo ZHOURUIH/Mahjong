@@ -10,6 +10,7 @@ public class txUIObject : ComponentOwner
 	protected AudioSource mAudioSource;
 	protected Transform mTransform;
 	protected BoxCollider mBoxCollider;
+	protected UIWidget mWidget;
 	protected static int mIDSeed = 0;
 	protected bool mPassRay = true;
 	protected bool mMouseHovered = false;
@@ -60,6 +61,33 @@ public class txUIObject : ComponentOwner
 		}
 		mAudioSource = mObject.GetComponent<AudioSource>();
 		mBoxCollider = mObject.GetComponent<BoxCollider>();
+		mWidget = mObject.GetComponent<UIWidget>();
+		if (mBoxCollider != null)
+		{
+			string layoutName = "";
+			if(mLayout != null)
+			{
+				layoutName = mLayout.getName();
+			}
+			// BoxCollider必须与UIWidget(或者UIWidget的派生类)一起使用,否则在自适应屏幕时BoxCollider会出现错误
+			if (mWidget == null)
+			{
+				UnityUtility.logError("BoxCollider must used with UIWidget! Otherwise can not adapt to the screen sometimes! name : " + mName + ", layout : " + layoutName);
+			}
+			else
+			{
+				mWidget.autoResizeBoxCollider = true;
+			}
+			// BoxCollider的中心必须为0,因为UIWidget会自动调整BoxCollider的大小和位置,而且调整后位置为0,所以在制作时BoxCollider的位置必须为0
+			if(!MathUtility.isFloatZero(mBoxCollider.center.sqrMagnitude))
+			{
+				UnityUtility.logError("BoxCollider's center must be zero! Otherwise can not adapt to the screen sometimes! name : " + mName + ", layout : " + layoutName);
+			}
+			if(mObject.GetComponent<ScaleAnchor>() == null)
+			{
+				UnityUtility.logError("Window with BoxCollider and Widget must has ScaleAnchor! Otherwise can not adapt to the screen sometimes! name : " + mName + ", layout : " + layoutName);
+			}
+		}
 	}
 	public override void initComponents()
 	{

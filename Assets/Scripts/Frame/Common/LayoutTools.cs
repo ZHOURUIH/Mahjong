@@ -900,6 +900,40 @@ public class LayoutTools : GameBase
 		pushCommand(cmd, obj);
 	}
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------
+	// 亮度
+	public static void LUM_WINDOW(txUIObject obj, float lum)
+	{
+		CommandWindowLum cmd = newCmd(out cmd, false, false);
+		cmd.mName = "";
+		cmd.mOnceLength = 0.0f;
+		cmd.mStartLum = lum;
+		cmd.mTargetLum = lum;
+		pushCommand(cmd, obj);
+	}
+	public static void LUM_WINDOW(txUIObject obj, float start, float target, float onceLength)
+	{
+		LUM_KEYFRAME_WINDOW(obj, CommonDefine.ZERO_ONE, start, target, onceLength, false, 0.0f);
+	}
+	public static void LUM_KEYFRAME_WINDOW(txUIObject obj, string keyframe, float start, float target, float onceLength)
+	{
+		LUM_KEYFRAME_WINDOW(obj, keyframe, start, target, onceLength, false, 0.0f);
+	}
+	public static void LUM_KEYFRAME_WINDOW(txUIObject obj, string keyframe, float start, float target, float onceLength, bool loop, float offset)
+	{
+		if (keyframe == "" || MathUtility.isFloatZero(onceLength))
+		{
+			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用void LUM_WINDOW(txUIObject obj, Vector3 hsl)");
+		}
+		CommandWindowLum cmd = newCmd(out cmd, false, false);
+		cmd.mName = keyframe;
+		cmd.mLoop = loop;
+		cmd.mOnceLength = onceLength;
+		cmd.mOffset = offset;
+		cmd.mStartLum = start;
+		cmd.mTargetLum = target;
+		pushCommand(cmd, obj);
+	}
+	//--------------------------------------------------------------------------------------------------------------------------------------------------------
 	// 音效
 	public static void PLAY_AUDIO(txUIObject obj)
 	{

@@ -95,8 +95,17 @@ public class AssetBundleLoader : GameBase
 #elif UNITY_ANDROID
 			bool loadFromWWW = true;
 #endif
-			mGameFramework.StartCoroutine(loadAssetBundleCoroutine(mRequestBundleList[0], loadFromWWW));
-			mRequestBundleList.RemoveAt(0);
+			// 找到第一个依赖项已经加载完毕的资源
+			int count = mRequestBundleList.Count;
+			for (int i = 0; i < count; ++i)
+			{
+				if(mRequestBundleList[i].isAllParentLoaded())
+				{
+					mGameFramework.StartCoroutine(loadAssetBundleCoroutine(mRequestBundleList[i], loadFromWWW));
+					mRequestBundleList.RemoveAt(i);
+					break;
+				}
+			}
 		}
 	}
 	public void destroy()
@@ -304,7 +313,7 @@ public class AssetBundleLoader : GameBase
 		if (www.error != null)
 		{
 			// 下载失败
-			UnityUtility.logInfo("下载失败 : " + url, LOG_LEVEL.LL_FORCE);
+			UnityUtility.logInfo("下载失败 : " + url + ", info : " + www.error, LOG_LEVEL.LL_FORCE);
 			callback(null, userData);
 		}
 		else
@@ -315,12 +324,20 @@ public class AssetBundleLoader : GameBase
 #if UNITY_5_3_5
 				obj = www.audioClip;
 #else
-				obj = www.GetAudioClip();
+				obj = WWWAudioExtensions.GetAudioClip(www);
 #endif
 			}
 			else if(assetsType == typeof(Texture2D) || assetsType == typeof(Texture))
 			{
 				obj = www.texture;
+			}
+			else if(assetsType == typeof(MovieTexture))
+			{
+#if UNITY_5_3_5
+				obj = www.movie;
+#else
+				obj = WWWAudioExtensions.GetMovieTexture(www);
+#endif
 			}
 			else if(assetsType == typeof(AssetBundle))
 			{
@@ -385,6 +402,7 @@ public class AssetBundleLoader : GameBase
 		}
 		UnityUtility.logInfo(bundleInfo.mBundleName + " load bundle done", LOG_LEVEL.LL_NORMAL);
 
+		yield return new WaitForEndOfFrame();
 		// 通知AssetBundleInfo
 		bundleInfo.notifyAssetBundleAsyncLoadedDone(assetBundle);
 		--mAssetBundleCoroutineCount;

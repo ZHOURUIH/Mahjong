@@ -7,12 +7,13 @@ using UnityEngine;
 public class WindowShaderHSLOffset : WindowShader
 {
 	protected Vector3 mHSLOffset;   // 当前HSL偏移,只有当shader为HSLOffet或者HSLOffsetLinearDodge时才有效
-	protected bool mGray = false;
+	protected Texture mHSLTexture;
 	public WindowShaderHSLOffset()
-	{}
+	{ }
 	public void setHSLOffset(Vector3 offset) { mHSLOffset = offset; }
 	public Vector3 getHSLOffset() { return mHSLOffset; }
-	public void setGray(bool gray) { mGray = gray; }
+	public void setHSLTexture(Texture hslTexture) { mHSLTexture = hslTexture; }
+	public Texture getHSLTexture() { return mHSLTexture; }
 	public override void applyShader(Material mat)
 	{
 		base.applyShader(mat);
@@ -22,7 +23,8 @@ public class WindowShaderHSLOffset : WindowShader
 			if (shaderName == "HSLOffset")
 			{
 				mat.SetColor("_HSLOffset", new Color(mHSLOffset.x, mHSLOffset.y, mHSLOffset.z));
-				mat.SetInt("_GrayHSL", mGray ? 1 : 0);
+				mat.SetTexture("_HSLTex", mHSLTexture);
+				mat.SetInt("_HasHSLTex", mHSLTexture == null ? 0 : 1);
 			}
 		}
 	}

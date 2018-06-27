@@ -40,7 +40,7 @@ public class CustomThread
 			mThread.IsBackground = mIsBackground;
 		}
 	}
-	public void start(CustomThreadCallback callback, int frameTimeMS = 15)
+	public void start(CustomThreadCallback callback, int frameTimeMS = 15, int forceSleep = 5)
 	{
 		UnityUtility.logInfo("准备启动线程 : " + mName, LOG_LEVEL.LL_FORCE);
 		if (mThread != null)
@@ -48,7 +48,7 @@ public class CustomThread
 			return;
 		}
 		mTimeLock = new ThreadTimeLock(frameTimeMS);
-		mTimeLock.setForceSleep(5);
+		mTimeLock.setForceSleep(forceSleep);
 		mRunning = true;
 		mCallback = callback;
 		mThread = new Thread(run);

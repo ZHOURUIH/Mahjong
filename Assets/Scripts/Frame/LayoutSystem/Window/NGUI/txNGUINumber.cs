@@ -70,7 +70,7 @@ public class txNGUINumber : txNGUIStaticSprite
 			{
 				break;
 			}
-			width += mNumberList[i].mSprite.width;
+			width += (int)mNumberList[i].getWindowSize().x;
 		}
 		width += mInterval * (mNumber.Length - 1);
 		return width;
@@ -184,12 +184,10 @@ public class txNGUINumber : txNGUIStaticSprite
 		for (int i = 0; i < mMaxCount + 1; ++i)
 		{
 			string name = mName + "_" + StringUtility.intToString(i);
+			// 由于所有数字的大小和位置都是由数字窗口自动计算的,所以不需要为子窗口添加自适应组件
 			mNumberList.Add(mLayout.getScript().createObject<txNGUIStaticSprite>(this, name, false));
 			mNumberList[i].mSprite.atlas = mSprite.atlas;
 			mNumberList[i].mSprite.depth = mSprite.depth + 1;
-			ScaleAnchor anchor = mNumberList[i].mObject.AddComponent<ScaleAnchor>();
-			anchor.mKeepAspect = mObject.GetComponent<ScaleAnchor>().mKeepAspect;
-			anchor.mAspectBase = mObject.GetComponent<ScaleAnchor>().mAspectBase;
 		}
 		refreshNumber();
 	}

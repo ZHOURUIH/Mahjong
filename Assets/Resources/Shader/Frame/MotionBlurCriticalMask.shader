@@ -1,6 +1,4 @@
-﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
-Shader "MotionBlurCriticalMask"
+﻿Shader "MotionBlurCriticalMask"
 {
 	Properties
 	{
@@ -74,7 +72,7 @@ Shader "MotionBlurCriticalMask"
 			v2f vert (appdata v)
 			{
 				v2f o;
-				o.vertex = UnityObjectToClipPos(v.vertex);
+				o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
 				o.uv = v.uv.xy * _MainTex_ST.xy + _MainTex_ST.zw;
 				o.color = v.color;
 				return o;
@@ -92,13 +90,13 @@ Shader "MotionBlurCriticalMask"
 				int sampleCount = (int)((pixelLen - _MinRange) * _IncreaseSample);
 				sampleCount = clamp(sampleCount, _SampleInterval, _MaxSample) / _SampleInterval;
 				fixed4 finalColor = float4(0.0f, 0.0f, 0.0f, 0.0f);
-				//[unroll(100)]
+				[unroll(100)]
 				for (int k = 0; k < sampleCount; ++k)
 				{
 					float2 samplePos = pixelPos + dir * k * _SampleInterval;
 					samplePos.x = clamp(samplePos.x * _MainTex_TexelSize.x, 0.0f, 1.0f);
 					samplePos.y = clamp(samplePos.y * _MainTex_TexelSize.y, 0.0f, 1.0f);
-					fixed4 curColor = tex2Dlod(_MainTex, float4(samplePos.x, samplePos.y, 0, 0)).rgba;
+					fixed4 curColor = tex2D(_MainTex, float2(samplePos.x, samplePos.y)).rgba;
 					finalColor += curColor;
 				}
 				finalColor /= sampleCount;

@@ -74,9 +74,9 @@ public class txUIObject : ComponentOwner
 			{
 				UnityUtility.logError("BoxCollider must used with UIWidget! Otherwise can not adapt to the screen sometimes! name : " + mName + ", layout : " + layoutName);
 			}
-			else
+			else if(!mWidget.autoResizeBoxCollider)
 			{
-				mWidget.autoResizeBoxCollider = true;
+				UnityUtility.logError("UIWidget's autoResizeBoxCollider must be true! Otherwise can not adapt to the screen sometimes! name : " + mName + ", layout : " + layoutName);
 			}
 			// BoxCollider的中心必须为0,因为UIWidget会自动调整BoxCollider的大小和位置,而且调整后位置为0,所以在制作时BoxCollider的位置必须为0
 			if(!MathUtility.isFloatZero(mBoxCollider.center.sqrMagnitude))
@@ -101,6 +101,7 @@ public class txUIObject : ComponentOwner
 		addComponent<WindowComponentFill>("fill");
 		addComponent<WindowComponentRotateFixed>("RotateFixed");
 		addComponent<WindowComponentHSL>("HSL");
+		addComponent<WindowComponentLum>("Lum");
 		addComponent<WindowComponentDrag>("Drag");
 		addComponent<WindowComponentTrackTarget>("TrackTarget");
 	}

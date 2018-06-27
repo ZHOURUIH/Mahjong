@@ -55,7 +55,6 @@ public class CommandPool : GameBase
 			cmd.init();
 			cmd.setType(typeof(T));
 			++mNewCount;
-			UnityUtility.logInfo("new cmd : " + mNewCount + ",type : " + typeof(T), LOG_LEVEL.LL_HIGH);
 		}
 		// 设置为可用命令
 		cmd.setValid(true);

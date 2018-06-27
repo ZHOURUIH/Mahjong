@@ -288,10 +288,6 @@ public class GameFramework : MonoBehaviour
 		}
 		if (adaptScreen == ADAPT_SCREEN.AS_SIMPLE_STRETCH)
 		{
-			UIRoot uiRoot = uiRootObj.GetComponent<UIRoot>();
-			uiRoot.scalingStyle = UIRoot.Scaling.Flexible;
-			uiRoot.manualWidth = CommonDefine.STANDARD_WIDTH;
-			uiRoot.manualHeight = CommonDefine.STANDARD_HEIGHT;
 			rootStretch.SetActive(true);
 			GameObject camera = UnityUtility.getGameObject(rootStretch, "Camera");
 			GameObject cameraTexture = UnityUtility.getGameObject(rootStretch, "UICameraTexture");
@@ -320,8 +316,6 @@ public class GameFramework : MonoBehaviour
 				setCameraTargetTexture(uiRootObj, "UIBackEffectCamera", null);
 				setCameraTargetTexture(uiRootObj, "UIForeEffectCamera", null);
 				setCameraTargetTexture(uiRootObj, "UIBlurCamera", null);
-				UIRoot uiRoot = uiRootObj.GetComponent<UIRoot>();
-				uiRoot.scalingStyle = UIRoot.Scaling.Constrained;
 			}
 			else if(adaptScreen == ADAPT_SCREEN.AS_MULTI_SCREEN && screenCount > 1)
 			{

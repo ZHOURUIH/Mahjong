@@ -13,6 +13,15 @@ public enum ANCHOR_MODE
 	AM_NEAR_PARENT_CENTER_SCALE_SIZE,	// 将锚点设置到相对于父节点的中心,并且各边界距离父节点对应边界占的比例固定,但是如果父节点为空,则只能固定大小
 }
 
+// 当mAnchorMode的值为AM_NEAR_SIDE时,要停靠的边界
+public enum NEAR_SIDE
+{
+	NS_LEFT,
+	NS_TOP,
+	NS_RIGHT,
+	NS_BOTTOM,
+}
+
 [Serializable]
 public class AnchorPoint
 {
@@ -45,8 +54,9 @@ public class SetPropertyAttribute : PropertyAttribute
 [ExecuteInEditMode]
 public class CustomAnchor : MonoBehaviour
 {
+	protected bool mDirty = true;
 	protected ANCHOR_MODE mAnchorMode = ANCHOR_MODE.AM_NONE;
-	protected int mNearSide = 0;    // 当mAnchorMode的值为AM_NEAR_SIDE时,要停靠的边界,0,1,2,3表示左,上,右,下
+	protected NEAR_SIDE mNearSide = NEAR_SIDE.NS_LEFT;
 	// 左上右下的顺序
 	public AnchorPoint[] mAnchorPoint = new AnchorPoint[4] { new AnchorPoint(), new AnchorPoint(), new AnchorPoint(), new AnchorPoint()};
 	public ANCHOR_MODE _mAnchorMode
@@ -77,7 +87,7 @@ public class CustomAnchor : MonoBehaviour
 		}
 	}
 	
-	public int _mNearSide
+	public NEAR_SIDE _mNearSide
 	{
 		get
 		{
@@ -92,18 +102,38 @@ public class CustomAnchor : MonoBehaviour
 			}
 		}
 	}
-	public void Start()
+	public bool _mDirty
 	{
-		;
+		get
+		{
+			return mDirty;
+		}
+		set
+		{
+			mDirty = value;
+			updateRect();
+		}
 	}
-	public void OnEnable()
+	public void forceUpdateChildren()
 	{
-		updateRect();
+		// 先更新自己
+		updateRect(true);
+		// 然后更新所有子节点
+		int childCount = transform.childCount;
+		for (int i = 0; i < childCount; ++i)
+		{
+			ScaleAnchor anchor = transform.GetChild(i).GetComponent<ScaleAnchor>();
+			if (anchor != null)
+			{
+				anchor.forceUpdateChildren();
+			}
+		}
 	}
+	//------------------------------------------------------------------------------------------------------------------------------------------------
 	// 将锚点设置到距离相对于父节点最近的边,并且各边界到父节点对应边界的距离固定不变
-	public void setToNearParentSides()
+	protected void setToNearParentSides()
 	{
-		UIRect parentRect = findRectParent(gameObject);
+		UIRect parentRect = findParentRect(gameObject);
 		if(parentRect == null)
 		{
 			Vector3[] sides = getSides(null);
@@ -112,11 +142,11 @@ public class CustomAnchor : MonoBehaviour
 				mAnchorPoint[i].setRelative(0.0f);
 				if(i == 0 || i == 2)
 				{
-					mAnchorPoint[i].setAbsolute(sides[i].x);
+					mAnchorPoint[i].setAbsolute(MathUtility.getLength(sides[i]));
 				}
 				else if(i == 1 || i == 3)
 				{
-					mAnchorPoint[i].setAbsolute(sides[i].y);
+					mAnchorPoint[i].setAbsolute(MathUtility.getLength(sides[i]));
 				}
 			}
 			return;
@@ -130,9 +160,9 @@ public class CustomAnchor : MonoBehaviour
 			{
 				if (i == 0 || i== 2)
 				{
-					float relativeLeft = sides[i].x - parentSides[0].x;
-					float relativeCenter = sides[i].x;
-					float relativeRight = sides[i].x - parentSides[2].x;
+					float relativeLeft = MathUtility.getLength(sides[i] - parentSides[0]);
+					float relativeCenter = MathUtility.getLength(sides[i]);
+					float relativeRight = MathUtility.getLength(sides[i] - parentSides[2]);
 					float disToLeft = Mathf.Abs(relativeLeft);
 					float disToCenter = Mathf.Abs(relativeCenter);
 					float disToRight = Mathf.Abs(relativeRight);
@@ -157,9 +187,9 @@ public class CustomAnchor : MonoBehaviour
 				}
 				else if (i == 1 || i == 3)
 				{
-					float relativeTop = sides[i].y - parentSides[1].y;
-					float relativeCenter = sides[i].y;
-					float relativeBottom = sides[i].y - parentSides[3].y;
+					float relativeTop = MathUtility.getLength(sides[i] - parentSides[1]);
+					float relativeCenter = MathUtility.getLength(sides[i]);
+					float relativeBottom = MathUtility.getLength(sides[i] - parentSides[3]);
 					float disToTop = Mathf.Abs(relativeTop);
 					float disToCenter = Mathf.Abs(relativeCenter);
 					float disToBottom = Mathf.Abs(relativeBottom);
@@ -186,10 +216,10 @@ public class CustomAnchor : MonoBehaviour
 		}
 	}
 	// 将锚点设置到相对于父节点的中心,并且大小不改变
-	public void setToNearParentCenterFixedSize()
+	protected void setToNearParentCenterFixedSize()
 	{
 		Vector3[] sides = null;
-		UIRect parentRect = findRectParent(gameObject);
+		UIRect parentRect = findParentRect(gameObject);
 		if (parentRect == null)
 		{
 			sides = getSides(null);
@@ -203,18 +233,18 @@ public class CustomAnchor : MonoBehaviour
 			mAnchorPoint[i].setRelative(0.0f);
 			if (i == 0 || i == 2)
 			{
-				mAnchorPoint[i].setAbsolute(sides[i].x);
+				mAnchorPoint[i].setAbsolute(MathUtility.getLength(sides[i]));
 			}
 			else
 			{
-				mAnchorPoint[i].setAbsolute(sides[i].y);
+				mAnchorPoint[i].setAbsolute(MathUtility.getLength(sides[i]));
 			}
 		}
 	}
 	// 将锚点设置到相对于父节点的中心,并且各边界距离父节点对应边界占的比例固定,但是如果父节点为空,则只能固定大小
-	public void setToNearParentCenterScaleSize()
+	protected void setToNearParentCenterScaleSize()
 	{
-		UIRect parentRect = findRectParent(gameObject);
+		UIRect parentRect = findParentRect(gameObject);
 		if (parentRect == null)
 		{
 			Vector3[] sides = getSides(null);
@@ -223,11 +253,11 @@ public class CustomAnchor : MonoBehaviour
 				mAnchorPoint[i].setRelative(0.0f);
 				if (i == 0 || i == 2)
 				{
-					mAnchorPoint[i].setAbsolute(sides[i].x);
+					mAnchorPoint[i].setAbsolute(MathUtility.getLength(sides[i]));
 				}
 				else
 				{
-					mAnchorPoint[i].setAbsolute(sides[i].y);
+					mAnchorPoint[i].setAbsolute(MathUtility.getLength(sides[i]));
 				}
 			}
 		}
@@ -241,19 +271,19 @@ public class CustomAnchor : MonoBehaviour
 				mAnchorPoint[i].setAbsolute(0.0f);
 				if (i == 0 || i == 2)
 				{
-					mAnchorPoint[i].setRelative(sides[i].x / parentSides[i].x);
+					mAnchorPoint[i].setRelative(MathUtility.getLength(sides[i]) / MathUtility.getLength(parentSides[i]));
 				}
 				else
 				{
-					mAnchorPoint[i].setRelative(sides[i].y / parentSides[i].y);
+					mAnchorPoint[i].setRelative(MathUtility.getLength(sides[i]) / MathUtility.getLength(parentSides[i]));
 				}
 			}
 		}
 	}
 	// 停靠父节点的指定边界,并且大小不改变,0,1,2,3表示左上右下
-	public void setToPaddingParentSide(int side)
+	protected void setToPaddingParentSide(NEAR_SIDE side)
 	{
-		UIRect parentRect = findRectParent(gameObject);
+		UIRect parentRect = findParentRect(gameObject);
 		if(parentRect == null)
 		{
 			Vector3[] sides = getSides(null);
@@ -262,11 +292,11 @@ public class CustomAnchor : MonoBehaviour
 				mAnchorPoint[i].setRelative(0.0f);
 				if (i == 0 || i == 2)
 				{
-					mAnchorPoint[i].setAbsolute(sides[i].x);
+					mAnchorPoint[i].setAbsolute(MathUtility.getLength(sides[i]));
 				}
 				else
 				{
-					mAnchorPoint[i].setAbsolute(sides[i].y);
+					mAnchorPoint[i].setAbsolute(MathUtility.getLength(sides[i]));
 				}
 			}
 		}
@@ -276,53 +306,57 @@ public class CustomAnchor : MonoBehaviour
 			Vector3[] sides = getSides(parent);
 			Vector3[] parentSides = getParentSides(parent);
 			// 相对于左右边界
-			if (side == 0 || side == 2)
+			if (side == NEAR_SIDE.NS_LEFT|| side == NEAR_SIDE.NS_RIGHT)
 			{
 				for (int i = 0; i < 4; ++i)
 				{
 					if (i == 0 || i == 2)
 					{
 						mAnchorPoint[i].setRelative((side == 0) ? -1.0f : 1.0f);
-						mAnchorPoint[i].setAbsolute(sides[i].x - parentSides[side].x);
+						mAnchorPoint[i].setAbsolute(MathUtility.getLength(sides[i] - parentSides[(int)side]));
 					}
 					else
 					{
 						mAnchorPoint[i].setRelative(0.0f);
-						mAnchorPoint[i].setAbsolute(sides[i].y);
+						mAnchorPoint[i].setAbsolute(MathUtility.getLength(sides[i]));
 					}
 				}
 			}
 			// 相对于上下边界
-			else if(side == 1 || side == 3)
+			else if(side == NEAR_SIDE.NS_TOP || side == NEAR_SIDE.NS_BOTTOM)
 			{
 				for (int i = 0; i < 4; ++i)
 				{
 					if (i == 0 || i == 2)
 					{
 						mAnchorPoint[i].setRelative(0.0f);
-						mAnchorPoint[i].setAbsolute(sides[i].x);
+						mAnchorPoint[i].setAbsolute(MathUtility.getLength(sides[i]));
 					}
 					else
 					{
-						mAnchorPoint[i].setRelative((side == 1) ? 1.0f : -1.0f);
-						mAnchorPoint[i].setAbsolute(sides[i].y - parentSides[side].y);
+						mAnchorPoint[i].setRelative((side == NEAR_SIDE.NS_TOP) ? 1.0f : -1.0f);
+						mAnchorPoint[i].setAbsolute(MathUtility.getLength(sides[i] - parentSides[(int)side]));
 					}
 				}
 			}
 		}
 	}
-	//------------------------------------------------------------------------------------------------------------------------------------------------
-	protected void updateRect()
+	protected void updateRect(bool force = false)
 	{
+		if (!force && !mDirty)
+		{
+			return;
+		}
+		mDirty = false;
 		// 如果还没有设置自适应方式,则查找父节点和设置默认的自适应方式
-		if(_mAnchorMode == ANCHOR_MODE.AM_NONE)
+		if (_mAnchorMode == ANCHOR_MODE.AM_NONE)
 		{
 			_mAnchorMode = ANCHOR_MODE.AM_NEAR_PARENT_SIDE;
 		}
 		float width = 0.0f;
 		float height = 0.0f;
 		Vector3 pos = Vector3.zero;
-		UIRect parentRect = findRectParent(gameObject);
+		UIRect parentRect = findParentRect(gameObject);
 		if (parentRect != null)
 		{
 			GameObject parent = parentRect.gameObject;
@@ -381,23 +415,43 @@ public class CustomAnchor : MonoBehaviour
 		return sides;
 	}
 	// 父节点在父节点坐标系下的各条边
-	protected Vector3[] getParentSides(GameObject parent)
+	public static Vector3[] getParentSides(GameObject parent)
 	{
-		Vector3[] sides = new Vector3[4] { Vector3.zero, Vector3.zero, Vector3.zero, Vector3.zero};
 		UIRect parentRect = getGameObjectRect(parent);
 		if(parentRect == null)
 		{
-			return sides;
+			return new Vector3[4] { Vector3.zero, Vector3.zero, Vector3.zero, Vector3.zero };
 		}
-		Vector3[] worldCorners = parentRect.worldCorners;
-		for(int i = 0; i < 4; ++i)
+		return getRectLocalSide(parentRect);
+	}
+	public static Vector2 getRectSize(UIRect rect)
+	{
+		Vector3[] sides = getRectLocalSide(rect);
+		float width = MathUtility.getLength(sides[0] - sides[2]);
+		float height = MathUtility.getLength(sides[1] - sides[3]);
+		return new Vector2(width, height);
+	}
+	public static Vector3[] getRectLocalSide(UIRect rect)
+	{
+		Vector3[] sides = new Vector3[4] { Vector3.zero, Vector3.zero, Vector3.zero, Vector3.zero };
+		Vector3[] localCorners = rect.localCorners;
+		for (int i = 0; i < 4; ++i)
 		{
-			sides[i] = (worldCorners[i] + worldCorners[(i + 1) % 4]) / 2;
-			sides[i] = parent.transform.InverseTransformPoint(sides[i]);
+			sides[i] = (localCorners[i] + localCorners[(i + 1) % 4]) / 2;
 		}
 		return sides;
 	}
-	protected UIRect findRectParent(GameObject obj)
+	public static Vector3[] getRectWorldSide(UIRect rect)
+	{
+		Vector3[] sides = new Vector3[4] { Vector3.zero, Vector3.zero, Vector3.zero, Vector3.zero };
+		Vector3[] worldCorners = rect.worldCorners;
+		for (int i = 0; i < 4; ++i)
+		{
+			sides[i] = (worldCorners[i] + worldCorners[(i + 1) % 4]) / 2;
+		}
+		return sides;
+	}
+	public static UIRect findParentRect(GameObject obj)
 	{
 		if (obj == null)
 		{
@@ -419,7 +473,7 @@ public class CustomAnchor : MonoBehaviour
 			// 父节点没有UIRect,则继续往上找
 			else
 			{
-				return findRectParent(parent);
+				return findParentRect(parent);
 			}
 		}
 		else

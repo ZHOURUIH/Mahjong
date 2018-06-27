@@ -1,6 +1,4 @@
-﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
-Shader "MaskCut"
+﻿Shader "MaskCut"
 {
 	Properties
 	{
@@ -61,7 +59,7 @@ Shader "MaskCut"
 			v2f vert (appdata v)
 			{
 				v2f o;
-				o.vertex = UnityObjectToClipPos(v.vertex);
+				o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
 				o.uv = v.uv.xy * _MainTex_ST.xy + _MainTex_ST.zw;
 				o.color = v.color;
 				return o;

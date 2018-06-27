@@ -31,6 +31,42 @@ public class txNGUIStaticTextureFeather : txNGUIStaticTexture
 	}
 }
 //---------------------------------------------------------------------------------------------------------------------------
+public class txNGUIStaticTextureGrey : txNGUIStaticTexture
+{
+	public override void init(GameLayout layout, GameObject go, txUIObject parent)
+	{
+		base.init(layout, go, parent);
+		setWindowShader<WindowShaderGrey>();
+	}
+}
+//---------------------------------------------------------------------------------------------------------------------------
+public class txNGUIStaticTextureLumOffset : txNGUIStaticTexture
+{
+	public override void init(GameLayout layout, GameObject go, txUIObject parent)
+	{
+		base.init(layout, go, parent);
+		setWindowShader<WindowShaderLumOffset>();
+	}
+}
+//---------------------------------------------------------------------------------------------------------------------------
+public class txNGUIStaticTextureLumOffsetLinearDodge : txNGUIStaticTexture
+{
+	public override void init(GameLayout layout, GameObject go, txUIObject parent)
+	{
+		base.init(layout, go, parent);
+		setWindowShader<WindowShaderLumOffsetLinearDodge>();
+	}
+}
+//---------------------------------------------------------------------------------------------------------------------------
+public class txNGUIStaticTextureLinearDodge : txNGUIStaticTexture
+{
+	public override void init(GameLayout layout, GameObject go, txUIObject parent)
+	{
+		base.init(layout, go, parent);
+		setWindowShader<WindowShaderLinearDodge>();
+	}
+}
+//---------------------------------------------------------------------------------------------------------------------------
 public class txNGUIStaticTextureHSLOffset : txNGUIStaticTexture
 {
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)

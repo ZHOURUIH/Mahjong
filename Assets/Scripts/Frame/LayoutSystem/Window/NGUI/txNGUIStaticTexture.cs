@@ -8,6 +8,7 @@ public class txNGUIStaticTexture : txUIObject
 {
 	protected UITexture mTexture;
 	protected WindowShader mWindowShader;
+    protected string mOriginTextureName;    // 初始图片的名字,用于外部根据初始名字设置其他效果的图片
 	public txNGUIStaticTexture()
 	{
 		mType = UI_TYPE.UT_NGUI_STATIC_TEXTURE;
@@ -26,7 +27,8 @@ public class txNGUIStaticTexture : txUIObject
 		{
 			setMaterial(getMaterialName(), true);
 		}
-	}
+        mOriginTextureName = getTextureName();
+    }
 	public virtual void setWindowShader<T>() where T : WindowShader, new()
 	{
 		mWindowShader = new T();
@@ -184,6 +186,21 @@ public class txNGUIStaticTexture : txUIObject
 		}
 		mTexture.depth = depth;
 		base.setDepth(depth);
+	}
+    public string getOriginTextureName() { return mOriginTextureName; }
+    public void setOriginTextureName(string textureName) { mOriginTextureName = textureName; }
+	// 自动计算图片的原始名称,也就是不带后缀的名称,后缀默认以_分隔
+	public void generateOriginTextureName(string key = "_")
+	{
+		int pos = mOriginTextureName.LastIndexOf(key);
+		if (pos >= 0)
+		{
+			mOriginTextureName = mOriginTextureName.Substring(0, mOriginTextureName.LastIndexOf(key) + 1);
+		}
+		else
+		{
+			UnityUtility.logError("texture name is not valid!can not generate origin texture name, texture name : " + mOriginTextureName);
+		}
 	}
 	//---------------------------------------------------------------------------------------------------
 	protected void onWidgetRender(Material mat)

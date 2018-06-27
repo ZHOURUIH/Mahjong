@@ -1,12 +1,11 @@
-﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
-Shader "HSLOffset"
+﻿Shader "HSLOffset"
 {
 	Properties
 	{
-		_MainTex ("Texture", 2D) = "white" {}
-		_HSLOffset ("HSL Offset", Color) = (0, 0, 0, 0)
-		_GrayHSL ("Gray HSL", int) = 0
+		_MainTex("Texture", 2D) = "white" {}
+		_HSLTex("HSL Texture", 2D) = "white" {}
+		_HSLOffset("HSL Offset", Color) = (0, 0, 0, 0)
+		_HasHSLTex("Has HSL Texture", int) = 0
 	}
 	SubShader
 	{
@@ -167,13 +166,14 @@ Shader "HSLOffset"
 			}
 
 			sampler2D _MainTex;
+			sampler2D _HSLTex;
 			float4 _HSLOffset;
-			int _GrayHSL;
-			
+			int _HasHSLTex;
+
 			v2f vert (appdata v)
 			{
 				v2f o;
-				o.vertex = UnityObjectToClipPos(v.vertex);
+				o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
 				o.texcoord = v.texcoord;
 				o.color = v.color;
 				return o;
@@ -182,16 +182,18 @@ Shader "HSLOffset"
 			fixed4 frag (v2f i) : SV_Target
 			{
 				fixed4 col = tex2D(_MainTex, i.texcoord);
-				// 转换到HSL颜色空间,再做HSL计算偏移
-				float3 hsl = RGBtoHSL(float3(col.r, col.g, col.b));
-				if(_GrayHSL == 0)
+				float3 hsl;
+				if (_HasHSLTex == 0)
 				{
-					hsl += float3(_HSLOffset.r, _HSLOffset.g, _HSLOffset.b);
+					// 转换到HSL颜色空间,再做HSL计算偏移
+					hsl = RGBtoHSL(float3(col.r, col.g, col.b));
 				}
 				else
 				{
-					hsl = float3(0.0f, 0.0f, hsl.z);
+					// 从HSL纹理中采样对应像素的HSL值
+					hsl = tex2D(_HSLTex, i.texcoord).rgb;
 				}
+				hsl += float3(_HSLOffset.r, _HSLOffset.g, _HSLOffset.b);
 				// 转回RGB空间,并转换到0-1之间
 				float3 rgb = HSLtoRGB(hsl);
 

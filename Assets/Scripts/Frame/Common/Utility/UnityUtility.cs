@@ -59,7 +59,8 @@ public class UnityUtility : FrameComponent
 			// 运行一次只显示一次提示框,避免在循环中报错时一直弹窗
 			mShowMessageBox = false;
 		}
-		UnityEngine.Debug.LogError("error : " + info);
+		string trackStr = new StackTrace().ToString();
+		UnityEngine.Debug.LogError("error : " + info + ", stack : " + trackStr);
 		// 游戏中的错误日志
 		if (mFrameLogSystem != null)
 		{

@@ -27,7 +27,7 @@ public class ThreadTimeLock
 		long remainMS = mFrameTimeMS - (long)(endTime - mLastTime).TotalMilliseconds;
 		if(remainMS > 0)
 		{
-			Thread.Sleep(remainMS);
+			Thread.Sleep((int)remainMS);
 		}
 		else if(mForceSleep > 0)
 		{

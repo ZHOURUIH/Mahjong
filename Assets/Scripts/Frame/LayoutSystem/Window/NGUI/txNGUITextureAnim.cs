@@ -6,27 +6,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
-public class TextureInfo
-{
-	public string mName;
-	public Texture mTexture;
-	public Vector2 mSize;
-	public Vector2 mPos;
-	public Vector2 mOriginSize;
-	public TextureInfo(string name, Texture tex, Vector2 size, Vector2 pos, Vector2 oriSize)
-	{
-		mName = name;
-		mTexture = tex;
-		mSize = size;
-		mPos = pos;
-		mOriginSize = oriSize;
-	}
-}
-
 public class txNGUITextureAnim : txNGUIStaticTexture
 {
-	protected List<TextureInfo> mTextureNameList;
-	protected Dictionary<Texture, TextureInfo> mTextureSearchList;
+	protected List<Texture> mTextureNameList;
 	protected int mStartIndex = 0;          // 序列帧的起始帧下标,默认为0,即从头开始
 	protected int mEndIndex = -1;           // 序列帧的终止帧下标,默认为-1,即播放到尾部
 	protected bool mPlayDirection = true;   // 播放方向,true为正向播放(从mStartIndex到mEndIndex),false为返向播放(从mEndIndex到mStartIndex)
@@ -40,37 +22,14 @@ public class txNGUITextureAnim : txNGUIStaticTexture
 	protected bool mAutoHide = true;        // 是否在播放完毕后自动隐藏并且重置当前帧下标
 	protected TextureAnimCallBack mPlayEndCallback = null;  // 一个序列播放完时的回调函数,只在非循环播放状态下有效
 	protected object mPlayEndUserData;
-	protected txNGUIStaticTexture mInstanceWindow;
-	protected bool mIsCulling = true;
 	public txNGUITextureAnim()
 	{
 		mType = UI_TYPE.UT_NGUI_TEXTURE_ANIM;
-		mTextureNameList = new List<TextureInfo>();
-		mTextureSearchList = new Dictionary<Texture, TextureInfo>();
+		mTextureNameList = new List<Texture>();
 		mInverseInterval = 1.0f / mInterval;
-		mInstanceWindow = new txNGUIStaticTexture();
 	}
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{
-		// 初始化之前先创建子节点，因为在初始化中会重新创建名称唯一的材质导致材质查找错误
-		GameObject instanceObj = null;
-		if (UnityUtility.getGameObject(go, go.name + "_Instance", false) == null)
-		{
-			instanceObj = UnityUtility.cloneObject(go, go.name + "_Instance");
-			instanceObj.transform.SetParent(go.transform);
-			BoxCollider boxCollider = instanceObj.transform.GetComponent<BoxCollider>();
-			if (boxCollider != null)
-			{
-				boxCollider.enabled = false;
-			}
-		}
-		mInstanceWindow.init(layout, instanceObj, this);
-		mInstanceWindow.setLocalScale(Vector3.one);
-		mInstanceWindow.setLocalPosition(Vector3.zero);
-		ScaleAnchor instanceAnchor = mInstanceWindow.mObject.AddComponent<ScaleAnchor>();
-		instanceAnchor.mKeepAspect = go.GetComponent<ScaleAnchor>().mKeepAspect;
-		instanceAnchor.mAspectBase = go.GetComponent<ScaleAnchor>().mAspectBase;
-		setUnActiveInstanceWindowChildGameobj();
 		base.init(layout, go, parent);
 		string textureName = getTextureName();
 		int index = textureName.LastIndexOf('_');
@@ -79,8 +38,6 @@ public class txNGUITextureAnim : txNGUIStaticTexture
 			string textureSetName = textureName.Substring(0, index);
 			setTextureSet(textureSetName);
 		}
-		// 禁用自身的Texture，使用子节点来实现显示功能
-		mTexture.enabled = false;
 	}
 	public override void update(float elapsedTime)
 	{
@@ -172,14 +129,6 @@ public class txNGUITextureAnim : txNGUIStaticTexture
 			}
 		}
 	}
-	public override void setWindowShader<T>()
-	{
-		mInstanceWindow.setWindowShader<T>();
-	}
-	public override T getWindowShader<T>()
-	{
-		return mInstanceWindow.getWindowShader<T>();
-	}
 	public LOOP_MODE getLoop() { return mLoopMode; }
 	public string getTextureSetName() { return mTextureSetName; }
 	public float getInterval() { return mInterval; }
@@ -237,81 +186,11 @@ public class txNGUITextureAnim : txNGUIStaticTexture
 			MathUtility.clamp(ref mEndIndex, 0, getTextureFrameCount() - 1);
 		}
 	}
-	public bool parseVector2(string str, string key, ref Vector2 value)
-	{
-		string[] pair = StringUtility.split(str, true, ":");
-		if (pair.Length != 2)
-		{
-			return false;
-		}
-		string[] valuePair = StringUtility.split(pair[1], true, key);
-		if (valuePair.Length != 2)
-		{
-			return false;
-		}
-		value.x = StringUtility.stringToFloat(valuePair[0]);
-		value.y = StringUtility.stringToFloat(valuePair[1]);
-		return true;
-	}
-	public void parseLine(string line, ref string name, ref Vector2 size, ref Vector2 pos, ref Vector2 textureSize)
-	{
-		// 去除所有空白字符
-		line = Regex.Replace(line, @"\s", "");
-		// 如果该行是空的,则不进行处理
-		if (line.Length > 0)
-		{
-			string[] value = StringUtility.split(line, true, "=");
-			if (value.Length != 2)
-			{
-				UnityUtility.logError("配置文件错误 : line : " + line);
-				return;
-			}
-			name = value[0];
-			string[] value0 = StringUtility.split(value[1], true, ";");
-			if (value0.Length != 3)
-			{
-				UnityUtility.logError("配置文件错误 : line : " + line);
-				return;
-			}
-			bool ret = parseVector2(value0[0], "*", ref size);
-			ret = parseVector2(value0[1], ",", ref pos) && ret;
-			ret = parseVector2(value0[2], "*", ref textureSize) && ret;
-			if (!ret)
-			{
-				UnityUtility.logError("配置文件错误 : line : " + line);
-				return;
-			}
-		}
-	}
-	public void readFile(string fileName, ref List<string> valueList)
-	{
-		TextAsset res = mResourceManager.loadResource<TextAsset>(fileName, false);
-		if (res == null)
-		{
-			mIsCulling = false;
-			return;
-		}
-		string[] lineList = StringUtility.split(res.text, true, "\r\n");
-		// 前1行需要被丢弃
-		int dropLine = 1;
-		for (int i = 0; i < lineList.Length; ++i)
-		{
-			if (i < dropLine)
-			{
-				continue;
-			}
-			valueList.Add(lineList[i]);
-		}
-	}
 	public void setTextureSet(string textureSetName)
 	{
 		mTextureNameList.Clear();
-		mTextureSearchList.Clear();
 		mTextureSetName = textureSetName;
 		string path = CommonDefine.R_TEXTURE_ANIM_PATH + mTextureSetName;
-		List<string> infoStringList = new List<string>();
-		//读取序列帧下的文本文档
-		readFile(path + "/" + mTextureSetName, ref infoStringList);
 		string preName = path + "/" + mTextureSetName + "_";
 		for (int i = 0; ; ++i)
 		{
@@ -321,22 +200,7 @@ public class txNGUITextureAnim : txNGUIStaticTexture
 			{
 				break;
 			}
-			string texName = "";
-			Vector2 targetSize = Vector2.zero;
-			Vector2 targetPos = Vector2.zero;
-			Vector2 originSize = Vector2.zero;
-			if (i < infoStringList.Count)
-			{
-				parseLine(infoStringList[i], ref texName, ref targetSize, ref targetPos, ref originSize);
-				string filename = StringUtility.getFileNameNoSuffix(name, true);
-				if (texName != filename)
-				{
-					UnityUtility.logError("texture name not match! name : " + filename + ", texture name in txt : " + texName);
-				}
-			}
-			TextureInfo info = new TextureInfo(name, tex, targetSize, targetPos, originSize);
-			mTextureNameList.Add(info);
-			mTextureSearchList.Add(tex, info);
+			mTextureNameList.Add(tex);
 		}
 
 		// 重新判断起始下标和终止下标,确保下标不会越界
@@ -347,7 +211,7 @@ public class txNGUITextureAnim : txNGUIStaticTexture
 		}
 		if (mTextureNameList.Count > 0 && mStartIndex >= 0 && mStartIndex < mTextureNameList.Count)
 		{
-			setTexture(mTextureNameList[mStartIndex].mTexture);
+			setTexture(mTextureNameList[mStartIndex]);
 		}
 	}
 	public void stop(bool resetStartIndex = true, bool callback = true, bool isBreak = true)
@@ -380,41 +244,13 @@ public class txNGUITextureAnim : txNGUIStaticTexture
 		mCurTimeCount = 0.0f;
 		applyFrameIndex();
 	}
-	public override void setTexture(Texture tex)
-	{
-		if (mInstanceWindow.mObject == null)
-		{
-			return;
-		}
-		// 不调用基类的方法
-		mInstanceWindow.setTexture(tex);
-		if (mIsCulling)
-		{
-			// 设置子窗口的大小和位置
-			TextureInfo info = mTextureSearchList[tex];
-			mInstanceWindow.setWindowSize(info.mSize);
-			mInstanceWindow.setLocalPosition(info.mPos);
-		}
-	}
 	//---------------------------------------------------------------------------------------------------------------------------------------------------
-	protected void setUnActiveInstanceWindowChildGameobj()
-	{
-		if (mInstanceWindow != null)
-		{
-			int childCount = mInstanceWindow.getTransform().childCount;
-			for (int i = 0; i < childCount; i++)
-			{
-				mInstanceWindow.getTransform().GetChild(i).gameObject.SetActive(false);
-			}
-		}
-	}
 	protected void applyFrameIndex()
 	{
 		MathUtility.clamp(ref mCurTextureIndex, mStartIndex, getRealEndIndex());
 		if (mCurTextureIndex >= 0 && mCurTextureIndex < mTextureNameList.Count)
 		{
-			TextureInfo info = mTextureNameList[mCurTextureIndex];
-			setTexture(info.mTexture);
+			setTexture(mTextureNameList[mCurTextureIndex]);
 		}
 	}
 	// 调用并且清空回调,清空是在调用之前

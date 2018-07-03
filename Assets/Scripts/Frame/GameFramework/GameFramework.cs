@@ -29,6 +29,8 @@ public class GameFramework : MonoBehaviour
 			UnityUtility.logError("game framework can not start again!");
 			return;
 		}
+		AppDomain app = AppDomain.CurrentDomain;
+		app.UnhandledException += UnhandledException;
 		UnityUtility.logInfo("start game!", LOG_LEVEL.LL_FORCE);
 		mFrameComponentMap = new Dictionary<string, FrameComponent>();
 		mFrameComponentList = new List<FrameComponent>();
@@ -46,6 +48,10 @@ public class GameFramework : MonoBehaviour
 		// 初始化完毕后启动游戏
 		launch();
 		mCurTime = DateTime.Now;
+	}
+	void UnhandledException(object sender, UnhandledExceptionEventArgs e)
+	{
+		UnityUtility.logError(e.ExceptionObject.ToString());
 	}
 	public void Update()
 	{

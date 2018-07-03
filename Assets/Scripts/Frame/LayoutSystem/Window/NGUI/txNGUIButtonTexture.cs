@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class txNGUIButton : txUIObject
+public class txNGUIButtonTexture : txNGUIStaticTexture
 {
 	protected UIButton	  mButton;
 	protected bool		  mHandleInput = true;
-	public txNGUIButton()
+	public txNGUIButtonTexture()
 	{
-		mType = UI_TYPE.UT_NGUI_BUTTON;
+		mType = UI_TYPE.UT_NGUI_BUTTON_TEXTURE;
 	}
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{

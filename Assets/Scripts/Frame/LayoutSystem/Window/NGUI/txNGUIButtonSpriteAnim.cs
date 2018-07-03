@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class txNGUIButton : txUIObject
+public class txNGUIButtonSpriteAnim : txNGUISpriteAnim
 {
 	protected UIButton	  mButton;
 	protected bool		  mHandleInput = true;
-	public txNGUIButton()
+	public txNGUIButtonSpriteAnim()
 	{
-		mType = UI_TYPE.UT_NGUI_BUTTON;
+		mType = UI_TYPE.UT_NGUI_BUTTON_SPRITE_ANIM;
 	}
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{

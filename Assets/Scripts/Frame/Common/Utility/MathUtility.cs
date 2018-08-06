@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class MathUtility
+public class MathUtility : GameBase
 {
 	protected static float[] sin_tb = null;
 	protected static float[] cos_tb = null;
 	protected static int mMaxFFTCount = 1024 * 8;
 	protected static Complex[] mComplexList;
-	public void init()
+	protected static void initParam()
 	{
 		sin_tb = new float[]
 		{  // 精度(PI PI/2 PI/4 PI/8 PI/16 ... PI/(2^k))
@@ -333,6 +333,21 @@ public class MathUtility
 		}
 		return UnityEngine.Random.Range(min, max);
 	}
+	// 计算点p在平面on上的投影点,o为平面上一点,n为平面法线
+	public static Vector3 getProjectionOnPlane(Vector3 o, Vector3 n, Vector3 p)
+	{
+		// o在np上的投影点即为交点
+		return getProjectPoint(o, p, p + n);
+	}
+	// 该算法是网上找的,计算结果与上面的函数一致
+	//public static Vector3 getProjectionOnPlane(Vector3 o, Vector3 n, Vector3 p)
+	//{
+	//	Vector3 projection = Vector3.zero;
+	//	projection.x = (n.x * n.y * o.y + n.y * n.y * p.x - n.x * n.y * p.y + n.x * n.z * o.z + n.z * n.z * p.x - n.x * n.z* p.z + n.x * n.x * o.x) / (n.x * n.x + n.y * n.y + n.z * n.z);
+	//	projection.y = (n.y * n.z * o.z + n.z * n.z * p.y - n.y * n.z * p.z + n.y * n.x * o.x + n.x * n.x * p.y - n.x * n.y* p.x + n.y * n.y * o.y) / (n.x * n.x + n.y * n.y + n.z * n.z);
+	//	projection.z = (n.x * o.x * n.z + n.x * n.x * p.z - n.x * p.x * n.z + n.y * o.y * n.z + n.y * n.y * p.z - n.y * p.y* n.z + n.z * n.z * o.z) / (n.x * n.x + n.y * n.y + n.z * n.z);
+	//	return projection;
+	//}
 	public static Vector3 getDirectionFromDegreeYawPitch(float yaw, float pitch)
 	{
 		yaw *= Mathf.Deg2Rad;
@@ -407,6 +422,25 @@ public class MathUtility
 		}
 		return angle;
 	}
+	public static float getAngleFromVectorToVector(Vector3 from, Vector3 to)
+	{
+		from.y = 0.0f;
+		to.y = 0.0f;
+		float angle = getAngleBetweenVector(from, to);
+		Vector3 crossVec = Vector3.Cross(from, to);
+		if (crossVec.y < 0.0f)
+		{
+			angle = -angle;
+		}
+		return angle;
+	}
+	public static Vector3 getDegreeEulerFromDirection(Vector3 dir)
+	{
+		float yaw = 0.0f;
+		float pitch = 0.0f;
+		getDegreeYawPitchFromDirection(dir, ref yaw, ref pitch);
+		return new Vector3(pitch, yaw, 0.0f);
+	}
 	public static void getDegreeYawPitchFromDirection(Vector3 dir, ref float fYaw, ref float fPitch)
 	{
 		getRadianYawPitchFromDirection(dir, ref fYaw, ref fPitch);
@@ -465,9 +499,29 @@ public class MathUtility
 	{
 		return isFloatZero(vec.x) && isFloatZero(vec.y) && isFloatZero(vec.z);
 	}
+	public static float getLength(Vector4 vec)
+	{
+		return Mathf.Sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z + vec.w * vec.w);
+	}
+	public static float getSquaredLength(Vector4 vec)
+	{
+		return vec.x * vec.x + vec.y * vec.y + vec.z * vec.z + vec.w * vec.w;
+	}
 	public static float getLength(Vector3 vec)
 	{
 		return Mathf.Sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
+	}
+	public static float getSquaredLength(Vector3 vec)
+	{
+		return vec.x * vec.x + vec.y * vec.y + vec.z * vec.z;
+	}
+	public static float getLength(Vector2 vec)
+	{
+		return Mathf.Sqrt(vec.x * vec.x + vec.y * vec.y);
+	}
+	public static float getSquaredLength(Vector2 vec)
+	{
+		return vec.x * vec.x + vec.y * vec.y;
 	}
 	public static Vector3 getMatrixScale(Matrix4x4 mat)
 	{
@@ -628,11 +682,9 @@ public class MathUtility
 	// 点在线上的投影是否在线段范围内
 	public static bool isPointProjectOnLine(Vector3 point, Vector3 start, Vector3 end)
 	{
-		float dis0 = getLength(point - start);
-		float dis1 = getLength(point - end);
 		Vector3 point0 = start;
 		Vector3 point1 = end;
-		if (dis0 > dis1)
+		if (getSquaredLength(point - start) > getSquaredLength(point - end))
 		{
 			point0 = end;
 			point1 = start;
@@ -759,25 +811,43 @@ public class MathUtility
 	{
 		return getLength(value - a) / getLength(b - a);
 	}
-	public static float lerp(float start, float end, float t)
+	public static float lerpSimple(float start, float end, float t)
 	{
-		clamp(ref t, 0.0f, 1.0f);
 		return start + (end - start) * t;
 	}
-	public static Vector2 lerp(Vector2 start, Vector2 end, float t)
+	public static float lerp(float start, float end, float t, float minAbsDelta = 0.0f)
 	{
 		clamp(ref t, 0.0f, 1.0f);
-		return start + (end - start) * t;
+		float value = start + (end - start) * t;
+		// 如果值已经在end的一定范围内了,则直接设置为end
+		if(Mathf.Abs(value - end) <= minAbsDelta)
+		{
+			value = end;
+		}
+		return value;
 	}
-	public static Vector3 lerp(Vector3 start, Vector3 end, float t)
+	public static Vector3 lerp(Vector3 start, Vector3 end, float t, float minAbsDelta = 0.0f)
 	{
 		clamp(ref t, 0.0f, 1.0f);
-		return start + (end - start) * t;
+		Vector3 value = start + (end - start) * t;
+		// 如果值已经在end的一定范围内了,则直接设置为end
+		if (Mathf.Abs(MathUtility.getSquaredLength(value - end)) <= minAbsDelta * minAbsDelta)
+		{
+			value = end;
+		}
+		return value;
 	}
-	public static Color lerp(Color start, Color end, float t)
+	public static Color lerp(Color start, Color end, float t, float minAbsDelta = 0.0f)
 	{
 		clamp(ref t, 0.0f, 1.0f);
-		return start + (end - start) * t;
+		Color value = start + (end - start) * t;
+		// 如果值已经在end的一定范围内了,则直接设置为end
+		Color curDelta = value - end;
+		if (Mathf.Abs(MathUtility.getSquaredLength(new Vector4(curDelta.r, curDelta.g, curDelta.b, curDelta.a))) <= minAbsDelta * minAbsDelta)
+		{
+			value = end;
+		}
+		return value;
 	}
 	public static void clamp(ref float value, float min, float max)
 	{
@@ -815,6 +885,34 @@ public class MathUtility
 			value = max;
 		}
 	}
+	public static void clampMin(ref int value, int min)
+	{
+		if (value < min)
+		{
+			value = min;
+		}
+	}
+	public static void clampMax(ref int value, int max)
+	{
+		if(value > max)
+		{
+			value = max;
+		}
+	}
+	public static void clampMin(ref float value, float min)
+	{
+		if (value < min)
+		{
+			value = min;
+		}
+	}
+	public static void clampMax(ref float value, float max)
+	{
+		if (value > max)
+		{
+			value = max;
+		}
+	}
 	public static bool isFloatZero(float value, float precision = 0.0001f)
 	{
 		return value >= -precision && value <= precision;
@@ -822,6 +920,17 @@ public class MathUtility
 	public static bool isFloatEqual(float value1, float value2, float precision = 0.0001f)
 	{
 		return isFloatZero(value1 - value2, precision);
+	}
+	public static void clampValue(ref int value, int min, int max, int cycle)
+	{
+		while (value < min)
+		{
+			value += cycle;
+		}
+		while (value > max)
+		{
+			value -= cycle;
+		}
 	}
 	public static void clampValue(ref float value, float min, float max, float cycle)
 	{
@@ -833,10 +942,6 @@ public class MathUtility
 		{
 			value -= cycle;
 		}
-	}
-	public static void clampAngle(ref float angle, float min, float max, float pi)
-	{
-		clampValue(ref angle, min, max, pi * 2.0f);
 	}
 	public static bool isInRange(float value, float range0, float range1)
 	{
@@ -855,11 +960,12 @@ public class MathUtility
 	}
 	public static void adjustRadian180(ref float radianAngle)
 	{
-		clampAngle(ref radianAngle, -Mathf.PI, Mathf.PI, Mathf.PI);
+		clampValue(ref radianAngle, -Mathf.PI, Mathf.PI, Mathf.PI * 2.0f);
 	}
 	public static void adjustAngle180(ref float radianAngle)
 	{
-		clampAngle(ref radianAngle, -180.0f, 180.0f, 180.0f);
+		float degreePI = Mathf.PI * Mathf.Rad2Deg;
+		clampValue(ref radianAngle, -degreePI, degreePI, degreePI * 2.0f);
 	}
 	public static void adjustRadian180(ref Vector3 radianAngle)
 	{
@@ -875,11 +981,12 @@ public class MathUtility
 	}
 	public static void adjustRadian360(ref float radianAngle)
 	{
-		clampAngle(ref radianAngle, 0.0f, Mathf.PI * 2.0f, Mathf.PI);
+		clampValue(ref radianAngle, 0.0f, Mathf.PI * 2.0f, Mathf.PI * 2.0f);
 	}
 	public static void adjustAngle360(ref float radianAngle)
 	{
-		clampAngle(ref radianAngle, 0.0f, 360.0f, 180.0f);
+		float degreePI = Mathf.PI * Mathf.Rad2Deg;
+		clampValue(ref radianAngle, 0.0f, degreePI * 2.0f, degreePI * 2.0f);
 	}
 	public static void adjustAngle360(ref Vector3 radianAngle)
 	{
@@ -960,8 +1067,12 @@ public class MathUtility
 	{
 		if (dataCount > mMaxFFTCount)
 		{
-			UnityUtility.logError("pcm data count is too many, data count : " + dataCount + ", max count : " + mMaxFFTCount);
+			logError("pcm data count is too many, data count : " + dataCount + ", max count : " + mMaxFFTCount);
 			return;
+		}
+		if(mComplexList == null)
+		{
+			initParam();
 		}
 		for (int i = 0; i < dataCount; ++i)
 		{
@@ -985,6 +1096,10 @@ public class MathUtility
 	*/
 	protected static void fft(Complex[] x, int count)
 	{
+		if(sin_tb == null)
+		{
+			initParam();
+		}
 		int i, j, k;
 		float sR, sI, uR, uI;
 		Complex tempComplex = new Complex();

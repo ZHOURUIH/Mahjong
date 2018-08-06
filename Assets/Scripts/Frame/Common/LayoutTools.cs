@@ -9,7 +9,7 @@ public class LayoutTools : GameBase
 		txUIObject panel = obj.mLayout.getLayoutPanel();
 		if (panel is txNGUIPanel && (panel as txNGUIPanel).getStatic())
 		{
-			UnityUtility.logError("layout is static! can not move/rotate/scale window! layout : " + obj.mLayout.getName());
+			logError("layout is static! can not move/rotate/scale window! layout : " + obj.mLayout.getName());
 			return false;
 		}
 		return true;
@@ -176,7 +176,7 @@ public class LayoutTools : GameBase
 		cmd.mVisibility = visible;
 		cmd.mImmediately = immediately;
 		cmd.mParam = param;
-		cmd.addStartCommandCallback(start, null);
+		cmd.addStartCommandCallback(start);
 		pushDelayCommand(cmd, mLayoutManager, delayTime);
 		if (procedure != null)
 		{
@@ -205,6 +205,10 @@ public class LayoutTools : GameBase
 		CommandWindowRotateFixed cmd = newCmd(out cmd, false);
 		cmd.mActive = lockRotation;
 		pushCommand(cmd, obj);
+	}
+	public static void ROTATE_WINDOW(txUIObject obj)
+	{
+		ROTATE_WINDOW(obj, Vector3.zero);
 	}
 	public static void ROTATE_WINDOW(txUIObject obj, Vector3 rotation)
 	{
@@ -247,7 +251,7 @@ public class LayoutTools : GameBase
 		}
 		if (keyframe == "" || MathUtility.isFloatZero(onceLength))
 		{
-			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用void ROTATE_WINDOW(txUIObject obj, Vector3 rotation)");
+			logError("时间或关键帧不能为空,如果要停止组件,请使用void ROTATE_WINDOW(txUIObject obj, Vector3 rotation)");
 		}
 		CommandWindowRotate cmd = newCmd(out cmd, false, false);
 		cmd.mName = keyframe;
@@ -295,7 +299,7 @@ public class LayoutTools : GameBase
 		}
 		if (keyframe == "" || MathUtility.isFloatZero(onceLength))
 		{
-			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用CommandWindowKeyFrameRotate ROTATE_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, Vector3 rotation)");
+			logError("时间或关键帧不能为空,如果要停止组件,请使用CommandWindowKeyFrameRotate ROTATE_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, Vector3 rotation)");
 		}
 		CommandWindowRotate cmd = newCmd(out cmd, false, true);
 		cmd.mName = keyframe;
@@ -418,7 +422,7 @@ public class LayoutTools : GameBase
 		}
 		if (fileName == "" || MathUtility.isFloatZero(onceLength))
 		{
-			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用void MOVE_WINDOW(txUIObject obj, Vector3 pos)");
+			logError("时间或关键帧不能为空,如果要停止组件,请使用void MOVE_WINDOW(txUIObject obj, Vector3 pos)");
 		}
 		CommandWindowMove cmd = newCmd(out cmd, false);
 		cmd.mName = fileName;
@@ -478,7 +482,7 @@ public class LayoutTools : GameBase
 		}
 		if (keyframe == "" || MathUtility.isFloatZero(onceLength))
 		{
-			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用CommandWindowKeyFrameMove MOVE_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, Vector3 pos)");
+			logError("时间或关键帧不能为空,如果要停止组件,请使用CommandWindowKeyFrameMove MOVE_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, Vector3 pos)");
 		}
 		CommandWindowMove cmd = newCmd(out cmd, false, true);
 		cmd.mName = keyframe;
@@ -531,6 +535,10 @@ public class LayoutTools : GameBase
 	}
 	//----------------------------------------------------------------------------------------------------------------------------------------------------------
 	// 缩放
+	public static void SCALE_WINDOW(txUIObject obj)
+	{
+		SCALE_WINDOW(obj, Vector2.one);
+	}
 	public static void SCALE_WINDOW(txUIObject obj, Vector2 scale)
 	{
 		if (!checkStaticPanel(obj))
@@ -596,7 +604,7 @@ public class LayoutTools : GameBase
 		}
 		if (fileName == "" || MathUtility.isFloatZero(onceLength))
 		{
-			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用void SCALE_WINDOW(txUIObject obj, Vector2 scale)");
+			logError("时间或关键帧不能为空,如果要停止组件,请使用void SCALE_WINDOW(txUIObject obj, Vector2 scale)");
 		}
 		CommandWindowScale cmd = newCmd(out cmd, false);
 		cmd.mName = fileName;
@@ -660,7 +668,7 @@ public class LayoutTools : GameBase
 		}
 		if (keyframe == "" || MathUtility.isFloatZero(onceLength))
 		{
-			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,CommandWindowScale SCALE_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, Vector2 scale)");
+			logError("时间或关键帧不能为空,如果要停止组件,CommandWindowScale SCALE_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, Vector2 scale)");
 		}
 		CommandWindowScale cmd = newCmd(out cmd, false, true);
 		cmd.mName = keyframe;
@@ -749,7 +757,7 @@ public class LayoutTools : GameBase
 	}
 	//----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	// 透明度
-	public static void ALPHA_WINDOW(txUIObject obj, float alpha)
+	public static void ALPHA_WINDOW(txUIObject obj, float alpha = 1.0f)
 	{
 		CommandWindowAlpha cmd = newCmd(out cmd, false);
 		cmd.mName = "";
@@ -794,7 +802,7 @@ public class LayoutTools : GameBase
 	{
 		if (name == "" || MathUtility.isFloatZero(onceLength))
 		{
-			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用void ALPHA_WINDOW(txUIObject obj, float alpha)");
+			logError("时间或关键帧不能为空,如果要停止组件,请使用void ALPHA_WINDOW(txUIObject obj, float alpha)");
 		}
 		CommandWindowAlpha cmd = newCmd(out cmd, false);
 		cmd.mName = name;
@@ -850,7 +858,7 @@ public class LayoutTools : GameBase
 	{
 		if (keyframe == "" || MathUtility.isFloatZero(onceLength))
 		{
-			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用CommandWindowAlphaTremble ALPHA_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, float alpha)");
+			logError("时间或关键帧不能为空,如果要停止组件,请使用CommandWindowAlphaTremble ALPHA_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, float alpha)");
 		}
 		CommandWindowAlpha cmd = newCmd(out cmd, false, true);
 		cmd.mName = keyframe;
@@ -888,7 +896,7 @@ public class LayoutTools : GameBase
 	{
 		if (keyframe == "" || MathUtility.isFloatZero(onceLength))
 		{
-			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用void HSL_WINDOW(txUIObject obj, Vector3 hsl)");
+			logError("时间或关键帧不能为空,如果要停止组件,请使用void HSL_WINDOW(txUIObject obj, Vector3 hsl)");
 		}
 		CommandWindowHSL cmd = newCmd(out cmd, false, false);
 		cmd.mName = keyframe;
@@ -897,6 +905,40 @@ public class LayoutTools : GameBase
 		cmd.mOffset = offset;
 		cmd.mStartHSL = start;
 		cmd.mTargetHSL = target;
+		pushCommand(cmd, obj);
+	}
+	//--------------------------------------------------------------------------------------------------------------------------------------------------------
+	// 亮度
+	public static void LUM_WINDOW(txUIObject obj, float lum)
+	{
+		CommandWindowLum cmd = newCmd(out cmd, false, false);
+		cmd.mName = "";
+		cmd.mOnceLength = 0.0f;
+		cmd.mStartLum = lum;
+		cmd.mTargetLum = lum;
+		pushCommand(cmd, obj);
+	}
+	public static void LUM_WINDOW(txUIObject obj, float start, float target, float onceLength)
+	{
+		LUM_KEYFRAME_WINDOW(obj, CommonDefine.ZERO_ONE, start, target, onceLength, false, 0.0f);
+	}
+	public static void LUM_KEYFRAME_WINDOW(txUIObject obj, string keyframe, float start, float target, float onceLength)
+	{
+		LUM_KEYFRAME_WINDOW(obj, keyframe, start, target, onceLength, false, 0.0f);
+	}
+	public static void LUM_KEYFRAME_WINDOW(txUIObject obj, string keyframe, float start, float target, float onceLength, bool loop, float offset)
+	{
+		if (keyframe == "" || MathUtility.isFloatZero(onceLength))
+		{
+			logError("时间或关键帧不能为空,如果要停止组件,请使用void LUM_WINDOW(txUIObject obj, Vector3 hsl)");
+		}
+		CommandWindowLum cmd = newCmd(out cmd, false, false);
+		cmd.mName = keyframe;
+		cmd.mLoop = loop;
+		cmd.mOnceLength = onceLength;
+		cmd.mOffset = offset;
+		cmd.mStartLum = start;
+		cmd.mTargetLum = target;
 		pushCommand(cmd, obj);
 	}
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -6,7 +6,7 @@ using System.Text;
 using UnityEngine;
 
 // 用于生成二进制文件的
-public class Serializer
+public class Serializer : GameBase
 {
 	protected int mIndex;
 	protected int mBufferSize;
@@ -66,53 +66,50 @@ public class Serializer
 		BinaryUtility.memcpy(mBuffer, BinaryUtility.toBytes(value), mIndex, 0, writeLen);
 		mIndex += writeLen;
 	}
-	public void read(ref byte value)
+	public void read(ref byte value, bool inverse = false)
 	{
 		int readLen = sizeof(byte);
 		if (!readCheck(readLen))
 		{
 			return;
 		}
-		byte[] dest = BinaryUtility.toBytes(value);
-		BinaryUtility.memcpy(dest, mBuffer, 0, mIndex, readLen);
-		value = BinaryUtility.bytesToByte(dest);
-		mIndex += readLen;
+		value = BinaryUtility.readByte(mBuffer, ref mIndex);
 	}
-	public void read(ref short value)
+	public void read(ref short value, bool inverse = false)
 	{
 		int readLen = sizeof(short);
 		if (!readCheck(readLen))
 		{
 			return;
 		}
-		byte[] dest = BinaryUtility.toBytes(value);
-		BinaryUtility.memcpy(dest, mBuffer, 0, mIndex, readLen);
-		value = BinaryUtility.bytesToShort(dest);
-		mIndex += readLen;
+		value = BinaryUtility.readShort(mBuffer, ref mIndex, inverse);
 	}
-	public void read(ref int value)
+	public void read(ref ushort value, bool inverse = false)
+	{
+		int readLen = sizeof(ushort);
+		if (!readCheck(readLen))
+		{
+			return;
+		}
+		value = BinaryUtility.readUShort(mBuffer, ref mIndex, inverse);
+	}
+	public void read(ref int value, bool inverse = false)
 	{
 		int readLen = sizeof(int);
 		if (!readCheck(readLen))
 		{
 			return;
 		}
-		byte[] dest = BinaryUtility.toBytes(value);
-		BinaryUtility.memcpy(dest, mBuffer, 0, mIndex, readLen);
-		value = BinaryUtility.bytesToInt(dest);
-		mIndex += readLen;
+		value = BinaryUtility.readInt(mBuffer, ref mIndex, inverse);
 	}
-	public void read(ref float value)
+	public void read(ref float value, bool inverse = false)
 	{
 		int readLen = sizeof(float);
 		if (!readCheck(readLen))
 		{
 			return;
 		}
-		byte[] dest = BinaryUtility.toBytes(value);
-		BinaryUtility.memcpy(dest, mBuffer, 0, mIndex, readLen);
-		value = BinaryUtility.bytesToFloat(dest);
-		mIndex += readLen;
+		value = BinaryUtility.readFloat(mBuffer, ref mIndex, inverse);
 	}
 	public void writeBuffer(byte[] buffer, int bufferSize)
 	{
@@ -120,8 +117,7 @@ public class Serializer
 		{
 			return;
 		}
-		BinaryUtility.memcpy(mBuffer, buffer, mIndex, 0, bufferSize);
-		mIndex += bufferSize;
+		BinaryUtility.writeBytes(mBuffer, ref mIndex, buffer, -1, -1, bufferSize);
 	}
 	public void readBuffer(byte[] buffer, int bufferSize, int readLen)
 	{
@@ -129,17 +125,11 @@ public class Serializer
 		{
 			return;
 		}
-		// 如果存放数据的空间大小不足以放入当前要读取的数据,则只拷贝能容纳的长度,但是下标应该正常跳转
-		if (bufferSize <= readLen)
-		{
-			BinaryUtility.memcpy(buffer, mBuffer, 0, mIndex, bufferSize);
-			mIndex += readLen;
-		}
-		else
-		{
-			BinaryUtility.memcpy(buffer, mBuffer, 0, mIndex, readLen);
-			mIndex += readLen;
-		}
+		BinaryUtility.readBytes(mBuffer, ref mIndex, buffer, -1, bufferSize, readLen);
+	}
+	public void readBuffer(byte[] buffer)
+	{
+		readBuffer(buffer, buffer.Length, buffer.Length);
 	}
 	public void writeString(string str)
 	{
@@ -150,8 +140,7 @@ public class Serializer
 		}
 		// 先写入字符串长度
 		write(strLen);
-		BinaryUtility.memcpy(mBuffer, BinaryUtility.stringToBytes(str), mIndex, 0, strLen);
-		mIndex += strLen;
+		writeBuffer(BinaryUtility.stringToBytes(str), strLen);
 	}
 	public void readString(byte[] str, int strBufferSize)
 	{
@@ -191,7 +180,7 @@ public class Serializer
 		// 如果是只读的,则不能写入
 		if (!mWriteFlag)
 		{
-			UnityUtility.logError("error : the buffer is read only, can not write!");
+			logError("the buffer is read only, can not write!");
 			return false;
 		}
 		// 如果缓冲区为空,则创建缓冲区
@@ -211,17 +200,17 @@ public class Serializer
 		// 如果是只写的,则不能读取
 		if (mWriteFlag)
 		{
-			UnityUtility.logError("error : the buffer is write only, can not read!");
+			logError("the buffer is write only, can not read!");
 			return false;
 		}
 		if (mBuffer == null)
 		{
-			UnityUtility.logError("error : buffer is NULL! can not read");
+			logError("buffer is NULL! can not read");
 			return false;
 		}
 		if (mIndex + readLen > mBufferSize)
 		{
-			UnityUtility.logError("error : read buffer out of range! cur index : " + mIndex + ", buffer size : " + mBufferSize + ", read length : " + readLen);
+			logError("read buffer out of range! cur index : " + mIndex + ", buffer size : " + mBufferSize + ", read length : " + readLen);
 			return false;
 		}
 		return true;

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class txNGUIButton : txNGUIStaticSprite
+public class txNGUIButton : txUIObject
 {
 	protected UIButton	  mButton;
 	protected bool		  mHandleInput = true;

@@ -55,6 +55,11 @@ public abstract class LayoutScript : CommandReceiver
 	{
 		mGlobalTouchSystem.registeBoxCollider(obj, clickCallback, pressCallback, hoverCallback);
 	}
+	public void registeBoxCollider(txUIObject obj, bool passRay)
+	{
+		mGlobalTouchSystem.registeBoxCollider(obj, null, null, null);
+		obj.setPassRay(passRay);
+	}
 	// 用于接收NGUI处理的输入事件
 	public void registeBoxColliderNGUI(txUIObject obj, UIEventListener.VoidDelegate clickCallback,
 		UIEventListener.BoolDelegate pressCallback = null, UIEventListener.BoolDelegate hoverCallback = null)
@@ -64,32 +69,6 @@ public abstract class LayoutScript : CommandReceiver
 	public void unregisteBoxCollider(txUIObject obj)
 	{
 		mGlobalTouchSystem.unregisteBoxCollider(obj);
-	}
-	public void findWindow(GameObject parent, GameObject gameObject, ref Dictionary<string, List<WindowInfo>> windowList)
-	{
-		// 将自己加入列表
-		string name = gameObject.name;
-		WindowInfo info = new WindowInfo();
-		info.mGameObject = gameObject;
-		info.mName = name;
-		info.mParent = parent;
-		if (windowList.ContainsKey(name))
-		{
-			windowList[name].Add(info);
-		}
-		else
-		{
-			List<WindowInfo> infoList = new List<WindowInfo>();
-			infoList.Add(info);
-			windowList.Add(name, infoList);
-		}
-		// 再将所有子窗口加入列表
-		Transform transform = gameObject.transform;
-		int childCount = transform.childCount;
-		for (int i = 0; i < childCount; ++i)
-		{
-			findWindow(gameObject, transform.GetChild(i).gameObject, ref windowList);
-		}
 	}
 	public abstract void assignWindow();
 	public abstract void init();
@@ -138,7 +117,7 @@ public abstract class LayoutScript : CommandReceiver
 	// 创建txUIObject,并且新建GameObject,分配到txUIObject中
 	public T createObject<T>(txUIObject parent, string name, bool active = true) where T : txUIObject, new()
 	{
-		GameObject go = new GameObject(name);
+		GameObject go = UnityUtility.createObject(name);
 		if (parent == null)
 		{
 			parent = mRoot;
@@ -151,6 +130,10 @@ public abstract class LayoutScript : CommandReceiver
 		go.transform.localPosition = Vector3.zero;
 		return obj;
 	}
+	public T createObject<T>(string name, bool active = true) where T : txUIObject, new()
+	{
+		return createObject<T>(null, name, active);
+	}
 	// 创建txUIObject,并且在布局中查找GameObject分配到txUIObject
 	// active为-1则表示不设置active,0表示false,1表示true
 	public T newObject<T>(out T obj, txUIObject parent, string name, int active = -1) where T : txUIObject, new()
@@ -161,11 +144,11 @@ public abstract class LayoutScript : CommandReceiver
 		// 先在全部子窗口列表中查找,查找不到,再去场景中查找
 		if (gameObject == null)
 		{
-			gameObject = UnityUtility.getGameObject(parentObj, name);
+			gameObject = getGameObject(parentObj, name);
 		}
 		if (gameObject == null)
 		{
-			UnityUtility.logError("object is null, name : " + name);
+			logError("object is null, name : " + name);
 			return obj;
 		}
 		obj = newUIObject<T>(name, parent, mLayout, gameObject);
@@ -198,6 +181,12 @@ public abstract class LayoutScript : CommandReceiver
 		obj.init(layout, gameObj, parent);
 		return obj;
 	}
+	public void instantiateObject(txUIObject parent, string prefabName, string name)
+	{
+		GameObject gameObject = mLayoutSubPrefabManager.instantiate(prefabName, parent.mObject, name);
+		gameObject.SetActive(false);
+		findWindow(parent.mObject, gameObject, ref mAllWindowList);
+	}
 	public void instantiateObject(txUIObject parent, string name)
 	{
 		GameObject gameObject = mLayoutSubPrefabManager.instantiate(name, parent.mObject, name);
@@ -217,7 +206,33 @@ public abstract class LayoutScript : CommandReceiver
 	{
 		if (!mDelayCmdList.Remove(cmd.mAssignID))
 		{
-			UnityUtility.logError("命令执行后移除命令失败!");
+			logError("命令执行后移除命令失败!");
+		}
+	}
+	protected void findWindow(GameObject parent, GameObject gameObject, ref Dictionary<string, List<WindowInfo>> windowList)
+	{
+		// 将自己加入列表
+		string name = gameObject.name;
+		WindowInfo info = new WindowInfo();
+		info.mGameObject = gameObject;
+		info.mName = name;
+		info.mParent = parent;
+		if (windowList.ContainsKey(name))
+		{
+			windowList[name].Add(info);
+		}
+		else
+		{
+			List<WindowInfo> infoList = new List<WindowInfo>();
+			infoList.Add(info);
+			windowList.Add(name, infoList);
+		}
+		// 再将所有子窗口加入列表
+		Transform transform = gameObject.transform;
+		int childCount = transform.childCount;
+		for (int i = 0; i < childCount; ++i)
+		{
+			findWindow(gameObject, transform.GetChild(i).gameObject, ref windowList);
 		}
 	}
 	protected GameObject getObjectFromList(GameObject parent, string name)

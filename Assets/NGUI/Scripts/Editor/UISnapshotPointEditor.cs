@@ -87,6 +87,10 @@ public class UISnapshotPointEditor : Editor
 		if (go == null) return null;
 
 		// Actual prefab
-		return PrefabUtility.GetPrefabParent(go) as GameObject;
+#if UNITY_5_3_5
+		return PrefabUtility.GetCorrespondingObjectFromSource(go) as GameObject;
+#elif UNITY_2018_2 || UNITY_2018_1
+		return PrefabUtility.GetPrefabObject(go) as GameObject;
+#endif
 	}
 }

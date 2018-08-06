@@ -27,11 +27,12 @@ public class txUGUIStaticImage : txUIObject
 		// 将默认材质替换为自定义的默认材质
 		if (materialName == "Default UI Material")
 		{
-			setMaterial("UGUIDefault", true);
+			setMaterial(CommonDefine.UGUI_DEFAULT_MATERIAL, false);
 		}
 		else if (materialName != "")
 		{
-			setMaterial(getMaterialName(), true);
+			bool newMaterial = mShaderManager.isSingleShader(materialName);
+			setMaterial(materialName, !newMaterial);
 		}
 	}
 	public void setWindowShader<T>() where T : WindowShader, new()
@@ -68,7 +69,7 @@ public class txUGUIStaticImage : txUIObject
 		{
 			return;
 		}
-		mImage.sprite = Sprite.Create(tex, new Rect(Vector2.zero, tex.texelSize), new Vector2(0.5f, 0.5f));
+		mImage.sprite = UnityUtility.texture2DToSprite(tex);
 	}
 	public Sprite getTexture()
 	{

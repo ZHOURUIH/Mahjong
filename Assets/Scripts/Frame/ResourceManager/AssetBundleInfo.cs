@@ -47,7 +47,7 @@ public class AssetBundleInfo : GameBase
 	{
 		if(mAssetBundle != null)
 		{
-			UnityUtility.logInfo("unload completely AssetBundle : " + mBundleName);
+			logInfo("unload completely AssetBundle : " + mBundleName);
 			mAssetBundle.Unload(true);
 			mAssetBundle = null;
 		}
@@ -60,7 +60,7 @@ public class AssetBundleInfo : GameBase
 		}
 		else
 		{
-			UnityUtility.logError("there is asset in asset bundle, asset : " + fileNameWithSuffix + ", asset bundle : " + mBundleName);
+			logError("there is asset in asset bundle, asset : " + fileNameWithSuffix + ", asset bundle : " + mBundleName);
 		}
 	}
 	public AssetInfo getAssetInfo(string fileNameWithSuffix)
@@ -156,7 +156,7 @@ public class AssetBundleInfo : GameBase
 			}
 			else
 			{
-				UnityUtility.logError("asset is loading, can not load asset async again! name : " + fileNameWithSuffix);
+				logError("asset is loading, can not load asset async again! name : " + fileNameWithSuffix);
 				return false;
 			}
 			if(mLoaded == LOAD_STATE.LS_UNLOAD)
@@ -187,7 +187,7 @@ public class AssetBundleInfo : GameBase
 		mAssetBundle = AssetBundle.LoadFromFile(CommonDefine.F_STREAMING_ASSETS_PATH + mBundleName + CommonDefine.ASSET_BUNDLE_SUFFIX);
 		if (mAssetBundle == null)
 		{
-			UnityUtility.logError("can not load asset bundle : " + mBundleName);
+			logError("can not load asset bundle : " + mBundleName);
 			return;
 		}
 		// 加载其中的所有资源

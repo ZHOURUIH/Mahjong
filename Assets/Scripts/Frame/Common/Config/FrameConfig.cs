@@ -25,14 +25,14 @@ public class FrameConfig : ConfigBase
 		addFloatParam(GAME_DEFINE_FLOAT.GDF_ENABLE_KEYBOARD);
 		if (mFloatNameToDefine.Count != (int)GAME_DEFINE_FLOAT.GDF_FRAME_MAX - (int)GAME_DEFINE_FLOAT.GDF_FRAME_MIN - 1)
 		{
-			UnityUtility.logError("not all float parameter added!");
+			logError("not all float parameter added!");
 		}
 	}
 	protected override void addString()
 	{
 		if (mStringNameToDefine.Count != (int)GAME_DEFINE_STRING.GDS_FRAME_MAX - (int)GAME_DEFINE_STRING.GDS_FRAME_MIN - 1)
 		{
-			UnityUtility.logError("not all string parameter added!");
+			logError("not all string parameter added!");
 		}
 	}
 	protected override void readConfig()

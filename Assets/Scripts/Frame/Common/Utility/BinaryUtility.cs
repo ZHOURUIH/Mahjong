@@ -113,6 +113,25 @@ public class BinaryUtility
 			return finalValue;
 		}
 	}
+	public static ushort readUShort(byte[] buffer, ref int curIndex, bool inverse = false)
+	{
+		if (buffer.Length < 2)
+		{
+			return 0;
+		}
+		int byte0 = (int)(0xff & buffer[curIndex++]);
+		int byte1 = (int)(0xff & buffer[curIndex++]);
+		if (inverse)
+		{
+			ushort finalValue = (ushort)((byte1 << (8 * 0)) | (byte0 << (8 * 1)));
+			return finalValue;
+		}
+		else
+		{
+			ushort finalValue = (ushort)((byte1 << (8 * 1)) | (byte0 << (8 * 0)));
+			return finalValue;
+		}
+	}
 	public static int readInt(byte[] buffer, ref int curIndex, bool inverse = false)
 	{
 		if (buffer.Length < 4)
@@ -183,6 +202,7 @@ public class BinaryUtility
 		{
 			return false;
 		}
+		readSize = MathUtility.getMin(readSize, destBufferSize);
 		memcpy(destBuffer, buffer, 0, index, readSize);
 		index += readSize;
 		return true;
@@ -399,6 +419,42 @@ public class BinaryUtility
 		}
 		return hexString;
 	}
+	public static byte hexStringToByte(string str)
+	{
+		byte highBit = 0;
+		byte lowBit = 0;
+		byte[] strBytes = stringToBytes(str);
+		byte highBitChar = strBytes[0];
+		byte lowBitChar = strBytes[1];
+		if (highBitChar >= 'A' && highBitChar <= 'F')
+		{
+			highBit = (byte)(10 + highBitChar - 'A');
+		}
+		else
+		{
+			highBit = (byte)(highBitChar - '0');
+		}
+		if (lowBitChar >= 'A' && lowBitChar <= 'F')
+		{
+			lowBit = (byte)(10 + lowBitChar - 'A');
+		}
+		else
+		{
+			lowBit = (byte)(lowBitChar - '0');
+		}
+		return (byte)(highBit << 4 | lowBit);
+	}
+	public static byte[] hexStringToBytes(string str)
+	{
+		string newStr = StringUtility.strReplaceAll(str, " ", "");
+		int dataCount = newStr.Length / 2;
+		byte[] data = new byte[dataCount];
+		for (int i = 0; i < dataCount; ++i)
+		{
+			data[i] = hexStringToByte(newStr.Substring(i * 2, 2));
+		}
+		return data;
+	}
 	public static void memcpy<T>(T[] dest, T[] src, int destOffset, int srcOffset, int count)
 	{
 		for (int i = 0; i < count; ++i)
@@ -534,5 +590,21 @@ public class BinaryUtility
 		}
 		str = str.Substring(0, newLen);
 		return str;
+	}
+	public static bool isMemoryEqual(byte[] buffer0, byte[] buffer1, int length, int offset0 = 0, int offset1 = 0)
+	{
+		// 如果长度不足,则返回失败
+		if(offset0 + length > buffer0.Length || offset1 + length > buffer1.Length)
+		{
+			return false;
+		}
+		for (int i = 0; i < length; ++i)
+		{
+			if (buffer0[i + offset0] != buffer1[i + offset1])
+			{
+				return false;
+			}
+		}
+		return true;
 	}
 }

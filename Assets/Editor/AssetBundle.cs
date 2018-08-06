@@ -24,7 +24,7 @@ class AssetBuildBundleInfo
 	}
 }
 
-public class AssetBundleBuild
+public class AssetBundlePack
 {
 	// 清理时需要保留的目录和目录的meta
 	protected static string[] mKeepFolder = new string[] {"Config", "GameDataFile", "DataBase", "Video", "DataTemplate", "HelperExe", "CustomSound"};
@@ -62,10 +62,8 @@ public class AssetBundleBuild
 		DateTime time0 = DateTime.Now;
 		// 清理输出目录
 		CreateOrClearOutPath();
-
 		// 清理之前设置过的bundleName
 		ClearAssetBundleName();
-
 		// 设置bunderName
 		bundleMap.Clear();
 		List<string> resList = new List<string>();
@@ -146,7 +144,7 @@ public class AssetBundleBuild
 		for(int i = 0; i < unpackCount; ++i)
 		{
 			// 如果该文件夹是不打包的文件夹,则直接返回
-			if (StringUtility.startWith(pathUnderResources, mUnPackFolder[i]))
+			if (StringUtility.startWith(pathUnderResources, mUnPackFolder[i], false))
 			{
 				return;
 			}

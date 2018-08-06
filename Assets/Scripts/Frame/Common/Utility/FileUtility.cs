@@ -6,7 +6,7 @@ using System.IO;
 using System.Security.Cryptography;
 using UnityEngine;
 
-public class FileUtility
+public class FileUtility : GameBase
 {
 	public static void validPath(ref string path)
 	{
@@ -37,7 +37,7 @@ public class FileUtility
 			StreamReader streamReader = File.OpenText(fileName);
 			if(streamReader == null)
 			{
-				UnityUtility.logInfo("open file failed! filename : " + fileName);
+				logInfo("open file failed! filename : " + fileName);
 				return "";
 			}
 			string fileBuffer = streamReader.ReadToEnd();
@@ -47,7 +47,7 @@ public class FileUtility
 		}
 		catch(Exception)
 		{
-			UnityUtility.logInfo("open file failed! filename : " + fileName);
+			logInfo("open file failed! filename : " + fileName);
 			return "";
 		}
 	}
@@ -214,7 +214,7 @@ public class FileUtility
 		validPath(ref path);
 		if(!isDirExist(path))
 		{
-			UnityUtility.logError("path is invalid! path : " + path);
+			logError("path is invalid! path : " + path);
 			return;
 		}
 		DirectoryInfo folder = new DirectoryInfo(path);
@@ -264,7 +264,7 @@ public class FileUtility
 		string[] dirs = Directory.GetDirectories(path);
 		foreach (var item in dirs)
 		{
-			dirList.Add(StringUtility.getFolderName(item));
+			dirList.Add(item);
 			if (recursive)
 			{
 				findDirectory(item, ref dirList, recursive);

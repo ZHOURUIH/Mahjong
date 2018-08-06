@@ -14,7 +14,7 @@ public class MovableObjectComponentTrackTargetPhysics : ComponentTrackTargetPhys
 	{
 		if(!(target is MovableObject))
 		{
-			UnityUtility.logError("track target must be a MovableObject!");
+			logError("track target must be a MovableObject!");
 			return;
 		}
 		base.setMoveDoneTrack(target, doneCallback);

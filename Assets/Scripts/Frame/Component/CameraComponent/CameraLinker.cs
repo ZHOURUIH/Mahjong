@@ -21,6 +21,7 @@ public class CameraLinker : GameComponent
 	protected Dictionary<CAMERA_LINKER_SWITCH, CameraLinkerSwitch> mSwitchList; // 转换器列表
 	protected CameraLinkerSwitch mCurSwitch;
 	protected GameCamera mCamera;
+	protected bool mLateUpdate = true;	// 是否在LateUpdate中更新连接器
 	public CameraLinker(Type type, string name)
 		: base(type, name)
 	{
@@ -43,9 +44,29 @@ public class CameraLinker : GameComponent
 		{
 			return;
 		}
-		if (mCurSwitch != null)
+		if (!mLateUpdate)
 		{
-			mCurSwitch.update(elapsedTime);
+			if (mCurSwitch != null)
+			{
+				mCurSwitch.update(elapsedTime);
+			}
+			updateLinker(elapsedTime);
+		}
+	}
+	public override void lateUpdate(float elapsedTime)
+	{
+		base.update(elapsedTime);
+		if (mLinkObject == null)
+		{
+			return;
+		}
+		if (mLateUpdate)
+		{
+			if (mCurSwitch != null)
+			{
+				mCurSwitch.update(elapsedTime);
+			}
+			updateLinker(elapsedTime);
 		}
 	}
 	public virtual void applyRelativePosition(Vector3 relative)
@@ -119,6 +140,7 @@ public class CameraLinker : GameComponent
 		return MathUtility.rotateVector3(mRelativePosition, mLinkObject.getRotation().y * Mathf.Deg2Rad);
 	}
 	//------------------------------------------------------------------------------------------------------------------------------------------------
+	protected virtual void updateLinker(float elapsedTime) { }
 	protected override void setBaseType() { mBaseType = typeof(CameraLinker); }
 	protected override bool isType(Type type) {	return type == typeof(CameraLinker);}
 	protected void initSwitch()

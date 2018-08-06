@@ -15,6 +15,7 @@ public class PrefabInfo
 	public GameObject mPrefab;
 	public string mFileWithPath;
 	public LOAD_STATE mState;
+	public AssetLoadDoneCallback mDoneCallback;
 }
 
 public class ObjectPool : FrameBase
@@ -40,11 +41,11 @@ public class ObjectPool : FrameBase
 	}
 	public void update(float elapsedTime)
 	{
-		foreach(var item in mInstanceList)
+		foreach (var item in mInstanceList)
 		{
-			if(item.Key == null)
+			if (item.Key == null)
 			{
-				UnityUtility.logError("Object can not be destroy outside of ObjectManager!");
+				logError("Object can not be destroy outside of ObjectManager!");
 			}
 		}
 	}
@@ -57,7 +58,7 @@ public class ObjectPool : FrameBase
 			GameObject prefab = getPrefab(fileWithPath);
 			if (prefab == null)
 			{
-				UnityUtility.logError("can not find prefab : " + fileWithPath);
+				logError("can not find prefab : " + fileWithPath);
 				return null;
 			}
 			obj.mObject = UnityUtility.instantiatePrefab(null, prefab);
@@ -70,14 +71,14 @@ public class ObjectPool : FrameBase
 	}
 	public void destroyObject(GameObject obj)
 	{
-		if(mInstanceList.ContainsKey(obj))
+		if (mInstanceList.ContainsKey(obj))
 		{
 			mInstanceList[obj].setUsing(false);
 		}
 	}
-	public GameObject loadPrefab(string fileWithPath, bool async = false)
+	public GameObject loadPrefab(string fileWithPath, bool async = false, AssetLoadDoneCallback doneCallback = null)
 	{
-		if(mPrefabList.ContainsKey(fileWithPath))
+		if (mPrefabList.ContainsKey(fileWithPath))
 		{
 			return mPrefabList[fileWithPath].mPrefab;
 		}
@@ -88,6 +89,7 @@ public class ObjectPool : FrameBase
 		{
 			info.mPrefab = null;
 			info.mState = LOAD_STATE.LS_LOADING;
+			info.mDoneCallback = doneCallback;
 			mResourceManager.loadResourceAsync<GameObject>(fileWithPath, onPrefabLoaded, fileWithPath, false);
 		}
 		else
@@ -95,7 +97,7 @@ public class ObjectPool : FrameBase
 			GameObject prefab = mResourceManager.loadResource<GameObject>(fileWithPath, false);
 			if (prefab == null)
 			{
-				UnityUtility.logInfo("can not load prefab : " + fileWithPath);
+				logInfo("can not load prefab : " + fileWithPath);
 				return null;
 			}
 			info.mPrefab = prefab;
@@ -111,7 +113,7 @@ public class ObjectPool : FrameBase
 	//-------------------------------------------------------------------------------------------------------------------------
 	protected ObjectInfo getUnusedObject(string fileWithPath)
 	{
-		if(mInstanceFileList.ContainsKey(fileWithPath))
+		if (mInstanceFileList.ContainsKey(fileWithPath))
 		{
 			foreach (var item in mInstanceFileList[fileWithPath])
 			{
@@ -125,12 +127,12 @@ public class ObjectPool : FrameBase
 	}
 	protected void addObject(ObjectInfo objInfo)
 	{
-		if(!mInstanceFileList.ContainsKey(objInfo.mFileWithPath))
+		if (!mInstanceFileList.ContainsKey(objInfo.mFileWithPath))
 		{
 			mInstanceFileList.Add(objInfo.mFileWithPath, new Dictionary<GameObject, ObjectInfo>());
 		}
 		mInstanceFileList[objInfo.mFileWithPath].Add(objInfo.mObject, objInfo);
-		if(!mInstanceList.ContainsKey(objInfo.mObject))
+		if (!mInstanceList.ContainsKey(objInfo.mObject))
 		{
 			mInstanceList.Add(objInfo.mObject, objInfo);
 		}
@@ -141,11 +143,11 @@ public class ObjectPool : FrameBase
 	}
 	protected void removeObject(ObjectInfo objInfo)
 	{
-		if(mInstanceFileList.ContainsKey(objInfo.mFileWithPath))
+		if (mInstanceFileList.ContainsKey(objInfo.mFileWithPath))
 		{
 			mInstanceFileList[objInfo.mFileWithPath].Remove(objInfo.mObject);
 		}
-		if(mInstanceList.ContainsKey(objInfo.mObject))
+		if (mInstanceList.ContainsKey(objInfo.mObject))
 		{
 			mInstanceList.Remove(objInfo.mObject);
 		}
@@ -153,9 +155,9 @@ public class ObjectPool : FrameBase
 	protected GameObject getPrefab(string fileWithPath, bool loadIfNull = true)
 	{
 		// 已加载或正在加载
-		if(mPrefabList.ContainsKey(fileWithPath))
+		if (mPrefabList.ContainsKey(fileWithPath))
 		{
-			if(mPrefabList[fileWithPath].mState == LOAD_STATE.LS_LOADED)
+			if (mPrefabList[fileWithPath].mState == LOAD_STATE.LS_LOADED)
 			{
 				return mPrefabList[fileWithPath].mPrefab;
 			}
@@ -173,6 +175,10 @@ public class ObjectPool : FrameBase
 		PrefabInfo info = mPrefabList[fileWithPath];
 		info.mPrefab = res as GameObject;
 		info.mState = LOAD_STATE.LS_LOADED;
+		if (info.mDoneCallback != null)
+		{
+			info.mDoneCallback(res, userData);
+		}
 	}
 }
 
@@ -181,13 +187,13 @@ public class ObjectManager : FrameComponent
 	protected GameObject mManagerObject;
 	protected ObjectPool mObjectPool;
 	public ObjectManager(string name)
-		:base(name)
+		: base(name)
 	{
 		mObjectPool = new ObjectPool();
 	}
 	public override void init()
 	{
-		mManagerObject = UnityUtility.getGameObject(mGameFramework.getGameFrameObject(), "ObjectManager");
+		mManagerObject = getGameObject(mGameFramework.getGameFrameObject(), "ObjectManager");
 	}
 	public override void destroy()
 	{
@@ -201,9 +207,9 @@ public class ObjectManager : FrameComponent
 		mObjectPool.update(elapsedTime);
 	}
 	// resources下的相对路径,不带后缀名
-	public void loadPrefab(string fileWithPath)
+	public GameObject loadPrefab(string fileWithPath, bool async = true, AssetLoadDoneCallback doneCallback = null)
 	{
-		mObjectPool.loadPrefab(fileWithPath, true);
+		return mObjectPool.loadPrefab(fileWithPath, async, doneCallback);
 	}
 	// 获取和创建使用同一接口
 	public GameObject createObject(string fileWithPath)

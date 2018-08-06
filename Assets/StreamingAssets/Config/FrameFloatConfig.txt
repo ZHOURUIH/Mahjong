@@ -18,5 +18,5 @@ GDF_LOAD_RESOURCES = 0
 // 日志输出等级,0表示只输出强制显示的日志,1表示显示系统提示日志,2表示显示所有日志
 GDF_LOG_LEVEL = 2
 
-// 是否启用键盘
+// 是否响应键盘按键
 GDF_ENABLE_KEYBOARD = 1

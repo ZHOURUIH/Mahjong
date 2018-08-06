@@ -17,4 +17,5 @@ public class FrameComponent : CommandReceiver
 	}
 	public virtual void update(float elapsedTime) { }
 	public virtual void fixedUpdate(float elapsedTime) { }
+	public virtual void lateUpdate(float elapsedTime) { }
 }

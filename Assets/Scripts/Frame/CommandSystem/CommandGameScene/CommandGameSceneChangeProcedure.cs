@@ -18,14 +18,17 @@ public class CommandGameSceneChangeProcedure : Command
 		SceneProcedure curProcedure = gameScene.getCurSceneProcedure();
 		if(curProcedure != null	&& curProcedure.isPreparingExit())
 		{
-			UnityUtility.logError("procedure is preparing to change, can not change again!");
+			logError("procedure is preparing to change, can not change again!");
 		}
 		else
 		{
-			gameScene.changeProcedure(mProcedure, mIntent);
-			if(mFrameLogSystem != null)
+			if(curProcedure == null || curProcedure.getProcedureType() != mProcedure)
 			{
-				mFrameLogSystem.logProcedure("进入流程 : " + mProcedure.ToString());
+				gameScene.changeProcedure(mProcedure, mIntent);
+				if (mFrameLogSystem != null)
+				{
+					mFrameLogSystem.logProcedure("进入流程 : " + mProcedure.ToString());
+				}
 			}
 		}
 	}

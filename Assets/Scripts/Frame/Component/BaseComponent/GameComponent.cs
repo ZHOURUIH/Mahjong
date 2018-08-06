@@ -300,7 +300,7 @@ public abstract class GameComponent : GameBase
 			}
 			else
 			{
-				UnityUtility.logError("error : there is a child named");
+				logError("there is a child named : " + component.getName());
 			}
 		}
 	}

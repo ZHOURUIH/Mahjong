@@ -49,7 +49,7 @@ public class GameLayout : GameBase
 		mScript = mLayoutManager.createScript(mName, this);
 		if (mScript == null)
 		{
-			UnityUtility.logError("can not create layout script! type : " + mType);
+			logError("can not create layout script! type : " + mType);
 		}
 		// 初始化布局脚本
 		if (mIsNGUI)
@@ -65,6 +65,17 @@ public class GameLayout : GameBase
 		mScript.setRoot(mRoot);
 		mScript.findAllWindow();
 		mScript.assignWindow();
+		// 布局实例化完成,初始化之前,需要调用自适应组件的更新
+		ScaleAnchor scaleAnchor = getLayoutPanel().mObject.GetComponent<ScaleAnchor>();
+		CustomAnchor customAnchor = getLayoutPanel().mObject.GetComponent<CustomAnchor>();
+		if (scaleAnchor != null)
+		{
+			scaleAnchor.forceUpdateChildren();
+		}
+		if (customAnchor != null)
+		{
+			customAnchor.forceUpdateChildren();
+		}
 		mScript.init();
 		mScriptInited = true;
 		// 加载完布局后强制隐藏

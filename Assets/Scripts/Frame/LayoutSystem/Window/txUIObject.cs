@@ -10,6 +10,7 @@ public class txUIObject : ComponentOwner
 	protected AudioSource mAudioSource;
 	protected Transform mTransform;
 	protected BoxCollider mBoxCollider;
+	protected UIWidget mWidget;
 	protected static int mIDSeed = 0;
 	protected bool mPassRay = true;
 	protected bool mMouseHovered = false;
@@ -60,10 +61,37 @@ public class txUIObject : ComponentOwner
 		}
 		mAudioSource = mObject.GetComponent<AudioSource>();
 		mBoxCollider = mObject.GetComponent<BoxCollider>();
+		mWidget = mObject.GetComponent<UIWidget>();
+		if (mBoxCollider != null)
+		{
+			string layoutName = "";
+			if(mLayout != null)
+			{
+				layoutName = mLayout.getName();
+			}
+			// BoxCollider必须与UIWidget(或者UIWidget的派生类)一起使用,否则在自适应屏幕时BoxCollider会出现错误
+			if (mWidget == null)
+			{
+				logError("BoxCollider must used with UIWidget! Otherwise can not adapt to the screen sometimes! name : " + mName + ", layout : " + layoutName);
+			}
+			else if(!mWidget.autoResizeBoxCollider)
+			{
+				logError("UIWidget's autoResizeBoxCollider must be true! Otherwise can not adapt to the screen sometimes! name : " + mName + ", layout : " + layoutName);
+			}
+			// BoxCollider的中心必须为0,因为UIWidget会自动调整BoxCollider的大小和位置,而且调整后位置为0,所以在制作时BoxCollider的位置必须为0
+			if(!MathUtility.isFloatZero(mBoxCollider.center.sqrMagnitude))
+			{
+				logError("BoxCollider's center must be zero! Otherwise can not adapt to the screen sometimes! name : " + mName + ", layout : " + layoutName);
+			}
+			if(mObject.GetComponent<ScaleAnchor>() == null)
+			{
+				logError("Window with BoxCollider and Widget must has ScaleAnchor! Otherwise can not adapt to the screen sometimes! name : " + mName + ", layout : " + layoutName);
+			}
+		}
 	}
 	public override void initComponents()
 	{
-		addComponent<WindowComponentAudio>("Audio", true);
+		addComponent<WindowComponentAudio>("Audio");
 		addComponent<WindowComponentRotateSpeed>("RotateSpeed");
 		addComponent<WindowComponentMove>("Move");
 		addComponent<WindowComponentScale>("Scale");
@@ -73,6 +101,7 @@ public class txUIObject : ComponentOwner
 		addComponent<WindowComponentFill>("fill");
 		addComponent<WindowComponentRotateFixed>("RotateFixed");
 		addComponent<WindowComponentHSL>("HSL");
+		addComponent<WindowComponentLum>("Lum");
 		addComponent<WindowComponentDrag>("Drag");
 		addComponent<WindowComponentTrackTarget>("TrackTarget");
 	}
@@ -121,10 +150,7 @@ public class txUIObject : ComponentOwner
 		Vector3 scale = MathUtility.getMatrixScale(mTransform.localToWorldMatrix);
 		txUIObject root = mLayout.isNGUI() ? mLayoutManager.getNGUIRoot() : mLayoutManager.getUGUIRoot();
 		Vector3 uiRootScale = root.getTransform().localScale;
-		Vector3 mTransformScale = mTransform.localScale;
-		return new Vector3(scale.x * mTransformScale.x / uiRootScale.x, 
-							scale.y * mTransformScale.y / uiRootScale.y, 
-							scale.z * mTransformScale.z / uiRootScale.z);
+		return new Vector2(scale.x / uiRootScale.x, scale.y / uiRootScale.y);
 	}
 	public int getChildCount() { return mTransform.childCount; }
 	public GameObject getChild(int index) { return mTransform.GetChild(index).gameObject; }
@@ -137,7 +163,7 @@ public class txUIObject : ComponentOwner
 	//set
 	//-------------------------------------------------------------------------------------------------------------------------------------
 	public void setParent(txUIObject parent) { mParent = parent; }
-	private void setGameObject(GameObject go)
+	protected void setGameObject(GameObject go)
 	{
 		setName(go.name);
 		mObject = go;
@@ -167,4 +193,16 @@ public class txUIObject : ComponentOwner
 	public void setClickCallback(UIEventListener.VoidDelegate callback){UIEventListener.Get(mObject).onClick = callback;}
 	public void setHoverCallback(UIEventListener.BoolDelegate callback){UIEventListener.Get(mObject).onHover = callback;}
 	public void setPressCallback(UIEventListener.BoolDelegate callback){UIEventListener.Get(mObject).onPress = callback;}
+	// callback
+	//--------------------------------------------------------------------------------------------------------------------------------
+	public virtual void onMouseEnter(){}
+	public virtual void onMouseLeave(){}
+	// 鼠标左键在窗口内按下
+	public virtual void onMouseDown(Vector2 mousePos) { }
+	// 鼠标左键在窗口内放开
+	public virtual void onMouseUp(Vector2 mousePos) { }
+	// 鼠标在窗口内,并且有移动
+	public virtual void onMouseMove(Vector2 mousePos, Vector2 moveDelta, float moveSpeed) { }
+	// 鼠标在窗口内,但是不移动
+	public virtual void onMouseStay(Vector2 mousePos) { }
 }

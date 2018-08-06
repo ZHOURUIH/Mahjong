@@ -18,7 +18,7 @@ public struct InterfaceDetails
 	public int OUT_reportByteLength;
 	public ushort versionNumber;
 }
-public class HIDDevice
+public class HIDDevice : GameBase
 {
     #region globals
     public bool deviceConnected { get; set; }
@@ -229,13 +229,13 @@ public class HIDDevice
 				//Kernel32.CloseHandle(handle);
 				handle.Close();
 				handle = null;
-				UnityUtility.logInfo("设备已关闭");
+				logInfo("设备已关闭");
 			}
 			this.deviceConnected = false;
 		}
 		catch(Exception e)
 		{
-			UnityUtility.logInfo("exception : " + e.Message);
+			logInfo("exception : " + e.Message);
 		}
     }
     public bool write(byte[] data)  

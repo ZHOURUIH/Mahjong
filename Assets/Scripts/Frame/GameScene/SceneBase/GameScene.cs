@@ -28,8 +28,7 @@ abstract public class GameScene : ComponentOwner
 		mSceneProcedureList = new Dictionary<PROCEDURE_TYPE, SceneProcedure>();
 		mLastProcedureList = new List<SceneProcedure>();
 		// 创建场景对应的物体,并挂接到场景管理器下
-		mSceneObject = new GameObject(name);
-		mSceneObject.transform.parent = mGameSceneManager.getManagerObject().transform;
+		mSceneObject = UnityUtility.createObject(name, mGameSceneManager.getManagerObject());
 		mAudioSource = mSceneObject.GetComponent<AudioSource>();
 	}
 	// 进入场景时初始化
@@ -168,7 +167,7 @@ abstract public class GameScene : ComponentOwner
         }
         else
         {
-			UnityUtility.logError("can not find scene procedure : " + procedure);
+			logError("can not find scene procedure : " + procedure);
         }
         return false;
     }

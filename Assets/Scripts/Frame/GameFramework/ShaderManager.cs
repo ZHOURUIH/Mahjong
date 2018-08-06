@@ -7,10 +7,12 @@ using UnityEngine;
 public class ShaderManager : FrameComponent
 {
 	protected Dictionary<string, Shader> mShaderList;
+	protected List<string> mSingleShaderList;
 	public ShaderManager(string name)
 		:base(name)
 	{
 		mShaderList = new Dictionary<string, Shader>();
+		mSingleShaderList = new List<string>();
 	}
 	public override void init()
 	{
@@ -35,8 +37,19 @@ public class ShaderManager : FrameComponent
 		}
 		else
 		{
-			UnityUtility.logError("can not find shader : " + name);
+			logError("can not find shader : " + name);
 		}
 		return shader;
+	}
+	public bool isSingleShader(string shaderName)
+	{
+		return mSingleShaderList.Contains(shaderName);
+	}
+	public void registeSingleShader(string shaderName)
+	{
+		if(!mSingleShaderList.Contains(shaderName))
+		{
+			mSingleShaderList.Add(shaderName);
+		}
 	}
 }

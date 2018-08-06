@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class txUGUINumber : txUGUIStaticImage
 {
@@ -71,12 +72,20 @@ public class txUGUINumber : txUGUIStaticImage
 	}
 	protected void refreshNumber()
 	{
-		Vector2 windowSize = getWindowSize();
+		if (mNumber == "")
+		{
+			int numCount = mNumberList.Count;
+			for (int i = 0; i < numCount; ++i)
+			{
+				mNumberList[i].setActive(false);
+			}
+			return;
+		}
 		// 整数部分
 		int dotPos = mNumber.LastIndexOf('.');
 		if (mNumber.Length > 0 && (dotPos == 0 || dotPos == mNumber.Length - 1))
 		{
-			UnityUtility.logError("error : number can not start or end with dot!");
+			logError("number can not start or end with dot!");
 			return;
 		}
 		string intPart = dotPos != -1 ? mNumber.Substring(0, dotPos) : mNumber;
@@ -97,6 +106,7 @@ public class txUGUINumber : txUGUIStaticImage
 		// 根据当前窗口的大小调整所有数字的大小
 		Vector2 numberSize = Vector2.zero;
 		float numberScale = 0.0f;
+		Vector2 windowSize = getWindowSize();
 		int numberLength = mNumber.Length;
 		if (numberLength > 0)
 		{
@@ -107,15 +117,15 @@ public class txUGUINumber : txUGUIStaticImage
 			numberSize.x = ratio * numberSize.y;
 			numberScale = windowSize.y * inverseHeight;
 		}
-		if (dotPos != -1)
-		{
-			mNumberList[dotPos].setWindowSize(mSpriteList[10].rect.size * numberScale);
-		}
 		for (int i = 0; i < numberLength; ++i)
 		{
 			if (mNumber[i] != '.')
 			{
 				mNumberList[i].setWindowSize(numberSize);
+			}
+			else
+			{
+				mNumberList[i].setWindowSize(mSpriteList[10].rect.size * numberScale);
 			}
 		}
 		// 调整窗口位置,隐藏不需要显示的窗口
@@ -168,6 +178,7 @@ public class txUGUINumber : txUGUIStaticImage
 		{
 			string name = mName + "_" + StringUtility.intToString(i);
 			mNumberList.Add(mLayout.getScript().createObject<txUGUIStaticImage>(this, name, false));
+			mNumberList[i].mObject.AddComponent<ScaleAnchor>();
 		}
 		refreshNumber();
 	}
@@ -177,7 +188,7 @@ public class txUGUINumber : txUGUIStaticImage
 	}
 	public void setNumber(string num)
 	{
-		mNumber = StringUtility.checkFloatString(num);
+		mNumber = StringUtility.checkString(num, "0123456789.");
 		// 设置的数字字符串不能超过最大数量
 		if (mNumber.Length > mMaxCount)
 		{

@@ -24,6 +24,7 @@ public class FrameBase
 	public static InputManager				mInputManager			= null;
 	public static SceneSystem				mSceneSystem			= null;
 	public static IFrameLogSystem			mFrameLogSystem			= null;
+	public static ClassObjectPool			mClassObjectPool		= null;
 	public virtual void notifyConstructDone()
 	{
 		if (mGameFramework == null)
@@ -46,6 +47,7 @@ public class FrameBase
 			mObjectManager = mGameFramework.getSystem<ObjectManager>();
 			mInputManager = mGameFramework.getSystem<InputManager>();
 			mSceneSystem = mGameFramework.getSystem<SceneSystem>();
+			mClassObjectPool = mGameFramework.getSystem<ClassObjectPool>();
 		}
 	}
 	// 方便书写代码添加的命令相关函数
@@ -69,5 +71,17 @@ public class FrameBase
 	public static void pushDelayCommand(Command cmd, CommandReceiver cmdReceiver, float delayExecute = 0.001f)
 	{
 		mCommandSystem.pushDelayCommand(cmd, cmdReceiver, delayExecute);
+	}
+	public static void logError(string info, bool isMainThread = true)
+	{
+		UnityUtility.logError(info, isMainThread);
+	}
+	public static void logInfo(string info, LOG_LEVEL level = LOG_LEVEL.LL_NORMAL)
+	{
+		UnityUtility.logInfo(info, level);
+	}
+	public static GameObject getGameObject(GameObject parent, string name, bool errorIfNull = false)
+	{
+		return UnityUtility.getGameObject(parent, name, errorIfNull);
 	}
 }

@@ -46,7 +46,7 @@ public class WavRecorder : GameBase
 	public WavRecorder(int bufferSize, int sampleRate = 44100)
 	{
 		mSampleRate = sampleRate;
-		mRecorderObject = UnityUtility.getGameObject(mGameFramework.getGameFrameObject(), "Recorder");
+		mRecorderObject = getGameObject(mGameFramework.getGameFrameObject(), "Recorder");
 		mDeviceList = Microphone.devices;
 		mCurDataCount = 0;
 		mBufferSize = bufferSize;
@@ -70,7 +70,7 @@ public class WavRecorder : GameBase
 		}
 		catch (Exception e)
 		{
-			UnityUtility.logInfo("error in record! : " + e.Message, LOG_LEVEL.LL_FORCE);
+			logInfo("error in record! : " + e.Message, LOG_LEVEL.LL_FORCE);
 			return false;
 		}
 		return true;

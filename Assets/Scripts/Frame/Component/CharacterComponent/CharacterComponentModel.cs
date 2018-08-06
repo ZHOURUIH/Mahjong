@@ -19,11 +19,7 @@ public class CharacterComponentModel : GameComponent
 	}
 	public override void destroy()
 	{
-		if(mModel != null)
-		{
-			mObjectManager.destroyObject(mModel);
-			mModel = null;
-		}
+		destroyModel();
 		base.destroy();
 	}
 	public override void update(float elapsedTime)
@@ -34,7 +30,7 @@ public class CharacterComponentModel : GameComponent
 	{
 		if(mModel != null)
 		{
-			UnityUtility.logError("model is not null! can not set again!");
+			logError("model is not null! can not set again!");
 			return;
 		}
 		mModelPath = modelPath;
@@ -55,6 +51,18 @@ public class CharacterComponentModel : GameComponent
 		if(mModel != null)
 		{
 			mModel.SetActive(active);
+		}
+	}
+	public void destroyModel()
+	{
+		if (mModel != null)
+		{
+			mObjectManager.destroyObject(mModel);
+			mModel = null;
+			mModelTransform = null;
+			mAnimator = null;
+			mAnimation = null;
+			mModelPath = "";
 		}
 	}
 	//-----------------------------------------------------------------------------------------------------------------------

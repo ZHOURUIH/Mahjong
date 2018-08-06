@@ -75,21 +75,23 @@ public enum GAME_DEFINE_FLOAT
 	GDF_NONE,
 	// 应用程序配置参数
 	GDF_APPLICATION_MIN,
-	GDF_FULL_SCREEN,                // 是否全屏
+	GDF_FULL_SCREEN,                // 是否全屏,0为窗口模式,1为全屏,2为无边框窗口
 	GDF_SCREEN_WIDTH,               // 分辨率的宽
 	GDF_SCREEN_HEIGHT,              // 分辨率的高
+	GDF_ADAPT_SCREEN,               // 屏幕自适应的方式,0为基于锚点的自适应,可以根据不同分辨率调整布局排列,1为简单拉伸,2为多屏拼接后复制显示
+	GDF_SCREEN_COUNT,               // 显示屏数量,用于多屏横向组合为高分辨率,只能在GDF_ADAPT_SCREEN为2的情况下使用
 	GDF_USE_FIXED_TIME,             // 是否将每帧的时间固定下来
 	GDF_FIXED_TIME,                 // 每帧的固定时间,单位秒
-	GDF_SCREEN_COUNT,               // 显示屏数量,用于多屏横向组合为高分辨率
+	GDF_VSYNC,                      // 垂直同步,0为关闭垂直同步,1为开启垂直同步
 	GDF_APPLICATION_MAX,
 
 	// 框架配置参数
 	GDF_FRAME_MIN,
 	GDF_SOCKET_PORT,                // socket端口
 	GDF_BROADCAST_PORT,             // 广播端口
-	GDF_LOAD_RESOURCES,             // 游戏加载资源的路径,0代表在Resources中读取,1代表从AssetBundle中读取 
-	GDF_LOG_LEVEL,                  // 是否关闭所有的日志输出
-	GDF_ENABLE_KEYBOARD,			// 是否启用键盘
+	GDF_LOAD_RESOURCES,             // 游戏加载资源的路径,0代表在Resources中读取,1代表从AssetBundle中读取
+	GDF_LOG_LEVEL,                  // 日志输出等级
+	GDF_ENABLE_KEYBOARD,            // 是否响应键盘按键
 	GDF_FRAME_MAX,
 
 	// 游戏配置参数

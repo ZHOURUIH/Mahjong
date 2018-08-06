@@ -29,6 +29,33 @@ public class txUGUIStaticImageFeather : txUGUIStaticImage
 	}
 }
 //---------------------------------------------------------------------------------------------------------------------------
+public class txUGUIStaticImageGrey : txUGUIStaticImage
+{
+	public override void init(GameLayout layout, GameObject go, txUIObject parent)
+	{
+		base.init(layout, go, parent);
+		setWindowShader<WindowShaderGrey>();
+	}
+}
+//---------------------------------------------------------------------------------------------------------------------------
+public class txUGUIStaticImageLumOffset : txUGUIStaticImage
+{
+	public override void init(GameLayout layout, GameObject go, txUIObject parent)
+	{
+		base.init(layout, go, parent);
+		setWindowShader<WindowShaderLumOffset>();
+	}
+}
+//---------------------------------------------------------------------------------------------------------------------------
+public class txUGUIStaticImageLumOffsetLinearDodge : txUGUIStaticImage
+{
+	public override void init(GameLayout layout, GameObject go, txUIObject parent)
+	{
+		base.init(layout, go, parent);
+		setWindowShader<WindowShaderLumOffsetLinearDodge>();
+	}
+}
+//---------------------------------------------------------------------------------------------------------------------------
 public class txUGUIStaticImageHSLOffset : txUGUIStaticImage
 {
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)

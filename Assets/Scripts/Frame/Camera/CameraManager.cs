@@ -37,6 +37,13 @@ public class CameraManager : FrameComponent
 			camera.Value.update(elapsedTime);
 		}
 	}
+	public override void lateUpdate(float elapsedTime)
+	{
+		foreach (var camera in mCameraList)
+		{
+			camera.Value.lateUpdate(elapsedTime);
+		}
+	}
 	// 获得摄像机,名字是场景中摄像机的名字
 	public GameCamera getCamera(string name, GameObject parent = null, bool createIfNull = true)
 	{
@@ -50,10 +57,14 @@ public class CameraManager : FrameComponent
 		}
 		return null;
 	}
-	public GameCamera createCamera(string name, GameObject parent = null)
+	public GameCamera createCamera(string name, GameObject parent = null, bool newCamera = false)
 	{
 		GameCamera camera = null;
-		GameObject obj = UnityUtility.getGameObject(parent, name);
+		GameObject obj = getGameObject(parent, name);
+		if(obj == null && newCamera)
+		{
+			obj = UnityUtility.createObject(name, parent);
+		}
 		if (obj != null)
 		{
 			camera = new GameCamera(name);

@@ -95,8 +95,17 @@ public class AssetBundleLoader : GameBase
 #elif UNITY_ANDROID
 			bool loadFromWWW = true;
 #endif
-			mGameFramework.StartCoroutine(loadAssetBundleCoroutine(mRequestBundleList[0], loadFromWWW));
-			mRequestBundleList.RemoveAt(0);
+			// 找到第一个依赖项已经加载完毕的资源
+			int count = mRequestBundleList.Count;
+			for (int i = 0; i < count; ++i)
+			{
+				if(mRequestBundleList[i].isAllParentLoaded())
+				{
+					mGameFramework.StartCoroutine(loadAssetBundleCoroutine(mRequestBundleList[i], loadFromWWW));
+					mRequestBundleList.RemoveAt(i);
+					break;
+				}
+			}
 		}
 	}
 	public void destroy()
@@ -204,7 +213,7 @@ public class AssetBundleLoader : GameBase
 			AssetBundleInfo bundleInfo = mAssetBundleInfoList[bundleName];
 			if (bundleInfo.mLoaded == LOAD_STATE.LS_LOADING)
 			{
-				UnityUtility.logError("asset bundle is loading, can not load again! name : " + bundleName);
+				logError("asset bundle is loading, can not load again! name : " + bundleName);
 				return null;
 			}
 			// 如果还未加载,则加载资源包
@@ -235,7 +244,7 @@ public class AssetBundleLoader : GameBase
 		AssetBundleInfo bundleInfo = mAssetBundleInfoList[bundleName];
 		if (bundleInfo.mLoaded != LOAD_STATE.LS_UNLOAD)
 		{
-			UnityUtility.logError("asset bundle is loading or loaded, can not load again! name : " + bundleName);
+			logError("asset bundle is loading or loaded, can not load again! name : " + bundleName);
 			return false;
 		}
 		// 加载资源包
@@ -304,7 +313,7 @@ public class AssetBundleLoader : GameBase
 		if (www.error != null)
 		{
 			// 下载失败
-			UnityUtility.logInfo("下载失败 : " + url, LOG_LEVEL.LL_FORCE);
+			logInfo("下载失败 : " + url + ", info : " + www.error, LOG_LEVEL.LL_FORCE);
 			callback(null, userData);
 		}
 		else
@@ -314,8 +323,10 @@ public class AssetBundleLoader : GameBase
 			{
 #if UNITY_5_3_5
 				obj = www.audioClip;
-#else
+#elif UNITY_2018_2 || UNITY_2018_1
 				obj = www.GetAudioClip();
+#else
+				obj = WWW.GetAudioClip(www);
 #endif
 			}
 			else if(assetsType == typeof(Texture2D) || assetsType == typeof(Texture))
@@ -335,7 +346,7 @@ public class AssetBundleLoader : GameBase
 	protected IEnumerator loadAssetBundleCoroutine(AssetBundleInfo bundleInfo, bool loadFromWWW)
 	{
 		++mAssetBundleCoroutineCount;
-		UnityUtility.logInfo(bundleInfo.mBundleName + " start load bundle", LOG_LEVEL.LL_NORMAL);
+		logInfo(bundleInfo.mBundleName + " start load bundle", LOG_LEVEL.LL_NORMAL);
 		// 先确保依赖项全部已经加载完成,才能开始加载当前请求的资源包
 		while (!bundleInfo.isAllParentLoaded())
 		{
@@ -363,7 +374,7 @@ public class AssetBundleLoader : GameBase
 			AssetBundleCreateRequest request = AssetBundle.LoadFromFileAsync(CommonDefine.F_STREAMING_ASSETS_PATH + bundleInfo.mBundleName + CommonDefine.ASSET_BUNDLE_SUFFIX);
 			if (request == null)
 			{
-				UnityUtility.logError("can not load asset bundle async : " + bundleInfo.mBundleName);
+				logError("can not load asset bundle async : " + bundleInfo.mBundleName);
 				--mAssetBundleCoroutineCount;
 				yield break;
 			}
@@ -376,15 +387,16 @@ public class AssetBundleLoader : GameBase
 			AssetBundleRequest assetRequest = assetBundle.LoadAssetAsync(CommonDefine.P_RESOURCE_PATH + item.Value.mAssetName);
 			if (assetRequest == null)
 			{
-				UnityUtility.logError("can not load asset async : " + item.Value.mAssetName);
+				logError("can not load asset async : " + item.Value.mAssetName);
 				--mAssetBundleCoroutineCount;
 				yield break;
 			}
 			yield return assetRequest;
 			item.Value.mAssetObject = assetRequest.asset;
 		}
-		UnityUtility.logInfo(bundleInfo.mBundleName + " load bundle done", LOG_LEVEL.LL_NORMAL);
+		logInfo(bundleInfo.mBundleName + " load bundle done", LOG_LEVEL.LL_NORMAL);
 
+		yield return new WaitForEndOfFrame();
 		// 通知AssetBundleInfo
 		bundleInfo.notifyAssetBundleAsyncLoadedDone(assetBundle);
 		--mAssetBundleCoroutineCount;
@@ -416,7 +428,7 @@ public class AssetBundleLoader : GameBase
 		}
 		else
 		{
-			UnityUtility.logError("resource type : " + type.ToString() + " is not registered!");
+			logError("resource type : " + type.ToString() + " is not registered!");
 		}
 		return fileNameWithSuffix;
 	}

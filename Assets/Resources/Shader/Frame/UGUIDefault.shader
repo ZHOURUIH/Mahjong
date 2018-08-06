@@ -64,6 +64,7 @@ Shader "UGUIDefault"
 			fixed4 frag (v2f i) : SV_Target
 			{
 				fixed4 srcColor = tex2D(_MainTex, i.uv).rgba;
+				srcColor.a *= i.color.a;
 				return srcColor;
 			}
 			ENDCG

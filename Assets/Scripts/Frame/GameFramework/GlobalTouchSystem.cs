@@ -61,12 +61,20 @@ public class GlobalTouchSystem : FrameComponent
 	protected Vector3 mLastMousePosition;
 	protected txUIObject mHoverButton;
 	protected bool mUseHover = true;        // 是否判断鼠标悬停在某个窗口
-	protected bool mUseGlobalTouch = true;	// 是否使用全局触摸检测来进行界面的输入检测
+	protected bool mUseGlobalTouch = true;  // 是否使用全局触摸检测来进行界面的输入检测
+	protected float mCurStayTime;
+	protected float mStayTime = 0.15f;
+	protected Vector3 mPressMousePosition;
+	protected float mSquaredClickThreshhold = 15 * 15;  // 点击阈值的平方
+	protected bool mSimulateTouch = true;		// 是否模拟触摸屏
+	protected Vector2 mCurTouchPosition;        // 在模拟触摸屏的条件下,当前触摸点
+	protected bool mMousePressed = false;		// 在模拟触摸屏的条件下,屏幕是否被按下
 	public GlobalTouchSystem(string name)
 		:base(name)
 	{
 		mButtonCallbackList = new Dictionary<txUIObject, ColliderCallBack>();
 		mButtonOrderList = new SortedDictionary<UIDepth, List<txUIObject>>(new CompareFunc());
+		mCurStayTime = -1.0f;
 	}
 	public override void init()
 	{
@@ -81,7 +89,14 @@ public class GlobalTouchSystem : FrameComponent
 	public void setUseGlobalTouch(bool use) { mUseGlobalTouch = use; }
 	public Vector3 getCurMousePosition()
 	{
-		return Input.mousePosition;
+		if(mSimulateTouch)
+		{
+			return mCurTouchPosition;
+		}
+		else
+		{
+			return Input.mousePosition;
+		}
 	}
 	public txUIObject getHoverButton(Vector3 pos)
 	{
@@ -103,6 +118,11 @@ public class GlobalTouchSystem : FrameComponent
 		if (!mUseHover || !mUseGlobalTouch)
 		{
 			return;
+		}
+		// 模拟触摸时,更新触摸点
+		if(mSimulateTouch && mMousePressed)
+		{
+			mCurTouchPosition = Input.mousePosition;
 		}
 		// 鼠标移动检测
 		Vector3 curMousePosition = getCurMousePosition();
@@ -132,7 +152,28 @@ public class GlobalTouchSystem : FrameComponent
 				hoverWindow(newWindow, true);
 			}
 			mHoverButton = newWindow;
+			if(mHoverButton != null)
+			{
+				Vector2 moveDelta = curMousePosition - mLastMousePosition;
+				mHoverButton.onMouseMove(curMousePosition, moveDelta, MathUtility.getLength(moveDelta) / elapsedTime);
+			}
 			mLastMousePosition = curMousePosition;
+			mCurStayTime = 0.0f;
+		}
+		else
+		{
+			if(mCurStayTime >= 0.0f)
+			{
+				mCurStayTime += elapsedTime;
+				if (mCurStayTime >= mStayTime)
+				{
+					mCurStayTime = -1.0f;
+					if (mHoverButton != null)
+					{
+						mHoverButton.onMouseStay(curMousePosition);
+					}
+				}
+			}
 		}
 	}
 	// 用于接收NGUI处理的输入事件,不经过GlobalTouchSystem
@@ -168,7 +209,7 @@ public class GlobalTouchSystem : FrameComponent
 		// 如果不使用
 		else
 		{
-			UnityUtility.logError("Not Active Global Touch! use public void registeBoxCollider(txUIObject button, " + 
+			logError("Not Active Global Touch! use public void registeBoxCollider(txUIObject button, " + 
 				"UIEventListener.VoidDelegate clickCallback = null,UIEventListener.BoolDelegate pressCallback = null, " + 
 				"UIEventListener.BoolDelegate hoverCallback = null) instead");
 		}
@@ -203,29 +244,55 @@ public class GlobalTouchSystem : FrameComponent
 	}
 	public void notifyGlobalPress(bool press)
 	{
-		List<txUIObject> raycast = globalRaycast(getCurMousePosition());
+		// 开始触摸时记录触摸状态,同步上一次的触摸位置
+		if (mSimulateTouch)
+		{
+			mMousePressed = press;
+			if(mMousePressed)
+			{
+				mCurTouchPosition = Input.mousePosition;
+				mLastMousePosition = mCurTouchPosition;
+			}
+		}
+		Vector3 mousePosition = getCurMousePosition();
+		var raycast = globalRaycast(mousePosition);
 		foreach (var button in raycast)
 		{
 			if (mButtonCallbackList[button].mPressCallback != null)
 			{
 				mButtonCallbackList[button].mPressCallback(button, press);
 			}
+			if (press)
+			{
+				button.onMouseDown(mousePosition);
+			}
+			else
+			{
+				button.onMouseUp(mousePosition);
+			}
 		}
 		if(!press)
 		{
-			// 检测所有拣选到的盒子
-			foreach (var button in raycast)
+			if(MathUtility.getSquaredLength(mPressMousePosition - mousePosition) <= mSquaredClickThreshhold)
 			{
-				if (mButtonCallbackList[button].mClickCallback != null)
+				// 检测所有拣选到的盒子
+				foreach (var button in raycast)
 				{
-					mButtonCallbackList[button].mClickCallback(button);
+					if (mButtonCallbackList[button].mClickCallback != null)
+					{
+						mButtonCallbackList[button].mClickCallback(button);
+					}
+				}
+				if (raycast.Count == 0)
+				{
+					GameScene gameScene = mGameSceneManager.getCurScene();
+					gameScene.notifyScreenActived();
 				}
 			}
-			if (raycast.Count == 0)
-			{
-				GameScene gameScene = mGameSceneManager.getCurScene();
-				gameScene.notifyScreenActived();
-			}
+		}
+		else
+		{
+			mPressMousePosition = mousePosition;
 		}
 	}
 	//--------------------------------------------------------------------------------------------------------------------------
@@ -233,7 +300,7 @@ public class GlobalTouchSystem : FrameComponent
 	protected List<txUIObject> globalRaycast(Vector3 mousePos)
 	{
 		Ray ray = UnityUtility.getRay(mousePos);
-		List<txUIObject> raycastRet = UnityUtility.raycast(ray, mButtonOrderList);
+		var raycastRet = UnityUtility.raycast(ray, mButtonOrderList);
 		return raycastRet;
 	}
 	protected void hoverWindow(txUIObject window, bool hover)
@@ -244,6 +311,14 @@ public class GlobalTouchSystem : FrameComponent
 			if (mButtonCallbackList[window].mHoverCallback != null)
 			{
 				mButtonCallbackList[window].mHoverCallback(window, hover);
+			}
+			if(hover)
+			{
+				window.onMouseEnter();
+			}
+			else
+			{
+				window.onMouseLeave();
 			}
 		}
 	}

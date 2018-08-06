@@ -119,7 +119,7 @@ public class CommandSystem : FrameComponent
 		}
 		if (assignID < 0)
 		{
-			UnityUtility.logError("assignID invalid! : " + assignID);
+			logError("assignID invalid! : " + assignID);
 			return false;
 		}
 		syncCommandBuffer();
@@ -127,7 +127,7 @@ public class CommandSystem : FrameComponent
 		{
 			if (item.mCommand.mAssignID == assignID)
 			{
-				UnityUtility.logInfo("CommandSystem : interrupt command " + assignID + " : " + item.mCommand.showDebugInfo() + ", receiver : " + item.mReceiver.getName(), LOG_LEVEL.LL_HIGH);
+				logInfo("CommandSystem : interrupt command " + assignID + " : " + item.mCommand.showDebugInfo() + ", receiver : " + item.mReceiver.getName(), LOG_LEVEL.LL_HIGH);
 				mCommandBufferProcess.Remove(item);
 				// 销毁回收命令
 				mCommandPool.destroyCmd(item.mCommand);
@@ -143,7 +143,7 @@ public class CommandSystem : FrameComponent
 				break;
 			}
 		}
-		UnityUtility.logError("not find cmd with assignID! " + assignID);
+		logError("not find cmd with assignID! " + assignID);
 		return false;
 	}
 	public new void pushCommand<T>(CommandReceiver cmdReceiver, bool show = true) where T : Command, new()
@@ -156,29 +156,29 @@ public class CommandSystem : FrameComponent
 	{
 		if (cmd == null)
 		{
-			UnityUtility.logError("cmd is null! receiver : " + (cmdReceiver != null ? cmdReceiver.getName() : ""));
+			logError("cmd is null! receiver : " + (cmdReceiver != null ? cmdReceiver.getName() : ""));
 			return;
 		}
 		if (cmdReceiver == null)
 		{
-			UnityUtility.logError("receiver is null! cmd : " + (cmd != null ? cmd.getType().ToString() : ""));
+			logError("receiver is null! cmd : " + (cmd != null ? cmd.getType().ToString() : ""));
 			return;
 		}
 		if (!cmd.isValid())
 		{
-			UnityUtility.logError("cmd is invalid! make sure create cmd use CommandSystem.newCmd! pushCommand cmd type : "
+			logError("cmd is invalid! make sure create cmd use CommandSystem.newCmd! pushCommand cmd type : "
 				+ cmd.GetType().ToString() + "cmd id : " + cmd.mAssignID);
 			return;
 		}
 		if (cmd.isDelayCommand())
 		{
-			UnityUtility.logError("cmd is a delay cmd! can not use pushCommand!" + cmd.mAssignID + ", " + cmd.showDebugInfo());
+			logError("cmd is a delay cmd! can not use pushCommand!" + cmd.mAssignID + ", " + cmd.showDebugInfo());
 			return;
 		}
 		cmd.setReceiver(cmdReceiver);
 		if (cmd.getShowDebugInfo())
 		{
-			UnityUtility.logInfo("CommandSystem : " + cmd.mAssignID + ", " + cmd.showDebugInfo() + ", receiver : " + cmdReceiver.getName(), LOG_LEVEL.LL_NORMAL);
+			logInfo("CommandSystem : " + cmd.mAssignID + ", " + cmd.showDebugInfo() + ", receiver : " + cmdReceiver.getName(), LOG_LEVEL.LL_NORMAL);
 		}
 		cmdReceiver.receiveCommand(cmd);
 
@@ -196,23 +196,23 @@ public class CommandSystem : FrameComponent
 	{
 		if (cmd == null)
 		{
-			UnityUtility.logError("cmd is null! receiver : " + (cmdReceiver != null ? cmdReceiver.getName() : ""));
+			logError("cmd is null! receiver : " + (cmdReceiver != null ? cmdReceiver.getName() : ""));
 			return;
 		}
 		if(cmdReceiver == null)
 		{
-			UnityUtility.logError("receiver is null! cmd : " + (cmd != null ? cmd.getType().ToString() : ""));
+			logError("receiver is null! cmd : " + (cmd != null ? cmd.getType().ToString() : ""));
 			return;
 		}
 		if (!cmd.isValid())
 		{
-			UnityUtility.logError("cmd is invalid! make sure create cmd use CommandSystem.newCmd! pushDelayCommand cmd type : "
+			logError("cmd is invalid! make sure create cmd use CommandSystem.newCmd! pushDelayCommand cmd type : "
 				+ cmd.GetType().ToString() + "cmd id : " + cmd.mAssignID);
 			return;
 		}
 		if (!cmd.isDelayCommand())
 		{
-			UnityUtility.logError("cmd is not a delay command, Command : " + cmd.mAssignID + ", " + cmd.showDebugInfo());
+			logError("cmd is not a delay command, Command : " + cmd.mAssignID + ", " + cmd.showDebugInfo());
 			return;
 		}
 		if (delayExecute < 0.0f)
@@ -221,7 +221,7 @@ public class CommandSystem : FrameComponent
 		}
 		if (cmd.getShowDebugInfo())
 		{
-			UnityUtility.logInfo("CommandSystem : delay cmd : " + cmd.mAssignID + ", " + delayExecute + ", info : " + cmd.showDebugInfo() + ", receiver : " + cmdReceiver.getName(), LOG_LEVEL.LL_NORMAL);
+			logInfo("CommandSystem : delay cmd : " + cmd.mAssignID + ", " + delayExecute + ", info : " + cmd.showDebugInfo() + ", receiver : " + cmdReceiver.getName(), LOG_LEVEL.LL_NORMAL);
 		}
 		DelayCommand delayCommand = new DelayCommand(delayExecute, cmd, cmdReceiver);
 

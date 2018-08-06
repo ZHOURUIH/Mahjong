@@ -8,6 +8,7 @@ public class txUGUICanvas : txUIObject
 	protected CanvasScaler mCanvasScaler;
 	protected GraphicRaycaster mGraphicRaycaster;
 	protected GameObject mConnectedParent;  // 重新指定挂接到的父节点
+	protected RectTransform mRectTransform;
 	public txUGUICanvas()
 	{
 		mType = UI_TYPE.UT_UGUI_CANVAS;
@@ -20,6 +21,9 @@ public class txUGUICanvas : txUIObject
 		{
 			mCanvas = mObject.AddComponent<Canvas>();
 		}
+		mRectTransform = mObject.GetComponent<RectTransform>();
+		// 因为添加Canvas组件后,原来的Transform会被替换为RectTransform,所以需要重新设置Transform组件
+		mTransform = mRectTransform;
 	}
 	public void setConnectParent(GameObject obj)
 	{

@@ -60,8 +60,13 @@ public class MovableObject : ComponentOwner
 		addComponent<MovableObjectComponentAudio>("Audio", true);
 	}
 	public virtual void update(float elapsedTime) 
-	{ 
+	{
+		base.preUpdateComponents(elapsedTime);
 		base.updateComponents(elapsedTime);
+	}
+	public virtual void lateUpdate(float elapsedTime)
+	{
+		base.lateUpdateComponents(elapsedTime);
 	}
 	public override void fixedUpdate(float elapsedTime)
 	{

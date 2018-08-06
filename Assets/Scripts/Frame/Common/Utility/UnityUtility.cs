@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 #if UNITY_STANDALONE_WIN
+using Microsoft.Win32;
 using System.Windows.Forms;
 #endif
 using UnityEngine;
@@ -50,7 +51,7 @@ public class UnityUtility : FrameComponent
 	{
 		return mLogLevel;
 	}
-	public static void logError(string info, bool isMainThread = true)
+	public static new void logError(string info, bool isMainThread = true)
 	{
 		if (isMainThread && mShowMessageBox)
 		{
@@ -58,15 +59,15 @@ public class UnityUtility : FrameComponent
 			// 运行一次只显示一次提示框,避免在循环中报错时一直弹窗
 			mShowMessageBox = false;
 		}
-		UnityEngine.Debug.LogError("error : " + info);
+		string trackStr = new StackTrace().ToString();
+		UnityEngine.Debug.LogError("error : " + info + ", stack : " + trackStr);
 		// 游戏中的错误日志
 		if (mFrameLogSystem != null)
 		{
 			mFrameLogSystem.logGameError(info);
 		}	
 	}
-	// force表示是否强制输出日志
-	public static void logInfo(string info, LOG_LEVEL level = LOG_LEVEL.LL_NORMAL)
+	public static new void logInfo(string info, LOG_LEVEL level = LOG_LEVEL.LL_NORMAL)
 	{
 		if ((int)level <= (int)mLogLevel)
 		{
@@ -149,7 +150,7 @@ public class UnityUtility : FrameComponent
 			GameObject.Destroy(obj);
 		}
 	}
-	public static GameObject getGameObject(GameObject parent, string name, bool errorIfNull = false)
+	public static new GameObject getGameObject(GameObject parent, string name, bool errorIfNull = false)
 	{
 		GameObject go = null;
 		if (parent == null)
@@ -206,7 +207,7 @@ public class UnityUtility : FrameComponent
 		GameObject prefab = mResourceManager.loadResource<GameObject>(prefabName, true);
 		if (prefab == null)
 		{
-			logError("error : can not find prefab : " + prefabName);
+			logError("can not find prefab : " + prefabName);
 			return null;
 		}
 		GameObject obj = instantiatePrefab(parent, prefab, name, scale, rot, pos);
@@ -223,6 +224,14 @@ public class UnityUtility : FrameComponent
 	{
 		string name = StringUtility.getFileName(prefab.name);
 		return instantiatePrefab(parent, prefab, name, Vector3.one, Vector3.zero, Vector3.zero);
+	}
+	public static GameObject instantiatePrefab(GameObject parent, GameObject prefab, string name)
+	{
+		return instantiatePrefab(parent, prefab, name, Vector3.one, Vector3.zero, Vector3.zero);
+	}
+	public static GameObject instantiatePrefab(GameObject parent, string prefabName, string name)
+	{
+		return instantiatePrefab(parent, prefabName, name, Vector3.one, Vector3.zero, Vector3.zero);
 	}
 	// parent为实例化后挂接的父节点
 	// prefabName为预设名,带Resources下相对路径
@@ -303,18 +312,14 @@ public class UnityUtility : FrameComponent
 		{
 			return;
 		}
-		GameObject go = obj.mObject;
-		go.layer = layer;
-		foreach (Transform t in go.transform.GetComponentsInChildren<Transform>(true))
-		{
-			t.gameObject.layer = layer;
-		}
+		setGameObjectLayer(obj, layer);
 	}
 	public static void setGameObjectLayer(txUIObject obj, int layer)
 	{
 		GameObject go = obj.mObject;
 		go.layer = layer;
-		foreach (Transform t in go.transform.GetComponentsInChildren<Transform>(true))
+		Transform[] childTransformList = go.transform.GetComponentsInChildren<Transform>(true);
+		foreach (Transform t in childTransformList)
 		{
 			t.gameObject.layer = layer;
 		}
@@ -339,5 +344,29 @@ public class UnityUtility : FrameComponent
 	public static Sprite texture2DToSprite(Texture2D tex)
 	{
 		return Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+	}
+	// 从注册表中获取注册码,如果注册码不存在,则自动创建
+	public static string readRegistryValue(string path, string keyName)
+	{
+		string value = "";
+#if UNITY_STANDALONE_WIN
+		RegistryKey key = Registry.CurrentUser.CreateSubKey(path);
+		string codeValue = key.GetValue(keyName) as string;
+		if (codeValue != null)
+		{
+			value = key.GetValue(keyName) as string;
+		}
+		key.Close();
+#endif
+		return value;
+	}
+	// 读取注册表
+	public static void writeRegistryValue(string path, string value, string keyName)
+	{
+#if UNITY_STANDALONE_WIN
+		RegistryKey key = Registry.CurrentUser.CreateSubKey(path);
+		key.SetValue(keyName, value);
+		key.Close();
+#endif
 	}
 }

@@ -239,7 +239,7 @@ public abstract class ConfigBase : FrameComponent
 					string[] value = StringUtility.split(line, false, "=");
 					if(value.Length != 2)
 					{
-						UnityUtility.logError("配置文件错误 : line : " + line);
+						logError("配置文件错误 : line : " + line);
 						return;
 					}
 					ConfigInfo info = new ConfigInfo();

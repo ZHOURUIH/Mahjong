@@ -66,7 +66,7 @@ public class ResourceLoader : GameBase
 		}
 	}
 	// 同步加载资源,name为Resources下的相对路径,不带后缀
-	public UnityEngine.Object loadResource(string name)
+	public T loadResource<T>(string name) where T : UnityEngine.Object
 	{
 		string path = StringUtility.getFilePath(name);
 		// 如果文件夹还未加载,则先加载文件夹
@@ -77,9 +77,9 @@ public class ResourceLoader : GameBase
 		// 已经加载,则返回true
 		if (!mLoadedPath[path].ContainsKey(name))
 		{
-			mLoadedPath[path][name] = Resources.Load(name);
+			mLoadedPath[path][name] = Resources.Load(name, typeof(T));
 		}
-		return mLoadedPath[path][name];
+		return mLoadedPath[path][name] as T;
 	}
 	// 异步加载资源,name为Resources下的相对路径,不带后缀
 	public bool loadResourcesAsync<T>(string name, AssetLoadDoneCallback doneCallback, object userData) where T : UnityEngine.Object
@@ -122,7 +122,7 @@ public class ResourceLoader : GameBase
 				string fullName = tempPath + resList[i].name;
 				if (loadedResource.ContainsKey(fullName))
 				{
-					UnityUtility.logError("folder is loaded,but there is more than one resource named : " + resList[i].name);
+					logError("folder is loaded,but there is more than one resource named : " + resList[i].name);
 					break;
 				}
 				else
@@ -149,13 +149,13 @@ public class ResourceLoader : GameBase
 	//---------------------------------------------------------------------------------------------------------------------------------------
 	protected IEnumerator loadResourceCoroutine<T>(string resName, AssetLoadDoneCallback doneCallback, object userData) where T : UnityEngine.Object
 	{
-		UnityUtility.logInfo(resName + " start load!", LOG_LEVEL.LL_NORMAL);
+		logInfo(resName + " start load!", LOG_LEVEL.LL_NORMAL);
 		ResourceRequest request = Resources.LoadAsync<T>(resName);
 		yield return request;
 		string path = StringUtility.getFilePath(resName);
 		mLoadedPath[path][resName] = request.asset;
 		doneCallback(request.asset, userData);
-		UnityUtility.logInfo(resName + " load done!", LOG_LEVEL.LL_NORMAL);
+		logInfo(resName + " load done!", LOG_LEVEL.LL_NORMAL);
 	}
 	protected IEnumerator loadPathCoroutine(string path, AssetBundleLoadDoneCallback callback)
 	{

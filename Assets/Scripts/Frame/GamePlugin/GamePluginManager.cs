@@ -37,12 +37,15 @@ public class GamePluginManager : FrameComponent
 	//-----------------------------------------------------------------------------------------------------------
 	protected void loadAllPlugin()
 	{
-		if(!FileUtility.isDirExist(CommonDefine.F_ASSETS_PATH + CommonDefine.A_GAME_PLUGIN))
+#if UNITY_ANDROID
+		return;
+#endif
+		if(!FileUtility.isDirExist(CommonDefine.F_GAME_PLUGIN_PATH))
 		{
 			return;
 		}
 		List<string> fileList = new List<string>();
-		FileUtility.findFiles(CommonDefine.A_GAME_PLUGIN, ref fileList, "dll");
+		FileUtility.findFiles(CommonDefine.F_GAME_PLUGIN_PATH, ref fileList, "dll");
 		int count = fileList.Count;
 		for(int i = 0; i < count; ++i)
 		{

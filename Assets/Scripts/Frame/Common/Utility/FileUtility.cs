@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Security.Cryptography;
+using UnityEngine;
 
 public class FileUtility
 {
@@ -19,30 +20,21 @@ public class FileUtility
 		}
 	}
 	// 打开一个二进制文件,fileName为绝对路径
-	public static void openFile(string fileName, ref byte[] fileBuffer, ref int fileSize)
+	public static void openFile(string fileName, ref byte[] fileBuffer)
 	{
-		if(!fileName.StartsWith(CommonDefine.F_ASSETS_PATH))
-		{
-			UnityUtility.logError("fileName should be a absolute path!");
-			return;
-		}
 		FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-		fileSize = (int)fs.Length;
+		int fileSize = (int)fs.Length;
 		fileBuffer = new byte[fileSize];
 		fs.Read(fileBuffer, 0, fileSize);
 		fs.Close();
+		fs.Dispose();
 	}
 	// 打开一个文本文件,fileName为绝对路径
 	public static string openTxtFile(string fileName)
 	{
-		if (!fileName.StartsWith(CommonDefine.F_ASSETS_PATH))
-		{
-			UnityUtility.logError("fileName should be a absolute path!");
-			return "";
-		}
 		try
 		{
-			StreamReader streamReader = new StreamReader(fileName, Encoding.UTF8);
+			StreamReader streamReader = File.OpenText(fileName);
 			if(streamReader == null)
 			{
 				UnityUtility.logInfo("open file failed! filename : " + fileName);
@@ -50,6 +42,7 @@ public class FileUtility
 			}
 			string fileBuffer = streamReader.ReadToEnd();
 			streamReader.Close();
+			streamReader.Dispose();
 			return fileBuffer;
 		}
 		catch(Exception)
@@ -70,6 +63,7 @@ public class FileUtility
 		}
 		file.Write(buffer, 0, size);
 		file.Close();
+		file.Dispose();
 	}
 	// 写一个文本文件,fileName为绝对路径,content是写入的字符串
 	public static void writeTxtFile(string fileName, string content)
@@ -79,6 +73,7 @@ public class FileUtility
 		StreamWriter writer = new StreamWriter(fileName, false, Encoding.UTF8);
 		writer.Write(content);
 		writer.Close();
+		writer.Dispose();
 	}
 	public static bool renameFile(string fileName, string newName)
 	{
@@ -145,21 +140,19 @@ public class FileUtility
 	}
 	public static bool isDirExist(string dir)
 	{
-		if (!dir.StartsWith(CommonDefine.F_ASSETS_PATH))
-		{
-			UnityUtility.logError("dir should be a absolute path!");
-			return false;
-		}
+#if UNITY_ANDROID && !UNITY_EDITOR
+		return true;
+#else
 		return Directory.Exists(dir);
+#endif
 	}
 	public static bool isFileExist(string fileName)
 	{
-		if (!fileName.StartsWith(CommonDefine.F_ASSETS_PATH))
-		{
-			UnityUtility.logError("fileName should be a absolute path!");
-			return false;
-		}
+#if UNITY_ANDROID && !UNITY_EDITOR
+		return true;
+#else
 		return File.Exists(fileName);
+#endif
 	}
 	public static void createDir(string dir)
 	{
@@ -175,20 +168,50 @@ public class FileUtility
 		}
 		Directory.CreateDirectory(dir);
 	}
+	// path为Resources下的相对路径
+	public static void findResourcesFiles(string path, ref List<string> fileList, string pattern, bool recursive = true)
+	{
+		List<string> patternList = new List<string>();
+		patternList.Add(pattern);
+		findResourcesFiles(path, ref fileList, patternList, recursive);
+	}
+	// path为Resources下的相对路径
+	public static void findResourcesFiles(string path, ref List<string> fileList, List<string> patterns = null, bool recursive = true)
+	{
+		validPath(ref path);
+		if (!StringUtility.startWith(path, CommonDefine.F_STREAMING_ASSETS_PATH))
+		{
+			path = CommonDefine.F_RESOURCES_PATH + path;
+		}
+		findFiles(path, ref fileList, patterns, recursive);
+	}
+	// path为StreamingAssets下的相对路径
+	public static void findStreamingAssetsFiles(string path, ref List<string> fileList, string pattern, bool recursive = true)
+	{
+		List<string> patternList = new List<string>();
+		patternList.Add(pattern);
+		findStreamingAssetsFiles(path, ref fileList, patternList, recursive);
+	}
+	// path为StreamingAssets下的相对路径
+	public static void findStreamingAssetsFiles(string path, ref List<string> fileList, List<string> patterns = null, bool recursive = true)
+	{
+		if (!StringUtility.startWith(path, CommonDefine.F_STREAMING_ASSETS_PATH))
+		{
+			path = CommonDefine.F_STREAMING_ASSETS_PATH + path;
+		}
+		findFiles(path, ref fileList, patterns, recursive);
+	}
+	// path为绝对路径
 	public static void findFiles(string path, ref List<string> fileList, string pattern, bool recursive = true)
 	{
 		List<string> patternList = new List<string>();
 		patternList.Add(pattern);
 		findFiles(path, ref fileList, patternList, recursive);
 	}
-	// path为相对于Assets的相对路径
-	public static void findFiles(string path, ref List<string> fileList, List<string> pattern = null, bool recursive = true)
+	// path为绝对路径
+	public static void findFiles(string path, ref List<string> fileList, List<string> patterns = null, bool recursive = true)
 	{
 		validPath(ref path);
-		if(!StringUtility.startWith(path, CommonDefine.F_ASSETS_PATH))
-		{
-			path = CommonDefine.F_ASSETS_PATH + path;
-		}
 		if(!isDirExist(path))
 		{
 			UnityUtility.logError("path is invalid! path : " + path);
@@ -197,7 +220,7 @@ public class FileUtility
 		DirectoryInfo folder = new DirectoryInfo(path);
 		FileInfo[] fileInfoList = folder.GetFiles();
 		int fileCount = fileInfoList.Length;
-		int patternCount = pattern != null ? pattern.Count : 0;
+		int patternCount = patterns != null ? patterns.Count : 0;
 		for (int i = 0; i < fileCount; ++i)
 		{
 			string fileName = fileInfoList[i].Name;
@@ -206,7 +229,7 @@ public class FileUtility
 			{
 				for (int j = 0; j < patternCount; ++j)
 				{
-					if (StringUtility.endWith(fileName, pattern[j], false))
+					if (StringUtility.endWith(fileName, patterns[j], false))
 					{
 						fileList.Add(path + fileName);
 					}
@@ -224,7 +247,7 @@ public class FileUtility
 			string[] dirs = Directory.GetDirectories(path);
 			foreach (var item in dirs)
 			{
-				findFiles(item, ref fileList, pattern, recursive);
+				findFiles(item, ref fileList, patterns, recursive);
 			}
 		}
 	}
@@ -233,7 +256,7 @@ public class FileUtility
 	public static bool findDirectory(string path, ref List<string> dirList, bool recursive = true)
 	{
 		validPath(ref path);
-		path = CommonDefine.F_ASSETS_PATH + path;
+		path = CommonDefine.F_STREAMING_ASSETS_PATH + path;
 		if(!isDirExist(path))
 		{
 			return false;
@@ -251,11 +274,6 @@ public class FileUtility
 	}
 	public static void deleteFile(string path)
 	{
-		if (!path.StartsWith(CommonDefine.F_ASSETS_PATH))
-		{
-			UnityUtility.logError("fileName should be a absolute path!");
-			return;
-		}
 		File.Delete(path);
 	}
 	public static string generateFileMD5(string fileName, bool upperOrLower = true)

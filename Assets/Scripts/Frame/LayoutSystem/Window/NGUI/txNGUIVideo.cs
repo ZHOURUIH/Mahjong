@@ -91,11 +91,11 @@ public class txNGUIVideo : txNGUIStaticTexture
 	public bool setFileName(string file)
 	{
 		setVideoEndCallback(null);
-		if (!file.StartsWith(CommonDefine.A_VIDEO_PATH))
+		if (!file.StartsWith(CommonDefine.SA_VIDEO_PATH))
 		{
-			file = CommonDefine.A_VIDEO_PATH + file;
+			file = CommonDefine.SA_VIDEO_PATH + file;
 		}
-		if(!FileUtility.isFileExist(CommonDefine.F_ASSETS_PATH + file))
+		if(!FileUtility.isFileExist(CommonDefine.F_STREAMING_ASSETS_PATH + file))
 		{
 			UnityUtility.logError("找不到视频文件 : " + file);
 			return false;

@@ -25,8 +25,9 @@ public enum UI_TYPE
 	// UGUI
 	UT_UGUI_STATIC_IMAGE,   // 静态图片
 	UT_UGUI_CANVAS,			// 画布
-	UT_UGUI_NUMBER,			// 数字
-	
+	UT_UGUI_NUMBER,         // 数字
+	UT_UGUI_TEXT,
+
 }
 // 停靠位置
 public enum DOCKING_POSITION
@@ -112,7 +113,11 @@ public class CommonDefine
 	public const string LOWER_NGUI_SUB_PREFAB = "nguisubprefab";
 	public const string NGUI_PREFAB = "NGUIPrefab";
 	public const string UGUI_PREFAB = "UGUIPrefab";
+#if UNITY_IPHONE
+	public const string STREAMING_ASSETS = "Raw";
+#elif !UNITY_ANDROID
 	public const string STREAMING_ASSETS = "StreamingAssets";
+#endif
 	public const string CONFIG = "Config";
 	public const string VIDEO = "Video";
 	public const string PARTICLE = "Particle";
@@ -124,21 +129,20 @@ public class CommonDefine
 	// 相对路径,相对于项目,以P_开头,表示Project
 	public const string P_ASSETS_PATH = ASSETS + "/";
 	public const string P_RESOURCE_PATH = P_ASSETS_PATH + RESOURCES + "/";
-	// 相对路径,相对于Assets,以A_开头,表示Assets
-	public const string A_RESOURCE_PATH = RESOURCES + "/";
-	public const string A_STREAMING_ASSETS_PATH = STREAMING_ASSETS + "/";
-	public const string A_CONFIG_PATH = A_STREAMING_ASSETS_PATH + CONFIG + "/";
-	public const string A_VIDEO_PATH = A_STREAMING_ASSETS_PATH + VIDEO + "/";
-	public const string A_GAME_DATA_FILE_PATH = A_STREAMING_ASSETS_PATH + GAME_DATA_FILE + "/";
-	public const string A_BUNDLE_KEY_FRAME_PATH = A_STREAMING_ASSETS_PATH + LOWER_KEY_FRAME + "/";
-	public const string A_BUNDLE_LAYOU_PATH = A_STREAMING_ASSETS_PATH + LOWER_LAYOUT + "/";
-	public const string A_CUSTOM_SOUND_PATH = A_STREAMING_ASSETS_PATH + CUSTOM_SOUND + "/";
-	public const string A_SOUND_PATH = A_RESOURCE_PATH + SOUND + "/";
-	public const string A_KEY_FRAME_PATH = A_RESOURCE_PATH + KEY_FRAME + "/";
-	public const string A_LAYOUT_PATH = A_RESOURCE_PATH + LAYOUT + "/";
-	public const string A_NGUI_SUB_PREFAB_PATH = A_LAYOUT_PATH + NGUI_SUB_PREFAB + "/";
-	public const string A_BUNDLE_NGUI_SUB_PREFAB_PATH = A_BUNDLE_LAYOU_PATH + NGUI_SUB_PREFAB + "/";
-	public const string A_GAME_PLUGIN = GAME_PLUGIN + "/";
+	// 相对路径,相对于StreamingAssets,以SA_开头,表示StreamingAssets
+	// 由于Android下的StreamingAssets路径不完全以Assets路径开头,与其他平台不一致,所以不定义相对于Asstes的路径
+	public const string SA_CONFIG_PATH = CONFIG + "/";
+	public const string SA_VIDEO_PATH = VIDEO + "/";
+	public const string SA_GAME_DATA_FILE_PATH = GAME_DATA_FILE + "/";
+	public const string SA_BUNDLE_KEY_FRAME_PATH = LOWER_KEY_FRAME + "/";
+	public const string SA_BUNDLE_LAYOU_PATH = LOWER_LAYOUT + "/";
+	public const string SA_CUSTOM_SOUND_PATH = CUSTOM_SOUND + "/";
+	public const string SA_BUNDLE_NGUI_SUB_PREFAB_PATH = SA_BUNDLE_LAYOU_PATH + NGUI_SUB_PREFAB + "/";
+	public const string SA_GAME_PLUGIN = GAME_PLUGIN + "/";
+	public const string SA_SOUND_PATH = SOUND + "/";
+	public const string SA_KEY_FRAME_PATH = KEY_FRAME + "/";
+	public const string SA_LAYOUT_PATH = LAYOUT + "/";
+	public const string SA_NGUI_SUB_PREFAB_PATH = SA_LAYOUT_PATH + NGUI_SUB_PREFAB + "/";
 	// 相对路径,相对于Resources,R_开头,表示Resources
 	public const string R_SOUND_PATH = SOUND + "/";
 	public const string R_LAYOUT_PATH = LAYOUT + "/";
@@ -155,13 +159,15 @@ public class CommonDefine
 	public const string R_MODEL_PATH = MODEL + "/";
 	// 绝对路径,以F_开头,表示Full
 	public static string F_ASSETS_PATH = Application.dataPath + "/";
-	public static string F_STREAMING_ASSETS_PATH = F_ASSETS_PATH + STREAMING_ASSETS + "/";
+	public static string F_RESOURCES_PATH = F_ASSETS_PATH + RESOURCES + "/";
+	public static string F_STREAMING_ASSETS_PATH = Application.streamingAssetsPath + "/";
 	public static string F_DATA_BASE_PATH = F_STREAMING_ASSETS_PATH + DATA_BASE + "/";
 	public static string F_VIDEO_PATH = F_STREAMING_ASSETS_PATH + VIDEO + "/";
 	public static string F_CONFIG_PATH = F_STREAMING_ASSETS_PATH + CONFIG + "/";
 	public static string F_GAME_DATA_FILE_PATH = F_STREAMING_ASSETS_PATH + GAME_DATA_FILE + "/";
 	public static string F_HELPER_EXE_PATH = F_STREAMING_ASSETS_PATH + HELPER_EXE + "/";
 	public static string F_CUSTOM_SOUND_PATH = F_STREAMING_ASSETS_PATH + CUSTOM_SOUND + "/";
+	public static string F_GAME_PLUGIN_PATH = F_STREAMING_ASSETS_PATH + GAME_PLUGIN + "/";
 	//-----------------------------------------------------------------------------------------------------------------
 	// 常量定义
 	// 常量数值定义

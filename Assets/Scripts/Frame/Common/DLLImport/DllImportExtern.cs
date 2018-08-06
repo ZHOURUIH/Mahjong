@@ -24,7 +24,9 @@ public class DllImportExtern : FrameComponent
 	}
 	public override void init()
 	{
+#if UNITY_WIN_STANDORD || UNITY_EDITOR
 		registerDLL(Winmm.WINMM_DLL);
+#endif
 	}
 	public override void destroy()
 	{

@@ -180,20 +180,21 @@ public class GameFramework : MonoBehaviour
 		int count = mFrameComponentList.Count;
 		for (int i = 0; i < count; ++i)
 		{
-			mFrameComponentList[i].init();
+			try
+			{
+				mFrameComponentList[i].init();
+			}
+			catch(Exception e)
+			{
+				UnityUtility.logError("init failed! : " + mFrameComponentList[i].getName() + ", info : " + e.Message + ", stack : " + e.StackTrace);
+			}
 		}
 		System.Net.ServicePointManager.DefaultConnectionLimit = 200;
 		int width = (int)FrameBase.mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SCREEN_WIDTH);
 		int height = (int)FrameBase.mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SCREEN_HEIGHT);
 		int fullscreen = (int)FrameBase.mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_FULL_SCREEN);
-		Screen.SetResolution(width, height, fullscreen == 1);
 		int screenCount = (int)FrameBase.mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SCREEN_COUNT);
-		processResolution(width, height, screenCount);
-		// 设置为无边框窗口
-		if (fullscreen == 2)
-		{
-			User32.SetWindowLong(User32.GetForegroundWindow(), -16, CommonDefine.WS_POPUP | CommonDefine.WS_VISIBLE);
-		}
+		processScreen(width, height, screenCount, fullscreen);
 		mEnableKeyboard = (int)FrameBase.mFrameConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_ENABLE_KEYBOARD) > 0;
 	}
 	protected virtual void registe() { }
@@ -252,14 +253,26 @@ public class GameFramework : MonoBehaviour
 		GameObject camera = UnityUtility.getGameObject(parent, cameraName);
 		camera.transform.localPosition = pos;
 	}
-	protected void processResolution(int width, int height, int screenCount)
+	protected void processScreen(int width, int height, int screenCount, int fullScreen)
 	{
+#if UNITY_ANDROID || UNITY_IOS
+		// 移动平台下固定为全屏
+		fullScreen = 1;
+		screenCount = 1;
+#endif
+		if (fullScreen == 1)
+		{
+			width = Screen.width;
+			height = Screen.height;
+		}
+		Screen.SetResolution(width, height, fullScreen == 1);
+		// 设置为无边框窗口
+		if (fullScreen == 2)
+		{
+			User32.SetWindowLong(User32.GetForegroundWindow(), -16, CommonDefine.WS_POPUP | CommonDefine.WS_VISIBLE);
+		}
 		GameObject uiRootObj = UnityUtility.getGameObject(null, "NGUIRoot");
 		GameObject rootTarget = UnityUtility.getGameObject(null, "UIRootTarget");
-		if (rootTarget == null)
-		{
-			return;
-		}
 		if (screenCount == 1)
 		{
 			setCameraTargetTexture(null, "MainCamera", null);
@@ -267,10 +280,18 @@ public class GameFramework : MonoBehaviour
 			setCameraTargetTexture(uiRootObj, "UIBackEffectCamera", null);
 			setCameraTargetTexture(uiRootObj, "UIForeEffectCamera", null);
 			setCameraTargetTexture(uiRootObj, "UIBlurCamera", null);
-			rootTarget.SetActive(false);
+			if(rootTarget != null)
+			{
+				rootTarget.SetActive(false);
+			}
 		}
 		else
 		{
+			
+			if (rootTarget == null)
+			{
+				return;
+			}
 			// 激活渲染目标
 			GameObject camera = UnityUtility.getGameObject(rootTarget, "Camera");
 			GameObject cameraTexture0 = UnityUtility.getGameObject(rootTarget, "UICameraTexture0");

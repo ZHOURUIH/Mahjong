@@ -17,7 +17,7 @@ public class DataGameSound : Data
 	{ }
 	public override void read(byte[] data, int dataCount)
 	{
-		Serializer seri = new Serializer(data, dataCount);
+		Serializer seri = new Serializer(data);
 		seri.read(ref mSoundID);
 		seri.readBuffer(mSoundOwner, 32, 32);
 		seri.read(ref mSoundType);

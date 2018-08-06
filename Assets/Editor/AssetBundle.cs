@@ -42,8 +42,22 @@ public class AssetBundleBuild
 	private static Dictionary<string, List<AssetBuildBundleInfo>> bundleMap = new Dictionary<string, List<AssetBuildBundleInfo>>();
 	// 文件名 <-> AssetBuildBundleInfo
 	private static Dictionary<string, AssetBuildBundleInfo> fileMap = new Dictionary<string, AssetBuildBundleInfo>();
-	[MenuItem(mAssetMenuRoot + "clear")]
-	public static void clearCache()
+	[MenuItem(mAssetMenuRoot + "pack/Android")]
+	public static void packAssetBundleAndroid()
+	{
+		packAssetBundle(BuildTarget.Android);
+	}
+	[MenuItem(mAssetMenuRoot + "pack/Windows")]
+	public static void packAssetBundleWindows()
+	{
+		packAssetBundle(BuildTarget.StandaloneWindows);
+	}
+	[MenuItem(mAssetMenuRoot + "pack/IOS")]
+	public static void packAssetBundleiOS()
+	{
+		packAssetBundle(BuildTarget.iOS);
+	}
+	public static void packAssetBundle(BuildTarget target)
 	{
 		DateTime time0 = DateTime.Now;
 		// 清理输出目录
@@ -51,12 +65,7 @@ public class AssetBundleBuild
 
 		// 清理之前设置过的bundleName
 		ClearAssetBundleName();
-		UnityUtility.messageBox("清理结束! 耗时 : " + (DateTime.Now - time0), false);
-	}
-	[MenuItem(mAssetMenuRoot + "pack")]
-	public static void packAssetBundle()
-	{
-		DateTime time0 = DateTime.Now;
+
 		// 设置bunderName
 		bundleMap.Clear();
 		List<string> resList = new List<string>();
@@ -66,7 +75,7 @@ public class AssetBundleBuild
 			setAssetBundleName(dir);
 		}
 		// 打包
-		BuildPipeline.BuildAssetBundles(RES_OUTPUT_PATH, BuildAssetBundleOptions.ChunkBasedCompression, BuildTarget.StandaloneWindows);
+		BuildPipeline.BuildAssetBundles(RES_OUTPUT_PATH, BuildAssetBundleOptions.ChunkBasedCompression, target);
 		AssetDatabase.Refresh();
 
 		// 构建依赖关系

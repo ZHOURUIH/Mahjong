@@ -36,14 +36,15 @@ public class DataBase : FrameComponent
 	}
 	public void loadAllDataFromFile()
 	{
-		// 读取配置文件，获得需要加载的所有数据列表
-		// 遍历每一个文件名，加载相应的文件
-		List<string> fileList = new List<string>();
-		FileUtility.findFiles(CommonDefine.A_GAME_DATA_FILE_PATH, ref fileList, CommonDefine.DATA_SUFFIX);
-		int fileCount = fileList.Count;
-		for (int i = 0; i < fileCount; ++i)
+		foreach (var item in mDataFileDefine)
 		{
-			loadData(fileList[i], true);
+			string filePath = CommonDefine.F_GAME_DATA_FILE_PATH + item.Key + CommonDefine.DATA_SUFFIX;
+			byte[] file = null;
+			FileUtility.openFile(filePath, ref file);
+			if (file != null && file.Length != 0)
+			{
+				parseFile(file, item.Value);
+			}
 		}
 	}
 	public void destroyAllData()
@@ -56,54 +57,6 @@ public class DataBase : FrameComponent
 		{
 			mDataStructList.Remove(type);
 		}
-	}
-	public void loadData(string filePath, bool forceCover)
-	{
-		// 根据文件名查找工厂类型
-		string fileName = StringUtility.getFileNameNoSuffix(filePath, true);
-		DATA_TYPE type = getDataTypeByDataName(fileName);
-		if (type == DATA_TYPE.DT_MAX)
-		{
-			UnityUtility.logError("error : can not find data file define, file name : " + fileName + ", filePath : " + filePath);
-			return;
-		}
-
-		// 如果该数据已经存在,并且需要覆盖,则先删除数据
-		if(mDataStructList.ContainsKey(type))
-		{
-			if (forceCover)
-			{
-				destroyData(type);
-			}
-			else
-			{
-				return;
-			}
-		}
-
-		// 打开文件
-		int fileSize = 0;
-		byte[] fileBuffer = null;
-		FileUtility.openFile(filePath, ref fileBuffer, ref fileSize);
-
-		// 解析文件
-		List<Data> dataList = new List<Data>();
-		int dataSize = getDataSize(type);
-		byte[] dataBuffer = new byte[dataSize];
-		int dataCount = fileSize / dataSize;
-		for (int i = 0; i < dataCount; ++i)
-		{
-			Data newData = createData(type);
-			if(newData == null)
-			{
-				UnityUtility.logError("error : can not create data ,type : " + type);
-				return;
-			}
-			BinaryUtility.memcpy(dataBuffer, fileBuffer, 0, i * dataSize, dataSize);
-			newData.read(dataBuffer, dataSize);
-			dataList.Add(newData);
-		}
-		mDataStructList.Add(type, dataList);
 	}
 	public List<Data> getAllData(DATA_TYPE type)
 	{
@@ -189,5 +142,27 @@ public class DataBase : FrameComponent
 			return mDataSizeMap[type];
 		}
 		return 0;
+	}
+	protected void parseFile(byte[] file, DATA_TYPE type)
+	{
+		// 解析文件
+		List<Data> dataList = new List<Data>();
+		int dataSize = getDataSize(type);
+		byte[] dataBuffer = new byte[dataSize];
+		int fileSize = file.Length;
+		int dataCount = fileSize / dataSize;
+		for (int i = 0; i < dataCount; ++i)
+		{
+			Data newData = createData(type);
+			if (newData == null)
+			{
+				UnityUtility.logError("error : can not create data ,type : " + type);
+				return;
+			}
+			BinaryUtility.memcpy(dataBuffer, file, 0, i * dataSize, dataSize);
+			newData.read(dataBuffer, dataSize);
+			dataList.Add(newData);
+		}
+		mDataStructList.Add(type, dataList);
 	}
 };

@@ -19,12 +19,12 @@ public class Serializer
 		mBufferSize = 0;
 		mBuffer = null;
 	}
-	public Serializer(byte[] buffer, int bufferSize)
+	public Serializer(byte[] buffer)
 	{
 		mWriteFlag = false;
 		mIndex = 0;
-		mBufferSize = bufferSize;
 		mBuffer = buffer;
+		mBufferSize = mBuffer.Length;
 	}
 	public void write(byte value)
 	{

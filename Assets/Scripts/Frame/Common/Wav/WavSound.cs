@@ -63,11 +63,10 @@ public class WavSound
 	public int getMixPCMDataCount() { return mDataSize / sizeof(short) / mSoundChannels; }
 	public bool readFile(string file)
 	{
-		int fileSize = 0;
 		byte[] fileData = null;
-		FileUtility.openFile(file, ref fileData, ref fileSize);
+		FileUtility.openFile(file, ref fileData);
 		mFileName = file;
-		Serializer serializer = new Serializer(fileData, fileSize);
+		Serializer serializer = new Serializer(fileData);
 		serializer.read(ref mRiffMark);
 		serializer.read(ref mFileSize);
 		serializer.read(ref mWaveMark);

@@ -26,10 +26,12 @@ public enum UI_TYPE
 	UT_NGUI_TEXT,			// 文本
 	UT_NGUI_EDITBOX,        // 文本编辑框
 	UT_NGUI_PANEL,          // 面板
+	UI_NGUI_DRAG_VIEW,		// 可拖动的窗口
 	// UGUI
 	UT_UGUI_STATIC_IMAGE,   // 静态图片
 	UT_UGUI_CANVAS,			// 画布
 	UT_UGUI_NUMBER,			// 数字
+    UT_UGUI_TEXT,           // 文本
 	
 }
 // 停靠位置
@@ -121,7 +123,7 @@ public class CommonDefine
 	public const string NUMBER_STYLE = "NumberStyle";
 	public const string TEXTURE_ANIM = "TextureAnim";
 	public const string NGUI_SUB_PREFAB = "NGUISubPrefab";
-	public const string LOWER_NGUI_SUB_PREFAB = "nguisubprefab";
+	public const string UGUI_SUB_PREFAB = "UGUISubPrefab";
 	public const string NGUI_PREFAB = "NGUIPrefab";
 	public const string UGUI_PREFAB = "UGUIPrefab";
 	public const string STREAMING_ASSETS = "StreamingAssets";
@@ -156,6 +158,7 @@ public class CommonDefine
 	public const string R_LAYOUT_PATH = LAYOUT + "/";
 	public const string R_KEY_FRAME_PATH = KEY_FRAME + "/";
 	public const string R_NGUI_SUB_PREFAB_PATH = R_LAYOUT_PATH + NGUI_SUB_PREFAB + "/";
+	public const string R_UGUI_SUB_PREFAB_PATH = R_LAYOUT_PATH + UGUI_SUB_PREFAB + "/";
 	public const string R_NGUI_PREFAB_PATH = R_LAYOUT_PATH + NGUI_PREFAB + "/";
 	public const string R_UGUI_PREFAB_PATH = R_LAYOUT_PATH + UGUI_PREFAB + "/";
 	public const string R_TEXTURE_PATH = TEXTURE + "/";
@@ -216,4 +219,6 @@ public class CommonDefine
 	public const string ZERO_ONE_DELAY = "ZeroOne_Delay";
 	// 音效所有者类型名,应该与SOUND_OWNER一致
 	public static string[] SOUND_OWNER_NAME = new string[] { "Window", "Scene" };
+	public const string NGUI_DEFAULT_MATERIAL = "NGUIDefault";
+	public const string UGUI_DEFAULT_MATERIAL = "UGUIDefault";
 }

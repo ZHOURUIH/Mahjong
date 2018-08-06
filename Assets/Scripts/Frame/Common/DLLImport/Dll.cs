@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-public class Dll
+public class Dll : GameBase
 {
 	protected Dictionary<string, Delegate> mFunctionList;
 	protected IntPtr mHandle;
@@ -31,7 +31,7 @@ public class Dll
 			IntPtr api = Kernel32.GetProcAddress(mHandle, funcName);
 			if(api == IntPtr.Zero)
 			{
-				UnityUtility.logError("can not find function, name : " + funcName);
+				logError("can not find function, name : " + funcName);
 				return null;
 			}
 			Delegate dele = Marshal.GetDelegateForFunctionPointer(api, t);

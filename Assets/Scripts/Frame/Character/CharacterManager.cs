@@ -21,7 +21,7 @@ public class CharacterManager : FrameComponent
 	}
 	public override void init()
 	{
-		mManagerObject = UnityUtility.getGameObject(mGameFramework.getGameFrameObject(), "CharacterManager", true);
+		mManagerObject = getGameObject(mGameFramework.getGameFrameObject(), "CharacterManager", true);
 	}
 	public override void destroy()
 	{
@@ -103,14 +103,14 @@ public class CharacterManager : FrameComponent
 	{
 		if (mCharacterList.ContainsKey(name))
 		{
-			UnityUtility.logError("error : there is a character named : " + name + "! can not create again!");
+			logError("there is a character named : " + name + "! can not create again!");
 			return null;
 		}
 		if (type == CHARACTER_TYPE.CT_MYSELF)
 		{
 			if(mMyself != null)
 			{
-				Debug .LogError ("error : Myself has exist ! can not create again, name : " + name);
+				logError("Myself has exist ! can not create again, name : " + name);
 				return null;
 			}
 		}
@@ -125,10 +125,8 @@ public class CharacterManager : FrameComponent
 			// 将角色挂接到管理器下
 			if(createNode)
 			{
-				GameObject charNode = new GameObject();
-				charNode.name = newCharacter.getName();
+				GameObject charNode = UnityUtility.createObject(newCharacter.getName(), mManagerObject);
 				newCharacter.setObject(charNode);
-				newCharacter.setParent(mManagerObject);
 			}
 			newCharacter.init();
 			newCharacter.setID(id);
@@ -211,7 +209,7 @@ public class CharacterManager : FrameComponent
 		}
 		else
 		{
-			UnityUtility.logError("error : there is a character id : " + characterID + ", can not add again!");
+			logError("there is a character id : " + characterID + ", can not add again!");
 		}
 	}
 	protected void removeCharacterFromList(Character character)

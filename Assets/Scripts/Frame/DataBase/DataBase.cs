@@ -64,7 +64,7 @@ public class DataBase : FrameComponent
 		DATA_TYPE type = getDataTypeByDataName(fileName);
 		if (type == DATA_TYPE.DT_MAX)
 		{
-			UnityUtility.logError("error : can not find data file define, file name : " + fileName + ", filePath : " + filePath);
+			logError("can not find data file define, file name : " + fileName + ", filePath : " + filePath);
 			return;
 		}
 
@@ -96,7 +96,7 @@ public class DataBase : FrameComponent
 			Data newData = createData(type);
 			if(newData == null)
 			{
-				UnityUtility.logError("error : can not create data ,type : " + type);
+				logError("can not create data ,type : " + type);
 				return;
 			}
 			BinaryUtility.memcpy(dataBuffer, fileBuffer, 0, i * dataSize, dataSize);

@@ -26,7 +26,7 @@ public class WindowComponentSlider : ComponentKeyFrameNormal
 		}
 		else
 		{
-			UnityUtility.logError("window is not a Slider Window!");
+			logError("window is not a Slider Window!");
 		}
 	}
 }

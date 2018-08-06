@@ -1,4 +1,6 @@
-﻿Shader "UGUIDefault"
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "UGUIDefault"
 {
 	Properties
 	{
@@ -53,7 +55,7 @@
 			v2f vert (appdata v)
 			{
 				v2f o;
-				o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
+				o.vertex = UnityObjectToClipPos(v.vertex);
 				o.uv = v.uv.xy * _MainTex_ST.xy + _MainTex_ST.zw;
 				o.color = v.color;
 				return o;
@@ -62,6 +64,7 @@
 			fixed4 frag (v2f i) : SV_Target
 			{
 				fixed4 srcColor = tex2D(_MainTex, i.uv).rgba;
+				srcColor.a *= i.color.a;
 				return srcColor;
 			}
 			ENDCG

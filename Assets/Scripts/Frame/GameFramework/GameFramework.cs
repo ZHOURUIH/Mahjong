@@ -66,12 +66,11 @@ public class GameFramework : MonoBehaviour
 				mCurFrameCount = 0;
 				mCurTime = now;
 			}
-			float elapsedTime = Time.deltaTime;
 			if (mPauseFrame)
 			{
 				return;
 			}
-			update(elapsedTime);
+			update(Time.deltaTime);
 			keyProcess();
 		}
 		catch (Exception e)
@@ -94,22 +93,19 @@ public class GameFramework : MonoBehaviour
 			UnityUtility.logError(e.Message + ", stack : " + e.StackTrace);
 		}
 	}
-	public virtual void update(float elapsedTime)
+	public void LateUpdate()
 	{
-		int count = mFrameComponentList.Count;
-		for (int i = 0; i < count; ++i)
+		try
 		{
-			Profiler.BeginSample(mFrameComponentList[i].getName());
-			mFrameComponentList[i].update(elapsedTime);
-			Profiler.EndSample();
+			if (mPauseFrame)
+			{
+				return;
+			}
+			lateUpdate(Time.deltaTime);
 		}
-	}
-	public virtual void fixedUpdate(float elapsedTime)
-	{
-		int count = mFrameComponentList.Count;
-		for (int i = 0; i < count; ++i)
+		catch (Exception e)
 		{
-			mFrameComponentList[i].fixedUpdate(elapsedTime);
+			UnityUtility.logError(e.Message + ", stack : " + e.StackTrace);
 		}
 	}
 	public void OnApplicationQuit()
@@ -164,6 +160,32 @@ public class GameFramework : MonoBehaviour
 	public bool getEnableKeyboard() { return mEnableKeyboard; }
 	public int getFPS() { return mFPS; }
 	//------------------------------------------------------------------------------------------------------
+	protected virtual void update(float elapsedTime)
+	{
+		int count = mFrameComponentList.Count;
+		for (int i = 0; i < count; ++i)
+		{
+			Profiler.BeginSample(mFrameComponentList[i].getName());
+			mFrameComponentList[i].update(elapsedTime);
+			Profiler.EndSample();
+		}
+	}
+	protected virtual void fixedUpdate(float elapsedTime)
+	{
+		int count = mFrameComponentList.Count;
+		for (int i = 0; i < count; ++i)
+		{
+			mFrameComponentList[i].fixedUpdate(elapsedTime);
+		}
+	}
+	protected virtual void lateUpdate(float elapsedTime)
+	{
+		int count = mFrameComponentList.Count;
+		for (int i = 0; i < count; ++i)
+		{
+			mFrameComponentList[i].lateUpdate(elapsedTime);
+		}
+	}
 	protected virtual void notifyBase()
 	{
 		// 所有类都构造完成后通知FrameBase
@@ -189,6 +211,7 @@ public class GameFramework : MonoBehaviour
 			mFrameComponentList[i].init();
 		}
 		System.Net.ServicePointManager.DefaultConnectionLimit = 200;
+		QualitySettings.vSyncCount = (int)FrameBase.mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_VSYNC);
 		int width = (int)FrameBase.mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SCREEN_WIDTH);
 		int height = (int)FrameBase.mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_SCREEN_HEIGHT);
 		int fullscreen = (int)FrameBase.mApplicationConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_FULL_SCREEN);
@@ -198,6 +221,7 @@ public class GameFramework : MonoBehaviour
 			width = Screen.width;
 			height = Screen.height;
 		}
+		
 #if UNITY_EDITOR
 		width = CommonDefine.STANDARD_WIDTH;
 		height = CommonDefine.STANDARD_HEIGHT;
@@ -244,6 +268,7 @@ public class GameFramework : MonoBehaviour
 		registeComponent<InputManager>();
 		registeComponent<SceneSystem>();
 		registeComponent<GamePluginManager>();
+		registeComponent<ClassObjectPool>();
 	}
 	protected void registeComponent<T>() where T : FrameComponent
 	{

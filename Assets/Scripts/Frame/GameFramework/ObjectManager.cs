@@ -45,7 +45,7 @@ public class ObjectPool : FrameBase
 		{
 			if (item.Key == null)
 			{
-				UnityUtility.logError("Object can not be destroy outside of ObjectManager!");
+				logError("Object can not be destroy outside of ObjectManager!");
 			}
 		}
 	}
@@ -58,7 +58,7 @@ public class ObjectPool : FrameBase
 			GameObject prefab = getPrefab(fileWithPath);
 			if (prefab == null)
 			{
-				UnityUtility.logError("can not find prefab : " + fileWithPath);
+				logError("can not find prefab : " + fileWithPath);
 				return null;
 			}
 			obj.mObject = UnityUtility.instantiatePrefab(null, prefab);
@@ -97,7 +97,7 @@ public class ObjectPool : FrameBase
 			GameObject prefab = mResourceManager.loadResource<GameObject>(fileWithPath, false);
 			if (prefab == null)
 			{
-				UnityUtility.logInfo("can not load prefab : " + fileWithPath);
+				logInfo("can not load prefab : " + fileWithPath);
 				return null;
 			}
 			info.mPrefab = prefab;
@@ -193,7 +193,7 @@ public class ObjectManager : FrameComponent
 	}
 	public override void init()
 	{
-		mManagerObject = UnityUtility.getGameObject(mGameFramework.getGameFrameObject(), "ObjectManager");
+		mManagerObject = getGameObject(mGameFramework.getGameFrameObject(), "ObjectManager");
 	}
 	public override void destroy()
 	{

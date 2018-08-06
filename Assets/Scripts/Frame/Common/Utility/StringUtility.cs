@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
-public class StringUtility
+public class StringUtility : GameBase
 {
 	public void init() { }
 	public static bool startWith(string oriString, string pattern, bool sensitive = true)
@@ -312,7 +312,7 @@ public class StringUtility
 		int len = rangeList.Length;
 		if (values != null && len != values.Length)
 		{
-			UnityUtility.logError("error : count is not equal " + str.Length);
+			logError("count is not equal " + str.Length);
 			return;
 		}
 		if (values == null)
@@ -345,7 +345,7 @@ public class StringUtility
 		int len = rangeList.Length;
 		if (values != null && len != values.Length)
 		{
-			UnityUtility.logError("error : count is not equal " + str.Length);
+			logError("count is not equal " + str.Length);
 			return;
 		}
 		if (values == null)

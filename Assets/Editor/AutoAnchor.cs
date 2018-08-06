@@ -28,7 +28,7 @@ public class AnchorMenu
 				return;
 			}
 		}
-		for (int i = 1; i < count; ++i)
+		for (int i = 0; i < count; ++i)
 		{
 			addAdvanceAnchor(Selection.gameObjects[i]);
 		}
@@ -51,7 +51,7 @@ public class AnchorMenu
 				return;
 			}
 		}
-		for (int i = 1; i < count; ++i)
+		for (int i = 0; i < count; ++i)
 		{
 			addScaleAnchor(Selection.gameObjects[i]);
 		}

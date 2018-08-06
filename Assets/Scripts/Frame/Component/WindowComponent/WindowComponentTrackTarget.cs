@@ -15,7 +15,7 @@ public class WindowComponentTrackTarget : ComponentTrackTargetNormal
 	}
 	public override void setMoveDoneTrack(object target, TrackDoneCallback doneCallback)
 	{
-		UnityUtility.logError("please use void setMoveDoneTrack(txUIObject target, TrackDoneCallback doneCallback, CheckPosition checkPosition)");
+		logError("please use void setMoveDoneTrack(txUIObject target, TrackDoneCallback doneCallback, CheckPosition checkPosition)");
 	}
 	public void setMoveDoneTrack(txUIObject target, TrackDoneCallback doneCallback, CheckPosition checkPosition)
 	{

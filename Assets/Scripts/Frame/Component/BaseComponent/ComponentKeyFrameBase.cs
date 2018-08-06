@@ -57,7 +57,7 @@ public class ComponentKeyFrameBase : GameComponent
 		}
 		if(offset > onceLength)
 		{
-			UnityUtility.logError("offset must be less than onceLength!");
+			logError("offset must be less than onceLength!");
 		}
 		mOnceLength = onceLength;
 		mPlayState = PLAY_STATE.PS_PLAY;

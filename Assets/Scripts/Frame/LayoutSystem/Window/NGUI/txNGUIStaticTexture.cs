@@ -25,7 +25,8 @@ public class txNGUIStaticTexture : txUIObject
 		string materialName = getMaterialName();
 		if(materialName != "")
 		{
-			setMaterial(getMaterialName(), true);
+			bool newMaterial = mShaderManager.isSingleShader(materialName);
+			setMaterial(getMaterialName(), !newMaterial);
 		}
         mOriginTextureName = getTextureName();
     }
@@ -157,13 +158,20 @@ public class txNGUIStaticTexture : txUIObject
 		}
 		return mTexture.fillAmount;
 	}
-	public Vector2 getWindowSize()
+	public Vector2 getWindowSize(bool transformed = false)
 	{
 		if (mTexture == null)
 		{
 			return Vector2.zero;
 		}
-		return new Vector2(mTexture.width, mTexture.height);
+		Vector2 textureSize = new Vector2(mTexture.width, mTexture.height);
+		if(transformed)
+		{
+			Vector2 scale = getWorldScale();
+			textureSize.x *= scale.x;
+			textureSize.y *= scale.y;
+		}
+		return textureSize;
 	}
 	public void setWindowSize(Vector2 size)
 	{
@@ -199,7 +207,7 @@ public class txNGUIStaticTexture : txUIObject
 		}
 		else
 		{
-			UnityUtility.logError("texture name is not valid!can not generate origin texture name, texture name : " + mOriginTextureName);
+			logError("texture name is not valid!can not generate origin texture name, texture name : " + mOriginTextureName);
 		}
 	}
 	//---------------------------------------------------------------------------------------------------

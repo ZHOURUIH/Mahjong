@@ -36,32 +36,6 @@ public class CameraLinkerAcceleration : CameraLinker
 		mSpringZ.setCurLength(Mathf.Abs(curRelative.z));
 		mSpringZ.setForce(acceleration.z);
 	}
-	public override void update(float elapsedTime)
-	{
-		base.update(elapsedTime);
-		if (mLinkObject == null)
-		{
-			return;
-		}
-
-		mSpringX.update(elapsedTime);
-		mSpringY.update(elapsedTime);
-		mSpringZ.update(elapsedTime);
-		float curX = 0.0f, curY = 0.0f, curZ = 0.0f;
-		// 如果使用目标物体的航向角,则对相对位置进行旋转
-		Vector3 relative = mRelativePosition;
-		if (mUseTargetYaw)
-		{
-			relative = MathUtility.rotateVector3(relative, mLinkObject.getRotation().y * Mathf.Deg2Rad);
-		}
-		//判断是否为零
-		Vector3 acceleration = mLinkObject.getAcceleration();
-		processRelative(mSpringX, relative.x, acceleration.x, ref curX);
-		processRelative(mSpringY, relative.y, acceleration.y, ref curY);
-		processRelative(mSpringZ, relative.z, acceleration.z, ref curZ);
-		// 改变摄像机位置
-		applyRelativePosition(new Vector3(curX, curY, curZ));
-	}
 	public override void setRelativePosition(Vector3 pos, CAMERA_LINKER_SWITCH switchType = CAMERA_LINKER_SWITCH.CLS_NONE, 
 		bool useDefaultSwitchSpeed = true, float switchSpeed = 1.0f)
 	{
@@ -90,6 +64,26 @@ public class CameraLinkerAcceleration : CameraLinker
 	public void setUseTargetYaw(bool use) { mUseTargetYaw = use; }
 	public bool getUseTargetYaw() { return mUseTargetYaw; }
 	//----------------------------------------------------------------------------------------------------------------
+	protected override void updateLinker(float elapsedTime)
+	{
+		mSpringX.update(elapsedTime);
+		mSpringY.update(elapsedTime);
+		mSpringZ.update(elapsedTime);
+		float curX = 0.0f, curY = 0.0f, curZ = 0.0f;
+		// 如果使用目标物体的航向角,则对相对位置进行旋转
+		Vector3 relative = mRelativePosition;
+		if (mUseTargetYaw)
+		{
+			relative = MathUtility.rotateVector3(relative, mLinkObject.getRotation().y * Mathf.Deg2Rad);
+		}
+		//判断是否为零
+		Vector3 acceleration = mLinkObject.getAcceleration();
+		processRelative(mSpringX, relative.x, acceleration.x, ref curX);
+		processRelative(mSpringY, relative.y, acceleration.y, ref curY);
+		processRelative(mSpringZ, relative.z, acceleration.z, ref curZ);
+		// 改变摄像机位置
+		applyRelativePosition(new Vector3(curX, curY, curZ));
+	}
 	protected override bool isType(Type type) { return base.isType(type) || type == typeof(CameraLinkerAcceleration); }
 	protected static void processRelative(Spring spring, float relative, float acceleration, ref float curRelative)
 	{

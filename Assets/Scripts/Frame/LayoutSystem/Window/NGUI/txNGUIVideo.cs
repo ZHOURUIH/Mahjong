@@ -97,7 +97,7 @@ public class txNGUIVideo : txNGUIStaticTexture
 		}
 		if(!FileUtility.isFileExist(CommonDefine.F_ASSETS_PATH + file))
 		{
-			UnityUtility.logError("找不到视频文件 : " + file);
+			logError("找不到视频文件 : " + file);
 			return false;
 		}
 		notifyVideoReady(false);
@@ -226,13 +226,13 @@ public class txNGUIVideo : txNGUIStaticTexture
 			// 视频准备完毕时,设置实际的状态
 			if (mMediaPlayer.Control == null)
 			{
-				UnityUtility.logError("video is ready, but MediaPlayer.Control is null!");
+				logError("video is ready, but MediaPlayer.Control is null!");
 			}
 			notifyVideoReady(true);
 		}
 		else if(eventType == MediaPlayerEvent.EventType.Error)
 		{
-			UnityUtility.logError("error code : " + errorCode);
+			logError("video error code : " + errorCode);
 		}
 	}
 	protected void play(bool autoShow = true)

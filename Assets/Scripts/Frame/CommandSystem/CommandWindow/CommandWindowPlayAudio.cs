@@ -22,6 +22,7 @@ public class CommandWindowPlayAudio : Command
 	public override void execute()
 	{
 		txUIObject window = mReceiver as txUIObject;
+		window.activeFirstComponent<WindowComponentAudio>();
 		WindowComponentAudio audioComponent = window.getFirstActiveComponent<WindowComponentAudio>();
 		if (audioComponent != null)
 		{

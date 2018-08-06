@@ -6,7 +6,7 @@ using System.Text;
 using UnityEngine;
 
 // 用于生成二进制文件的
-public class Serializer
+public class Serializer : GameBase
 {
 	protected int mIndex;
 	protected int mBufferSize;
@@ -180,7 +180,7 @@ public class Serializer
 		// 如果是只读的,则不能写入
 		if (!mWriteFlag)
 		{
-			UnityUtility.logError("error : the buffer is read only, can not write!");
+			logError("the buffer is read only, can not write!");
 			return false;
 		}
 		// 如果缓冲区为空,则创建缓冲区
@@ -200,17 +200,17 @@ public class Serializer
 		// 如果是只写的,则不能读取
 		if (mWriteFlag)
 		{
-			UnityUtility.logError("error : the buffer is write only, can not read!");
+			logError("the buffer is write only, can not read!");
 			return false;
 		}
 		if (mBuffer == null)
 		{
-			UnityUtility.logError("error : buffer is NULL! can not read");
+			logError("buffer is NULL! can not read");
 			return false;
 		}
 		if (mIndex + readLen > mBufferSize)
 		{
-			UnityUtility.logError("error : read buffer out of range! cur index : " + mIndex + ", buffer size : " + mBufferSize + ", read length : " + readLen);
+			logError("read buffer out of range! cur index : " + mIndex + ", buffer size : " + mBufferSize + ", read length : " + readLen);
 			return false;
 		}
 		return true;

@@ -17,7 +17,8 @@ public class GameCamera : MovableObject
 		:
 		base(name)
 	{
-		mUsePreLateUpdate = true;
+		mUsePreUpdate = true;
+		mUseLateUpdate = true;
 		mCurLinker = null;
 		mMoveSpeed = 30.0f;
 		mMouseSpeed = 0.1f;
@@ -33,6 +34,11 @@ public class GameCamera : MovableObject
 	{
 		base.setObject(obj, destroyOld);
 		mCamera = mObject.GetComponent<Camera>();
+		if (mObject.GetComponent<CameraInfo>() == null)
+		{
+			mObject.AddComponent<CameraInfo>();
+		}
+		mObject.GetComponent<CameraInfo>().setCamera(this);
 	}
 	public override void initComponents()
 	{
@@ -40,6 +46,7 @@ public class GameCamera : MovableObject
 		addComponent<CameraLinkerAcceleration>("acceleration");
 		addComponent<CameraLinkerFixed>("fixed");
 		addComponent<CameraLinkerSmoothFollow>("SmoothFollow");
+		addComponent<CameraLinkerSmoothRotate>("SmoothRotate");
 	}
 	public override void update(float elapsedTime)
 	{
@@ -162,5 +169,6 @@ public class GameCamera : MovableObject
 		copyObjectTransform(obj);
 		Camera camera = obj.GetComponent<Camera>();
 		mCamera.fieldOfView = camera.fieldOfView;
+		mCamera.cullingMask = camera.cullingMask;
 	}
 }

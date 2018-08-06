@@ -28,12 +28,20 @@ public class SceneInstance : GameBase
 	{
 		mInited = false;
 	}
+	public virtual void update(float elapsedTime)
+	{
+		;
+	}
 	public void setActive(bool active)
 	{
 		if (mRoot != null && mRoot.activeSelf != active)
 		{
 			mRoot.SetActive(active);
 		}
+	}
+	public bool getActive()
+	{
+		return mRoot != null && mRoot.activeSelf;
 	}
 	//-------------------------------------------------------------------------------------------
 	protected virtual void findGameObject() { }

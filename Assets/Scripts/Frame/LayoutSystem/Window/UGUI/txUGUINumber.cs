@@ -85,7 +85,7 @@ public class txUGUINumber : txUGUIStaticImage
 		int dotPos = mNumber.LastIndexOf('.');
 		if (mNumber.Length > 0 && (dotPos == 0 || dotPos == mNumber.Length - 1))
 		{
-			UnityUtility.logError("error : number can not start or end with dot!");
+			logError("number can not start or end with dot!");
 			return;
 		}
 		string intPart = dotPos != -1 ? mNumber.Substring(0, dotPos) : mNumber;
@@ -188,7 +188,7 @@ public class txUGUINumber : txUGUIStaticImage
 	}
 	public void setNumber(string num)
 	{
-		mNumber = StringUtility.checkFloatString(num);
+		mNumber = StringUtility.checkString(num, "0123456789.");
 		// 设置的数字字符串不能超过最大数量
 		if (mNumber.Length > mMaxCount)
 		{

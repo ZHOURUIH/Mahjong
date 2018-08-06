@@ -39,8 +39,8 @@ public class GameLayoutManager : FrameComponent
 	}
 	public override void init()
 	{
-		mNGUIRoot = LayoutScript.newUIObject<txUIObject>("NGUIRoot", null, null, UnityUtility.getGameObject(null, "NGUIRoot", true));
-		mUGUIRoot = LayoutScript.newUIObject<txUIObject>("UGUIRoot", null, null, UnityUtility.getGameObject(null, "UGUIRoot", true));
+		mNGUIRoot = LayoutScript.newUIObject<txUIObject>("NGUIRoot", null, null, getGameObject(null, "NGUIRoot", true));
+		mUGUIRoot = LayoutScript.newUIObject<txUIObject>("UGUIRoot", null, null, getGameObject(null, "UGUIRoot", true));
 	}
 	public GameObject getNGUIRootObject()
 	{
@@ -87,7 +87,7 @@ public class GameLayoutManager : FrameComponent
 		}
 		else
 		{
-			UnityUtility.logError("can not find LayoutType: " + type);
+			logError("can not find LayoutType: " + type);
 		}
 		return "";
 	}
@@ -99,7 +99,7 @@ public class GameLayoutManager : FrameComponent
 		}
 		else
 		{
-			UnityUtility.logError("can not  find LayoutName:" + name);
+			logError("can not  find LayoutName:" + name);
 		}
 		return LAYOUT_TYPE.LT_MAX;
 	}
@@ -156,7 +156,7 @@ public class GameLayoutManager : FrameComponent
 			bool ret = mResourceManager.loadResourceAsync<GameObject>(path + name, onLayoutPrefabAsyncDone, null, true);
 			if (!ret)
 			{
-				UnityUtility.logError("can not find layout : " + name);
+				logError("can not find layout : " + name);
 			}
 			return null;
 		}

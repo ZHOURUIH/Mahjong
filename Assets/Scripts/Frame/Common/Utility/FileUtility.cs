@@ -5,7 +5,7 @@ using System.Text;
 using System.IO;
 using System.Security.Cryptography;
 
-public class FileUtility
+public class FileUtility : GameBase
 {
 	public static void validPath(ref string path)
 	{
@@ -23,7 +23,7 @@ public class FileUtility
 	{
 		if(!fileName.StartsWith(CommonDefine.F_ASSETS_PATH))
 		{
-			UnityUtility.logError("fileName should be a absolute path!");
+			logError("fileName should be a absolute path!");
 			return;
 		}
 		FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
@@ -37,7 +37,7 @@ public class FileUtility
 	{
 		if (!fileName.StartsWith(CommonDefine.F_ASSETS_PATH))
 		{
-			UnityUtility.logError("fileName should be a absolute path!");
+			logError("fileName should be a absolute path!");
 			return "";
 		}
 		try
@@ -45,7 +45,7 @@ public class FileUtility
 			StreamReader streamReader = new StreamReader(fileName, Encoding.UTF8);
 			if(streamReader == null)
 			{
-				UnityUtility.logInfo("open file failed! filename : " + fileName);
+				logInfo("open file failed! filename : " + fileName);
 				return "";
 			}
 			string fileBuffer = streamReader.ReadToEnd();
@@ -54,7 +54,7 @@ public class FileUtility
 		}
 		catch(Exception)
 		{
-			UnityUtility.logInfo("open file failed! filename : " + fileName);
+			logInfo("open file failed! filename : " + fileName);
 			return "";
 		}
 	}
@@ -147,7 +147,7 @@ public class FileUtility
 	{
 		if (!dir.StartsWith(CommonDefine.F_ASSETS_PATH))
 		{
-			UnityUtility.logError("dir should be a absolute path!");
+			logError("dir should be a absolute path!");
 			return false;
 		}
 		return Directory.Exists(dir);
@@ -156,7 +156,7 @@ public class FileUtility
 	{
 		if (!fileName.StartsWith(CommonDefine.F_ASSETS_PATH))
 		{
-			UnityUtility.logError("fileName should be a absolute path!");
+			logError("fileName should be a absolute path!");
 			return false;
 		}
 		return File.Exists(fileName);
@@ -191,7 +191,7 @@ public class FileUtility
 		}
 		if(!isDirExist(path))
 		{
-			UnityUtility.logError("path is invalid! path : " + path);
+			logError("path is invalid! path : " + path);
 			return;
 		}
 		DirectoryInfo folder = new DirectoryInfo(path);
@@ -253,7 +253,7 @@ public class FileUtility
 	{
 		if (!path.StartsWith(CommonDefine.F_ASSETS_PATH))
 		{
-			UnityUtility.logError("fileName should be a absolute path!");
+			logError("fileName should be a absolute path!");
 			return;
 		}
 		File.Delete(path);

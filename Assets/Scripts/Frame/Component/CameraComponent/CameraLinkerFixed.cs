@@ -12,9 +12,12 @@ public class CameraLinkerFixed : CameraLinker
 	{
 		mUseTargetYaw = true;
 	}
-	public override void update(float elapsedTime)
+	public void setUseTargetYaw(bool use) { mUseTargetYaw = use; }
+	public bool getUseTargetYaw() { return mUseTargetYaw; }
+	//---------------------------------------------------------------------------------------
+	protected override bool isType(Type type) { return base.isType(type) || type == typeof(CameraLinkerFixed); }
+	protected override void updateLinker(float elapsedTime)
 	{
-		base.update(elapsedTime);
 		// 如果使用目标物体的航向角,则对相对位置进行旋转
 		Vector3 relative = mRelativePosition;
 		if (mUseTargetYaw)
@@ -23,8 +26,4 @@ public class CameraLinkerFixed : CameraLinker
 		}
 		applyRelativePosition(relative);
 	}
-	public void setUseTargetYaw(bool use) { mUseTargetYaw = use; }
-	public bool getUseTargetYaw() { return mUseTargetYaw; }
-	//---------------------------------------------------------------------------------------
-	protected override bool isType(Type type) { return base.isType(type) || type == typeof(CameraLinkerFixed); }
 };

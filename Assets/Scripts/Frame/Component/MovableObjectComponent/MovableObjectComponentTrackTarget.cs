@@ -14,7 +14,7 @@ public class MovableObjectComponentTrackTarget : ComponentTrackTargetNormal
 	{
 		if(target != null && !(target is MovableObject))
 		{
-			UnityUtility.logError("track target must be a MovableObject!");
+			logError("track target must be a MovableObject!");
 			return;
 		}
 		base.setMoveDoneTrack(target, doneCallback);

@@ -90,7 +90,7 @@ public class txNGUINumber : txNGUIStaticSprite
 		int dotPos = mNumber.LastIndexOf('.');
 		if (mNumber.Length > 0 && (dotPos == 0 || dotPos == mNumber.Length - 1))
 		{
-			UnityUtility.logError("number can not start or end with dot!");
+			logError("number can not start or end with dot!");
 			return;
 		}
 		string intPart = dotPos != -1 ? mNumber.Substring(0, dotPos) : mNumber;
@@ -204,6 +204,15 @@ public class txNGUINumber : txNGUIStaticSprite
 			mNumber = mNumber.Substring(0, mMaxCount);
 		}
 		refreshNumber();
+	}
+	public override void setDepth(int depth)
+	{
+		base.setDepth(depth);
+		int count = mNumberList.Count;
+		for (int i = 0; i < count; ++i)
+		{
+			mNumberList[i].mSprite.depth = mSprite.depth + 1;
+		}
 	}
 	public int getMaxCount(){return mMaxCount;}
 	public string getNumber(){return mNumber;}

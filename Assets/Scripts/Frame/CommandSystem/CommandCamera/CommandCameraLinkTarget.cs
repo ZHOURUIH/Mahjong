@@ -68,7 +68,7 @@ public class CommandCameraLinkTarget : Command
 			}
 			else if(mLinkerName != "")
 			{
-				UnityUtility.logError("linker name is not empty, but can not find linker, name : " + mLinkerName);
+				logError("linker name is not empty, but can not find linker, name : " + mLinkerName);
 			}
 		}
 	}

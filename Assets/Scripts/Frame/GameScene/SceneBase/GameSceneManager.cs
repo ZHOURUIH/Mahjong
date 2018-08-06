@@ -18,7 +18,7 @@ public class GameSceneManager : FrameComponent
 	}
 	public override void init() 
 	{
-		mManagerObject = UnityUtility.getGameObject(mGameFramework.getGameFrameObject(), "GameSceneManager", true);
+		mManagerObject = getGameObject(mGameFramework.getGameFrameObject(), "GameSceneManager", true);
 	}
 	public GameScene getCurScene(){ return mCurScene; }
 	public GameObject getManagerObject(){return mManagerObject;}

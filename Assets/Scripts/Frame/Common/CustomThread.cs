@@ -7,7 +7,7 @@ using System.Threading;
 // 返回值表示是否继续运行该线程
 public delegate bool CustomThreadCallback();
 
-public class CustomThread
+public class CustomThread : GameBase
 {
 	protected bool mRunning;
 	protected bool mFinish;
@@ -42,7 +42,7 @@ public class CustomThread
 	}
 	public void start(CustomThreadCallback callback, int frameTimeMS = 15, int forceSleep = 5)
 	{
-		UnityUtility.logInfo("准备启动线程 : " + mName, LOG_LEVEL.LL_FORCE);
+		logInfo("准备启动线程 : " + mName, LOG_LEVEL.LL_FORCE);
 		if (mThread != null)
 		{
 			return;
@@ -55,7 +55,7 @@ public class CustomThread
 		mThread.Name = mName;
 		mThread.Start();
 		mThread.IsBackground = mIsBackground;
-		UnityUtility.logInfo("线程启动成功 : " + mName, LOG_LEVEL.LL_FORCE);
+		logInfo("线程启动成功 : " + mName, LOG_LEVEL.LL_FORCE);
 	}
 	public void pause(bool isPause)
 	{
@@ -63,7 +63,7 @@ public class CustomThread
 	}
 	public void stop()
 	{
-		UnityUtility.logInfo("准备退出线程 : " + mName, LOG_LEVEL.LL_FORCE);
+		logInfo("准备退出线程 : " + mName, LOG_LEVEL.LL_FORCE);
 		mRunning = false;
 		while (!mIsBackground && !mFinish) { }
 		if (mThread != null)
@@ -74,7 +74,7 @@ public class CustomThread
 		mCallback = null;
 		mTimeLock = null;
 		mPause = false;
-		UnityUtility.logInfo("线程退出完成! 线程名 : " + mName, LOG_LEVEL.LL_FORCE);
+		logInfo("线程退出完成! 线程名 : " + mName, LOG_LEVEL.LL_FORCE);
 	}
 	protected void run()
 	{
@@ -95,7 +95,7 @@ public class CustomThread
 			}
 			catch (Exception e)
 			{
-				UnityUtility.logInfo("捕获线程异常! 线程名 : " + mName + ", " + e.Message + ", " + e.StackTrace, LOG_LEVEL.LL_FORCE);
+				logInfo("捕获线程异常! 线程名 : " + mName + ", " + e.Message + ", " + e.StackTrace, LOG_LEVEL.LL_FORCE);
 			}
 		}
 		mFinish = true;

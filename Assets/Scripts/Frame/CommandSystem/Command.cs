@@ -73,7 +73,7 @@ public class Command : GameBase
 	// 被分配为延迟命令时的唯一ID
 	public void setAssignID(int id)					{ mAssignID = id; }
 	public void setID(int id) { mCmdID = id; }
-	public void addEndCommandCallback(CommandCallback cmdCallback, object userdata)
+	public void addEndCommandCallback(CommandCallback cmdCallback, object userdata = null)
 	{
 		if (cmdCallback != null)
 		{
@@ -81,7 +81,7 @@ public class Command : GameBase
 			mEndUserData.Add(userdata);
 		}
 	}
-	public void addStartCommandCallback(CommandCallback cmdCallback, object userdata)
+	public void addStartCommandCallback(CommandCallback cmdCallback, object userdata = null)
 	{
 		if (cmdCallback != null)
 		{

@@ -22,13 +22,13 @@ public class WindowComponentLum : ComponentKeyFrameNormal
 		txNGUIStaticTexture staticTexture = uiObj as txNGUIStaticTexture;
 		if(staticTexture == null)
 		{
-			UnityUtility.logError("window is not a texture window!");
+			logError("window is not a texture window!");
 			return;
 		}
 		WindowShaderLumOffset lumOffset = staticTexture.getWindowShader<WindowShaderLumOffset>();
 		if(lumOffset == null)
 		{
-			UnityUtility.logError("window has no WindowShaderLumOffset!");
+			logError("window has no WindowShaderLumOffset!");
 			return;
 		}
 		float lum = mStartLum + (mTargetLum - mStartLum) * offset;

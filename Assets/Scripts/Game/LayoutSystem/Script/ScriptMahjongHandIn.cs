@@ -204,7 +204,7 @@ public enum HANDIN_STATE
 
 public class HandInMahjongInfo
 {
-	public txNGUIButton mWindow;
+	public txNGUIButtonSprite mWindow;
 	public MAHJONG mMahjong;
 	public HANDIN_STATE mState;
 }

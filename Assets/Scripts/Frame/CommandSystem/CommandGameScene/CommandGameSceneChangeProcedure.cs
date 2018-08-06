@@ -18,7 +18,7 @@ public class CommandGameSceneChangeProcedure : Command
 		SceneProcedure curProcedure = gameScene.getCurSceneProcedure();
 		if(curProcedure != null	&& curProcedure.isPreparingExit())
 		{
-			UnityUtility.logError("procedure is preparing to change, can not change again!");
+			logError("procedure is preparing to change, can not change again!");
 		}
 		else
 		{

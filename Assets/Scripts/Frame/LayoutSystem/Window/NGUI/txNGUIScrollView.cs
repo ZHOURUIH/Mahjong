@@ -27,7 +27,7 @@ public class txNGUIScrollView : txUIObject
 		}
 		if (mGrid == null)
 		{
-			UnityUtility.logError("error : scroll view window must have a child with grid compoent!");
+			logError("scroll view window must have a child with grid compoent!");
 		}
 		// 查找grid下已经挂接的物体
 		int itemCount = mGrid.getChildCount();

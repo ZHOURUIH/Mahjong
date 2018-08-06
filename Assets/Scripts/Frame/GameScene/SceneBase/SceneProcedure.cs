@@ -19,7 +19,7 @@ public abstract class SceneProcedure : GameBase
 	protected string			mPrepareIntent;
 	public SceneProcedure()
 	{
-		UnityUtility.logError("error : can not create SceneProcedure without parameters!");
+		logError("can not create SceneProcedure without parameters!");
 	}
 	public SceneProcedure(PROCEDURE_TYPE type, GameScene gameScene)
 	{
@@ -286,7 +286,7 @@ public abstract class SceneProcedure : GameBase
 	{
 		if(!mDelayCmdList.Remove(cmd.mAssignID))
 		{
-			UnityUtility.logError("命令执行后移除流程命令失败");
+			logError("命令执行后移除流程命令失败");
 		}
 	}
 }

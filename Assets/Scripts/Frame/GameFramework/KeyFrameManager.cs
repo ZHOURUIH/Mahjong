@@ -41,7 +41,7 @@ public class KeyFrameManager : FrameComponent
 	public override void init()
 	{
 		// 查找关键帧管理器物体
-		mManagerObject = UnityUtility.getGameObject(mGameFramework.getGameFrameObject(), "KeyFrameManager");
+		mManagerObject = getGameObject(mGameFramework.getGameFrameObject(), "KeyFrameManager");
 	}
 	// 加载所有KeyFrame下的关键帧
 	public void loadAll(bool async)
@@ -92,7 +92,7 @@ public class KeyFrameManager : FrameComponent
 		TweenScale tweenScale = keyFrameObject.GetComponent<TweenScale>();
 		if (tweenScale == null)
 		{
-			UnityUtility.logError("object in KeyFrame folder must has TweenScale!");
+			logError("object in KeyFrame folder must has TweenScale!");
 			return;
 		}
 		AnimationCurve animCurve = tweenScale.animationCurve;
@@ -106,7 +106,7 @@ public class KeyFrameManager : FrameComponent
 		}
 		else
 		{
-			UnityUtility.logError("object in KeyFrame folder must has TweenScale and AnimationCurve!");
+			logError("object in KeyFrame folder must has TweenScale and AnimationCurve!");
 		}
 	}
 }

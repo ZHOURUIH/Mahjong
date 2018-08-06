@@ -17,6 +17,7 @@ public class RequestThreadParam
 	public object mUserData;
 	public Thread mThread;
 	public string mFullURL;
+	public bool mLogError;
 }
 
 public class HttpUtility : FrameComponent
@@ -38,7 +39,7 @@ public class HttpUtility : FrameComponent
 		mHttpThreadList.Clear();
 		base.destroy();
 	}
-	public static JsonData httpWebRequestPost(string url, string param, OnHttpWebRequestCallback callback = null, object callbakcUserData = null)
+	public static JsonData httpWebRequestPost(string url, string param, OnHttpWebRequestCallback callback = null, object callbakcUserData = null, bool logError = true)
 	{
 		// 转换输入参数的编码类型，获取byte[]数组 
 		byte[] byteArray = BinaryUtility.stringToBytes(param, Encoding.UTF8);
@@ -60,6 +61,7 @@ public class HttpUtility : FrameComponent
 			threadParam.mCallback = callback;
 			threadParam.mUserData = callbakcUserData;
 			threadParam.mFullURL = url + param;
+			threadParam.mLogError = logError;
 			Thread httpThread = new Thread(waitPostHttpWebRequest);
 			threadParam.mThread = httpThread;
 			httpThread.Start(threadParam);
@@ -105,7 +107,7 @@ public class HttpUtility : FrameComponent
 		}
 		return url + Parameters;
 	}
-	static public JsonData httpWebRequestGet(string urlString, OnHttpWebRequestCallback callback = null)
+	static public JsonData httpWebRequestGet(string urlString, OnHttpWebRequestCallback callback = null, bool logError = true)
 	{
 		HttpWebRequest httprequest = (HttpWebRequest)WebRequest.Create(new Uri(urlString));//根据url地址创建HTTpWebRequest对象
 		httprequest.Method = "GET";
@@ -123,6 +125,7 @@ public class HttpUtility : FrameComponent
 			threadParam.mByteArray = null;
 			threadParam.mCallback = callback;
 			threadParam.mFullURL = urlString;
+			threadParam.mLogError = logError;
 			Thread httpThread = new Thread(waitGetHttpWebRequest);
 			threadParam.mThread = httpThread;
 			httpThread.Start(threadParam);
@@ -175,8 +178,8 @@ public class HttpUtility : FrameComponent
 		{
 			threadParam.mCallback(null, threadParam.mUserData);
 			string info = "http post result exception : " + e.Message + ", url : " + threadParam.mFullURL;
-			UnityUtility.logInfo(info);
-			if (mFrameLogSystem != null)
+			logInfo(info);
+			if (mFrameLogSystem != null && threadParam.mLogError)
 			{
 				mFrameLogSystem.logHttpOverTime(info);
 			}
@@ -207,8 +210,8 @@ public class HttpUtility : FrameComponent
 		{
 			threadParam.mCallback(null, threadParam.mUserData);
 			string info = "http get result exception : " + e.Message + ", url : " + threadParam.mFullURL;
-			UnityUtility.logInfo(info);
-			if (mFrameLogSystem != null)
+			logInfo(info);
+			if (mFrameLogSystem != null && threadParam.mLogError)
 			{
 				mFrameLogSystem.logHttpOverTime(info);
 			}

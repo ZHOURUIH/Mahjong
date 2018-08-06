@@ -1,4 +1,6 @@
-﻿Shader "Gray"
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "EdgeAlpha"
 {
 	Properties
 	{
@@ -13,6 +15,7 @@
 			"Queue" = "Transparent"
 			"IgnoreProjector" = "True"
 			"RenderType" = "Transparent"
+			"LightMode"="ForwardBase"
 		}
 
 		// No culling or depth
@@ -29,6 +32,7 @@
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
+			#pragma target 3.0
 			
 			#include "UnityCG.cginc"
 
@@ -36,35 +40,36 @@
 			{
 				float4 vertex : POSITION;
 				half4 color : COLOR;
-				float2 texcoord : TEXCOORD0;
+				float2 uv : TEXCOORD0;
 			};
 			struct v2f
 			{
 				float4 vertex : SV_POSITION;
 				half4 color : COLOR;
-				float2 texcoord : TEXCOORD0;
+				float2 uv : TEXCOORD0;
 			};
-			
+
 			sampler2D _MainTex;
-			
+			float4 _MainTex_ST;
+
 			v2f vert (appdata v)
 			{
 				v2f o;
-				o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
-				o.texcoord = v.texcoord;
+				o.vertex = UnityObjectToClipPos(v.vertex);
+				o.uv = v.uv.xy * _MainTex_ST.xy + _MainTex_ST.zw;
 				o.color = v.color;
 				return o;
 			}
 
 			fixed4 frag (v2f i) : SV_Target
 			{
-				fixed4 col = tex2D(_MainTex, i.texcoord);
-				float grayValue = (col.r + col.g + col.b) * 0.3;
-				col.r = grayValue;
-				col.g = grayValue;
-				col.b = grayValue;
-				col.a *= i.color.a;
-				return col;
+				fixed4 srcColor = tex2D(_MainTex, i.uv).rgba;
+				srcColor.a *= i.color.a;
+				if (srcColor.a < 0.4)
+				{
+					srcColor.a *= srcColor.a * 2.5;
+				}
+				return srcColor;
 			}
 			ENDCG
 		}

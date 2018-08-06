@@ -20,12 +20,12 @@ public class CommandGameScenePrepareChangeProcedure : Command
 		SceneProcedure curProcedure = gameScene.getCurSceneProcedure();
 		if(mPrepareTime <= 0.0f)
 		{
-			UnityUtility.logError("preapare time must be larger than 0!");
+			logError("preapare time must be larger than 0!");
 		}
 		// 正在准备跳转时,不允许再次准备跳转
 		else if(curProcedure.isPreparingExit())
 		{
-			UnityUtility.logError("procedure is preparing to exit, can not prepare again!");
+			logError("procedure is preparing to exit, can not prepare again!");
 		}
 		else
 		{

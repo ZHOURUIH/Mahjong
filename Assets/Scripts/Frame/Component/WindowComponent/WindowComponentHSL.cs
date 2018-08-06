@@ -22,13 +22,13 @@ public class WindowComponentHSL : ComponentKeyFrameNormal
 		txNGUIStaticTexture staticTexture = uiObj as txNGUIStaticTexture;
 		if(staticTexture == null)
 		{
-			UnityUtility.logError("window is not a texture window! can not offset hsl!");
+			logError("window is not a texture window! can not offset hsl!");
 			return;
 		}
 		WindowShaderHSLOffset hslOffset = staticTexture.getWindowShader<WindowShaderHSLOffset>();
 		if(hslOffset == null)
 		{
-			UnityUtility.logError("window has no hsl offset shader! can not offset hsl!");
+			logError("window has no hsl offset shader! can not offset hsl!");
 			return;
 		}
 		Vector3 hsl = mStartHSL + (mTargetHSL - mStartHSL) * offset;

@@ -9,8 +9,9 @@ public abstract class ComponentOwner : CommandReceiver
 	protected List<GameComponent>									mRootComponentList;				// 一级组件列表,保存着组件之间的更新顺序
 	protected Dictionary<string, GameComponent>						mAllComponentList;				// 组件拥有者当前的所有组件列表
 	protected Dictionary<Type, Dictionary<string, GameComponent>>	mAllComponentTypeList;		    // 组件类型列表,first是组件的类型名
-	protected Dictionary<Type, Dictionary<string, GameComponent>>	mAllComponentBaseTypeList;	    // 根据组件的基础类型分组的组件列表,first是基础组件类型名
-	protected bool mUsePreLateUpdate = false;	// 是否对组件预更新和后更新
+	protected Dictionary<Type, Dictionary<string, GameComponent>>	mAllComponentBaseTypeList;      // 根据组件的基础类型分组的组件列表,first是基础组件类型名
+	protected bool mUsePreUpdate = false;
+	protected bool mUseLateUpdate = false;
 	public ComponentOwner(string name)
 		:
 		base(name)
@@ -21,6 +22,27 @@ public abstract class ComponentOwner : CommandReceiver
 		mAllComponentBaseTypeList = new Dictionary<Type, Dictionary<string, GameComponent>>();
 	}
 	public abstract void initComponents();
+	public virtual void preUpdateComponents(float elapsedTime)
+	{
+		if(!mUsePreUpdate)
+		{
+			return;
+		}
+		if (mAllComponentList.Count == 0)
+		{
+			return;
+		}
+		// 预更新基础类型组件
+		int rootComponentCount = mRootComponentList.Count;
+		for (int i = 0; i < rootComponentCount; ++i)
+		{
+			GameComponent component = mRootComponentList[i];
+			if (component != null && component.isActive() && !component.isLockOneFrame())
+			{
+				component.preUpdate(elapsedTime);
+			}
+		}
+	}
 	// 更新正常更新的组件
 	public virtual void updateComponents(float elapsedTime)
 	{
@@ -28,20 +50,8 @@ public abstract class ComponentOwner : CommandReceiver
 		{
 			return;
 		}
-		int rootComponentCount = mRootComponentList.Count;
-		if (mUsePreLateUpdate)
-		{
-			// 预更新基础类型组件
-			for (int i = 0; i < rootComponentCount; ++i)
-			{
-				GameComponent component = mRootComponentList[i];
-				if (component != null && component.isActive() && !component.isLockOneFrame())
-				{
-					component.preUpdate(elapsedTime);
-				}
-			}
-		}
 		// 更新基础类型组件
+		int rootComponentCount = mRootComponentList.Count;
 		for (int i = 0; i < rootComponentCount; ++i)
 		{
 			GameComponent component = mRootComponentList[i];
@@ -50,23 +60,32 @@ public abstract class ComponentOwner : CommandReceiver
 				component.update(elapsedTime);
 			}
 		}
-		if (mUsePreLateUpdate)
+	}
+	public virtual void lateUpdateComponents(float elapsedTime)
+	{
+		if(!mUseLateUpdate)
 		{
-			// 补充更新基础类型组件
-			for (int i = 0; i < rootComponentCount; ++i)
+			return;
+		}
+		if (mAllComponentList.Count == 0)
+		{
+			return;
+		}
+		// 补充更新基础类型组件
+		int rootComponentCount = mRootComponentList.Count;
+		for (int i = 0; i < rootComponentCount; ++i)
+		{
+			GameComponent component = mRootComponentList[i];
+			if (component != null && component.isActive())
 			{
-				GameComponent component = mRootComponentList[i];
-				if (component != null && component.isActive())
+				// 如果组件被锁定了一帧,则不更新,解除锁定
+				if (component.isLockOneFrame())
 				{
-					// 如果组件被锁定了一帧,则不更新,解除锁定
-					if (component.isLockOneFrame())
-					{
-						component.setLockOneFrame(false);
-					}
-					else
-					{
-						component.lateUpdate(elapsedTime);
-					}
+					component.setLockOneFrame(false);
+				}
+				else
+				{
+					component.lateUpdate(elapsedTime);
 				}
 			}
 		}
@@ -132,7 +151,7 @@ public abstract class ComponentOwner : CommandReceiver
 		// 不能创建重名的组件
 		if (mAllComponentList.ContainsKey(name))
 		{
-			UnityUtility.logError("error : there is component named " + name);
+			logError("there is component named " + name);
 			return null;
 		}
 		GameComponent component = createIndependentComponent(name, typeof(T), false);

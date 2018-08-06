@@ -32,6 +32,13 @@ public class SceneSystem : FrameComponent
 	public override void update(float elapsedTime)
 	{
 		base.update(elapsedTime);
+		foreach(var item in mSceneList)
+		{
+			if(item.Value.getActive())
+			{
+				item.Value.update(elapsedTime);
+			}
+		}
 	}
 	public void initScene(string name)
 	{
@@ -135,7 +142,7 @@ public class SceneSystem : FrameComponent
 		// 首先获得场景
 		scene.mScene = SceneManager.GetSceneByName(scene.mName);
 		// 获得了场景根节点才能使场景显示或隐藏
-		scene.mRoot = UnityUtility.getGameObject(null, scene.mName + "_Root", true);
+		scene.mRoot = getGameObject(null, scene.mName + "_Root", true);
 		activeScene(scene.mName, active);
 		scene.mState = LOAD_STATE.LS_LOADED;
 		if (callback != null)

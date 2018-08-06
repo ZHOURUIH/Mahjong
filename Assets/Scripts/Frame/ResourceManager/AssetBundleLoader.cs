@@ -213,7 +213,7 @@ public class AssetBundleLoader : GameBase
 			AssetBundleInfo bundleInfo = mAssetBundleInfoList[bundleName];
 			if (bundleInfo.mLoaded == LOAD_STATE.LS_LOADING)
 			{
-				UnityUtility.logError("asset bundle is loading, can not load again! name : " + bundleName);
+				logError("asset bundle is loading, can not load again! name : " + bundleName);
 				return null;
 			}
 			// 如果还未加载,则加载资源包
@@ -244,7 +244,7 @@ public class AssetBundleLoader : GameBase
 		AssetBundleInfo bundleInfo = mAssetBundleInfoList[bundleName];
 		if (bundleInfo.mLoaded != LOAD_STATE.LS_UNLOAD)
 		{
-			UnityUtility.logError("asset bundle is loading or loaded, can not load again! name : " + bundleName);
+			logError("asset bundle is loading or loaded, can not load again! name : " + bundleName);
 			return false;
 		}
 		// 加载资源包
@@ -313,7 +313,7 @@ public class AssetBundleLoader : GameBase
 		if (www.error != null)
 		{
 			// 下载失败
-			UnityUtility.logInfo("下载失败 : " + url + ", info : " + www.error, LOG_LEVEL.LL_FORCE);
+			logInfo("下载失败 : " + url + ", info : " + www.error, LOG_LEVEL.LL_FORCE);
 			callback(null, userData);
 		}
 		else
@@ -323,21 +323,15 @@ public class AssetBundleLoader : GameBase
 			{
 #if UNITY_5_3_5
 				obj = www.audioClip;
+#elif UNITY_2018_2
+				obj = www.GetAudioClip();
 #else
-				obj = WWWAudioExtensions.GetAudioClip(www);
+				obj = WWW.GetAudioClip(www);
 #endif
 			}
 			else if(assetsType == typeof(Texture2D) || assetsType == typeof(Texture))
 			{
 				obj = www.texture;
-			}
-			else if(assetsType == typeof(MovieTexture))
-			{
-#if UNITY_5_3_5
-				obj = www.movie;
-#else
-				obj = WWWAudioExtensions.GetMovieTexture(www);
-#endif
 			}
 			else if(assetsType == typeof(AssetBundle))
 			{
@@ -352,7 +346,7 @@ public class AssetBundleLoader : GameBase
 	protected IEnumerator loadAssetBundleCoroutine(AssetBundleInfo bundleInfo, bool loadFromWWW)
 	{
 		++mAssetBundleCoroutineCount;
-		UnityUtility.logInfo(bundleInfo.mBundleName + " start load bundle", LOG_LEVEL.LL_NORMAL);
+		logInfo(bundleInfo.mBundleName + " start load bundle", LOG_LEVEL.LL_NORMAL);
 		// 先确保依赖项全部已经加载完成,才能开始加载当前请求的资源包
 		while (!bundleInfo.isAllParentLoaded())
 		{
@@ -380,7 +374,7 @@ public class AssetBundleLoader : GameBase
 			AssetBundleCreateRequest request = AssetBundle.LoadFromFileAsync(CommonDefine.F_STREAMING_ASSETS_PATH + bundleInfo.mBundleName + CommonDefine.ASSET_BUNDLE_SUFFIX);
 			if (request == null)
 			{
-				UnityUtility.logError("can not load asset bundle async : " + bundleInfo.mBundleName);
+				logError("can not load asset bundle async : " + bundleInfo.mBundleName);
 				--mAssetBundleCoroutineCount;
 				yield break;
 			}
@@ -393,14 +387,14 @@ public class AssetBundleLoader : GameBase
 			AssetBundleRequest assetRequest = assetBundle.LoadAssetAsync(CommonDefine.P_RESOURCE_PATH + item.Value.mAssetName);
 			if (assetRequest == null)
 			{
-				UnityUtility.logError("can not load asset async : " + item.Value.mAssetName);
+				logError("can not load asset async : " + item.Value.mAssetName);
 				--mAssetBundleCoroutineCount;
 				yield break;
 			}
 			yield return assetRequest;
 			item.Value.mAssetObject = assetRequest.asset;
 		}
-		UnityUtility.logInfo(bundleInfo.mBundleName + " load bundle done", LOG_LEVEL.LL_NORMAL);
+		logInfo(bundleInfo.mBundleName + " load bundle done", LOG_LEVEL.LL_NORMAL);
 
 		yield return new WaitForEndOfFrame();
 		// 通知AssetBundleInfo
@@ -434,7 +428,7 @@ public class AssetBundleLoader : GameBase
 		}
 		else
 		{
-			UnityUtility.logError("resource type : " + type.ToString() + " is not registered!");
+			logError("resource type : " + type.ToString() + " is not registered!");
 		}
 		return fileNameWithSuffix;
 	}

@@ -53,7 +53,7 @@ public class ObjectTools : GameBase
 	{
 		if(keyframe == "" || MathUtility.isFloatZero(onceLength))
 		{
-			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用void ROTATE_OBJECT(txUIObject obj, Vector3 rotation)");
+			logError("时间或关键帧不能为空,如果要停止组件,请使用void ROTATE_OBJECT(txUIObject obj, Vector3 rotation)");
 		}
 		CommandMovableObjectRotate cmd = newCmd(out cmd, false, false);
 		cmd.mName = keyframe;
@@ -92,7 +92,7 @@ public class ObjectTools : GameBase
 	{
 		if (keyframe == "" || MathUtility.isFloatZero(onceLength))
 		{
-			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用CommandMovableObjectRotate ROTATE_OBJECT_DELAY(MovableObject obj, float delayTime, Vector3 rotation)");
+			logError("时间或关键帧不能为空,如果要停止组件,请使用CommandMovableObjectRotate ROTATE_OBJECT_DELAY(MovableObject obj, float delayTime, Vector3 rotation)");
 		}
 		CommandMovableObjectRotate cmd = newCmd(out cmd, false, true);
 		cmd.mName = keyframe;
@@ -189,7 +189,7 @@ public class ObjectTools : GameBase
 	{
 		if (keyframe == "" || MathUtility.isFloatZero(onceLength))
 		{
-			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用void ROTATE_OBJECT_PHY(txUIObject obj, Vector3 rotation)");
+			logError("时间或关键帧不能为空,如果要停止组件,请使用void ROTATE_OBJECT_PHY(txUIObject obj, Vector3 rotation)");
 		}
 		CommandMovableObjectRotatePhysics cmd = newCmd(out cmd, false, false);
 		cmd.mName = keyframe;
@@ -228,7 +228,7 @@ public class ObjectTools : GameBase
 	{
 		if (keyframe == "" || MathUtility.isFloatZero(onceLength))
 		{
-			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用CommandMovableObjectRotatePhysics ROTATE_OBJECT_PHY_DELAY(MovableObject obj, float delayTime, Vector3 rotation)");
+			logError("时间或关键帧不能为空,如果要停止组件,请使用CommandMovableObjectRotatePhysics ROTATE_OBJECT_PHY_DELAY(MovableObject obj, float delayTime, Vector3 rotation)");
 		}
 		CommandMovableObjectRotatePhysics cmd = newCmd(out cmd, false, true);
 		cmd.mName = keyframe;
@@ -334,7 +334,7 @@ public class ObjectTools : GameBase
 	{
 		if (fileName == "" || MathUtility.isFloatZero(onceLength))
 		{
-			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用void MOVE_OBJECT(MovableObject obj, Vector3 pos)");
+			logError("时间或关键帧不能为空,如果要停止组件,请使用void MOVE_OBJECT(MovableObject obj, Vector3 pos)");
 		}
 		CommandMovableObjectMove cmd = newCmd(out cmd, false, false);
 		cmd.mName = fileName;
@@ -385,7 +385,7 @@ public class ObjectTools : GameBase
 	{
 		if (keyframe == "" || MathUtility.isFloatZero(onceLength))
 		{
-			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用CommandMovableObjectMove MOVE_OBJECT_DELAY(MovableObject obj, float delayTime, Vector3 pos)");
+			logError("时间或关键帧不能为空,如果要停止组件,请使用CommandMovableObjectMove MOVE_OBJECT_DELAY(MovableObject obj, float delayTime, Vector3 pos)");
 		}
 		CommandMovableObjectMove cmd = newCmd(out cmd, false, true);
 		cmd.mName = keyframe;
@@ -454,7 +454,7 @@ public class ObjectTools : GameBase
 	{
 		if (fileName == "" || MathUtility.isFloatZero(onceLength))
 		{
-			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用void MOVE_OBJECT_PHY(MovableObject obj, Vector3 pos)");
+			logError("时间或关键帧不能为空,如果要停止组件,请使用void MOVE_OBJECT_PHY(MovableObject obj, Vector3 pos)");
 		}
 		CommandMovableObjectMovePhysics cmd = newCmd(out cmd, false, false);
 		cmd.mName = fileName;
@@ -505,7 +505,7 @@ public class ObjectTools : GameBase
 	{
 		if (keyframe == "" || MathUtility.isFloatZero(onceLength))
 		{
-			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,CommandMovableObjectMovePhysics MOVE_OBJECT_PHY_DELAY(MovableObject obj, float delayTime, Vector3 pos)");
+			logError("时间或关键帧不能为空,如果要停止组件,CommandMovableObjectMovePhysics MOVE_OBJECT_PHY_DELAY(MovableObject obj, float delayTime, Vector3 pos)");
 		}
 		CommandMovableObjectMovePhysics cmd = newCmd(out cmd, false, true);
 		cmd.mName = keyframe;
@@ -627,7 +627,7 @@ public class ObjectTools : GameBase
 	{
 		if (fileName == "" || MathUtility.isFloatZero(onceLength))
 		{
-			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用void SCALE_OBJECT(MovableObject obj, Vector2 scale)");
+			logError("时间或关键帧不能为空,如果要停止组件,请使用void SCALE_OBJECT(MovableObject obj, Vector2 scale)");
 		}
 		CommandMovableObjectScale cmd = newCmd(out cmd, false);
 		cmd.mName = fileName;
@@ -682,7 +682,7 @@ public class ObjectTools : GameBase
 	{
 		if (keyframe == "" || MathUtility.isFloatZero(onceLength))
 		{
-			UnityUtility.logError("时间或关键帧不能为空,如果要停止组件,请使用CommandMovableObjectScale SCALE_OBJECT_DELAY(MovableObject obj, float delayTime, Vector2 scale)");
+			logError("时间或关键帧不能为空,如果要停止组件,请使用CommandMovableObjectScale SCALE_OBJECT_DELAY(MovableObject obj, float delayTime, Vector2 scale)");
 		}
 		CommandMovableObjectScale cmd = newCmd(out cmd, false, true);
 		cmd.mName = keyframe;

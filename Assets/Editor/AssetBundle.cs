@@ -24,7 +24,7 @@ class AssetBuildBundleInfo
 	}
 }
 
-public class AssetBundleBuild
+public class AssetBundlePack
 {
 	// 清理时需要保留的目录和目录的meta
 	protected static string[] mKeepFolder = new string[] {"Config", "GameDataFile", "DataBase", "Video", "DataTemplate", "HelperExe", "CustomSound"};

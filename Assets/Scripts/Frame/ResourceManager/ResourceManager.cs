@@ -75,7 +75,7 @@ public class ResourceManager : FrameComponent
 		}
 		if (res == null && errorIfNull)
 		{
-			UnityUtility.logError("can not find resource : " + name);
+			logError("can not find resource : " + name);
 		}
 		return res;
 	}
@@ -121,7 +121,7 @@ public class ResourceManager : FrameComponent
 		T res = null;
 		if (mLoadSource == 0)
 		{
-			res = mResourceLoader.loadResource(name) as T;
+			res = mResourceLoader.loadResource<T>(name);
 		}
 		else if (mLoadSource == 1)
 		{
@@ -129,7 +129,7 @@ public class ResourceManager : FrameComponent
 		}
 		if (res == null && errorIfNull)
 		{
-			UnityUtility.logError("can not find resource : " + name);
+			logError("can not find resource : " + name);
 		}
 		return res;
 	}
@@ -147,7 +147,7 @@ public class ResourceManager : FrameComponent
 		}
 		if (!ret && errorIfNull)
 		{
-			UnityUtility.logError("can not find resource : " + name);
+			logError("can not find resource : " + name);
 		}
 		return ret;
 	}

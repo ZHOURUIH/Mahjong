@@ -92,9 +92,12 @@ Shader "MotionBlurCriticalMask"
 				int sampleCount = (int)((pixelLen - _MinRange) * _IncreaseSample);
 				sampleCount = clamp(sampleCount, _SampleInterval, _MaxSample) / _SampleInterval;
 				fixed4 finalColor = float4(0.0f, 0.0f, 0.0f, 0.0f);
-				[unroll(100)]
-				for (int k = 0; k < sampleCount; ++k)
+				for (int k = 0; k < 100; ++k)
 				{
+					if (k >= sampleCount)
+					{
+						break;
+					}
 					float2 samplePos = pixelPos + dir * k * _SampleInterval;
 					samplePos.x = clamp(samplePos.x * _MainTex_TexelSize.x, 0.0f, 1.0f);
 					samplePos.y = clamp(samplePos.y * _MainTex_TexelSize.y, 0.0f, 1.0f);

@@ -234,6 +234,7 @@ public class GameFramework : MonoBehaviour
 	protected virtual void launch() { }
 	protected virtual void initComponent()
 	{
+		registeComponent<AndroidAssetLoader>();
 		registeComponent<ApplicationConfig>();
 		registeComponent<FrameConfig>();
 		registeComponent<UnityUtility>();

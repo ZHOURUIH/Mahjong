@@ -211,7 +211,7 @@ public abstract class ConfigBase : FrameComponent
 #if UNITY_EDITOR || UNITY_STANDALONE_WIN
 		string text = FileUtility.openTxtFile(fileName);
 #elif UNITY_ANDROID
-		string text = AndroidAssetLoadSDK.LoadTextFile(fileName);
+		string text = AndroidAssetLoader.loadTextFile(fileName);
 #endif
 		string[] lineList = StringUtility.split(text, true, "\r\n");
 		Dictionary<string, ConfigInfo> valueList = new Dictionary<string, ConfigInfo>();

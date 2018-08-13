@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class AndroidAssetLoader : FrameComponent
 {
@@ -37,5 +38,24 @@ public class AndroidAssetLoader : FrameComponent
 	{
 		string str = mCurrentActivity.Call<string>("loadTxtFile", path);
 		return str;
+	}
+	public bool isDirExist(string path)
+	{
+		bool exist = mCurrentActivity.Call<bool>("isDirExist", path);
+		return exist;
+	}
+	public bool isFileExist(string path)
+	{
+		bool exist = mCurrentActivity.Call<bool>("isFileExist", path);
+		return exist;
+	}
+	public int getFileSize(string path)
+	{
+		int size = mCurrentActivity.Call<int>("getFileSize", path);
+		return size;
+	}
+	public void findFiles(string path, List<string> fileList, List<string> patterns, bool recursive)
+	{
+		mCurrentActivity.Call<int>("findFiles", path);
 	}
 }

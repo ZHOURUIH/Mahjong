@@ -69,6 +69,10 @@ public class FileUtility : GameBase
 	// 写一个文本文件,fileName为绝对路径,content是写入的字符串
 	public static void writeFile(string fileName, byte[] buffer, int size, bool appenData = false)
 	{
+#if UNITY_ANDROID && !UNITY_EDITOR
+		logError("can not write file on android!");
+		return;
+#endif
 		// 检测路径是否存在,如果不存在就创建一个
 		createDir(StringUtility.getFilePath(fileName));
 		FileStream file = new FileStream(fileName, FileMode.Open, FileAccess.Write);
@@ -83,6 +87,10 @@ public class FileUtility : GameBase
 	// 写一个文本文件,fileName为绝对路径,content是写入的字符串
 	public static void writeTxtFile(string fileName, string content)
 	{
+#if UNITY_ANDROID && !UNITY_EDITOR
+		logError("can not write txt file on android!");
+		return;
+#endif
 		// 检测路径是否存在,如果不存在就创建一个
 		createDir(StringUtility.getFilePath(fileName));
 		StreamWriter writer = new StreamWriter(fileName, false, Encoding.UTF8);
@@ -92,6 +100,10 @@ public class FileUtility : GameBase
 	}
 	public static bool renameFile(string fileName, string newName)
 	{
+#if UNITY_ANDROID && !UNITY_EDITOR
+		logError("can not rename file on android!");
+		return false;
+#endif
 		if (isFileExist(fileName) || isFileExist(newName))
 		{
 			return false;
@@ -101,6 +113,10 @@ public class FileUtility : GameBase
 	}
 	public static void deleteFolder(string path)
 	{
+#if UNITY_ANDROID && !UNITY_EDITOR
+		logError("can not delete dir on android!");
+		return;
+#endif
 		validPath(ref path);
 		string[] dirList = Directory.GetDirectories(path);
 		// 先删除所有文件夹
@@ -119,6 +135,10 @@ public class FileUtility : GameBase
 	}
 	public static bool deleteEmptyFolder(string path)
 	{
+#if UNITY_ANDROID && !UNITY_EDITOR
+		logError("can not delete empty dir on android!");
+		return false;
+#endif
 		validPath(ref path);
 		// 先删除所有空的文件夹
 		string[] dirList = Directory.GetDirectories(path);
@@ -136,6 +156,10 @@ public class FileUtility : GameBase
 	}
 	public static void copyFile(string source, string dest, bool overwrite = true)
 	{
+#if UNITY_ANDROID && !UNITY_EDITOR
+		logError("can not copy file on android!");
+		return;
+#endif
 		// 如果目标文件所在的目录不存在,则先创建目录
 		string parentDir = StringUtility.getFilePath(dest);
 		createDir(parentDir);
@@ -171,6 +195,10 @@ public class FileUtility : GameBase
 	}
 	public static void createDir(string dir)
 	{
+#if UNITY_ANDROID && !UNITY_EDITOR
+		logError("can not create dir on android!");
+		return;
+#endif
 		if (isDirExist(dir))
 		{
 			return;
@@ -186,6 +214,10 @@ public class FileUtility : GameBase
 	// path为Resources下的相对路径
 	public static void findResourcesFiles(string path, ref List<string> fileList, string pattern, bool recursive = true)
 	{
+#if UNITY_ANDROID && !UNITY_EDITOR
+		logError("can not find resouces files on android!");
+		return;
+#endif
 		List<string> patternList = new List<string>();
 		patternList.Add(pattern);
 		findResourcesFiles(path, ref fileList, patternList, recursive);
@@ -193,6 +225,10 @@ public class FileUtility : GameBase
 	// path为Resources下的相对路径
 	public static void findResourcesFiles(string path, ref List<string> fileList, List<string> patterns = null, bool recursive = true)
 	{
+#if UNITY_ANDROID && !UNITY_EDITOR
+		logError("can not find resouces files on android!");
+		return;
+#endif
 		validPath(ref path);
 		if (!StringUtility.startWith(path, CommonDefine.F_STREAMING_ASSETS_PATH))
 		{
@@ -226,6 +262,9 @@ public class FileUtility : GameBase
 	// path为绝对路径
 	public static void findFiles(string path, ref List<string> fileList, List<string> patterns = null, bool recursive = true)
 	{
+#if UNITY_ANDROID && !UNITY_EDITOR
+#else
+#endif
 		validPath(ref path);
 		if(!isDirExist(path))
 		{
@@ -289,10 +328,18 @@ public class FileUtility : GameBase
 	}
 	public static void deleteFile(string path)
 	{
+#if UNITY_ANDROID && !UNITY_EDITOR
+		logError("can not delete file on android!");
+		return;
+#endif
 		File.Delete(path);
 	}
 	public static string generateFileMD5(string fileName, bool upperOrLower = true)
 	{
+#if UNITY_ANDROID && !UNITY_EDITOR
+		logError("can not generate file md5 on android!");
+		return "";
+#endif
 		FileStream file = new FileStream(fileName, FileMode.Open);
 		HashAlgorithm algorithm = MD5.Create();
 		byte[] md5Bytes = algorithm.ComputeHash(file);

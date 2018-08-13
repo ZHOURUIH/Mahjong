@@ -18,15 +18,24 @@ public class AndroidAssetLoader : FrameComponent
 		base.destroy();
 	}
 	// 相对于StreamingAssets的路径
-	public static byte[] loadFile(string path)
+	public static byte[] loadAsset(string path)
 	{
-		byte[] buffer = mCurrentActivity.Call<byte[]>("loadAB", path);
+		byte[] buffer = mCurrentActivity.Call<byte[]>("loadAsset", path);
 		return buffer;
 	}
-	public static string loadTextFile(string path)
+	public static string loadTxtAsset(string path)
 	{
-		byte[] buffer = mCurrentActivity.Call<byte[]>("loadAB", path);
-		string str = BinaryUtility.bytesToString(buffer);
+		string str = mCurrentActivity.Call<string>("loadTxtAsset", path);
+		return str;
+	}
+	public static byte[] loadFile(string path)
+	{
+		byte[] buffer = mCurrentActivity.Call<byte[]>("loadFile", path);
+		return buffer;
+	}
+	public static string loadTxtFile(string path)
+	{
+		string str = mCurrentActivity.Call<string>("loadTxtFile", path);
 		return str;
 	}
 }

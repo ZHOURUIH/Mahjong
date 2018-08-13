@@ -22,20 +22,34 @@ public class FileUtility : GameBase
 	// 打开一个二进制文件,fileName为绝对路径
 	public static void openFile(string fileName, ref byte[] fileBuffer)
 	{
-		FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-		int fileSize = (int)fs.Length;
-		fileBuffer = new byte[fileSize];
-		fs.Read(fileBuffer, 0, fileSize);
-		fs.Close();
-		fs.Dispose();
+		try
+		{
+#if !UNITY_ANDROID && UNITY_EDITOR
+			fileBuffer = AndroidAssetLoader.loadFile(fileName);
+#else
+			FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+			int fileSize = (int)fs.Length;
+			fileBuffer = new byte[fileSize];
+			fs.Read(fileBuffer, 0, fileSize);
+			fs.Close();
+			fs.Dispose();
+#endif
+		}
+		catch (Exception)
+		{
+			logInfo("open file failed! filename : " + fileName);
+		}
 	}
 	// 打开一个文本文件,fileName为绝对路径
 	public static string openTxtFile(string fileName)
 	{
 		try
 		{
+#if !UNITY_ANDROID && UNITY_EDITOR
+			return AndroidAssetLoader.loadTxtFile(fileName);
+#else
 			StreamReader streamReader = File.OpenText(fileName);
-			if(streamReader == null)
+			if (streamReader == null)
 			{
 				logInfo("open file failed! filename : " + fileName);
 				return "";
@@ -44,6 +58,7 @@ public class FileUtility : GameBase
 			streamReader.Close();
 			streamReader.Dispose();
 			return fileBuffer;
+#endif
 		}
 		catch(Exception)
 		{

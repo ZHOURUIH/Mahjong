@@ -24,15 +24,30 @@ public class FileUtility : GameBase
 	{
 		try
 		{
-#if !UNITY_ANDROID && UNITY_EDITOR
-			fileBuffer = AndroidAssetLoader.loadFile(fileName);
-#else
+#if !UNITY_ANDROID || UNITY_EDITOR
 			FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
 			int fileSize = (int)fs.Length;
 			fileBuffer = new byte[fileSize];
 			fs.Read(fileBuffer, 0, fileSize);
 			fs.Close();
 			fs.Dispose();
+#else
+			// 安卓平台如果要读取StreamingAssets下的文件,只能使用AssetManager
+			if(StringUtility.startWith(fileName, CommonDefine.F_STREAMING_ASSETS_PATH))
+			{
+				// 改为相对路径
+				fileName = fileName.Substring(CommonDefine.F_STREAMING_ASSETS_PATH.Length, fileName.Length - CommonDefine.F_STREAMING_ASSETS_PATH.Length);
+				fileBuffer = AndroidAssetLoader.loadAsset(fileName);
+			}
+			// 安卓平台如果要读取persistentDataPath的文件,则可以使用File
+			else if (StringUtility.startWith(fileName, CommonDefine.F_PERSISTENT_DATA_PATH))
+			{
+				fileBuffer = AndroidAssetLoader.loadFile(fileName);
+			}
+			else
+			{
+				logError("openFile invalid path : " + fileName);
+			}
 #endif
 		}
 		catch (Exception)
@@ -45,9 +60,7 @@ public class FileUtility : GameBase
 	{
 		try
 		{
-#if !UNITY_ANDROID && UNITY_EDITOR
-			return AndroidAssetLoader.loadTxtFile(fileName);
-#else
+#if !UNITY_ANDROID || UNITY_EDITOR
 			StreamReader streamReader = File.OpenText(fileName);
 			if (streamReader == null)
 			{
@@ -58,6 +71,24 @@ public class FileUtility : GameBase
 			streamReader.Close();
 			streamReader.Dispose();
 			return fileBuffer;
+#else
+			// 安卓平台如果要读取StreamingAssets下的文件,只能使用AssetManager
+			if(StringUtility.startWith(fileName, CommonDefine.F_STREAMING_ASSETS_PATH))
+			{
+				// 改为相对路径
+				fileName = fileName.Substring(CommonDefine.F_STREAMING_ASSETS_PATH.Length, fileName.Length - CommonDefine.F_STREAMING_ASSETS_PATH.Length);
+				return AndroidAssetLoader.loadTxtAsset(fileName);
+			}
+			// 安卓平台如果要读取persistentDataPath的文件,则可以使用File
+			else if (StringUtility.startWith(fileName, CommonDefine.F_PERSISTENT_DATA_PATH))
+			{
+				return AndroidAssetLoader.loadTxtFile(fileName);
+			}
+			else
+			{
+				logError("openTxtFile invalid path : " + fileName);
+			}
+			return "";
 #endif
 		}
 		catch(Exception)
@@ -67,36 +98,36 @@ public class FileUtility : GameBase
 		}
 	}
 	// 写一个文本文件,fileName为绝对路径,content是写入的字符串
-	public static void writeFile(string fileName, byte[] buffer, int size, bool appenData = false)
+	public static void writeFile(string fileName, byte[] buffer, int size, bool appendData = false)
 	{
-#if UNITY_ANDROID && !UNITY_EDITOR
-		logError("can not write file on android!");
-		return;
-#endif
 		// 检测路径是否存在,如果不存在就创建一个
 		createDir(StringUtility.getFilePath(fileName));
+#if !UNITY_ANDROID || UNITY_EDITOR
 		FileStream file = new FileStream(fileName, FileMode.Open, FileAccess.Write);
-		if(appenData)
+		if(appendData)
 		{
 			file.Seek(0, SeekOrigin.End);
 		}
 		file.Write(buffer, 0, size);
 		file.Close();
 		file.Dispose();
+#else
+		AndroidAssetLoader.writeFile(fileName, buffer, size, appendData);
+#endif
 	}
 	// 写一个文本文件,fileName为绝对路径,content是写入的字符串
-	public static void writeTxtFile(string fileName, string content)
+	public static void writeTxtFile(string fileName, string content, bool appendData = false)
 	{
-#if UNITY_ANDROID && !UNITY_EDITOR
-		logError("can not write txt file on android!");
-		return;
-#endif
 		// 检测路径是否存在,如果不存在就创建一个
 		createDir(StringUtility.getFilePath(fileName));
+#if !UNITY_ANDROID || UNITY_EDITOR
 		StreamWriter writer = new StreamWriter(fileName, false, Encoding.UTF8);
 		writer.Write(content);
 		writer.Close();
 		writer.Dispose();
+#else
+		AndroidAssetLoader.writeTxtFile(fileName, content, appendData);
+#endif
 	}
 	public static bool renameFile(string fileName, string newName)
 	{
@@ -169,8 +200,12 @@ public class FileUtility : GameBase
 	{
 		try
 		{
+#if !UNITY_ANDROID || UNITY_EDITOR
 			FileInfo fileInfo = new FileInfo(file);
 			return (int)fileInfo.Length;
+#else
+			return AndroidAssetLoader.getFileSize(file);
+#endif
 		}
 		catch
 		{
@@ -179,26 +214,22 @@ public class FileUtility : GameBase
 	}
 	public static bool isDirExist(string dir)
 	{
-#if UNITY_ANDROID && !UNITY_EDITOR
-		return true;
-#else
+#if !UNITY_ANDROID || UNITY_EDITOR
 		return Directory.Exists(dir);
+#else
+		return AndroidAssetLoader.isDirExist(dir);
 #endif
 	}
 	public static bool isFileExist(string fileName)
 	{
-#if UNITY_ANDROID && !UNITY_EDITOR
-		return true;
-#else
+#if !UNITY_ANDROID || UNITY_EDITOR
 		return File.Exists(fileName);
+#else
+		return AndroidAssetLoader.isFileExist(fileName);
 #endif
 	}
 	public static void createDir(string dir)
 	{
-#if UNITY_ANDROID && !UNITY_EDITOR
-		logError("can not create dir on android!");
-		return;
-#endif
 		if (isDirExist(dir))
 		{
 			return;
@@ -209,7 +240,12 @@ public class FileUtility : GameBase
 		{
 			createDir(parentDir);
 		}
+#if !UNITY_ANDROID || UNITY_EDITOR
 		Directory.CreateDirectory(dir);
+#else
+		AndroidAssetLoader.createDirectory(dir);
+#endif
+
 	}
 	// path为Resources下的相对路径
 	public static void findResourcesFiles(string path, ref List<string> fileList, string pattern, bool recursive = true)
@@ -246,11 +282,15 @@ public class FileUtility : GameBase
 	// path为StreamingAssets下的相对路径
 	public static void findStreamingAssetsFiles(string path, ref List<string> fileList, List<string> patterns = null, bool recursive = true)
 	{
+#if UNITY_ANDROID && !UNITY_EDITOR
+		AndroidAssetLoader.findAssets(path, ref fileList, patterns, recursive);
+#else
 		if (!StringUtility.startWith(path, CommonDefine.F_STREAMING_ASSETS_PATH))
 		{
 			path = CommonDefine.F_STREAMING_ASSETS_PATH + path;
 		}
 		findFiles(path, ref fileList, patterns, recursive);
+#endif
 	}
 	// path为绝对路径
 	public static void findFiles(string path, ref List<string> fileList, string pattern, bool recursive = true)
@@ -263,7 +303,8 @@ public class FileUtility : GameBase
 	public static void findFiles(string path, ref List<string> fileList, List<string> patterns = null, bool recursive = true)
 	{
 #if UNITY_ANDROID && !UNITY_EDITOR
-#else
+		logError("can not findFiles on android!");
+		return;
 #endif
 		validPath(ref path);
 		if(!isDirExist(path))

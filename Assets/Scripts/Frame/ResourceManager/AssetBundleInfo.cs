@@ -184,7 +184,13 @@ public class AssetBundleInfo : GameBase
 			info.Value.loadAssetBundle();
 		}
 		// 然后加载AssetBundle
+#if UNITY_ANDROID && UNITY_EDITOR
+		byte[] assetBundleBuffer = AndroidAssetLoader.loadAsset(mBundleName + CommonDefine.ASSET_BUNDLE_SUFFIX);
+		mAssetBundle = AssetBundle.LoadFromMemory(assetBundleBuffer);
+#else
 		mAssetBundle = AssetBundle.LoadFromFile(CommonDefine.F_STREAMING_ASSETS_PATH + mBundleName + CommonDefine.ASSET_BUNDLE_SUFFIX);
+#endif
+
 		if (mAssetBundle == null)
 		{
 			logError("can not load asset bundle : " + mBundleName);

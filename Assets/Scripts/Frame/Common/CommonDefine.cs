@@ -174,6 +174,8 @@ public class CommonDefine
 	// 绝对路径,以F_开头,表示Full
 	public static string F_ASSETS_PATH = Application.dataPath + "/";
 	public static string F_RESOURCES_PATH = F_ASSETS_PATH + RESOURCES + "/";
+	public static string F_PERSISTENT_DATA_PATH = Application.persistentDataPath + "/";
+	public static string F_TEMPORARY_CACHE_PATH = Application.temporaryCachePath + "/";
 	public static string F_STREAMING_ASSETS_PATH = Application.streamingAssetsPath + "/";
 	public static string F_DATA_BASE_PATH = F_STREAMING_ASSETS_PATH + DATA_BASE + "/";
 	public static string F_VIDEO_PATH = F_STREAMING_ASSETS_PATH + VIDEO + "/";

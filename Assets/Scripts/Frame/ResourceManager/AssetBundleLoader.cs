@@ -39,12 +39,15 @@ public class AssetBundleLoader : GameBase
 	public bool init()
 	{
 		string path = CommonDefine.F_STREAMING_ASSETS_PATH + "StreamingAssets.xml";
-		if (!File.Exists(path))
+		if (!FileUtility.isFileExist(path))
 		{
 			return false;
 		}
+		byte[] fileBuffer = null;
+		FileUtility.openFile(path, ref fileBuffer);
+		MemoryStream stream = new MemoryStream(fileBuffer);
 		XmlDocument doc = new XmlDocument();
-		doc.Load(path);
+		doc.Load(stream);
 		XmlNodeList nodeList = doc.SelectSingleNode("files").ChildNodes;
 		foreach (XmlElement xe in nodeList)
 		{
@@ -360,7 +363,7 @@ public class AssetBundleLoader : GameBase
 #if UNITY_EDITOR || UNITY_STANDALONE_WIN || UNITY_IPHONE || UNITY_IOS
 			string path = "file:\\" + CommonDefine.F_STREAMING_ASSETS_PATH + bundleInfo.mBundleName + CommonDefine.ASSET_BUNDLE_SUFFIX;
 #elif UNITY_ANDROID
-			string path = "file:\\" + Application.dataPath + "!assets/" + bundleInfo.mBundleName + CommonDefine.ASSET_BUNDLE_SUFFIX;
+			string path = CommonDefine.F_STREAMING_ASSETS_PATH + bundleInfo.mBundleName + CommonDefine.ASSET_BUNDLE_SUFFIX;
 #endif
 			WWW www = new WWW(path);
 			yield return www;

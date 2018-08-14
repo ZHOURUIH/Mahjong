@@ -217,7 +217,23 @@ public class FileUtility : GameBase
 #if !UNITY_ANDROID || UNITY_EDITOR
 		return Directory.Exists(dir);
 #else
-		return AndroidAssetLoader.isDirExist(dir);
+		// 安卓平台如果要读取StreamingAssets下的文件,只能使用AssetManager
+		if(StringUtility.startWith(dir, CommonDefine.F_STREAMING_ASSETS_PATH))
+		{
+			// 改为相对路径
+			dir = dir.Substring(CommonDefine.F_STREAMING_ASSETS_PATH.Length, dir.Length - CommonDefine.F_STREAMING_ASSETS_PATH.Length);
+			return AndroidAssetLoader.isAssetExist(dir);
+		}
+		// 安卓平台如果要读取persistentDataPath的文件,则可以使用File
+		else if (StringUtility.startWith(dir, CommonDefine.F_PERSISTENT_DATA_PATH))
+		{
+			return AndroidAssetLoader.isDirExist(dir);
+		}
+		else
+		{
+			logError("isDirExist invalid path : " + dir);
+		}
+		return false;
 #endif
 	}
 	public static bool isFileExist(string fileName)
@@ -225,7 +241,23 @@ public class FileUtility : GameBase
 #if !UNITY_ANDROID || UNITY_EDITOR
 		return File.Exists(fileName);
 #else
-		return AndroidAssetLoader.isFileExist(fileName);
+		// 安卓平台如果要读取StreamingAssets下的文件,只能使用AssetManager
+		if(StringUtility.startWith(fileName, CommonDefine.F_STREAMING_ASSETS_PATH))
+		{
+			// 改为相对路径
+			fileName = fileName.Substring(CommonDefine.F_STREAMING_ASSETS_PATH.Length, fileName.Length - CommonDefine.F_STREAMING_ASSETS_PATH.Length);
+			return AndroidAssetLoader.isAssetExist(fileName);
+		}
+		// 安卓平台如果要读取persistentDataPath的文件,则可以使用File
+		else if (StringUtility.startWith(fileName, CommonDefine.F_PERSISTENT_DATA_PATH))
+		{
+			return AndroidAssetLoader.isFileExist(fileName);
+		}
+		else
+		{
+			logError("isFileExist invalid path : " + fileName);
+		}
+		return false;
 #endif
 	}
 	public static void createDir(string dir)

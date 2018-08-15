@@ -12,6 +12,7 @@ public class ScriptLogin : LayoutScript
 	protected txNGUIButton mLoginButton;
 	protected txNGUIButton mRegisterButton;
 	protected txNGUIButton mQuitButton;
+	protected bool mTestAccount = false;
 	public ScriptLogin(string name, GameLayout layout)
 		:
 		base(name, layout)
@@ -35,9 +36,9 @@ public class ScriptLogin : LayoutScript
 	}
 	public override void onReset()
 	{
-		LayoutTools.SCALE_WINDOW(mLoginButton, Vector2.one);
-		LayoutTools.SCALE_WINDOW(mRegisterButton, Vector2.one);
-		LayoutTools.SCALE_WINDOW(mQuitButton, Vector2.one);
+		LayoutTools.SCALE_WINDOW(mLoginButton);
+		LayoutTools.SCALE_WINDOW(mRegisterButton);
+		LayoutTools.SCALE_WINDOW(mQuitButton);
 	}
 	public override void onShow(bool immediately, string param)
 	{
@@ -54,10 +55,32 @@ public class ScriptLogin : LayoutScript
 	//---------------------------------------------------------------------------------------------------------------------
 	protected void onLoginClick(GameObject obj)
 	{
-		CSLogin login = mSocketNetManager.createPacket<CSLogin>();
-		login.setAccount(mAccountEdit.getText());
-		login.setPassword(mPasswordEdit.getText());
-		mSocketNetManager.sendMessage(login);
+		if(!mTestAccount)
+		{
+			CSLogin login = mSocketNetManager.createPacket<CSLogin>();
+			login.setAccount(mAccountEdit.getText());
+			login.setPassword(mPasswordEdit.getText());
+			mSocketNetManager.sendMessage(login);
+		}
+		else
+		{
+			// 创建玩家
+			CommandCharacterManagerCreateCharacter cmdCreate = newCmd(out cmdCreate);
+			cmdCreate.mCharacterType = CHARACTER_TYPE.CT_MYSELF;
+			cmdCreate.mName = "测试";
+			cmdCreate.mID = 0;
+			pushCommand(cmdCreate, mCharacterManager);
+			// 设置角色数据
+			CharacterMyself myself = mCharacterManager.getMyself();
+			CharacterData data = myself.getCharacterData();
+			data.mMoney = 100;
+			data.mHead = 1;
+
+			// 进入到主场景
+			CommandGameSceneManagerEnter cmdEnterMain = newCmd(out cmdEnterMain, true, true);
+			cmdEnterMain.mSceneType = GAME_SCENE_TYPE.GST_MAIN;
+			pushDelayCommand(cmdEnterMain, mGameSceneManager);
+		}
 	}
 	protected void onButtonPress(GameObject button, bool press)
 	{

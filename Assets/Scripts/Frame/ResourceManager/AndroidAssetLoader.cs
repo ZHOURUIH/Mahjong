@@ -9,13 +9,17 @@ public class AndroidAssetLoader : FrameComponent
 	public AndroidAssetLoader(string name)
 		:base(name)
 	{
+#if !UNITY_EDITOR && UNITY_ANDROID
 		mUnityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
 		mCurrentActivity = mUnityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
+#endif
 	}
 	public override void destroy()
 	{
+#if !UNITY_EDITOR && UNITY_ANDROID
 		mUnityPlayer.Dispose();
 		mCurrentActivity.Dispose();
+#endif
 		base.destroy();
 	}
 	// 相对于StreamingAssets的路径

@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 435854699
+CRC: 3663473121
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 5b684ff71b1e034715068f626b02bf60
+    Hash: c52cfbfd16a1f30da12d9f5e8e533069
   TypeTreeHash:
     serializedVersion: 2
     Hash: 68d67e4fba1d11c3e75f7ca15498b463
@@ -22,4 +22,4 @@ ClassTypes:
 Assets:
 - Assets/Resources/Font/FZY3JW.prefab
 Dependencies:
-- "E:/SOURCE_HOME/\u5916\u5305\u9879\u76EE/Mahjong/Assets/StreamingAssets/font.unity3d"
+- E:/SOURCE_HOME/Github/Mahjong/Assets/StreamingAssets/font.unity3d

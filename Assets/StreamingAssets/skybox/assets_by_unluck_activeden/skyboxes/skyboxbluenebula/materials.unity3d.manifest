@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1928989840
+CRC: 2260880113
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 7534245e4222b458689653e513ece640
+    Hash: 64d8db1e634255c800edc57f083ae21c
   TypeTreeHash:
     serializedVersion: 2
     Hash: abb9b9167ab0d9f4af2beeb617361f49
@@ -18,4 +18,4 @@ ClassTypes:
 Assets:
 - Assets/Resources/Skybox/Assets_By_Unluck_Activeden/skyboxes/skyboxBlueNebula/materials/SkyboxBlueNebula_Material.mat
 Dependencies:
-- "E:/SOURCE_HOME/\u5916\u5305\u9879\u76EE/Mahjong/Assets/StreamingAssets/skybox/assets_by_unluck_activeden/skyboxes/skyboxbluenebula/images.unity3d"
+- E:/SOURCE_HOME/Github/Mahjong/Assets/StreamingAssets/skybox/assets_by_unluck_activeden/skyboxes/skyboxbluenebula/images.unity3d

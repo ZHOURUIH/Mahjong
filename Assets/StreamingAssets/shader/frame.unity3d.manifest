@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2427408798
+CRC: 3746054400
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 73b43b71d108968c63dd0fa868f37482
+    Hash: d430013484df04e58f8c628da7d380ab
   TypeTreeHash:
     serializedVersion: 2
     Hash: 7e9ee104d6bb707fb2602b751e6f78b1
@@ -12,14 +12,24 @@ ClassTypes:
 - Class: 48
   Script: {instanceID: 0}
 Assets:
+- Assets/Resources/Shader/Frame/BlurMaskVertical.shader
+- Assets/Resources/Shader/Frame/BlurMaskHorizontal.shader
 - Assets/Resources/Shader/Frame/CriticalMaskFadeOutLinearDodge.shader
 - Assets/Resources/Shader/Frame/GaussianBlur.shader
 - Assets/Resources/Shader/Frame/MotionBlurCriticalMask.shader
+- Assets/Resources/Shader/Frame/NGUIDefault.shader
 - Assets/Resources/Shader/Frame/HSLOffsetLinearDodge.shader
+- Assets/Resources/Shader/Frame/LumOffset.shader
+- Assets/Resources/Shader/Frame/LinearDodge.shader
 - Assets/Resources/Shader/Frame/Feather.shader
+- Assets/Resources/Shader/Frame/BlurMaskDownSample.shader
+- Assets/Resources/Shader/Frame/SurfaceLight.shader
+- Assets/Resources/Shader/Frame/LumOffsetLinearDodge.shader
 - Assets/Resources/Shader/Frame/UGUIDefault.shader
 - Assets/Resources/Shader/Frame/HSLOffset.shader
 - Assets/Resources/Shader/Frame/MaskCut.shader
 - Assets/Resources/Shader/Frame/CriticalMask.shader
 - Assets/Resources/Shader/Frame/MotionBlur.shader
+- Assets/Resources/Shader/Frame/EdgeAlpha.shader
+- Assets/Resources/Shader/Frame/Grey.shader
 Dependencies: []

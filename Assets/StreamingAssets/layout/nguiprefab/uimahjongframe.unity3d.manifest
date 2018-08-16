@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 1047621626
+CRC: 2697975837
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 571fd2daf2a45eed0b6826dbd4125413
+    Hash: 65902528a0ed115d1baaf85ecac8e8de
   TypeTreeHash:
     serializedVersion: 2
-    Hash: a93bbe13c8e8867cbdb96ca139fb2a94
+    Hash: db3999444d28ae86bac39d55e2f93c8c
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -26,6 +26,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 8b583f62f4eba54419f1262c9199ec59, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 1fdca5042b1d12a4890ec1bd4f04290d, type: 3}
@@ -42,4 +44,4 @@ ClassTypes:
 Assets:
 - Assets/Resources/Layout/NGUIPrefab/UIMahjongFrame.prefab
 Dependencies:
-- "E:/SOURCE_HOME/\u5916\u5305\u9879\u76EE/Mahjong/Assets/StreamingAssets/font/fzy3jw.unity3d"
+- E:/SOURCE_HOME/Github/Mahjong/Assets/StreamingAssets/font/fzy3jw.unity3d

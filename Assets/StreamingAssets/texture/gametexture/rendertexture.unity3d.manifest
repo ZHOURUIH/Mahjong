@@ -1,0 +1,16 @@
+ManifestFileVersion: 0
+CRC: 1838082004
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: f0f9482ac864d3d75a38998e6fdff1ff
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 89010fa122ffffe6344faa21dd7249a1
+HashAppended: 0
+ClassTypes:
+- Class: 84
+  Script: {instanceID: 0}
+Assets:
+- Assets/Resources/Texture/GameTexture/RenderTexture/UICameraTexture.renderTexture
+Dependencies: []

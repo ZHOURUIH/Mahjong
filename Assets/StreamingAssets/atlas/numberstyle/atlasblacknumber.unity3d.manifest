@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 229308469
+CRC: 882002180
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: e9bd6a9c640964bdd4dcb42d9b3a99a0
+    Hash: cea950a4dc56aca9076e4da945ca21c1
   TypeTreeHash:
     serializedVersion: 2
     Hash: 10df304355517f1b3addff786f7a0435
@@ -22,4 +22,4 @@ ClassTypes:
 Assets:
 - Assets/Resources/Atlas/NumberStyle/AtlasBlackNumber.prefab
 Dependencies:
-- "E:/SOURCE_HOME/\u5916\u5305\u9879\u76EE/Mahjong/Assets/StreamingAssets/atlas/numberstyle.unity3d"
+- E:/SOURCE_HOME/Github/Mahjong/Assets/StreamingAssets/atlas/numberstyle.unity3d

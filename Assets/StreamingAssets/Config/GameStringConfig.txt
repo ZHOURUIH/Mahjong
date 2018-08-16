@@ -4,8 +4,7 @@
 // 变量命名应与代码中枚举命名相同
 
 // 服务器IP
-GDS_TCP_SERVER_IP = 
-//127.0.0.1
+GDS_TCP_SERVER_IP = 192.168.1.105
 // 服务器域名,域名和IP只需要填一个,都填则使用IP
 GDS_TCP_HOST_NAME = www.inothingtodo.com
 

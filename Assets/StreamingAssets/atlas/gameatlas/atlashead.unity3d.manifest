@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 364679807
+CRC: 239466001
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 06d6cfad6841dc25a2bf75aa2fd1d0e0
+    Hash: 7d32db1b707ab8555be1c221ee71cd90
   TypeTreeHash:
     serializedVersion: 2
     Hash: 10df304355517f1b3addff786f7a0435
@@ -22,4 +22,4 @@ ClassTypes:
 Assets:
 - Assets/Resources/Atlas/GameAtlas/AtlasHead.prefab
 Dependencies:
-- "E:/SOURCE_HOME/\u5916\u5305\u9879\u76EE/Mahjong/Assets/StreamingAssets/atlas/gameatlas.unity3d"
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/atlas/gameatlas.unity3d

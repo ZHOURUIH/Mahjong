@@ -1,9 +1,9 @@
 fileFormatVersion: 2
 guid: 7f4f45d3b221d1c4ead254c87b826d69
-timeCreated: 1532849186
-licenseType: Pro
 ShaderImporter:
+  externalObjects: {}
   defaultTextures: []
+  nonModifiableTextures: []
   userData: 
   assetBundleName: shader/builtinshader.unity3d
   assetBundleVariant: 

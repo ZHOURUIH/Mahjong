@@ -1,17 +1,19 @@
 ManifestFileVersion: 0
-CRC: 4157542741
+CRC: 2796289008
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 3b6caea87b09f9e84fcc6e0081d21c14
+    Hash: 8e053dc29b84d0b8800428a0e1fd26a9
   TypeTreeHash:
     serializedVersion: 2
-    Hash: b06e61764c6ae844ad31ed2fe969e536
+    Hash: 4bc5f81d719aedee74a62f5b853d08dd
 HashAppended: 0
 ClassTypes:
 - Class: 1
   Script: {instanceID: 0}
 - Class: 4
+  Script: {instanceID: 0}
+- Class: 21
   Script: {instanceID: 0}
 - Class: 28
   Script: {instanceID: 0}
@@ -20,10 +22,13 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 8b583f62f4eba54419f1262c9199ec59, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: d5c5ca47aa5c01740810b7c66662099f, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 Assets:
 - Assets/Resources/Layout/NGUIPrefab/UIMahjongBackFrame.prefab
 Dependencies:
-- "E:/SOURCE_HOME/\u5916\u5305\u9879\u76EE/Mahjong/Assets/StreamingAssets/texture/gametexture/common.unity3d"
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/material.unity3d
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/texture/gametexture/common.unity3d

@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 1257467331
+CRC: 2310415250
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 810d1ffcc766248d1ff2ef7aa82db0a5
+    Hash: 36a40369323e865d66893ef0438c1713
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 2fc93b9767c1fd1466b74471bffa3fbc
+    Hash: 2baf71b9ea32ac627321bdaeb177a8d7
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -24,6 +24,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 8b583f62f4eba54419f1262c9199ec59, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 1fdca5042b1d12a4890ec1bd4f04290d, type: 3}
@@ -40,5 +42,5 @@ ClassTypes:
 Assets:
 - Assets/Resources/Layout/NGUIPrefab/UIJoinRoomDialog.prefab
 Dependencies:
-- "E:/SOURCE_HOME/\u5916\u5305\u9879\u76EE/Mahjong/Assets/StreamingAssets/font/fzy3jw.unity3d"
-- "E:/SOURCE_HOME/\u5916\u5305\u9879\u76EE/Mahjong/Assets/StreamingAssets/font/fzzyjw.unity3d"
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/font/fzy3jw.unity3d
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/font/fzzyjw.unity3d

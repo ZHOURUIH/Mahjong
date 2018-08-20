@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2878471804
+CRC: 2019032338
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 6e85fb705bdc0eface21efbca2a80cec
+    Hash: 01916d6a64dfd09b5649f51cec69378b
   TypeTreeHash:
     serializedVersion: 2
     Hash: 10df304355517f1b3addff786f7a0435
@@ -22,4 +22,4 @@ ClassTypes:
 Assets:
 - Assets/Resources/Atlas/GameAtlas/AtlasGameEnding.prefab
 Dependencies:
-- "E:/SOURCE_HOME/\u5916\u5305\u9879\u76EE/Mahjong/Assets/StreamingAssets/atlas/gameatlas.unity3d"
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/atlas/gameatlas.unity3d

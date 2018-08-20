@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 308346634
+CRC: 251139033
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: d0d0e4878bc7f0ec91ea0a81211961a2
+    Hash: d23aeac91d33652df81aa4f795fa9094
   TypeTreeHash:
     serializedVersion: 2
-    Hash: f676d41041f238768b7fc16bf38b0454
+    Hash: 4c7f498e687904e0decf2340094b52ca
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -18,6 +18,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 8b583f62f4eba54419f1262c9199ec59, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 1fdca5042b1d12a4890ec1bd4f04290d, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 4d0c51bb0b6e93049af5e88f93826e3b, type: 3}
@@ -28,4 +30,4 @@ ClassTypes:
 Assets:
 - Assets/Resources/Layout/NGUIPrefab/UIRoomMenu.prefab
 Dependencies:
-- "E:/SOURCE_HOME/\u5916\u5305\u9879\u76EE/Mahjong/Assets/StreamingAssets/atlas/gameatlas/atlasroommenu.unity3d"
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/atlas/gameatlas/atlasroommenu.unity3d

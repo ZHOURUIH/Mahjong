@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 1374195027
+CRC: 209591183
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 4fa226c28c2aa35f4a5f2b63601b0aa0
+    Hash: 97b9d8692c02e5ffecec2879a40be670
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 8bf12ca6bdd3b60a3308155c9582e839
+    Hash: edc7d19ee388ae2ed0e05f62ac2fdda5
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -16,6 +16,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 8b583f62f4eba54419f1262c9199ec59, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 4d0c51bb0b6e93049af5e88f93826e3b, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
@@ -24,4 +26,4 @@ ClassTypes:
 Assets:
 - Assets/Resources/Layout/NGUIPrefab/UIMahjongDrop.prefab
 Dependencies:
-- "E:/SOURCE_HOME/\u5916\u5305\u9879\u76EE/Mahjong/Assets/StreamingAssets/atlas/gameatlas/atlasmahjongdrop.unity3d"
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/atlas/gameatlas/atlasmahjongdrop.unity3d

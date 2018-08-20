@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3429036076
+CRC: 3866838495
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 338a9d34033e5f54943f520d8ac99b93
+    Hash: fef6f49c1019449ee3f27620bc596603
   TypeTreeHash:
     serializedVersion: 2
     Hash: abb9b9167ab0d9f4af2beeb617361f49
@@ -16,15 +16,24 @@ ClassTypes:
 - Class: 48
   Script: {instanceID: 0}
 Assets:
+- Assets/Resources/Material/LinearDodge.mat
+- Assets/Resources/Material/LumOffsetLinearDodge.mat
 - Assets/Resources/Material/MaskCut.mat
 - Assets/Resources/Material/UGUIDefault.mat
 - Assets/Resources/Material/HSLOffsetLinearDodge.mat
 - Assets/Resources/Material/CriticalMaskFadeOutLinearDodge.mat
+- Assets/Resources/Material/BlurMaskDownSample.mat
+- Assets/Resources/Material/Grey.mat
+- Assets/Resources/Material/NGUIDefault.mat
+- Assets/Resources/Material/EdgeAlpha.mat
 - Assets/Resources/Material/CriticalMask.mat
 - Assets/Resources/Material/HSLOffset.mat
+- Assets/Resources/Material/LumOffset.mat
+- Assets/Resources/Material/BlurMaskHorizontal.mat
 - Assets/Resources/Material/Feather.mat
 - Assets/Resources/Material/MotionBlur.mat
+- Assets/Resources/Material/BlurMaskVertical.mat
 - Assets/Resources/Material/MotionBlurCriticalMask.mat
 Dependencies:
-- "E:/SOURCE_HOME/\u5916\u5305\u9879\u76EE/Mahjong/Assets/StreamingAssets/shader/frame.unity3d"
-- "E:/SOURCE_HOME/\u5916\u5305\u9879\u76EE/Mahjong/Assets/StreamingAssets/texture/gametexture/common.unity3d"
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/shader/frame.unity3d
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/texture/gametexture/common.unity3d

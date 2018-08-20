@@ -1,0 +1,26 @@
+ManifestFileVersion: 0
+CRC: 271760952
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 1afdd6f41c0c7e5c752cc74f74386554
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 7e9ee104d6bb707fb2602b751e6f78b1
+HashAppended: 0
+ClassTypes:
+- Class: 48
+  Script: {instanceID: 0}
+Assets:
+- Assets/Resources/Shader/BuiltinShader/UI-Lit-Bumped.shader
+- Assets/Resources/Shader/BuiltinShader/UI-DefaultFont.shader
+- Assets/Resources/Shader/BuiltinShader/UI-Unlit-Text.shader
+- Assets/Resources/Shader/BuiltinShader/UI-Lit-Transparent.shader
+- Assets/Resources/Shader/BuiltinShader/UI-Lit-Detail.shader
+- Assets/Resources/Shader/BuiltinShader/UI-Unlit-Transparent.shader
+- Assets/Resources/Shader/BuiltinShader/UI-Unlit-Detail.shader
+- Assets/Resources/Shader/BuiltinShader/UI-Default.shader
+- Assets/Resources/Shader/BuiltinShader/UI-Lit-Refraction.shader
+- Assets/Resources/Shader/BuiltinShader/UI-Lit-RefractionDetail.shader
+- Assets/Resources/Shader/BuiltinShader/UI-Unlit-TextDetail.shader
+Dependencies: []

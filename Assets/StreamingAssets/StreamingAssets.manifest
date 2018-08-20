@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 1828752338
+CRC: 2074672336
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -156,7 +156,8 @@ AssetBundleManifest:
     Info_38:
       Name: layout/nguiprefab/uimahjongbackframe.unity3d
       Dependencies:
-        Dependency_0: texture/gametexture/common.unity3d
+        Dependency_0: material.unity3d
+        Dependency_1: texture/gametexture/common.unity3d
     Info_39:
       Name: layout/nguiprefab/uimahjongdrop.unity3d
       Dependencies:
@@ -175,60 +176,72 @@ AssetBundleManifest:
       Dependencies:
         Dependency_0: atlas/gameatlas/atlasmainframe.unity3d
     Info_43:
+      Name: layout/nguiprefab/uimessageok.unity3d
+      Dependencies:
+        Dependency_0: font/fzy3jw.unity3d
+        Dependency_1: material.unity3d
+        Dependency_2: texture/gametexture/common.unity3d
+    Info_44:
       Name: layout/nguiprefab/uiplayeraction.unity3d
       Dependencies:
         Dependency_0: atlas/gameatlas/atlasplayeraction.unity3d
-    Info_44:
+    Info_45:
       Name: layout/nguiprefab/uiregister.unity3d
       Dependencies:
         Dependency_0: font/fzzyjw.unity3d
-    Info_45:
+    Info_46:
       Name: layout/nguiprefab/uiroommenu.unity3d
       Dependencies:
         Dependency_0: atlas/gameatlas/atlasroommenu.unity3d
-    Info_46:
+    Info_47:
       Name: material.unity3d
       Dependencies:
         Dependency_0: shader/frame.unity3d
         Dependency_1: texture/gametexture/common.unity3d
-    Info_47:
-      Name: shader/frame.unity3d
-      Dependencies: {}
     Info_48:
-      Name: skybox/assets_by_unluck_activeden/skyboxes/skyboxbluenebula/images.unity3d
+      Name: shader/builtinshader.unity3d
       Dependencies: {}
     Info_49:
+      Name: shader/frame.unity3d
+      Dependencies: {}
+    Info_50:
+      Name: skybox/assets_by_unluck_activeden/skyboxes/skyboxbluenebula/images.unity3d
+      Dependencies: {}
+    Info_51:
       Name: skybox/assets_by_unluck_activeden/skyboxes/skyboxbluenebula/materials.unity3d
       Dependencies:
         Dependency_0: skybox/assets_by_unluck_activeden/skyboxes/skyboxbluenebula/images.unity3d
-    Info_50:
+    Info_52:
       Name: skybox/assets_by_unluck_activeden/skyboxes/skyboxbluenebula/scenes/skyboxbluenebula_scene.unity3d
       Dependencies:
         Dependency_0: skybox/assets_by_unluck_activeden/skyboxes/skyboxbluenebula/materials.unity3d
-    Info_51:
+    Info_53:
       Name: texture/gametexture/common.unity3d
       Dependencies: {}
-    Info_52:
+    Info_54:
       Name: texture/gametexture/gameending.unity3d
       Dependencies: {}
-    Info_53:
+    Info_55:
       Name: texture/gametexture/head.unity3d
       Dependencies: {}
-    Info_54:
+    Info_56:
       Name: texture/gametexture/mahjongdrop.unity3d
       Dependencies: {}
-    Info_55:
+    Info_57:
       Name: texture/gametexture/mahjonghandin.unity3d
       Dependencies: {}
-    Info_56:
+    Info_58:
       Name: texture/gametexture/mainframe.unity3d
       Dependencies: {}
-    Info_57:
+    Info_59:
       Name: texture/gametexture/playeraction.unity3d
       Dependencies: {}
-    Info_58:
+    Info_60:
+      Name: texture/gametexture/rendertexture.unity3d
+      Dependencies: {}
+    Info_61:
       Name: texture/gametexture/roommenu.unity3d
       Dependencies: {}
-    Info_59:
+    Info_62:
       Name: texture/textureanim/dice.unity3d
       Dependencies: {}

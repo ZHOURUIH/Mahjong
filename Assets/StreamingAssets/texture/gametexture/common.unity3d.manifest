@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 4062705716
+CRC: 1628195239
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 4d64a506ae80b953b79a165d07b9129e
+    Hash: b899aec6b96fd80029f5c87e52703516
   TypeTreeHash:
     serializedVersion: 2
     Hash: c73412a662fd4e4f36af34cbdf078b85
@@ -25,6 +25,7 @@ Assets:
 - Assets/Resources/Texture/GameTexture/Common/Overlay.png
 - Assets/Resources/Texture/GameTexture/Common/banker.png
 - Assets/Resources/Texture/GameTexture/Common/Dice2.png
+- Assets/Resources/Texture/GameTexture/Common/MessageBoxBackground.jpg
 - Assets/Resources/Texture/GameTexture/Common/Dice3.png
 - Assets/Resources/Texture/GameTexture/Common/img_gonggao_title_words.png
 - Assets/Resources/Texture/GameTexture/Common/HeadMask.png

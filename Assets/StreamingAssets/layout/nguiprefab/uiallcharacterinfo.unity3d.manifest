@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 694539029
+CRC: 229969779
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: f04c59c672fa2c5aad3651160b720f08
+    Hash: 83c5265eac3a1d6473b78b9bbeaced39
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 4b863585beda09cf52c39e546b6b5202
+    Hash: 573c59779d53971a07005c3012843664
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -15,6 +15,8 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 114
   Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 8b583f62f4eba54419f1262c9199ec59, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
 - Class: 114
@@ -28,8 +30,8 @@ ClassTypes:
 Assets:
 - Assets/Resources/Layout/NGUIPrefab/UIAllCharacterInfo.prefab
 Dependencies:
-- "E:/SOURCE_HOME/\u5916\u5305\u9879\u76EE/Mahjong/Assets/StreamingAssets/atlas/gameatlas/atlascommon.unity3d"
-- "E:/SOURCE_HOME/\u5916\u5305\u9879\u76EE/Mahjong/Assets/StreamingAssets/atlas/gameatlas/atlashead.unity3d"
-- "E:/SOURCE_HOME/\u5916\u5305\u9879\u76EE/Mahjong/Assets/StreamingAssets/atlas/gameatlas/atlasmainframe.unity3d"
-- "E:/SOURCE_HOME/\u5916\u5305\u9879\u76EE/Mahjong/Assets/StreamingAssets/atlas/numberstyle/atlaswhitenumber.unity3d"
-- "E:/SOURCE_HOME/\u5916\u5305\u9879\u76EE/Mahjong/Assets/StreamingAssets/font.unity3d"
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/atlas/gameatlas/atlascommon.unity3d
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/atlas/gameatlas/atlashead.unity3d
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/atlas/gameatlas/atlasmainframe.unity3d
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/atlas/numberstyle/atlaswhitenumber.unity3d
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/font.unity3d

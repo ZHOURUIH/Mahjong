@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 216962882
+CRC: 2109577022
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 78bb038f01272186f4c08f6a7a99155e
+    Hash: 8cf04dbbdaf997d7902fd42f1b3a90b6
   TypeTreeHash:
     serializedVersion: 2
     Hash: 4c7f498e687904e0decf2340094b52ca
@@ -30,4 +30,4 @@ ClassTypes:
 Assets:
 - Assets/Resources/Layout/NGUIPrefab/UIPlayerAction.prefab
 Dependencies:
-- E:/SOURCE_HOME/Github/Mahjong/Assets/StreamingAssets/atlas/gameatlas/atlasplayeraction.unity3d
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/atlas/gameatlas/atlasplayeraction.unity3d

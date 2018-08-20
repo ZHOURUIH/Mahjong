@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2346272314
+CRC: 2310415250
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 3f9107a6273ef3ee89b7357883af9ff0
+    Hash: 36a40369323e865d66893ef0438c1713
   TypeTreeHash:
     serializedVersion: 2
     Hash: 2baf71b9ea32ac627321bdaeb177a8d7
@@ -42,5 +42,5 @@ ClassTypes:
 Assets:
 - Assets/Resources/Layout/NGUIPrefab/UIJoinRoomDialog.prefab
 Dependencies:
-- E:/SOURCE_HOME/Github/Mahjong/Assets/StreamingAssets/font/fzy3jw.unity3d
-- E:/SOURCE_HOME/Github/Mahjong/Assets/StreamingAssets/font/fzzyjw.unity3d
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/font/fzy3jw.unity3d
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/font/fzzyjw.unity3d

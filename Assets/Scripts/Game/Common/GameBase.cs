@@ -29,6 +29,7 @@ public class GameBase : FrameBase
 	public static ScriptAddPlayer mScriptAddPlayer;
 	public static ScriptMahjongFrame mScriptMahjongFrame;
 	public static ScriptJoinRoomDialog mScriptJoinRoomDialog;
+	public static ScriptMessageOK mScriptMessageOK;
 	public override void notifyConstructDone()
 	{
 		base.notifyConstructDone();

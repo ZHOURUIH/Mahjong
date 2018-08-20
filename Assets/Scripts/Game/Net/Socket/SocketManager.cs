@@ -155,7 +155,9 @@ public class SocketManager : FrameComponent
 	{
 		if (heartBeatTimes != mHeartBeatTimes)
 		{
-			UnityUtility.logError("心跳错误!");
+			string info = "心跳错误!";
+			GameUtility.messageOK(info);
+			UnityUtility.logError(info);
 		}
 		else
 		{
@@ -236,7 +238,9 @@ public class SocketManager : FrameComponent
 				// 客户端接收到的必须是SC类型的
 				if (type <= PACKET_TYPE.PT_SC_MIN || type >= PACKET_TYPE.PT_SC_MAX)
 				{
-					UnityUtility.logError("packet type error : " + type);
+					string info = "packet type error : " + type;
+					GameUtility.messageOK(info, true);
+					UnityUtility.logError(info, false);
 					break;
 				}
 				int packetSize = mSocketFactory.getPacketSize(type);
@@ -246,12 +250,16 @@ public class SocketManager : FrameComponent
 					short realDataSize = BinaryUtility.readShort(recvBuff, ref index);
 					if (realDataSize != packetSize)
 					{
-						UnityUtility.logError("error : wrong packet size! type : " + type + "readed : " + realDataSize + ", packet size : " + packetSize, false);
+						string info = "error : wrong packet size! type : " + type + "readed : " + realDataSize + ", packet size : " + packetSize;
+						GameUtility.messageOK(info, true);
+						UnityUtility.logError(info, false);
 						break;
 					}
 					if (packetSize > nRecv - sizeof(short))
 					{
-						UnityUtility.logError("error : wrong packet data! packet : " + type + ", need size : " + packetSize + ", receive size : " + (nRecv - sizeof(PACKET_TYPE)), false);
+						string info = "error : wrong packet data! packet : " + type + ", need size : " + packetSize + ", receive size : " + (nRecv - sizeof(PACKET_TYPE));
+						GameUtility.messageOK(info, true);
+						UnityUtility.logError(info, false);
 						break;
 					}
 					mReceiveLock.waitForUnlock();

@@ -35,5 +35,5 @@ Assets:
 - Assets/Resources/Material/BlurMaskVertical.mat
 - Assets/Resources/Material/MotionBlurCriticalMask.mat
 Dependencies:
-- E:/SOURCE_HOME/Github/Mahjong/Assets/StreamingAssets/shader/frame.unity3d
-- E:/SOURCE_HOME/Github/Mahjong/Assets/StreamingAssets/texture/gametexture/common.unity3d
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/shader/frame.unity3d
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/texture/gametexture/common.unity3d

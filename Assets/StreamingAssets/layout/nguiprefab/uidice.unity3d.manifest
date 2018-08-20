@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 341317228
+CRC: 1327071601
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: df1b81abf631bb00a0dae7798a5dadf9
+    Hash: 1126dde1f258a54d4c955590257c25e2
   TypeTreeHash:
     serializedVersion: 2
     Hash: edc7d19ee388ae2ed0e05f62ac2fdda5
@@ -26,5 +26,5 @@ ClassTypes:
 Assets:
 - Assets/Resources/Layout/NGUIPrefab/UIDice.prefab
 Dependencies:
-- E:/SOURCE_HOME/Github/Mahjong/Assets/StreamingAssets/atlas/gameatlas/atlascommon.unity3d
-- E:/SOURCE_HOME/Github/Mahjong/Assets/StreamingAssets/atlas/textureanim/dice.unity3d
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/atlas/gameatlas/atlascommon.unity3d
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/atlas/textureanim/dice.unity3d

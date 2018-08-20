@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 28417051
+CRC: 3104924982
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 6a489b03976e49d9c3d81bec4adb9e2f
+    Hash: 38399684e137de7860bdf7139b523ff8
   TypeTreeHash:
     serializedVersion: 2
     Hash: 4c7f498e687904e0decf2340094b52ca
@@ -30,4 +30,4 @@ ClassTypes:
 Assets:
 - Assets/Resources/Layout/NGUIPrefab/UIAddPlayer.prefab
 Dependencies:
-- E:/SOURCE_HOME/Github/Mahjong/Assets/StreamingAssets/atlas/gameatlas/atlascommon.unity3d
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/atlas/gameatlas/atlascommon.unity3d

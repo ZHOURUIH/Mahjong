@@ -3,7 +3,7 @@ CRC: 2485164138
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 0afbf66ae6b627df2fdef5f54218a9d0
+    Hash: 8a1417aeec3bda2978765d8eab762193
   TypeTreeHash:
     serializedVersion: 2
     Hash: 31d6cfe0d16ae931b73c59d7e0c089c0
@@ -12,4 +12,4 @@ ClassTypes: []
 Assets:
 - Assets/Resources/Skybox/Assets_By_Unluck_Activeden/skyboxes/skyboxBlueNebula/scenes/SkyboxBlueNebula_Scene.unity
 Dependencies:
-- E:/SOURCE_HOME/Github/Mahjong/Assets/StreamingAssets/skybox/assets_by_unluck_activeden/skyboxes/skyboxbluenebula/materials.unity3d
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/skybox/assets_by_unluck_activeden/skyboxes/skyboxbluenebula/materials.unity3d

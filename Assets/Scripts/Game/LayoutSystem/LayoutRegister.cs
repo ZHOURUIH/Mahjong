@@ -24,7 +24,8 @@ public class LayoutRegister : GameBase
         registeLayout<ScriptAddPlayer>(LAYOUT_TYPE.LT_ADD_PLAYER, "UIAddPlayer");
         registeLayout<ScriptMahjongFrame>(LAYOUT_TYPE.LT_MAHJONG_FRAME, "UIMahjongFrame");
         registeLayout<ScriptJoinRoomDialog>(LAYOUT_TYPE.LT_JOIN_ROOM_DIALOG, "UIJoinRoomDialog");
-        if (mLayoutManager.getLayoutCount() < (int)LAYOUT_TYPE.LT_MAX)
+		registeLayout<ScriptMessageOK>(LAYOUT_TYPE.LT_MESSAGE_OK, "UIMessageOK");
+		if (mLayoutManager.getLayoutCount() < (int)LAYOUT_TYPE.LT_MAX)
 		{
 			UnityUtility.logError("error : not all script added! max count : " + (int)LAYOUT_TYPE.LT_MAX + ", added count :" + mLayoutManager.getLayoutCount());
 		}
@@ -53,6 +54,7 @@ public class LayoutRegister : GameBase
 		if (assign(ref mScriptAddPlayer, script, created)) return;
 		if (assign(ref mScriptMahjongFrame, script, created)) return;
 		if (assign(ref mScriptJoinRoomDialog, script, created)) return;
+		if (assign(ref mScriptMessageOK, script, created)) return;
 	}
 	//----------------------------------------------------------------------------------------------------------------------------------------------------------------
 	protected static void registeLayout<T>(LAYOUT_TYPE layout, string name) where T : LayoutScript

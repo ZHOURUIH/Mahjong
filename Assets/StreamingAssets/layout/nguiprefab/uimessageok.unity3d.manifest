@@ -1,0 +1,51 @@
+ManifestFileVersion: 0
+CRC: 2062815359
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 8c5ab2bfc01d9255c890e20e52ca0a8d
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 8a69c08785f165956305c96e1d714980
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
+- Class: 83
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 8b583f62f4eba54419f1262c9199ec59, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1fdca5042b1d12a4890ec1bd4f04290d, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 0b4eb3a400afab046abb8471a9d746d6, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: d5c5ca47aa5c01740810b7c66662099f, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 7d44bc69c2ca5f943b845318866dc1bd, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4d0c51bb0b6e93049af5e88f93826e3b, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+Assets:
+- Assets/Resources/Layout/NGUIPrefab/UIMessageOK.prefab
+Dependencies:
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/font/fzy3jw.unity3d
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/material.unity3d
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/texture/gametexture/common.unity3d

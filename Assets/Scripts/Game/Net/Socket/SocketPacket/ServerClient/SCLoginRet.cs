@@ -48,11 +48,15 @@ public class SCLoginRet : SocketPacket
 		}
 		else if (mLoginRet.mValue == 1)
 		{
-			UnityUtility.logInfo("账号密码错误!");
+			string info = "账号密码错误!";
+			GameUtility.messageOK(info);
+			UnityUtility.logInfo(info);
 		}
 		else if (mLoginRet.mValue == 2)
 		{
-			UnityUtility.logInfo("已在其他地方登陆!");
+			string info = "已在其他地方登陆!";
+			GameUtility.messageOK(info);
+			UnityUtility.logInfo(info);
 		}
 	}
 }

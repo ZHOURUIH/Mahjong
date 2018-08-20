@@ -18,7 +18,6 @@ public class SCCheckNameRet : SocketPacket
 	}
 	public override void execute()
 	{
-		// 创建房间成功,进入麻将场景
 		if(mResult.mValue == 0)
 		{
 			UnityUtility.logInfo("成功!");

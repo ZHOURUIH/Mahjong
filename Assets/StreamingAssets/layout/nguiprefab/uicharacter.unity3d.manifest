@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 548065769
+CRC: 4055253399
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 880512224b1d4a1b791486c10cbf6961
+    Hash: 697c06047fff6285a87b12f87d1af5d4
   TypeTreeHash:
     serializedVersion: 2
     Hash: 0c036dc3649231da24f770687a37c7c8
@@ -32,7 +32,7 @@ ClassTypes:
 Assets:
 - Assets/Resources/Layout/NGUIPrefab/UICharacter.prefab
 Dependencies:
-- E:/SOURCE_HOME/Github/Mahjong/Assets/StreamingAssets/atlas/gameatlas/atlashead.unity3d
-- E:/SOURCE_HOME/Github/Mahjong/Assets/StreamingAssets/atlas/gameatlas/atlasmainframe.unity3d
-- E:/SOURCE_HOME/Github/Mahjong/Assets/StreamingAssets/font/fzy3jw.unity3d
-- E:/SOURCE_HOME/Github/Mahjong/Assets/StreamingAssets/font.unity3d
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/atlas/gameatlas/atlashead.unity3d
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/atlas/gameatlas/atlasmainframe.unity3d
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/font/fzy3jw.unity3d
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/font.unity3d

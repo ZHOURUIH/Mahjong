@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1961184774
+CRC: 251139033
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 8c1f9d7cc52d7ba44df3c678f1fd5c1d
+    Hash: d23aeac91d33652df81aa4f795fa9094
   TypeTreeHash:
     serializedVersion: 2
     Hash: 4c7f498e687904e0decf2340094b52ca
@@ -30,4 +30,4 @@ ClassTypes:
 Assets:
 - Assets/Resources/Layout/NGUIPrefab/UIRoomMenu.prefab
 Dependencies:
-- E:/SOURCE_HOME/Github/Mahjong/Assets/StreamingAssets/atlas/gameatlas/atlasroommenu.unity3d
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/atlas/gameatlas/atlasroommenu.unity3d

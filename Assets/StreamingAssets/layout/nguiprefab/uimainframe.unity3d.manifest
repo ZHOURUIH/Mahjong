@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1441970973
+CRC: 3984871152
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: dfb00dfd93b67d0545aa4eaed07a1b1b
+    Hash: 2db9c0b270e881a117ac47837580fb41
   TypeTreeHash:
     serializedVersion: 2
     Hash: 4c7f498e687904e0decf2340094b52ca
@@ -30,4 +30,4 @@ ClassTypes:
 Assets:
 - Assets/Resources/Layout/NGUIPrefab/UIMainFrame.prefab
 Dependencies:
-- E:/SOURCE_HOME/Github/Mahjong/Assets/StreamingAssets/atlas/gameatlas/atlasmainframe.unity3d
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/atlas/gameatlas/atlasmainframe.unity3d

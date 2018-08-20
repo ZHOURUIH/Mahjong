@@ -3,7 +3,7 @@ CRC: 2811746120
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: f6612e900773e945034ea95f5cc1910a
+    Hash: 3399cb136c957a697f3d4330bab5c808
   TypeTreeHash:
     serializedVersion: 2
     Hash: 10df304355517f1b3addff786f7a0435
@@ -22,4 +22,4 @@ ClassTypes:
 Assets:
 - Assets/Resources/Atlas/NumberStyle/AtlasWhiteNumber.prefab
 Dependencies:
-- E:/SOURCE_HOME/Github/Mahjong/Assets/StreamingAssets/atlas/numberstyle.unity3d
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/atlas/numberstyle.unity3d

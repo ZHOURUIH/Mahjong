@@ -3,7 +3,7 @@ CRC: 882002180
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: cea950a4dc56aca9076e4da945ca21c1
+    Hash: f8539cc7eefc267c4a5bb869c2500305
   TypeTreeHash:
     serializedVersion: 2
     Hash: 10df304355517f1b3addff786f7a0435
@@ -22,4 +22,4 @@ ClassTypes:
 Assets:
 - Assets/Resources/Atlas/NumberStyle/AtlasBlackNumber.prefab
 Dependencies:
-- E:/SOURCE_HOME/Github/Mahjong/Assets/StreamingAssets/atlas/numberstyle.unity3d
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/atlas/numberstyle.unity3d

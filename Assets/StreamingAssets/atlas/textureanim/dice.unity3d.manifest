@@ -3,7 +3,7 @@ CRC: 4116457120
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 89b7680956a43fd6b90a4d2e06f6677a
+    Hash: ea6bc6e3870c9e63a5104c061bddb9ca
   TypeTreeHash:
     serializedVersion: 2
     Hash: 10df304355517f1b3addff786f7a0435
@@ -22,4 +22,4 @@ ClassTypes:
 Assets:
 - Assets/Resources/Atlas/TextureAnim/Dice.prefab
 Dependencies:
-- E:/SOURCE_HOME/Github/Mahjong/Assets/StreamingAssets/atlas/textureanim.unity3d
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/atlas/textureanim.unity3d

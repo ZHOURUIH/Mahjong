@@ -3,7 +3,7 @@ CRC: 2379023494
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 79cae5bea200a89a7a5aec1d4d30e6e0
+    Hash: ddeba989956897ced4069fabbf940b04
   TypeTreeHash:
     serializedVersion: 2
     Hash: 3d785d53d4ab9e3391535542c47a1e9c
@@ -24,4 +24,4 @@ ClassTypes:
 Assets:
 - Assets/Resources/Font/simhei.prefab
 Dependencies:
-- E:/SOURCE_HOME/Github/Mahjong/Assets/StreamingAssets/font.unity3d
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/font.unity3d

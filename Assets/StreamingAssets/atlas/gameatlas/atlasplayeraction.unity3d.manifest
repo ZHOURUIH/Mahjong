@@ -3,7 +3,7 @@ CRC: 2166350956
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 8a150cfa70241d11bcc815602201cada
+    Hash: b174949a553857c5a50bf48b63b53350
   TypeTreeHash:
     serializedVersion: 2
     Hash: 10df304355517f1b3addff786f7a0435
@@ -22,4 +22,4 @@ ClassTypes:
 Assets:
 - Assets/Resources/Atlas/GameAtlas/AtlasPlayerAction.prefab
 Dependencies:
-- E:/SOURCE_HOME/Github/Mahjong/Assets/StreamingAssets/atlas/gameatlas.unity3d
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/atlas/gameatlas.unity3d

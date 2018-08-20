@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 3437877263
+CRC: 2603294110
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 576cf74011ed094f6ecc8b5b8e41e812
+    Hash: 1a37d1b8cdc30573f520b64ba5ec8e51
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 18a83c552184d7c0f1b54dccd9d1b6fc
+    Hash: e49c02191456f974cd0d24bbf9d87d09
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -18,6 +18,8 @@ ClassTypes:
 - Class: 28
   Script: {instanceID: 0}
 - Class: 48
+  Script: {instanceID: 0}
+- Class: 54
   Script: {instanceID: 0}
 - Class: 65
   Script: {instanceID: 0}
@@ -48,4 +50,4 @@ ClassTypes:
 Assets:
 - Assets/Resources/Layout/NGUIPrefab/UILogin.prefab
 Dependencies:
-- E:/SOURCE_HOME/Github/Mahjong/Assets/StreamingAssets/font/fzzyjw.unity3d
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/font/fzzyjw.unity3d

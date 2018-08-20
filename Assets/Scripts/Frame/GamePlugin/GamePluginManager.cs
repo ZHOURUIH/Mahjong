@@ -37,9 +37,7 @@ public class GamePluginManager : FrameComponent
 	//-----------------------------------------------------------------------------------------------------------
 	protected void loadAllPlugin()
 	{
-#if UNITY_ANDROID
-		return;
-#endif
+#if UNITY_STANDALONE_WIN
 		if(!FileUtility.isDirExist(CommonDefine.F_GAME_PLUGIN_PATH))
 		{
 			return;
@@ -51,6 +49,7 @@ public class GamePluginManager : FrameComponent
 		{
 			loadPlugin(fileList[i]);
 		}
+#endif
 	}
 	protected bool loadPlugin(string dllName)
 	{

@@ -30,6 +30,24 @@ public class GameUtility : GameBase
 		return expressionValue;
 	}
 	public static int makeID() { return ++mIDMaker; }
+	public static void messageOK(string info, bool delay = false, string buttonLabel = "")
+	{
+		// 使用游戏中的信息框界面显示提示信息
+		if(mScriptMessageOK != null)
+		{
+			CommandGameSceneMessageOK cmdMessage = newCmd(out cmdMessage, true, delay);
+			cmdMessage.mMessage = info;
+			cmdMessage.mButtonLabel = buttonLabel;
+			if(delay)
+			{
+				pushDelayCommand(cmdMessage, mGameSceneManager.getCurScene());
+			}
+			else
+			{
+				pushCommand(cmdMessage, mGameSceneManager.getCurScene());
+			}
+		}
+	}
 	// handInMah必须是从小到大的有序数组
 	public static bool canHu(List<MAHJONG> handInMah, MAHJONG mah)
 	{

@@ -26,7 +26,9 @@ public class SCRegisterRet : SocketPacket
 		}
 		else if (mResult.mValue == 1)
 		{
-			UnityUtility.logInfo("注册失败");
+			string info = "注册失败!";
+			GameUtility.messageOK(info);
+			UnityUtility.logInfo(info);
 		}
 	}
 }

@@ -12,6 +12,7 @@ public class UnityAndroidLog : MonoBehaviour
 	}
 	public void logError(string info)
 	{
+		GameUtility.messageOK(info, true);
 		UnityUtility.logError("android : " + info);
 	}
 }

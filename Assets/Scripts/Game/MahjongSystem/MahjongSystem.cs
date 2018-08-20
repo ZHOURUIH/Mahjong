@@ -171,7 +171,9 @@ public class MahjongSystem : FrameComponent
 			}
 			if(mBankerPos == PLAYER_POSITION.PP_MAX)
 			{
-				UnityUtility.logError("not find banker!");
+				string info = "not find banker!";
+				GameUtility.messageOK(info);
+				UnityUtility.logError(info);
 			}
 		}
 		else if(mPlayState == MAHJONG_PLAY_STATE.MPS_NORMAL_GAMING)
@@ -360,7 +362,9 @@ public class MahjongSystem : FrameComponent
 	{
 		if(actionList.Count == 0)
 		{
-			UnityUtility.logError("has no action");
+			string message = "has no action";
+			GameUtility.messageOK(message);
+			UnityUtility.logError(message);
 			return;
 		}
 		// 将行为放入列表
@@ -382,7 +386,9 @@ public class MahjongSystem : FrameComponent
 	{
 		if(!mWaitList.ContainsKey(player))
 		{
-			UnityUtility.logError("player has no action : name : " + player.getName() + ", action : " + type);
+			string message = "player has no action : name : " + player.getName() + ", action : " + type;
+			GameUtility.messageOK(message);
+			UnityUtility.logError(message);
 			return;
 		}
 		MahjongAction action = null;

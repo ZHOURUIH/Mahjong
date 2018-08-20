@@ -60,7 +60,9 @@ public class SCJoinRoomRet : SocketPacket
 		}
 		else
 		{
-			UnityUtility.logInfo("加入房间失败, 原因:" + result);
+			string info = "加入房间失败, 原因:" + result;
+			GameUtility.messageOK(info);
+			UnityUtility.logInfo(info);
 		}
 	}
 }

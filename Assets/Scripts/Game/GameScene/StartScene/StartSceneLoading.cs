@@ -19,6 +19,8 @@ public class LogoSceneLoading : SceneProcedure
 	}
 	protected override void onInit(SceneProcedure lastProcedure, string intent)
 	{
+		// 用于显示信息的界面需要预先加载
+		LayoutTools.LOAD_NGUI_HIDE(LAYOUT_TYPE.LT_MESSAGE_OK, 20);
 		mLoadedCount = 0;
 		foreach (var item in mLoadInfo)
 		{

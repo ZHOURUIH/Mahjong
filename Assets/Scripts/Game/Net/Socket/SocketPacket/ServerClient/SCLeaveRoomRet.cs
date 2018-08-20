@@ -33,7 +33,9 @@ public class SCLeaveRoomRet : SocketPacket
 		}
 		else
 		{
-			UnityUtility.logInfo("离开房间失败");
+			string info = "离开房间失败";
+			GameUtility.messageOK(info);
+			UnityUtility.logInfo(info);
 		}
 	}
 }

@@ -21,13 +21,15 @@ public class SCCreateRoomRet : SocketPacket
 	public override void execute()
 	{
 		// 创建房间成功,等待服务器通知进入房间
-		if(mResult.mValue == 0)
+		if(mResult.mValue > 0)
 		{
 			;
 		}
 		else
 		{
-			UnityUtility.logInfo("创建房间失败!");
+			string info = "创建房间失败!";
+			GameUtility.messageOK(info);
+			UnityUtility.logInfo(info);
 		}
 	}
 }

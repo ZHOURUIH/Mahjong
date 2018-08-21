@@ -1,0 +1,52 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using UnityEngine;
+
+// 花牌
+public class HuaMahjong
+{
+	protected ScriptMahjongHandIn mScript;
+	protected string mMahjongPreName;
+	protected txUIObject mHuaRoot;
+	protected List<txNGUIStaticSprite> mHuaMahjong;
+	public HuaMahjong(ScriptMahjongHandIn script, string mahjongPreName)
+	{
+		mScript = script;
+		mMahjongPreName = mahjongPreName;
+		mHuaMahjong = new List<txNGUIStaticSprite>();
+	}
+	public void assignWindow(string huaRoot)
+	{
+		mScript.newObject(out mHuaRoot, huaRoot, 0);
+		for (int i = 0; i < GameDefine.MAX_HUA_COUNT; ++i)
+		{
+			txNGUIStaticSprite obj = mScript.newObject(out obj, mHuaRoot, "Mahjong" + i);
+			mHuaMahjong.Add(obj);
+		}
+	}
+	public void init()
+	{
+		;
+	}
+	public void onReset()
+	{
+		showHua(new List<MAHJONG>());
+	}
+	public void showHua(List<MAHJONG> huaList)
+	{
+		LayoutTools.ACTIVE_WINDOW(mHuaRoot);
+		int curCount = huaList.Count;
+		int maxCount = mHuaMahjong.Count;
+		for (int i = 0; i < maxCount; ++i)
+		{
+			bool show = i < curCount;
+			LayoutTools.ACTIVE_WINDOW(mHuaMahjong[i], show);
+			if (show)
+			{
+				mHuaMahjong[i].setSpriteName(mMahjongPreName + GameDefine.MAHJONG_NAME[(int)huaList[i]]);
+			}
+		}
+	}
+}

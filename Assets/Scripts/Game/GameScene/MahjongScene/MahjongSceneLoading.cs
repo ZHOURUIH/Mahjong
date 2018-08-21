@@ -24,6 +24,7 @@ public class MahjongSceneLoading : SceneProcedure
 	}
 	protected override void onInit(SceneProcedure lastProcedure, string intent)
 	{
+		LayoutTools.LOAD_NGUI_SHOW(LAYOUT_TYPE.LT_MAHJONG_LOADING, 0);
 		mLoadedCount = 0;
 		foreach (var item in mLoadInfo)
 		{
@@ -36,7 +37,7 @@ public class MahjongSceneLoading : SceneProcedure
 	}
 	protected override void onExit(SceneProcedure nextProcedure)
 	{
-		;
+		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_MAHJONG_LOADING);
 	}
 	protected override void onKeyProcess(float elapsedTime)
 	{
@@ -45,6 +46,7 @@ public class MahjongSceneLoading : SceneProcedure
 	//-----------------------------------------------------------------------------------------------------------
 	protected void onLayoutLoaded(GameLayout layout)
 	{
+		mScriptMahjongLoading.setProgress((float)mLoadedCount / mLoadInfo.Count);
 		mLoadInfo[layout.getType()].mLayout = layout;
 		if (++mLoadedCount == mLoadInfo.Count)
 		{

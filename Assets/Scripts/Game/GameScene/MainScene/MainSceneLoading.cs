@@ -24,16 +24,15 @@ public class MainSceneLoading : SceneProcedure
 	base(type, gameScene)
 	{
 		mLoadInfo = new Dictionary<LAYOUT_TYPE, LayoutLoadInfo>();
-		mLoadInfo.Add(LAYOUT_TYPE.LT_MAIN_FRAME, new LayoutLoadInfo(LAYOUT_TYPE.LT_MAIN_FRAME, 0));
-		mLoadInfo.Add(LAYOUT_TYPE.LT_CHARACTER, new LayoutLoadInfo(LAYOUT_TYPE.LT_CHARACTER, 1));
-		mLoadInfo.Add(LAYOUT_TYPE.LT_BILLBOARD, new LayoutLoadInfo(LAYOUT_TYPE.LT_BILLBOARD, 1));
-		mLoadInfo.Add(LAYOUT_TYPE.LT_ROOM_MENU, new LayoutLoadInfo(LAYOUT_TYPE.LT_ROOM_MENU, 1));
-		mLoadInfo.Add(LAYOUT_TYPE.LT_JOIN_ROOM_DIALOG, new LayoutLoadInfo(LAYOUT_TYPE.LT_JOIN_ROOM_DIALOG, 2));
+		addLoadInfo(LAYOUT_TYPE.LT_MAIN_FRAME, 0);
+		addLoadInfo(LAYOUT_TYPE.LT_CHARACTER, 1);
+		addLoadInfo(LAYOUT_TYPE.LT_BILLBOARD, 1);
+		addLoadInfo(LAYOUT_TYPE.LT_ROOM_MENU, 1);
+		addLoadInfo(LAYOUT_TYPE.LT_JOIN_ROOM_DIALOG, 2);
 	}
 	protected override void onInit(SceneProcedure lastProcedure, string intent)
 	{
-		QualitySettings.vSyncCount = 0;
-		Application.targetFrameRate = 30;
+		LayoutTools.LOAD_NGUI_SHOW(LAYOUT_TYPE.LT_MAIN_LOADING, 0);
 		mLoadedCount = 0;
 		foreach (var item in mLoadInfo)
 		{
@@ -46,7 +45,7 @@ public class MainSceneLoading : SceneProcedure
 	}
 	protected override void onExit(SceneProcedure nextProcedure)
 	{
-		;
+		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_MAIN_LOADING);
 	}
 	protected override void onKeyProcess(float elapsedTime)
 	{
@@ -54,6 +53,7 @@ public class MainSceneLoading : SceneProcedure
 	}
 	protected void onLayoutLoaded(GameLayout layout)
 	{
+		mScriptMainLoading.setProgress((float)mLoadedCount / mLoadInfo.Count);
 		mLoadInfo[layout.getType()].mLayout = layout;
 		if (++mLoadedCount == mLoadInfo.Count)
 		{
@@ -65,5 +65,9 @@ public class MainSceneLoading : SceneProcedure
 		CommandGameSceneChangeProcedure cmd = newCmd(out cmd, true, true);
 		cmd.mProcedure = PROCEDURE_TYPE.PT_MAIN_RUNNING;
 		pushDelayCommand(cmd, mGameScene);
+	}
+	protected void addLoadInfo(LAYOUT_TYPE type, int order)
+	{
+		mLoadInfo.Add(type, new LayoutLoadInfo(type, order));
 	}
 }

@@ -12,10 +12,9 @@ public class CSCheckName : SocketPacket
 		fillParams();
 		zeroParams();
 	}
-	public void setName(string name)
+	public void setName(byte[] name)
 	{
-		byte[] nameBytes = BinaryUtility.stringToBytes(name);
-		mName.setValue(nameBytes);
+		mName.setValue(name);
 	}
 	protected override void fillParams()
 	{

@@ -29,6 +29,7 @@ public class txNGUIButton : txUIObject
 	{
 		base.setHandleInput(enable);
 		mHandleInput = enable;
+		mButton.SetState(mHandleInput ? UIButtonColor.State.Normal : UIButtonColor.State.Disabled, true);
 	}
 	public override bool getHandleInput()
 	{

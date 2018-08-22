@@ -49,6 +49,7 @@ public class ScriptLogin : LayoutScript
 		LayoutTools.SCALE_WINDOW(mLoginButton);
 		LayoutTools.SCALE_WINDOW(mRegisterButton);
 		LayoutTools.SCALE_WINDOW(mQuitButton);
+		LayoutTools.SCALE_WINDOW(mCancelButton);
 		mCurTime = 0.0f;
 	}
 	public override void onShow(bool immediately, string param)

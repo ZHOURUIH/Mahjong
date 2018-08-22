@@ -7,7 +7,6 @@ public enum JOIN_ROOM_RESULT
 {
 	JRR_SUCC,           // 加入成功
 	JRR_FULL,           // 房间已满
-	JRR_ROOM_LOCKED,    // 房间已锁定,拒绝加入
 	JRR_NO_ROOM,        // 房间不存在
 	JRR_PLAYER_IN_ROOM, // 玩家已在房间中
 }

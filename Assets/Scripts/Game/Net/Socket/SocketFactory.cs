@@ -37,6 +37,7 @@ public class SocketFactory
 		registerPacket<CSConfirmAction>(PACKET_TYPE.PT_CS_CONFIRM_ACTION);
 		registerPacket<CSContinueGame>(PACKET_TYPE.PT_CS_CONTINUE_GAME);
 		registerPacket<CSBackToMahjongHall>(PACKET_TYPE.PT_CS_BACK_TO_MAHJONG_HALL);
+		registerPacket<CSAddMahjongRobot>(PACKET_TYPE.PT_CS_ADD_MAHJONG_ROBOT);
 		int needCSCount = PACKET_TYPE.PT_CS_MAX - PACKET_TYPE.PT_CS_MIN - 1;
 		if (mPacketTypeList.Count != needCSCount)
 		{
@@ -83,6 +84,7 @@ public class SocketFactory
 		registerPacket<SCOtherPlayerBackToMahjongHall>(PACKET_TYPE.PT_SC_OTHER_PLAYER_BACK_TO_MAHJONG_HALL);
 		registerPacket<SCShowHua>(PACKET_TYPE.PT_SC_SHOW_HUA);
 		registerPacket<SCOtherPlayerShowHua>(PACKET_TYPE.PT_SC_OTHER_PLAYER_SHOW_HUA);
+		registerPacket<SCAddMahjongRobotRet>(PACKET_TYPE.PT_SC_ADD_MAHJONG_ROBOT_RET);
 		int needSCCount = PACKET_TYPE.PT_SC_MAX - PACKET_TYPE.PT_SC_MIN - 1;
 		if (mPacketTypeList.Count - needCSCount != needSCCount)
 		{

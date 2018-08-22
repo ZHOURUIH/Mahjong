@@ -83,8 +83,9 @@ public class SocketManager : FrameComponent
 			mServerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 			mServerSocket.Connect(serverIP, port);
 		}
-		catch(Exception)
+		catch(Exception e)
 		{
+			logError("init socket exception : " + e.Message + ", stack : " + e.StackTrace);
 			mServerSocket = null;
 			CommandSocketManagerNetState cmd = newCmd(out cmd);
 			cmd.mNetState = NET_STATE.NS_NET_CLOSE;

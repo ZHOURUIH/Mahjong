@@ -25,6 +25,7 @@ public enum PACKET_TYPE
 	PT_CS_CONTINUE_GAME,                    // 向服务器请求继续游戏
 	PT_CS_BACK_TO_MAHJONG_HALL,             // 向服务器请求返回大厅
 	PT_CS_ADD_MAHJONG_ROBOT,                // 向服务器请求添加机器人打麻将,用作测试
+	PT_CS_CANCEL_LOGIN,						// 向服务器请求取消登录
 	PT_CS_MAX,
 
 	// SC表示Server->Client

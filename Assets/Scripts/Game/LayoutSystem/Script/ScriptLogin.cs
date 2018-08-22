@@ -12,7 +12,12 @@ public class ScriptLogin : LayoutScript
 	protected txNGUIButton mLoginButton;
 	protected txNGUIButton mRegisterButton;
 	protected txNGUIButton mQuitButton;
+	protected txUIObject mTipMask;
+	protected txNGUIStaticSprite mTipBackground;
+	protected txNGUIText mTipLabel;
+	protected txNGUIButton mCancelButton;
 	protected bool mTestAccount = false;
+	protected float mCurTime;
 	public ScriptLogin(string name, GameLayout layout)
 		:
 		base(name, layout)
@@ -27,18 +32,24 @@ public class ScriptLogin : LayoutScript
 		newObject(out mLoginButton, mBackground, "LoginButton");
 		newObject(out mRegisterButton, mBackground, "RegisterButton");
 		newObject(out mQuitButton, mBackground, "QuitButton");
+		newObject(out mTipMask, mBackground, "TipMask", 0);
+		newObject(out mTipBackground, mTipMask, "TipBackground");
+		newObject(out mTipLabel, mTipBackground, "TipLabel");
+		newObject(out mCancelButton, mTipBackground, "CancelButton");
 	}
 	public override void init()
 	{
 		registeBoxColliderNGUI(mLoginButton, onLoginClick, onButtonPress);
 		registeBoxColliderNGUI(mRegisterButton, onRegisterClick, onButtonPress);
 		registeBoxColliderNGUI(mQuitButton, onQuitClick, onButtonPress);
+		registeBoxColliderNGUI(mCancelButton, onQuitClick, onButtonPress);
 	}
 	public override void onReset()
 	{
 		LayoutTools.SCALE_WINDOW(mLoginButton);
 		LayoutTools.SCALE_WINDOW(mRegisterButton);
 		LayoutTools.SCALE_WINDOW(mQuitButton);
+		mCurTime = 0.0f;
 	}
 	public override void onShow(bool immediately, string param)
 	{
@@ -50,7 +61,24 @@ public class ScriptLogin : LayoutScript
 	}
 	public override void update(float elapsedTime)
 	{
-		;
+		if(mTipMask.isActive())
+		{
+			mCurTime += elapsedTime;
+			string dotSuffix = "";
+			int dotCount = (int)(mCurTime / 0.5f);
+			if(dotCount >= 4)
+			{
+				mCurTime = 0.0f;
+			}
+			else
+			{
+				for(int i = 0; i < dotCount; ++i)
+				{
+					dotSuffix += ".";
+				}
+			}
+			mTipLabel.setLabel("登录中" + dotSuffix);
+		}
 	}
 	//---------------------------------------------------------------------------------------------------------------------
 	protected void onLoginClick(GameObject obj)
@@ -61,6 +89,9 @@ public class ScriptLogin : LayoutScript
 			login.setAccount(mAccountEdit.getText());
 			login.setPassword(mPasswordEdit.getText());
 			mSocketNetManager.sendMessage(login);
+			// 发送登录消息后显示正在登录的提示框
+			LayoutTools.ACTIVE_WINDOW(mTipMask);
+			mCurTime = 0.0f;
 		}
 		else
 		{
@@ -96,5 +127,11 @@ public class ScriptLogin : LayoutScript
 	protected void onQuitClick(GameObject button)
 	{
 		mGameFramework.stop();
+	}
+	protected void onCancelClick(GameObject button)
+	{
+		// 关闭登录提示框,然后发送消息取消登录
+		LayoutTools.ACTIVE_WINDOW(mTipMask, false);
+		mSocketNetManager.sendMessage<CSCancelLogin>();
 	}
 }

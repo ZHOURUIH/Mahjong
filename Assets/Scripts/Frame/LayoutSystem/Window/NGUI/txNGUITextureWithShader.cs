@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class txNGUIStaticTextureCriticalMask : txNGUIStaticTexture
+public class txNGUITextureCriticalMask : txNGUITexture
 {
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{
@@ -13,7 +13,7 @@ public class txNGUIStaticTextureCriticalMask : txNGUIStaticTexture
 	}
 }
 //---------------------------------------------------------------------------------------------------------------------------
-public class txNGUIStaticTextureCriticalMaskFadeOutLinearDodge : txNGUIStaticTexture
+public class txNGUTextureCriticalMaskFadeOutLinearDodge : txNGUITexture
 {
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{
@@ -22,7 +22,7 @@ public class txNGUIStaticTextureCriticalMaskFadeOutLinearDodge : txNGUIStaticTex
 	}
 }
 //---------------------------------------------------------------------------------------------------------------------------
-public class txNGUIStaticTextureFeather : txNGUIStaticTexture
+public class txNGUITextureFeather : txNGUITexture
 {
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{
@@ -31,7 +31,7 @@ public class txNGUIStaticTextureFeather : txNGUIStaticTexture
 	}
 }
 //---------------------------------------------------------------------------------------------------------------------------
-public class txNGUIStaticTextureGrey : txNGUIStaticTexture
+public class txNGUITextureGrey : txNGUITexture
 {
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{
@@ -40,7 +40,7 @@ public class txNGUIStaticTextureGrey : txNGUIStaticTexture
 	}
 }
 //---------------------------------------------------------------------------------------------------------------------------
-public class txNGUIStaticTextureLumOffset : txNGUIStaticTexture
+public class txNGUITextureLumOffset : txNGUITexture
 {
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{
@@ -49,7 +49,7 @@ public class txNGUIStaticTextureLumOffset : txNGUIStaticTexture
 	}
 }
 //---------------------------------------------------------------------------------------------------------------------------
-public class txNGUIStaticTextureLumOffsetLinearDodge : txNGUIStaticTexture
+public class txNGUITextureLumOffsetLinearDodge : txNGUITexture
 {
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{
@@ -58,7 +58,7 @@ public class txNGUIStaticTextureLumOffsetLinearDodge : txNGUIStaticTexture
 	}
 }
 //---------------------------------------------------------------------------------------------------------------------------
-public class txNGUIStaticTextureLinearDodge : txNGUIStaticTexture
+public class txNGUITextureLinearDodge : txNGUITexture
 {
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{
@@ -67,7 +67,7 @@ public class txNGUIStaticTextureLinearDodge : txNGUIStaticTexture
 	}
 }
 //---------------------------------------------------------------------------------------------------------------------------
-public class txNGUIStaticTextureHSLOffset : txNGUIStaticTexture
+public class txNGUITextureHSLOffset : txNGUITexture
 {
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{
@@ -76,7 +76,7 @@ public class txNGUIStaticTextureHSLOffset : txNGUIStaticTexture
 	}
 }
 //---------------------------------------------------------------------------------------------------------------------------
-public class txNGUIStaticTextureHSLOffsetLinearDodge : txNGUIStaticTexture
+public class txNGUITextureHSLOffsetLinearDodge : txNGUITexture
 {
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{
@@ -85,7 +85,7 @@ public class txNGUIStaticTextureHSLOffsetLinearDodge : txNGUIStaticTexture
 	}
 }
 //---------------------------------------------------------------------------------------------------------------------------
-public class txNGUIStaticTextureMaskCut : txNGUIStaticTexture
+public class txNGUITextureMaskCut : txNGUITexture
 {
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{

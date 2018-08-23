@@ -5,10 +5,10 @@ using System.Text;
 
 public class ScriptCharacter : LayoutScript
 {
-	protected txNGUIStaticSprite mCharacterHead;
+	protected txNGUISprite mCharacterHead;
 	protected txNGUIText mCharacterName;
 	protected txNGUIText mCharacterID;
-	protected txNGUIStaticSprite mMoneyIcon;
+	protected txNGUISprite mMoneyIcon;
 	protected txNGUIText mMoney;
 	public ScriptCharacter(string name, GameLayout layout)
 		:

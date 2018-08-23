@@ -6,10 +6,10 @@ using UnityEngine;
 
 public class ScriptMainFrame : LayoutScript
 {
-	protected txNGUIStaticSprite mBackground;
+	protected txNGUISprite mBackground;
 	protected txUIObject mBottomButtonRoot;
 	protected txUIObject mLeftTopButtonRoot;
-	protected txNGUIStaticSprite mFrameTitle;
+	protected txNGUISprite mFrameTitle;
 	protected txNGUIButton mMailButton;
 	protected txNGUIButton mCompetitionButton;
 	protected txNGUIButton mShareButton;

@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class ScriptMahjongLoading : LayoutScript
 {
-	protected txNGUIStaticSprite mBackground;
+	protected txNGUISprite mBackground;
 	protected txNGUISlider mProgress;
 	public ScriptMahjongLoading(string name, GameLayout layout)
 		:

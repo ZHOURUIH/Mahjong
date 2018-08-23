@@ -11,16 +11,16 @@ public class PengGangMahjong
 	protected string mMahjongPreName;
 	protected txUIObject mPengGangRoot;
 	protected List<txUIObject> mPengGangSingleRoot;
-	protected List<List<txNGUIStaticSprite>> mMahjongWindows;
+	protected List<List<txNGUISprite>> mMahjongWindows;
 	public PengGangMahjong(ScriptMahjongHandIn script, string preName)
 	{
 		mScript = script;
 		mMahjongPreName = preName;
 		mPengGangSingleRoot = new List<txUIObject>();
-		mMahjongWindows = new List<List<txNGUIStaticSprite>>();
+		mMahjongWindows = new List<List<txNGUISprite>>();
 		for (int i = 0; i < GameDefine.MAX_PENG_TIMES; ++i)
 		{
-			mMahjongWindows.Add(new List<txNGUIStaticSprite>());
+			mMahjongWindows.Add(new List<txNGUISprite>());
 		}
 	}
 	public void assignWindow(string rootName)
@@ -36,7 +36,7 @@ public class PengGangMahjong
 		{
 			for (int j = 0; j < GameDefine.MAX_SINGLE_COUNT; ++j)
 			{
-				txNGUIStaticSprite obj = mScript.newObject(out obj, mPengGangSingleRoot[i], "Mahjong" + j, 0);
+				txNGUISprite obj = mScript.newObject(out obj, mPengGangSingleRoot[i], "Mahjong" + j, 0);
 				mMahjongWindows[i].Add(obj);
 			}
 		}

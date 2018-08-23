@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class txNGUIStaticTexture : txUIObject
+public class txNGUITexture : txUIObject
 {
 	protected UITexture mTexture;
 	protected WindowShader mWindowShader;
     protected string mOriginTextureName;    // 初始图片的名字,用于外部根据初始名字设置其他效果的图片
-	public txNGUIStaticTexture()
+	public txNGUITexture()
 	{
-		mType = UI_TYPE.UT_NGUI_STATIC_TEXTURE;
+		mType = UI_TYPE.UT_NGUI_TEXTURE;
 	}
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{

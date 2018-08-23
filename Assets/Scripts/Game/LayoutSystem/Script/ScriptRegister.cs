@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class ScriptRegister : LayoutScript
 {
-	protected txNGUIStaticSprite mBackground;
+	protected txNGUISprite mBackground;
 	protected txNGUIEditbox mAccountEdit;
 	protected txNGUIEditbox mPasswordEdit;
 	protected txNGUIEditbox mNameEdit;

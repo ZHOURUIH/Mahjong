@@ -7,17 +7,17 @@ using UnityEngine;
 public class ScriptMahjongDrop : LayoutScript
 {
 	protected txUIObject[] mRootList;
-	protected List<txNGUIStaticSprite>[] mDropList;
+	protected List<txNGUISprite>[] mDropList;
 	protected int mMaxDropCount = 30;
 	public ScriptMahjongDrop(string name, GameLayout layout)
 		:
 		base(name, layout)
 	{
 		mRootList = new txUIObject[GameDefine.MAX_PLAYER_COUNT];
-		mDropList = new List<txNGUIStaticSprite>[GameDefine.MAX_PLAYER_COUNT];
+		mDropList = new List<txNGUISprite>[GameDefine.MAX_PLAYER_COUNT];
 		for(int i = 0; i < GameDefine.MAX_PLAYER_COUNT; ++i)
 		{
-			mDropList[i] = new List<txNGUIStaticSprite>();
+			mDropList[i] = new List<txNGUISprite>();
 		}
 	}
 	public override void assignWindow()
@@ -28,7 +28,7 @@ public class ScriptMahjongDrop : LayoutScript
 			newObject(out mRootList[i], rootName[i], 1);
 			for(int j = 0; j < mMaxDropCount; ++j)
 			{
-				txNGUIStaticSprite obj = newObject(out obj, mRootList[i], "Mahjong" + j, 0);
+				txNGUISprite obj = newObject(out obj, mRootList[i], "Mahjong" + j, 0);
 				mDropList[i].Add(obj);
 			}
 		}

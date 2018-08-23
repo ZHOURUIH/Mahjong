@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class ScriptMahjongBackFrame : LayoutScript
 {
-	protected txNGUIStaticTexture mBackground;
+	protected txNGUITexture mBackground;
 	public ScriptMahjongBackFrame(string name, GameLayout layout)
 		:
 		base(name, layout)

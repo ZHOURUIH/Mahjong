@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class txNGUISpriteAnim : txNGUIStaticSprite
+public class txNGUISpriteAnim : txNGUISprite
 {
 	protected List<string>		 mTextureNameList = new List<string>();
 	protected int				 mStartIndex = 0;			// 序列帧的起始帧下标,默认为0,即从头开始

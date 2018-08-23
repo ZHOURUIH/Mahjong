@@ -7,12 +7,12 @@ using UnityEngine;
 public class CharacterInfoPanel
 {
 	public txUIObject mRoot;
-	public txNGUIStaticSprite mHead;
+	public txNGUISprite mHead;
 	public txNGUIText mName;
-	public txNGUIStaticSprite mMoneyIcon;
+	public txNGUISprite mMoneyIcon;
 	public txNGUINumber mMoneyValue;
-	public txNGUIStaticSprite mReady;
-	public txNGUIStaticSprite mBanker;
+	public txNGUISprite mReady;
+	public txNGUISprite mBanker;
 	public ScriptAllCharacterInfo mScript;
 	public CharacterInfoPanel(ScriptAllCharacterInfo script)
 	{

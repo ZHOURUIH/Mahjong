@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class txNGUIStaticSprite : txUIObject
+public class txNGUISprite : txUIObject
 {
 	public UISprite mSprite;
-	public txNGUIStaticSprite()
+	public txNGUISprite()
 	{
-		mType = UI_TYPE.UT_NGUI_STATIC_SPRITE;
+		mType = UI_TYPE.UT_NGUI_SPRITE;
 	}
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{

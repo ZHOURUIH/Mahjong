@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class ScriptMessageOK : LayoutScript
 {
-	protected txNGUIStaticTexture mBackground;
+	protected txNGUITexture mBackground;
 	protected txNGUIText mMessage;
 	protected txNGUIButton mOKButton;
 	protected txNGUIText mButtonLabel;

@@ -10,9 +10,9 @@ public enum UI_TYPE
 	UT_BASE,				// 窗口基类
 	UT_PARTICLE,			// 粒子特效窗口
 	// NGUI
-	UT_NGUI_STATIC_SPRITE,	// 静态图片窗口,需要图集
+	UT_NGUI_SPRITE,			// 静态图片窗口,需要图集
 	UT_NGUI_SPRITE_ANIM,	// 序列帧图片窗口,需要图集
-	UT_NGUI_STATIC_TEXTURE,	// 静态图片窗口,不需要图集
+	UT_NGUI_TEXTURE,		// 静态图片窗口,不需要图集
 	UT_NGUI_TEXTURE_ANIM,	// 序列帧图片窗口,不需要图集
 	UT_NGUI_NUMBER,			// 数字窗口
 	UT_NGUI_BUTTON,         // 按钮窗口

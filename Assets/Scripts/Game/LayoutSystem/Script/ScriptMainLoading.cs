@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class ScriptMainLoading : LayoutScript
 {
-	protected txNGUIStaticSprite mBackground;
+	protected txNGUISprite mBackground;
 	protected txNGUISlider mProgress;
 	public ScriptMainLoading(string name, GameLayout layout)
 		:

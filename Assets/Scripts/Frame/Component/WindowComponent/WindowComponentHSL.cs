@@ -19,7 +19,7 @@ public class WindowComponentHSL : ComponentKeyFrameNormal
 	protected override void applyTrembling(float offset)
 	{
 		txUIObject uiObj = mComponentOwner as txUIObject;
-		txNGUIStaticTexture staticTexture = uiObj as txNGUIStaticTexture;
+		txNGUITexture staticTexture = uiObj as txNGUITexture;
 		if(staticTexture == null)
 		{
 			logError("window is not a texture window! can not offset hsl!");

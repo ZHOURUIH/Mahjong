@@ -7,8 +7,8 @@ using UnityEngine;
 public class ScriptDice : LayoutScript
 {
 	protected txNGUISpriteAnim mDiceAnim;
-	protected txNGUIStaticSprite mDice0;
-	protected txNGUIStaticSprite mDice1;
+	protected txNGUISprite mDice0;
+	protected txNGUISprite mDice1;
 	public ScriptDice(string name, GameLayout layout)
 		:
 		base(name, layout)

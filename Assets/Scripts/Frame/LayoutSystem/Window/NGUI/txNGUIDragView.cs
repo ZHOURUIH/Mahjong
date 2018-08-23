@@ -10,7 +10,7 @@ public enum DRAG_DIRECTION
 
 public delegate void OnDraging();
 
-public class txNGUIDragView : txNGUIStaticTexture
+public class txNGUIDragView : txNGUITexture
 {
 	protected float mMoveSpeed;
 	protected Vector3 mMoveNormal;

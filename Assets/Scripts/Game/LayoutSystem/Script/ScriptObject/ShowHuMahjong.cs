@@ -10,19 +10,19 @@ public class ShowHuMahjong
 	protected ScriptMahjongHandIn mScript;
 	protected string mMahjongPreName;
 	protected txUIObject mShowRoot;
-	protected List<txNGUIStaticSprite> mShowMahjong;
+	protected List<txNGUISprite> mShowMahjong;
 	public ShowHuMahjong(ScriptMahjongHandIn script, string mahjongPreName)
 	{
 		mScript = script;
 		mMahjongPreName = mahjongPreName;
-		mShowMahjong = new List<txNGUIStaticSprite>();
+		mShowMahjong = new List<txNGUISprite>();
 	}
 	public void assignWindow(string showRoot)
 	{
 		mScript.newObject(out mShowRoot, showRoot, 0);
 		for (int i = 0; i < GameDefine.MAX_HAND_IN_COUNT; ++i)
 		{
-			txNGUIStaticSprite obj = mScript.newObject(out obj, mShowRoot, "Mahjong" + i);
+			txNGUISprite obj = mScript.newObject(out obj, mShowRoot, "Mahjong" + i);
 			mShowMahjong.Add(obj);
 		}
 	}

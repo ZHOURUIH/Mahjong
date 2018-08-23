@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class txNGUINumber : txNGUIStaticSprite
+public class txNGUINumber : txNGUISprite
 {
 	protected int					 mMaxCount = 0;
 	protected string[]				 mSpriteNameList;		// 前10个是0~9,第11个是小数点
 	protected UISpriteData[]		 mSpriteDataList;
-	protected List<txNGUIStaticSprite> mNumberList;
+	protected List<txNGUISprite> mNumberList;
 	protected string                 mNumberStyle = "";
 	protected int                    mInterval = 5;
 	protected DOCKING_POSITION		 mDockingPosition = DOCKING_POSITION.DP_LEFT;
@@ -19,7 +19,7 @@ public class txNGUINumber : txNGUIStaticSprite
 		mType = UI_TYPE.UT_NGUI_NUMBER;
 		mSpriteNameList = new string[11];
 		mSpriteDataList = new UISpriteData[11];
-		mNumberList = new List<txNGUIStaticSprite>();
+		mNumberList = new List<txNGUISprite>();
 	}
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{
@@ -185,7 +185,7 @@ public class txNGUINumber : txNGUIStaticSprite
 		{
 			string name = mName + "_" + StringUtility.intToString(i);
 			// 由于所有数字的大小和位置都是由数字窗口自动计算的,所以不需要为子窗口添加自适应组件
-			mNumberList.Add(mLayout.getScript().createObject<txNGUIStaticSprite>(this, name, false));
+			mNumberList.Add(mLayout.getScript().createObject<txNGUISprite>(this, name, false));
 			mNumberList[i].mSprite.atlas = mSprite.atlas;
 			mNumberList[i].mSprite.depth = mSprite.depth + 1;
 		}

@@ -7,7 +7,7 @@ using UnityEngine;
 public class EndingCharacter
 {
 	public txUIObject mRoot;
-	public txNGUIStaticTexture mHead;
+	public txNGUITexture mHead;
 	public txNGUIText mName;
 	public txNGUIText mMoneyDelta;
 	public ScriptGameEnding mScript;
@@ -90,8 +90,8 @@ public class Multiple
 public class ScriptGameEnding : LayoutScript
 {
 	protected txUIObject mHuResultRoot;
-	protected txNGUIStaticSprite mHu;
-	protected txNGUIStaticSprite mPingJu;
+	protected txNGUISprite mHu;
+	protected txNGUISprite mPingJu;
 	protected txUIObject mMoneyResultRoot;
 	protected List<EndingCharacter> mEndingCharacterList;
 	protected txUIObject mDetailRoot;

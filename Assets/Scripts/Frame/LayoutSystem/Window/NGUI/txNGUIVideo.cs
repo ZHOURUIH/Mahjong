@@ -3,7 +3,7 @@ using UnityEngine.Events;
 using System.Collections;
 using RenderHeads.Media.AVProVideo;
 
-public class txNGUIVideo : txNGUIStaticTexture
+public class txNGUIVideo : txNGUITexture
 {
 	protected MediaPlayer mMediaPlayer;
 	protected string mFileName;

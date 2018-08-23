@@ -58,7 +58,7 @@ public class txNGUITextureAnimLumOffsetLinearDodge : txNGUITextureAnim
 	}
 }
 //---------------------------------------------------------------------------------------------------------------------------
-public class txNGUITextureAnimLinearDodge : txNGUIStaticTexture
+public class txNGUITextureAnimLinearDodge : txNGUITexture
 {
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{

@@ -6,11 +6,11 @@ using UnityEngine;
 
 public class ScriptRoomMenu : LayoutScript
 {
-	protected txNGUIStaticSprite mBackground;
+	protected txNGUISprite mBackground;
 	protected txNGUIButton mCreateRoomButton;
-	protected txNGUIStaticSprite mCreateLabel;
+	protected txNGUISprite mCreateLabel;
 	protected txNGUIButton mJoinRoomButton;
-	protected txNGUIStaticSprite mJoinLabel;
+	protected txNGUISprite mJoinLabel;
 	public ScriptRoomMenu(string name, GameLayout layout)
 		:
 		base(name, layout)

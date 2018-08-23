@@ -13,8 +13,8 @@ public enum HANDIN_STATE
 
 public class HandInMahjongInfo
 {
-	public txNGUIStaticSprite mMahjongWindow;
-	public txNGUIStaticTexture mSelectMask;
+	public txNGUISprite mMahjongWindow;
+	public txNGUITexture mSelectMask;
 	public MAHJONG mMahjong;
 	public HANDIN_STATE mState;
 }

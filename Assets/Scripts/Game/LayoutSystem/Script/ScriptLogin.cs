@@ -6,14 +6,14 @@ using UnityEngine;
 
 public class ScriptLogin : LayoutScript
 {
-	protected txNGUIStaticSprite mBackground;
+	protected txNGUISprite mBackground;
 	protected txNGUIEditbox mAccountEdit;
 	protected txNGUIEditbox mPasswordEdit;
 	protected txNGUIButton mLoginButton;
 	protected txNGUIButton mRegisterButton;
 	protected txNGUIButton mQuitButton;
 	protected txUIObject mTipMask;
-	protected txNGUIStaticSprite mTipBackground;
+	protected txNGUISprite mTipBackground;
 	protected txNGUIText mTipLabel;
 	protected txNGUIButton mCancelButton;
 	protected bool mTestAccount = false;

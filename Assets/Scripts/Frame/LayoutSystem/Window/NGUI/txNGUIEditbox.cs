@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class txNGUIEditbox : txNGUIStaticSprite
+public class txNGUIEditbox : txNGUISprite
 {
 	protected UIInput mInput;
 	public txNGUIEditbox()

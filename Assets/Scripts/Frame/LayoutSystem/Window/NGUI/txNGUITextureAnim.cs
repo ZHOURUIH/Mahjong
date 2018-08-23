@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
-public class txNGUITextureAnim : txNGUIStaticTexture
+public class txNGUITextureAnim : txNGUITexture
 {
 	protected List<Texture> mTextureNameList;
 	protected int mStartIndex = 0;          // 序列帧的起始帧下标,默认为0,即从头开始

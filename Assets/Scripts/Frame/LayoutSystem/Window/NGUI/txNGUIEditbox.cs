@@ -19,10 +19,10 @@ public class txNGUIEditbox : txNGUIStaticSprite
 	}
 	public void setText(string text)
 	{
-		mInput.label.text = text;
+		mInput.value = text;
 	}
 	public string getText()
 	{
-		return mInput.label.text;
+		return mInput.value;
 	}
 }

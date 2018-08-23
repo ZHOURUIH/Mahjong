@@ -18,13 +18,6 @@ public class SCCheckNameRet : SocketPacket
 	}
 	public override void execute()
 	{
-		if(mResult.mValue == 0)
-		{
-			UnityUtility.logInfo("成功!");
-		}
-		else
-		{
-			UnityUtility.logInfo("失败!");
-		}
+		mScriptRegister.setNameCheckRet(mResult.mValue == 0);
 	}
 }

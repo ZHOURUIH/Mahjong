@@ -8,7 +8,7 @@ public class ScriptMessageOK : LayoutScript
 {
 	protected txNGUIStaticTexture mBackground;
 	protected txNGUIText mMessage;
-	protected txNGUIButtonTexture mOKButton;
+	protected txNGUIButton mOKButton;
 	protected txNGUIText mButtonLabel;
 	public ScriptMessageOK(string name, GameLayout layout)
 		:

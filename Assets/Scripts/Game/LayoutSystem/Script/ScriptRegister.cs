@@ -13,6 +13,8 @@ public class ScriptRegister : LayoutScript
 	protected txNGUIButton mRegisterButton;
 	protected txNGUIButton mCancelButton;
 	protected txNGUIButton mCheckNameButton;
+	protected txNGUIText mValidNameTip;
+	protected txNGUIText mInvalidNameTip;
 	public ScriptRegister(string name, GameLayout layout)
 		:
 		base(name, layout)
@@ -28,6 +30,8 @@ public class ScriptRegister : LayoutScript
 		newObject(out mRegisterButton, mBackground, "RegisterButton");
 		newObject(out mCancelButton, mBackground, "CancelButton");
 		newObject(out mCheckNameButton, mBackground, "CheckNameButton");
+		newObject(out mValidNameTip, mBackground, "ValidNameTip", 0);
+		newObject(out mInvalidNameTip, mBackground, "InvalidNameTip", 0);
 	}
 	public override void init()
 	{
@@ -41,6 +45,8 @@ public class ScriptRegister : LayoutScript
 		LayoutTools.SCALE_WINDOW(mCancelButton);
 		LayoutTools.SCALE_WINDOW(mCheckNameButton);
 		LayoutTools.ACTIVE_WINDOW(mCheckNameButton);
+		LayoutTools.ACTIVE_WINDOW(mValidNameTip, false);
+		LayoutTools.ACTIVE_WINDOW(mInvalidNameTip, false);
 		mRegisterButton.setHandleInput(false);
 	}
 	public override void onShow(bool immediately, string param)
@@ -59,6 +65,9 @@ public class ScriptRegister : LayoutScript
 	{
 		mRegisterButton.setHandleInput(available);
 		mCheckNameButton.setHandleInput(!available);
+		LayoutTools.ACTIVE_WINDOW(mCheckNameButton, !available);
+		LayoutTools.ACTIVE_WINDOW(mValidNameTip, available);
+		LayoutTools.ACTIVE_WINDOW(mInvalidNameTip, !available);
 	}
 	//-------------------------------------------------------------------------------------------------------
 	protected void onRegisterClick(GameObject button)
@@ -80,10 +89,16 @@ public class ScriptRegister : LayoutScript
 	}
 	protected void onCheckNameClick(GameObject button)
 	{
-		CSCheckName checkName = mSocketNetManager.createPacket<CSCheckName>();
-		byte[] nameBytes = BinaryUtility.stringToBytes(mNameEdit.getText(), BinaryUtility.getGB2312());
-		checkName.setName(nameBytes);
-		mSocketNetManager.sendMessage(checkName);
+		string nameText = mNameEdit.getText();
+		if(nameText != "")
+		{
+			CSCheckName checkName = mSocketNetManager.createPacket<CSCheckName>();
+			byte[] nameBytes = BinaryUtility.stringToBytes(nameText, BinaryUtility.getGB2312());
+			checkName.setName(nameBytes);
+			mSocketNetManager.sendMessage(checkName);
+			// 检测按钮点击后就禁用该按钮
+			mCheckNameButton.setHandleInput(false);
+		}
 	}
 	protected void onButtonPress(GameObject button, bool press)
 	{

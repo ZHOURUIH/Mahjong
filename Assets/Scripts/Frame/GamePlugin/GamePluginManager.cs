@@ -43,19 +43,21 @@ public class GamePluginManager : FrameComponent
 			return;
 		}
 		List<string> fileList = new List<string>();
-		FileUtility.findFiles(CommonDefine.F_GAME_PLUGIN_PATH, ref fileList, "dll");
+		FileUtility.findFiles(CommonDefine.F_GAME_PLUGIN_PATH, ref fileList, CommonDefine.DLL_PLUGIN_SUFFIX);
 		int count = fileList.Count;
 		for(int i = 0; i < count; ++i)
 		{
-			loadPlugin(fileList[i]);
+			byte[] fileBuffer = null;
+			FileUtility.openFile(fileList[i], ref fileBuffer);
+			loadPlugin(fileBuffer);
 		}
 #endif
 	}
-	protected bool loadPlugin(string dllName)
+	protected bool loadPlugin(byte[] rawDll)
 	{
 		try
 		{
-			var assembly = Assembly.LoadFrom(dllName);
+			var assembly = Assembly.Load(rawDll);
 			var types = assembly.GetTypes();
 			foreach (var type in types)
 			{

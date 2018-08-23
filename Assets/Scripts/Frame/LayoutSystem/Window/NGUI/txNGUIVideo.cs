@@ -104,7 +104,7 @@ public class txNGUIVideo : txNGUITexture
 		mFileName = StringUtility.getFileName(file);
 		mMediaPlayer.Events.RemoveAllListeners();
 		mTexture.mainTexture = null;
-		mMediaPlayer.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToDataFolder, file, false);
+		mMediaPlayer.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, file, false);
 		mMediaPlayer.Events.AddListener(onVideoEvent);
 		return true;
 	}

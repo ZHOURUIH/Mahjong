@@ -13,7 +13,7 @@ public class txNGUITextureCriticalMask : txNGUITexture
 	}
 }
 //---------------------------------------------------------------------------------------------------------------------------
-public class txNGUTextureCriticalMaskFadeOutLinearDodge : txNGUITexture
+public class txNGUITextureCriticalMaskFadeOutLinearDodge : txNGUITexture
 {
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{

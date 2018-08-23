@@ -160,7 +160,7 @@ public class DataBase : FrameComponent
 				return;
 			}
 			BinaryUtility.memcpy(dataBuffer, file, 0, i * dataSize, dataSize);
-			newData.read(dataBuffer, dataSize);
+			newData.read(dataBuffer);
 			dataList.Add(newData);
 		}
 		mDataStructList.Add(type, dataList);

@@ -76,32 +76,32 @@ public class BinaryUtility
 	{
 		return (ushort)((crc >> 8) ^ crc16_table[(crc ^ data) & 0xFF]);
 	}
-	public static bool readBool(byte[] buffer, ref int curIndex)
+	public static bool readBool(byte[] buffer, ref int index)
 	{
-		if (buffer.Length < 1)
+		if (buffer.Length < index + sizeof(bool))
 		{
 			return false;
 		}
-		bool value = (0xff & buffer[curIndex++]) != 0;
+		bool value = (0xff & buffer[index++]) != 0;
 		return value;
 	}
-	public static byte readByte(byte[] buffer, ref int curIndex)
+	public static byte readByte(byte[] buffer, ref int index)
 	{
-		if (buffer.Length < 1)
+		if (buffer.Length < index + sizeof(byte))
 		{
 			return 0;
 		}
-		byte byte0 = (byte)(0xff & buffer[curIndex++]);
+		byte byte0 = (byte)(0xff & buffer[index++]);
 		return byte0;
 	}
-	public static short readShort(byte[] buffer, ref int curIndex, bool inverse = false)
+	public static short readShort(byte[] buffer, ref int index, bool inverse = false)
 	{
-		if (buffer.Length < 2)
+		if (buffer.Length < index + sizeof(short))
 		{
 			return 0;
 		}
-		int byte0 = (int)(0xff & buffer[curIndex++]);
-		int byte1 = (int)(0xff & buffer[curIndex++]);
+		int byte0 = (int)(0xff & buffer[index++]);
+		int byte1 = (int)(0xff & buffer[index++]);
 		if(inverse)
 		{
 			short finalValue = (short)((byte1 << (8 * 0)) | (byte0 << (8 * 1)));
@@ -113,14 +113,14 @@ public class BinaryUtility
 			return finalValue;
 		}
 	}
-	public static ushort readUShort(byte[] buffer, ref int curIndex, bool inverse = false)
+	public static ushort readUShort(byte[] buffer, ref int index, bool inverse = false)
 	{
-		if (buffer.Length < 2)
+		if (buffer.Length < index + sizeof(ushort))
 		{
 			return 0;
 		}
-		int byte0 = (int)(0xff & buffer[curIndex++]);
-		int byte1 = (int)(0xff & buffer[curIndex++]);
+		int byte0 = (int)(0xff & buffer[index++]);
+		int byte1 = (int)(0xff & buffer[index++]);
 		if (inverse)
 		{
 			ushort finalValue = (ushort)((byte1 << (8 * 0)) | (byte0 << (8 * 1)));
@@ -132,16 +132,16 @@ public class BinaryUtility
 			return finalValue;
 		}
 	}
-	public static int readInt(byte[] buffer, ref int curIndex, bool inverse = false)
+	public static int readInt(byte[] buffer, ref int index, bool inverse = false)
 	{
-		if (buffer.Length < 4)
+		if (buffer.Length < index + sizeof(int))
 		{
 			return 0;
 		}
-		int byte0 = (int)(0xff & buffer[curIndex++]);
-		int byte1 = (int)(0xff & buffer[curIndex++]);
-		int byte2 = (int)(0xff & buffer[curIndex++]);
-		int byte3 = (int)(0xff & buffer[curIndex++]);
+		int byte0 = (int)(0xff & buffer[index++]);
+		int byte1 = (int)(0xff & buffer[index++]);
+		int byte2 = (int)(0xff & buffer[index++]);
+		int byte3 = (int)(0xff & buffer[index++]);
 		if (inverse)
 		{
 			int finalInt = (int)((byte3 << (8 * 0)) | (byte2 << (8 * 1)) | (byte1 << (8 * 2)) | (byte0 << (8 * 3)));
@@ -155,7 +155,7 @@ public class BinaryUtility
 	}
 	public static float readFloat(byte[] buffer, ref int curIndex, bool inverse = false)
 	{
-		if (buffer.Length < 4)
+		if (buffer.Length < curIndex + sizeof(float))
 		{
 			return 0.0f;
 		}
@@ -233,7 +233,7 @@ public class BinaryUtility
 	}
 	public static bool writeBool(byte[] buffer, ref int index, bool value)
 	{
-		if (buffer.Length < 1)
+		if (buffer.Length < index + sizeof(bool))
 		{
 			return false;
 		}
@@ -242,7 +242,7 @@ public class BinaryUtility
 	}
 	public static bool writeByte(byte[] buffer, ref int index, byte value)
 	{
-		if (buffer.Length < 1)
+		if (buffer.Length < index + sizeof(byte))
 		{
 			return false;
 		}
@@ -251,7 +251,7 @@ public class BinaryUtility
 	}
 	public static bool writeShort(byte[] buffer, ref int index, short value, bool inverse = false)
 	{
-		if (buffer.Length < 2)
+		if (buffer.Length < index + sizeof(short))
 		{
 			return false;
 		}
@@ -269,7 +269,7 @@ public class BinaryUtility
 	}
 	public static bool writeInt(byte[] buffer, ref int index, int value, bool inverse = false)
 	{
-		if (buffer.Length < 4)
+		if (buffer.Length < index + sizeof(int))
 		{
 			return false;
 		}
@@ -293,12 +293,12 @@ public class BinaryUtility
 
 	public static bool writeFloat(byte[] buffer, ref int index, float value)
 	{
-		if (buffer.Length < 4)
+		if (buffer.Length < index + sizeof(float))
 		{
 			return false;
 		}
 		byte[] valueByte = toBytes(value);
-		for (int i = 0; i < 4; ++i)
+		for (int i = 0; i < sizeof(float); ++i)
 		{
 			buffer[index++] = valueByte[i];
 		}

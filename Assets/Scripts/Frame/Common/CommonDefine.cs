@@ -211,6 +211,8 @@ public class CommonDefine
 	// 表格数据文件后缀名
 	public const string DATA_SUFFIX = ".bytes";
 	public const string ASSET_BUNDLE_SUFFIX = ".unity3d";
+	// dll插件的后缀名
+	public const string DLL_PLUGIN_SUFFIX = ".bytes";
 	// 常用关键帧名定义
 	public const string ONE_ZERO = "OneZero";
 	public const string ONE_ZERO_ONE = "OneZeroOne";

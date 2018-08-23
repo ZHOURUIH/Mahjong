@@ -379,11 +379,10 @@ public class FileUtility : GameBase
 		}
 	}
 	// 得到指定目录下的所有第一级子目录
-	// path为相对于Assets的相对路径
+	// path为绝对路径
 	public static bool findDirectory(string path, ref List<string> dirList, bool recursive = true)
 	{
 		validPath(ref path);
-		path = CommonDefine.F_STREAMING_ASSETS_PATH + path;
 		if(!isDirExist(path))
 		{
 			return false;

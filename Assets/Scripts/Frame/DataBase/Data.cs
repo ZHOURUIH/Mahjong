@@ -11,6 +11,6 @@ public class Data
 		mType = type;
 	}
 	public DATA_TYPE getType() { return mType; }
-	public virtual void read(byte[] data, int dataCount) { }
+	public virtual void read(byte[] data) { }
 	public virtual int getDataSize() { return 0; }
 };

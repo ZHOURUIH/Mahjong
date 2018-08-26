@@ -59,7 +59,6 @@ public class SocketFactory
 		registerPacket<SCReadyRet>(PACKET_TYPE.PT_SC_READY_RET);
 		registerPacket<SCOtherPlayerReady>(PACKET_TYPE.PT_SC_OTHER_PLAYER_READY);
 		registerPacket<SCLeaveRoomRet>(PACKET_TYPE.PT_SC_LEAVE_ROOM_RET);
-		registerPacket<SCDiceDoneRet>(PACKET_TYPE.PT_SC_DICE_DONE_RET);
 		registerPacket<SCNotifyGetStartMahjong>(PACKET_TYPE.PT_SC_NOTIFY_GET_START_MAHJONG);
 		registerPacket<SCNotifyReorderMahjong>(PACKET_TYPE.PT_SC_NOTIFY_REORDER_MAHJONG);
 		registerPacket<SCNotifyGetStartDone>(PACKET_TYPE.PT_SC_NOTIFY_GET_START_DONE);

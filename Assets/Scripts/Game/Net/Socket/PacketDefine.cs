@@ -44,7 +44,6 @@ public enum PACKET_TYPE
 	PT_SC_READY_RET,                        // 通知客户端玩家是否准备
 	PT_SC_OTHER_PLAYER_READY,               // 通知客户端有其他玩家准备
 	PT_SC_LEAVE_ROOM_RET,                   // 通知客户端离开房间的结果
-	PT_SC_DICE_DONE_RET,                    // 通知客户端掷骰子完毕,开始拿牌
 	PT_SC_NOTIFY_GET_START_MAHJONG,         // 通知客户端有玩家开局拿牌
 	PT_SC_NOTIFY_REORDER_MAHJONG,           // 通知客户端重新排列麻将
 	PT_SC_NOTIFY_GET_START_DONE,            // 通知客户端开局拿牌完毕

@@ -32,7 +32,6 @@ public class SocketFactory
 		registerPacket<CSCheckAccount>(PACKET_TYPE.PT_CS_CHECK_ACCOUNT);
 		registerPacket<CSReady>(PACKET_TYPE.PT_CS_READY);
 		registerPacket<CSLeaveRoom>(PACKET_TYPE.PT_CS_LEAVE_ROOM);
-		registerPacket<CSDiceDone>(PACKET_TYPE.PT_CS_DICE_DONE);
 		registerPacket<CSRequestDrop>(PACKET_TYPE.PT_CS_REQUEST_DROP);
 		registerPacket<CSConfirmAction>(PACKET_TYPE.PT_CS_CONFIRM_ACTION);
 		registerPacket<CSContinueGame>(PACKET_TYPE.PT_CS_CONTINUE_GAME);

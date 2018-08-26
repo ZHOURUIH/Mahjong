@@ -19,7 +19,6 @@ public enum PACKET_TYPE
 	PT_CS_JOIN_ROOM,                        // 向服务器请求加入房间
 	PT_CS_READY,                            // 向服务器发送是否已准备
 	PT_CS_LEAVE_ROOM,                       // 向服务器请求离开房间
-	PT_CS_DICE_DONE,                        // 向服务器发送骰子
 	PT_CS_REQUEST_DROP,                     // 向服务器请求打出一张牌
 	PT_CS_CONFIRM_ACTION,                   // 向服务器确认麻将操作
 	PT_CS_CONTINUE_GAME,                    // 向服务器请求继续游戏

@@ -102,7 +102,7 @@ public class SocketFactory
 	{
 		if(mPacketTypeList.ContainsKey(type))
 		{
-			return UnityUtility.createInstance<SocketPacket>(mPacketTypeList[type].mClassType, type);
+			return createPacket(mPacketTypeList[type].mClassType, type);
 		}
 		return null;
 	}
@@ -110,17 +110,23 @@ public class SocketFactory
 	{
 		if(mClassTypeList.ContainsKey(type))
 		{
-			return UnityUtility.createInstance<SocketPacket>(type, mClassTypeList[type].mType);
+			return createPacket(type, mClassTypeList[type].mType);
 		}
 		return null;
 	}
 	//------------------------------------------------------------------------------------------------------------
-	public void registerPacket<T>(PACKET_TYPE type) where T : SocketPacket
+	protected SocketPacket createPacket(Type classType, PACKET_TYPE packetType)
+	{
+		SocketPacket packet = UnityUtility.createInstance<SocketPacket>(classType, packetType);
+		packet.init();
+		return packet;
+	}
+	protected void registerPacket<T>(PACKET_TYPE type) where T : SocketPacket
 	{
 		PacketInfo info = new PacketInfo();
 		info.mClassType = typeof(T);
 		info.mType = type;
-		SocketPacket packet = UnityUtility.createInstance<T>(typeof(T), type);
+		SocketPacket packet = createPacket(typeof(T), type);
 		info.mPacketSize = packet.getSize();
 		mPacketTypeList.Add(type, info);
 		mClassTypeList.Add(info.mClassType, info);

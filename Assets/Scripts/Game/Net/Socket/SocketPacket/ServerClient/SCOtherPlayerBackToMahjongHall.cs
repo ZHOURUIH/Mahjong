@@ -6,12 +6,7 @@ public class SCOtherPlayerBackToMahjongHall : SocketPacket
 {
 	public INT mOtherPlayerGUID = new INT();
 	public SCOtherPlayerBackToMahjongHall(PACKET_TYPE type)
-		:
-		base(type)
-	{
-		fillParams();
-		zeroParams();
-	}
+		: base(type) { }
 	protected override void fillParams()
 	{
 		pushParam(mOtherPlayerGUID);

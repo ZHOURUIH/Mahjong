@@ -7,12 +7,7 @@ public class SCNotifyMahjongEnd : SocketPacket
 	INTS mCharacterGUIDList = new INTS(GameDefine.MAX_PLAYER_COUNT);
 	INTS mMoneyDeltaList = new INTS(GameDefine.MAX_PLAYER_COUNT);
 	public SCNotifyMahjongEnd(PACKET_TYPE type)
-		:
-		base(type)
-	{
-		fillParams();
-		zeroParams();
-	}
+		: base(type) { }
 	protected override void fillParams()
 	{
 		pushParam(mCharacterGUIDList);

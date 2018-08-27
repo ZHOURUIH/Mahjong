@@ -5,12 +5,7 @@ using System.Collections.Generic;
 public class SCBackToMahjongHallRet : SocketPacket
 {
 	public SCBackToMahjongHallRet(PACKET_TYPE type)
-		:
-		base(type)
-	{
-		fillParams();
-		zeroParams();
-	}
+		: base(type) { }
 	protected override void fillParams()
 	{ }
 	public override void execute()

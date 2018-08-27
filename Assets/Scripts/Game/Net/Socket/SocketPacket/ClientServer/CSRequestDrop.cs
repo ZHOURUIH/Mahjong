@@ -7,12 +7,7 @@ public class CSRequestDrop : SocketPacket
 {
 	public BYTE mIndex = new BYTE();
 	public CSRequestDrop(PACKET_TYPE type)
-		:
-		base(type)
-	{
-		fillParams();
-		zeroParams();
-	}
+		: base(type) { }
 	protected override void fillParams()
 	{
 		pushParam(mIndex);

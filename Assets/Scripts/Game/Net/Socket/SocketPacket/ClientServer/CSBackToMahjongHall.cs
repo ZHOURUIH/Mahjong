@@ -6,11 +6,6 @@ using System.Text;
 public class CSBackToMahjongHall : SocketPacket
 {
 	public CSBackToMahjongHall(PACKET_TYPE type)
-		:
-		base(type)
-	{
-		fillParams();
-		zeroParams();
-	}
+		: base(type) { }
 	protected override void fillParams(){}
 }

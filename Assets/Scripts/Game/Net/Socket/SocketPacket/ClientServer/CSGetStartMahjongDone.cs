@@ -5,12 +5,7 @@ using System.Collections.Generic;
 public class CSGetStartMahjongDone : SocketPacket
 {
 	public CSGetStartMahjongDone(PACKET_TYPE type)
-		:
-		base(type)
-	{
-		fillParams();
-		zeroParams();
-	}
+		: base(type) { }
 	protected override void fillParams()
 	{}
 }

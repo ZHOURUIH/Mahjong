@@ -6,12 +6,7 @@ public class SCAddMahjongRobotRet : SocketPacket
 {
 	public BOOL mResult = new BOOL();
 	public SCAddMahjongRobotRet(PACKET_TYPE type)
-		:
-		base(type)
-	{
-		fillParams();
-		zeroParams();
-	}
+		: base(type) { }
 	protected override void fillParams()
 	{
 		pushParam(mResult);

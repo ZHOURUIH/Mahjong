@@ -6,11 +6,6 @@ using System.Text;
 public class CSAddMahjongRobot : SocketPacket
 {
 	public CSAddMahjongRobot(PACKET_TYPE type)
-		:
-		base(type)
-	{
-		fillParams();
-		zeroParams();
-	}
+		: base(type) { }
 	protected override void fillParams(){}
 }

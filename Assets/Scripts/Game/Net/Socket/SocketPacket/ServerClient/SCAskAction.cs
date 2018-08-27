@@ -10,12 +10,7 @@ public class SCAskAction : SocketPacket
 	public BYTES mMahjong = new BYTES(4);
 	public BYTES mHuList = new BYTES(GameDefine.MAX_HU_COUNT);     // 当有胡操作时,该数组中才会有值
 	public SCAskAction(PACKET_TYPE type)
-		:
-		base(type)
-	{
-		fillParams();
-		zeroParams();
-	}
+		: base(type) { }
 	protected override void fillParams()
 	{
 		pushParam(mAction);

@@ -7,12 +7,7 @@ public class SCNotifyGetMahjong : SocketPacket
 	public INT mPlayerGUID = new INT();
 	public BYTE mMahjong = new BYTE();
 	public SCNotifyGetMahjong(PACKET_TYPE type)
-		:
-		base(type)
-	{
-		fillParams();
-		zeroParams();
-	}
+		: base(type) { }
 	protected override void fillParams()
 	{
 		pushParam(mPlayerGUID);

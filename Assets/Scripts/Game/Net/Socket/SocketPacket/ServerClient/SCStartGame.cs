@@ -11,12 +11,7 @@ public class SCStartGame : SocketPacket
 	protected BYTES mHandInList = new BYTES(GameDefine.MAX_PLAYER_COUNT * GameDefine.MAX_HAND_IN_COUNT);
 	protected BYTES mHuaList = new BYTES(GameDefine.MAX_PLAYER_COUNT * GameDefine.MAX_HUA_COUNT);
 	public SCStartGame(PACKET_TYPE type)
-		:
-		base(type)
-	{
-		fillParams();
-		zeroParams();
-	}
+		:base(type){}
 	protected override void fillParams()
 	{
 		pushParam(mDice);

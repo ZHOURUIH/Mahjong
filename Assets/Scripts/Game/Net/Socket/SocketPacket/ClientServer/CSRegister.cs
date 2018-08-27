@@ -10,12 +10,7 @@ public class CSRegister : SocketPacket
 	public BYTES mName = new BYTES(16);
 	public INT mHead = new INT();
 	public CSRegister(PACKET_TYPE type)
-		:
-		base(type)
-	{
-		fillParams();
-		zeroParams();
-	}
+		: base(type) { }
 	public void setAccount(string account)
 	{
 		byte[] accountBytes = BinaryUtility.stringToBytes(account);

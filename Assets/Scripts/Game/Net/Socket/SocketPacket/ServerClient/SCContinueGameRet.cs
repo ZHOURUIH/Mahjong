@@ -6,12 +6,7 @@ public class SCContinueGameRet : SocketPacket
 {
 	public BOOL mBanker = new BOOL();
 	public SCContinueGameRet(PACKET_TYPE type)
-		:
-		base(type)
-	{
-		fillParams();
-		zeroParams();
-	}
+		: base(type) { }
 	protected override void fillParams()
 	{
 		pushParam(mBanker);

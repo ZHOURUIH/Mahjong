@@ -7,12 +7,7 @@ public class SCRequestDropRet : SocketPacket
 	public BYTE mIndex = new BYTE();
 	public BYTE mMahjong = new BYTE();
 	public SCRequestDropRet(PACKET_TYPE type)
-		:
-		base(type)
-	{
-		fillParams();
-		zeroParams();
-	}
+		: base(type) { }
 	protected override void fillParams()
 	{
 		pushParam(mIndex);

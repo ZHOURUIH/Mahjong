@@ -7,12 +7,7 @@ public class SCPlayerGang : SocketPacket
 	public INT mDroppedPlayerGUID = new INT();
 	public BYTE mMahjong = new BYTE();
 	public SCPlayerGang(PACKET_TYPE type)
-		:
-		base(type)
-	{
-		fillParams();
-		zeroParams();
-	}
+		: base(type) { }
 	protected override void fillParams()
 	{
 		pushParam(mDroppedPlayerGUID);

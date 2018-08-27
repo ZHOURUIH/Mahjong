@@ -6,12 +6,7 @@ public class SCHeartBeatRet : SocketPacket
 {
 	public INT mHeartBeatTimes = new INT();
 	public SCHeartBeatRet(PACKET_TYPE type)
-		:
-		base(type)
-	{
-		fillParams();
-		zeroParams();
-	}
+		: base(type) { }
 	protected override void fillParams()
 	{
 		pushParam(mHeartBeatTimes);

@@ -8,12 +8,7 @@ public class SCOtherPlayerGang : SocketPacket
 	public INT mDroppedPlayerGUID = new INT();
 	public BYTE mMahjong = new BYTE();
 	public SCOtherPlayerGang(PACKET_TYPE type)
-		:
-		base(type)
-	{
-		fillParams();
-		zeroParams();
-	}
+		: base(type) { }
 	protected override void fillParams()
 	{
 		pushParam(mOtherPlayerGUID);

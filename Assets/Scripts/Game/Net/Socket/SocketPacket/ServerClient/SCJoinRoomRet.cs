@@ -18,12 +18,7 @@ public class SCJoinRoomRet : SocketPacket
 	public BYTE mServerPosition = new BYTE();
 	public BOOL mBanker = new BOOL();
 	public SCJoinRoomRet(PACKET_TYPE type)
-		:
-		base(type)
-	{
-		fillParams();
-		zeroParams();
-	}
+		: base(type) { }
 	protected override void fillParams()
 	{
 		pushParam(mResult);

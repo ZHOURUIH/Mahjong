@@ -5,12 +5,7 @@ using System.Collections.Generic;
 public class SCAskDrop : SocketPacket
 {
 	public SCAskDrop(PACKET_TYPE type)
-		:
-		base(type)
-	{
-		fillParams();
-		zeroParams();
-	}
+		: base(type) { }
 	protected override void fillParams()
 	{ }
 	public override void execute()

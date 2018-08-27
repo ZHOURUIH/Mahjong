@@ -6,12 +6,7 @@ public class CSCheckName : SocketPacket
 {
 	public BYTES mName = new BYTES(16);
 	public CSCheckName(PACKET_TYPE type)
-		:
-		base(type)
-	{
-		fillParams();
-		zeroParams();
-	}
+		: base(type) { }
 	public void setName(byte[] name)
 	{
 		mName.setValue(name);

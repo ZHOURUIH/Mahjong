@@ -7,12 +7,7 @@ public class CSConfirmAction : SocketPacket
 {
 	public BYTE mAction = new BYTE();
 	public CSConfirmAction(PACKET_TYPE type)
-		:
-		base(type)
-	{
-		fillParams();
-		zeroParams();
-	}
+		: base(type) { }
 	protected override void fillParams()
 	{
 		pushParam(mAction);

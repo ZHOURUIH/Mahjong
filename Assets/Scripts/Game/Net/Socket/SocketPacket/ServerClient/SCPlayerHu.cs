@@ -7,12 +7,7 @@ public class SCPlayerHu : SocketPacket
 	public INTS mHuPlayerGUID = new INTS(GameDefine.MAX_PLAYER_COUNT - 1);
 	public BYTES mHuList = new BYTES(GameDefine.MAX_HU_COUNT * (GameDefine.MAX_PLAYER_COUNT - 1));
 	public SCPlayerHu(PACKET_TYPE type)
-		:
-		base(type)
-	{
-		fillParams();
-		zeroParams();
-	}
+		: base(type) { }
 	protected override void fillParams()
 	{
 		pushParam(mHuPlayerGUID);

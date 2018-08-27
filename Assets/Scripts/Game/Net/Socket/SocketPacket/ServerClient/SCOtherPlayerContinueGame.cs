@@ -7,12 +7,7 @@ public class SCOtherPlayerContinueGame : SocketPacket
 	public INT mOtherPlayerGUID = new INT();
 	public BOOL mBanker = new BOOL();
 	public SCOtherPlayerContinueGame(PACKET_TYPE type)
-		:
-		base(type)
-	{
-		fillParams();
-		zeroParams();
-	}
+		: base(type) { }
 	protected override void fillParams()
 	{
 		pushParam(mOtherPlayerGUID);

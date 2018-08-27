@@ -6,12 +6,7 @@ public class SCNotifyBanker : SocketPacket
 {
 	public INT mPlayerGUID = new INT();		// 庄家ID
 	public SCNotifyBanker(PACKET_TYPE type)
-		:
-		base(type)
-	{
-		fillParams();
-		zeroParams();
-	}
+		: base(type) { }
 	protected override void fillParams()
 	{
 		pushParam(mPlayerGUID);

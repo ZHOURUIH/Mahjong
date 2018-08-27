@@ -6,12 +6,7 @@ public class SCCheckAccountRet : SocketPacket
 {
 	public BYTE mResult = new BYTE();  // 0表示成功,1表示失败
 	public SCCheckAccountRet(PACKET_TYPE type)
-		:
-		base(type)
-	{
-		fillParams();
-		zeroParams();
-	}
+		: base(type) { }
 	protected override void fillParams()
 	{
 		pushParam(mResult);

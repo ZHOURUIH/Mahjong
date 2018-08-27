@@ -6,11 +6,6 @@ using System.Text;
 public class CSContinueGame : SocketPacket
 {
 	public CSContinueGame(PACKET_TYPE type)
-		:
-		base(type)
-	{
-		fillParams();
-		zeroParams();
-	}
+		: base(type) { }
 	protected override void fillParams(){}
 }

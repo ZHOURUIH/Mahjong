@@ -6,12 +6,7 @@ public class SCRegisterRet : SocketPacket
 {
 	public BYTE mResult = new BYTE();
 	public SCRegisterRet(PACKET_TYPE type)
-		:
-		base(type)
-	{
-		fillParams();
-		zeroParams();
-	}
+		: base(type) { }
 	protected override void fillParams()
 	{
 		pushParam(mResult);

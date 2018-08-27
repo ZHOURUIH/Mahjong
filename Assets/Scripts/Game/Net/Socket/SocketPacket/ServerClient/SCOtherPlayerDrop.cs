@@ -8,12 +8,7 @@ public class SCOtherPlayerDrop : SocketPacket
 	public INT mIndex = new INT();
 	public BYTE mMahjong = new BYTE();
 	public SCOtherPlayerDrop(PACKET_TYPE type)
-		:
-		base(type)
-	{
-		fillParams();
-		zeroParams();
-	}
+		: base(type) { }
 	protected override void fillParams()
 	{
 		pushParam(mPlayerGUID);

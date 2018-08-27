@@ -6,12 +6,7 @@ public class CSJoinRoom : SocketPacket
 {
 	public INT mRoomID = new INT();
 	public CSJoinRoom(PACKET_TYPE type)
-		:
-		base(type)
-	{
-		fillParams();
-		zeroParams();
-	}
+		: base(type) { }
 	protected override void fillParams()
 	{
 		pushParam(mRoomID);

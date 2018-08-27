@@ -8,12 +8,7 @@ public class SCOtherPlayerPass : SocketPacket
 	public INT mDroppedPlayerGUID = new INT();
 	public BYTE mMahjong = new BYTE();
 	public SCOtherPlayerPass(PACKET_TYPE type)
-		:
-		base(type)
-	{
-		fillParams();
-		zeroParams();
-	}
+		: base(type) { }
 	protected override void fillParams()
 	{
 		pushParam(mOtherPlayerGUID);

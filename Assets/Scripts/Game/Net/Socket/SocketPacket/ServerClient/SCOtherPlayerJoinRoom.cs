@@ -13,12 +13,7 @@ public class SCOtherPlayerJoinRoom : SocketPacket
 	public BOOL mReady = new BOOL();
 	public BOOL mBanker = new BOOL();
 	public SCOtherPlayerJoinRoom(PACKET_TYPE type)
-		:
-		base(type)
-	{
-		fillParams();
-		zeroParams();
-	}
+		: base(type) { }
 	protected override void fillParams()
 	{
 		pushParam(mPlayerGUID);

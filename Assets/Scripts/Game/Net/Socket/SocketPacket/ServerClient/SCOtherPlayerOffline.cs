@@ -6,12 +6,7 @@ public class SCOtherPlayerOffline : SocketPacket
 {
 	public INT mPlayerGUID = new INT();		// 离线的玩家GUID
 	public SCOtherPlayerOffline(PACKET_TYPE type)
-		:
-		base(type)
-	{
-		fillParams();
-		zeroParams();
-	}
+		: base(type) { }
 	protected override void fillParams()
 	{
 		pushParam(mPlayerGUID);

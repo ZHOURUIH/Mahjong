@@ -15,7 +15,7 @@ public class HandInMahjongMyself : HandInMahjong
 		int handInCount = mHandInMahjong.Count;
 		for (int i = 0; i < handInCount; ++i)
 		{
-			mScript.newObject(out mHandInMahjong[i].mSelectMask, mHandInMahjong[i].mMahjongWindow, "Select");
+			mScript.newObject(out mHandInMahjong[i].mSelectMask, mHandInMahjong[i].mMahjongWindow, "Select", 0);
 		}
 	}
 	public override void init()

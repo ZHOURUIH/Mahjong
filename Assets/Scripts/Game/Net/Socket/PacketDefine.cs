@@ -67,7 +67,7 @@ public enum PACKET_TYPE
 	PT_SC_BACK_TO_MAHJONG_HALL_RET,         // 通知客户端返回大厅的结果
 	PT_SC_OTHER_PLAYER_BACK_TO_MAHJONG_HALL,// 通知客户端有其他玩家选择返回大厅
 	PT_SC_GET_HUA,                          // 通知客户端摆出花牌
-	PT_SC_OTHER_PLAYER_GET_HUA,         // 通知客户端有其他玩家摆出花牌
+	PT_SC_OTHER_PLAYER_GET_HUA,				// 通知客户端有其他玩家摆出花牌
 	PT_SC_ADD_MAHJONG_ROBOT_RET,            // 通知客户端添加麻将机器人的结果
 	PT_SC_MAX,
 

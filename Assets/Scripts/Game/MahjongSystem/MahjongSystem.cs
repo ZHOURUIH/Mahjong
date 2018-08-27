@@ -62,8 +62,6 @@ public class MahjongSystem : FrameComponent
 					int playerCount = mPlayerPositionList.Count;
 					for (int i = 0; i < playerCount; ++i)
 					{
-						pushCommand<CommandCharacterReorderMahjong>(mPlayerPositionList[i]);
-
 						int huaCount = mHuaList[i].Count;
 						for (int j = 0; j < huaCount; ++j)
 						{

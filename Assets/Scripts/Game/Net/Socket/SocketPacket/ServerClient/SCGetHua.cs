@@ -2,11 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class SCShowHua : SocketPacket
+public class SCGetHua : SocketPacket
 {
-	public BYTE mIndex = new BYTE();
 	public BYTE mMahjong = new BYTE();
-    public SCShowHua(PACKET_TYPE type)
+    public SCGetHua(PACKET_TYPE type)
 		:
 		base(type)
 	{
@@ -15,13 +14,11 @@ public class SCShowHua : SocketPacket
 	}
 	protected override void fillParams()
 	{
-		pushParam(mIndex);
 		pushParam(mMahjong);
 	}
 	public override void execute()
 	{
-		CommandCharacterShowHua cmdShowHua = newCmd(out cmdShowHua);
-		cmdShowHua.mIndex = mIndex.mValue;
+		CommandCharacterGetHua cmdShowHua = newCmd(out cmdShowHua);
 		cmdShowHua.mMah = (MAHJONG)mMahjong.mValue;
 		pushCommand(cmdShowHua, mCharacterManager.getMyself());
 	}

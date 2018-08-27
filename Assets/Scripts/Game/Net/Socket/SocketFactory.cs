@@ -38,6 +38,7 @@ public class SocketFactory
 		registerPacket<CSBackToMahjongHall>(PACKET_TYPE.PT_CS_BACK_TO_MAHJONG_HALL);
 		registerPacket<CSAddMahjongRobot>(PACKET_TYPE.PT_CS_ADD_MAHJONG_ROBOT);
 		registerPacket<CSCancelLogin>(PACKET_TYPE.PT_CS_CANCEL_LOGIN);
+		registerPacket<CSGetStartMahjongDone>(PACKET_TYPE.PT_CS_GET_START_MAHJONG_DONE);
 		int needCSCount = PACKET_TYPE.PT_CS_MAX - PACKET_TYPE.PT_CS_MIN - 1;
 		if (mPacketTypeList.Count != needCSCount)
 		{
@@ -59,9 +60,8 @@ public class SocketFactory
 		registerPacket<SCReadyRet>(PACKET_TYPE.PT_SC_READY_RET);
 		registerPacket<SCOtherPlayerReady>(PACKET_TYPE.PT_SC_OTHER_PLAYER_READY);
 		registerPacket<SCLeaveRoomRet>(PACKET_TYPE.PT_SC_LEAVE_ROOM_RET);
-		registerPacket<SCNotifyGetStartMahjong>(PACKET_TYPE.PT_SC_NOTIFY_GET_START_MAHJONG);
 		registerPacket<SCNotifyReorderMahjong>(PACKET_TYPE.PT_SC_NOTIFY_REORDER_MAHJONG);
-		registerPacket<SCNotifyGetStartDone>(PACKET_TYPE.PT_SC_NOTIFY_GET_START_DONE);
+		registerPacket<SCNotifyAllGetStartDone>(PACKET_TYPE.PT_SC_NOTIFY_ALL_GET_START_DONE);
 		registerPacket<SCAskDrop>(PACKET_TYPE.PT_SC_ASK_DROP);
 		registerPacket<SCNotifyGetMahjong>(PACKET_TYPE.PT_SC_NOTIFY_GET_MAHJONG);
 		registerPacket<SCAskAction>(PACKET_TYPE.PT_SC_ASK_ACTION);
@@ -81,8 +81,8 @@ public class SocketFactory
 		registerPacket<SCOtherPlayerContinueGame>(PACKET_TYPE.PT_SC_OTHER_PLAYER_CONTINUE_GAME);
 		registerPacket<SCBackToMahjongHallRet>(PACKET_TYPE.PT_SC_BACK_TO_MAHJONG_HALL_RET);
 		registerPacket<SCOtherPlayerBackToMahjongHall>(PACKET_TYPE.PT_SC_OTHER_PLAYER_BACK_TO_MAHJONG_HALL);
-		registerPacket<SCShowHua>(PACKET_TYPE.PT_SC_SHOW_HUA);
-		registerPacket<SCOtherPlayerShowHua>(PACKET_TYPE.PT_SC_OTHER_PLAYER_SHOW_HUA);
+		registerPacket<SCGetHua>(PACKET_TYPE.PT_SC_GET_HUA);
+		registerPacket<SCOtherPlayerGetHua>(PACKET_TYPE.PT_SC_OTHER_PLAYER_GET_HUA);
 		registerPacket<SCAddMahjongRobotRet>(PACKET_TYPE.PT_SC_ADD_MAHJONG_ROBOT_RET);
 		int needSCCount = PACKET_TYPE.PT_SC_MAX - PACKET_TYPE.PT_SC_MIN - 1;
 		if (mPacketTypeList.Count - needCSCount != needSCCount)

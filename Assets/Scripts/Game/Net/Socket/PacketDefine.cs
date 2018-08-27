@@ -24,7 +24,8 @@ public enum PACKET_TYPE
 	PT_CS_CONTINUE_GAME,                    // 向服务器请求继续游戏
 	PT_CS_BACK_TO_MAHJONG_HALL,             // 向服务器请求返回大厅
 	PT_CS_ADD_MAHJONG_ROBOT,                // 向服务器请求添加机器人打麻将,用作测试
-	PT_CS_CANCEL_LOGIN,						// 向服务器请求取消登录
+	PT_CS_CANCEL_LOGIN,                     // 向服务器请求取消登录,仅在还未返回登录结果时使用
+	PT_CS_GET_START_MAHJONG_DONE,           // 向服务器发送客户端已发牌完毕的通知
 	PT_CS_MAX,
 
 	// SC表示Server->Client
@@ -44,11 +45,10 @@ public enum PACKET_TYPE
 	PT_SC_READY_RET,                        // 通知客户端玩家是否准备
 	PT_SC_OTHER_PLAYER_READY,               // 通知客户端有其他玩家准备
 	PT_SC_LEAVE_ROOM_RET,                   // 通知客户端离开房间的结果
-	PT_SC_NOTIFY_GET_START_MAHJONG,         // 通知客户端有玩家开局拿牌
 	PT_SC_NOTIFY_REORDER_MAHJONG,           // 通知客户端重新排列麻将
-	PT_SC_NOTIFY_GET_START_DONE,            // 通知客户端开局拿牌完毕
+	PT_SC_NOTIFY_ALL_GET_START_DONE,        // 通知客户端所有的玩家都拿完了开局的牌
 	PT_SC_ASK_DROP,                         // 通知客户端需要打出一张牌
-	PT_SC_NOTIFY_GET_MAHJONG,               // 通知客户端有玩家摸了一张牌
+	PT_SC_NOTIFY_GET_MAHJONG,               // 通知客户端摸了一张牌
 	PT_SC_ASK_ACTION,                       // 通知客户端选择麻将行为
 	PT_SC_OTHER_PLAYER_DROP,                // 通知客户端有其他玩家打出一张牌
 	PT_SC_REQUEST_DROP_RET,                 // 通知客户端请求打出一张牌的结果
@@ -66,8 +66,8 @@ public enum PACKET_TYPE
 	PT_SC_OTHER_PLAYER_CONTINUE_GAME,       // 通知客户端有其他玩家选择继续游戏
 	PT_SC_BACK_TO_MAHJONG_HALL_RET,         // 通知客户端返回大厅的结果
 	PT_SC_OTHER_PLAYER_BACK_TO_MAHJONG_HALL,// 通知客户端有其他玩家选择返回大厅
-	PT_SC_SHOW_HUA,                         // 通知客户端摆出花牌
-	PT_SC_OTHER_PLAYER_SHOW_HUA,            // 通知客户端有其他玩家摆出花牌
+	PT_SC_GET_HUA,                          // 通知客户端摆出花牌
+	PT_SC_OTHER_PLAYER_GET_HUA,         // 通知客户端有其他玩家摆出花牌
 	PT_SC_ADD_MAHJONG_ROBOT_RET,            // 通知客户端添加麻将机器人的结果
 	PT_SC_MAX,
 

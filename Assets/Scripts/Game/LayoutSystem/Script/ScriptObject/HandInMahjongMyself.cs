@@ -55,14 +55,6 @@ public class HandInMahjongMyself : HandInMahjong
 		// 最后才调用基类函数
 		base.notifyGet(mah);
 	}
-	public override void notifyShowHua(MAHJONG mah, int index)
-	{
-		base.notifyShowHua(mah, index);
-		HandInMahjongInfo info = mHandInMahjong[index];
-		info.mMahjong = MAHJONG.M_MAX;
-		info.mState = HANDIN_STATE.HS_MAX;
-		info.mMahjongWindow.setSpriteName("");
-	}
 	public override void notifyDrop(MAHJONG mah, int index)
 	{
 		base.notifyDrop(mah, index);

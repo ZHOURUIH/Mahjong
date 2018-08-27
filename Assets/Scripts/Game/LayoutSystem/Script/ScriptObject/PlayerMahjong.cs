@@ -59,10 +59,10 @@ public class PlayerMahjong : GameBase
 	{
 		mHandInMahjong.notifyGet(mah);
 	}
-	public void notifyShowHua(MAHJONG mah, int index)
-	{
-		mHandInMahjong.notifyShowHua(mah, index);
-	}
+	//public void notifyShowHua(MAHJONG mah, int index)
+	//{
+	//	mHandInMahjong.notifyShowHua(mah, index);
+	//}
 	public void notifyDrop(MAHJONG mah, int index)
 	{
 		mHandInMahjong.notifyDrop(mah, index);

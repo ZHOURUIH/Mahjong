@@ -12,9 +12,7 @@ public class ScriptDice : LayoutScript
 	public ScriptDice(string name, GameLayout layout)
 		:
 		base(name, layout)
-	{
-		;
-	}
+	{}
 	public override void assignWindow()
 	{
 		newObject(out mDiceAnim, "DiceAnim");
@@ -31,6 +29,13 @@ public class ScriptDice : LayoutScript
 		LayoutTools.ACTIVE_WINDOW(mDice0, false);
 		LayoutTools.ACTIVE_WINDOW(mDice1, false);
 	}
+	public override void onGameState()
+	{
+		base.onGameState();
+		byte[] dice = mMahjongSystem.getDice();
+		mDice0.setSpriteName("Dice" + dice[0]);
+		mDice1.setSpriteName("Dice" + dice[1]);
+	}
 	public override void onShow(bool immediately, string param)
 	{
 		mDiceAnim.stop();
@@ -45,10 +50,9 @@ public class ScriptDice : LayoutScript
 	{
 		;
 	}
-	public void setDiceResult(byte[] dice)
+	public float getDiceAnimTime()
 	{
-		mDice0.setSpriteName("Dice" + dice[0]);
-		mDice1.setSpriteName("Dice" + dice[1]);
+		return mDiceAnim.getInterval() * mDiceAnim.getTextureFrameCount();
 	}
 	//-----------------------------------------------------------------------------------
 	protected void onDiceAnimDone(txNGUISpriteAnim window, object userData, bool isBreak)

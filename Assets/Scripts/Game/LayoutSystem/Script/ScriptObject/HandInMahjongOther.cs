@@ -35,10 +35,6 @@ public class HandInMahjongOther : HandInMahjong
 	{
 		base.notifyGet(mah);
 	}
-	public override void notifyShowHua(MAHJONG mah, int index)
-	{
-		base.notifyShowHua(mah, index);
-	}
 	public override void notifyDrop(MAHJONG mah, int index)
 	{
 		base.notifyDrop(mah, index);

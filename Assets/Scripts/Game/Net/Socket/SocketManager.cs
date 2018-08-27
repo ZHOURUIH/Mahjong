@@ -251,7 +251,7 @@ public class SocketManager : FrameComponent
 					short realDataSize = BinaryUtility.readShort(recvBuff, ref index);
 					if (realDataSize != packetSize)
 					{
-						string info = "error : wrong packet size! type : " + type + "readed : " + realDataSize + ", packet size : " + packetSize;
+						string info = "error : wrong packet size! type : " + type + ", readed : " + realDataSize + ", packet size : " + packetSize;
 						GameUtility.messageOK(info, true);
 						UnityUtility.logError(info, false);
 						break;

@@ -14,6 +14,10 @@ public class MahjongSceneRunningDice : SceneProcedure
 		// 通知全部角色信息布局全部准备完毕
 		mScriptAllCharacterInfo.notifyStartGame();
 		mScriptMahjongFrame.notifyStartGame();
+		CommandGameScenePrepareChangeProcedure cmd = newCmd(out cmd);
+		cmd.mProcedure = PROCEDURE_TYPE.PT_MAHJONG_RUNNING_GET_START;
+		cmd.mPrepareTime = mScriptDice.getDiceAnimTime() + 1.0f;
+		pushCommand(cmd, mGameScene);
 	}
 	protected override void onUpdate(float elapsedTime)
 	{

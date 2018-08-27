@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class SCStartGame : SocketPacket
 {
 	protected BYTES mDice = new BYTES(2);
-	protected INT mPlayerCount = new INT();
+	protected BYTE mPlayerCount = new BYTE();
 	// 以下数组是将二维数组合成了一维数组
 	protected INTS mPlayerIDList = new INTS(GameDefine.MAX_PLAYER_COUNT);
 	protected BYTES mHandInList = new BYTES(GameDefine.MAX_PLAYER_COUNT * GameDefine.MAX_HAND_IN_COUNT);
@@ -20,11 +20,19 @@ public class SCStartGame : SocketPacket
 	protected override void fillParams()
 	{
 		pushParam(mDice);
+		pushParam(mPlayerCount);
+		pushParam(mPlayerIDList);
+		pushParam(mHandInList);
+		pushParam(mHuaList);
 	}
 	public override void execute()
 	{
 		GameScene gameScene = mGameSceneManager.getCurScene();
 		if(gameScene.getSceneType() != GAME_SCENE_TYPE.GST_MAHJONG)
+		{
+			return;
+		}
+		if(!gameScene.atProcedure(PROCEDURE_TYPE.PT_MAHJONG_WAITING))
 		{
 			return;
 		}
@@ -55,16 +63,12 @@ public class SCStartGame : SocketPacket
 				huaList[i].Add(mah);
 			}
 		}
+		mMahjongSystem.setDice(mDice.mValue);
 		mMahjongSystem.startMahjong(playerIDList, handInList, huaList);
 
 		// 跳转到掷骰子流程
 		CommandGameSceneChangeProcedure cmd = newCmd(out cmd);
 		cmd.mProcedure = PROCEDURE_TYPE.PT_MAHJONG_RUNNING_DICE;
 		pushCommand(cmd, mGameSceneManager.getCurScene());
-
-		// 通知麻将场景开始掷骰子
-		CommandMahjongSceneNotifyDice cmdDice = newCmd(out cmdDice);
-		cmdDice.mDice = mDice.mValue;
-		pushCommand(cmdDice, gameScene);
 	}
 }

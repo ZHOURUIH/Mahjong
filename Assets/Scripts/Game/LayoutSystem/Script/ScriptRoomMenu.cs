@@ -6,11 +6,15 @@ using UnityEngine;
 
 public class ScriptRoomMenu : LayoutScript
 {
-	protected txNGUISprite mBackground;
-	protected txNGUIButton mCreateRoomButton;
-	protected txNGUISprite mCreateLabel;
-	protected txNGUIButton mJoinRoomButton;
-	protected txNGUISprite mJoinLabel;
+	protected txNGUISprite	mBackground;
+	protected txNGUIButton	mCreateRoomButton;
+	protected txNGUIText	mCreateLabel;
+	protected txNGUIButton	mJoinRoomButton;
+	protected txNGUIText	mJoinLabel;
+	protected txNGUIButton	mFreeMatchButton;
+	protected txNGUIText	mFreeMatchLabel;
+	protected txNGUIButton	mRoomListButton;
+	protected txNGUIText	mRoomListLabel;
 	public ScriptRoomMenu(string name, GameLayout layout)
 		:
 		base(name, layout)
@@ -21,14 +25,20 @@ public class ScriptRoomMenu : LayoutScript
 	{
 		newObject(out mBackground, "Background");
 		newObject(out mCreateRoomButton, mBackground, "CreateRoomButton");
-		newObject(out mCreateLabel, mCreateRoomButton, "CreateLabel");
+		newObject(out mCreateLabel, mCreateRoomButton, "Label");
 		newObject(out mJoinRoomButton, mBackground, "JoinRoomButton");
-		newObject(out mJoinLabel, mJoinRoomButton, "JoinLabel");
+		newObject(out mJoinLabel, mJoinRoomButton, "Label");
+		newObject(out mFreeMatchButton, mBackground, "FreeMatchButton");
+		newObject(out mFreeMatchLabel, mFreeMatchButton, "Label");
+		newObject(out mRoomListButton, mBackground, "RoomListButton");
+		newObject(out mRoomListLabel, mRoomListButton, "Label");
 	}
 	public override void init()
 	{
 		registeBoxColliderNGUI(mCreateRoomButton, onCreateClicked, onButtonPress);
 		registeBoxColliderNGUI(mJoinRoomButton, onJoinClicked, onButtonPress);
+		registeBoxColliderNGUI(mFreeMatchButton, onFreeMatchClicked, onButtonPress);
+		registeBoxColliderNGUI(mRoomListButton, onRoomListClicked, onButtonPress);
 	}
 	public override void onReset()
 	{
@@ -57,6 +67,18 @@ public class ScriptRoomMenu : LayoutScript
 	{
 		// 显示加入房间对话框
 		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_JOIN_ROOM_DIALOG);
+	}
+	protected void onFreeMatchClicked(GameObject obj)
+	{
+		// 显示正在自由匹配的提示界面
+		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_FREE_MATCH_TIP);
+	}
+	protected void onRoomListClicked(GameObject obj)
+	{
+		// 进入到房间列表流程
+		CommandGameSceneChangeProcedure cmd = newCmd(out cmd);
+		cmd.mProcedure = PROCEDURE_TYPE.PT_MAIN_ROOM_LIST;
+		pushCommand(cmd, mGameSceneManager.getCurScene());
 	}
 	protected void onButtonPress(GameObject obj, bool press)
 	{

@@ -2,9 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class MainSceneRunning : SceneProcedure
+public class MainSceneMainHall : SceneProcedure
 {
-	public MainSceneRunning(PROCEDURE_TYPE type, GameScene gameScene)
+	public MainSceneMainHall(PROCEDURE_TYPE type, GameScene gameScene)
 		:
 	base(type, gameScene)
 	{ }

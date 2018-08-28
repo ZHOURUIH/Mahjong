@@ -29,6 +29,7 @@ public class MainSceneLoading : SceneProcedure
 		addLoadInfo(LAYOUT_TYPE.LT_BILLBOARD, 1);
 		addLoadInfo(LAYOUT_TYPE.LT_ROOM_MENU, 1);
 		addLoadInfo(LAYOUT_TYPE.LT_JOIN_ROOM_DIALOG, 2);
+		addLoadInfo(LAYOUT_TYPE.LT_FREE_MATCH_TIP, 5);
 	}
 	protected override void onInit(SceneProcedure lastProcedure, string intent)
 	{
@@ -63,7 +64,7 @@ public class MainSceneLoading : SceneProcedure
 	protected void allLayoutLoaded()
 	{
 		CommandGameSceneChangeProcedure cmd = newCmd(out cmd, true, true);
-		cmd.mProcedure = PROCEDURE_TYPE.PT_MAIN_RUNNING;
+		cmd.mProcedure = PROCEDURE_TYPE.PT_MAIN_MAIN_HALL;
 		pushDelayCommand(cmd, mGameScene);
 	}
 	protected void addLoadInfo(LAYOUT_TYPE type, int order)

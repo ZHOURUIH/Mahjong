@@ -32,6 +32,7 @@ public class GameBase : FrameBase
 	public static ScriptMessageOK mScriptMessageOK;
 	public static ScriptMainLoading mScriptMainLoading;
 	public static ScriptMahjongLoading mScriptMahjongLoading;
+	public static ScriptFreeMatchTip mScriptFreeMatchTip;
 	public override void notifyConstructDone()
 	{
 		base.notifyConstructDone();

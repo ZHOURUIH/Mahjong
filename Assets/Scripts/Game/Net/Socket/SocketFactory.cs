@@ -39,6 +39,7 @@ public class SocketFactory
 		registerPacket<CSAddMahjongRobot>(PACKET_TYPE.PT_CS_ADD_MAHJONG_ROBOT);
 		registerPacket<CSCancelLogin>(PACKET_TYPE.PT_CS_CANCEL_LOGIN);
 		registerPacket<CSGetStartMahjongDone>(PACKET_TYPE.PT_CS_GET_START_MAHJONG_DONE);
+		registerPacket<CSFreeMatch>(PACKET_TYPE.PT_CS_FREE_MATCH);
 		int needCSCount = PACKET_TYPE.PT_CS_MAX - PACKET_TYPE.PT_CS_MIN - 1;
 		if (mPacketTypeList.Count != needCSCount)
 		{

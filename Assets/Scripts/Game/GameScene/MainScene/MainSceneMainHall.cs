@@ -34,6 +34,7 @@ public class MainSceneMainHall : SceneProcedure
 		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_BILLBOARD);
 		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_ROOM_MENU);
 		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_JOIN_ROOM_DIALOG);
+		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_FREE_MATCH_TIP);
 	}
 	protected override void onKeyProcess(float elapsedTime)
 	{

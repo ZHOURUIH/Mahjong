@@ -26,6 +26,7 @@ public enum PACKET_TYPE
 	PT_CS_ADD_MAHJONG_ROBOT,                // 向服务器请求添加机器人打麻将,用作测试
 	PT_CS_CANCEL_LOGIN,                     // 向服务器请求取消登录,仅在还未返回登录结果时使用
 	PT_CS_GET_START_MAHJONG_DONE,           // 向服务器发送客户端已发牌完毕的通知
+	PT_CS_FREE_MATCH,						// 向服务器请求自由匹配房间
 	PT_CS_MAX,
 
 	// SC表示Server->Client

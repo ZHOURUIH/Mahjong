@@ -72,6 +72,8 @@ public class ScriptRoomMenu : LayoutScript
 	{
 		// 显示正在自由匹配的提示界面
 		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_FREE_MATCH_TIP);
+		// 发送消息自由匹配
+		mSocketNetManager.sendMessage<CSFreeMatch>();
 	}
 	protected void onRoomListClicked(GameObject obj)
 	{

@@ -70,14 +70,6 @@ public class HandInMahjong : GameBase
 		LayoutTools.ACTIVE_WINDOW(mHandInMahjong[mCurHandInCount].mMahjongWindow);
 		++mCurHandInCount;
 	}
-	//// 拿出一张花牌
-	//public virtual void notifyShowHua(MAHJONG mah, int index)
-	//{
-	//	if(index >= 0 && index < mHandInMahjong.Count)
-	//	{
-	//		LayoutTools.ACTIVE_WINDOW(mHandInMahjong[index].mMahjongWindow, false);
-	//	}
-	//}
 	// 打出一张牌
 	public virtual void notifyDrop(MAHJONG mah, int index)
 	{

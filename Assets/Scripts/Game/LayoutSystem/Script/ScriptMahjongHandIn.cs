@@ -73,11 +73,6 @@ public class ScriptMahjongHandIn : LayoutScript
 	{
 		mPlayerMahjong[(int)pos].notifyDrop(mah, index);
 	}
-	//// 拿出一张花牌
-	//public void notifyShowHua(PLAYER_POSITION pos, MAHJONG mah, int index)
-	//{
-	//	mPlayerMahjong[(int)pos].notifyShowHua(mah, index);
-	//}
 	// 碰牌或者杠牌
 	public void notifyPengOrGang(PLAYER_POSITION pos, List<PengGangInfo> infoList)
 	{

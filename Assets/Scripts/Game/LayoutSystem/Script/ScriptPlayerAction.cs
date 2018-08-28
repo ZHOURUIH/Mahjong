@@ -86,6 +86,8 @@ public class ScriptPlayerAction : LayoutScript
 			confirm.mAction.mValue = (byte)action;
 			mSocketNetManager.sendMessage(confirm);
 			afterActionSelected();
+			// 通知其他布局行为已经选择
+			mScriptMahjongHandIn.notifyAbleToPengOrGang(PLAYER_POSITION.PP_MYSELF, MAHJONG.M_MAX);
 		}
 	}
 	protected void afterActionSelected()

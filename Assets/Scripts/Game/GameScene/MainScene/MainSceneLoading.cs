@@ -30,6 +30,7 @@ public class MainSceneLoading : SceneProcedure
 		addLoadInfo(LAYOUT_TYPE.LT_ROOM_MENU, 1);
 		addLoadInfo(LAYOUT_TYPE.LT_JOIN_ROOM_DIALOG, 2);
 		addLoadInfo(LAYOUT_TYPE.LT_FREE_MATCH_TIP, 5);
+		addLoadInfo(LAYOUT_TYPE.LT_BACK_TO_MAIN_HALL, 1);
 	}
 	protected override void onInit(SceneProcedure lastProcedure, string intent)
 	{

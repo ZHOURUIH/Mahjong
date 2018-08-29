@@ -14,6 +14,7 @@ public class MainSceneMainHall : SceneProcedure
 		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_CHARACTER);
 		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_BILLBOARD);
 		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_ROOM_MENU);
+		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_MAIN_FRAME_BACK);
 
 		// 显示角色信息
 		CharacterMyself myself = mCharacterManager.getMyself();
@@ -35,6 +36,7 @@ public class MainSceneMainHall : SceneProcedure
 		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_ROOM_MENU);
 		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_JOIN_ROOM_DIALOG);
 		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_FREE_MATCH_TIP);
+		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_MAIN_FRAME_BACK);
 	}
 	protected override void onKeyProcess(float elapsedTime)
 	{

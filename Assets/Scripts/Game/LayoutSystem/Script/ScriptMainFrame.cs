@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class ScriptMainFrame : LayoutScript
 {
-	protected txNGUISprite mBackground;
+	protected txUIObject mBackground;
 	protected txUIObject mBottomButtonRoot;
 	protected txUIObject mLeftTopButtonRoot;
 	protected txNGUISprite mFrameTitle;
@@ -55,15 +55,15 @@ public class ScriptMainFrame : LayoutScript
 	}
 	public override void onReset()
 	{
-		LayoutTools.SCALE_WINDOW(mMailButton, Vector2.one);
-		LayoutTools.SCALE_WINDOW(mCompetitionButton, Vector2.one);
-		LayoutTools.SCALE_WINDOW(mShareButton, Vector2.one);
-		LayoutTools.SCALE_WINDOW(mStandingButton, Vector2.one);
-		LayoutTools.SCALE_WINDOW(mRuleButton, Vector2.one);
-		LayoutTools.SCALE_WINDOW(mContactButton, Vector2.one);
-		LayoutTools.SCALE_WINDOW(mRechargeButton, Vector2.one);
-		LayoutTools.SCALE_WINDOW(mSettingButton, Vector2.one);
-		LayoutTools.SCALE_WINDOW(mQuitButton, Vector2.one);
+		LayoutTools.SCALE_WINDOW(mMailButton);
+		LayoutTools.SCALE_WINDOW(mCompetitionButton);
+		LayoutTools.SCALE_WINDOW(mShareButton);
+		LayoutTools.SCALE_WINDOW(mStandingButton);
+		LayoutTools.SCALE_WINDOW(mRuleButton);
+		LayoutTools.SCALE_WINDOW(mContactButton);
+		LayoutTools.SCALE_WINDOW(mRechargeButton);
+		LayoutTools.SCALE_WINDOW(mSettingButton);
+		LayoutTools.SCALE_WINDOW(mQuitButton);
 	}
 	public override void onShow(bool immediately, string param)
 	{

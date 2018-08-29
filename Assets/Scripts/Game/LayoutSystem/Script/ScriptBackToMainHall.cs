@@ -42,8 +42,10 @@ public class ScriptBackToMainHall : LayoutScript
 	//-----------------------------------------------------------------------------------
 	protected void onBackClicked(GameObject obj)
 	{
-		// 向服务器发送创建房间的消息
-		mSocketNetManager.sendMessage<CSCreateRoom>();
+		// 从房间列表流程返回到大厅流程
+		CommandGameSceneChangeProcedure cmd = newCmd(out cmd);
+		cmd.mProcedure = PROCEDURE_TYPE.PT_MAIN_MAIN_HALL;
+		pushCommand(cmd, mGameSceneManager.getCurScene());
 	}
 	protected void onButtonPress(GameObject obj, bool press)
 	{

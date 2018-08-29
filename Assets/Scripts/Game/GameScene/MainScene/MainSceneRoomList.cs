@@ -10,7 +10,7 @@ public class MainSceneRoomList : SceneProcedure
 	{ }
 	protected override void onInit(SceneProcedure lastProcedure, string intent)
 	{
-		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_MAIN_FRAME);
+		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_MAIN_FRAME_BACK);
 		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_BACK_TO_MAIN_HALL);
 		// 向服务器请求房间列表
 	}
@@ -20,7 +20,7 @@ public class MainSceneRoomList : SceneProcedure
 	}
 	protected override void onExit(SceneProcedure nextProcedure)
 	{
-		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_MAIN_FRAME);
+		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_MAIN_FRAME_BACK);
 		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_BACK_TO_MAIN_HALL);
 	}
 	protected override void onKeyProcess(float elapsedTime)

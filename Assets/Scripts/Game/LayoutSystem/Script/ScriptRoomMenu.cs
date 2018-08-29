@@ -42,8 +42,10 @@ public class ScriptRoomMenu : LayoutScript
 	}
 	public override void onReset()
 	{
-		LayoutTools.SCALE_WINDOW(mCreateRoomButton, Vector2.one);
-		LayoutTools.SCALE_WINDOW(mJoinRoomButton, Vector2.one);
+		LayoutTools.SCALE_WINDOW(mCreateRoomButton);
+		LayoutTools.SCALE_WINDOW(mJoinRoomButton);
+		LayoutTools.SCALE_WINDOW(mFreeMatchButton);
+		LayoutTools.SCALE_WINDOW(mRoomListButton);
 	}
 	public override void onShow(bool immediately, string param)
 	{

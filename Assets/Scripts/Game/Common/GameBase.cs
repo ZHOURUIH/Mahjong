@@ -35,6 +35,7 @@ public class GameBase : FrameBase
 	public static ScriptFreeMatchTip mScriptFreeMatchTip;
 	public static ScriptBackToMainHall mScriptBackToMainHall;
 	public static ScriptMainFrameBack mScriptMainFrameBack;
+	public static ScriptRoomList mScriptRoomList;
 	public override void notifyConstructDone()
 	{
 		base.notifyConstructDone();

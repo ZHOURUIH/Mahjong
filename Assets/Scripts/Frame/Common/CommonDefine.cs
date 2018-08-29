@@ -16,6 +16,7 @@ public enum UI_TYPE
 	UT_NGUI_TEXTURE_ANIM,	// 序列帧图片窗口,不需要图集
 	UT_NGUI_NUMBER,			// 数字窗口
 	UT_NGUI_BUTTON,         // 按钮窗口
+	UT_NGUI_CHECK_BOX,      // 勾选框
 	UT_NGUI_SLIDER,			// 滑动条
 	UT_NGUI_SCROLL_VIEW,	// 包含多个按钮的滚动条
 	UT_NGUI_VIDEO,			// 用于播放视频的窗口

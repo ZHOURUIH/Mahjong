@@ -30,6 +30,7 @@ public enum LAYOUT_TYPE
 	LT_FREE_MATCH_TIP,
 	LT_BACK_TO_MAIN_HALL,
 	LT_MAIN_FRAME_BACK,
+	LT_ROOM_LIST,
 	LT_MAX,
 };
 // 音效定义
@@ -264,6 +265,8 @@ public class GameDefine : CommonDefine
 	public const int INVALID_ID = ~0;
 	// 胡牌类型的最大数量
 	public const int MAX_HU_COUNT = 16;
+	// 房间列表一页中房间的最大数量
+	public const int ROOM_LIST_PAGE_ITEM_COUNT = 9;
 	// 所有麻将的资源名字
 	public static string[] MAHJONG_NAME = new string[(int)MAHJONG.M_MAX]
 	{

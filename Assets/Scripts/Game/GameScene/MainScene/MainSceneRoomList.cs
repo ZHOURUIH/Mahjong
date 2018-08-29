@@ -12,6 +12,7 @@ public class MainSceneRoomList : SceneProcedure
 	{
 		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_MAIN_FRAME_BACK);
 		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_BACK_TO_MAIN_HALL);
+		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_ROOM_LIST);
 		// 向服务器请求房间列表
 	}
 	protected override void onUpdate(float elapsedTime)
@@ -22,6 +23,7 @@ public class MainSceneRoomList : SceneProcedure
 	{
 		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_MAIN_FRAME_BACK);
 		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_BACK_TO_MAIN_HALL);
+		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_ROOM_LIST);
 	}
 	protected override void onKeyProcess(float elapsedTime)
 	{

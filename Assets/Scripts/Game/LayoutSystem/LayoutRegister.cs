@@ -30,6 +30,7 @@ public class LayoutRegister : GameBase
 		registeLayout<ScriptFreeMatchTip>(LAYOUT_TYPE.LT_FREE_MATCH_TIP, "UIFreeMatchTip");
 		registeLayout<ScriptBackToMainHall>(LAYOUT_TYPE.LT_BACK_TO_MAIN_HALL, "UIBackToMainHall");
 		registeLayout<ScriptMainFrameBack>(LAYOUT_TYPE.LT_MAIN_FRAME_BACK, "UIMainFrameBack");
+		registeLayout<ScriptRoomList>(LAYOUT_TYPE.LT_ROOM_LIST, "UIRoomList");
 		if (mLayoutManager.getLayoutCount() < (int)LAYOUT_TYPE.LT_MAX)
 		{
 			UnityUtility.logError("error : not all script added! max count : " + (int)LAYOUT_TYPE.LT_MAX + ", added count :" + mLayoutManager.getLayoutCount());
@@ -65,6 +66,7 @@ public class LayoutRegister : GameBase
 		if (assign(ref mScriptFreeMatchTip, script, created)) return;
 		if (assign(ref mScriptBackToMainHall, script, created)) return;
 		if (assign(ref mScriptMainFrameBack, script, created)) return;
+		if (assign(ref mScriptRoomList, script, created)) return;
 	}
 	//----------------------------------------------------------------------------------------------------------------------------------------------------------------
 	protected static void registeLayout<T>(LAYOUT_TYPE layout, string name) where T : LayoutScript

@@ -930,7 +930,7 @@ public class UIAtlasMaker : EditorWindow
 					// If the material doesn't exist, create it
 					if (mat == null)
 					{
-						Shader shader = Shader.Find(NGUISettings.atlasPMA ? "Unlit/Premultiplied Colored" : "Unlit/Transparent Colored");
+						Shader shader = Shader.Find(NGUISettings.atlasPMA ? "Unlit/Premultiplied Colored" : "NGUIDefault");
 						mat = new Material(shader);
 
 						// Save the material

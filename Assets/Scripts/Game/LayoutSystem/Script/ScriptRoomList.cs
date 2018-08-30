@@ -6,11 +6,11 @@ using UnityEngine;
 
 public class RoomItem : GameBase
 {
-	protected ScriptRoomList mScript;
-	protected txUIObject mItemParent;
-	protected txNGUITexture mItemRoot;
-	protected txNGUIText mOwnerName;
-	protected txNGUIText mPlayerCount;
+	public ScriptRoomList mScript;
+	public txUIObject mItemParent;
+	public txNGUITexture mItemRoot;
+	public txNGUIText mOwnerName;
+	public txNGUIText mPlayerCount;
 	public RoomItem(ScriptRoomList script)
 	{
 		mScript = script;
@@ -48,6 +48,7 @@ public class ScriptRoomList : LayoutScript
 	protected txUIObject[] mItemRootList;
 	protected RoomItem[] mRoomItemList;
 	protected txNGUIButton mLastPage;
+	protected txNGUIText mPageCountLabel;
 	protected txNGUIButton mNextPage;
 	protected txNGUIButton mManualRefresh;
 	protected txNGUIText mRefreshLabel;
@@ -74,6 +75,7 @@ public class ScriptRoomList : LayoutScript
 			mRoomItemList[i].assignWindow(mItemRootList[i]);
 		}
 		newObject(out mLastPage, mBackground, "LastPage");
+		newObject(out mPageCountLabel, mBackground, "PageCountLabel");
 		newObject(out mNextPage, mBackground, "NextPage");
 		newObject(out mManualRefresh, mBackground, "ManualRefresh");
 		newObject(out mRefreshLabel, mBackground, "RefreshLabel");
@@ -103,6 +105,21 @@ public class ScriptRoomList : LayoutScript
 			mRoomItemList[i].onReset();
 		}
 	}
+	public override void onGameState()
+	{
+		base.onGameState();
+		GameScene gameScene = mGameSceneManager.getCurScene();
+		if(gameScene.atProcedure(PROCEDURE_TYPE.PT_MAIN_ROOM_LIST))
+		{
+			MainSceneRoomList roomListProcedure = gameScene.getCurOrParentProcedure<MainSceneRoomList>(PROCEDURE_TYPE.PT_MAIN_ROOM_LIST);
+			if (roomListProcedure != null)
+			{
+				confirmAutoRequest(roomListProcedure.getAutoRequestRoomList(), roomListProcedure.getCurRequestTime());
+				setPageLabel(0, 0);
+				showRoomList(null, 0, 0);
+			}
+		}
+	}
 	public override void onShow(bool immediately, string param)
 	{
 		;
@@ -115,22 +132,84 @@ public class ScriptRoomList : LayoutScript
 	{
 		;
 	}
+	public void setRemainRequestTime(int time)
+	{
+		mTimeLabel.setLabel(time + "秒");
+	}
+	public void showRoomList(List<RoomInfo> roomList, int pageIndex, int allRoomCount)
+	{
+		// 显示当前页房间信息
+		int maxCount = mRoomItemList.Length;
+		int showCount = MathUtility.getMin(roomList != null ? roomList.Count : 0, maxCount);
+		for(int i = 0; i < maxCount; ++i)
+		{
+			LayoutTools.ACTIVE_WINDOW(mRoomItemList[i].mItemParent, i < showCount);
+			if(i < showCount)
+			{
+				mRoomItemList[i].setOwnerName(roomList[i].mOwnerName);
+				mRoomItemList[i].setPlayerCount(roomList[i].mCurCount, roomList[i].mMaxCount);
+			}
+		}
+		// 计算总页数
+		int pageCount = allRoomCount / GameDefine.ROOM_LIST_PAGE_ITEM_COUNT;
+		if(allRoomCount % GameDefine.ROOM_LIST_PAGE_ITEM_COUNT > 0)
+		{
+			++pageCount;
+		}
+		setPageLabel(pageIndex, pageCount);
+	}
+	public void confirmAutoRequest(bool autoRequest, float autoRequestTime)
+	{
+		mAutoRefreshCheck.setChecked(autoRequest);
+		MathUtility.clampMin(ref autoRequestTime, 0.0f);
+		setRemainRequestTime((int)autoRequestTime);
+	}
+	public void setPageLabel(int curPage, int totalPage)
+	{
+		// 设置翻页按钮是否可点击
+		mLastPage.setHandleInput(curPage > 0);
+		mNextPage.setHandleInput(curPage < totalPage);
+		mPageCountLabel.setLabel(curPage + "/" + totalPage);
+	}
 	//-----------------------------------------------------------------------------------
 	protected void onLastPageClicked(GameObject obj)
 	{
-		;
+		GameScene gameScene = mGameSceneManager.getCurScene();
+		if (gameScene.atProcedure(PROCEDURE_TYPE.PT_MAIN_ROOM_LIST))
+		{
+			MainSceneRoomList roomListProcedure = gameScene.getCurOrParentProcedure<MainSceneRoomList>(PROCEDURE_TYPE.PT_MAIN_ROOM_LIST);
+			CommandMainSceneRequestRoomList cmd = newCmd(out cmd);
+			cmd.mCurPageIndex = roomListProcedure.getCurPage() - 1;
+			pushCommand(cmd, gameScene);
+		}
 	}
 	protected void onNextPageClicked(GameObject obj)
 	{
-		;
+		GameScene gameScene = mGameSceneManager.getCurScene();
+		if (gameScene.atProcedure(PROCEDURE_TYPE.PT_MAIN_ROOM_LIST))
+		{
+			MainSceneRoomList roomListProcedure = gameScene.getCurOrParentProcedure<MainSceneRoomList>(PROCEDURE_TYPE.PT_MAIN_ROOM_LIST);
+			CommandMainSceneRequestRoomList cmd = newCmd(out cmd);
+			cmd.mCurPageIndex = roomListProcedure.getCurPage() + 1;
+			pushCommand(cmd, gameScene);
+		}
 	}
 	protected void onManualRefreshClicked(GameObject obj)
 	{
-		;
+		GameScene gameScene = mGameSceneManager.getCurScene();
+		if(gameScene.atProcedure(PROCEDURE_TYPE.PT_MAIN_ROOM_LIST))
+		{
+			MainSceneRoomList roomListProcedure = gameScene.getCurOrParentProcedure<MainSceneRoomList>(PROCEDURE_TYPE.PT_MAIN_ROOM_LIST);
+			CommandMainSceneRequestRoomList cmd = newCmd(out cmd);
+			cmd.mCurPageIndex = roomListProcedure.getCurPage();
+			pushCommand(cmd, gameScene);
+		}
 	}
 	protected void onAutoRefreshClicked(GameObject obj)
 	{
-		;
+		CommandMainSceneNotifyAutoRequest cmd = newCmd(out cmd);
+		cmd.mAutoRequest = mAutoRefreshCheck.getChecked();
+		pushCommand(cmd, mGameSceneManager.getCurScene());
 	}
 	protected void onButtonPress(GameObject obj, bool press)
 	{

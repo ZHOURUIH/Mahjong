@@ -16,6 +16,7 @@ public class Game : GameFramework
 		registeComponent<MahjongSystem>();
 		registeComponent<SocketManager>();
 		registeComponent<LogSystem>();
+		registeComponent<RoomSystem>();
 	}
 	protected override void notifyBase()
 	{

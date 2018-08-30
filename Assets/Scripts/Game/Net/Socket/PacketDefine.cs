@@ -27,6 +27,7 @@ public enum PACKET_TYPE
 	PT_CS_CANCEL_LOGIN,                     // 向服务器请求取消登录,仅在还未返回登录结果时使用
 	PT_CS_GET_START_MAHJONG_DONE,           // 向服务器发送客户端已发牌完毕的通知
 	PT_CS_FREE_MATCH,						// 向服务器请求自由匹配房间
+	PT_CS_REQUEST_ROOM_LIST,                // 向服务器请求获得房间列表
 	PT_CS_MAX,
 
 	// SC表示Server->Client
@@ -70,6 +71,7 @@ public enum PACKET_TYPE
 	PT_SC_GET_HUA,                          // 通知客户端摆出花牌
 	PT_SC_OTHER_PLAYER_GET_HUA,				// 通知客户端有其他玩家摆出花牌
 	PT_SC_ADD_MAHJONG_ROBOT_RET,            // 通知客户端添加麻将机器人的结果
+	PT_SC_ROOM_LIST,						// 通知客户端房间列表
 	PT_SC_MAX,
 
 	PT_MAX,

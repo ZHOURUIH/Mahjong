@@ -267,6 +267,13 @@ public class GameDefine : CommonDefine
 	public const int MAX_HU_COUNT = 16;
 	// 房间列表一页中房间的最大数量
 	public const int ROOM_LIST_PAGE_ITEM_COUNT = 9;
+	public const int MAX_REQUEST_ROOM_COUNT = ROOM_LIST_PAGE_ITEM_COUNT;
+	// 名字的最大长度
+	public const int MAX_NAME_LENGTH = 16;
+	// 自动刷新房间列表的时间
+	public const float AUTO_UPDATE_ROOM_TIME = 5.0f;
+	// 两次刷新房间列表之间的最小间隔
+	public const float REQUEST_ROOM_LIST_CD = 0.5f;
 	// 所有麻将的资源名字
 	public static string[] MAHJONG_NAME = new string[(int)MAHJONG.M_MAX]
 	{

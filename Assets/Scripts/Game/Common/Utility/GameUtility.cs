@@ -423,9 +423,9 @@ public class GameUtility : GameBase
 	}
 
 	// 服务器中的位置转换为客户端的位置
-	public static PLAYER_POSITION serverPositionToClientPosition(PLAYER_POSITION serverPosition, PLAYER_POSITION myselfSererPosition)
+	public static PLAYER_POSITION serverPositionToClientPosition(PLAYER_POSITION serverPosition, PLAYER_POSITION myselfServerPosition)
 	{
-		int interval = serverPosition - myselfSererPosition;
+		int interval = serverPosition - myselfServerPosition;
 		if(interval < 0)
 		{
 			interval += GameDefine.MAX_PLAYER_COUNT;

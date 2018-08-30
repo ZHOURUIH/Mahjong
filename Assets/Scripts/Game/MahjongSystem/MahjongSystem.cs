@@ -99,8 +99,15 @@ public class MahjongSystem : FrameComponent
 		mHandInList = handInList;
 		mHuaList = huaList;
 	}
+	public void setBankerPos(int bankerPos)
+	{
+		// 计算出服务器中庄家在本地的方位
+		CharacterMyself myself = mCharacterManager.getMyself();
+		mBankerPos = GameUtility.serverPositionToClientPosition((PLAYER_POSITION)bankerPos, myself.getCharacterData().mServerPosition);
+	}
 	public void notifyGetStartMahjong()
 	{
 		mPlayState = MAHJONG_PLAY_STATE.MPS_GET_START;
+		mCurAssignPos = mBankerPos;
 	}
 }

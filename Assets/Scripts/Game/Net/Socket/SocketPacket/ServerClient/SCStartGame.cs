@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class SCStartGame : SocketPacket
 {
 	protected BYTES mDice = new BYTES(2);
+	protected BYTE mBankerPos = new BYTE();
 	protected BYTE mPlayerCount = new BYTE();
 	// 以下数组是将二维数组合成了一维数组
 	protected INTS mPlayerIDList = new INTS(GameDefine.MAX_PLAYER_COUNT);
@@ -15,6 +16,7 @@ public class SCStartGame : SocketPacket
 	protected override void fillParams()
 	{
 		pushParam(mDice);
+		pushParam(mBankerPos);
 		pushParam(mPlayerCount);
 		pushParam(mPlayerIDList);
 		pushParam(mHandInList);
@@ -59,6 +61,7 @@ public class SCStartGame : SocketPacket
 			}
 		}
 		mMahjongSystem.setDice(mDice.mValue);
+		mMahjongSystem.setBankerPos(mBankerPos.mValue);
 		mMahjongSystem.startMahjong(playerIDList, handInList, huaList);
 
 		// 跳转到掷骰子流程

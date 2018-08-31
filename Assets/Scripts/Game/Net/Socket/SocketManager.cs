@@ -304,5 +304,6 @@ public class SocketManager : FrameComponent
 		CSHeartBeat beat = createPacket(PACKET_TYPE.PT_CS_HEART_BEAT) as CSHeartBeat;
 		beat.setHeartBeatTimes(++mHeartBeatTimes);
 		sendMessage(beat);
+		logInfo("客户端心跳 : " + mHeartBeatTimes, LOG_LEVEL.LL_FORCE);
 	}
 }

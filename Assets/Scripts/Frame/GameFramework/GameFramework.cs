@@ -305,6 +305,7 @@ public class GameFramework : MonoBehaviour
 		width = CommonDefine.STANDARD_WIDTH;
 		height = CommonDefine.STANDARD_HEIGHT;
 #endif
+		UnityUtility.logInfo("use resolution : " + width + " * " + height + ", fullscreen : " + fullScreen, LOG_LEVEL.LL_FORCE);
 		Screen.SetResolution(width, height, fullScreen == 1 || fullScreen == 3);
 		// 设置为无边框窗口
 		if (fullScreen == 2)

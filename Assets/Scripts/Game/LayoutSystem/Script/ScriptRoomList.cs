@@ -11,6 +11,7 @@ public class RoomItem : GameBase
 	public txNGUITexture mItemRoot;
 	public txNGUIText mOwnerName;
 	public txNGUIText mPlayerCount;
+	public int mRoomID;
 	public RoomItem(ScriptRoomList script)
 	{
 		mScript = script;
@@ -18,13 +19,13 @@ public class RoomItem : GameBase
 	public void assignWindow(txUIObject parent)
 	{
 		mItemParent = parent;
-		mScript.newObject(out mItemRoot, mItemParent, "RoomItem");
+		mScript.newObject(out mItemRoot, mItemParent, "RoomItem", 1);
 		mScript.newObject(out mOwnerName, mItemRoot, "OwnerName");
 		mScript.newObject(out mPlayerCount, mItemRoot, "PlayerCount");
 	}
 	public void init()
 	{
-		;
+		mScript.registeBoxColliderNGUI(mItemRoot, onItemClicked);
 	}
 	public void onReset()
 	{
@@ -37,6 +38,16 @@ public class RoomItem : GameBase
 	public void setPlayerCount(int curCount, int maxCount)
 	{
 		mPlayerCount.setLabel("" + curCount + "/" + maxCount);
+	}
+	public void setRoomID(int roomID)
+	{
+		mRoomID = roomID;
+	}
+	protected void onItemClicked(GameObject obj)
+	{
+		CSJoinRoom join = mSocketNetManager.createPacket<CSJoinRoom>();
+		join.mRoomID.mValue = mRoomID;
+		mSocketNetManager.sendMessage(join);
 	}
 }
 
@@ -148,6 +159,7 @@ public class ScriptRoomList : LayoutScript
 			{
 				mRoomItemList[i].setOwnerName(roomList[i].mOwnerName);
 				mRoomItemList[i].setPlayerCount(roomList[i].mCurCount, roomList[i].mMaxCount);
+				mRoomItemList[i].setRoomID(roomList[i].mID);
 			}
 		}
 		// 计算总页数
@@ -168,8 +180,8 @@ public class ScriptRoomList : LayoutScript
 	{
 		// 设置翻页按钮是否可点击
 		mLastPage.setHandleInput(curPage > 0);
-		mNextPage.setHandleInput(curPage < totalPage);
-		mPageCountLabel.setLabel(curPage + "/" + totalPage);
+		mNextPage.setHandleInput(curPage + 1 < totalPage);
+		mPageCountLabel.setLabel((curPage + 1) + "/" + totalPage);
 	}
 	//-----------------------------------------------------------------------------------
 	protected void onLastPageClicked(GameObject obj)

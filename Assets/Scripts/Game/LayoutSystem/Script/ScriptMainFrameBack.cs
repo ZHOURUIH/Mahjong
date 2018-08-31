@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class ScriptMainFrameBack : LayoutScript
 {
-	protected txNGUITexture mBackground;
+	protected txNGUISprite mBackground;
 	public ScriptMainFrameBack(string name, GameLayout layout)
 		:
 		base(name, layout)

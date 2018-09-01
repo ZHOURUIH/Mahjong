@@ -35,7 +35,6 @@ public class SocketFactory
 		registerPacket<CSRequestDrop>(PACKET_TYPE.PT_CS_REQUEST_DROP);
 		registerPacket<CSConfirmAction>(PACKET_TYPE.PT_CS_CONFIRM_ACTION);
 		registerPacket<CSContinueGame>(PACKET_TYPE.PT_CS_CONTINUE_GAME);
-		registerPacket<CSBackToMahjongHall>(PACKET_TYPE.PT_CS_BACK_TO_MAHJONG_HALL);
 		registerPacket<CSAddMahjongRobot>(PACKET_TYPE.PT_CS_ADD_MAHJONG_ROBOT);
 		registerPacket<CSCancelLogin>(PACKET_TYPE.PT_CS_CANCEL_LOGIN);
 		registerPacket<CSGetStartMahjongDone>(PACKET_TYPE.PT_CS_GET_START_MAHJONG_DONE);
@@ -81,8 +80,6 @@ public class SocketFactory
 		registerPacket<SCNotifyMahjongEnd>(PACKET_TYPE.PT_SC_NOTIFY_MAHJONG_END);
 		registerPacket<SCContinueGameRet>(PACKET_TYPE.PT_SC_CONTINUE_GAME_RET);
 		registerPacket<SCOtherPlayerContinueGame>(PACKET_TYPE.PT_SC_OTHER_PLAYER_CONTINUE_GAME);
-		registerPacket<SCBackToMahjongHallRet>(PACKET_TYPE.PT_SC_BACK_TO_MAHJONG_HALL_RET);
-		registerPacket<SCOtherPlayerBackToMahjongHall>(PACKET_TYPE.PT_SC_OTHER_PLAYER_BACK_TO_MAHJONG_HALL);
 		registerPacket<SCGetHua>(PACKET_TYPE.PT_SC_GET_HUA);
 		registerPacket<SCOtherPlayerGetHua>(PACKET_TYPE.PT_SC_OTHER_PLAYER_GET_HUA);
 		registerPacket<SCAddMahjongRobotRet>(PACKET_TYPE.PT_SC_ADD_MAHJONG_ROBOT_RET);

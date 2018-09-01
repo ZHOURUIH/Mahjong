@@ -14,8 +14,8 @@ public class CommandCharacterGetHua : Command
 	{
 		Character character = (mReceiver) as Character;
 		CharacterData data = character.getCharacterData();
-		character.showHua(mMah);
-		mScriptMahjongHandIn.notifyShowHua(data.mPosition, data.mHuaList);
+		character.getHua(mMah);
+		mScriptMahjongHandIn.notifyGetHua(data.mPosition, data.mHuaList);
 	}
 	public override string showDebugInfo()
 	{

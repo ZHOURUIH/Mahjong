@@ -91,9 +91,9 @@ public class ScriptMahjongHandIn : LayoutScript
 	{
 		mPlayerMahjong[(int)pos].notifyEnd(handIn);
 	}
-	public void notifyShowHua(PLAYER_POSITION pos, List<MAHJONG> huaList)
+	public void notifyGetHua(PLAYER_POSITION pos, List<MAHJONG> huaList)
 	{
-		mPlayerMahjong[(int)pos].notifyShowHua(huaList);
+		mPlayerMahjong[(int)pos].notifyGetHua(huaList);
 	}
 	public void notifyAbleToPengOrGang(PLAYER_POSITION pos, MAHJONG mah)
 	{

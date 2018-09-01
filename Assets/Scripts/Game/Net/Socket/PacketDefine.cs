@@ -22,11 +22,10 @@ public enum PACKET_TYPE
 	PT_CS_REQUEST_DROP,                     // 向服务器请求打出一张牌
 	PT_CS_CONFIRM_ACTION,                   // 向服务器确认麻将操作
 	PT_CS_CONTINUE_GAME,                    // 向服务器请求继续游戏
-	PT_CS_BACK_TO_MAHJONG_HALL,             // 向服务器请求返回大厅
 	PT_CS_ADD_MAHJONG_ROBOT,                // 向服务器请求添加机器人打麻将,用作测试
 	PT_CS_CANCEL_LOGIN,                     // 向服务器请求取消登录,仅在还未返回登录结果时使用
 	PT_CS_GET_START_MAHJONG_DONE,           // 向服务器发送客户端已发牌完毕的通知
-	PT_CS_FREE_MATCH,						// 向服务器请求自由匹配房间
+	PT_CS_FREE_MATCH,                       // 向服务器请求自由匹配房间
 	PT_CS_REQUEST_ROOM_LIST,                // 向服务器请求获得房间列表
 	PT_CS_MAX,
 
@@ -66,12 +65,10 @@ public enum PACKET_TYPE
 	PT_SC_NOTIFY_MAHJONG_END,               // 通知客户端本局游戏结束
 	PT_SC_CONTINUE_GAME_RET,                // 通知客户端继续游戏的结果
 	PT_SC_OTHER_PLAYER_CONTINUE_GAME,       // 通知客户端有其他玩家选择继续游戏
-	PT_SC_BACK_TO_MAHJONG_HALL_RET,         // 通知客户端返回大厅的结果
-	PT_SC_OTHER_PLAYER_BACK_TO_MAHJONG_HALL,// 通知客户端有其他玩家选择返回大厅
 	PT_SC_GET_HUA,                          // 通知客户端摆出花牌
-	PT_SC_OTHER_PLAYER_GET_HUA,				// 通知客户端有其他玩家摆出花牌
+	PT_SC_OTHER_PLAYER_GET_HUA,             // 通知客户端有其他玩家摆出花牌
 	PT_SC_ADD_MAHJONG_ROBOT_RET,            // 通知客户端添加麻将机器人的结果
-	PT_SC_ROOM_LIST,						// 通知客户端房间列表
+	PT_SC_ROOM_LIST,                        // 通知客户端房间列表
 	PT_SC_MAX,
 
 	PT_MAX,

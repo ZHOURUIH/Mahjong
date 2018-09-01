@@ -19,7 +19,7 @@ public class MahjongSystem : FrameComponent
 	protected List<CharacterOther> mPlayerPositionList;          // 玩家列表,保存着玩家之间的顺序,顺序为服务器中玩家的位置
 	protected MAHJONG_PLAY_STATE mPlayState;            // 当前麻将游戏的状态
 	protected byte[] mDice;                              // 骰子的值
-	protected PLAYER_POSITION mBankerPos;				// 本局庄家的位置
+	protected PLAYER_POSITION mBankerPos;				// 本局庄家的位置,服务器中的位置
 	protected PLAYER_POSITION mCurAssignPos;			// 开局发牌时当前发到牌的玩家的位置,为服务器中的位置
 	protected float mCurInterval;                       // 当前间隔时间计时
 	protected List<List<MAHJONG>> mHandInList;
@@ -103,7 +103,7 @@ public class MahjongSystem : FrameComponent
 	{
 		// 计算出服务器中庄家在本地的方位
 		CharacterMyself myself = mCharacterManager.getMyself();
-		mBankerPos = GameUtility.serverPositionToClientPosition((PLAYER_POSITION)bankerPos, myself.getCharacterData().mServerPosition);
+		mBankerPos = (PLAYER_POSITION)bankerPos;
 	}
 	public void notifyGetStartMahjong()
 	{

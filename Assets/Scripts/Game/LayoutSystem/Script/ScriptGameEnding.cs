@@ -225,11 +225,15 @@ public class ScriptGameEnding : LayoutScript
 	//---------------------------------------------------------------------------------
 	protected void onContinueClick(GameObject go)
 	{
-		mSocketNetManager.sendMessage<CSContinueGame>();
+		CSContinueGame continueGame = mSocketNetManager.createPacket<CSContinueGame>();
+		continueGame.mContinue.mValue = true;
+		mSocketNetManager.sendMessage(continueGame);
 	}
 	protected void onReturnClick(GameObject go)
 	{
-		mSocketNetManager.sendMessage<CSBackToMahjongHall>();
+		CSContinueGame continueGame = mSocketNetManager.createPacket<CSContinueGame>();
+		continueGame.mContinue.mValue = false;
+		mSocketNetManager.sendMessage(continueGame);
 	}
 	protected void onButtonPress(GameObject go, bool press)
 	{

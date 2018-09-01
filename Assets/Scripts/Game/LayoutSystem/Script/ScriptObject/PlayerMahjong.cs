@@ -86,9 +86,9 @@ public class PlayerMahjong : GameBase
 		mHandInMahjong.notifyEnd();
 		mShowMahjong.showCurMahjong(handIn);
 	}
-	public void notifyShowHua(List<MAHJONG> huaList)
+	public void notifyGetHua(List<MAHJONG> huaList)
 	{
-		mHuaMahjong.showHua(huaList);
+		mHuaMahjong.getHua(huaList);
 	}
 	public void notifyAbleToPengOrGang(MAHJONG mah)
 	{

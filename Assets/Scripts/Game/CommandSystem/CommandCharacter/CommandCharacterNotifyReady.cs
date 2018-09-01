@@ -19,7 +19,10 @@ public class CommandCharacterNotifyReady : Command
 		}
 		data.mReady = mReady;
 		// 通知布局
-		mScriptAllCharacterInfo.notifyCharacterReady(character, mReady);
+		if(mScriptAllCharacterInfo != null)
+		{
+			mScriptAllCharacterInfo.notifyCharacterReady(character, mReady);
+		}
 		// 如果是自己的准备状态改变
 		if(character.getType() == CHARACTER_TYPE.CT_MYSELF)
 		{

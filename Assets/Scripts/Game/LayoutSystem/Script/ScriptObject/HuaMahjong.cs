@@ -32,9 +32,9 @@ public class HuaMahjong
 	}
 	public void onReset()
 	{
-		showHua(new List<MAHJONG>());
+		getHua(new List<MAHJONG>());
 	}
-	public void showHua(List<MAHJONG> huaList)
+	public void getHua(List<MAHJONG> huaList)
 	{
 		LayoutTools.ACTIVE_WINDOW(mHuaRoot);
 		int curCount = huaList.Count;

@@ -12,6 +12,8 @@ public class ScriptMahjongFrame : LayoutScript
 	protected txNGUIButton mReadyButton;
 	protected txNGUIButton mCancelReadyButton;
 	protected txNGUIText mInfo;
+	protected txUIObject mMahjongPoolSize;
+	protected txNGUIText mCountLabel;
 	public ScriptMahjongFrame(string name, GameLayout layout)
 		:
 		base(name, layout)
@@ -26,6 +28,8 @@ public class ScriptMahjongFrame : LayoutScript
 		newObject(out mReadyButton, "Ready");
 		newObject(out mCancelReadyButton, "CancelReady");
 		newObject(out mInfo, "Info");
+		newObject(out mMahjongPoolSize, "MahjongPoolSize");
+		newObject(out mCountLabel, mMahjongPoolSize, "CountLabel");
 	}
 	public override void init()
 	{
@@ -69,6 +73,10 @@ public class ScriptMahjongFrame : LayoutScript
 	public void notifyInfo(string info)
 	{
 		mInfo.setLabel(info);
+	}
+	public void setMahjongPoolSize(int count)
+	{
+		mCountLabel.setLabel(count + "个");
 	}
 	//-----------------------------------------------------------------------------------
 	protected void onReadyClick(GameObject go)

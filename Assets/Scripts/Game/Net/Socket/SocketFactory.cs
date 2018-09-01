@@ -84,6 +84,7 @@ public class SocketFactory
 		registerPacket<SCOtherPlayerGetHua>(PACKET_TYPE.PT_SC_OTHER_PLAYER_GET_HUA);
 		registerPacket<SCAddMahjongRobotRet>(PACKET_TYPE.PT_SC_ADD_MAHJONG_ROBOT_RET);
 		registerPacket<SCRoomList>(PACKET_TYPE.PT_SC_ROOM_LIST);
+		registerPacket<SCMahjongPoolSize>(PACKET_TYPE.PT_SC_MAHJONG_POOL_SIZE);
 		int needSCCount = PACKET_TYPE.PT_SC_MAX - PACKET_TYPE.PT_SC_MIN - 1;
 		if (mPacketTypeList.Count - needCSCount != needSCCount)
 		{

@@ -16,6 +16,7 @@ public class Room : CommandReceiver
 	protected Dictionary<int, Character> mPlayerIDList;						// key是玩家GUID,value是玩家对象,只用于查找
 	protected SortedDictionary<PLAYER_POSITION, Character> mPlayerPositionList; // 玩家列表,保存着玩家之间的顺序
 	protected List<ResultInfo> mResultInfoList;
+	protected int mMahjongPoolSize = 0;		// 当前麻将池中麻将的个数
 	public Room(int id)
 		:
 		base(typeof(Room).ToString())
@@ -30,6 +31,8 @@ public class Room : CommandReceiver
 	public Dictionary<int, Character> getPlayerList() { return mPlayerIDList; }
 	public List<ResultInfo> getResultInfoList() { return mResultInfoList; }
 	public SortedDictionary<PLAYER_POSITION, Character> getPlayerPositionList() { return mPlayerPositionList; }
+	public int getMahjongPoolSize() { return mMahjongPoolSize; }
+	public void setMahjongPoolSize(int count) { mMahjongPoolSize = count; }
 	// 通知房间有玩家加入
 	public void notifyPlayerJoin(Character player)
 	{

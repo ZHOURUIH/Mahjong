@@ -103,10 +103,14 @@ public class FileUtility : GameBase
 		// 检测路径是否存在,如果不存在就创建一个
 		createDir(StringUtility.getFilePath(fileName));
 #if !UNITY_ANDROID || UNITY_EDITOR
-		FileStream file = new FileStream(fileName, FileMode.Open, FileAccess.Write);
+		FileStream file = null;
 		if(appendData)
 		{
-			file.Seek(0, SeekOrigin.End);
+			file = new FileStream(fileName, FileMode.Append, FileAccess.Write);
+		}
+		else
+		{
+			file = new FileStream(fileName, FileMode.Create, FileAccess.Write);
 		}
 		file.Write(buffer, 0, size);
 		file.Close();
@@ -118,14 +122,12 @@ public class FileUtility : GameBase
 	// 写一个文本文件,fileName为绝对路径,content是写入的字符串
 	public static void writeTxtFile(string fileName, string content, bool appendData = false)
 	{
+#if !UNITY_ANDROID || UNITY_EDITOR
+		byte[] bytes = BinaryUtility.stringToBytes(content, Encoding.UTF8);
+		writeFile(fileName, bytes, bytes.Length, appendData);
+#else
 		// 检测路径是否存在,如果不存在就创建一个
 		createDir(StringUtility.getFilePath(fileName));
-#if !UNITY_ANDROID || UNITY_EDITOR
-		StreamWriter writer = new StreamWriter(fileName, false, Encoding.UTF8);
-		writer.Write(content);
-		writer.Close();
-		writer.Dispose();
-#else
 		AndroidAssetLoader.writeTxtFile(fileName, content, appendData);
 #endif
 	}
@@ -236,8 +238,17 @@ public class FileUtility : GameBase
 		return false;
 #endif
 	}
+	public static bool isDirectoryExist(string path)
+	{
+#if !UNITY_ANDROID || UNITY_EDITOR
+		return Directory.Exists(path);
+#else
+		isFileExist(path);
+#endif
+	}
 	public static bool isFileExist(string fileName)
 	{
+		
 #if !UNITY_ANDROID || UNITY_EDITOR
 		return File.Exists(fileName);
 #else

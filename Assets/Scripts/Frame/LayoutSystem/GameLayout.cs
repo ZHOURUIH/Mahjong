@@ -15,6 +15,7 @@ public class GameLayout : GameBase
 	protected bool			mScriptInited;		// 脚本是否已经初始化
 	protected bool			mScriptControlHide;	// 是否由脚本来控制隐藏
 	protected bool			mIsNGUI;			// 是否为NGUI布局,true为NGUI,false为UGUI
+	protected bool			mCheckBoxAnchor;	// 是否检查布局中所有带碰撞盒的窗口是否自适应分辨率
 	protected Dictionary<int, txUIObject> mObjectList;
 	protected Dictionary<GameObject, txUIObject> mGameObjectSearchList;
 	public GameLayout()
@@ -23,6 +24,7 @@ public class GameLayout : GameBase
 		mGameObjectSearchList = new Dictionary<GameObject, txUIObject>();
 		mScriptInited = false;
 		mScriptControlHide = false;
+		mCheckBoxAnchor = true;
 	}
 	public void setRenderOrder(int renderOrder)
 	{
@@ -63,7 +65,6 @@ public class GameLayout : GameBase
 		mScript.newObject(out mRoot, getLayoutPanel(), "Root");
 		setRenderOrder(renderOrder);
 		mScript.setRoot(mRoot);
-		mScript.findAllWindow();
 		mScript.assignWindow();
 		// 布局实例化完成,初始化之前,需要调用自适应组件的更新
 		ScaleAnchor scaleAnchor = getLayoutPanel().mObject.GetComponent<ScaleAnchor>();
@@ -173,6 +174,8 @@ public class GameLayout : GameBase
 	public LAYOUT_TYPE getType() { return mType; }
 	public string getName() { return mName; }
 	public bool isNGUI() { return mIsNGUI; }
+	public void setCheckBoxAnchor(bool check) { mCheckBoxAnchor = check; }
+	public bool isCheckBoxAnchor() { return mCheckBoxAnchor; }
 	public void registerUIObject(txUIObject uiObj)
 	{
 		mObjectList.Add(uiObj.mID, uiObj);
@@ -180,14 +183,12 @@ public class GameLayout : GameBase
 	}
 	public void unregisterUIObject(txUIObject uiObj)
 	{
-		if(mObjectList.ContainsKey(uiObj.mID))
+		if(uiObj == null)
 		{
-			mObjectList.Remove(uiObj.mID);
+			return;
 		}
-		if(mGameObjectSearchList.ContainsKey(uiObj.mObject))
-		{
-			mGameObjectSearchList.Remove(uiObj.mObject);
-		}
+		mObjectList.Remove(uiObj.mID);
+		mGameObjectSearchList.Remove(uiObj.mObject);
 	}
 	public void setLayer(string layer)
 	{

@@ -60,7 +60,14 @@ public class UnityUtility : FrameComponent
 			mShowMessageBox = false;
 		}
 		string trackStr = new StackTrace().ToString();
+		if (mLocalLog != null)
+		{
+			mLocalLog.log("error : " + info + ", stack : " + trackStr);
+		}
+#if UNITY_EDITOR
 		UnityEngine.Debug.LogError("error : " + info + ", stack : " + trackStr);
+		UnityEditor.EditorApplication.isPaused = true;
+#endif
 		// 游戏中的错误日志
 		if (mFrameLogSystem != null)
 		{
@@ -71,7 +78,13 @@ public class UnityUtility : FrameComponent
 	{
 		if ((int)level <= (int)mLogLevel)
 		{
+#if UNITY_EDITOR
 			UnityEngine.Debug.Log(getTime() + " : " + info);
+#endif
+			if(mLocalLog != null)
+			{
+				mLocalLog.log(getTime() + " : " + info);
+			}
 		}
 	}
 	public static string getTime()

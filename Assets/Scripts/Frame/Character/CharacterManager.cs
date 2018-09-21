@@ -128,8 +128,8 @@ public class CharacterManager : FrameComponent
 				GameObject charNode = UnityUtility.createObject(newCharacter.getName(), mManagerObject);
 				newCharacter.setObject(charNode);
 			}
-			newCharacter.init();
 			newCharacter.setID(id);
+			newCharacter.init();
 			addCharacterToList(newCharacter);
 			UnityUtility.notifyIDUsed(id);
 		}

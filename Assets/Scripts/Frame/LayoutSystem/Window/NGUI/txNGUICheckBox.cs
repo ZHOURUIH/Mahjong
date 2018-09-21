@@ -7,7 +7,7 @@ public class txNGUICheckBox : txUIObject
 	
 	public txNGUICheckBox()
 	{
-		mType = UI_TYPE.UT_NGUI_BUTTON;
+		mType = UI_TYPE.UT_NGUI_CHECK_BOX;
 	}
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{

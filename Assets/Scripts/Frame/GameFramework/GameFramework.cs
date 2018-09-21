@@ -24,6 +24,9 @@ public class GameFramework : MonoBehaviour
 	protected int					mCurFrameCount;
 	public void Start()
 	{
+		// 由于本地日志系统的特殊性,必须在最开始就初始化
+		FrameBase.mLocalLog = new LocalLog();
+		FrameBase.mLocalLog.init();
 		if (instance != null)
 		{
 			UnityUtility.logError("game framework can not start again!");
@@ -112,6 +115,11 @@ public class GameFramework : MonoBehaviour
 	{
 		destroy();
 		UnityUtility.logInfo("程序退出完毕!", LOG_LEVEL.LL_FORCE);
+		if (FrameBase.mLocalLog != null)
+		{
+			FrameBase.mLocalLog.destroy();
+			FrameBase.mLocalLog = null;
+		}
 	}
 	public virtual void destroy()
 	{
@@ -305,7 +313,6 @@ public class GameFramework : MonoBehaviour
 		width = CommonDefine.STANDARD_WIDTH;
 		height = CommonDefine.STANDARD_HEIGHT;
 #endif
-		UnityUtility.logInfo("use resolution : " + width + " * " + height + ", fullscreen : " + fullScreen, LOG_LEVEL.LL_FORCE);
 		Screen.SetResolution(width, height, fullScreen == 1 || fullScreen == 3);
 		// 设置为无边框窗口
 		if (fullScreen == 2)
@@ -346,9 +353,6 @@ public class GameFramework : MonoBehaviour
 			UITexture uiTexture = cameraTexture.GetComponent<UITexture>();
 			setCameraTargetTexture(null, "MainCamera", uiTexture);
 			setCameraTargetTexture(uiRootObj, "UICamera", uiTexture);
-			setCameraTargetTexture(uiRootObj, "UIBackEffectCamera", uiTexture);
-			setCameraTargetTexture(uiRootObj, "UIForeEffectCamera", uiTexture);
-			setCameraTargetTexture(uiRootObj, "UIBlurCamera", uiTexture);
 		}
 		else
 		{
@@ -356,9 +360,6 @@ public class GameFramework : MonoBehaviour
 			{
 				setCameraTargetTexture(null, "MainCamera", null);
 				setCameraTargetTexture(uiRootObj, "UICamera", null);
-				setCameraTargetTexture(uiRootObj, "UIBackEffectCamera", null);
-				setCameraTargetTexture(uiRootObj, "UIForeEffectCamera", null);
-				setCameraTargetTexture(uiRootObj, "UIBlurCamera", null);
 			}
 			else if(adaptScreen == ADAPT_SCREEN.AS_MULTI_SCREEN && screenCount > 1)
 			{
@@ -382,9 +383,6 @@ public class GameFramework : MonoBehaviour
 				UITexture uiTexture = cameraTexture0.GetComponent<UITexture>();
 				setCameraTargetTexture(null, "MainCamera", uiTexture);
 				setCameraTargetTexture(uiRootObj, "UICamera", uiTexture);
-				setCameraTargetTexture(uiRootObj, "UIBackEffectCamera", uiTexture);
-				setCameraTargetTexture(uiRootObj, "UIForeEffectCamera", uiTexture);
-				setCameraTargetTexture(uiRootObj, "UIBlurCamera", uiTexture);
 			}
 		}
 	}

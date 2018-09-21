@@ -6,9 +6,9 @@ public class CharacterBaseData
 {
 	public CharacterBaseData()
 	{
-		mGUID = -1;
+		mGUID = CommonDefine.INVALID_ID;
 		mName = "";
 	}
-	public int				mGUID;		// 玩家唯一ID,由服务器发送过来的
-	public string			mName;
+	public int		mGUID;		// 玩家唯一ID,由服务器发送过来的
+	public string	mName;
 }

@@ -25,6 +25,7 @@ public class FrameBase
 	public static SceneSystem				mSceneSystem			= null;
 	public static IFrameLogSystem			mFrameLogSystem			= null;
 	public static ClassObjectPool			mClassObjectPool		= null;
+	public static LocalLog					mLocalLog				= null;
 	public virtual void notifyConstructDone()
 	{
 		if (mGameFramework == null)
@@ -83,5 +84,25 @@ public class FrameBase
 	public static GameObject getGameObject(GameObject parent, string name, bool errorIfNull = false)
 	{
 		return UnityUtility.getGameObject(parent, name, errorIfNull);
+	}
+	public static bool getKeyCurrentDown(KeyCode key)
+	{
+		return mInputManager.getKeyCurrentDown(key);
+	}
+	public static bool getKeyCurrentUp(KeyCode key)
+	{
+		return mInputManager.getKeyCurrentUp(key);
+	}
+	public static bool getKeyDown(KeyCode key)
+	{
+		return mInputManager.getKeyDown(key);
+	}
+	public static bool getKeyUp(KeyCode key)
+	{
+		return mInputManager.getKeyUp(key);
+	}
+	public static Vector2 getMousePosition()
+	{
+		return mInputManager.getMousePosition();
 	}
 }

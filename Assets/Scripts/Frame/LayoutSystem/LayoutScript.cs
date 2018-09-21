@@ -12,20 +12,12 @@ public class AssignInfo
 	public string mAttachedPrefab;  // 该物体下挂接的预设
 }
 
-public class WindowInfo
-{
-	public GameObject mGameObject;
-	public string mName;
-	public GameObject mParent;
-}
-
 public abstract class LayoutScript : CommandReceiver
 {
 	protected List<int> mDelayCmdList;  // 布局显示和隐藏时的延迟命令列表,当命令执行时,会从列表中移除该命令
 	protected GameLayout mLayout;
 	protected txUIObject mRoot;
 	protected LAYOUT_TYPE mType;
-	protected Dictionary<string, List<WindowInfo>> mAllWindowList;
 	public LayoutScript(string name, GameLayout layout)
 		:
 		base(name)
@@ -33,7 +25,6 @@ public abstract class LayoutScript : CommandReceiver
 		mLayout = layout;
 		mType = mLayout.getType();
 		mDelayCmdList = new List<int>();
-		mAllWindowList = new Dictionary<string, List<WindowInfo>>();
 		LayoutRegister.onScriptChanged(this);
 	}
 	public override void destroy()
@@ -45,10 +36,6 @@ public abstract class LayoutScript : CommandReceiver
 	public GameLayout getLayout() { return mLayout; }
 	public void setRoot(txUIObject root) { mRoot = root; }
 	public txUIObject getRoot() { return mRoot; }
-	public void findAllWindow()
-	{
-		findWindow(null, mRoot.mObject, ref mAllWindowList);
-	}
 	// 用于接收GlobalTouchSystem处理的输入事件
 	public void registeBoxCollider(txUIObject obj, BoxColliderClickCallback clickCallback = null,
 		BoxColliderHoverCallback hoverCallback = null, BoxColliderPressCallback pressCallback = null)
@@ -97,7 +84,11 @@ public abstract class LayoutScript : CommandReceiver
 	}
 	public bool hasObject(txUIObject parent, string name)
 	{
-		GameObject gameObject = getObjectFromList(parent.mObject, name);
+		if(parent == null)
+		{
+			parent = mRoot;
+		}
+		GameObject gameObject = getGameObject(parent.mObject, name);
 		return gameObject != null;
 	}
 	public T cloneObject<T>(txUIObject parent, txUIObject oriObj, string name, bool active = true) where T : txUIObject, new()
@@ -140,12 +131,7 @@ public abstract class LayoutScript : CommandReceiver
 	{
 		obj = null;
 		GameObject parentObj = (parent != null) ? parent.mObject : null;
-		GameObject gameObject = getObjectFromList(parentObj, name);
-		// 先在全部子窗口列表中查找,查找不到,再去场景中查找
-		if (gameObject == null)
-		{
-			gameObject = getGameObject(parentObj, name);
-		}
+		GameObject gameObject = getGameObject(parentObj, name);
 		if (gameObject == null)
 		{
 			logError("object is null, name : " + name);
@@ -185,13 +171,23 @@ public abstract class LayoutScript : CommandReceiver
 	{
 		GameObject gameObject = mLayoutSubPrefabManager.instantiate(prefabName, parent.mObject, name);
 		gameObject.SetActive(false);
-		findWindow(parent.mObject, gameObject, ref mAllWindowList);
 	}
 	public void instantiateObject(txUIObject parent, string name)
 	{
 		GameObject gameObject = mLayoutSubPrefabManager.instantiate(name, parent.mObject, name);
 		gameObject.SetActive(false);
-		findWindow(parent.mObject, gameObject, ref mAllWindowList);
+	}
+	public void destroyObject(txUIObject obj, bool immediately = false)
+	{
+		// 查找该节点下的所有窗口,从布局中注销
+		List<GameObject> children = new List<GameObject>();
+		findAllChild(obj.mObject, children);
+		int count = children.Count;
+		for(int i = 0; i < count; ++i)
+		{
+			mLayout.unregisterUIObject(mLayout.getUIObject(children[i]));
+		}
+		UnityUtility.destroyGameObject(obj.mObject, immediately);
 	}
 	public void interruptCommand(int assignID)
 	{
@@ -209,47 +205,16 @@ public abstract class LayoutScript : CommandReceiver
 			logError("命令执行后移除命令失败!");
 		}
 	}
-	protected void findWindow(GameObject parent, GameObject gameObject, ref Dictionary<string, List<WindowInfo>> windowList)
+	protected void findAllChild(GameObject obj, List<GameObject> children)
 	{
-		// 将自己加入列表
-		string name = gameObject.name;
-		WindowInfo info = new WindowInfo();
-		info.mGameObject = gameObject;
-		info.mName = name;
-		info.mParent = parent;
-		if (windowList.ContainsKey(name))
+		// 先把自己添加进列表
+		children.Add(obj);
+		// 然后把自己所有的子节点添加进列表
+		Transform trans = obj.transform;
+		int count = trans.childCount;
+		for(int i = 0; i < count; ++i)
 		{
-			windowList[name].Add(info);
+			findAllChild(trans.GetChild(i).gameObject, children);
 		}
-		else
-		{
-			List<WindowInfo> infoList = new List<WindowInfo>();
-			infoList.Add(info);
-			windowList.Add(name, infoList);
-		}
-		// 再将所有子窗口加入列表
-		Transform transform = gameObject.transform;
-		int childCount = transform.childCount;
-		for (int i = 0; i < childCount; ++i)
-		{
-			findWindow(gameObject, transform.GetChild(i).gameObject, ref windowList);
-		}
-	}
-	protected GameObject getObjectFromList(GameObject parent, string name)
-	{
-		if (!mAllWindowList.ContainsKey(name))
-		{
-			return null;
-		}
-		List<WindowInfo> infoList = mAllWindowList[name];
-		int count = infoList.Count;
-		for (int i = 0; i < count; ++i)
-		{
-			if (infoList[i].mParent == parent)
-			{
-				return infoList[i].mGameObject;
-			}
-		}
-		return null;
 	}
 }

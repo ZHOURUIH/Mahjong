@@ -44,13 +44,17 @@ public class txNGUITexture : txUIObject
 		UnityUtility.destroyGameObject(mTexture.material);
 		base.destroy();
 	}
-	public virtual void setTexture(Texture tex)
+	public virtual void setTexture(Texture tex, bool useTextureSize = false)
 	{
 		if (mTexture == null)
 		{
 			return;
 		}
 		mTexture.mainTexture = tex;
+		if (useTextureSize && tex != null)
+		{
+			setWindowSize(new Vector2(tex.width, tex.height));
+		}
 	}
 	public Texture getTexture()
 	{
@@ -90,16 +94,16 @@ public class txNGUITexture : txUIObject
 			mTexture.shader = shader;
 		}
 	}
-	public void setTextureName(string name)
+	public void setTextureName(string name, bool useTextureSize = false)
 	{
 		if (name != "")
 		{
 			Texture tex = mResourceManager.loadResource<Texture>(name, true);
-			setTexture(tex);
+			setTexture(tex, useTextureSize);
 		}
 		else
 		{
-			setTexture(null);
+			setTexture(null, useTextureSize);
 		}
 	}
 	public string getTextureName()

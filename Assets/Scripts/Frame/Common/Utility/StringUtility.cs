@@ -71,9 +71,9 @@ public class StringUtility : GameBase
 		str = checkIntString(str);
 		return int.Parse(str);
 	}
-	public static Vector2 stringToVector2(string value)
+	public static Vector2 stringToVector2(string value, string seperate = ",")
 	{
-		string[] spitList = split(value, true, ",");
+		string[] spitList = split(value, true, seperate);
 		if (spitList.Length < 2)
 		{
 			return Vector2.zero;
@@ -83,9 +83,9 @@ public class StringUtility : GameBase
 		v.y = stringToFloat(spitList[1]);
 		return v;
 	}
-	public static Vector3 stringToVector3(string value)
+	public static Vector3 stringToVector3(string value, string seperate = ",")
 	{
-		string[] spitList = split(value, true, ",");
+		string[] spitList = split(value, true, seperate);
 		if (spitList.Length < 3)
 		{
 			return Vector3.zero;
@@ -96,9 +96,9 @@ public class StringUtility : GameBase
 		v.z = stringToFloat(spitList[2]);
 		return v;
 	}
-	public static Vector4 stringToVector4(string value)
+	public static Vector4 stringToVector4(string value, string seperate = ",")
 	{
-		string[] spitList = split(value, true, ",");
+		string[] spitList = split(value, true, seperate);
 		if (spitList.Length < 4)
 		{
 			return Vector4.zero;
@@ -306,9 +306,9 @@ public class StringUtility : GameBase
 			}
 		}
 	}
-	public static void stringToFloatArray(string str, ref float[] values)
+	public static void stringToFloatArray(string str, ref float[] values, string seperate = ",")
 	{
-		string[] rangeList = split(str, true, ";");
+		string[] rangeList = split(str, true, seperate);
 		int len = rangeList.Length;
 		if (values != null && len != values.Length)
 		{
@@ -325,7 +325,7 @@ public class StringUtility : GameBase
 			values[i] = stringToFloat(rangeList[i]);
 		}
 	}
-	public static string floatArrayToString(float[] values)
+	public static string floatArrayToString(float[] values, string seperate = ",")
 	{
 		string str = "";
 		int count = values.Length;
@@ -334,14 +334,14 @@ public class StringUtility : GameBase
 			str += floatToString(values[i], 2);
 			if (i != count - 1)
 			{
-				str += ",";
+				str += seperate;
 			}
 		}
 		return str;
 	}
-	public static void stringToIntArray(string str, ref int[] values)
+	public static void stringToIntArray(string str, ref int[] values, string seperate = ",")
 	{
-		string[] rangeList = split(str, true, ",");
+		string[] rangeList = split(str, true, seperate);
 		int len = rangeList.Length;
 		if (values != null && len != values.Length)
 		{
@@ -357,7 +357,7 @@ public class StringUtility : GameBase
 			values[i] = stringToInt(rangeList[i]);
 		}
 	}
-	public static string intArrayToString(int[] values)
+	public static string intArrayToString(int[] values, string seperate = ",")
 	{
 		string str = "";
 		int count = values.Length;
@@ -366,7 +366,7 @@ public class StringUtility : GameBase
 			str += intToString(values[i]);
 			if(i != count - 1)
 			{
-				str += ",";
+				str += seperate;
 			}
 		}
 		return str;

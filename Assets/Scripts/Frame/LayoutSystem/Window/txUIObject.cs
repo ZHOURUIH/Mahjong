@@ -62,7 +62,7 @@ public class txUIObject : ComponentOwner
 		mAudioSource = mObject.GetComponent<AudioSource>();
 		mBoxCollider = mObject.GetComponent<BoxCollider>();
 		mWidget = mObject.GetComponent<UIWidget>();
-		if (mBoxCollider != null)
+		if (mBoxCollider != null && mLayout.isCheckBoxAnchor())
 		{
 			string layoutName = "";
 			if(mLayout != null)

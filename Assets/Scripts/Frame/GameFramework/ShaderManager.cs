@@ -16,7 +16,12 @@ public class ShaderManager : FrameComponent
 	}
 	public override void init()
 	{
-		;
+		mShaderManager.registeSingleShader("NGUIDefault");
+		mShaderManager.registeSingleShader("UGUIDefault");
+		mShaderManager.registeSingleShader("BlurMaskDownSample");
+		mShaderManager.registeSingleShader("EdgeAlpha");
+		mShaderManager.registeSingleShader("Feather");
+		mShaderManager.registeSingleShader("LinearDodge");
 	}
 	public override void destroy()
 	{

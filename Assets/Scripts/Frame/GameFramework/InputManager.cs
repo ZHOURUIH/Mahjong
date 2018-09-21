@@ -34,7 +34,7 @@ public class InputManager : FrameComponent
 	{
 		Cursor.visible = visible;
 	}
-	public Vector2 getMousePosition()
+	public new Vector2 getMousePosition()
 	{
 		return mCurMousePosition;
 	}
@@ -62,19 +62,19 @@ public class InputManager : FrameComponent
 	{
 		return Input.GetMouseButtonUp((int)mouse);
 	}
-	public virtual bool getKeyCurrentDown(KeyCode key)
+	public new virtual bool getKeyCurrentDown(KeyCode key)
 	{
 		return Input.GetKeyDown(key);
 	}
-	public virtual bool getKeyCurrentUp(KeyCode key)
+	public new virtual bool getKeyCurrentUp(KeyCode key)
 	{
 		return Input.GetKeyUp(key);
 	}
-	public virtual bool getKeyDown(KeyCode key)
+	public new virtual bool getKeyDown(KeyCode key)
 	{
 		return Input.GetKey(key);
 	}
-	public virtual bool getKeyUp(KeyCode key)
+	public new virtual bool getKeyUp(KeyCode key)
 	{
 		return !Input.GetKey(key);
 	}

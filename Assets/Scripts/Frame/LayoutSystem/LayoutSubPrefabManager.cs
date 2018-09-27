@@ -73,10 +73,6 @@ public class LayoutSubPrefabManager : FrameComponent
 	}
 	protected void loadSubPrefabFolder(string path, bool async)
 	{
-		if(!FileUtility.isDirectoryExist(CommonDefine.F_RESOURCES_PATH + path))
-		{
-			return;
-		}
 		List<string> fileList = mResourceManager.getFileList(path);
 		int fileCount = fileList.Count;
 		for (int i = 0; i < fileCount; ++i)

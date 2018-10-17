@@ -66,13 +66,15 @@ public class UnityUtility : FrameComponent
 			mShowMessageBox = false;
 		}
 		string trackStr = new StackTrace().ToString();
-		//if (mLocalLog != null)
-		//{
-		//	mLocalLog.log("error : " + info + ", stack : " + trackStr);
-		//}
-//#if UNITY_EDITOR
+#if UNITY_STANDALONE_WIN && !UNITY_EDITOR
+		// windows平台打包后使用LocalLog打印日志
+		if (mLocalLog != null)
+		{
+			mLocalLog.log("error : " + info + ", stack : " + trackStr);
+		}
+#else
 		UnityEngine.Debug.LogError("error : " + info + ", stack : " + trackStr);
-//#endif
+#endif
 		// 游戏中的错误日志
 		if (mFrameLogSystem != null)
 		{
@@ -83,13 +85,15 @@ public class UnityUtility : FrameComponent
 	{
 		if ((int)level <= (int)mLogLevel)
 		{
-//#if UNITY_EDITOR
+#if UNITY_STANDALONE_WIN && !UNITY_EDITOR
+			// windows平台打包后使用LocalLog打印日志
+			if(mLocalLog != null)
+			{
+				mLocalLog.log(getTime() + " : " + info);
+			}
+#else
 			UnityEngine.Debug.Log(getTime() + " : " + info);
-//#endif
-			//if(mLocalLog != null)
-			//{
-			//	mLocalLog.log(getTime() + " : " + info);
-			//}
+#endif
 		}
 	}
 	public static string getTime()

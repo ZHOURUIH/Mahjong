@@ -26,7 +26,9 @@ public class FrameBase
 	public static SceneSystem				mSceneSystem			= null;
 	public static IFrameLogSystem			mFrameLogSystem			= null;
 	public static ClassObjectPool			mClassObjectPool		= null;
-	//public static LocalLog					mLocalLog				= null;
+#if UNITY_STANDALONE_WIN && !UNITY_EDITOR
+	public static LocalLog					mLocalLog				= null;
+#endif
 	// SQLiteTable
 	public static SQLiteSound				mSQLiteSound			= null;
 	public virtual void notifyConstructDone()

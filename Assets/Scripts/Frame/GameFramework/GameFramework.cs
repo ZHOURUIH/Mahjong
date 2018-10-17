@@ -24,9 +24,11 @@ public class GameFramework : MonoBehaviour
 	protected int					mCurFrameCount;
 	public void Start()
 	{
+#if UNITY_STANDALONE_WIN && !UNITY_EDITOR
 		// 由于本地日志系统的特殊性,必须在最开始就初始化
-		//FrameBase.mLocalLog = new LocalLog();
-		//FrameBase.mLocalLog.init();
+		FrameBase.mLocalLog = new LocalLog();
+		FrameBase.mLocalLog.init();
+#endif
 		if (instance != null)
 		{
 			UnityUtility.logError("game framework can not start again!");
@@ -115,11 +117,13 @@ public class GameFramework : MonoBehaviour
 	{
 		destroy();
 		UnityUtility.logInfo("程序退出完毕!", LOG_LEVEL.LL_FORCE);
-		//if (FrameBase.mLocalLog != null)
-		//{
-		//	FrameBase.mLocalLog.destroy();
-		//	FrameBase.mLocalLog = null;
-		//}
+#if UNITY_STANDALONE_WIN && !UNITY_EDITOR
+		if (FrameBase.mLocalLog != null)
+		{
+			FrameBase.mLocalLog.destroy();
+			FrameBase.mLocalLog = null;
+		}
+#endif
 	}
 	public virtual void destroy()
 	{

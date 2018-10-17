@@ -40,7 +40,7 @@ public class ScriptDice : LayoutScript
 	{
 		mDiceAnim.stop();
 		mDiceAnim.play();
-		mDiceAnim.setPlayEndCallback(onDiceAnimDone);
+		mDiceAnim.addPlayEndCallback(onDiceAnimDone);
 	}
 	public override void onHide(bool immediately, string param)
 	{
@@ -55,7 +55,7 @@ public class ScriptDice : LayoutScript
 		return mDiceAnim.getInterval() * mDiceAnim.getTextureFrameCount();
 	}
 	//-----------------------------------------------------------------------------------
-	protected void onDiceAnimDone(txNGUISpriteAnim window, object userData, bool isBreak)
+	protected void onDiceAnimDone(INGUIAnimation window, bool isBreak)
 	{
 		LayoutTools.ACTIVE_WINDOW(mDice0);
 		LayoutTools.ACTIVE_WINDOW(mDice1);

@@ -52,8 +52,8 @@ public class txUIObject : ComponentOwner
 	public virtual void init(GameLayout layout, GameObject go, txUIObject parent)
 	{
 		mLayout = layout;
-		mParent = parent;
 		setGameObject(go);
+		setParent(parent);
 		initComponents();
 		if (mLayout != null)
 		{
@@ -162,7 +162,18 @@ public class txUIObject : ComponentOwner
 	public bool getMouseHovered() { return mMouseHovered; }
 	//set
 	//-------------------------------------------------------------------------------------------------------------------------------------
-	public void setParent(txUIObject parent) { mParent = parent; }
+	public void setParent(txUIObject parent)
+	{
+		mParent = parent;
+		if (parent != null)
+		{
+			parent.addChild(this);
+			if (mTransform.parent != parent.mObject.transform)
+			{
+				mTransform.SetParent(parent.mObject.transform);
+			}
+		}
+	}
 	protected void setGameObject(GameObject go)
 	{
 		setName(go.name);

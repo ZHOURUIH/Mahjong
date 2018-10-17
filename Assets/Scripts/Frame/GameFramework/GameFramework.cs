@@ -25,8 +25,8 @@ public class GameFramework : MonoBehaviour
 	public void Start()
 	{
 		// 由于本地日志系统的特殊性,必须在最开始就初始化
-		FrameBase.mLocalLog = new LocalLog();
-		FrameBase.mLocalLog.init();
+		//FrameBase.mLocalLog = new LocalLog();
+		//FrameBase.mLocalLog.init();
 		if (instance != null)
 		{
 			UnityUtility.logError("game framework can not start again!");
@@ -115,11 +115,11 @@ public class GameFramework : MonoBehaviour
 	{
 		destroy();
 		UnityUtility.logInfo("程序退出完毕!", LOG_LEVEL.LL_FORCE);
-		if (FrameBase.mLocalLog != null)
-		{
-			FrameBase.mLocalLog.destroy();
-			FrameBase.mLocalLog = null;
-		}
+		//if (FrameBase.mLocalLog != null)
+		//{
+		//	FrameBase.mLocalLog.destroy();
+		//	FrameBase.mLocalLog = null;
+		//}
 	}
 	public virtual void destroy()
 	{
@@ -247,7 +247,7 @@ public class GameFramework : MonoBehaviour
 		registeComponent<FrameConfig>();
 		registeComponent<UnityUtility>();
 		registeComponent<HttpUtility>();
-		registeComponent<DataBase>();
+		registeComponent<SQLite>();
 		registeComponent<CommandSystem>();
 		registeComponent<CharacterManager>();
 		registeComponent<GameLayoutManager>();

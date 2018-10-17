@@ -52,6 +52,11 @@ public class StringUtility : GameBase
 		}
 		return -1;
 	}
+	public static string getNotNumberSubString(string str)
+	{
+		int notNumPos = getLastNotNumberPos(str);
+		return str.Substring(0, notNumPos + 1);
+	}
 	public static int getLastNumber(string str)
 	{
 		int lastPos = getLastNotNumberPos(str);
@@ -64,11 +69,15 @@ public class StringUtility : GameBase
 		{
 			return 0;
 		}
-		return stringToInt(numStr); ;
+		return stringToInt(numStr);
 	}
 	public static int stringToInt(string str)
 	{
 		str = checkIntString(str);
+		if(str == "")
+		{
+			return 0;
+		}
 		return int.Parse(str);
 	}
 	public static Vector2 stringToVector2(string value, string seperate = ",")
@@ -325,6 +334,25 @@ public class StringUtility : GameBase
 			values[i] = stringToFloat(rangeList[i]);
 		}
 	}
+	public static void stringToFloatArray(string str, ref List<float> values, string seperate = ",")
+	{
+		string[] rangeList = split(str, true, seperate);
+		int len = rangeList.Length;
+		if (values != null && len != values.Count)
+		{
+			logError("count is not equal " + str.Length);
+			return;
+		}
+		if (values == null)
+		{
+			values = new List<float>();
+		}
+
+		for (int i = 0; i < len; ++i)
+		{
+			values.Add(stringToFloat(rangeList[i]));
+		}
+	}
 	public static string floatArrayToString(float[] values, string seperate = ",")
 	{
 		string str = "";
@@ -338,6 +366,39 @@ public class StringUtility : GameBase
 			}
 		}
 		return str;
+	}
+	public static string floatArrayToString(List<float> values, string seperate = ",")
+	{
+		string str = "";
+		int count = values.Count;
+		for (int i = 0; i < count; ++i)
+		{
+			str += floatToString(values[i], 2);
+			if (i != count - 1)
+			{
+				str += seperate;
+			}
+		}
+		return str;
+	}
+	public static void stringToIntArray(string str, ref List<int> values, string seperate = ",")
+	{
+		string[] rangeList = split(str, true, seperate);
+		int len = rangeList.Length;
+		if (values != null && len != values.Count)
+		{
+			logError("count is not equal " + str.Length);
+			return;
+		}
+		if (values == null)
+		{
+			values = new List<int>();
+		}
+
+		for (int i = 0; i < len; ++i)
+		{
+			values.Add(stringToInt(rangeList[i]));
+		}
 	}
 	public static void stringToIntArray(string str, ref int[] values, string seperate = ",")
 	{
@@ -365,6 +426,20 @@ public class StringUtility : GameBase
 		{
 			str += intToString(values[i]);
 			if(i != count - 1)
+			{
+				str += seperate;
+			}
+		}
+		return str;
+	}
+	public static string intArrayToString(List<int> values, string seperate = ",")
+	{
+		string str = "";
+		int count = values.Count;
+		for (int i = 0; i < count; ++i)
+		{
+			str += intToString(values[i]);
+			if (i != count - 1)
 			{
 				str += seperate;
 			}

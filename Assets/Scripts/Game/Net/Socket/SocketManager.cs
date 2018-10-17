@@ -85,7 +85,7 @@ public class SocketManager : FrameComponent
 		}
 		catch(Exception e)
 		{
-			logError("init socket exception : " + e.Message + ", stack : " + e.StackTrace);
+			logInfo("init socket exception : " + e.Message + ", stack : " + e.StackTrace);
 			mServerSocket = null;
 			CommandSocketManagerNetState cmd = newCmd(out cmd);
 			cmd.mNetState = NET_STATE.NS_NET_CLOSE;
@@ -185,6 +185,10 @@ public class SocketManager : FrameComponent
 	// 发送Socket消息
 	protected bool sendSocket()
 	{
+		if(mServerSocket == null)
+		{
+			return false;
+		}
 		mOutputLock.waitForUnlock();
 		try
 		{
@@ -206,6 +210,10 @@ public class SocketManager : FrameComponent
 	// 接收Socket消息
 	protected bool receiveSocket()
 	{
+		if(mServerSocket == null)
+		{
+			return false;
+		}
 		try
 		{
 			IPEndPoint endpoint = null;

@@ -23,4 +23,8 @@ public class txNGUICheckBox : txUIObject
 	{
 		return mToggle.value;
 	}
+	public void setCheckChangedCallback(EventDelegate.Callback callback)
+	{
+		EventDelegate.Add(mToggle.onChange, callback);
+	}
 }

@@ -186,8 +186,8 @@ public class txNGUINumber : txNGUISprite
 			string name = mName + "_" + StringUtility.intToString(i);
 			// 由于所有数字的大小和位置都是由数字窗口自动计算的,所以不需要为子窗口添加自适应组件
 			mNumberList.Add(mLayout.getScript().createObject<txNGUISprite>(this, name, false));
-			mNumberList[i].mSprite.atlas = mSprite.atlas;
-			mNumberList[i].mSprite.depth = mSprite.depth + 1;
+			mNumberList[i].setAtlas(mSprite.atlas);
+			mNumberList[i].setDepth(mSprite.depth + 1);
 		}
 		refreshNumber();
 	}
@@ -211,7 +211,7 @@ public class txNGUINumber : txNGUISprite
 		int count = mNumberList.Count;
 		for (int i = 0; i < count; ++i)
 		{
-			mNumberList[i].mSprite.depth = mSprite.depth + 1;
+			mNumberList[i].setDepth(mSprite.depth + 1);
 		}
 	}
 	public int getMaxCount(){return mMaxCount;}

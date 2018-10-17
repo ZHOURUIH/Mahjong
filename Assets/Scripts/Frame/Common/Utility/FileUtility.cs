@@ -238,17 +238,8 @@ public class FileUtility : GameBase
 		return false;
 #endif
 	}
-	public static bool isDirectoryExist(string path)
-	{
-#if !UNITY_ANDROID || UNITY_EDITOR
-		return Directory.Exists(path);
-#else
-		isFileExist(path);
-#endif
-	}
 	public static bool isFileExist(string fileName)
 	{
-		
 #if !UNITY_ANDROID || UNITY_EDITOR
 		return File.Exists(fileName);
 #else

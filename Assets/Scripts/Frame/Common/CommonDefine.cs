@@ -7,29 +7,30 @@ using System.Collections.Generic;
 // UI物体类型
 public enum UI_TYPE
 {
-	UT_BASE,				// 窗口基类
-	UT_PARTICLE,			// 粒子特效窗口
-	// NGUI
-	UT_NGUI_SPRITE,			// 静态图片窗口,需要图集
-	UT_NGUI_SPRITE_ANIM,	// 序列帧图片窗口,需要图集
-	UT_NGUI_TEXTURE,		// 静态图片窗口,不需要图集
-	UT_NGUI_TEXTURE_ANIM,	// 序列帧图片窗口,不需要图集
-	UT_NGUI_NUMBER,			// 数字窗口
+	UT_BASE,                // 窗口基类
+	UT_PARTICLE,            // 粒子特效窗口
+							// NGUI
+	UT_NGUI_SPRITE,         // 静态图片窗口,需要图集
+	UT_NGUI_SPRITE_ANIM,    // 序列帧图片窗口,需要图集
+	UT_NGUI_TEXTURE,        // 静态图片窗口,不需要图集
+	UT_NGUI_TEXTURE_ANIM,   // 序列帧图片窗口,不需要图集
+	UT_NGUI_NUMBER,         // 数字窗口
 	UT_NGUI_BUTTON,         // 按钮窗口
+	UT_NGUI_POPUP_LIST,     // 下拉列表窗口
 	UT_NGUI_CHECK_BOX,      // 勾选框
-	UT_NGUI_SLIDER,			// 滑动条
-	UT_NGUI_SCROLL_VIEW,	// 包含多个按钮的滚动条
-	UT_NGUI_VIDEO,			// 用于播放视频的窗口
-	UT_NGUI_TEXT,			// 文本
+	UT_NGUI_SLIDER,         // 滑动条
+	UT_NGUI_SCROLL_VIEW,    // 包含多个按钮的滚动条
+	UT_NGUI_VIDEO,          // 用于播放视频的窗口
+	UT_NGUI_TEXT,           // 文本
 	UT_NGUI_EDITBOX,        // 文本编辑框
 	UT_NGUI_PANEL,          // 面板
-	UI_NGUI_DRAG_VIEW,		// 可拖动的窗口
-	// UGUI
+	UI_NGUI_DRAG_VIEW,      // 可拖动的窗口
+							// UGUI
 	UT_UGUI_STATIC_IMAGE,   // 静态图片
-	UT_UGUI_CANVAS,			// 画布
-	UT_UGUI_NUMBER,			// 数字
-    UT_UGUI_TEXT,           // 文本
-	
+	UT_UGUI_CANVAS,         // 画布
+	UT_UGUI_NUMBER,         // 数字
+	UT_UGUI_TEXT,           // 文本
+
 }
 // 停靠位置
 public enum DOCKING_POSITION
@@ -72,15 +73,14 @@ public enum CHARACTER_TYPE
 // 屏幕适配方式
 public enum ADAPT_SCREEN
 {
-	AS_BASE_ON_ANCHOR,	// 基于NGUI锚点的自适应
-	AS_SIMPLE_STRETCH,	// 简单拉伸
-	AS_MULTI_SCREEN,	// 多屏拼接后复制显示
+	AS_BASE_ON_ANCHOR,  // 基于NGUI锚点的自适应
+	AS_SIMPLE_STRETCH,  // 简单拉伸
+	AS_MULTI_SCREEN,    // 多屏拼接后复制显示
 }
 
 // 游戏委托定义-------------------------------------------------------------------------------------------------------------
-public delegate void SpriteAnimCallBack(txNGUISpriteAnim window, object userData, bool isBreak);
-public delegate void TextureAnimCallBack(txNGUITextureAnim window, object userData, bool isBreak);
-public delegate void KeyFrameCallback(ComponentKeyFrameBase component, object userData, bool breakTremling, bool done);
+public delegate void TextureAnimCallBack(INGUIAnimation window, bool isBreak);
+public delegate void KeyFrameCallback(ComponentKeyFrameBase component, object userdata, bool breakTremling, bool done);
 public delegate void CommandCallback(object user_data, Command cmd);
 public delegate void BoxColliderClickCallback(txUIObject obj);
 public delegate void BoxColliderHoverCallback(txUIObject obj, bool hover);
@@ -154,6 +154,8 @@ public class CommonDefine
 	public const string SA_LAYOUT_PATH = LAYOUT + "/";
 	public const string SA_NGUI_SUB_PREFAB_PATH = SA_LAYOUT_PATH + NGUI_SUB_PREFAB + "/";
 	// 相对路径,相对于Resources,R_开头,表示Resources
+	public const string R_ATLAS_PATH = ATLAS + "/";
+	public const string R_ATLAS_TEXTURE_ANIM_PATH = R_ATLAS_PATH + TEXTURE_ANIM + "/";
 	public const string R_SOUND_PATH = SOUND + "/";
 	public const string R_LAYOUT_PATH = LAYOUT + "/";
 	public const string R_KEY_FRAME_PATH = KEY_FRAME + "/";
@@ -181,6 +183,11 @@ public class CommonDefine
 	public static string F_HELPER_EXE_PATH = F_STREAMING_ASSETS_PATH + HELPER_EXE + "/";
 	public static string F_CUSTOM_SOUND_PATH = F_STREAMING_ASSETS_PATH + CUSTOM_SOUND + "/";
 	public static string F_GAME_PLUGIN_PATH = F_STREAMING_ASSETS_PATH + GAME_PLUGIN + "/";
+	public static string F_ATLAS_PATH = F_RESOURCES_PATH + ATLAS + "/";
+	public static string F_GAME_ATLAS_PATH = F_ATLAS_PATH + GAME_ATLAS + "/";
+	public static string F_ATLAS_TEXTURE_ANIM_PATH = F_ATLAS_PATH + TEXTURE_ANIM + "/";
+	public static string F_TEXTURE_PATH = F_RESOURCES_PATH + TEXTURE + "/";
+	public static string F_TEXTURE_ANIM_PATH = F_TEXTURE_PATH + TEXTURE_ANIM + "/";
 	//-----------------------------------------------------------------------------------------------------------------
 	// 常量定义
 	// 常量数值定义
@@ -211,8 +218,7 @@ public class CommonDefine
 	// 无效ID值
 	public const int INVALID_ID = ~0;
 	//-----------------------------------------------------------------------------------------------------------------
-	// 表格数据文件后缀名
-	public const string DATA_SUFFIX = ".bytes";
+	// 后缀名
 	public const string ASSET_BUNDLE_SUFFIX = ".unity3d";
 	// dll插件的后缀名
 	public const string DLL_PLUGIN_SUFFIX = ".bytes";
@@ -229,4 +235,6 @@ public class CommonDefine
 	public static string[] SOUND_OWNER_NAME = new string[] { "Window", "Scene" };
 	public const string NGUI_DEFAULT_MATERIAL = "NGUIDefault";
 	public const string UGUI_DEFAULT_MATERIAL = "UGUIDefault";
+	// 数据库文件名
+	public const string DATA_BASE_FILE_NAME = "MicroLegend.db";
 }

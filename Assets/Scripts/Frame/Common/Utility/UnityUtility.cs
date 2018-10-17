@@ -10,6 +10,9 @@ using System.Windows.Forms;
 #endif
 using UnityEngine;
 using System.Diagnostics;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 // 日志等级
 public enum LOG_LEVEL
@@ -56,18 +59,20 @@ public class UnityUtility : FrameComponent
 		if (isMainThread && mShowMessageBox)
 		{
 			messageBox(info, true);
+#if UNITY_EDITOR
+			EditorApplication.isPaused = true;
+#endif
 			// 运行一次只显示一次提示框,避免在循环中报错时一直弹窗
 			mShowMessageBox = false;
 		}
 		string trackStr = new StackTrace().ToString();
-		if (mLocalLog != null)
-		{
-			mLocalLog.log("error : " + info + ", stack : " + trackStr);
-		}
-#if UNITY_EDITOR
+		//if (mLocalLog != null)
+		//{
+		//	mLocalLog.log("error : " + info + ", stack : " + trackStr);
+		//}
+//#if UNITY_EDITOR
 		UnityEngine.Debug.LogError("error : " + info + ", stack : " + trackStr);
-		UnityEditor.EditorApplication.isPaused = true;
-#endif
+//#endif
 		// 游戏中的错误日志
 		if (mFrameLogSystem != null)
 		{
@@ -78,13 +83,13 @@ public class UnityUtility : FrameComponent
 	{
 		if ((int)level <= (int)mLogLevel)
 		{
-#if UNITY_EDITOR
+//#if UNITY_EDITOR
 			UnityEngine.Debug.Log(getTime() + " : " + info);
-#endif
-			if(mLocalLog != null)
-			{
-				mLocalLog.log(getTime() + " : " + info);
-			}
+//#endif
+			//if(mLocalLog != null)
+			//{
+			//	mLocalLog.log(getTime() + " : " + info);
+			//}
 		}
 	}
 	public static string getTime()

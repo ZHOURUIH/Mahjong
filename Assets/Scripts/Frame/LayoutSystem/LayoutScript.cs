@@ -155,15 +155,6 @@ public abstract class LayoutScript : CommandReceiver
 	public static T newUIObject<T>(string name, txUIObject parent, GameLayout layout, GameObject gameObj) where T : txUIObject, new()
 	{
 		T obj = new T();
-		obj.setParent(parent);
-		if (parent != null)
-		{
-			parent.addChild(obj);
-			if (gameObj.transform.parent != parent.mObject.transform)
-			{
-				gameObj.transform.parent = parent.mObject.transform;
-			}
-		}
 		obj.init(layout, gameObj, parent);
 		return obj;
 	}

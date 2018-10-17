@@ -18,18 +18,16 @@ public class AnimControl
 	protected bool mPlayDirection = true;   // 播放方向,true为正向播放(从mStartIndex到mEndIndex),false为返向播放(从mEndIndex到mStartIndex)
 	protected int mCurTextureIndex = 0;
 	protected LOOP_MODE mLoopMode = LOOP_MODE.LM_ONCE;
-	protected string mTextureSetName = "";
 	protected float mCurTimeCount = 0.0f;
 	protected PLAY_STATE mPlayState = PLAY_STATE.PS_STOP;
 	protected float mInterval = 0.03f;  // 隔多少秒切换图片
-	protected float mInverseInterval = 0.0f;
 	protected bool mAutoResetIndex = true;        // 是否在播放完毕后自动重置当前帧下标,也表示是否在非循环播放完毕后自动隐藏
 	protected onPlayEndCallback mPlayEndCallback = null;  // 一个序列播放完时的回调函数,只在非循环播放状态下有效
 	protected onPlayingCallback mPlayingCallback = null;  // 一个序列正在播放时的回调函数
 	protected bool mUseTextureSelfSize = true;		// 在切换图片时是否使用图片自身的大小
 	public AnimControl()
 	{
-		mInverseInterval = 1.0f / mInterval;
+		;
 	}
 	public void update(float elapsedTime)
 	{
@@ -115,8 +113,8 @@ public class AnimControl
 		}
 	}
 	public LOOP_MODE getLoop() { return mLoopMode; }
-	public string getTextureSetName() { return mTextureSetName; }
 	public float getInterval() { return mInterval; }
+	public float getSpeed() { return mInterval / 0.033f; }
 	public int getStartIndex() { return mStartIndex; }
 	public PLAY_STATE getPlayState() { return mPlayState; }
 	public bool getPlayDirection() { return mPlayDirection; }
@@ -139,7 +137,13 @@ public class AnimControl
 	public void setInterval(float interval)
 	{
 		mInterval = interval;
-		mInverseInterval = 1.0f / mInterval;
+	}
+	public void setSpeed(float speed)
+	{
+		if(speed > 0.0f)
+		{
+			mInterval = 0.033f / speed;
+		}
 	}
 	public void setFrameCount(int count)
 	{

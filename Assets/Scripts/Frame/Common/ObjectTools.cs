@@ -704,6 +704,10 @@ public class ObjectTools : GameBase
 	{
 		pushCommand<CommandGameScenePlayAudio>(mGameSceneManager.getCurScene(), false);
 	}
+	public static void PLAY_AUDIO_SCENE(SOUND_DEFINE sound)
+	{
+		PLAY_AUDIO_SCENE(sound, true, 1.0f);
+	}
 	public static void PLAY_AUDIO_SCENE(SOUND_DEFINE sound, bool loop, float volume)
 	{
 		CommandGameScenePlayAudio cmd = newCmd(out cmd, false);

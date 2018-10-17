@@ -27,19 +27,20 @@ public class AudioManager : FrameComponent
 	}
 	public override void init()
 	{
-		int dataCount = mDataBase.getDataCount(DATA_TYPE.DT_GAME_SOUND);
+		List<SoundData> soundDataList;
+		mSQLiteSound.queryAll(out soundDataList);
+		int dataCount = soundDataList.Count;
 		for (int i = 0; i < dataCount; ++i)
 		{
-			DataGameSound soundData = mDataBase.queryData(DATA_TYPE.DT_GAME_SOUND, i) as DataGameSound;
-			string soundName = BinaryUtility.bytesToString(soundData.mSoundFileName);
-			string audioName = StringUtility.getFileNameNoSuffix(soundName, true);
-			SOUND_DEFINE soundID = (SOUND_DEFINE)(soundData.mSoundID);
+			SoundData soundData = soundDataList[i];
+			string audioName = StringUtility.getFileNameNoSuffix(soundData.mFileName, true);
+			SOUND_DEFINE soundID = (SOUND_DEFINE)(soundData.mID);
 			mSoundDefineMap.Add(soundID, audioName);
 			if (!mVolumeScale.ContainsKey(soundID))
 			{
 				mVolumeScale.Add(soundID, soundData.mVolumeScale);
 			}
-			registeAudio(soundName);
+			registeAudio(soundData.mFileName);
 		}
 	}
 	public override void destroy()

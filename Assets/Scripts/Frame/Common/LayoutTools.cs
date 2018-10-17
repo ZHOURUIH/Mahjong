@@ -361,6 +361,10 @@ public class LayoutTools : GameBase
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------
 	// 移动
 	// 用关键帧移动窗口
+	public static void MOVE_WINDOW(txUIObject obj)
+	{
+		MOVE_WINDOW(obj, Vector3.zero);
+	}
 	public static void MOVE_WINDOW(txUIObject obj, Vector3 pos)
 	{
 		if(!checkStaticPanel(obj))
@@ -946,6 +950,10 @@ public class LayoutTools : GameBase
 	public static void PLAY_AUDIO(txUIObject obj)
 	{
 		pushCommand<CommandWindowPlayAudio>(obj, false);
+	}
+	public static void PLAY_AUDIO(txUIObject obj, SOUND_DEFINE sound)
+	{
+		PLAY_AUDIO(obj, sound, false, 1.0f);
 	}
 	public static void PLAY_AUDIO(txUIObject obj, SOUND_DEFINE sound, bool loop, float volume)
 	{

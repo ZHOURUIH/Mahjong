@@ -14,24 +14,36 @@ public abstract class SerializedData : GameBase
 		mDataSize = 0;
 		mParameterInfoList = new List<OBJECT>();
 	}
-	// 从buffer中读取数据到所有参数中
 	public void read(byte[] buffer)
 	{
-		int bufferOffset = 0;
+		int offset = 0;
+		read(buffer, ref offset);
+	}
+	// 从buffer中读取数据到所有参数中
+	public void read(byte[] buffer, ref int offset)
+	{
+		if(buffer == null)
+		{
+			return;
+		}
 		int parameterCount = mParameterInfoList.Count;
 		for (int i = 0; i < parameterCount; ++i)
 		{
-			mParameterInfoList[i].readFromBuffer(buffer, ref bufferOffset);
+			mParameterInfoList[i].readFromBuffer(buffer, ref offset);
 		}
 	}
-	// 将所有参数的值写入buffer
 	public void write(byte[] buffer)
 	{
-		int bufferOffset = 0;
+		int offset = 0;
+		write(buffer, ref offset);
+	}
+	// 将所有参数的值写入buffer
+	public void write(byte[] buffer, ref int offset)
+	{
 		int parameterCount = mParameterInfoList.Count;
 		for (int i = 0; i < parameterCount; ++i)
 		{
-			mParameterInfoList[i].writeToBuffer(buffer, ref bufferOffset);
+			mParameterInfoList[i].writeToBuffer(buffer, ref offset);
 		}
 	}
 	public int getSize() { return mDataSize; }

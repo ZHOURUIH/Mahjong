@@ -5,6 +5,7 @@ using System.Collections;
 // 这个父类的添加是方便代码的书写
 public class FrameBase
 {
+	// FrameComponent
 	public static GameFramework				mGameFramework			= null;
 	public static CommandSystem				mCommandSystem			= null;
 	public static AudioManager				mAudioManager			= null;
@@ -14,7 +15,7 @@ public class FrameBase
 	public static KeyFrameManager			mKeyFrameManager		= null;
 	public static GlobalTouchSystem			mGlobalTouchSystem		= null;
 	public static ShaderManager				mShaderManager			= null;
-	public static DataBase					mDataBase				= null;
+	public static SQLite					mSQLite					= null;
 	public static CameraManager				mCameraManager			= null;
 	public static ResourceManager			mResourceManager		= null;
 	public static LayoutSubPrefabManager	mLayoutSubPrefabManager	= null;
@@ -25,7 +26,9 @@ public class FrameBase
 	public static SceneSystem				mSceneSystem			= null;
 	public static IFrameLogSystem			mFrameLogSystem			= null;
 	public static ClassObjectPool			mClassObjectPool		= null;
-	public static LocalLog					mLocalLog				= null;
+	//public static LocalLog					mLocalLog				= null;
+	// SQLiteTable
+	public static SQLiteSound				mSQLiteSound			= null;
 	public virtual void notifyConstructDone()
 	{
 		if (mGameFramework == null)
@@ -39,7 +42,7 @@ public class FrameBase
 			mKeyFrameManager = mGameFramework.getSystem<KeyFrameManager>();
 			mGlobalTouchSystem = mGameFramework.getSystem<GlobalTouchSystem>();
 			mShaderManager = mGameFramework.getSystem<ShaderManager>();
-			mDataBase = mGameFramework.getSystem<DataBase>();
+			mSQLite = mGameFramework.getSystem<SQLite>();
 			mCameraManager = mGameFramework.getSystem<CameraManager>();
 			mResourceManager = mGameFramework.getSystem<ResourceManager>();
 			mLayoutSubPrefabManager = mGameFramework.getSystem<LayoutSubPrefabManager>();
@@ -49,6 +52,7 @@ public class FrameBase
 			mInputManager = mGameFramework.getSystem<InputManager>();
 			mSceneSystem = mGameFramework.getSystem<SceneSystem>();
 			mClassObjectPool = mGameFramework.getSystem<ClassObjectPool>();
+			mSQLiteSound = mSQLite.getTable<SQLiteSound>();
 		}
 	}
 	// 方便书写代码添加的命令相关函数

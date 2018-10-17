@@ -13,11 +13,11 @@ public class CommandSocketManagerNetState : Command
 	{
 		if(mNetState == NET_STATE.NS_NET_CLOSE)
 		{
-			UnityUtility.logError("网络已断开");
+			UnityUtility.logInfo("网络已断开");
 		}
 		else if(mNetState == NET_STATE.NS_SERVER_CLOSE)
 		{
-			UnityUtility.logError("服务器关闭");
+			UnityUtility.logInfo("服务器关闭");
 		}
 	}
 	public override string showDebugInfo()

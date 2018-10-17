@@ -1,17 +1,23 @@
 ManifestFileVersion: 0
-CRC: 1882120598
+CRC: 4208501578
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: ca59fe938fbbb24bb43674357a54af2e
+    Hash: 3b35a84ebab731db0fe6b03c60b0fb09
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 4c7f498e687904e0decf2340094b52ca
+    Hash: 8a0e4482b46d2976fe55e9a6838b7319
 HashAppended: 0
 ClassTypes:
 - Class: 1
   Script: {instanceID: 0}
 - Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
   Script: {instanceID: 0}
 - Class: 65
   Script: {instanceID: 0}
@@ -21,6 +27,8 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 8b583f62f4eba54419f1262c9199ec59, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 1fdca5042b1d12a4890ec1bd4f04290d, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: d5c5ca47aa5c01740810b7c66662099f, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 4d0c51bb0b6e93049af5e88f93826e3b, type: 3}
 - Class: 114
@@ -32,3 +40,5 @@ Assets:
 Dependencies:
 - E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/atlas/gameatlas/atlasmahjongdrop.unity3d
 - E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/atlas/gameatlas/atlasmahjonghandin.unity3d
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/material.unity3d
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/texture/gametexture/mahjonghandin.unity3d

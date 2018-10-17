@@ -1,0 +1,39 @@
+ManifestFileVersion: 0
+CRC: 1380374045
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 52b82fe8dc683242463c052051dcdc5e
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: c2cba4261db10f168efe886d710499f2
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 8b583f62f4eba54419f1262c9199ec59, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 0b4eb3a400afab046abb8471a9d746d6, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: d5c5ca47aa5c01740810b7c66662099f, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+Assets:
+- Assets/Resources/Layout/NGUISubPrefab/RoomItem.prefab
+Dependencies:
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/font/fzy3jw.unity3d
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/material.unity3d
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/texture/gametexture/roomlist.unity3d

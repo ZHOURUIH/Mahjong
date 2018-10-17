@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3533590995
+CRC: 2592479341
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 1c479eae6698c9676b9c98ab082fded2
+    Hash: 69cc0f4641fd87a089e97dc3989e1903
   TypeTreeHash:
     serializedVersion: 2
     Hash: c73412a662fd4e4f36af34cbdf078b85
@@ -16,6 +16,7 @@ Assets:
 - Assets/Resources/Texture/GameTexture/MahjongHandIn/Tiao0.png
 - Assets/Resources/Texture/GameTexture/MahjongHandIn/Tong3.png
 - Assets/Resources/Texture/GameTexture/MahjongHandIn/Tiao2.png
+- Assets/Resources/Texture/GameTexture/MahjongHandIn/SelectMahjong.png
 - Assets/Resources/Texture/GameTexture/MahjongHandIn/Tiao8.png
 - Assets/Resources/Texture/GameTexture/MahjongHandIn/Wan0.png
 - Assets/Resources/Texture/GameTexture/MahjongHandIn/Tong2.png

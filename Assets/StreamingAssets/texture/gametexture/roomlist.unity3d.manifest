@@ -1,0 +1,17 @@
+ManifestFileVersion: 0
+CRC: 2134256609
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 31c80d5c0d2b7623f96d55d1e6fdaba7
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: c73412a662fd4e4f36af34cbdf078b85
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+Assets:
+- Assets/Resources/Texture/GameTexture/RoomList/RoomItemBackground.png
+- Assets/Resources/Texture/GameTexture/RoomList/RoomListBackground.tga
+Dependencies: []

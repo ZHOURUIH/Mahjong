@@ -1,0 +1,29 @@
+ManifestFileVersion: 0
+CRC: 2513196763
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: db2ecaa36c33db0ebaac254a83ab7aa8
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: edc7d19ee388ae2ed0e05f62ac2fdda5
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 8b583f62f4eba54419f1262c9199ec59, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4d0c51bb0b6e93049af5e88f93826e3b, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+Assets:
+- Assets/Resources/Layout/NGUIPrefab/UIMainFrameBack.prefab
+Dependencies:
+- E:/GameProject/GitHub/Mahjong/Assets/StreamingAssets/atlas/gameatlas/atlasmainframe.unity3d

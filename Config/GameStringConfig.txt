@@ -1,0 +1,12 @@
+// 注意
+// 该文件中可使用双斜杠来对单行进行注释
+// 可以添加任意的换行和空格
+// 变量命名应与代码中枚举命名相同
+
+
+// 排除的文件名
+GDS_EXCEPT_FILE = ../Assets/Resources/Scene,../Assets/Resources/Shader,../Assets/Resources/Skybox,../Assets/StreamingAssets/Video/LogoVideo
+// 源文件目录
+GDS_COPY_FILE_DIR = ../Assets/Resources,../Assets/StreamingAssets/Video
+// 目标资源文件目录
+GDS_COPY_FILE_DEST_DIR = ../../backup_Mahjong

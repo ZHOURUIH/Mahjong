@@ -14,10 +14,10 @@ public abstract class SerializedData : GameBase
 		mDataSize = 0;
 		mParameterInfoList = new List<OBJECT>();
 	}
-	public void read(byte[] buffer)
+	public void read(byte[] buffer, int offset = 0)
 	{
-		int offset = 0;
-		read(buffer, ref offset);
+		int curOffset = offset;
+		read(buffer, ref curOffset);
 	}
 	// 从buffer中读取数据到所有参数中
 	public void read(byte[] buffer, ref int offset)
@@ -32,10 +32,10 @@ public abstract class SerializedData : GameBase
 			mParameterInfoList[i].readFromBuffer(buffer, ref offset);
 		}
 	}
-	public void write(byte[] buffer)
+	public void write(byte[] buffer, int offset = 0)
 	{
-		int offset = 0;
-		write(buffer, ref offset);
+		int curOffset = offset;
+		write(buffer, ref curOffset);
 	}
 	// 将所有参数的值写入buffer
 	public void write(byte[] buffer, ref int offset)

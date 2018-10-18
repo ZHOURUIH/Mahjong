@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 
 // 返回值表示是否继续运行该线程
-public delegate bool CustomThreadCallback();
+public delegate void CustomThreadCallback(ref bool run);
 
 public class CustomThread : GameBase
 {
@@ -42,7 +42,6 @@ public class CustomThread : GameBase
 	}
 	public void start(CustomThreadCallback callback, int frameTimeMS = 15, int forceSleep = 5)
 	{
-		logInfo("准备启动线程 : " + mName, LOG_LEVEL.LL_FORCE);
 		if (mThread != null)
 		{
 			return;
@@ -63,7 +62,10 @@ public class CustomThread : GameBase
 	}
 	public void stop()
 	{
-		logInfo("准备退出线程 : " + mName, LOG_LEVEL.LL_FORCE);
+		if(mThread == null)
+		{
+			return;
+		}
 		mRunning = false;
 		while (!mIsBackground && !mFinish) { }
 		if (mThread != null)
@@ -88,7 +90,9 @@ public class CustomThread : GameBase
 				{
 					continue;
 				}
-				if(!mCallback())
+				bool run = true;
+				mCallback(ref run);
+				if (!run)
 				{
 					break;
 				}

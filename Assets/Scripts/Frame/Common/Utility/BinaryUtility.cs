@@ -134,24 +134,43 @@ public class BinaryUtility
 	}
 	public static int readInt(byte[] buffer, ref int index, bool inverse = false)
 	{
-		if (buffer.Length < index + sizeof(int))
+		int typeSize = sizeof(int);
+		if (buffer.Length < index + typeSize)
 		{
 			return 0;
 		}
-		int byte0 = (int)(0xff & buffer[index++]);
-		int byte1 = (int)(0xff & buffer[index++]);
-		int byte2 = (int)(0xff & buffer[index++]);
-		int byte3 = (int)(0xff & buffer[index++]);
-		if (inverse)
+		int[] bytes = new int[typeSize];
+		for (int i = 0; i < typeSize; ++i)
 		{
-			int finalInt = (int)((byte3 << (8 * 0)) | (byte2 << (8 * 1)) | (byte1 << (8 * 2)) | (byte0 << (8 * 3)));
-			return finalInt;
+			bytes[i] = (0xFF & buffer[index++]);
 		}
-		else
+		int finalInt = 0;
+		for (int i = 0; i < typeSize; ++i)
 		{
-			int finalInt = (int)((byte3 << (8 * 3)) | (byte2 << (8 * 2)) | (byte1 << (8 * 1)) | (byte0 << (8 * 0)));
-			return finalInt;
+			int bitsOffset = inverse ? 8 * i : 8 * (typeSize - i - 1);
+			finalInt |= bytes[typeSize - i - 1] << bitsOffset;
 		}
+		return finalInt;
+	}
+	public static ulong readULong(byte[] buffer, ref int index, bool inverse = false)
+	{
+		int typeSize = sizeof(ulong);
+		if (buffer.Length < index + typeSize)
+		{
+			return 0;
+		}
+		ulong[] bytes = new ulong[typeSize];
+		for(int i = 0; i < typeSize; ++i)
+		{
+			bytes[i] = (ulong)(0xFF & buffer[index++]);
+		}
+		ulong finalInt = 0;
+		for (int i = 0; i < typeSize; ++i)
+		{
+			int bitsOffset = inverse ? 8 * i : 8 * (typeSize - i - 1);
+			finalInt |= bytes[typeSize - i - 1] << bitsOffset;
+		}
+		return finalInt;
 	}
 	public static float readFloat(byte[] buffer, ref int curIndex, bool inverse = false)
 	{
@@ -269,28 +288,32 @@ public class BinaryUtility
 	}
 	public static bool writeInt(byte[] buffer, ref int index, int value, bool inverse = false)
 	{
-		if (buffer.Length < index + sizeof(int))
+		int typeSize = sizeof(int);
+		if (buffer.Length < index + typeSize)
 		{
 			return false;
 		}
-		if(inverse)
+		for(int i = 0; i < typeSize; ++i)
 		{
-			buffer[index++] = (byte)((0xff000000 & value) >> 24);
-			buffer[index++] = (byte)((0x00ff0000 & value) >> 16);
-			buffer[index++] = (byte)((0x0000ff00 & value) >> 8);
-			buffer[index++] = (byte)((0x000000ff & value) >> 0);
+			int bitsOffset = inverse ? 8 * (typeSize - i - 1) : 8 * i;
+			buffer[index++] = (byte)(((0xFF << bitsOffset) & value) >> bitsOffset);
 		}
-		else
-		{
-			buffer[index++] = (byte)((0x000000ff & value) >> 0);
-			buffer[index++] = (byte)((0x0000ff00 & value) >> 8);
-			buffer[index++] = (byte)((0x00ff0000 & value) >> 16);
-			buffer[index++] = (byte)((0xff000000 & value) >> 24);
-		}
-		
 		return true;
 	}
-
+	public static bool writeULong(byte[] buffer, ref int index, ulong value, bool inverse = false)
+	{
+		int typeSize = sizeof(ulong);
+		if (buffer.Length < index + typeSize)
+		{
+			return false;
+		}
+		for (int i = 0; i < typeSize; ++i)
+		{
+			int bitsOffset = inverse ? 8 * (typeSize - i - 1) : 8 * i;
+			buffer[index++] = (byte)(((ulong)(0xFF << bitsOffset) & value) >> bitsOffset);
+		}
+		return true;
+	}
 	public static bool writeFloat(byte[] buffer, ref int index, float value)
 	{
 		if (buffer.Length < index + sizeof(float))
@@ -370,6 +393,7 @@ public class BinaryUtility
 	{
 		string byteString = "";
 		int byteCount = count > 0 ? count : byteList.Length;
+		byteCount = MathUtility.getMin(byteList.Length, byteCount);
 		for (int i = 0; i < byteCount; ++i)
 		{
 			if (addSpace)
@@ -457,14 +481,7 @@ public class BinaryUtility
 	}
 	public static void memcpy<T>(T[] dest, T[] src, int destOffset, int srcOffset, int count)
 	{
-		for (int i = 0; i < count; ++i)
-		{
-			dest[destOffset + i] = src[srcOffset + i];
-		}
-	}
-	public static void memcpy<T>(T[] dest, T[] src, int destOffset)
-	{
-		memcpy(dest, src, destOffset, 0, src.Length);
+		Buffer.BlockCopy(src, srcOffset, dest, destOffset, count);
 	}
 	public static void memmove<T>(ref T[] data, int dest, int src, int count)
 	{
@@ -488,15 +505,24 @@ public class BinaryUtility
 			}
 		}
 	}
+	// 将数组每个元素值设置为0
 	public static void memset<T>(T[] p, T value, int length = -1)
 	{
 		if(length == -1)
 		{
 			length = p.Length;
 		}
-		for (int i = 0; i < length; ++i)
+		// 有两种方法清零一个数组,遍历和Array.Clear(),但是两个效率在不同情况下是不一样的,数量小于77时,遍历会快一些,数量大于等于77时,Array.Clear()更快
+		if(length < 77)
 		{
-			p[i] = value;
+			for (int i = 0; i < length; ++i)
+			{
+				p[i] = value;
+			}
+		}
+		else
+		{
+			Array.Clear(p, 0, length);
 		}
 	}
 	public static byte[] toBytes(byte value)

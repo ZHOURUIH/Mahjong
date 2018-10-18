@@ -213,8 +213,8 @@ public class CommonDefine
 	public const long WS_MAXIMIZEBOX = 0x00010000;
 	public const int GWL_STYLE = -16;
 	// UI的制作标准,所有UI都是按1920*1080标准分辨率制作的
-	public const int STANDARD_WIDTH = 800;
-	public const int STANDARD_HEIGHT = 600;
+	public const int STANDARD_WIDTH = 1920;
+	public const int STANDARD_HEIGHT = 1080;
 	// 无效ID值
 	public const int INVALID_ID = ~0;
 	//-----------------------------------------------------------------------------------------------------------------

@@ -1,4 +1,4 @@
-﻿#if UNITY_STANDALONE_WIN
+﻿#if UNITY_STANDALONE_WIN && !UNITY_EDITOR
 using UnityEngine;
 using System;
 using System.Collections;
@@ -47,11 +47,10 @@ public class LocalLog
 		mLogListLock.unlock();
 	}
 	//-----------------------------------------------------------------------------------------------------------
-	protected bool writeLocalLog()
+	protected void writeLocalLog(ref bool run)
 	{
 		// 将当前写入缓冲区中的内容写入文件
 		writeLogToFile();
-		return true;
 	}
 	protected void writeLogToFile()
 	{

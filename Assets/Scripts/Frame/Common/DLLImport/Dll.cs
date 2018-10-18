@@ -13,7 +13,7 @@ public class Dll : GameBase
 	{
 		mLibraryName = name;
 		mFunctionList = new Dictionary<string, Delegate>();
-		mHandle = Kernel32.LoadLibrary(mLibraryName);
+		mHandle = Kernel32.LoadLibrary(CommonDefine.F_ASSETS_PATH + "Plugins/" + mLibraryName);
 	}
 	public void destroy()
 	{

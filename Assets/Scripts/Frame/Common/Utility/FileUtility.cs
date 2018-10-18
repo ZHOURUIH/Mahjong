@@ -220,14 +220,14 @@ public class FileUtility : GameBase
 		return Directory.Exists(dir);
 #else
 		// 安卓平台如果要读取StreamingAssets下的文件,只能使用AssetManager
-		if(StringUtility.startWith(dir, CommonDefine.F_STREAMING_ASSETS_PATH))
+		if(StringUtility.startWith(dir + "/", CommonDefine.F_STREAMING_ASSETS_PATH))
 		{
 			// 改为相对路径
 			dir = dir.Substring(CommonDefine.F_STREAMING_ASSETS_PATH.Length, dir.Length - CommonDefine.F_STREAMING_ASSETS_PATH.Length);
 			return AndroidAssetLoader.isAssetExist(dir);
 		}
 		// 安卓平台如果要读取persistentDataPath的文件,则可以使用File
-		else if (StringUtility.startWith(dir, CommonDefine.F_PERSISTENT_DATA_PATH))
+		else if (StringUtility.startWith(dir + "/", CommonDefine.F_PERSISTENT_DATA_PATH))
 		{
 			return AndroidAssetLoader.isDirExist(dir);
 		}
@@ -343,7 +343,6 @@ public class FileUtility : GameBase
 		validPath(ref path);
 		if(!isDirExist(path))
 		{
-			logError("path is invalid! path : " + path);
 			return;
 		}
 		DirectoryInfo folder = new DirectoryInfo(path);

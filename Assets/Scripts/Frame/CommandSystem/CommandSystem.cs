@@ -41,10 +41,10 @@ public class CommandSystem : FrameComponent
 	}
 	public override void destroy()
 	{
+		mSystemDestroy = true;
 		mCommandPool.destroy();
 		mCommandBufferInput.Clear();
 		mCommandBufferProcess.Clear();
-		mSystemDestroy = true;
 		base.destroy();
 	}
 	public override void update(float elapsedTime)
@@ -86,6 +86,11 @@ public class CommandSystem : FrameComponent
 	// 创建命令
 	public T newCmd<T>(bool show = true, bool delay = false) where T : Command, new()
 	{
+		// 如果命令系统已经销毁了,则不能再创建命令
+		if (mSystemDestroy)
+		{
+			return null;
+		}
 		T cmd = mCommandPool.newCmd<T>(show, delay);
 #if UNITY_EDITOR
 		if (mTraceCommand)
@@ -148,12 +153,22 @@ public class CommandSystem : FrameComponent
 	}
 	public new void pushCommand<T>(CommandReceiver cmdReceiver, bool show = true) where T : Command, new()
 	{
+		// 如果命令系统已经销毁了,则不能再发送命令
+		if (mSystemDestroy)
+		{
+			return;
+		}
 		T cmd = newCmd<T>(show, false);
 		pushCommand(cmd, cmdReceiver);
 	}
 	// 执行命令
 	public new void pushCommand(Command cmd, CommandReceiver cmdReceiver)
 	{
+		// 如果命令系统已经销毁了,则不能再发送命令
+		if (mSystemDestroy)
+		{
+			return;
+		}
 		if (cmd == null)
 		{
 			logError("cmd is null! receiver : " + (cmdReceiver != null ? cmdReceiver.getName() : ""));
@@ -187,6 +202,11 @@ public class CommandSystem : FrameComponent
 	}
 	public new void pushDelayCommand<T>(CommandReceiver cmdReceiver, float delayExecute = 0.001f, bool show = true) where T : Command, new()
 	{
+		// 如果命令系统已经销毁了,则不能再发送命令
+		if (mSystemDestroy)
+		{
+			return;
+		}
 		T cmd = newCmd<T>(show, true);
 		pushDelayCommand(cmd, cmdReceiver, delayExecute);
 	}
@@ -194,6 +214,11 @@ public class CommandSystem : FrameComponent
 	// 子线程中发出的命令必须是延时执行的命令!
 	public new void pushDelayCommand(Command cmd, CommandReceiver cmdReceiver, float delayExecute = 0.001f)
 	{
+		// 如果命令系统已经销毁了,则不能再发送命令
+		if (mSystemDestroy)
+		{
+			return;
+		}
 		if (cmd == null)
 		{
 			logError("cmd is null! receiver : " + (cmdReceiver != null ? cmdReceiver.getName() : ""));

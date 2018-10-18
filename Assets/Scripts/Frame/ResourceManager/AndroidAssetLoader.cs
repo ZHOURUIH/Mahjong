@@ -137,9 +137,10 @@ public class AndroidAssetLoader : FrameComponent
 	//------------------------------------------------------------------------------------------------------------------------------------------------
 	protected static void checkPersistenDataPath(string path)
 	{
-		if (!StringUtility.startWith(path, Application.persistentDataPath))
+		if (!StringUtility.startWith(path, CommonDefine.F_PERSISTENT_DATA_PATH)
+			&& !StringUtility.startWith(path + "/", CommonDefine.F_PERSISTENT_DATA_PATH))
 		{
-			logError("path must start with Application.persistentDataPath");
+			logError("path must start with " + CommonDefine.F_PERSISTENT_DATA_PATH + ", path : " + path);
 		}
 	}
 }

@@ -49,6 +49,7 @@ public abstract class ConfigBase : FrameComponent
 	}
 	public override void init()
 	{
+		base.init();
 		addFloat();
 		addString();
 		readConfig();

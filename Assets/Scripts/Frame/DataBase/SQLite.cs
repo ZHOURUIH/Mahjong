@@ -51,14 +51,23 @@ public class SQLite : FrameComponent
 			mCommand = null;
 		}
 	}
+	// 数据库文件不存在时,创建数据库文件
+	public void createDataBase()
+	{
+		if(mConnection == null)
+		{
+			string fullPath = CommonDefine.F_DATA_BASE_PATH + CommonDefine.DATA_BASE_FILE_NAME;
+			mConnection = new SqliteConnection("DATA SOURCE = " + fullPath);   // 创建SQLite对象的同时，创建SqliteConnection对象  
+			mConnection.Open();                         // 打开数据库链接	
+		}
+		if (mConnection != null)
+		{
+			mCommand = mConnection.CreateCommand();
+		}
+	}
 	public void createTable(string tableName, string format)
 	{
-		if(mCommand == null)
-		{
-			return;
-		}
-		mCommand.CommandText = "CREATE TABLE IF NOT EXISTS " + tableName + "(" + format + ");";
-		mCommand.ExecuteNonQuery();
+		queryNonReader("CREATE TABLE IF NOT EXISTS " + tableName + "(" + format + ");");
 	}
 	public SqliteDataReader queryReader(string queryString)
 	{

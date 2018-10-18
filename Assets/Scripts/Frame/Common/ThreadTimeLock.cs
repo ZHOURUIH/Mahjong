@@ -21,6 +21,10 @@ public class ThreadTimeLock
 	{
 		mForceSleep = timeMS;
 	}
+	public void setFrameTime(int timeMS)
+	{
+		mFrameTimeMS = timeMS;
+	}
 	public long update()
 	{
 		DateTime endTime = DateTime.Now;

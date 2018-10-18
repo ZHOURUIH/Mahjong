@@ -19,6 +19,10 @@ public class ThreadLock
 	{
 		mTraceStack = trace;
 	}
+	public bool isLocked()
+	{
+		return mLockCount == 1;
+	}
 	public void waitForUnlock()
 	{
 		while (Interlocked.Exchange(ref mLockCount, 1) != 0){}

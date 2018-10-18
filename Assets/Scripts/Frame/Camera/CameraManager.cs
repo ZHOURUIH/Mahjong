@@ -9,6 +9,9 @@ public class CameraManager : FrameComponent
 	protected Dictionary<string, GameCamera> mCameraList;
 	protected GameCamera mMainCamera;
 	protected GameCamera mUICamera;
+	protected GameCamera mUIForeEffectCamera;
+	protected GameCamera mUIBackEffectCamera;
+	protected GameCamera mUIBlurCamera;
 	public CameraManager(string name)
 		:base(name)
 	{
@@ -19,6 +22,9 @@ public class CameraManager : FrameComponent
 		findMainCamera();
 		GameObject parent = mLayoutManager.getNGUIRoot().mObject;
 		mUICamera = getCamera("UICamera", parent);
+		mUIForeEffectCamera = getCamera("UIForeEffectCamera", parent, false);
+		mUIBackEffectCamera = getCamera("UIBackEffectCamera", parent, false);
+		mUIBlurCamera = getCamera("UIBlurCamera", parent, false);
 	}
 	public override void destroy()
 	{
@@ -79,6 +85,9 @@ public class CameraManager : FrameComponent
 	}
 	public GameCamera getMainCamera(){return mMainCamera;}
 	public GameCamera getUICamera(){return mUICamera;}
+	public GameCamera getUIForeEffectCamera(){return mUIForeEffectCamera;}
+	public GameCamera getUIBackEffectCamera() {return mUIBackEffectCamera;}
+	public GameCamera getUIBlurCamera() { return mUIBlurCamera; }
 	public void destroyCamera(string name)
 	{
 		GameCamera camera = getCamera(name);
@@ -95,6 +104,18 @@ public class CameraManager : FrameComponent
 		else if(camera == mUICamera)
 		{
 			mUICamera = null;
+		}
+		else if(camera == mUIForeEffectCamera)
+		{
+			mUIForeEffectCamera = null;
+		}
+		else if(camera == mUIBackEffectCamera)
+		{
+			mUIBackEffectCamera = null;
+		}
+		else if(camera == mUIBlurCamera)
+		{
+			mUIBlurCamera = null;
 		}
 	}
 }

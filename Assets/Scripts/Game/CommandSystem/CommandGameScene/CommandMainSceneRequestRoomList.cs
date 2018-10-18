@@ -30,10 +30,10 @@ public class CommandMainSceneRequestRoomList : Command
 		}
 		MathUtility.clampMin(ref mCurPageIndex, 0);
 		// 向服务器请求一页房间列表
-		CSRequestRoomList requestRoomList = mSocketNetManager.createPacket<CSRequestRoomList>();
+		CSRequestRoomList requestRoomList = mSocketManager.createPacket<CSRequestRoomList>();
 		requestRoomList.mMinIndex.mValue = (short)(mCurPageIndex * GameDefine.MAX_REQUEST_ROOM_COUNT);
 		requestRoomList.mMaxIndex.mValue = (short)(requestRoomList.mMinIndex.mValue + GameDefine.MAX_REQUEST_ROOM_COUNT);
-		mSocketNetManager.sendMessage(requestRoomList);
+		mSocketManager.sendMessage(requestRoomList);
 	}
 	public override string showDebugInfo()
 	{

@@ -86,10 +86,10 @@ public class ScriptLogin : LayoutScript
 	{
 		if(!mTestAccount)
 		{
-			CSLogin login = mSocketNetManager.createPacket<CSLogin>();
+			CSLogin login = mSocketManager.createPacket<CSLogin>();
 			login.setAccount(mAccountEdit.getText());
 			login.setPassword(mPasswordEdit.getText());
-			mSocketNetManager.sendMessage(login);
+			mSocketManager.sendMessage(login);
 			// 发送登录消息后显示正在登录的提示框
 			LayoutTools.ACTIVE_WINDOW(mTipMask);
 			mCurTime = 0.0f;
@@ -133,6 +133,6 @@ public class ScriptLogin : LayoutScript
 	{
 		// 关闭登录提示框,然后发送消息取消登录
 		LayoutTools.ACTIVE_WINDOW(mTipMask, false);
-		mSocketNetManager.sendMessage<CSCancelLogin>();
+		mSocketManager.sendMessage<CSCancelLogin>();
 	}
 }

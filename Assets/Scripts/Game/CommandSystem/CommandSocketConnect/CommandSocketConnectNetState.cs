@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CommandSocketManagerNetState : Command
+public class CommandSocketConnectNetState : Command
 {
 	public NET_STATE mNetState;
 	public override void init()

@@ -12,7 +12,6 @@ public class CommandMainSceneAutoRequestTimeChanged : Command
 	}
 	public override void execute()
 	{
-		GameScene gameScene = mReceiver as GameScene;
 		mScriptRoomList.setRemainRequestTime(mTime);
 	}
 	public override string showDebugInfo()

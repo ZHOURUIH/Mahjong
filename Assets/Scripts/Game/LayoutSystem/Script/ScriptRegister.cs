@@ -73,12 +73,12 @@ public class ScriptRegister : LayoutScript
 	protected void onRegisterClick(GameObject button)
 	{
 		// 发送注册消息
-		CSRegister register = mSocketNetManager.createPacket<CSRegister>();
+		CSRegister register = mSocketManager.createPacket<CSRegister>();
 		register.setAccount(mAccountEdit.getText());
 		register.setPassword(mPasswordEdit.getText());
 		register.setName(mNameEdit.getText());
 		register.mHead.mValue = 0;
-		mSocketNetManager.sendMessage(register);
+		mSocketManager.sendMessage(register);
 	}
 	protected void onCancelClick(GameObject button)
 	{
@@ -92,10 +92,10 @@ public class ScriptRegister : LayoutScript
 		string nameText = mNameEdit.getText();
 		if(nameText != "")
 		{
-			CSCheckName checkName = mSocketNetManager.createPacket<CSCheckName>();
+			CSCheckName checkName = mSocketManager.createPacket<CSCheckName>();
 			byte[] nameBytes = BinaryUtility.stringToBytes(nameText, BinaryUtility.getGB2312());
 			checkName.setName(nameBytes);
-			mSocketNetManager.sendMessage(checkName);
+			mSocketManager.sendMessage(checkName);
 			// 检测按钮点击后就禁用该按钮
 			mCheckNameButton.setHandleInput(false);
 		}

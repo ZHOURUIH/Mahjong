@@ -63,7 +63,7 @@ public class ScriptRoomMenu : LayoutScript
 	protected void onCreateClicked(GameObject obj)
 	{
 		// 向服务器发送创建房间的消息
-		mSocketNetManager.sendMessage<CSCreateRoom>();
+		mSocketManager.sendMessage<CSCreateRoom>();
 	}
 	protected void onJoinClicked(GameObject obj)
 	{
@@ -75,7 +75,7 @@ public class ScriptRoomMenu : LayoutScript
 		// 显示正在自由匹配的提示界面
 		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_FREE_MATCH_TIP);
 		// 发送消息自由匹配
-		mSocketNetManager.sendMessage<CSFreeMatch>();
+		mSocketManager.sendMessage<CSFreeMatch>();
 	}
 	protected void onRoomListClicked(GameObject obj)
 	{

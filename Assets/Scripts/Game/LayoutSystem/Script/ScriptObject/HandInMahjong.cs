@@ -141,9 +141,9 @@ public class HandInMahjong : GameBase
 		// 点击准备打出的牌,则请求将牌打出
 		else if (mHandInMahjong[index].mState == HANDIN_STATE.HS_PREPARE_DROP)
 		{
-			CSRequestDrop requestDrop = mSocketNetManager.createPacket<CSRequestDrop>();
+			CSRequestDrop requestDrop = mSocketManager.createPacket<CSRequestDrop>();
 			requestDrop.mIndex.mValue = (byte)index;
-			mSocketNetManager.sendMessage(requestDrop);
+			mSocketManager.sendMessage(requestDrop);
 		}
 	}
 	protected void prepareDropMahjong(int index)

@@ -82,9 +82,9 @@ public class ScriptPlayerAction : LayoutScript
 		}
 		if(action != ACTION_TYPE.AT_MAX)
 		{
-			CSConfirmAction confirm = mSocketNetManager.createPacket<CSConfirmAction>();
+			CSConfirmAction confirm = mSocketManager.createPacket<CSConfirmAction>();
 			confirm.mAction.mValue = (byte)action;
-			mSocketNetManager.sendMessage(confirm);
+			mSocketManager.sendMessage(confirm);
 			afterActionSelected();
 			// 通知其他布局行为已经选择
 			mScriptMahjongHandIn.notifyAbleToPengOrGang(PLAYER_POSITION.PP_MYSELF, MAHJONG.M_MAX);

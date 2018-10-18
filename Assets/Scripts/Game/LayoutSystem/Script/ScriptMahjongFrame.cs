@@ -82,20 +82,20 @@ public class ScriptMahjongFrame : LayoutScript
 	protected void onReadyClick(GameObject go)
 	{
 		// 发送消息通知服务器玩家已经准备
-		CSReady packetReady = mSocketNetManager.createPacket<CSReady>();
+		CSReady packetReady = mSocketManager.createPacket<CSReady>();
 		packetReady.mReady.mValue = true;
-		mSocketNetManager.sendMessage(packetReady);
+		mSocketManager.sendMessage(packetReady);
 	}
 	protected void onCancelReadyClick(GameObject go)
 	{
 		// 发送消息通知服务器玩家已经准备
-		CSReady packetReady = mSocketNetManager.createPacket<CSReady>();
+		CSReady packetReady = mSocketManager.createPacket<CSReady>();
 		packetReady.mReady.mValue = false;
-		mSocketNetManager.sendMessage(packetReady);
+		mSocketManager.sendMessage(packetReady);
 	}
 	protected void onLeaveRoomClick(GameObject go)
 	{
-		mSocketNetManager.sendMessage<CSLeaveRoom>();
+		mSocketManager.sendMessage<CSLeaveRoom>();
 	}
 	protected void onButtonPress(GameObject go, bool press)
 	{

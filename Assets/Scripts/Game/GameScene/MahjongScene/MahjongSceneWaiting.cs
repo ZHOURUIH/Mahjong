@@ -37,7 +37,7 @@ public class MahjongSceneWaiting : SceneProcedure
 		// 在房间中按1键添加一个机器人
 		if(mInputManager.getKeyCurrentDown(KeyCode.Alpha1))
 		{
-			mSocketNetManager.sendMessage<CSAddMahjongRobot>();
+			mSocketManager.sendMessage<CSAddMahjongRobot>();
 		}
 	}
 }

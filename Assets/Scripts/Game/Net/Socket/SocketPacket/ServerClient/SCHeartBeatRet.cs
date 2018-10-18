@@ -14,6 +14,6 @@ public class SCHeartBeatRet : SocketPacket
 	public override void execute()
 	{
 		UnityUtility.logInfo("心跳 : " + mHeartBeatTimes.mValue);
-		mSocketNetManager.notifyHeartBeatRet(mHeartBeatTimes.mValue);
+		mConnect.notifyHeartBeatRet(mHeartBeatTimes.mValue);
 	}
 }

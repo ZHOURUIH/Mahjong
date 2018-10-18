@@ -71,7 +71,7 @@ public class MahjongSystem : FrameComponent
 						}
 					}
 					// 通知服务器开局麻将已经拿完了
-					mSocketNetManager.sendMessage<CSGetStartMahjongDone>();
+					mSocketManager.sendMessage<CSGetStartMahjongDone>();
 					return;
 				}
 				else
@@ -102,7 +102,6 @@ public class MahjongSystem : FrameComponent
 	public void setBankerPos(int bankerPos)
 	{
 		// 计算出服务器中庄家在本地的方位
-		CharacterMyself myself = mCharacterManager.getMyself();
 		mBankerPos = (PLAYER_POSITION)bankerPos;
 	}
 	public void notifyGetStartMahjong()

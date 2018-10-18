@@ -9,7 +9,7 @@ public class GameBase : FrameBase
 	public static GameConfig mGameConfig;
 	public static MahjongSystem mMahjongSystem;
 	public static HeadTextureManager mHeadTextureManager;
-	public static SocketManager mSocketNetManager;
+	public static SocketManager mSocketManager;
 	public static LogSystem mLogSystem;
 	public static RoomSystem mRoomSystem;
 	// 以下是用于快速访问的布局脚本
@@ -46,7 +46,7 @@ public class GameBase : FrameBase
 			mGameConfig = mGame.getSystem<GameConfig>();
 			mMahjongSystem = mGame.getSystem<MahjongSystem>();
 			mHeadTextureManager = mGame.getSystem<HeadTextureManager>();
-			mSocketNetManager = mGame.getSystem<SocketManager>();
+			mSocketManager = mGame.getSystem<SocketManager>();
 			mLogSystem = mGame.getSystem<LogSystem>();
 			mRoomSystem = mGame.getSystem<RoomSystem>();
 		}

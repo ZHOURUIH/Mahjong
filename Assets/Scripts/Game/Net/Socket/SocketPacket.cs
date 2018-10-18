@@ -6,9 +6,14 @@ using System.Collections.Generic;
 public abstract class SocketPacket : SerializedData
 {
 	protected PACKET_TYPE mType;
+	protected SocketConnect mConnect;
 	public SocketPacket(PACKET_TYPE type)
 	{
 		mType = type;
+	}
+	public void setConnect(SocketConnect connect)
+	{
+		mConnect = connect;
 	}
 	public virtual void init()
 	{

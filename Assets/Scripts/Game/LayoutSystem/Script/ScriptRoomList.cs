@@ -45,9 +45,9 @@ public class RoomItem : GameBase
 	}
 	protected void onItemClicked(GameObject obj)
 	{
-		CSJoinRoom join = mSocketNetManager.createPacket<CSJoinRoom>();
+		CSJoinRoom join = mSocketManager.createPacket<CSJoinRoom>();
 		join.mRoomID.mValue = mRoomID;
-		mSocketNetManager.sendMessage(join);
+		mSocketManager.sendMessage(join);
 	}
 }
 

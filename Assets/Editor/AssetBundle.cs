@@ -27,9 +27,9 @@ class AssetBuildBundleInfo
 public class AssetBundlePack
 {
 	// 清理时需要保留的目录和目录的meta
-	protected static string[] mKeepFolder = new string[] {"Config", "GameDataFile", "DataBase", "Video", "DataTemplate", "HelperExe", "CustomSound"};
+	protected static string[] mKeepFolder = new string[] { "Config", "GameDataFile", "GamePlugin", "DataBase", "Video", "DataTemplate", "HelperExe", "CustomSound" };
 	// Resources下的目录,带相对路径,且如果前缀符合,也会认为是不打包的目录
-	protected static string[] mUnPackFolder = new string[] {"Scene" };
+	protected static string[] mUnPackFolder = new string[] { "Scene" };
 	protected const string mAssetMenuRoot = "AssetBundle/";
 	private static string RES_SRC_PATH = "Assets/Resources/";
 	// 打包输出目录
@@ -56,6 +56,11 @@ public class AssetBundlePack
 	public static void packAssetBundleiOS()
 	{
 		packAssetBundle(BuildTarget.iOS);
+	}
+	[MenuItem(mAssetMenuRoot + "pack/Lunix")]
+	public static void packAssetBundleLinux()
+	{
+		packAssetBundle(BuildTarget.StandaloneLinux);
 	}
 	public static void packAssetBundle(BuildTarget target)
 	{
@@ -141,7 +146,7 @@ public class AssetBundlePack
 		}
 		string pathUnderResources = fullPath.Substring(RES_SRC_PATH.Length);
 		int unpackCount = mUnPackFolder.Length;
-		for(int i = 0; i < unpackCount; ++i)
+		for (int i = 0; i < unpackCount; ++i)
 		{
 			// 如果该文件夹是不打包的文件夹,则直接返回
 			if (StringUtility.startWith(pathUnderResources, mUnPackFolder[i], false))
@@ -258,7 +263,7 @@ public class AssetBundlePack
 			// 查找目录下的所有第一级文件
 			string[] files = Directory.GetFiles(RES_OUTPUT_PATH);
 			int fileCount = files.Length;
-			for(int i = 0; i < fileCount; ++i)
+			for (int i = 0; i < fileCount; ++i)
 			{
 				if (!isKeepFolderOrMeta(StringUtility.getFileName(files[i])))
 				{
@@ -272,7 +277,7 @@ public class AssetBundlePack
 		int count = mKeepFolder.Length;
 		for (int i = 0; i < count; ++i)
 		{
-			if(mKeepFolder[i] == name || mKeepFolder[i] + ".meta" == name)
+			if (mKeepFolder[i] == name || mKeepFolder[i] + ".meta" == name)
 			{
 				return true;
 			}

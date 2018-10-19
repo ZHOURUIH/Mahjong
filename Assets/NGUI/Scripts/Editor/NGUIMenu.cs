@@ -1,7 +1,7 @@
-//----------------------------------------------
+//-------------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2016 Tasharen Entertainment
-//----------------------------------------------
+// Copyright © 2011-2018 Tasharen Entertainment Inc
+//-------------------------------------------------
 
 using UnityEngine;
 using UnityEditor;
@@ -711,10 +711,7 @@ static public class NGUIMenu
 
 	[MenuItem("NGUI/Normalize Depth Hierarchy &#0", false, 11)]
 	static public void Normalize () { NGUITools.NormalizeDepths(); }
-	
-	[MenuItem("NGUI/", false, 11)]
-	static void Breaker () { }
 
-	[MenuItem("NGUI/Help", false, 12)]
+	[MenuItem("NGUI/Help", false, 120)]
 	static public void Help () { NGUIHelp.Show(); }
 }

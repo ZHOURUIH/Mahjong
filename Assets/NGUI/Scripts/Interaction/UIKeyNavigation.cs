@@ -1,7 +1,7 @@
-//----------------------------------------------
+//-------------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2016 Tasharen Entertainment
-//----------------------------------------------
+// Copyright © 2011-2018 Tasharen Entertainment Inc
+//-------------------------------------------------
 
 using UnityEngine;
 
@@ -18,7 +18,7 @@ public class UIKeyNavigation : MonoBehaviour
 
 	static public BetterList<UIKeyNavigation> list = new BetterList<UIKeyNavigation>();
 
-	public enum Constraint
+	[DoNotObfuscateNGUI] public enum Constraint
 	{
 		None,
 		Vertical,
@@ -114,7 +114,7 @@ public class UIKeyNavigation : MonoBehaviour
 	protected virtual void OnEnable ()
 	{
 		list.Add(this);
-		if (mStarted) Start();
+		if (mStarted) Invoke("Start", 0.001f);
 	}
 
 	void Start ()
@@ -124,7 +124,7 @@ public class UIKeyNavigation : MonoBehaviour
 #endif
 		mStarted = true;
 		if (startsSelected && isColliderEnabled)
-			UICamera.hoveredObject = gameObject;
+			UICamera.selectedObject = gameObject;
 	}
 
 	protected virtual void OnDisable () { list.Remove(this); }

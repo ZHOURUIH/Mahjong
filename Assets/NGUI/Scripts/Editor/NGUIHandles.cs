@@ -1,7 +1,7 @@
-//----------------------------------------------
+//-------------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2016 Tasharen Entertainment
-//----------------------------------------------
+// Copyright © 2011-2018 Tasharen Entertainment Inc
+//-------------------------------------------------
 
 using UnityEngine;
 using UnityEditor;
@@ -10,7 +10,7 @@ using UnityEditor;
 /// Editor helper class containing functions related to drawing things in the Scene View using UnityEditor.Handles.
 /// </summary>
 
-public static class NGUIHandles
+static public class NGUIHandles
 {
 	/// <summary>
 	/// Given a plane the rectangle lies upon, convert the given screen coordinates to world coordinates.

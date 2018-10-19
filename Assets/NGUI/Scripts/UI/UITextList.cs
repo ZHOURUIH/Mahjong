@@ -1,7 +1,7 @@
-//----------------------------------------------
+//-------------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2016 Tasharen Entertainment
-//----------------------------------------------
+// Copyright © 2011-2018 Tasharen Entertainment Inc
+//-------------------------------------------------
 
 #if !UNITY_3_5 && !UNITY_FLASH
 #define DYNAMIC_FONT
@@ -19,7 +19,7 @@ using System.Text;
 [AddComponentMenu("NGUI/UI/Text List")]
 public class UITextList : MonoBehaviour
 {
-	public enum Style
+	[DoNotObfuscateNGUI] public enum Style
 	{
 		Text,
 		Chat,
@@ -89,6 +89,12 @@ public class UITextList : MonoBehaviour
 			return mParagraphs;
 		}
 	}
+
+	/// <summary>
+	/// Return the number of paragraphs currently in the text list.
+	/// </summary>
+
+	public int paragraphCount { get { return paragraphs.size; } }
 
 	/// <summary>
 	/// Whether the text list is usable.

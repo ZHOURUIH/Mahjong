@@ -1,7 +1,7 @@
-//----------------------------------------------
+//-------------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2016 Tasharen Entertainment
-//----------------------------------------------
+// Copyright © 2011-2018 Tasharen Entertainment Inc
+//-------------------------------------------------
 
 using UnityEngine;
 using System.Collections.Generic;
@@ -85,7 +85,7 @@ public class UISlider : UIProgressBar
 	protected override void OnStart ()
 	{
 #if UNITY_4_3 || UNITY_4_5 || UNITY_4_6 || UNITY_4_7
-				GameObject bg = (mBG != null && (mBG.collider != null || mBG.GetComponent<Collider2D>() != null)) ? mBG.gameObject : gameObject;
+		GameObject bg = (mBG != null && (mBG.collider != null || mBG.GetComponent<Collider2D>() != null)) ? mBG.gameObject : gameObject;
 		UIEventListener bgl = UIEventListener.Get(bg);
 		bgl.onPress += OnPressBackground;
 		bgl.onDrag += OnDragBackground;

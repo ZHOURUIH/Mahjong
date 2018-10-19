@@ -1,7 +1,7 @@
-//----------------------------------------------
+//-------------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2016 Tasharen Entertainment
-//----------------------------------------------
+// Copyright © 2011-2018 Tasharen Entertainment Inc
+//-------------------------------------------------
 
 #if UNITY_EDITOR || !UNITY_FLASH
 #define REFLECTION_SUPPORT
@@ -637,8 +637,8 @@ public class EventDelegate
 					}
 					catch (System.Exception ex)
 					{
-						if (ex.InnerException != null) Debug.LogError(ex.InnerException.Message);
-						else Debug.LogError(ex.Message);
+						if (ex.InnerException != null) Debug.LogException(ex.InnerException);
+						else Debug.LogException(ex);
 					}
 #else
 					del.Execute();

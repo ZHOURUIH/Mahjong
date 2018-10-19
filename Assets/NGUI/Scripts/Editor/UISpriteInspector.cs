@@ -1,7 +1,7 @@
-//----------------------------------------------
+//-------------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2016 Tasharen Entertainment
-//----------------------------------------------
+// Copyright © 2011-2018 Tasharen Entertainment Inc
+//-------------------------------------------------
 
 using UnityEditor;
 using UnityEngine;
@@ -66,6 +66,8 @@ public class UISpriteInspector : UIBasicSpriteEditor
 
 		SerializedProperty sp = serializedObject.FindProperty("mSpriteName");
 		NGUIEditorTools.DrawAdvancedSpriteField(atlas.objectReferenceValue as UIAtlas, sp.stringValue, SelectSprite, false);
+
+		NGUIEditorTools.DrawProperty("Material", serializedObject, "mMat");
 		return true;
 	}
 

@@ -1,7 +1,7 @@
-//----------------------------------------------
+//-------------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2016 Tasharen Entertainment
-//----------------------------------------------
+// Copyright © 2011-2018 Tasharen Entertainment Inc
+//-------------------------------------------------
 
 using UnityEngine;
 using System.Collections.Generic;
@@ -27,7 +27,7 @@ using System.Collections.Generic;
 /// Info,"Localization Example","Par exemple la localisation"
 /// </summary>
 
-public static class Localization
+static public class Localization
 {
 	public delegate byte[] LoadFunction (string path);
 	public delegate void OnLocalizeNotification ();
@@ -127,10 +127,23 @@ public static class Localization
 	}
 
 	/// <summary>
+	/// Reload the localization file. Useful when testing live edited localization.
+	/// </summary>
+
+	static public bool Reload ()
+	{
+		localizationHasBeenSet = false;
+		if (!LoadDictionary(mLanguage, true)) return false;
+		if (onLocalize != null) onLocalize();
+		UIRoot.Broadcast("OnLocalize");
+		return true;
+	}
+
+	/// <summary>
 	/// Load the specified localization dictionary.
 	/// </summary>
 
-	static bool LoadDictionary (string value)
+	static bool LoadDictionary (string value, bool merge = false)
 	{
 		// Try to load the Localization CSV
 		byte[] bytes = null;
@@ -139,15 +152,18 @@ public static class Localization
 		{
 			if (loadFunction == null)
 			{
-				TextAsset asset = Resources.Load<TextAsset>("Localization");
+				var asset = Resources.Load<TextAsset>("Localization");
 				if (asset != null) bytes = asset.bytes;
+#if W2
+				else bytes = TNet.Tools.ReadFile("Localization.txt") ?? TNet.Tools.ReadFile("Localization.csv");
+#endif
 			}
 			else bytes = loadFunction("Localization");
 			localizationHasBeenSet = true;
 		}
 
 		// Try to load the localization file
-		if (LoadCSV(bytes)) return true;
+		if (LoadCSV(bytes, merge)) return true;
 		if (string.IsNullOrEmpty(value)) value = mLanguage;
 
 		// If this point was reached, the localization file was not present
@@ -156,7 +172,7 @@ public static class Localization
 		// Not a referenced asset -- try to load it dynamically
 		if (loadFunction == null)
 		{
-			TextAsset asset = Resources.Load<TextAsset>(value);
+			var asset = Resources.Load<TextAsset>(value);
 			if (asset != null) bytes = asset.bytes;
 		}
 		else bytes = loadFunction(value);
@@ -262,7 +278,7 @@ public static class Localization
 		ByteReader reader = new ByteReader(bytes);
 
 		// The first line should contain "KEY", followed by languages.
-		BetterList<string> header = reader.ReadCSV();
+		var header = reader.ReadCSV();
 
 		// There must be at least two columns in a valid CSV file
 		if (header.size < 2) return false;
@@ -310,11 +326,11 @@ public static class Localization
 #endif
 					mLanguages[newSize - 1] = header[i];
 
-					Dictionary<string, string[]> newDict = new Dictionary<string, string[]>();
+					var newDict = new Dictionary<string, string[]>();
 
-					foreach (KeyValuePair<string, string[]> pair in mDictionary)
+					foreach (var pair in mDictionary)
 					{
-						string[] arr = pair.Value;
+						var arr = pair.Value;
 #if UNITY_FLASH
 						temp = new string[newSize];
 						for (int b = 0, bmax = arr.Length; b < bmax; ++b) temp[b] = arr[b];
@@ -330,14 +346,14 @@ public static class Localization
 			}
 		}
 
-		Dictionary<string, int> languageIndices = new Dictionary<string, int>();
+		var languageIndices = new Dictionary<string, int>();
 		for (int i = 0; i < mLanguages.Length; ++i)
 			languageIndices.Add(mLanguages[i], i);
 
 		// Read the entire CSV file into memory
 		for (;;)
 		{
-			BetterList<string> temp = reader.ReadCSV();
+			var temp = reader.ReadCSV();
 			if (temp == null || temp.size == 0) break;
 			if (string.IsNullOrEmpty(temp[0])) continue;
 			AddCSV(temp, languagesToAdd, languageIndices);
@@ -351,6 +367,12 @@ public static class Localization
 			note();
 			onLocalize = note;
 			mMerging = false;
+		}
+
+		if (merge)
+		{
+			if (onLocalize != null) onLocalize();
+			UIRoot.Broadcast("OnLocalize");
 		}
 		return true;
 	}
@@ -471,10 +493,65 @@ public static class Localization
 	}
 
 	/// <summary>
+	/// Whether the specified key is present in the localization.
+	/// </summary>
+
+	static public bool Has (string key)
+	{
+		if (string.IsNullOrEmpty(key)) return false;
+
+		// Ensure we have a language to work with
+		if (!localizationHasBeenSet) LoadDictionary(PlayerPrefs.GetString("Language", "English"));
+		if (mLanguages == null) return false;
+
+		string lang = language;
+
+		if (mLanguageIndex == -1)
+		{
+			for (int i = 0; i < mLanguages.Length; ++i)
+			{
+				if (mLanguages[i] == lang)
+				{
+					mLanguageIndex = i;
+					break;
+				}
+			}
+		}
+
+		if (mLanguageIndex == -1)
+		{
+			mLanguageIndex = 0;
+			mLanguage = mLanguages[0];
+		}
+
+		var scheme = UICamera.currentScheme;
+
+		if (scheme == UICamera.ControlScheme.Touch)
+		{
+			string altKey = key + " Mobile";
+			if (mReplacement.ContainsKey(altKey)) return true;
+			if (mLanguageIndex != -1 && mDictionary.ContainsKey(altKey)) return true;
+			if (mOldDictionary.ContainsKey(altKey)) return true;
+		}
+		else if (scheme == UICamera.ControlScheme.Controller)
+		{
+			string altKey = key + " Controller";
+			if (mReplacement.ContainsKey(altKey)) return true;
+			if (mLanguageIndex != -1 && mDictionary.ContainsKey(altKey)) return true;
+			if (mOldDictionary.ContainsKey(altKey)) return true;
+		}
+
+		if (mReplacement.ContainsKey(key)) return true;
+		if (mLanguageIndex != -1 && mDictionary.ContainsKey(key)) return true;
+		if (mOldDictionary.ContainsKey(key)) return true;
+		return false;
+	}
+
+	/// <summary>
 	/// Localize the specified value.
 	/// </summary>
 
-	static public string Get (string key)
+	static public string Get (string key, bool warnIfMissing = true)
 	{
 		if (string.IsNullOrEmpty(key)) return null;
 
@@ -512,7 +589,6 @@ public static class Localization
 		string[] vals;
 
 		UICamera.ControlScheme scheme = UICamera.currentScheme;
-
 
 		if (scheme == UICamera.ControlScheme.Touch)
 		{
@@ -554,16 +630,92 @@ public static class Localization
 		if (mOldDictionary.TryGetValue(key, out val)) return val;
 
 #if UNITY_EDITOR
-		Debug.LogWarning("Localization key not found: '" + key + "' for language " + lang);
+		if (warnIfMissing)
+		{
+			if (mIgnoreMissing == null) mIgnoreMissing = new HashSet<string>();
+
+			if (!mIgnoreMissing.Contains(key))
+			{
+				mIgnoreMissing.Add(key);
+				Debug.LogWarning("Localization key not found: '" + key + "' for language " + lang);
+			}
+		}
 #endif
 		return key;
+	}
+
+#if UNITY_EDITOR
+	[System.NonSerialized]
+	static HashSet<string> mIgnoreMissing = null;
+#endif
+
+	/// <summary>
+	/// Localize the specified value and format it.
+	/// </summary>
+
+	static public string Format (string key, object parameter)
+	{
+		try
+		{
+			return string.Format(Get(key), parameter);
+		}
+		catch (System.Exception)
+		{
+			Debug.LogError("string.Format(1): " + key);
+			return key;
+		}
 	}
 
 	/// <summary>
 	/// Localize the specified value and format it.
 	/// </summary>
 
-	static public string Format (string key, params object[] parameters) { return string.Format(Get(key), parameters); }
+	static public string Format (string key, object arg0, object arg1)
+	{
+		try
+		{
+			return string.Format(Get(key), arg0, arg1);
+		}
+		catch (System.Exception)
+		{
+			Debug.LogError("string.Format(2): " + key);
+			return key;
+		}
+	}
+
+	/// <summary>
+	/// Localize the specified value and format it.
+	/// </summary>
+
+	static public string Format (string key, object arg0, object arg1, object arg2)
+	{
+		try
+		{
+			return string.Format(Get(key), arg0, arg1, arg2);
+		}
+		catch (System.Exception)
+		{
+			Debug.LogError("string.Format(3): " + key);
+			return key;
+		}
+	}
+
+	/// <summary>
+	/// Localize the specified value and format it.
+	/// </summary>
+
+	static public string Format (string key, params object[] parameters)
+	{
+		try
+		{
+			return string.Format(Get(key), parameters);
+		}
+		catch (System.Exception)
+		{
+			Debug.LogError("string.Format(" + parameters.Length + "): " + key);
+			return key;
+		}
+	}
 
 	[System.Obsolete("Localization is now always active. You no longer need to check this property.")]
 	static public bool isActive { get { return true; } }

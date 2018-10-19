@@ -1,7 +1,7 @@
-//----------------------------------------------
+//-------------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2016 Tasharen Entertainment
-//----------------------------------------------
+// Copyright © 2011-2018 Tasharen Entertainment Inc
+//-------------------------------------------------
 
 using UnityEngine;
 using UnityEditor;
@@ -14,7 +14,7 @@ using System.Collections.Generic;
 
 public class NGUISettings
 {
-	public enum ColorMode
+	[DoNotObfuscateNGUI] public enum ColorMode
 	{
 		Orange,
 		Green,
@@ -372,14 +372,20 @@ public class NGUISettings
 
 	static public bool unityPacking
 	{
-		get { return GetBool("NGUI Packing", true); }
-		set { SetBool("NGUI Packing", value); }
+		get { return GetBool("NGUI Atlas Packing", false); }
+		set { SetBool("NGUI Atlas Packing", value); }
 	}
 
 	static public bool trueColorAtlas
 	{
 		get { return GetBool("NGUI Truecolor", true); }
 		set { SetBool("NGUI Truecolor", value); }
+	}
+
+	static public bool autoUpgradeSprites
+	{
+		get { return GetBool("NGUI AutoUpgrade", false); }
+		set { SetBool("NGUI AutoUpgrade", value); }
 	}
 
 	static public bool keepPadding

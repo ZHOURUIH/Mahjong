@@ -1,7 +1,7 @@
-﻿//----------------------------------------------
+﻿//-------------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2016 Tasharen Entertainment
-//----------------------------------------------
+// Copyright © 2011-2018 Tasharen Entertainment Inc
+//-------------------------------------------------
 
 using UnityEngine;
 using UnityEditor;
@@ -24,7 +24,7 @@ public class UISpriteAnimationInspector : Editor
 		NGUIEditorTools.SetLabelWidth(80f);
 		serializedObject.Update();
 
-		NGUIEditorTools.DrawProperty("Frame Index", serializedObject, "frame");
+		NGUIEditorTools.DrawProperty("Frame Index", serializedObject, "frameIndex");
 		NGUIEditorTools.DrawProperty("Framerate", serializedObject, "mFPS");
 		NGUIEditorTools.DrawProperty("Name Prefix", serializedObject, "mPrefix");
 		NGUIEditorTools.DrawProperty("Loop", serializedObject, "mLoop");

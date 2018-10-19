@@ -1,7 +1,7 @@
-//----------------------------------------------
+//-------------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2016 Tasharen Entertainment
-//----------------------------------------------
+// Copyright © 2011-2018 Tasharen Entertainment Inc
+//-------------------------------------------------
 
 using UnityEngine;
 using System.Collections.Generic;
@@ -17,13 +17,13 @@ public class UITable : UIWidgetContainer
 {
 	public delegate void OnReposition ();
 
-	public enum Direction
+	[DoNotObfuscateNGUI] public enum Direction
 	{
 		Down,
 		Up,
 	}
 
-	public enum Sorting
+	[DoNotObfuscateNGUI] public enum Sorting
 	{
 		None,
 		Alphabetic,
@@ -274,8 +274,10 @@ public class UITable : UIWidgetContainer
 
 				if (sp != null)
 				{
+					sp.enabled = false;
 					sp.target.x -= fx;
 					sp.target.y -= fy;
+					sp.enabled = true;
 				}
 				else
 				{

@@ -1,5 +1,3 @@
-// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
 Shader "Hidden/Unlit/Premultiplied Colored 1"
 {
 	Properties
@@ -16,6 +14,7 @@ Shader "Hidden/Unlit/Premultiplied Colored 1"
 			"Queue" = "Transparent"
 			"IgnoreProjector" = "True"
 			"RenderType" = "Transparent"
+			"DisableBatching" = "True"
 		}
 		
 		Pass
@@ -26,7 +25,6 @@ Shader "Hidden/Unlit/Premultiplied Colored 1"
 			AlphaTest Off
 			Fog { Mode Off }
 			Offset -1, -1
-			ColorMask RGB
 			Blend One OneMinusSrcAlpha
 
 			CGPROGRAM
@@ -43,6 +41,7 @@ Shader "Hidden/Unlit/Premultiplied Colored 1"
 				float4 vertex : POSITION;
 				half4 color : COLOR;
 				float2 texcoord : TEXCOORD0;
+				UNITY_VERTEX_INPUT_INSTANCE_ID
 			};
 
 			struct v2f
@@ -51,11 +50,14 @@ Shader "Hidden/Unlit/Premultiplied Colored 1"
 				half4 color : COLOR;
 				float2 texcoord : TEXCOORD0;
 				float2 worldPos : TEXCOORD1;
+				UNITY_VERTEX_OUTPUT_STEREO
 			};
 
 			v2f vert (appdata_t v)
 			{
 				v2f o;
+				UNITY_SETUP_INSTANCE_ID(v);
+				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 				o.vertex = UnityObjectToClipPos(v.vertex);
 				o.color = v.color;
 				o.texcoord = v.texcoord;

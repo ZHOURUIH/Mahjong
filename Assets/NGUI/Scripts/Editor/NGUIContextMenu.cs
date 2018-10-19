@@ -7,9 +7,9 @@ using System.Collections.Generic;
 /// It ensures that it's possible to add multiple items with the same name.
 /// </summary>
 
-public static class NGUIContextMenu
+static public class NGUIContextMenu
 {
-	[MenuItem("Help/NGUI Documentation (v.3.9.9)")]
+	[MenuItem("Help/NGUI Documentation (v.3.11.0)")]
 	static void ShowHelp0 (MenuCommand command) { NGUIHelp.Show(); }
 
 	[MenuItem("Help/NGUI Support Forum")]

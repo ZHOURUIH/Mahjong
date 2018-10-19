@@ -1,7 +1,7 @@
-//----------------------------------------------
+//-------------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2016 Tasharen Entertainment
-//----------------------------------------------
+// Copyright © 2011-2018 Tasharen Entertainment Inc
+//-------------------------------------------------
 
 using UnityEngine;
 using UnityEditor;
@@ -457,7 +457,7 @@ public class UIPanelInspector : UIRectEditor
 		if (mPanel.clipping != clipping)
 		{
 			mPanel.clipping = clipping;
-			EditorUtility.SetDirty(mPanel);
+			NGUITools.SetDirty(mPanel);
 		}
 
 		// Contributed by Benzino07: http://www.tasharen.com/forum/index.php?topic=6956.15
@@ -489,7 +489,7 @@ public class UIPanelInspector : UIRectEditor
 			if (index != selectedIndex)
 			{
 				mPanel.sortingLayerName = names[selectedIndex];
-				EditorUtility.SetDirty(mPanel);
+				NGUITools.SetDirty(mPanel);
 			}
 		}
 		GUILayout.EndHorizontal();
@@ -510,7 +510,7 @@ public class UIPanelInspector : UIRectEditor
 			{
 				NGUIEditorTools.RegisterUndo("Clipping Change", mPanel);
 				mPanel.clipOffset = off;
-				EditorUtility.SetDirty(mPanel);
+				NGUITools.SetDirty(mPanel);
 			}
 			//EditorGUI.EndDisabledGroup();
 
@@ -536,7 +536,7 @@ public class UIPanelInspector : UIRectEditor
 			{
 				NGUIEditorTools.RegisterUndo("Clipping Change", mPanel);
 				mPanel.baseClipRegion = range;
-				EditorUtility.SetDirty(mPanel);
+				NGUITools.SetDirty(mPanel);
 			}
 
 			if (mPanel.clipping == UIDrawCall.Clipping.SoftClip)
@@ -553,7 +553,7 @@ public class UIPanelInspector : UIRectEditor
 				{
 					NGUIEditorTools.RegisterUndo("Clipping Change", mPanel);
 					mPanel.clipSoftness = soft;
-					EditorUtility.SetDirty(mPanel);
+					NGUITools.SetDirty(mPanel);
 				}
 			}
 			else if (mPanel.clipping == UIDrawCall.Clipping.TextureMask)
@@ -568,7 +568,7 @@ public class UIPanelInspector : UIRectEditor
 				{
 					NGUIEditorTools.RegisterUndo("Clipping Change", mPanel);
 					mPanel.clipTexture = tex;
-					EditorUtility.SetDirty(mPanel);
+					NGUITools.SetDirty(mPanel);
 				}
 				NGUIEditorTools.SetLabelWidth(80f);
 			}
@@ -595,7 +595,7 @@ public class UIPanelInspector : UIRectEditor
 			{
 				mPanel.renderQueue = rq;
 				mPanel.RebuildAllDrawCalls();
-				EditorUtility.SetDirty(mPanel);
+				NGUITools.SetDirty(mPanel);
 				if (UIDrawCallViewer.instance != null)
 					UIDrawCallViewer.instance.Repaint();
 			}
@@ -608,7 +608,7 @@ public class UIPanelInspector : UIRectEditor
 				{
 					mPanel.startingRenderQueue = sq;
 					mPanel.RebuildAllDrawCalls();
-					EditorUtility.SetDirty(mPanel);
+					NGUITools.SetDirty(mPanel);
 					if (UIDrawCallViewer.instance != null)
 						UIDrawCallViewer.instance.Repaint();
 				}
@@ -616,7 +616,22 @@ public class UIPanelInspector : UIRectEditor
 			GUILayout.EndHorizontal();
 
 			GUI.changed = false;
-			int so = EditorGUILayout.IntField("Sort Order", mPanel.sortingOrder, GUILayout.Width(120f));
+			GUILayout.BeginHorizontal();
+			var use = EditorGUILayout.Toggle("Sort Order", mPanel.useSortingOrder, GUILayout.Width(100f));
+
+			if (GUI.changed)
+			{
+				mPanel.useSortingOrder = use;
+				mPanel.RebuildAllDrawCalls();
+				NGUITools.SetDirty(mPanel);
+			}
+
+			GUI.changed = false;
+			EditorGUI.BeginDisabledGroup(!use);
+			int so = EditorGUILayout.IntField(mPanel.sortingOrder, GUILayout.Width(40f));
+			GUILayout.Label(so == 0 ? "Automatic" : "Explicit", GUILayout.MinWidth(20f));
+			EditorGUI.EndDisabledGroup();
+			GUILayout.EndHorizontal();
 			if (GUI.changed) mPanel.sortingOrder = so;
 
 			GUILayout.BeginHorizontal();
@@ -628,9 +643,23 @@ public class UIPanelInspector : UIRectEditor
 			{
 				mPanel.generateNormals = norms;
 				mPanel.RebuildAllDrawCalls();
-				EditorUtility.SetDirty(mPanel);
+				NGUITools.SetDirty(mPanel);
 			}
 
+			GUILayout.BeginHorizontal();
+			bool uv2 = EditorGUILayout.Toggle("UV2", mPanel.generateUV2, GUILayout.Width(100f));
+			GUILayout.Label("For custom shader effects", GUILayout.MinWidth(20f));
+			GUILayout.EndHorizontal();
+
+			if (mPanel.generateUV2 != uv2)
+			{
+				mPanel.generateUV2 = uv2;
+				mPanel.RebuildAllDrawCalls();
+				NGUITools.SetDirty(mPanel);
+			}
+#if !UNITY_4_7
+			serializedObject.DrawProperty("shadowMode");
+#endif
 			GUILayout.BeginHorizontal();
 			bool cull = EditorGUILayout.Toggle("Cull", mPanel.cullWhileDragging, GUILayout.Width(100f));
 			GUILayout.Label("Cull widgets while dragging them", GUILayout.MinWidth(20f));
@@ -640,7 +669,7 @@ public class UIPanelInspector : UIRectEditor
 			{
 				mPanel.cullWhileDragging = cull;
 				mPanel.RebuildAllDrawCalls();
-				EditorUtility.SetDirty(mPanel);
+				NGUITools.SetDirty(mPanel);
 			}
 
 			GUILayout.BeginHorizontal();
@@ -652,7 +681,7 @@ public class UIPanelInspector : UIRectEditor
 			{
 				mPanel.alwaysOnScreen = alw;
 				mPanel.RebuildAllDrawCalls();
-				EditorUtility.SetDirty(mPanel);
+				NGUITools.SetDirty(mPanel);
 			}
 
 			GUILayout.BeginHorizontal();
@@ -671,7 +700,7 @@ public class UIPanelInspector : UIRectEditor
 			{
 				mPanel.anchorOffset = off;
 				mPanel.RebuildAllDrawCalls();
-				EditorUtility.SetDirty(mPanel);
+				NGUITools.SetDirty(mPanel);
 			}
 
 			GUILayout.BeginHorizontal();
@@ -683,7 +712,7 @@ public class UIPanelInspector : UIRectEditor
 			{
 				mPanel.widgetsAreStatic = stat;
 				mPanel.RebuildAllDrawCalls();
-				EditorUtility.SetDirty(mPanel);
+				NGUITools.SetDirty(mPanel);
 			}
 
 			if (stat)
@@ -699,7 +728,7 @@ public class UIPanelInspector : UIRectEditor
 			if (mPanel.showInPanelTool != tool)
 			{
 				mPanel.showInPanelTool = !mPanel.showInPanelTool;
-				EditorUtility.SetDirty(mPanel);
+				NGUITools.SetDirty(mPanel);
 				EditorWindow.FocusWindowIfItsOpen<UIPanelTool>();
 			}
 			NGUIEditorTools.EndContents();

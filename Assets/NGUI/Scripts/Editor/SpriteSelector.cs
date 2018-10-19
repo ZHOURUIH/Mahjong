@@ -1,7 +1,7 @@
-//----------------------------------------------
+//-------------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2016 Tasharen Entertainment
-//----------------------------------------------
+// Copyright © 2011-2018 Tasharen Entertainment Inc
+//-------------------------------------------------
 
 using UnityEditor;
 using UnityEngine;
@@ -74,7 +74,12 @@ public class SpriteSelector : ScriptableWizard
 			
 			float size = 80f;
 			float padded = size + 10f;
-			int columns = Mathf.FloorToInt(Screen.width / padded);
+#if UNITY_4_7
+			int screenWidth = Screen.width;
+#else
+			int screenWidth = (int)EditorGUIUtility.currentViewWidth;
+#endif
+			int columns = Mathf.FloorToInt(screenWidth / padded);
 			if (columns < 1) columns = 1;
 
 			int offset = 0;
@@ -110,7 +115,7 @@ public class SpriteSelector : ScriptableWizard
 									{
 										NGUIEditorTools.RegisterUndo("Atlas Selection", mSprite);
 										mSprite.MakePixelPerfect();
-										EditorUtility.SetDirty(mSprite.gameObject);
+										NGUITools.SetDirty(mSprite.gameObject);
 									}
 
 									NGUISettings.selectedSprite = sprite.name;

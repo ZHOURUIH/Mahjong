@@ -1,7 +1,7 @@
-//----------------------------------------------
+//-------------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2016 Tasharen Entertainment
-//----------------------------------------------
+// Copyright © 2011-2018 Tasharen Entertainment Inc
+//-------------------------------------------------
 
 using UnityEngine;
 using AnimationOrTween;
@@ -151,9 +151,37 @@ public class UIPlayTween : MonoBehaviour
 				(trigger == Trigger.OnHoverTrue && isOver) ||
 				(trigger == Trigger.OnHoverFalse && !isOver))
 			{
+				if (isOver == mActivated) return;
+
+				// Hover out action happened on a child object -- we want to maintain the hovered state
+				if (!isOver && UICamera.hoveredObject != null && UICamera.hoveredObject.transform.IsChildOf(transform))
+				{
+					// Subscribe to a global hover listener so we can keep receiving hover notifications
+					UICamera.onHover += CustomHoverListener;
+					isOver = true;
+					if (mActivated) return;
+				}
+
 				mActivated = isOver && (trigger == Trigger.OnHover);
 				Play(isOver);
 			}
+		}
+	}
+
+	/// <summary>
+	/// Wait for the hover event to happen outside the object's hierarchy before removing the hovered state.
+	/// </summary>
+
+	void CustomHoverListener (GameObject go, bool isOver)
+	{
+		if (!this) return;
+		var myGo = gameObject;
+		var hover = myGo && go && (go == myGo || go.transform.IsChildOf(transform));
+
+		if (!hover)
+		{
+			OnHover(false);
+			UICamera.onHover -= CustomHoverListener;
 		}
 	}
 

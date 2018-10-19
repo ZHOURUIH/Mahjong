@@ -1,7 +1,7 @@
-﻿//----------------------------------------------
+﻿//-------------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2016 Tasharen Entertainment
-//----------------------------------------------
+// Copyright © 2011-2018 Tasharen Entertainment Inc
+//-------------------------------------------------
 
 using UnityEngine;
 using System.IO;
@@ -10,7 +10,7 @@ using System.IO;
 /// This class contains NGUI's extensions to Unity Editor's functionality.
 /// </summary>
 
-public static class NGUIEditorExtensions
+static public class NGUIEditorExtensions
 {
 	/// <summary>
 	/// Render the camera into a render texture. If the camera has a render texture assigned, it will be re-used.
@@ -32,7 +32,11 @@ public static class NGUIEditorExtensions
 		{
 			rt = new RenderTexture(width, height, 1);
 			rt.hideFlags = HideFlags.HideAndDontSave;
-			rt.useMipMap = false;
+#if UNITY_5_5_OR_NEWER
+			rt.autoGenerateMips = false;
+#else
+			rt.generateMips = false;
+#endif
 			rt.format = RenderTextureFormat.ARGB32;
 			rt.filterMode = FilterMode.Trilinear;
 			rt.anisoLevel = 4;

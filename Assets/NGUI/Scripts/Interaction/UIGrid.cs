@@ -1,7 +1,7 @@
-//----------------------------------------------
+//-------------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2016 Tasharen Entertainment
-//----------------------------------------------
+// Copyright © 2011-2018 Tasharen Entertainment Inc
+//-------------------------------------------------
 
 using UnityEngine;
 using System.Collections.Generic;
@@ -16,14 +16,14 @@ public class UIGrid : UIWidgetContainer
 {
 	public delegate void OnReposition ();
 
-	public enum Arrangement
+	[DoNotObfuscateNGUI] public enum Arrangement
 	{
 		Horizontal,
 		Vertical,
 		CellSnap,
 	}
 
-	public enum Sorting
+	[DoNotObfuscateNGUI] public enum Sorting
 	{
 		None,
 		Alphabetic,
@@ -125,8 +125,11 @@ public class UIGrid : UIWidgetContainer
 		for (int i = 0; i < myTrans.childCount; ++i)
 		{
 			Transform t = myTrans.GetChild(i);
-			if (!hideInactive || (t && NGUITools.GetActive(t.gameObject)))
-				list.Add(t);
+
+			if (!hideInactive || (t && t.gameObject.activeSelf))
+			{
+				if (!UIDragDropItem.IsDragged(t.gameObject)) list.Add(t);
+			}
 		}
 
 		// Sort the list using the desired sorting logic
@@ -162,13 +165,22 @@ public class UIGrid : UIWidgetContainer
 	/// Convenience method -- add a new child.
 	/// </summary>
 
-	public void AddChild (Transform trans) { AddChild(trans, true); }
+	[System.Obsolete("Use gameObject.AddChild or transform.parent = gridTransform")]
+	public void AddChild (Transform trans)
+	{
+		if (trans != null)
+		{
+			trans.parent = transform;
+			ResetPosition(GetChildList());
+		}
+	}
 
 	/// <summary>
 	/// Convenience method -- add a new child.
 	/// Note that if you plan on adding multiple objects, it's faster to GetChildList() and modify that instead.
 	/// </summary>
 
+	[System.Obsolete("Use gameObject.AddChild or transform.parent = gridTransform")]
 	public void AddChild (Transform trans, bool sort)
 	{
 		if (trans != null)
@@ -368,9 +380,9 @@ public class UIGrid : UIWidgetContainer
 				new Vector3(cellWidth * x, -cellHeight * y, depth) :
 				new Vector3(cellWidth * y, -cellHeight * x, depth);
 
-			if (animateSmoothly && Application.isPlaying && Vector3.SqrMagnitude(t.localPosition - pos) >= 0.0001f)
+			if (animateSmoothly && Application.isPlaying && (pivot != UIWidget.Pivot.TopLeft || Vector3.SqrMagnitude(t.localPosition - pos) >= 0.0001f))
 			{
-				SpringPosition sp = SpringPosition.Begin(t.gameObject, pos, 15f);
+				var sp = SpringPosition.Begin(t.gameObject, pos, 15f);
 				sp.updateScrollView = true;
 				sp.ignoreTimeScale = true;
 			}
@@ -389,7 +401,7 @@ public class UIGrid : UIWidgetContainer
 		// Apply the origin offset
 		if (pivot != UIWidget.Pivot.TopLeft)
 		{
-			Vector2 po = NGUIMath.GetPivotOffset(pivot);
+			var po = NGUIMath.GetPivotOffset(pivot);
 
 			float fx, fy;
 
@@ -404,15 +416,16 @@ public class UIGrid : UIWidgetContainer
 				fy = Mathf.Lerp(-maxX * cellHeight, 0f, po.y);
 			}
 
-			for (int i = 0; i < myTrans.childCount; ++i)
+			foreach (var t in list)
 			{
-				Transform t = myTrans.GetChild(i);
-				SpringPosition sp = t.GetComponent<SpringPosition>();
+				var sp = t.GetComponent<SpringPosition>();
 
 				if (sp != null)
 				{
+					sp.enabled = false;
 					sp.target.x -= fx;
 					sp.target.y -= fy;
+					sp.enabled = true;
 				}
 				else
 				{

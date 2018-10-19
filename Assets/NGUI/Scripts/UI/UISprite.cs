@@ -1,9 +1,10 @@
-//----------------------------------------------
+//-------------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2016 Tasharen Entertainment
-//----------------------------------------------
+// Copyright © 2011-2018 Tasharen Entertainment Inc
+//-------------------------------------------------
 
 using UnityEngine;
+using System.Collections.Generic;
 
 /// <summary>
 /// Sprite is a textured element in the UI hierarchy.
@@ -24,10 +25,39 @@ public class UISprite : UIBasicSprite
 	[System.NonSerialized] bool mSpriteSet = false;
 
 	/// <summary>
-	/// Retrieve the material used by the font.
+	/// Main texture is assigned on the atlas.
 	/// </summary>
 
-	public override Material material { get { return (mAtlas != null) ? mAtlas.spriteMaterial : null; } }
+	public override Texture mainTexture
+	{
+		get
+		{
+			var mat = (mAtlas != null) ? mAtlas.spriteMaterial : null;
+			return (mat != null) ? mat.mainTexture : null;
+		}
+		set
+		{
+			base.mainTexture = value;
+		}
+	}
+
+	/// <summary>
+	/// Material comes from the base class first, and sprite atlas last.
+	/// </summary>
+
+	public override Material material
+	{
+		get
+		{
+			var mat = base.material;
+			if (mat != null) return mat;
+			return (mAtlas != null ? mAtlas.spriteMaterial : null);
+		}
+		set
+		{
+			base.material = value;
+		}
+	}
 
 	/// <summary>
 	/// Atlas used by this widget.
@@ -203,6 +233,25 @@ public class UISprite : UIBasicSprite
 			UISpriteData sp = GetAtlasSprite();
 			if (sp == null) return base.border;
 			return new Vector4(sp.borderLeft, sp.borderBottom, sp.borderRight, sp.borderTop);
+		}
+	}
+	/// <summary>
+	/// Trimmed space in the atlas around the sprite. X = left, Y = bottom, Z = right, W = top.
+	/// </summary>
+	protected override Vector4 padding
+	{
+		get
+		{
+			UISpriteData sp = GetAtlasSprite();
+			var p = new Vector4(0, 0, 0, 0);
+			if (sp != null)
+			{
+				p.x = sp.paddingLeft;
+				p.y = sp.paddingBottom;
+				p.z = sp.paddingRight;
+				p.w = sp.paddingTop;
+			}
+			return p;
 		}
 	}
 
@@ -476,7 +525,7 @@ public class UISprite : UIBasicSprite
 	/// Virtual function called by the UIPanel that fills the buffers.
 	/// </summary>
 
-	public override void OnFill (BetterList<Vector3> verts, BetterList<Vector2> uvs, BetterList<Color> cols)
+	public override void OnFill (List<Vector3> verts, List<Vector2> uvs, List<Color> cols)
 	{
 		Texture tex = mainTexture;
 		if (tex == null) return;
@@ -492,7 +541,7 @@ public class UISprite : UIBasicSprite
 		outer = NGUIMath.ConvertToTexCoords(outer, tex.width, tex.height);
 		inner = NGUIMath.ConvertToTexCoords(inner, tex.width, tex.height);
 
-		int offset = verts.size;
+		int offset = verts.Count;
 		Fill(verts, uvs, cols, outer, inner);
 
 		if (onPostFill != null)

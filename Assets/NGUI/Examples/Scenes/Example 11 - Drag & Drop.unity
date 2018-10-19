@@ -213,6 +213,7 @@ MonoBehaviour:
   movement: 1
   dragEffect: 2
   restrictWithinPanel: 1
+  constrainOnDrag: 0
   disableDragIfFits: 0
   smoothDragStart: 1
   iOSDragEmulation: 1
@@ -404,7 +405,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 11}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -658, y: -1, z: 0}
+  m_LocalPosition: {x: -608, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 67}
@@ -459,7 +460,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 26}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7, y: 188.238007, z: 0}
+  m_LocalPosition: {x: 7, y: 195.968414, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 57}
@@ -534,7 +535,7 @@ Transform:
   m_GameObject: {fileID: 35}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: .00222222228, y: .00222222228, z: .00222222228}
+  m_LocalScale: {x: .00232558139, y: .00232558139, z: .00232558139}
   m_Children:
   - {fileID: 66}
   - {fileID: 848388263}
@@ -760,6 +761,7 @@ MonoBehaviour:
   mWidth: 434
   mHeight: 400
   mDepth: -9
+  mMat: {fileID: 0}
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
@@ -794,7 +796,6 @@ MonoBehaviour:
   mSymbols: 1
   mEffectDistance: {x: 1, y: 1}
   mOverflow: 0
-  mMaterial: {fileID: 0}
   mApplyGradient: 1
   mGradientTop: {r: 1, g: 1, b: 1, a: 1}
   mGradientBottom: {r: .679104447, g: .679104447, b: .679104447, a: 1}
@@ -803,6 +804,9 @@ MonoBehaviour:
   mUseFloatSpacing: 0
   mFloatSpacingX: 0
   mFloatSpacingY: 0
+  mOverflowEllipsis: 0
+  mOverflowWidth: 0
+  mModifier: 0
   mShrinkToFit: 0
   mMaxLineWidth: 0
   mMaxLineHeight: 0
@@ -866,6 +870,7 @@ MonoBehaviour:
   mWidth: 100
   mHeight: 100
   mDepth: 0
+  mMat: {fileID: 0}
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
   keepAspectRatio: 0
@@ -875,6 +880,9 @@ MonoBehaviour:
   mFillAmount: 1
   mInvert: 0
   mFlip: 0
+  mApplyGradient: 0
+  mGradientTop: {r: 1, g: 1, b: 1, a: 1}
+  mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   centerType: 1
   leftType: 1
   rightType: 1
@@ -916,6 +924,7 @@ MonoBehaviour:
   mWidth: 80
   mHeight: 80
   mDepth: 1
+  mMat: {fileID: 0}
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
@@ -925,6 +934,9 @@ MonoBehaviour:
   mFillAmount: 1
   mInvert: 0
   mFlip: 0
+  mApplyGradient: 0
+  mGradientTop: {r: 1, g: 1, b: 1, a: 1}
+  mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   centerType: 1
   leftType: 1
   rightType: 1
@@ -964,8 +976,9 @@ MonoBehaviour:
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 3
   mWidth: 135
-  mHeight: 800
+  mHeight: 760
   mDepth: 2
+  mMat: {fileID: 0}
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
   keepAspectRatio: 0
@@ -975,6 +988,9 @@ MonoBehaviour:
   mFillAmount: 1
   mInvert: 0
   mFlip: 0
+  mApplyGradient: 0
+  mGradientTop: {r: 1, g: 1, b: 1, a: 1}
+  mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   centerType: 1
   leftType: 1
   rightType: 1
@@ -999,6 +1015,7 @@ MonoBehaviour:
   eventReceiverMask:
     serializedVersion: 2
     m_Bits: 4294966527
+  processEventsIn: 0
   debug: 0
   useMouse: 1
   useTouch: 1
@@ -1023,6 +1040,7 @@ MonoBehaviour:
   submitKey1: 330
   cancelKey0: 27
   cancelKey1: 331
+  autoHideCursor: 1
 --- !u!114 &114
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1039,6 +1057,7 @@ MonoBehaviour:
   eventReceiverMask:
     serializedVersion: 2
     m_Bits: 256
+  processEventsIn: 0
   debug: 0
   useMouse: 1
   useTouch: 1
@@ -1063,6 +1082,7 @@ MonoBehaviour:
   submitKey1: 330
   cancelKey0: 27
   cancelKey1: 331
+  autoHideCursor: 1
 --- !u!114 &115
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1113,6 +1133,7 @@ MonoBehaviour:
   updateAnchors: 1
   showInPanelTool: 1
   generateNormals: 0
+  generateUV2: 0
   widgetsAreStatic: 0
   cullWhileDragging: 0
   alwaysOnScreen: 0
@@ -1127,7 +1148,9 @@ MonoBehaviour:
   mClipSoftness: {x: 40, y: 40}
   mDepth: 1
   mSortingOrder: 0
+  mSortingLayerName: 
   mClipOffset: {x: 0, y: 0}
+  useSortingOrder: 0
 --- !u!114 &118
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1158,6 +1181,7 @@ MonoBehaviour:
   updateAnchors: 1
   showInPanelTool: 1
   generateNormals: 0
+  generateUV2: 0
   widgetsAreStatic: 0
   cullWhileDragging: 0
   alwaysOnScreen: 0
@@ -1168,11 +1192,13 @@ MonoBehaviour:
   mClipTexture: {fileID: 0}
   mAlpha: 1
   mClipping: 3
-  mClipRange: {x: 50, y: -209, z: 102, w: 774}
+  mClipRange: {x: 50, y: -209, z: 102, w: 734}
   mClipSoftness: {x: 1, y: 10}
   mDepth: 3
   mSortingOrder: 0
-  mClipOffset: {x: 0, y: 21.7619934}
+  mSortingLayerName: 
+  mClipOffset: {x: 0, y: 14.0315857}
+  useSortingOrder: 0
 --- !u!114 &120
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1203,6 +1229,7 @@ MonoBehaviour:
   updateAnchors: 1
   showInPanelTool: 1
   generateNormals: 0
+  generateUV2: 0
   widgetsAreStatic: 0
   cullWhileDragging: 0
   alwaysOnScreen: 0
@@ -1217,7 +1244,9 @@ MonoBehaviour:
   mClipSoftness: {x: 40, y: 40}
   mDepth: 5
   mSortingOrder: 0
+  mSortingLayerName: 
   mClipOffset: {x: 0, y: 0}
+  useSortingOrder: 0
 --- !u!196 &121
 NavMeshSettings:
   m_ObjectHideFlags: 0
@@ -1232,6 +1261,7 @@ NavMeshSettings:
     minRegionArea: 2
     widthInaccuracy: 16.666666
     heightInaccuracy: 10
+    tileSizeHint: 0
   m_NavMesh: {fileID: 0}
 --- !u!54 &122
 Rigidbody:
@@ -1367,6 +1397,7 @@ MonoBehaviour:
   mWidth: 80
   mHeight: 80
   mDepth: 1
+  mMat: {fileID: 0}
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
@@ -1376,6 +1407,9 @@ MonoBehaviour:
   mFillAmount: 1
   mInvert: 0
   mFlip: 0
+  mApplyGradient: 0
+  mGradientTop: {r: 1, g: 1, b: 1, a: 1}
+  mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   centerType: 1
   leftType: 1
   rightType: 1
@@ -1478,6 +1512,7 @@ MonoBehaviour:
   mWidth: 100
   mHeight: 100
   mDepth: 0
+  mMat: {fileID: 0}
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
   keepAspectRatio: 0
@@ -1487,6 +1522,9 @@ MonoBehaviour:
   mFillAmount: 1
   mInvert: 0
   mFlip: 0
+  mApplyGradient: 0
+  mGradientTop: {r: 1, g: 1, b: 1, a: 1}
+  mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   centerType: 1
   leftType: 1
   rightType: 1
@@ -1627,6 +1665,7 @@ MonoBehaviour:
   mWidth: 100
   mHeight: 100
   mDepth: 0
+  mMat: {fileID: 0}
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
   keepAspectRatio: 0
@@ -1636,6 +1675,9 @@ MonoBehaviour:
   mFillAmount: 1
   mInvert: 0
   mFlip: 0
+  mApplyGradient: 0
+  mGradientTop: {r: 1, g: 1, b: 1, a: 1}
+  mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   centerType: 1
   leftType: 1
   rightType: 1
@@ -1723,8 +1765,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 16, y: 767.675659, z: 0}
-  m_Center: {x: 0, y: -.0626678467, z: 0}
+  m_Size: {x: 16, y: 727.772705, z: 0}
+  m_Center: {x: 0, y: -.0438995361, z: 0}
 --- !u!114 &306477866
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1783,8 +1825,9 @@ MonoBehaviour:
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mWidth: 16
-  mHeight: 768
+  mHeight: 728
   mDepth: 1
+  mMat: {fileID: 0}
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
   keepAspectRatio: 0
@@ -1794,6 +1837,9 @@ MonoBehaviour:
   mFillAmount: 1
   mInvert: 0
   mFlip: 0
+  mApplyGradient: 0
+  mGradientTop: {r: 1, g: 1, b: 1, a: 1}
+  mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   centerType: 1
   leftType: 1
   rightType: 1
@@ -1863,6 +1909,7 @@ MonoBehaviour:
   mWidth: 80
   mHeight: 80
   mDepth: 1
+  mMat: {fileID: 0}
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
@@ -1872,6 +1919,9 @@ MonoBehaviour:
   mFillAmount: 1
   mInvert: 0
   mFlip: 0
+  mApplyGradient: 0
+  mGradientTop: {r: 1, g: 1, b: 1, a: 1}
+  mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   centerType: 1
   leftType: 1
   rightType: 1
@@ -1941,6 +1991,7 @@ MonoBehaviour:
   mWidth: 80
   mHeight: 80
   mDepth: 1
+  mMat: {fileID: 0}
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
@@ -1950,6 +2001,9 @@ MonoBehaviour:
   mFillAmount: 1
   mInvert: 0
   mFlip: 0
+  mApplyGradient: 0
+  mGradientTop: {r: 1, g: 1, b: 1, a: 1}
+  mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   centerType: 1
   leftType: 1
   rightType: 1
@@ -2019,6 +2073,7 @@ MonoBehaviour:
   mWidth: 80
   mHeight: 80
   mDepth: 1
+  mMat: {fileID: 0}
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
@@ -2028,6 +2083,9 @@ MonoBehaviour:
   mFillAmount: 1
   mInvert: 0
   mFlip: 0
+  mApplyGradient: 0
+  mGradientTop: {r: 1, g: 1, b: 1, a: 1}
+  mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   centerType: 1
   leftType: 1
   rightType: 1
@@ -2095,8 +2153,9 @@ MonoBehaviour:
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 5
   mWidth: 107
-  mHeight: 772
+  mHeight: 732
   mDepth: 3
+  mMat: {fileID: 0}
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
@@ -2106,6 +2165,9 @@ MonoBehaviour:
   mFillAmount: 1
   mInvert: 0
   mFlip: 0
+  mApplyGradient: 0
+  mGradientTop: {r: 1, g: 1, b: 1, a: 1}
+  mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   centerType: 1
   leftType: 1
   rightType: 1
@@ -2173,8 +2235,9 @@ MonoBehaviour:
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 3
   mWidth: 107
-  mHeight: 772
+  mHeight: 732
   mDepth: 3
+  mMat: {fileID: 0}
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
@@ -2184,6 +2247,9 @@ MonoBehaviour:
   mFillAmount: 1
   mInvert: 0
   mFlip: 0
+  mApplyGradient: 0
+  mGradientTop: {r: 1, g: 1, b: 1, a: 1}
+  mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   centerType: 1
   leftType: 1
   rightType: 1
@@ -2283,6 +2349,7 @@ MonoBehaviour:
   mWidth: 100
   mHeight: 100
   mDepth: 0
+  mMat: {fileID: 0}
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
   keepAspectRatio: 0
@@ -2292,6 +2359,9 @@ MonoBehaviour:
   mFillAmount: 1
   mInvert: 0
   mFlip: 0
+  mApplyGradient: 0
+  mGradientTop: {r: 1, g: 1, b: 1, a: 1}
+  mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   centerType: 1
   leftType: 1
   rightType: 1
@@ -2367,7 +2437,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 710038377}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 690, y: 0, z: 0}
+  m_LocalPosition: {x: 640, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1675588937}
@@ -2385,7 +2455,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 108, y: 800, z: 0}
+  m_Size: {x: 108, y: 760, z: 0}
   m_Center: {x: 54, y: 0, z: 0}
 --- !u!114 &710038380
 MonoBehaviour:
@@ -2418,8 +2488,9 @@ MonoBehaviour:
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 3
   mWidth: 108
-  mHeight: 800
+  mHeight: 760
   mDepth: 0
+  mMat: {fileID: 0}
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
   keepAspectRatio: 0
@@ -2540,6 +2611,7 @@ MonoBehaviour:
   mWidth: 100
   mHeight: 100
   mDepth: 0
+  mMat: {fileID: 0}
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
   keepAspectRatio: 0
@@ -2549,6 +2621,9 @@ MonoBehaviour:
   mFillAmount: 1
   mInvert: 0
   mFlip: 0
+  mApplyGradient: 0
+  mGradientTop: {r: 1, g: 1, b: 1, a: 1}
+  mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   centerType: 1
   leftType: 1
   rightType: 1
@@ -2689,6 +2764,7 @@ MonoBehaviour:
   mWidth: 100
   mHeight: 100
   mDepth: 0
+  mMat: {fileID: 0}
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
   keepAspectRatio: 0
@@ -2698,6 +2774,9 @@ MonoBehaviour:
   mFillAmount: 1
   mInvert: 0
   mFlip: 0
+  mApplyGradient: 0
+  mGradientTop: {r: 1, g: 1, b: 1, a: 1}
+  mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   centerType: 1
   leftType: 1
   rightType: 1
@@ -2841,6 +2920,7 @@ MonoBehaviour:
   mWidth: 100
   mHeight: 100
   mDepth: 0
+  mMat: {fileID: 0}
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
   keepAspectRatio: 0
@@ -2850,6 +2930,9 @@ MonoBehaviour:
   mFillAmount: 1
   mInvert: 0
   mFlip: 0
+  mApplyGradient: 0
+  mGradientTop: {r: 1, g: 1, b: 1, a: 1}
+  mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   centerType: 1
   leftType: 1
   rightType: 1
@@ -2977,7 +3060,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 848388262}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -800, y: 0, z: 0}
+  m_LocalPosition: {x: -750, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1706457510}
@@ -3016,8 +3099,9 @@ MonoBehaviour:
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 3
   mWidth: 108
-  mHeight: 800
+  mHeight: 760
   mDepth: 0
+  mMat: {fileID: 0}
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
   keepAspectRatio: 0
@@ -3032,7 +3116,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 108, y: 800, z: 0}
+  m_Size: {x: 108, y: 760, z: 0}
   m_Center: {x: 54, y: 0, z: 0}
 --- !u!114 &848388267
 MonoBehaviour:
@@ -3150,6 +3234,7 @@ MonoBehaviour:
   mWidth: 100
   mHeight: 100
   mDepth: 0
+  mMat: {fileID: 0}
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
   keepAspectRatio: 0
@@ -3159,6 +3244,9 @@ MonoBehaviour:
   mFillAmount: 1
   mInvert: 0
   mFlip: 0
+  mApplyGradient: 0
+  mGradientTop: {r: 1, g: 1, b: 1, a: 1}
+  mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   centerType: 1
   leftType: 1
   rightType: 1
@@ -3269,6 +3357,7 @@ MonoBehaviour:
   mWidth: 80
   mHeight: 80
   mDepth: 1
+  mMat: {fileID: 0}
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
@@ -3278,6 +3367,9 @@ MonoBehaviour:
   mFillAmount: 1
   mInvert: 0
   mFlip: 0
+  mApplyGradient: 0
+  mGradientTop: {r: 1, g: 1, b: 1, a: 1}
+  mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   centerType: 1
   leftType: 1
   rightType: 1
@@ -3323,7 +3415,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 6500002, guid: df7390d50d06a4b4b893085286142266, type: 2}
       propertyPath: m_Size.y
-      value: 778
+      value: 738
       objectReference: {fileID: 0}
     - target: {fileID: 11400010, guid: df7390d50d06a4b4b893085286142266, type: 2}
       propertyPath: mHeight
@@ -3331,11 +3423,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 6500000, guid: df7390d50d06a4b4b893085286142266, type: 2}
       propertyPath: m_Size.y
-      value: 767.675659
+      value: 727.772705
       objectReference: {fileID: 0}
     - target: {fileID: 11400004, guid: df7390d50d06a4b4b893085286142266, type: 2}
       propertyPath: mHeight
-      value: 768
+      value: 728
       objectReference: {fileID: 0}
     - target: {fileID: 6500002, guid: df7390d50d06a4b4b893085286142266, type: 2}
       propertyPath: m_Size.x
@@ -3367,7 +3459,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 6500000, guid: df7390d50d06a4b4b893085286142266, type: 2}
       propertyPath: m_Center.y
-      value: -.0626678467
+      value: -.0438995361
       objectReference: {fileID: 0}
     - target: {fileID: 11400010, guid: df7390d50d06a4b4b893085286142266, type: 2}
       propertyPath: leftAnchor.target
@@ -3419,11 +3511,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400008, guid: df7390d50d06a4b4b893085286142266, type: 2}
       propertyPath: mValue
-      value: .693259537
+      value: .693259716
       objectReference: {fileID: 0}
     - target: {fileID: 11400008, guid: df7390d50d06a4b4b893085286142266, type: 2}
       propertyPath: mSize
-      value: .999572217
+      value: .999683321
       objectReference: {fileID: 0}
     - target: {fileID: 11400006, guid: df7390d50d06a4b4b893085286142266, type: 2}
       propertyPath: disabledColor.r
@@ -3503,6 +3595,7 @@ MonoBehaviour:
   mWidth: 80
   mHeight: 80
   mDepth: 1
+  mMat: {fileID: 0}
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
@@ -3512,6 +3605,9 @@ MonoBehaviour:
   mFillAmount: 1
   mInvert: 0
   mFlip: 0
+  mApplyGradient: 0
+  mGradientTop: {r: 1, g: 1, b: 1, a: 1}
+  mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   centerType: 1
   leftType: 1
   rightType: 1
@@ -3581,6 +3677,7 @@ MonoBehaviour:
   mWidth: 80
   mHeight: 80
   mDepth: 1
+  mMat: {fileID: 0}
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
@@ -3590,6 +3687,9 @@ MonoBehaviour:
   mFillAmount: 1
   mInvert: 0
   mFlip: 0
+  mApplyGradient: 0
+  mGradientTop: {r: 1, g: 1, b: 1, a: 1}
+  mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   centerType: 1
   leftType: 1
   rightType: 1
@@ -3659,6 +3759,7 @@ MonoBehaviour:
   mWidth: 80
   mHeight: 80
   mDepth: 1
+  mMat: {fileID: 0}
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
@@ -3668,6 +3769,9 @@ MonoBehaviour:
   mFillAmount: 1
   mInvert: 0
   mFlip: 0
+  mApplyGradient: 0
+  mGradientTop: {r: 1, g: 1, b: 1, a: 1}
+  mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   centerType: 1
   leftType: 1
   rightType: 1
@@ -3770,6 +3874,7 @@ MonoBehaviour:
   mWidth: 100
   mHeight: 100
   mDepth: 0
+  mMat: {fileID: 0}
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
   keepAspectRatio: 0
@@ -3779,6 +3884,9 @@ MonoBehaviour:
   mFillAmount: 1
   mInvert: 0
   mFlip: 0
+  mApplyGradient: 0
+  mGradientTop: {r: 1, g: 1, b: 1, a: 1}
+  mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   centerType: 1
   leftType: 1
   rightType: 1
@@ -3916,6 +4024,7 @@ MonoBehaviour:
   mWidth: 100
   mHeight: 100
   mDepth: 0
+  mMat: {fileID: 0}
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
   keepAspectRatio: 0
@@ -3925,6 +4034,9 @@ MonoBehaviour:
   mFillAmount: 1
   mInvert: 0
   mFlip: 0
+  mApplyGradient: 0
+  mGradientTop: {r: 1, g: 1, b: 1, a: 1}
+  mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   centerType: 1
   leftType: 1
   rightType: 1
@@ -4035,6 +4147,7 @@ MonoBehaviour:
   mWidth: 80
   mHeight: 80
   mDepth: 1
+  mMat: {fileID: 0}
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
@@ -4044,6 +4157,9 @@ MonoBehaviour:
   mFillAmount: 1
   mInvert: 0
   mFlip: 0
+  mApplyGradient: 0
+  mGradientTop: {r: 1, g: 1, b: 1, a: 1}
+  mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   centerType: 1
   leftType: 1
   rightType: 1
@@ -4089,7 +4205,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 6500002, guid: df7390d50d06a4b4b893085286142266, type: 2}
       propertyPath: m_Size.y
-      value: 778
+      value: 738
       objectReference: {fileID: 0}
     - target: {fileID: 11400010, guid: df7390d50d06a4b4b893085286142266, type: 2}
       propertyPath: mHeight
@@ -4097,11 +4213,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 6500000, guid: df7390d50d06a4b4b893085286142266, type: 2}
       propertyPath: m_Size.y
-      value: 767.675659
+      value: 727.772705
       objectReference: {fileID: 0}
     - target: {fileID: 11400004, guid: df7390d50d06a4b4b893085286142266, type: 2}
       propertyPath: mHeight
-      value: 768
+      value: 728
       objectReference: {fileID: 0}
     - target: {fileID: 6500002, guid: df7390d50d06a4b4b893085286142266, type: 2}
       propertyPath: m_Size.x
@@ -4137,7 +4253,7 @@ Prefab:
       objectReference: {fileID: 69}
     - target: {fileID: 6500000, guid: df7390d50d06a4b4b893085286142266, type: 2}
       propertyPath: m_Center.y
-      value: -.0626678467
+      value: -.0438995361
       objectReference: {fileID: 0}
     - target: {fileID: 11400010, guid: df7390d50d06a4b4b893085286142266, type: 2}
       propertyPath: leftAnchor.target
@@ -4185,11 +4301,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400008, guid: df7390d50d06a4b4b893085286142266, type: 2}
       propertyPath: mValue
-      value: .693259537
+      value: .693259716
       objectReference: {fileID: 0}
     - target: {fileID: 11400008, guid: df7390d50d06a4b4b893085286142266, type: 2}
       propertyPath: mSize
-      value: .999572217
+      value: .999683321
       objectReference: {fileID: 0}
     - target: {fileID: 11400006, guid: df7390d50d06a4b4b893085286142266, type: 2}
       propertyPath: disabledColor.r
@@ -4296,6 +4412,7 @@ MonoBehaviour:
   mWidth: 80
   mHeight: 80
   mDepth: 1
+  mMat: {fileID: 0}
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
@@ -4305,6 +4422,9 @@ MonoBehaviour:
   mFillAmount: 1
   mInvert: 0
   mFlip: 0
+  mApplyGradient: 0
+  mGradientTop: {r: 1, g: 1, b: 1, a: 1}
+  mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   centerType: 1
   leftType: 1
   rightType: 1
@@ -4338,7 +4458,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1607436409}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7, y: 188.238007, z: 0}
+  m_LocalPosition: {x: 7, y: 195.968414, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 830441778}
@@ -4373,6 +4493,7 @@ MonoBehaviour:
   movement: 1
   dragEffect: 2
   restrictWithinPanel: 1
+  constrainOnDrag: 0
   disableDragIfFits: 0
   smoothDragStart: 1
   iOSDragEmulation: 1
@@ -4417,6 +4538,7 @@ MonoBehaviour:
   updateAnchors: 1
   showInPanelTool: 1
   generateNormals: 0
+  generateUV2: 0
   widgetsAreStatic: 0
   cullWhileDragging: 0
   alwaysOnScreen: 0
@@ -4427,11 +4549,13 @@ MonoBehaviour:
   mClipTexture: {fileID: 0}
   mAlpha: 1
   mClipping: 3
-  mClipRange: {x: 50.000061, y: -209, z: 102, w: 774}
+  mClipRange: {x: 50, y: -209, z: 102, w: 734}
   mClipSoftness: {x: 1, y: 10}
   mDepth: 4
   mSortingOrder: 0
-  mClipOffset: {x: 0, y: 21.7619934}
+  mSortingLayerName: 
+  mClipOffset: {x: 0, y: 14.0315857}
+  useSortingOrder: 0
 --- !u!1 &1675588936
 GameObject:
   m_ObjectHideFlags: 0
@@ -4476,7 +4600,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 26, y: 778, z: 0}
+  m_Size: {x: 26, y: 738, z: 0}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1675588939
 MonoBehaviour:
@@ -4510,8 +4634,9 @@ MonoBehaviour:
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mWidth: 26
-  mHeight: 778
+  mHeight: 738
   mDepth: 0
+  mMat: {fileID: 0}
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
   keepAspectRatio: 0
@@ -4521,6 +4646,9 @@ MonoBehaviour:
   mFillAmount: 1
   mInvert: 0
   mFlip: 0
+  mApplyGradient: 0
+  mGradientTop: {r: 1, g: 1, b: 1, a: 1}
+  mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   centerType: 1
   leftType: 1
   rightType: 1
@@ -4570,7 +4698,7 @@ MonoBehaviour:
   thumb: {fileID: 0}
   mBG: {fileID: 1675588939}
   mFG: {fileID: 2069478560}
-  mValue: .693259537
+  mValue: .693259716
   mFill: 3
   numberOfSteps: 0
   onChange: []
@@ -4578,7 +4706,7 @@ MonoBehaviour:
   rawValue: 1
   direction: 2
   mInverted: 0
-  mSize: .999572217
+  mSize: .999683321
   mScroll: .600000024
   mDir: 2
 --- !u!1 &1706457509
@@ -4625,7 +4753,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 26, y: 778, z: 0}
+  m_Size: {x: 26, y: 738, z: 0}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1706457512
 MonoBehaviour:
@@ -4685,8 +4813,9 @@ MonoBehaviour:
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mWidth: 26
-  mHeight: 778
+  mHeight: 738
   mDepth: 0
+  mMat: {fileID: 0}
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
   keepAspectRatio: 0
@@ -4696,6 +4825,9 @@ MonoBehaviour:
   mFillAmount: 1
   mInvert: 0
   mFlip: 0
+  mApplyGradient: 0
+  mGradientTop: {r: 1, g: 1, b: 1, a: 1}
+  mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   centerType: 1
   leftType: 1
   rightType: 1
@@ -4719,7 +4851,7 @@ MonoBehaviour:
   thumb: {fileID: 0}
   mBG: {fileID: 1706457513}
   mFG: {fileID: 306477867}
-  mValue: .693259537
+  mValue: .693259716
   mFill: 3
   numberOfSteps: 0
   onChange: []
@@ -4727,7 +4859,7 @@ MonoBehaviour:
   rawValue: 1
   direction: 2
   mInverted: 0
-  mSize: .999572217
+  mSize: .999683321
   mScroll: .600000024
   mDir: 2
 --- !u!1 &1727460117
@@ -4817,8 +4949,9 @@ MonoBehaviour:
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 3
   mWidth: 135
-  mHeight: 800
+  mHeight: 760
   mDepth: 2
+  mMat: {fileID: 0}
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
   keepAspectRatio: 0
@@ -4828,6 +4961,9 @@ MonoBehaviour:
   mFillAmount: 1
   mInvert: 0
   mFlip: 0
+  mApplyGradient: 0
+  mGradientTop: {r: 1, g: 1, b: 1, a: 1}
+  mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   centerType: 1
   leftType: 1
   rightType: 1
@@ -4930,6 +5066,7 @@ MonoBehaviour:
   mWidth: 100
   mHeight: 100
   mDepth: 0
+  mMat: {fileID: 0}
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
   keepAspectRatio: 0
@@ -4939,6 +5076,9 @@ MonoBehaviour:
   mFillAmount: 1
   mInvert: 0
   mFlip: 0
+  mApplyGradient: 0
+  mGradientTop: {r: 1, g: 1, b: 1, a: 1}
+  mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   centerType: 1
   leftType: 1
   rightType: 1
@@ -5079,6 +5219,7 @@ MonoBehaviour:
   mWidth: 100
   mHeight: 100
   mDepth: 0
+  mMat: {fileID: 0}
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
   keepAspectRatio: 0
@@ -5088,6 +5229,9 @@ MonoBehaviour:
   mFillAmount: 1
   mInvert: 0
   mFlip: 0
+  mApplyGradient: 0
+  mGradientTop: {r: 1, g: 1, b: 1, a: 1}
+  mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   centerType: 1
   leftType: 1
   rightType: 1
@@ -5175,8 +5319,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 16, y: 767.675659, z: 0}
-  m_Center: {x: 0, y: -.0626678467, z: 0}
+  m_Size: {x: 16, y: 727.772705, z: 0}
+  m_Center: {x: 0, y: -.0438995361, z: 0}
 --- !u!114 &2069478560
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5209,8 +5353,9 @@ MonoBehaviour:
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mWidth: 16
-  mHeight: 768
+  mHeight: 728
   mDepth: 1
+  mMat: {fileID: 0}
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
   keepAspectRatio: 0
@@ -5220,6 +5365,9 @@ MonoBehaviour:
   mFillAmount: 1
   mInvert: 0
   mFlip: 0
+  mApplyGradient: 0
+  mGradientTop: {r: 1, g: 1, b: 1, a: 1}
+  mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   centerType: 1
   leftType: 1
   rightType: 1
@@ -5315,6 +5463,7 @@ MonoBehaviour:
   mWidth: 80
   mHeight: 80
   mDepth: 1
+  mMat: {fileID: 0}
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
@@ -5324,6 +5473,9 @@ MonoBehaviour:
   mFillAmount: 1
   mInvert: 0
   mFlip: 0
+  mApplyGradient: 0
+  mGradientTop: {r: 1, g: 1, b: 1, a: 1}
+  mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   centerType: 1
   leftType: 1
   rightType: 1

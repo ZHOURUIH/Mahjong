@@ -1,7 +1,7 @@
-//----------------------------------------------
+//-------------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2016 Tasharen Entertainment
-//----------------------------------------------
+// Copyright © 2011-2018 Tasharen Entertainment Inc
+//-------------------------------------------------
 
 using UnityEngine;
 using UnityEditor;
@@ -17,7 +17,7 @@ public class UIWidgetInspector : UIRectEditor
 {
 	static public new UIWidgetInspector instance;
 
-	public enum Action
+	[DoNotObfuscateNGUI] public enum Action
 	{
 		None,
 		Move,

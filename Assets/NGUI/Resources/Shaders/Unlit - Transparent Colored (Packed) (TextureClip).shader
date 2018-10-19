@@ -1,5 +1,3 @@
-// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
 Shader "Unlit/Transparent Colored (Packed) (TextureClip)"
 {
 	Properties
@@ -25,7 +23,7 @@ Shader "Unlit/Transparent Colored (Packed) (TextureClip)"
 			ZWrite Off
 			Offset -1, -1
 			Fog { Mode Off }
-			ColorMask RGB
+			//ColorMask RGB
 			Blend SrcAlpha OneMinusSrcAlpha
 
 			CGPROGRAM

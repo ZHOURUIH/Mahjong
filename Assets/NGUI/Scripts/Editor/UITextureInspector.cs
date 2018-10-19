@@ -1,7 +1,7 @@
-//----------------------------------------------
+//-------------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2016 Tasharen Entertainment
-//----------------------------------------------
+// Copyright © 2011-2018 Tasharen Entertainment Inc
+//-------------------------------------------------
 
 using UnityEngine;
 using UnityEditor;
@@ -17,13 +17,13 @@ public class UITextureInspector : UIBasicSpriteEditor
 {
 	UITexture mTex;
 
-	protected override void OnEnable()
+	protected override void OnEnable ()
 	{
 		base.OnEnable();
 		mTex = target as UITexture;
 	}
 
-	protected override bool ShouldDrawProperties()
+	protected override bool ShouldDrawProperties ()
 	{
 		if (target == null) return false;
 		SerializedProperty sp = NGUIEditorTools.DrawProperty("Texture", serializedObject, "mTexture");
@@ -59,7 +59,7 @@ public class UITextureInspector : UIBasicSpriteEditor
 	/// Allow the texture to be previewed.
 	/// </summary>
 
-	public override bool HasPreviewGUI()
+	public override bool HasPreviewGUI ()
 	{
 		return (Selection.activeGameObject == null || Selection.gameObjects.Length == 1) &&
 			(mTex != null) && (mTex.mainTexture as Texture2D != null);
@@ -69,7 +69,7 @@ public class UITextureInspector : UIBasicSpriteEditor
 	/// Draw the sprite preview.
 	/// </summary>
 
-	public override void OnPreviewGUI(Rect rect, GUIStyle background)
+	public override void OnPreviewGUI (Rect rect, GUIStyle background)
 	{
 		Texture2D tex = mTex.mainTexture as Texture2D;
 

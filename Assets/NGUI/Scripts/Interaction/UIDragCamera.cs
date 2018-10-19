@@ -1,7 +1,7 @@
-//----------------------------------------------
+//-------------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2016 Tasharen Entertainment
-//----------------------------------------------
+// Copyright © 2011-2018 Tasharen Entertainment Inc
+//-------------------------------------------------
 
 using UnityEngine;
 
@@ -37,7 +37,7 @@ public class UIDragCamera : MonoBehaviour
 
 	void OnPress (bool isPressed)
 	{
-		if (enabled && NGUITools.GetActive(gameObject) && draggableCamera != null)
+		if (enabled && NGUITools.GetActive(gameObject) && draggableCamera != null && draggableCamera.enabled)
 		{
 			draggableCamera.Press(isPressed);
 		}
@@ -49,7 +49,7 @@ public class UIDragCamera : MonoBehaviour
 
 	void OnDrag (Vector2 delta)
 	{
-		if (enabled && NGUITools.GetActive(gameObject) && draggableCamera != null)
+		if (enabled && NGUITools.GetActive(gameObject) && draggableCamera != null && draggableCamera.enabled)
 		{
 			draggableCamera.Drag(delta);
 		}
@@ -61,7 +61,7 @@ public class UIDragCamera : MonoBehaviour
 
 	void OnScroll (float delta)
 	{
-		if (enabled && NGUITools.GetActive(gameObject) && draggableCamera != null)
+		if (enabled && NGUITools.GetActive(gameObject) && draggableCamera != null && draggableCamera.enabled)
 		{
 			draggableCamera.Scroll(delta);
 		}

@@ -1,7 +1,7 @@
-//----------------------------------------------
+//-------------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2016 Tasharen Entertainment
-//----------------------------------------------
+// Copyright © 2011-2018 Tasharen Entertainment Inc
+//-------------------------------------------------
 
 using UnityEngine;
 
@@ -13,7 +13,7 @@ using UnityEngine;
 [AddComponentMenu("NGUI/Internal/Property Binding")]
 public class PropertyBinding : MonoBehaviour
 {
-	public enum UpdateCondition
+	[DoNotObfuscateNGUI] public enum UpdateCondition
 	{
 		OnStart,
 		OnUpdate,
@@ -21,7 +21,7 @@ public class PropertyBinding : MonoBehaviour
 		OnFixedUpdate,
 	}
 
-	public enum Direction
+	[DoNotObfuscateNGUI] public enum Direction
 	{
 		SourceUpdatesTarget,
 		TargetUpdatesSource,

@@ -1,7 +1,7 @@
-//----------------------------------------------
+//-------------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2016 Tasharen Entertainment
-//----------------------------------------------
+// Copyright © 2011-2018 Tasharen Entertainment Inc
+//-------------------------------------------------
 
 #if !UNITY_3_5 && !UNITY_FLASH
 #define DYNAMIC_FONT
@@ -15,7 +15,7 @@ using System.Collections.Generic;
 /// Inspector class used to edit UIPopupLists.
 /// </summary>
 
-[CustomEditor(typeof(UIPopupList))]
+[CustomEditor(typeof(UIPopupList), true)]
 public class UIPopupListInspector : UIWidgetContainerEditor
 {
 	enum FontType
@@ -38,15 +38,15 @@ public class UIPopupListInspector : UIWidgetContainerEditor
 			mList.ambigiousFont = NGUISettings.ambigiousFont;
 			mList.fontSize = NGUISettings.fontSize;
 			mList.fontStyle = NGUISettings.fontStyle;
-			EditorUtility.SetDirty(mList);
+			NGUITools.SetDirty(mList);
 		}
 
-		if (mList.atlas == null)
+		if (mList.atlas == null && mList.background2DSprite == null && mList.highlight2DSprite == null)
 		{
 			mList.atlas = NGUISettings.atlas;
 			mList.backgroundSprite = NGUISettings.selectedSprite;
 			mList.highlightSprite = NGUISettings.selectedSprite;
-			EditorUtility.SetDirty(mList);
+			NGUITools.SetDirty(mList);
 		}
 	}
 
@@ -126,15 +126,28 @@ public class UIPopupListInspector : UIWidgetContainerEditor
 			}
 		}
 
-		GUI.changed = false;
-		string sel = NGUIEditorTools.DrawList("Default", mList.items.ToArray(), mList.value);
-		if (GUI.changed) serializedObject.FindProperty("mSelectedItem").stringValue = sel;
-
 		NGUIEditorTools.DrawProperty("Position", serializedObject, "position");
+		NGUIEditorTools.DrawProperty("Selection", serializedObject, "selection");
 		NGUIEditorTools.DrawProperty("Alignment", serializedObject, "alignment");
 		NGUIEditorTools.DrawProperty("Open on", serializedObject, "openOn");
 		NGUIEditorTools.DrawProperty("On Top", serializedObject, "separatePanel");
 		NGUIEditorTools.DrawProperty("Localized", serializedObject, "isLocalized");
+
+		GUI.changed = false;
+		var sp = NGUIEditorTools.DrawProperty("Keep Value", serializedObject, "keepValue");
+
+		if (GUI.changed)
+		{
+			serializedObject.FindProperty("mSelectedItem").stringValue = (sp.boolValue && mList.items.Count > 0) ? mList.items[0] : "";
+		}
+
+		EditorGUI.BeginDisabledGroup(!sp.boolValue);
+		{
+			GUI.changed = false;
+			string sel = NGUIEditorTools.DrawList("Initial Value", mList.items.ToArray(), mList.value);
+			if (GUI.changed) serializedObject.FindProperty("mSelectedItem").stringValue = sel;
+		}
+		EditorGUI.EndDisabledGroup();
 
 		DrawAtlas();
 		DrawFont();
@@ -175,6 +188,7 @@ public class UIPopupListInspector : UIWidgetContainerEditor
 
 			NGUIEditorTools.DrawProperty("Background", serializedObject, "backgroundColor");
 			NGUIEditorTools.DrawProperty("Highlight", serializedObject, "highlightColor");
+			NGUIEditorTools.DrawProperty("Overlap", serializedObject, "overlap", GUILayout.Width(110f));
 			NGUIEditorTools.DrawProperty("Animated", serializedObject, "isAnimated");
 			NGUIEditorTools.EndContents();
 		}
@@ -259,6 +273,8 @@ public class UIPopupListInspector : UIWidgetContainerEditor
 			NGUIEditorTools.DrawPadding();
 			NGUIEditorTools.SetLabelWidth(80f);
 			GUILayout.EndHorizontal();
+
+			NGUIEditorTools.DrawProperty("Modifier", serializedObject, "textModifier");
 
 			NGUIEditorTools.EndContents();
 		}

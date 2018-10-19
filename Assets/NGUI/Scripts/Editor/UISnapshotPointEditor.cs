@@ -1,7 +1,7 @@
-//----------------------------------------------
+//-------------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2016 Tasharen Entertainment
-//----------------------------------------------
+// Copyright © 2011-2018 Tasharen Entertainment Inc
+//-------------------------------------------------
 
 using UnityEngine;
 using UnityEditor;
@@ -87,10 +87,6 @@ public class UISnapshotPointEditor : Editor
 		if (go == null) return null;
 
 		// Actual prefab
-#if UNITY_5_3_5
-		return PrefabUtility.GetCorrespondingObjectFromSource(go) as GameObject;
-#elif UNITY_2018_2 || UNITY_2018_1
-		return PrefabUtility.GetPrefabObject(go) as GameObject;
-#endif
+		return PrefabUtility.GetPrefabParent(go) as GameObject;
 	}
 }

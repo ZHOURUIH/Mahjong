@@ -1,7 +1,7 @@
 ----------------------------------------------
             NGUI: Next-Gen UI kit
  Copyright © 2011-2016 Tasharen Entertainment
-            Version 3.9.9
+            Version 3.12.1
     http://www.tasharen.com/?page_id=197
             support@tasharen.com
 ----------------------------------------------
@@ -18,9 +18,10 @@ If you've obtained NGUI via some other means then note that your license is effe
 as Tasharen cannot provide support for pirated and/or potentially modified software.
 
 Documentation can be found here: http://www.tasharen.com/forum/index.php?topic=6754.0
+Support is provided here: https://discord.gg/tasharen
 
-If you have any questions, suggestions, comments or feature requests, please
-drop by the NGUI forum, found here: http://www.tasharen.com/forum/index.php?board=1.0
+If you have any questions, please first search the forum: http://www.tasharen.com/forum/index.php?board=1.0
+If you don't find an answer, simply ask in the #ngui-support channel in Discord: https://discord.gg/tasharen
 
 --------------------
  How To Update NGUI
@@ -35,7 +36,7 @@ If you have a Standard License:
 3. Import NGUI from the updated Unity Package.
 
 ---------------------------------------
- Support, documentation, and tutorials
+ Documentation, and tutorials
 ---------------------------------------
 
 All can be found here: http://www.tasharen.com/forum/index.php?topic=6754.0
@@ -54,6 +55,88 @@ and it will not be included in the build of your game. It's only used in the edi
 -----------------
  Version History
 -----------------
+
+3.12.1
+- NEW: Added an option to UIDragDropItem to make it work not just with press-and-hold but also with click-move-click dragging actions.
+- Improved the UIKeyBinding a bit (to string and from string conversion to be exact).
+
+3.12.0
+- NEW: Popup list can now accept delegates when setting up the items programmatically (ideally anonymous delegates).
+- NEW: Added Localization.Format overloads for 3 parameters and less to avoid GC allocations.
+- NEW: Added UIWidget.SetColorNoAlpha helper function.
+- NEW: color.LinearToGammaSpace() helper extension to match color.GammaToLinear().
+- NEW: Added a fast path for updating a widget's collider if the collider is already known, and forced it to be used when the widget gets enabled.
+- NEW: Added the "No Outline" option to the symbol coloring style. The symbol won't have an outline even if the text does.
+- FIX: Fixed an issue with the font's actual printed size not being printed correctly in inspector in some situations.
+- FIX: Random minor fixes from the support forum.
+- FIX: Missing localization entry warnings will now only be shown once per keyword.
+- FIX: UICamera will no longer keep assigning UICamera.hoveredObject repeatedly while mouse events are enabled. It will now only be assigned if the hovered object changes, or the mouse moves.
+- FIX: Fixed some issues with NGUIText.InsertHyperlink/ReplaceLink.
+- Merged pull request #26 by Nicki Hansen.
+- Checked against Unity 4.7, 5.6, and 2018.1b2.
+
+3.11.4
+- FIX: Assortment of various minor fixes for issues reported on the forums.
+
+3.11.3
+- NEW: Popup list now has an option to control whether it opens on press or on click.
+- NEW: TweenAlpha is now able to tween light sources as well.
+- NEW: Better logic for UICamera.isOverUI, UICamera.uiHasFocus and UICamera.interactingWithUI.
+- FIX: UICenterOnChild will now scroll up/down in the proper direction when using the mouse wheel.
+- FIX: UIKeyBinding will now set the currentTouch to -1 before firing its OnBindingPress function.
+- FIX: Reverted UILabel.OnFontChanged (dynamic fonts) since it's now working how it used to (?)
+- FIX: Fix for underline and label spacing being broken.
+
+3.11.2
+- FIX: Fix for the popup list not re-opening properly in some cases with touch input.
+- FIX: Rewrote how '...' gets appended at the end of wrapped labels, fixing its functionality when sup/subscript is used in the same label.
+- FIX: Reverted the ordering of triangles for UI, making them face the -Z again.
+- FIX: Added code to NGUI's main default shaders (Unlit/Transparent Colored and Unlit/Text) to handle single pass VR.
+- FIX: Choosing to hide a side of an advanced sprite will now also hide corners on that side.
+- FIX: Small fix to how UIGrid and UITable would handle widgets with SpringPosition attached.
+
+3.11.1
+- NEW: Added a 'keep value' option to the popup list that will make popup values persist even after it disappears, like it used to work before the change many versions back.
+- FIX: Popup list with values defined at edit time no longer has an initial value (unless the new 'keep value' is checked).
+- FIX: Capitalized versions of bbcode keywords like [B] will now work in addition to lowercase.
+- FIX: Backwards compatibility fixes with Unity 5.3.
+
+3.11.0
+- NEW: It's now possible to specify a custom material on regular NGUI sprites and labels.
+- NEW: Added UV2 support, specified on the panels. Secondary UVs can be easily used to add multi-texturing effects such as blended tiled backgrounds or simply detail textures, enhancing your UI's look.
+- NEW: Draw call now uses a material property block to specify the main texture as it works better at edit time.
+- NEW: UIGeometry now has a onCustomWrite delegate that can be used to modify the generated geometry as you see fit.
+- NEW: Added camera.FitOnScreen(transform) to simplify adjusting some group of widget's position to be within screen bounds.
+- NEW: Tweens can now be set to use FixedUpdate for their animation.
+- NEW: Added UIDrawCall.onCreateDrawCall that's called every time a new draw call gets created.
+- NEW: Added UIDrawCall.shadowMode that can be used to change the shadow casting mode.
+- FIX: NGUI's geometry should now work with one-sided shaders.
+- NEW: Added UICamera.lastWorldRay to hold the last ray used to cast into the world.
+- NEW: Added UICamera.mouse0, mouse1, mouse2 to access the mouse directly.
+- NEW: UICamera.uiHasFocus to return 'true' when there is an active UI interaction happening.
+- NEW: NGUI raycasts into the world will now automatically ignore triggers if the event type is set to World_3D.
+- FIX: Popup list's panel now keeps the sorting order of its parent panel.
+- FIX: Tweener.Begin now always clears the onFinished callback list.
+- FIX: Eliminated GC allocations from raycasts.
+
+3.10.2
+- NEW: Added UIDrawCall.MoveToScene for Unity 5.4+ to make it easier to move the UI to another scene.
+- FIX: Fixed an issue with Unity 5.4.1 in regards to the NGUI menu.
+- FIX: DragDropItem will now inverse transform the delta, so it should theoretically work even with rotated panels.
+- FIX: DragDropItem now again clears the scroll view reference after the drag operation completes.
+- FIX: Unity 5.4 DX9 bug work-around (no longer marking VBOs as dynamic).
+
+3.10.1
+- NEW: Added UICamera.ignoreAllEvents to easily disable all NGUI events.
+- FIX: Unity 5.4 editor on OSX: fixes for retina-related glitches of 5.4.
+- FIX: Gamma to linear conversion now happens in the draw call class and no longer needs to be set in each OnFill function.
+
+3.10.0
+- NEW: Added Texture2D.MakeReadable(true/false) -- a convenience extension for the editor. Not sure why this isn't built-in.
+- FIX: UIDragScrollView will no longer inform the scroll view of OnPress(false) on disable unless it's actually being dragged.
+- FIX: Removed ColorMask RGB from shaders since according to Unity docs it may slow down some mobiles.
+- FIX: Fixed Unity 5.4 function deprecation warnings.
+- MISC: Added Profiler.BeginSample/EndSample blocks to clarify GC allocations that only happen in the editor.
 
 3.9.9
 - NEW: Added customizable GetMouse, GetTouch and RemoveTouch delegates to UICamera replacing fixed Input calls. This makes all of NGUI's events go through user-settable delegates.

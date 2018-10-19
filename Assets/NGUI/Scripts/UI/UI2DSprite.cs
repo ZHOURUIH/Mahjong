@@ -1,7 +1,7 @@
-//----------------------------------------------
+//-------------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2016 Tasharen Entertainment
-//----------------------------------------------
+// Copyright © 2011-2018 Tasharen Entertainment Inc
+//-------------------------------------------------
 
 using UnityEngine;
 using System.Collections.Generic;
@@ -18,7 +18,6 @@ using System.Collections.Generic;
 public class UI2DSprite : UIBasicSprite
 {
 	[HideInInspector][SerializeField] UnityEngine.Sprite mSprite;
-	[HideInInspector][SerializeField] Material mMat;
 	[HideInInspector][SerializeField] Shader mShader;
 	[HideInInspector][SerializeField] Vector4 mBorder = Vector4.zero;
 	[HideInInspector][SerializeField] bool mFixedAspect = false;
@@ -115,6 +114,27 @@ public class UI2DSprite : UIBasicSprite
 			if (mSprite != null) return mSprite.texture;
 			if (mMat != null) return mMat.mainTexture;
 			return null;
+		}
+	}
+
+	/// <summary>
+	/// Whether the sprite is going to have a fixed aspect ratio.
+	/// </summary>
+
+	public bool fixedAspect
+	{
+		get
+		{
+			return mFixedAspect;
+		}
+		set
+		{
+			if (mFixedAspect != value)
+			{
+				mFixedAspect = value;
+				mDrawRegion = new Vector4(0f, 0f, 1f, 1f);
+				MarkAsChanged();
+			}
 		}
 	}
 
@@ -344,7 +364,7 @@ public class UI2DSprite : UIBasicSprite
 	/// Virtual function called by the UIPanel that fills the buffers.
 	/// </summary>
 
-	public override void OnFill (BetterList<Vector3> verts, BetterList<Vector2> uvs, BetterList<Color> cols)
+	public override void OnFill (List<Vector3> verts, List<Vector2> uvs, List<Color> cols)
 	{
 		Texture tex = mainTexture;
 		if (tex == null) return;
@@ -370,7 +390,7 @@ public class UI2DSprite : UIBasicSprite
 		inner.yMin *= h;
 		inner.yMax *= h;
 
-		int offset = verts.size;
+		int offset = verts.Count;
 		Fill(verts, uvs, cols, outer, inner);
 
 		if (onPostFill != null)

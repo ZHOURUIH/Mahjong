@@ -1,7 +1,7 @@
-//----------------------------------------------
+//-------------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2016 Tasharen Entertainment
-//----------------------------------------------
+// Copyright © 2011-2018 Tasharen Entertainment Inc
+//-------------------------------------------------
 
 using UnityEditor;
 using UnityEngine;
@@ -214,7 +214,7 @@ public class UIPanelTool : EditorWindow
 		if (ent != null)
 		{
 			GUI.backgroundColor = ent.panel == selected ? Color.white : new Color(0.8f, 0.8f, 0.8f);
-			GUILayout.BeginHorizontal("AS TextArea", GUILayout.MinHeight(20f));
+			GUILayout.BeginHorizontal(NGUIEditorTools.textArea, GUILayout.MinHeight(20f));
 			GUI.backgroundColor = Color.white;
 		}
 		else
@@ -232,7 +232,7 @@ public class UIPanelTool : EditorWindow
 			if (ent != null)
 			{
 				Selection.activeGameObject = ent.panel.gameObject;
-				EditorUtility.SetDirty(ent.panel.gameObject);
+				NGUITools.SetDirty(ent.panel.gameObject);
 			}
 		}
 
@@ -253,7 +253,7 @@ public class UIPanelTool : EditorWindow
 			if (val != EditorGUILayout.Toggle(val, GUILayout.Width(20f)))
 			{
 				ent.panel.widgetsAreStatic = !val;
-				EditorUtility.SetDirty(ent.panel.gameObject);
+				NGUITools.SetDirty(ent.panel.gameObject);
 #if !UNITY_3_5
 				if (NGUITransformInspector.instance != null)
 					NGUITransformInspector.instance.Repaint();

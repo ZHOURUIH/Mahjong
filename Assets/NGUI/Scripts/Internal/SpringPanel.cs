@@ -1,7 +1,7 @@
-//----------------------------------------------
+//-------------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2016 Tasharen Entertainment
-//----------------------------------------------
+// Copyright © 2011-2018 Tasharen Entertainment Inc
+//-------------------------------------------------
 
 using UnityEngine;
 
@@ -93,7 +93,7 @@ public class SpringPanel : MonoBehaviour
 			onFinished();
 			current = null;
 		}
-    }
+	}
 
 	/// <summary>
 	/// Start the tweening process.
@@ -107,6 +107,22 @@ public class SpringPanel : MonoBehaviour
 		sp.strength = strength;
 		sp.onFinished = null;
 		sp.enabled = true;
+		return sp;
+	}
+
+	/// <summary>
+	/// Stop the tweening process.
+	/// </summary>
+
+	static public SpringPanel Stop (GameObject go)
+	{
+		SpringPanel sp = go.GetComponent<SpringPanel>();
+
+		if (sp != null && sp.enabled)
+		{
+			if (sp.onFinished != null) sp.onFinished();
+			sp.enabled = false;
+		}
 		return sp;
 	}
 }

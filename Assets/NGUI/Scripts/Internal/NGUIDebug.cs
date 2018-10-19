@@ -1,7 +1,7 @@
-//----------------------------------------------
+//-------------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2016 Tasharen Entertainment
-//----------------------------------------------
+// Copyright © 2011-2018 Tasharen Entertainment Inc
+//-------------------------------------------------
 
 using UnityEngine;
 using System.Collections.Generic;
@@ -55,9 +55,6 @@ public class NGUIDebug : MonoBehaviour
 
 	static void LogString (string text)
 	{
-#if UNITY_EDITOR
-		Debug.Log(text);
-#else
 		if (Application.isPlaying)
 		{
 			if (mLines.Count > 20) mLines.RemoveAt(0);
@@ -65,7 +62,6 @@ public class NGUIDebug : MonoBehaviour
 			CreateInstance();
 		}
 		else Debug.Log(text);
-#endif
 	}
 
 	/// <summary>

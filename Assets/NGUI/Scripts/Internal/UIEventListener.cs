@@ -1,7 +1,7 @@
-//----------------------------------------------
+//-------------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2016 Tasharen Entertainment
-//----------------------------------------------
+// Copyright © 2011-2018 Tasharen Entertainment Inc
+//-------------------------------------------------
 
 using UnityEngine;
 
@@ -37,11 +37,13 @@ public class UIEventListener : MonoBehaviour
 	public ObjectDelegate onDrop;
 	public KeyCodeDelegate onKey;
 	public BoolDelegate onTooltip;
+	public bool needsActiveCollider = true;
 
 	bool isColliderEnabled
 	{
 		get
 		{
+			if (!needsActiveCollider) return true;
 			Collider c = GetComponent<Collider>();
 			if (c != null) return c.enabled;
 			Collider2D b = GetComponent<Collider2D>();
@@ -50,13 +52,13 @@ public class UIEventListener : MonoBehaviour
 	}
 
 	void OnSubmit ()				{ if (isColliderEnabled && onSubmit != null) onSubmit(gameObject); }
-	void OnClick ()					{ if (isColliderEnabled && onClick != null) onClick(gameObject); }
+	void OnClick ()				{ if (isColliderEnabled && onClick != null) onClick(gameObject); }
 	void OnDoubleClick ()			{ if (isColliderEnabled && onDoubleClick != null) onDoubleClick(gameObject); }
 	void OnHover (bool isOver)		{ if (isColliderEnabled && onHover != null) onHover(gameObject, isOver); }
 	void OnPress (bool isPressed)	{ if (isColliderEnabled && onPress != null) onPress(gameObject, isPressed); }
 	void OnSelect (bool selected)	{ if (isColliderEnabled && onSelect != null) onSelect(gameObject, selected); }
-	void OnScroll (float delta)		{ if (isColliderEnabled && onScroll != null) onScroll(gameObject, delta); }
-	void OnDragStart ()				{ if (onDragStart != null) onDragStart(gameObject); }
+	void OnScroll (float delta)	{ if (isColliderEnabled && onScroll != null) onScroll(gameObject, delta); }
+	void OnDragStart ()			{ if (onDragStart != null) onDragStart(gameObject); }
 	void OnDrag (Vector2 delta)		{ if (onDrag != null) onDrag(gameObject, delta); }
 	void OnDragOver ()				{ if (isColliderEnabled && onDragOver != null) onDragOver(gameObject); }
 	void OnDragOut ()				{ if (isColliderEnabled && onDragOut != null) onDragOut(gameObject); }
@@ -64,6 +66,25 @@ public class UIEventListener : MonoBehaviour
 	void OnDrop (GameObject go)		{ if (isColliderEnabled && onDrop != null) onDrop(gameObject, go); }
 	void OnKey (KeyCode key)		{ if (isColliderEnabled && onKey != null) onKey(gameObject, key); }
 	void OnTooltip (bool show)		{ if (isColliderEnabled && onTooltip != null) onTooltip(gameObject, show); }
+
+	public void Clear ()
+	{
+		onSubmit = null;
+		onClick = null;
+		onDoubleClick = null;
+		onHover = null;
+		onPress = null;
+		onSelect = null;
+		onScroll = null;
+		onDragStart = null;
+		onDrag = null;
+		onDragOver = null;
+		onDragOut = null;
+		onDragEnd = null;
+		onDrop = null;
+		onKey = null;
+		onTooltip = null;
+	}
 
 	/// <summary>
 	/// Get or add an event listener to the specified game object.

@@ -1,7 +1,7 @@
-//----------------------------------------------
+//-------------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2016 Tasharen Entertainment
-//----------------------------------------------
+// Copyright © 2011-2018 Tasharen Entertainment Inc
+//-------------------------------------------------
 
 using UnityEngine;
 
@@ -14,7 +14,7 @@ using UnityEngine;
 [AddComponentMenu("NGUI/UI/Stretch")]
 public class UIStretch : MonoBehaviour
 {
-	public enum Style
+	[DoNotObfuscateNGUI] public enum Style
 	{
 		None,
 		Horizontal,

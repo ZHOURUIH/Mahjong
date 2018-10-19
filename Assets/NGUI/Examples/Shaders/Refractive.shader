@@ -1,5 +1,3 @@
-// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
 Shader "Transparent/Refractive"
 {
 	Properties
@@ -42,6 +40,7 @@ Shader "Transparent/Refractive"
 			#pragma exclude_renderers gles
 			#pragma vertex vert
 			#pragma surface surf PPL alpha
+			#pragma target 3.0
 			#include "UnityCG.cginc"
 
 			sampler2D _GrabTexture;

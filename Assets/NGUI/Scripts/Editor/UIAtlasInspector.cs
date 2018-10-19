@@ -1,7 +1,7 @@
-//----------------------------------------------
+//-------------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2016 Tasharen Entertainment
-//----------------------------------------------
+// Copyright © 2011-2018 Tasharen Entertainment Inc
+//-------------------------------------------------
 
 using UnityEngine;
 using UnityEditor;
@@ -48,7 +48,7 @@ public class UIAtlasInspector : Editor
 				UIAtlas atl = sp.atlas;
 				sp.atlas = null;
 				sp.atlas = atl;
-				EditorUtility.SetDirty(sp);
+				NGUITools.SetDirty(sp);
 			}
 		}
 
@@ -61,7 +61,7 @@ public class UIAtlasInspector : Editor
 				UIFont font = lbl.bitmapFont;
 				lbl.bitmapFont = null;
 				lbl.bitmapFont = font;
-				EditorUtility.SetDirty(lbl);
+				NGUITools.SetDirty(lbl);
 			}
 		}
 	}
@@ -273,7 +273,7 @@ public class UIAtlasInspector : Editor
 							{
 								byte[] bytes = se.tex.EncodeToPNG();
 								File.WriteAllBytes(path, bytes);
-								AssetDatabase.ImportAsset(path);
+								//AssetDatabase.ImportAsset(path);
 								if (se.temporaryTexture) DestroyImmediate(se.tex);
 							}
 						}

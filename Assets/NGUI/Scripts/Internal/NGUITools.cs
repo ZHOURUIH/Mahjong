@@ -1,7 +1,7 @@
-//----------------------------------------------
+//-------------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2016 Tasharen Entertainment
-//----------------------------------------------
+// Copyright © 2011-2018 Tasharen Entertainment Inc
+//-------------------------------------------------
 
 using UnityEngine;
 using System;
@@ -9,13 +9,21 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
+public class DoNotObfuscateNGUI : Attribute { }
+
 /// <summary>
 /// Helper class containing generic functions used throughout the UI library.
 /// </summary>
 
 static public class NGUITools
 {
-	static AudioListener mListener;
+	[System.NonSerialized] static AudioListener mListener;
+
+	/// <summary>
+	/// Audio source used to play UI sounds. NGUI will create one for you automatically, but you can specify it yourself as well if you like.
+	/// </summary>
+
+	[System.NonSerialized] static public AudioSource audioSource;
 
 	static bool mLoaded = false;
 	static float mGlobalVolume = 1f;
@@ -54,7 +62,15 @@ static public class NGUITools
 	{
 		get
 		{
+#if !UNITY_4_7
+			if (Application.platform == RuntimePlatform.WebGLPlayer) return false;
+#endif
+#if UNITY_4_7 || UNITY_5_0 || UNITY_5_1 || UNITY_5_2 || UNITY_5_3
+			return Application.platform != RuntimePlatform.WindowsWebPlayer &&
+				Application.platform != RuntimePlatform.OSXWebPlayer;
+#else
 			return true;
+#endif
 		}
 	}
 
@@ -106,7 +122,11 @@ static public class NGUITools
 
 				if (mListener == null)
 				{
-					Camera cam = Camera.main;
+#if W2
+					var cam = MainCamera.instance;
+#else
+					var cam = Camera.main;
+#endif
 					if (cam == null) cam = GameObject.FindObjectOfType(typeof(Camera)) as Camera;
 					if (cam != null) mListener = cam.gameObject.AddComponent<AudioListener>();
 				}
@@ -114,18 +134,22 @@ static public class NGUITools
 
 			if (mListener != null && mListener.enabled && NGUITools.GetActive(mListener.gameObject))
 			{
+				if (!audioSource)
+				{
 #if UNITY_4_3 || UNITY_4_5 || UNITY_4_6 || UNITY_4_7
-				AudioSource source = mListener.audio;
+					audioSource = mListener.audio;
 #else
-				AudioSource source = mListener.GetComponent<AudioSource>();
+					audioSource = mListener.GetComponent<AudioSource>();
 #endif
-				if (source == null) source = mListener.gameObject.AddComponent<AudioSource>();
+					if (audioSource == null) audioSource = mListener.gameObject.AddComponent<AudioSource>();
+				}
+
 #if !UNITY_FLASH
-				source.priority = 50;
-				source.pitch = pitch;
+				audioSource.priority = 50;
+				audioSource.pitch = pitch;
 #endif
-				source.PlayOneShot(clip, volume);
-				return source;
+				audioSource.PlayOneShot(clip, volume);
+				return audioSource;
 			}
 		}
 		return null;
@@ -220,8 +244,11 @@ static public class NGUITools
 			if (cam && (cam.cullingMask & layerMask) != 0)
 				return cam;
 		}
-
+#if W2
+		cam = MainCamera.instance;
+#else
 		cam = Camera.main;
+#endif
 		if (cam && (cam.cullingMask & layerMask) != 0) return cam;
 
 #if UNITY_4_3 || UNITY_FLASH
@@ -343,31 +370,107 @@ static public class NGUITools
 	{
 		if (box != null)
 		{
-			GameObject go = box.gameObject;
-			UIWidget w = go.GetComponent<UIWidget>();
+			var go = box.gameObject;
+			var w = go.GetComponent<UIWidget>();
 
 			if (w != null)
 			{
-				Vector4 dr = w.drawRegion;
+				var dr = w.drawRegion;
 
 				if (dr.x != 0f || dr.y != 0f || dr.z != 1f || dr.w != 1f)
 				{
-					Vector4 region = w.drawingDimensions;
+					var region = w.drawingDimensions;
 					box.center = new Vector3((region.x + region.z) * 0.5f, (region.y + region.w) * 0.5f);
 					box.size = new Vector3(region.z - region.x, region.w - region.y);
 				}
 				else
 				{
-					Vector3[] corners = w.localCorners;
+					var corners = w.localCorners;
 					box.center = Vector3.Lerp(corners[0], corners[2], 0.5f);
 					box.size = corners[2] - corners[0];
 				}
 			}
 			else
 			{
-				Bounds b = NGUIMath.CalculateRelativeWidgetBounds(go.transform, considerInactive);
+				var b = NGUIMath.CalculateRelativeWidgetBounds(go.transform, considerInactive);
 				box.center = b.center;
 				box.size = new Vector3(b.size.x, b.size.y, 0f);
+			}
+#if UNITY_EDITOR
+			NGUITools.SetDirty(box);
+#endif
+		}
+	}
+
+	/// <summary>
+	/// Adjust the widget's collider based on the depth of the widgets, as well as the widget's dimensions.
+	/// </summary>
+
+	static public void UpdateWidgetCollider (UIWidget w)
+	{
+		if (w == null) return;
+		var bc = w.GetComponent<BoxCollider>();
+		if (bc != null) UpdateWidgetCollider(w, bc);
+		else UpdateWidgetCollider(w, w.GetComponent<BoxCollider2D>());
+	}
+
+	/// <summary>
+	/// Adjust the widget's collider based on the depth of the widgets, as well as the widget's dimensions.
+	/// </summary>
+
+	static public void UpdateWidgetCollider (UIWidget w, BoxCollider box)
+	{
+		if (box != null && w != null)
+		{
+			var dr = w.drawRegion;
+
+			if (dr.x != 0f || dr.y != 0f || dr.z != 1f || dr.w != 1f)
+			{
+				var region = w.drawingDimensions;
+				box.center = new Vector3((region.x + region.z) * 0.5f, (region.y + region.w) * 0.5f);
+				box.size = new Vector3(region.z - region.x, region.w - region.y);
+			}
+			else
+			{
+				var corners = w.localCorners;
+				box.center = Vector3.Lerp(corners[0], corners[2], 0.5f);
+				box.size = corners[2] - corners[0];
+			}
+#if UNITY_EDITOR
+			NGUITools.SetDirty(box);
+#endif
+		}
+	}
+
+	// <summary>
+	/// Adjust the widget's collider based on the depth of the widgets, as well as the widget's dimensions.
+	/// </summary>
+
+	static public void UpdateWidgetCollider (UIWidget w, BoxCollider2D box)
+	{
+		if (box != null && w != null)
+		{
+			var dr = w.drawRegion;
+
+			if (dr.x != 0f || dr.y != 0f || dr.z != 1f || dr.w != 1f)
+			{
+				var region = w.drawingDimensions;
+#if UNITY_4_3 || UNITY_4_5 || UNITY_4_6 || UNITY_4_7
+				box.center = new Vector3((region.x + region.z) * 0.5f, (region.y + region.w) * 0.5f);
+#else
+				box.offset = new Vector3((region.x + region.z) * 0.5f, (region.y + region.w) * 0.5f);
+#endif
+				box.size = new Vector3(region.z - region.x, region.w - region.y);
+			}
+			else
+			{
+				var corners = w.localCorners;
+#if UNITY_4_3 || UNITY_4_5 || UNITY_4_6 || UNITY_4_7
+				box.center = Vector3.Lerp(corners[0], corners[2], 0.5f);
+#else
+				box.offset = Vector3.Lerp(corners[0], corners[2], 0.5f);
+#endif
+				box.size = corners[2] - corners[0];
 			}
 #if UNITY_EDITOR
 			NGUITools.SetDirty(box);
@@ -388,13 +491,28 @@ static public class NGUITools
 
 			if (w != null)
 			{
-				Vector3[] corners = w.localCorners;
+				var dr = w.drawRegion;
+
+				if (dr.x != 0f || dr.y != 0f || dr.z != 1f || dr.w != 1f)
+				{
+					var region = w.drawingDimensions;
 #if UNITY_4_3 || UNITY_4_5 || UNITY_4_6 || UNITY_4_7
-				box.center = Vector3.Lerp(corners[0], corners[2], 0.5f);
+					box.center = new Vector3((region.x + region.z) * 0.5f, (region.y + region.w) * 0.5f);
 #else
-				box.offset = Vector3.Lerp(corners[0], corners[2], 0.5f);
+					box.offset = new Vector3((region.x + region.z) * 0.5f, (region.y + region.w) * 0.5f);
 #endif
-				box.size = corners[2] - corners[0];
+					box.size = new Vector3(region.z - region.x, region.w - region.y);
+				}
+				else
+				{
+					var corners = w.localCorners;
+#if UNITY_4_3 || UNITY_4_5 || UNITY_4_6 || UNITY_4_7
+					box.center = Vector3.Lerp(corners[0], corners[2], 0.5f);
+#else
+					box.offset = Vector3.Lerp(corners[0], corners[2], 0.5f);
+#endif
+					box.size = corners[2] - corners[0];
+				}
 			}
 			else
 			{
@@ -453,16 +571,10 @@ static public class NGUITools
 	/// Convenience function that marks the specified object as dirty in the Unity Editor.
 	/// </summary>
 
-	static public void SetDirty (UnityEngine.Object obj)
+	static public void SetDirty (UnityEngine.Object obj, string undoName = "last change")
 	{
 #if UNITY_EDITOR
-		if (obj)
-		{
-			//if (obj is Component) Debug.Log(NGUITools.GetHierarchy((obj as Component).gameObject), obj);
-			//else if (obj is GameObject) Debug.Log(NGUITools.GetHierarchy(obj as GameObject), obj);
-			//else Debug.Log("Hmm... " + obj.GetType(), obj);
-			UnityEditor.EditorUtility.SetDirty(obj);
-		}
+		if (obj) UnityEditor.EditorUtility.SetDirty(obj);
 #endif
 	}
 
@@ -470,17 +582,30 @@ static public class NGUITools
 	/// Add a new child game object.
 	/// </summary>
 
-	static public GameObject AddChild (this GameObject parent) { return AddChild(parent, true); }
+	static public GameObject AddChild (GameObject parent) { return AddChild(parent, true, -1); }
 
 	/// <summary>
 	/// Add a new child game object.
 	/// </summary>
 
-	static public GameObject AddChild (this GameObject parent, bool undo)
+	static public GameObject AddChild (this GameObject parent, int layer) { return AddChild(parent, true, layer); }
+
+	/// <summary>
+	/// Add a new child game object.
+	/// </summary>
+
+	static public GameObject AddChild (this GameObject parent, bool undo) { return AddChild(parent, undo, -1); }
+
+	/// <summary>
+	/// Add a new child game object.
+	/// </summary>
+
+	static public GameObject AddChild (this GameObject parent, bool undo, int layer)
 	{
-		GameObject go = new GameObject();
+		var go = new GameObject();
 #if UNITY_EDITOR
-		if (undo) UnityEditor.Undo.RegisterCreatedObjectUndo(go, "Create Object");
+		if (undo && !Application.isPlaying)
+			UnityEditor.Undo.RegisterCreatedObjectUndo(go, "Create Object");
 #endif
 		if (parent != null)
 		{
@@ -489,7 +614,8 @@ static public class NGUITools
 			t.localPosition = Vector3.zero;
 			t.localRotation = Quaternion.identity;
 			t.localScale = Vector3.one;
-			go.layer = parent.layer;
+			if (layer == -1) go.layer = parent.layer;
+			else if (layer > -1 && layer < 32) go.layer = layer;
 		}
 		return go;
 	}
@@ -498,22 +624,60 @@ static public class NGUITools
 	/// Instantiate an object and add it to the specified parent.
 	/// </summary>
 
-	static public GameObject AddChild (this GameObject parent, GameObject prefab)
+	static public GameObject AddChild (this GameObject parent, GameObject prefab) { return parent.AddChild(prefab, -1); }
+
+	/// <summary>
+	/// Instantiate an object and add it to the specified parent.
+	/// </summary>
+
+	static public GameObject AddChild (this GameObject parent, GameObject prefab, int layer)
 	{
-		GameObject go = GameObject.Instantiate(prefab) as GameObject;
+#if UNITY_5_5_OR_NEWER
+		var go = (parent != null) ? UnityEngine.Object.Instantiate(prefab, parent.transform) : UnityEngine.Object.Instantiate(prefab);
 #if UNITY_EDITOR
-		UnityEditor.Undo.RegisterCreatedObjectUndo(go, "Create Object");
+		if (!Application.isPlaying) UnityEditor.Undo.RegisterCreatedObjectUndo(go, "Create Object");
 #endif
-		if (go != null && parent != null)
+		if (go != null)
 		{
-			Transform t = go.transform;
-			t.parent = parent.transform;
+			var t = go.transform;
+			go.name = prefab.name;
+
+			if (parent != null)
+			{
+				if (layer == -1) go.layer = parent.layer;
+				else if (layer > -1 && layer < 32) go.layer = layer;
+			}
+
 			t.localPosition = Vector3.zero;
 			t.localRotation = Quaternion.identity;
 			t.localScale = Vector3.one;
-			go.layer = parent.layer;
+			go.SetActive(true);
 		}
 		return go;
+#else
+		var go = GameObject.Instantiate(prefab) as GameObject;
+#if UNITY_EDITOR
+		if (!Application.isPlaying) UnityEditor.Undo.RegisterCreatedObjectUndo(go, "Create Object");
+#endif
+		if (go != null)
+		{
+			Transform t = go.transform;
+			go.name = prefab.name;
+
+			if (parent != null)
+			{
+				t.parent = parent.transform;
+				if (layer == -1) go.layer = parent.layer;
+				else if (layer > -1 && layer < 32) go.layer = layer;
+			}
+
+			t.localPosition = Vector3.zero;
+			t.localRotation = Quaternion.identity;
+			t.localScale = Vector3.one;
+			go.SetActive(true);
+		}
+		return go;
+#endif
 	}
 
 	/// <summary>
@@ -522,10 +686,30 @@ static public class NGUITools
 
 	static public int CalculateRaycastDepth (GameObject go)
 	{
-		UIWidget w = go.GetComponent<UIWidget>();
-		if (w != null) return w.raycastDepth;
+#if UNITY_5_5_OR_NEWER
+		UnityEngine.Profiling.Profiler.BeginSample("Editor-only GC allocation (GetComponent)");
+#else
+		Profiler.BeginSample("Editor-only GC allocation (GetComponent)");
+#endif
+		var w = go.GetComponent<UIWidget>();
+		
+		if (w != null)
+		{
+#if UNITY_5_5_OR_NEWER
+			UnityEngine.Profiling.Profiler.EndSample();
+#else
+			Profiler.EndSample();
+#endif
+			return w.raycastDepth;
+		}
 
-		UIWidget[] widgets = go.GetComponentsInChildren<UIWidget>();
+		var widgets = go.GetComponentsInChildren<UIWidget>();
+#if UNITY_5_5_OR_NEWER
+		UnityEngine.Profiling.Profiler.EndSample();
+#else
+		Profiler.EndSample();
+#endif
+		
 		if (widgets.Length == 0) return 0;
 
 		int depth = int.MaxValue;
@@ -830,6 +1014,8 @@ static public class NGUITools
 				go.name = "UI Root";
 				root.scalingStyle = UIRoot.Scaling.Flexible;
 			}
+
+			root.UpdateScale();
 		}
 
 		// Find the first panel
@@ -890,7 +1076,7 @@ static public class NGUITools
 			// Add a panel to the root
 			panel = root.gameObject.AddComponent<UIPanel>();
 #if UNITY_EDITOR
-			UnityEditor.Selection.activeGameObject = panel.gameObject;
+			if (!Application.isPlaying) UnityEditor.Selection.activeGameObject = panel.gameObject;
 #endif
 		}
 
@@ -1018,69 +1204,51 @@ static public class NGUITools
 
 	/// <summary>
 	/// Finds the specified component on the game object or one of its parents.
+	/// This function has become obsolete with Unity 4.3.
 	/// </summary>
 
 	static public T FindInParents<T> (GameObject go) where T : Component
 	{
 		if (go == null) return null;
-		// Commented out because apparently it causes Unity 4.5.3 to lag horribly:
-		// http://www.tasharen.com/forum/index.php?topic=10882.0
-//#if UNITY_4_3
- #if UNITY_FLASH
-		object comp = go.GetComponent<T>();
- #else
-		T comp = go.GetComponent<T>();
- #endif
-		if (comp == null)
-		{
-			Transform t = go.transform.parent;
 
-			while (t != null && comp == null)
-			{
-				comp = t.gameObject.GetComponent<T>();
-				t = t.parent;
-			}
-		}
- #if UNITY_FLASH
+#if UNITY_5_5_OR_NEWER
+		UnityEngine.Profiling.Profiler.BeginSample("Editor-only GC allocation (GetComponent)");
+		var comp = go.GetComponentInParent<T>();
+		UnityEngine.Profiling.Profiler.EndSample();
+#else
+		Profiler.BeginSample("Editor-only GC allocation (GetComponent)");
+		var comp = go.GetComponentInParent<T>();
+		Profiler.EndSample();
+#endif
+#if UNITY_FLASH
 		return (T)comp;
- #else
+#else
 		return comp;
- #endif
-//#else
-//		return go.GetComponentInParent<T>();
-//#endif
+#endif
 	}
 
 	/// <summary>
 	/// Finds the specified component on the game object or one of its parents.
+	/// This function has become obsolete with Unity 4.3.
 	/// </summary>
 
 	static public T FindInParents<T> (Transform trans) where T : Component
 	{
 		if (trans == null) return null;
-#if UNITY_4_3
- #if UNITY_FLASH
-		object comp = trans.GetComponent<T>();
- #else
-		T comp = trans.GetComponent<T>();
- #endif
-		if (comp == null)
-		{
-			Transform t = trans.transform.parent;
 
-			while (t != null && comp == null)
-			{
-				comp = t.gameObject.GetComponent<T>();
-				t = t.parent;
-			}
-		}
- #if UNITY_FLASH
-		return (T)comp;
- #else
-		return comp;
- #endif
+#if UNITY_5_5_OR_NEWER
+		UnityEngine.Profiling.Profiler.BeginSample("Editor-only GC allocation (GetComponent)");
+		var comp = trans.GetComponentInParent<T>();
+		UnityEngine.Profiling.Profiler.EndSample();
 #else
-		return trans.GetComponentInParent<T>();
+		Profiler.BeginSample("Editor-only GC allocation (GetComponent)");
+		var comp = trans.GetComponentInParent<T>();
+		Profiler.EndSample();
+#endif
+#if UNITY_FLASH
+		return (T)comp;
+#else
+		return comp;
 #endif
 	}
 
@@ -1181,14 +1349,17 @@ static public class NGUITools
 
 	static public bool IsChild (Transform parent, Transform child)
 	{
-		if (parent == null || child == null) return false;
+		return child.IsChildOf(parent);
 
-		while (child != null)
-		{
-			if (child == parent) return true;
-			child = child.parent;
-		}
-		return false;
+		// Legacy way of doing it prior to Unity adding IsChildOf
+		//if (parent == null || child == null) return false;
+
+		//while (child != null)
+		//{
+		//    if (child == parent) return true;
+		//    child = child.parent;
+		//}
+		//return false;
 	}
 
 	/// <summary>
@@ -1393,6 +1564,31 @@ static public class NGUITools
 	}
 
 	/// <summary>
+	/// Given the root widget, adjust its position so that it fits on the screen.
+	/// </summary>
+
+	static public void FitOnScreen (this Camera cam, Transform t, bool considerInactive = false, bool considerChildren = true)
+	{
+		var bounds = NGUIMath.CalculateRelativeWidgetBounds(t, t, considerInactive, considerChildren);
+
+		var sp = cam.WorldToScreenPoint(t.position);
+		var min = sp + bounds.min;
+		var max = sp + bounds.max;
+
+		var sw = Screen.width;
+		var sh = Screen.height;
+		var offset = Vector2.zero;
+
+		if (min.x < 0f) offset.x = -min.x;
+		else if (max.x > sw) offset.x = sw - max.x;
+
+		if (min.y < 0f) offset.y = -min.y;
+		else if (max.y > sh) offset.y = sh - max.y;
+
+		if (offset.sqrMagnitude > 0f) t.localPosition += new Vector3(offset.x, offset.y, 0f);
+	}
+
+	/// <summary>
 	/// Fit the specified NGUI hierarchy on the screen.
 	/// Example: uiCamera.FitOnScreen(contentObjectTransform, UICamera.lastEventPosition);
 	/// </summary>
@@ -1407,10 +1603,10 @@ static public class NGUITools
 	/// Example: uiCamera.FitOnScreen(rootObjectTransform, contentObjectTransform, UICamera.lastEventPosition);
 	/// </summary>
 
-	static public void FitOnScreen (this Camera cam, Transform transform, Transform content, Vector3 pos)
+	static public void FitOnScreen (this Camera cam, Transform transform, Transform content, Vector3 pos, bool considerInactive = false)
 	{
 		Bounds b;
-		cam.FitOnScreen(transform, content, pos, out b);
+		cam.FitOnScreen(transform, content, pos, out b, considerInactive);
 	}
 
 	/// <summary>
@@ -1418,9 +1614,9 @@ static public class NGUITools
 	/// Example: uiCamera.FitOnScreen(rootObjectTransform, contentObjectTransform, UICamera.lastEventPosition);
 	/// </summary>
 
-	static public void FitOnScreen (this Camera cam, Transform transform, Transform content, Vector3 pos, out Bounds bounds)
+	static public void FitOnScreen (this Camera cam, Transform transform, Transform content, Vector3 pos, out Bounds bounds, bool considerInactive = false)
 	{
-		bounds = NGUIMath.CalculateRelativeWidgetBounds(transform, content);
+		bounds = NGUIMath.CalculateRelativeWidgetBounds(transform, content, considerInactive);
 
 		Vector3 min = bounds.min;
 		Vector3 max = bounds.max;
@@ -1845,7 +2041,7 @@ static public class NGUITools
 #if UNITY_EDITOR
 	static int mSizeFrame = -1;
 	static Func<Vector2> s_GetSizeOfMainGameView;
-	static Vector2 mGameSize = Vector2.one;
+	[System.NonSerialized] static Vector2 mGameSize = Vector2.one;
 	[System.NonSerialized] static bool mCheckedMainViewFunc = false;
 
 	/// <summary>
@@ -1860,6 +2056,11 @@ static public class NGUITools
 
 			if (mSizeFrame != frame || !Application.isPlaying)
 			{
+#if UNITY_5_5_OR_NEWER
+				UnityEngine.Profiling.Profiler.BeginSample("Editor-only GC allocation (NGUITools.screenSize)");
+#else
+				Profiler.BeginSample("Editor-only GC allocation (NGUITools.screenSize)");
+#endif
 				mSizeFrame = frame;
 
 				if (s_GetSizeOfMainGameView == null && !mCheckedMainViewFunc)
@@ -1890,9 +2091,22 @@ static public class NGUITools
 
 				if (s_GetSizeOfMainGameView != null)
 				{
+//#if UNITY_EDITOR_OSX
+					// There seems to be a Unity 5.4 bug that returns invalid screen size when the mouse is clicked (wtf?) on OSX
+					//if (mGameSize.x == 1f && mGameSize.y == 1f) mGameSize = s_GetSizeOfMainGameView();
+//#else
 					mGameSize = s_GetSizeOfMainGameView();
+//#endif
 				}
 				else mGameSize = new Vector2(Screen.width, Screen.height);
+#if UNITY_5_5_OR_NEWER
+				UnityEngine.Profiling.Profiler.EndSample();
+#else
+				Profiler.EndSample();
+#endif
+				#if UNITY_EDITOR && W2
+				if (mGameSize.magnitude > 4000f) Debug.LogWarning(mGameSize);
+				#endif
 			}
 			return mGameSize;
 		}
@@ -2070,15 +2284,15 @@ static public class NGUITools
 		switch (key)
 		{
 			case KeyCode.None: return null;
-			case KeyCode.Backspace: return "BS";
+			case KeyCode.Backspace: return "Backspace";
 			case KeyCode.Tab: return "Tab";
-			case KeyCode.Clear: return "Clr";
-			case KeyCode.Return: return "NT";
+			case KeyCode.Clear: return "Clear";
+			case KeyCode.Return: return "Return";
 			case KeyCode.Pause: return "PS";
 			case KeyCode.Escape: return "Esc";
-			case KeyCode.Space: return "SP";
+			case KeyCode.Space: return "Space";
 			case KeyCode.Exclaim: return "!";
-			case KeyCode.DoubleQuote: return "\"";
+			case KeyCode.DoubleQuote: return "''";
 			case KeyCode.Hash: return "#";
 			case KeyCode.Dollar: return "$";
 			case KeyCode.Ampersand: return "&";
@@ -2127,7 +2341,7 @@ static public class NGUITools
 			case KeyCode.K: return "K";
 			case KeyCode.L: return "L";
 			case KeyCode.M: return "M";
-			case KeyCode.N: return "N0";
+			case KeyCode.N: return "N";
 			case KeyCode.O: return "O";
 			case KeyCode.P: return "P";
 			case KeyCode.Q: return "Q";
@@ -2222,6 +2436,164 @@ static public class NGUITools
 		return null;
 	}
 
+	/// <summary>
+	/// The opposite of KeyToCaption() function that converts the string representation to its KeyCode value.
+	/// </summary>
+
+	static public KeyCode CaptionToKey (string caption)
+	{
+		if (string.IsNullOrEmpty(caption)) return KeyCode.None;
+		if (caption == "Backspace") return KeyCode.Backspace;
+		if (caption == "Tab") return KeyCode.Tab;
+		if (caption == "Clear") return KeyCode.Clear;
+		if (caption == "Return") return KeyCode.Return;
+		if (caption == "Pause") return KeyCode.Pause;
+		if (caption == "Esc") return KeyCode.Escape;
+		if (caption == "Space") return KeyCode.Space;
+		if (caption == "!") return KeyCode.Exclaim;
+		if (caption == "''") return KeyCode.DoubleQuote;
+		if (caption == "#") return KeyCode.Hash;
+		if (caption == "$") return KeyCode.Dollar;
+		if (caption == "&") return KeyCode.Ampersand;
+		if (caption == "'") return KeyCode.Quote;
+		if (caption == "(") return KeyCode.LeftParen;
+		if (caption == ")") return KeyCode.RightParen;
+		if (caption == "*") return KeyCode.Asterisk;
+		if (caption == "+") return KeyCode.Plus;
+		if (caption == ",") return KeyCode.Comma;
+		if (caption == "-") return KeyCode.Minus;
+		if (caption == ".") return KeyCode.Period;
+		if (caption == "/") return KeyCode.Slash;
+		if (caption == "0") return KeyCode.Alpha0;
+		if (caption == "1") return KeyCode.Alpha1;
+		if (caption == "2") return KeyCode.Alpha2;
+		if (caption == "3") return KeyCode.Alpha3;
+		if (caption == "4") return KeyCode.Alpha4;
+		if (caption == "5") return KeyCode.Alpha5;
+		if (caption == "6") return KeyCode.Alpha6;
+		if (caption == "7") return KeyCode.Alpha7;
+		if (caption == "8") return KeyCode.Alpha8;
+		if (caption == "9") return KeyCode.Alpha9;
+		if (caption == ";//") return KeyCode.Colon;
+		if (caption == ";") return KeyCode.Semicolon;
+		if (caption == "<") return KeyCode.Less;
+		if (caption == "=") return KeyCode.Equals;
+		if (caption == ">") return KeyCode.Greater;
+		if (caption == "?") return KeyCode.Question;
+		if (caption == "@") return KeyCode.At;
+		if (caption == "[") return KeyCode.LeftBracket;
+		if (caption == "\\") return KeyCode.Backslash;
+		if (caption == "]") return KeyCode.RightBracket;
+		if (caption == "^") return KeyCode.Caret;
+		if (caption == "_") return KeyCode.Underscore;
+		if (caption == "`") return KeyCode.BackQuote;
+		if (caption == "A") return KeyCode.A;
+		if (caption == "B") return KeyCode.B;
+		if (caption == "C") return KeyCode.C;
+		if (caption == "D") return KeyCode.D;
+		if (caption == "E") return KeyCode.E;
+		if (caption == "F") return KeyCode.F;
+		if (caption == "G") return KeyCode.G;
+		if (caption == "H") return KeyCode.H;
+		if (caption == "I") return KeyCode.I;
+		if (caption == "J") return KeyCode.J;
+		if (caption == "L") return KeyCode.K;
+		if (caption == "L") return KeyCode.L;
+		if (caption == "M") return KeyCode.M;
+		if (caption == "N") return KeyCode.N;
+		if (caption == "O") return KeyCode.O;
+		if (caption == "P") return KeyCode.P;
+		if (caption == "Q") return KeyCode.Q;
+		if (caption == "R") return KeyCode.R;
+		if (caption == "S") return KeyCode.S;
+		if (caption == "T") return KeyCode.T;
+		if (caption == "U") return KeyCode.U;
+		if (caption == "V") return KeyCode.V;
+		if (caption == "W") return KeyCode.W;
+		if (caption == "X") return KeyCode.X;
+		if (caption == "Y") return KeyCode.Y;
+		if (caption == "Z") return KeyCode.Z;
+		if (caption == "Del") return KeyCode.Delete;
+		if (caption == "K0") return KeyCode.Keypad0;
+		if (caption == "K1") return KeyCode.Keypad1;
+		if (caption == "K2") return KeyCode.Keypad2;
+		if (caption == "K3") return KeyCode.Keypad3;
+		if (caption == "K4") return KeyCode.Keypad4;
+		if (caption == "K5") return KeyCode.Keypad5;
+		if (caption == "K6") return KeyCode.Keypad6;
+		if (caption == "K7") return KeyCode.Keypad7;
+		if (caption == "K8") return KeyCode.Keypad8;
+		if (caption == "K9") return KeyCode.Keypad9;
+		if (caption == ".") return KeyCode.KeypadPeriod;
+		if (caption == "/") return KeyCode.KeypadDivide;
+		if (caption == "*") return KeyCode.KeypadMultiply;
+		if (caption == "-") return KeyCode.KeypadMinus;
+		if (caption == "+") return KeyCode.KeypadPlus;
+		if (caption == "NT") return KeyCode.KeypadEnter;
+		if (caption == "=") return KeyCode.KeypadEquals;
+		if (caption == "UP") return KeyCode.UpArrow;
+		if (caption == "DN") return KeyCode.DownArrow;
+		if (caption == "LT") return KeyCode.RightArrow;
+		if (caption == "RT") return KeyCode.LeftArrow;
+		if (caption == "Ins") return KeyCode.Insert;
+		if (caption == "Home") return KeyCode.Home;
+		if (caption == "End") return KeyCode.End;
+		if (caption == "PU") return KeyCode.PageUp;
+		if (caption == "PD") return KeyCode.PageDown;
+		if (caption == "F1") return KeyCode.F1;
+		if (caption == "F2") return KeyCode.F2;
+		if (caption == "F3") return KeyCode.F3;
+		if (caption == "F4") return KeyCode.F4;
+		if (caption == "F5") return KeyCode.F5;
+		if (caption == "F6") return KeyCode.F6;
+		if (caption == "F7") return KeyCode.F7;
+		if (caption == "F8") return KeyCode.F8;
+		if (caption == "F9") return KeyCode.F9;
+		if (caption == "F10") return KeyCode.F10;
+		if (caption == "F11") return KeyCode.F11;
+		if (caption == "F12") return KeyCode.F12;
+		if (caption == "F13") return KeyCode.F13;
+		if (caption == "F14") return KeyCode.F14;
+		if (caption == "F15") return KeyCode.F15;
+		if (caption == "Num") return KeyCode.Numlock;
+		if (caption == "Cap") return KeyCode.CapsLock;
+		if (caption == "Scr") return KeyCode.ScrollLock;
+		if (caption == "RS") return KeyCode.RightShift;
+		if (caption == "LS") return KeyCode.LeftShift;
+		if (caption == "RC") return KeyCode.RightControl;
+		if (caption == "LC") return KeyCode.LeftControl;
+		if (caption == "RA") return KeyCode.RightAlt;
+		if (caption == "LA") return KeyCode.LeftAlt;
+		if (caption == "M0") return KeyCode.Mouse0;
+		if (caption == "M1") return KeyCode.Mouse1;
+		if (caption == "M2") return KeyCode.Mouse2;
+		if (caption == "M3") return KeyCode.Mouse3;
+		if (caption == "M4") return KeyCode.Mouse4;
+		if (caption == "M5") return KeyCode.Mouse5;
+		if (caption == "M6") return KeyCode.Mouse6;
+		if (caption == "(A)") return KeyCode.JoystickButton0;
+		if (caption == "(B)") return KeyCode.JoystickButton1;
+		if (caption == "(X)") return KeyCode.JoystickButton2;
+		if (caption == "(Y)") return KeyCode.JoystickButton3;
+		if (caption == "(RB)") return KeyCode.JoystickButton4;
+		if (caption == "(LB)") return KeyCode.JoystickButton5;
+		if (caption == "(Back)") return KeyCode.JoystickButton6;
+		if (caption == "(Start)") return KeyCode.JoystickButton7;
+		if (caption == "(LS)") return KeyCode.JoystickButton8;
+		if (caption == "(RS)") return KeyCode.JoystickButton9;
+		if (caption == "(J10)") return KeyCode.JoystickButton10;
+		if (caption == "(J11)") return KeyCode.JoystickButton11;
+		if (caption == "(J12)") return KeyCode.JoystickButton12;
+		if (caption == "(J13)") return KeyCode.JoystickButton13;
+		if (caption == "(J14)") return KeyCode.JoystickButton14;
+		if (caption == "(J15)") return KeyCode.JoystickButton15;
+		if (caption == "(J16)") return KeyCode.JoystickButton16;
+		if (caption == "(J17)") return KeyCode.JoystickButton17;
+		if (caption == "(J18)") return KeyCode.JoystickButton18;
+		if (caption == "(J19)") return KeyCode.JoystickButton19;
+		return KeyCode.None;
+	}
+
 	static Dictionary<string, UIWidget> mWidgets = new Dictionary<string, UIWidget>();
 	static UIPanel mRoot;
 	static GameObject mGo;
@@ -2293,31 +2665,34 @@ static public class NGUITools
 
 		if (mColorSpace == ColorSpace.Linear)
 		{
-			c.r = Mathf.GammaToLinearSpace(c.r);
-			c.g = Mathf.GammaToLinearSpace(c.g);
-			c.b = Mathf.GammaToLinearSpace(c.b);
-			c.a = Mathf.GammaToLinearSpace(c.a);
+			return new Color(
+				Mathf.GammaToLinearSpace(c.r),
+				Mathf.GammaToLinearSpace(c.g),
+				Mathf.GammaToLinearSpace(c.b),
+				Mathf.GammaToLinearSpace(c.a));
 		}
 		return c;
 	}
 
 	/// <summary>
-	/// Transforms this color from gamma to linear space, but only if the active color space is actually set to linear.
+	/// Transforms this color from linear to gamma space, but only if the active color space is actually set to linear.
 	/// </summary>
 
-	static public Color GammaToLinearSpace (this Vector4 v)
+	static public Color LinearToGammaSpace (this Color c)
 	{
 		if (mColorSpace == ColorSpace.Uninitialized)
 			mColorSpace = QualitySettings.activeColorSpace;
 
 		if (mColorSpace == ColorSpace.Linear)
 		{
-			v.x = Mathf.GammaToLinearSpace(v.x);
-			v.y = Mathf.GammaToLinearSpace(v.y);
-			v.z = Mathf.GammaToLinearSpace(v.z);
-			v.w = Mathf.GammaToLinearSpace(v.w);
+			return new Color(
+				Mathf.LinearToGammaSpace(c.r),
+				Mathf.LinearToGammaSpace(c.g),
+				Mathf.LinearToGammaSpace(c.b),
+				Mathf.LinearToGammaSpace(c.a));
 		}
-		return v;
+		return c;
 	}
+
 	static ColorSpace mColorSpace = ColorSpace.Uninitialized;
 }

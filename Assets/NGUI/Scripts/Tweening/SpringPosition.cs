@@ -1,7 +1,7 @@
-//----------------------------------------------
+//-------------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2016 Tasharen Entertainment
-//----------------------------------------------
+// Copyright © 2011-2018 Tasharen Entertainment Inc
+//-------------------------------------------------
 
 using UnityEngine;
 
@@ -134,12 +134,7 @@ public class SpringPosition : MonoBehaviour
 		sp.target = pos;
 		sp.strength = strength;
 		sp.onFinished = null;
-
-		if (!sp.enabled)
-		{
-			sp.mThreshold = 0f;
-			sp.enabled = true;
-		}
+		if (!sp.enabled) sp.enabled = true;
 		return sp;
 	}
 }

@@ -1,7 +1,7 @@
-//----------------------------------------------
+//-------------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2016 Tasharen Entertainment
-//----------------------------------------------
+// Copyright © 2011-2018 Tasharen Entertainment Inc
+//-------------------------------------------------
 
 using UnityEngine;
 
@@ -13,7 +13,7 @@ using UnityEngine;
 [AddComponentMenu("NGUI/UI/Anchor")]
 public class UIAnchor : MonoBehaviour
 {
-	public enum Side
+	[DoNotObfuscateNGUI] public enum Side
 	{
 		BottomLeft,
 		Left,
@@ -118,6 +118,7 @@ public class UIAnchor : MonoBehaviour
 	void Update ()
 	{
 		if (mAnim != null && mAnim.enabled && mAnim.isPlaying) return;
+		if (mTrans == null) return;
 
 		bool useCamera = false;
 

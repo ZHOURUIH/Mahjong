@@ -1,7 +1,7 @@
-//----------------------------------------------
+//-------------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2016 Tasharen Entertainment
-//----------------------------------------------
+// Copyright © 2011-2018 Tasharen Entertainment Inc
+//-------------------------------------------------
 
 using UnityEngine;
 using System.Text;
@@ -274,6 +274,7 @@ public class ByteReader
 				if (insideQuotes) continue;
 				mTemp.Add(line.Substring(wordStart, line.Length - wordStart));
 			}
+			else mTemp.Add("");
 			return mTemp;
 		}
 		return null;

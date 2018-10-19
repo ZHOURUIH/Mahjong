@@ -1,7 +1,7 @@
-//----------------------------------------------
+//-------------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2016 Tasharen Entertainment
-//----------------------------------------------
+// Copyright © 2011-2018 Tasharen Entertainment Inc
+//-------------------------------------------------
 
 using System;
 using System.IO;
@@ -122,7 +122,7 @@ static public class FreeType
 	public const int FT_LOAD_SBITS_ONLY = 16384;
 	public const int FT_LOAD_VERTICAL_LAYOUT = 16;
 
-	public enum FT_Glyph_Format
+	[DoNotObfuscateNGUI] public enum FT_Glyph_Format
 	{
 		FT_GLYPH_FORMAT_NONE,
 		FT_GLYPH_FORMAT_COMPOSITE = 1668246896,
@@ -131,7 +131,7 @@ static public class FreeType
 		FT_GLYPH_FORMAT_PLOTTER = 1886154612
 	}
 
-	public enum FT_Render_Mode
+	[DoNotObfuscateNGUI] public enum FT_Render_Mode
 	{
 		FT_RENDER_MODE_NORMAL,
 		FT_RENDER_MODE_LIGHT,

@@ -1,5 +1,3 @@
-// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
 Shader "Unlit/Transparent Packed"
 {
 	Properties
@@ -16,6 +14,7 @@ Shader "Unlit/Transparent Packed"
 			"Queue" = "Transparent"
 			"IgnoreProjector" = "True"
 			"RenderType" = "Transparent"
+			"DisableBatching" = "True"
 		}
 		
 		Pass
@@ -25,7 +24,7 @@ Shader "Unlit/Transparent Packed"
 			ZWrite Off
 			Offset -1, -1
 			Fog { Mode Off }
-			ColorMask RGB
+			//ColorMask RGB
 			Blend SrcAlpha OneMinusSrcAlpha
 
 			CGPROGRAM

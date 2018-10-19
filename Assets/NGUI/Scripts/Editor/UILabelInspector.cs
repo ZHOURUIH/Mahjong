@@ -1,7 +1,7 @@
-//----------------------------------------------
+//-------------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2016 Tasharen Entertainment
-//----------------------------------------------
+// Copyright © 2011-2018 Tasharen Entertainment Inc
+//-------------------------------------------------
 
 #if !UNITY_FLASH
 #define DYNAMIC_FONT
@@ -18,7 +18,7 @@ using UnityEditor;
 [CustomEditor(typeof(UILabel), true)]
 public class UILabelInspector : UIWidgetInspector
 {
-	public enum FontType
+	[DoNotObfuscateNGUI] public enum FontType
 	{
 		NGUI,
 		Unity,
@@ -127,6 +127,8 @@ public class UILabelInspector : UIWidgetInspector
 				"When you do run into such issues, please submit a Bug Report to Unity via Help -> Report a Bug (as this is will be a Unity bug, not an NGUI one).", MessageType.Warning);
 		}
 
+		NGUIEditorTools.DrawProperty("Material", serializedObject, "mMat");
+
 		EditorGUI.BeginDisabledGroup(!isValid);
 		{
 			UIFont uiFont = (fnt != null) ? fnt.objectReferenceValue as UIFont : null;
@@ -154,8 +156,6 @@ public class UILabelInspector : UIWidgetInspector
 					EditorGUI.EndDisabledGroup();
 				}
 				GUILayout.EndHorizontal();
-
-				NGUIEditorTools.DrawProperty("Material", serializedObject, "mMaterial");
 			}
 			else if (uiFont != null)
 			{
@@ -163,12 +163,19 @@ public class UILabelInspector : UIWidgetInspector
 				SerializedProperty prop = NGUIEditorTools.DrawProperty("Font Size", serializedObject, "mFontSize", GUILayout.Width(142f));
 
 				EditorGUI.BeginDisabledGroup(true);
+
 				if (!serializedObject.isEditingMultipleObjects)
 				{
-					if (mLabel.overflowMethod == UILabel.Overflow.ShrinkContent)
-						GUILayout.Label(" Actual: " + mLabel.finalFontSize + "/" + mLabel.defaultFontSize);
-					else GUILayout.Label(" Default: " + mLabel.defaultFontSize);
+					var printed = mLabel.finalFontSize;
+					var def = mLabel.defaultFontSize;
+
+					if (mLabel.overflowMethod == UILabel.Overflow.ShrinkContent && printed != mLabel.fontSize)
+					{
+						GUILayout.Label(" Printed: " + printed);
+					}
+					else if (printed != def) GUILayout.Label(" Default: " + def);
 				}
+
 				EditorGUI.EndDisabledGroup();
 
 				NGUISettings.fontSize = prop.intValue;
@@ -231,7 +238,24 @@ public class UILabelInspector : UIWidgetInspector
 			{
 				GUILayout.BeginHorizontal();
 				SerializedProperty s = NGUIEditorTools.DrawPaddedProperty("Max Width", serializedObject, "mOverflowWidth");
-				if (s != null && s.intValue < 1) GUILayout.Label("unlimited");
+
+				if (s != null)
+				{
+					if (s.intValue < 0) s.intValue = 0;
+					if (s.intValue == 0) GUILayout.Label("unlimited");
+				}
+
+				GUILayout.EndHorizontal();
+
+				GUILayout.BeginHorizontal();
+				s = NGUIEditorTools.DrawPaddedProperty("Max Height", serializedObject, "mOverflowHeight");
+
+				if (s != null)
+				{
+					if (s.intValue < 0) s.intValue = 0;
+					if (s.intValue == 0) GUILayout.Label("unlimited");
+				}
+
 				GUILayout.EndHorizontal();
 			}
 

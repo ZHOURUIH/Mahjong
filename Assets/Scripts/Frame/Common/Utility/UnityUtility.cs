@@ -305,14 +305,14 @@ public class UnityUtility : FrameComponent
 	{
 		Vector3 screenPos = worldPosToScreenPos(worldPos);
 		return screenPos.z >= 0.0f && 
-			(screenPos.x > 0 && screenPos.x < Screen.currentResolution.width) && 
-			(screenPos.y > 0 && screenPos.y < Screen.currentResolution.height);
+			(screenPos.x > 0 && screenPos.x < UnityEngine.Screen.currentResolution.width) && 
+			(screenPos.y > 0 && screenPos.y < UnityEngine.Screen.currentResolution.height);
 	}
 	public static Vector2 screenPosToWindowPos(Vector2 screenPos, txUIObject parent, bool screenCenterOsZero = false, bool isNGUI = true)
 	{
 		Camera camera = mCameraManager.getUICamera().getCamera();
-		screenPos.x = screenPos.x / camera.pixelWidth * Screen.currentResolution.width;
-		screenPos.y = screenPos.y / camera.pixelHeight * Screen.currentResolution.height;
+		screenPos.x = screenPos.x / camera.pixelWidth * UnityEngine.Screen.currentResolution.width;
+		screenPos.y = screenPos.y / camera.pixelHeight * UnityEngine.Screen.currentResolution.height;
 		Vector3 parentWorldPosition = parent != null ? parent.getWorldPosition() : Vector3.zero;
 		txUIObject root = isNGUI ? mLayoutManager.getNGUIRoot() : mLayoutManager.getUGUIRoot();
 		Vector3 scale = root.getScale();
@@ -323,7 +323,7 @@ public class UnityUtility : FrameComponent
 		Vector2 windowPos = new Vector2(pos.x / parentWorldScale.x, pos.y / parentWorldScale.y);
 		if(screenCenterOsZero)
 		{
-			windowPos -= new Vector2(Screen.currentResolution.width / 2.0f, Screen.currentResolution.height / 2.0f);
+			windowPos -= new Vector2(UnityEngine.Screen.currentResolution.width / 2.0f, UnityEngine.Screen.currentResolution.height / 2.0f);
 		}
 		return windowPos;
 	}

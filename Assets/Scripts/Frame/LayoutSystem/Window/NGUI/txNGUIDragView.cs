@@ -53,8 +53,8 @@ public class txNGUIDragView : txNGUITexture
 			Vector3 curPosition = getPosition();
 			curPosition += mMoveNormal * mMoveSpeed * mMoveSpeedScale * elapsedTime;
 			// 获得第一个带widget的父节点的rect
-			UIRect rect = CustomAnchor.findParentRect(mObject);
-			Vector2 parentWidgetSize = CustomAnchor.getRectSize(rect);
+			UIRect rect = WidgetUtility.findParentRect(mObject);
+			Vector2 parentWidgetSize = WidgetUtility.getRectSize(rect);
 			// 计算父节点的世界缩放
 			Vector3 worldScale = MathUtility.getMatrixScale(mTransform.parent.localToWorldMatrix);
 			txUIObject root = mLayout.isNGUI() ? mLayoutManager.getNGUIRoot() : mLayoutManager.getUGUIRoot();

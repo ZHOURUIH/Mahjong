@@ -68,14 +68,14 @@ public class GameLayout : GameBase
 		mScript.assignWindow();
 		// 布局实例化完成,初始化之前,需要调用自适应组件的更新
 		ScaleAnchor scaleAnchor = getLayoutPanel().mObject.GetComponent<ScaleAnchor>();
-		CustomAnchor customAnchor = getLayoutPanel().mObject.GetComponent<CustomAnchor>();
+		PaddingAnchor customAnchor = getLayoutPanel().mObject.GetComponent<PaddingAnchor>();
 		if (scaleAnchor != null)
 		{
-			scaleAnchor.forceUpdateChildren();
+			ScaleAnchor.forceUpdateChildren(getLayoutPanel().mObject);
 		}
 		if (customAnchor != null)
 		{
-			customAnchor.forceUpdateChildren();
+			PaddingAnchor.forceUpdateChildren(getLayoutPanel().mObject);
 		}
 		mScript.init();
 		mScriptInited = true;

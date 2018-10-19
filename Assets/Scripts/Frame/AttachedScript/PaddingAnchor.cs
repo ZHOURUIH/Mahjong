@@ -40,25 +40,15 @@ public class AnchorPoint
 	}
 }
 
-public class SetPropertyAttribute : PropertyAttribute
-{
-	public string Name { get; private set; }
-	public bool IsDirty { get; set; }
-
-	public SetPropertyAttribute(string name)
-	{
-		this.Name = name;
-	}
-}
-
-[ExecuteInEditMode]
-public class CustomAnchor : MonoBehaviour
+// 该组件所在的物体不能有旋转,否则会计算错误
+public class PaddingAnchor : MonoBehaviour
 {
 	protected bool mDirty = true;
-	protected ANCHOR_MODE mAnchorMode = ANCHOR_MODE.AM_NONE;
-	protected NEAR_SIDE mNearSide = NEAR_SIDE.NS_LEFT;
+	public ANCHOR_MODE mAnchorMode;
+	protected NEAR_SIDE mNearSide;
+	public Vector3[] mParentSides;
 	// 左上右下的顺序
-	public AnchorPoint[] mAnchorPoint = new AnchorPoint[4] { new AnchorPoint(), new AnchorPoint(), new AnchorPoint(), new AnchorPoint()};
+	public AnchorPoint[] mAnchorPoint;
 	public ANCHOR_MODE _mAnchorMode
 	{
 		get
@@ -68,25 +58,9 @@ public class CustomAnchor : MonoBehaviour
 		set
 		{
 			mAnchorMode = value;
-			if (mAnchorMode == ANCHOR_MODE.AM_PADDING_PARENT_SIDE)
-			{
-				setToPaddingParentSide(mNearSide);
-			}
-			else if(mAnchorMode == ANCHOR_MODE.AM_NEAR_PARENT_SIDE)
-			{
-				setToNearParentSides();
-			}
-			else if(mAnchorMode == ANCHOR_MODE.AM_NEAR_PARENT_CENTER_FIXED_SIZE)
-			{
-				setToNearParentCenterFixedSize();
-			}
-			else if(mAnchorMode == ANCHOR_MODE.AM_NEAR_PARENT_CENTER_SCALE_SIZE)
-			{
-				setToNearParentCenterScaleSize();
-			}
+			setAnchorMode(mAnchorMode);
 		}
 	}
-	
 	public NEAR_SIDE _mNearSide
 	{
 		get
@@ -96,10 +70,7 @@ public class CustomAnchor : MonoBehaviour
 		set
 		{
 			mNearSide = value;
-			if(mAnchorMode == ANCHOR_MODE.AM_PADDING_PARENT_SIDE)
-			{
-				setToPaddingParentSide(mNearSide);
-			}
+			setAnchorMode(mAnchorMode);
 		}
 	}
 	public bool _mDirty
@@ -111,29 +82,53 @@ public class CustomAnchor : MonoBehaviour
 		set
 		{
 			mDirty = value;
-			updateRect();
 		}
 	}
-	public void forceUpdateChildren()
+	public static void forceUpdateChildren(GameObject obj)
 	{
 		// 先更新自己
-		updateRect(true);
+		if (obj.GetComponent<PaddingAnchor>() != null)
+		{
+			obj.GetComponent<PaddingAnchor>().updateRect(true);
+		}
 		// 然后更新所有子节点
-		int childCount = transform.childCount;
+		Transform curTrans = obj.transform;
+		int childCount = curTrans.childCount;
 		for (int i = 0; i < childCount; ++i)
 		{
-			ScaleAnchor anchor = transform.GetChild(i).GetComponent<ScaleAnchor>();
-			if (anchor != null)
-			{
-				anchor.forceUpdateChildren();
-			}
+			forceUpdateChildren(curTrans.GetChild(i).gameObject);
+		}
+	}
+
+	public void setAnchorMode(ANCHOR_MODE mode)
+	{
+		mAnchorMode = mode;
+		if (mAnchorPoint == null)
+		{
+			mAnchorPoint = new AnchorPoint[4] { new AnchorPoint(), new AnchorPoint(), new AnchorPoint(), new AnchorPoint() };
+		}
+		if (mAnchorMode == ANCHOR_MODE.AM_PADDING_PARENT_SIDE)
+		{
+			setToPaddingParentSide(mNearSide);
+		}
+		else if (mAnchorMode == ANCHOR_MODE.AM_NEAR_PARENT_SIDE)
+		{
+			setToNearParentSides();
+		}
+		else if (mAnchorMode == ANCHOR_MODE.AM_NEAR_PARENT_CENTER_FIXED_SIZE)
+		{
+			setToNearParentCenterFixedSize();
+		}
+		else if (mAnchorMode == ANCHOR_MODE.AM_NEAR_PARENT_CENTER_SCALE_SIZE)
+		{
+			setToNearParentCenterScaleSize();
 		}
 	}
 	//------------------------------------------------------------------------------------------------------------------------------------------------
 	// 将锚点设置到距离相对于父节点最近的边,并且各边界到父节点对应边界的距离固定不变
 	protected void setToNearParentSides()
 	{
-		UIRect parentRect = findParentRect(gameObject);
+		UIRect parentRect = WidgetUtility.findParentRect(gameObject);
 		if(parentRect == null)
 		{
 			Vector3[] sides = getSides(null);
@@ -155,14 +150,14 @@ public class CustomAnchor : MonoBehaviour
 		{
 			GameObject parent = parentRect.gameObject;
 			Vector3[] sides = getSides(parent);
-			Vector3[] parentSides = getParentSides(parent);
+			Vector3[] parentSides = WidgetUtility.getParentSides(parent);
 			for(int i = 0; i < 4; ++i)
 			{
 				if (i == 0 || i== 2)
 				{
-					float relativeLeft = MathUtility.getLength(sides[i] - parentSides[0]);
-					float relativeCenter = MathUtility.getLength(sides[i]);
-					float relativeRight = MathUtility.getLength(sides[i] - parentSides[2]);
+					float relativeLeft = sides[i].x - parentSides[0].x;
+					float relativeCenter = sides[i].x;
+					float relativeRight = sides[i].x - parentSides[2].x;
 					float disToLeft = Mathf.Abs(relativeLeft);
 					float disToCenter = Mathf.Abs(relativeCenter);
 					float disToRight = Mathf.Abs(relativeRight);
@@ -187,9 +182,9 @@ public class CustomAnchor : MonoBehaviour
 				}
 				else if (i == 1 || i == 3)
 				{
-					float relativeTop = MathUtility.getLength(sides[i] - parentSides[1]);
-					float relativeCenter = MathUtility.getLength(sides[i]);
-					float relativeBottom = MathUtility.getLength(sides[i] - parentSides[3]);
+					float relativeTop = sides[i].y - parentSides[1].y;
+					float relativeCenter = sides[i].y;
+					float relativeBottom = sides[i].y - parentSides[3].y;
 					float disToTop = Mathf.Abs(relativeTop);
 					float disToCenter = Mathf.Abs(relativeCenter);
 					float disToBottom = Mathf.Abs(relativeBottom);
@@ -219,7 +214,7 @@ public class CustomAnchor : MonoBehaviour
 	protected void setToNearParentCenterFixedSize()
 	{
 		Vector3[] sides = null;
-		UIRect parentRect = findParentRect(gameObject);
+		UIRect parentRect = WidgetUtility.findParentRect(gameObject);
 		if (parentRect == null)
 		{
 			sides = getSides(null);
@@ -233,18 +228,18 @@ public class CustomAnchor : MonoBehaviour
 			mAnchorPoint[i].setRelative(0.0f);
 			if (i == 0 || i == 2)
 			{
-				mAnchorPoint[i].setAbsolute(MathUtility.getLength(sides[i]));
+				mAnchorPoint[i].setAbsolute(sides[i].x);
 			}
 			else
 			{
-				mAnchorPoint[i].setAbsolute(MathUtility.getLength(sides[i]));
+				mAnchorPoint[i].setAbsolute(sides[i].y);
 			}
 		}
 	}
 	// 将锚点设置到相对于父节点的中心,并且各边界距离父节点对应边界占的比例固定,但是如果父节点为空,则只能固定大小
 	protected void setToNearParentCenterScaleSize()
 	{
-		UIRect parentRect = findParentRect(gameObject);
+		UIRect parentRect = WidgetUtility.findParentRect(gameObject);
 		if (parentRect == null)
 		{
 			Vector3[] sides = getSides(null);
@@ -253,11 +248,11 @@ public class CustomAnchor : MonoBehaviour
 				mAnchorPoint[i].setRelative(0.0f);
 				if (i == 0 || i == 2)
 				{
-					mAnchorPoint[i].setAbsolute(MathUtility.getLength(sides[i]));
+					mAnchorPoint[i].setAbsolute(sides[i].x);
 				}
 				else
 				{
-					mAnchorPoint[i].setAbsolute(MathUtility.getLength(sides[i]));
+					mAnchorPoint[i].setAbsolute(sides[i].y);
 				}
 			}
 		}
@@ -265,17 +260,17 @@ public class CustomAnchor : MonoBehaviour
 		{
 			GameObject parent = parentRect.gameObject;
 			Vector3[] sides = getSides(parent);
-			Vector3[] parentSides = getParentSides(parent);
+			Vector3[] parentSides = WidgetUtility.getParentSides(parent);
 			for (int i = 0; i < 4; ++i)
 			{
 				mAnchorPoint[i].setAbsolute(0.0f);
 				if (i == 0 || i == 2)
 				{
-					mAnchorPoint[i].setRelative(MathUtility.getLength(sides[i]) / MathUtility.getLength(parentSides[i]));
+					mAnchorPoint[i].setRelative(sides[i].x / parentSides[2].x);
 				}
 				else
 				{
-					mAnchorPoint[i].setRelative(MathUtility.getLength(sides[i]) / MathUtility.getLength(parentSides[i]));
+					mAnchorPoint[i].setRelative(sides[i].x / parentSides[1].y);
 				}
 			}
 		}
@@ -283,7 +278,7 @@ public class CustomAnchor : MonoBehaviour
 	// 停靠父节点的指定边界,并且大小不改变,0,1,2,3表示左上右下
 	protected void setToPaddingParentSide(NEAR_SIDE side)
 	{
-		UIRect parentRect = findParentRect(gameObject);
+		UIRect parentRect = WidgetUtility.findParentRect(gameObject);
 		if(parentRect == null)
 		{
 			Vector3[] sides = getSides(null);
@@ -292,11 +287,11 @@ public class CustomAnchor : MonoBehaviour
 				mAnchorPoint[i].setRelative(0.0f);
 				if (i == 0 || i == 2)
 				{
-					mAnchorPoint[i].setAbsolute(MathUtility.getLength(sides[i]));
+					mAnchorPoint[i].setAbsolute(sides[i].x);
 				}
 				else
 				{
-					mAnchorPoint[i].setAbsolute(MathUtility.getLength(sides[i]));
+					mAnchorPoint[i].setAbsolute(sides[i].y);
 				}
 			}
 		}
@@ -304,21 +299,21 @@ public class CustomAnchor : MonoBehaviour
 		{
 			GameObject parent = parentRect.gameObject;
 			Vector3[] sides = getSides(parent);
-			Vector3[] parentSides = getParentSides(parent);
+			Vector3[] parentSides = WidgetUtility.getParentSides(parent);
 			// 相对于左右边界
-			if (side == NEAR_SIDE.NS_LEFT|| side == NEAR_SIDE.NS_RIGHT)
+			if (side == NEAR_SIDE.NS_LEFT || side == NEAR_SIDE.NS_RIGHT)
 			{
 				for (int i = 0; i < 4; ++i)
 				{
 					if (i == 0 || i == 2)
 					{
-						mAnchorPoint[i].setRelative((side == 0) ? -1.0f : 1.0f);
-						mAnchorPoint[i].setAbsolute(MathUtility.getLength(sides[i] - parentSides[(int)side]));
+						mAnchorPoint[i].setRelative((side == NEAR_SIDE.NS_LEFT) ? -1.0f : 1.0f);
+						mAnchorPoint[i].setAbsolute(sides[i].x - parentSides[(int)side].x);
 					}
 					else
 					{
 						mAnchorPoint[i].setRelative(0.0f);
-						mAnchorPoint[i].setAbsolute(MathUtility.getLength(sides[i]));
+						mAnchorPoint[i].setAbsolute(sides[i].y);
 					}
 				}
 			}
@@ -330,12 +325,12 @@ public class CustomAnchor : MonoBehaviour
 					if (i == 0 || i == 2)
 					{
 						mAnchorPoint[i].setRelative(0.0f);
-						mAnchorPoint[i].setAbsolute(MathUtility.getLength(sides[i]));
+						mAnchorPoint[i].setAbsolute(sides[i].x);
 					}
 					else
 					{
 						mAnchorPoint[i].setRelative((side == NEAR_SIDE.NS_TOP) ? 1.0f : -1.0f);
-						mAnchorPoint[i].setAbsolute(MathUtility.getLength(sides[i] - parentSides[(int)side]));
+						mAnchorPoint[i].setAbsolute(sides[i].y - parentSides[(int)side].y);
 					}
 				}
 			}
@@ -348,23 +343,18 @@ public class CustomAnchor : MonoBehaviour
 			return;
 		}
 		mDirty = false;
-		// 如果还没有设置自适应方式,则查找父节点和设置默认的自适应方式
-		if (_mAnchorMode == ANCHOR_MODE.AM_NONE)
-		{
-			_mAnchorMode = ANCHOR_MODE.AM_NEAR_PARENT_SIDE;
-		}
 		float width = 0.0f;
 		float height = 0.0f;
 		Vector3 pos = Vector3.zero;
-		UIRect parentRect = findParentRect(gameObject);
+		UIRect parentRect = WidgetUtility.findParentRect(gameObject);
 		if (parentRect != null)
 		{
 			GameObject parent = parentRect.gameObject;
-			Vector3[] parentSides = getParentSides(parent);
-			float thisLeft = mAnchorPoint[0].mRelative * parentSides[2].x + mAnchorPoint[0].mAbsolute;
-			float thisRight = mAnchorPoint[2].mRelative * parentSides[2].x + mAnchorPoint[2].mAbsolute;
-			float thisTop = mAnchorPoint[1].mRelative * parentSides[1].y + mAnchorPoint[1].mAbsolute;
-			float thisBottom = mAnchorPoint[3].mRelative * parentSides[1].y + mAnchorPoint[3].mAbsolute;
+			mParentSides = WidgetUtility.getParentSides(parent);
+			float thisLeft = mAnchorPoint[0].mRelative * mParentSides[2].x + mAnchorPoint[0].mAbsolute;
+			float thisRight = mAnchorPoint[2].mRelative * mParentSides[2].x + mAnchorPoint[2].mAbsolute;
+			float thisTop = mAnchorPoint[1].mRelative * mParentSides[1].y + mAnchorPoint[1].mAbsolute;
+			float thisBottom = mAnchorPoint[3].mRelative * mParentSides[1].y + mAnchorPoint[3].mAbsolute;
 			width = thisRight - thisLeft;
 			height = thisTop - thisBottom;
 			pos.x = (thisRight + thisLeft) / 2.0f;
@@ -383,9 +373,13 @@ public class CustomAnchor : MonoBehaviour
 		{
 			UnityUtility.logError("height error in anchor!");
 		}
-		UIWidget thisWidget = getGameObjectWidget(gameObject);
-		thisWidget.width = (int)(width + 0.5f);
-		thisWidget.height = (int)(height + 0.5f);
+		UIWidget thisWidget = WidgetUtility.getGameObjectWidget(gameObject);
+		// 没有widget则是panel,panel是没有宽高的
+		if (thisWidget != null)
+		{
+			thisWidget.width = (int)(width + 0.5f);
+			thisWidget.height = (int)(height + 0.5f);
+		}
 		Transform thisTrans = gameObject.transform;
 		thisTrans.localPosition = pos;
 	}
@@ -394,7 +388,7 @@ public class CustomAnchor : MonoBehaviour
 	{
 		// 如果自身带有旋转,则需要还原自身的变换
 		Vector3[] sides = new Vector3[4] { Vector3.zero, Vector3.zero, Vector3.zero, Vector3.zero };
-		UIWidget thisRect = getGameObjectWidget(gameObject);
+		UIRect thisRect = WidgetUtility.getGameObjectRect(gameObject);
 		Vector3[] worldCorners = thisRect.worldCorners;
 		Vector3[] localCorners = new Vector3[4];
 		for (int i = 0; i < 4; ++i)
@@ -414,124 +408,5 @@ public class CustomAnchor : MonoBehaviour
 		}
 		return sides;
 	}
-	// 父节点在父节点坐标系下的各条边
-	public static Vector3[] getParentSides(GameObject parent)
-	{
-		UIRect parentRect = getGameObjectRect(parent);
-		if(parentRect == null)
-		{
-			return new Vector3[4] { Vector3.zero, Vector3.zero, Vector3.zero, Vector3.zero };
-		}
-		return getRectLocalSide(parentRect);
-	}
-	public static Vector2 getRectSize(UIRect rect)
-	{
-		Vector3[] sides = getRectLocalSide(rect);
-		float width = MathUtility.getLength(sides[0] - sides[2]);
-		float height = MathUtility.getLength(sides[1] - sides[3]);
-		return new Vector2(width, height);
-	}
-	public static Vector3[] getRectLocalSide(UIRect rect)
-	{
-		Vector3[] sides = new Vector3[4] { Vector3.zero, Vector3.zero, Vector3.zero, Vector3.zero };
-		Vector3[] localCorners = rect.localCorners;
-		for (int i = 0; i < 4; ++i)
-		{
-			sides[i] = (localCorners[i] + localCorners[(i + 1) % 4]) / 2;
-		}
-		return sides;
-	}
-	public static Vector3[] getRectWorldSide(UIRect rect)
-	{
-		Vector3[] sides = new Vector3[4] { Vector3.zero, Vector3.zero, Vector3.zero, Vector3.zero };
-		Vector3[] worldCorners = rect.worldCorners;
-		for (int i = 0; i < 4; ++i)
-		{
-			sides[i] = (worldCorners[i] + worldCorners[(i + 1) % 4]) / 2;
-		}
-		return sides;
-	}
-	public static UIRect findParentRect(GameObject obj)
-	{
-		if (obj == null)
-		{
-			return null;
-		}
-		if(obj.transform.parent == null)
-		{
-			return null;
-		}
-		GameObject parent = obj.transform.parent.gameObject;
-		if (parent != null)
-		{
-			// 自己有父节点,并且父节点有UIRect,则返回父节点的UIRect
-			UIRect widget = getGameObjectRect(parent);
-			if (widget != null)
-			{
-				return widget;
-			}
-			// 父节点没有UIRect,则继续往上找
-			else
-			{
-				return findParentRect(parent);
-			}
-		}
-		else
-		{
-			return null;
-		}
-	}
-	public static UIWidget getGameObjectWidget(GameObject obj)
-	{
-		UILabel label = obj.GetComponent<UILabel>();
-		if (label != null)
-		{
-			return label;
-		}
-		UITexture texture = obj.GetComponent<UITexture>();
-		if (texture != null)
-		{
-			return texture;
-		}
-		UISprite sprite = obj.GetComponent<UISprite>();
-		if (sprite != null)
-		{
-			return sprite;
-		}
-		UI2DSprite sprite2D = obj.GetComponent<UI2DSprite>();
-		if (sprite2D != null)
-		{
-			return sprite2D;
-		}
-		return null;
-	}
-	public static UIRect getGameObjectRect(GameObject obj)
-	{
-		UIPanel panel = obj.GetComponent<UIPanel>();
-		if (panel != null)
-		{
-			return panel;
-		}
-		UILabel label = obj.GetComponent<UILabel>();
-		if (label != null)
-		{
-			return label;
-		}
-		UITexture texture = obj.GetComponent<UITexture>();
-		if(texture != null)
-		{
-			return texture;
-		}
-		UISprite sprite = obj.GetComponent<UISprite>();
-		if(sprite != null)
-		{
-			return sprite;
-		}
-		UI2DSprite sprite2D = obj.GetComponent<UI2DSprite>();
-		if(sprite2D != null)
-		{
-			return sprite2D;
-		}
-		return null;
-	}
+	
 }

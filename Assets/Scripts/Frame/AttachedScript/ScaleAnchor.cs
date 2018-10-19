@@ -24,6 +24,7 @@ public enum PADDING_STYLE
 	PS_RIGHT_TOP,
 	PS_CUSTOM_VALUE,
 }
+
 public class ScaleAnchor : MonoBehaviour
 {
 	protected bool mDirty = true;
@@ -48,7 +49,7 @@ public class ScaleAnchor : MonoBehaviour
 		if (GameBase.mLayoutManager != null && mRoot == null)
 		{
 			mRoot = GameBase.mLayoutManager.getNGUIRootObject().GetComponent<UIRoot>();
-			UIWidget widget = CustomAnchor.getGameObjectWidget(gameObject);
+			UIWidget widget = WidgetUtility.getGameObjectWidget(gameObject);
 			if (widget != null)
 			{
 				widget.keepAspectRatio = UIWidget.AspectRatioSource.Free;
@@ -58,26 +59,26 @@ public class ScaleAnchor : MonoBehaviour
 		}
 		// 由于初始位置是在Awake中记录的,所以在动态实例化预设后挂接到父节点下时,坐标必须为0,也就是与预设初始状态保持一致
 		mOriginPos = transform.localPosition;
-		UIWidget thisWidget = CustomAnchor.getGameObjectWidget(gameObject);
+		UIWidget thisWidget = WidgetUtility.getGameObjectWidget(gameObject);
 		if (thisWidget != null)
 		{
 			mOriginWidth = thisWidget.width;
 			mOriginHeight = thisWidget.height;
 		}
 	}
-	public void forceUpdateChildren()
+	public static void forceUpdateChildren(GameObject obj)
 	{
 		// 先更新自己
-		updateRect(true);
+		if (obj.GetComponent<ScaleAnchor>() != null)
+		{
+			obj.GetComponent<ScaleAnchor>().updateRect(true);
+		}
 		// 然后更新所有子节点
-		int childCount = transform.childCount;
+		Transform curTrans = obj.transform;
+		int childCount = curTrans.childCount;
 		for (int i = 0; i < childCount; ++i)
 		{
-			ScaleAnchor anchor = transform.GetChild(i).GetComponent<ScaleAnchor>();
-			if (anchor != null)
-			{
-				anchor.forceUpdateChildren();
-			}
+			forceUpdateChildren(curTrans.GetChild(i).gameObject);
 		}
 	}
 	//------------------------------------------------------------------------------------------------------------------------------------------------
@@ -103,7 +104,7 @@ public class ScaleAnchor : MonoBehaviour
 		}
 		float thisWidth = 0.0f;
 		float thisHeight = 0.0f;
-		UIWidget thisWidget = CustomAnchor.getGameObjectWidget(gameObject);
+		UIWidget thisWidget = WidgetUtility.getGameObjectWidget(gameObject);
 		if (thisWidget != null)
 		{
 			thisWidth = mOriginWidth * mWidthScale;
@@ -120,8 +121,8 @@ public class ScaleAnchor : MonoBehaviour
 		else
 		{
 			// 只有在刷新时才能确定父节点,所以父节点需要实时获取
-			UIRect parentRect = CustomAnchor.findParentRect(gameObject);
-			Vector2 parentSize = CustomAnchor.getRectSize(parentRect);
+			UIRect parentRect = WidgetUtility.findParentRect(gameObject);
+			Vector2 parentSize = WidgetUtility.getRectSize(parentRect);
 			// hori为-1表示窗口坐标在父窗口的左侧边界上,为1表示在右侧边界上
 			if (mPadding == PADDING_STYLE.PS_LEFT || mPadding == PADDING_STYLE.PS_LEFT_BOTTOM || mPadding == PADDING_STYLE.PS_LEFT_TOP)
 			{

@@ -96,7 +96,7 @@ public class ResourceLoader : GameBase
 			// 如果已经加载完毕,则返回,否则继续等待
 			if(mLoadedPath[path][name] != null)
 			{
-				doneCallback(mLoadedPath[path][name], null);
+				doneCallback(mLoadedPath[path][name], null, null);
 			}
 		}
 		else
@@ -154,7 +154,7 @@ public class ResourceLoader : GameBase
 		yield return request;
 		string path = StringUtility.getFilePath(resName);
 		mLoadedPath[path][resName] = request.asset;
-		doneCallback(request.asset, userData);
+		doneCallback(request.asset, null, userData);
 		logInfo(resName + " load done!", LOG_LEVEL.LL_NORMAL);
 	}
 	protected IEnumerator loadPathCoroutine(string path, AssetBundleLoadDoneCallback callback)

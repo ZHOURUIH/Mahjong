@@ -58,10 +58,7 @@ public class SQLite : FrameComponent
 		{
 			string fullPath = CommonDefine.F_DATA_BASE_PATH + CommonDefine.DATA_BASE_FILE_NAME;
 			mConnection = new SqliteConnection("DATA SOURCE = " + fullPath);   // 创建SQLite对象的同时，创建SqliteConnection对象  
-			mConnection.Open();                         // 打开数据库链接	
-		}
-		if (mConnection != null)
-		{
+			mConnection.Open();                         // 打开数据库链接
 			mCommand = mConnection.CreateCommand();
 		}
 	}

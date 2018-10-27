@@ -169,7 +169,7 @@ public class ObjectPool : FrameBase
 		}
 		return null;
 	}
-	protected void onPrefabLoaded(Object res, object userData)
+	protected void onPrefabLoaded(Object res, byte[] bytes, object userData)
 	{
 		string fileWithPath = userData as string;
 		PrefabInfo info = mPrefabList[fileWithPath];
@@ -177,7 +177,7 @@ public class ObjectPool : FrameBase
 		info.mState = LOAD_STATE.LS_LOADED;
 		if (info.mDoneCallback != null)
 		{
-			info.mDoneCallback(res, userData);
+			info.mDoneCallback(res, bytes, userData);
 		}
 	}
 }

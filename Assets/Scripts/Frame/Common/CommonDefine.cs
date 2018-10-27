@@ -78,6 +78,13 @@ public enum ADAPT_SCREEN
 	AS_MULTI_SCREEN,    // 多屏拼接后复制显示
 }
 
+public enum LOAD_STATE
+{
+	LS_UNLOAD,
+	LS_LOADING,
+	LS_LOADED,
+}
+
 // 游戏委托定义-------------------------------------------------------------------------------------------------------------
 public delegate void TextureAnimCallBack(INGUIAnimation window, bool isBreak);
 public delegate void KeyFrameCallback(ComponentKeyFrameBase component, object userdata, bool breakTremling, bool done);
@@ -85,7 +92,7 @@ public delegate void CommandCallback(object user_data, Command cmd);
 public delegate void BoxColliderClickCallback(txUIObject obj);
 public delegate void BoxColliderHoverCallback(txUIObject obj, bool hover);
 public delegate void BoxColliderPressCallback(txUIObject obj, bool press);
-public delegate void AssetLoadDoneCallback(UnityEngine.Object res, object userData);
+public delegate void AssetLoadDoneCallback(UnityEngine.Object res, byte[] bytes, object userData);
 public delegate void SceneLoadCallback(float progress, bool done, object userData);
 public delegate void SceneActiveCallback(object userData);
 public delegate void AssetBundleLoadDoneCallback(List<UnityEngine.Object> resList);
@@ -219,6 +226,7 @@ public class CommonDefine
 	public const int INVALID_ID = ~0;
 	//-----------------------------------------------------------------------------------------------------------------
 	// 后缀名
+	public const string DATA_SUFFIX = ".bytes";
 	public const string ASSET_BUNDLE_SUFFIX = ".unity3d";
 	// dll插件的后缀名
 	public const string DLL_PLUGIN_SUFFIX = ".bytes";
@@ -236,5 +244,5 @@ public class CommonDefine
 	public const string NGUI_DEFAULT_MATERIAL = "NGUIDefault";
 	public const string UGUI_DEFAULT_MATERIAL = "UGUIDefault";
 	// 数据库文件名
-	public const string DATA_BASE_FILE_NAME = "MicroLegend.db";
+	public const string DATA_BASE_FILE_NAME = "DataBase.db";
 }

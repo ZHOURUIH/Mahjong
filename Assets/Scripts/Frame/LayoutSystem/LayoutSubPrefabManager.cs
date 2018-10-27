@@ -65,7 +65,7 @@ public class LayoutSubPrefabManager : FrameComponent
 		return (float)mLoadedCount / (float)mPrefabList.Count;
 	}
 	//---------------------------------------------------------------------------------------------------------
-	protected void onLayoutPrefabLoaded(UnityEngine.Object res, object userData)
+	protected void onLayoutPrefabLoaded(UnityEngine.Object res, byte[] bytes, object userData)
 	{
 		GameObject prefab = res as GameObject;
 		mPrefabList[prefab.name.ToLower()] = prefab;

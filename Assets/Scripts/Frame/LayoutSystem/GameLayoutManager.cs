@@ -224,7 +224,7 @@ public class GameLayoutManager : FrameComponent
 			mLayoutTypeList.Remove(layout.getType());
 		}
 	}
-	protected void onLayoutPrefabAsyncDone(UnityEngine.Object res, object userData)
+	protected void onLayoutPrefabAsyncDone(UnityEngine.Object res, byte[] bytes, object userData)
 	{
 		LayoutAsyncInfo info = mLayoutAsyncList[res.name];
 		mLayoutAsyncList.Remove(res.name);

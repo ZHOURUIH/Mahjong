@@ -257,6 +257,7 @@ public class GameFramework : MonoBehaviour
 		registeComponent<UnityUtility>();
 		registeComponent<HttpUtility>();
 		registeComponent<SQLite>();
+		registeComponent<DataBase>();
 		registeComponent<CommandSystem>();
 		registeComponent<CharacterManager>();
 		registeComponent<GameLayoutManager>();

@@ -5,19 +5,25 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
+public class AssetInfo : GameBase
+{
+	public string mAssetName;                       // 资源文件名,带相对于StreamingAssets的相对路径,带后缀
+	public AssetBundleInfo mParentAssetBundle;      // 资源所属的AssetBundle
+	public UnityEngine.Object mAssetObject;         // 资源
+	public AssetInfo(AssetBundleInfo parent, string name)
+	{
+		mParentAssetBundle = parent;
+		mAssetName = name;
+		mAssetObject = null;
+	}
+}
+
 public class AsyncLoadInfo
 {
 	public string mName;
 	public AssetInfo mAssetInfo;
 	public AssetLoadDoneCallback mCallback;
 	public object mUserData;
-}
-
-public enum LOAD_STATE
-{
-	LS_UNLOAD,
-	LS_LOADING,
-	LS_LOADED,
 }
 
 public class AssetBundleInfo : GameBase
@@ -167,7 +173,7 @@ public class AssetBundleInfo : GameBase
 		// 如果资源包已经加载,则可以直接异步加载资源
 		else
 		{
-			callback(mAssetList[fileNameWithSuffix].mAssetObject, userData);
+			callback(mAssetList[fileNameWithSuffix].mAssetObject, null, userData);
 		}
 		return true;
 	}
@@ -234,7 +240,7 @@ public class AssetBundleInfo : GameBase
 		{
 			if (assetInfo.Value.mCallback != null)
 			{
-				assetInfo.Value.mCallback(assetInfo.Value.mAssetInfo.mAssetObject, assetInfo.Value.mUserData);
+				assetInfo.Value.mCallback(assetInfo.Value.mAssetInfo.mAssetObject, null, assetInfo.Value.mUserData);
 			}
 		}
 		mLoadAsyncList.Clear();

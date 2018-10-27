@@ -166,7 +166,7 @@ public class FileUtility : GameBase
 		// 再删除文件夹自身
 		Directory.Delete(path);
 	}
-	public static bool deleteEmptyFolder(string path)
+	public static bool deleteEmptyFolder(string path, bool deleteSelfIfEmpty = true)
 	{
 #if UNITY_ANDROID && !UNITY_EDITOR
 		logError("can not delete empty dir on android!");
@@ -178,14 +178,40 @@ public class FileUtility : GameBase
 		bool isEmpty = true;
 		foreach (var item in dirList)
 		{
-			isEmpty = deleteEmptyFolder(item) && isEmpty;
+			isEmpty = deleteEmptyFolder(item, true) && isEmpty;
 		}
 		isEmpty = isEmpty && Directory.GetFiles(path).Length == 0;
-		if (isEmpty)
+		if (isEmpty && deleteSelfIfEmpty)
 		{
 			Directory.Delete(path);
 		}
 		return isEmpty;
+	}
+	public static void moveFile(string source, string dest, bool overwrite = true)
+	{
+#if UNITY_ANDROID && !UNITY_EDITOR
+		logError("can not copy file on android!");
+		return;
+#endif
+		if (isFileExist(dest))
+		{
+			// 先删除目标文件,因为File.Move不支持覆盖文件,目标文件存在时,File.Move会失败
+			if (overwrite)
+			{
+				deleteFile(dest);
+			}
+			else
+			{
+				return;
+			}
+		}
+		else
+		{
+			// 如果目标文件所在的目录不存在,则先创建目录
+			string parentDir = StringUtility.getFilePath(dest);
+			createDir(parentDir);
+		}
+		File.Move(source, dest);
 	}
 	public static void copyFile(string source, string dest, bool overwrite = true)
 	{
@@ -330,7 +356,10 @@ public class FileUtility : GameBase
 	public static void findFiles(string path, ref List<string> fileList, string pattern, bool recursive = true)
 	{
 		List<string> patternList = new List<string>();
-		patternList.Add(pattern);
+		if(pattern != "")
+		{
+			patternList.Add(pattern);
+		}
 		findFiles(path, ref fileList, patternList, recursive);
 	}
 	// path为绝对路径

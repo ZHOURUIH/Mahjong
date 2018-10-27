@@ -305,48 +305,7 @@ public class AssetBundleLoader : GameBase
 	{
 		mRequestBundleList.Add(bundleInfo);
 	}
-	public void requestLoadAssetsFromUrl(string url, Type assetsType, AssetLoadDoneCallback callback, object userData)
-	{
-		mGameFramework.StartCoroutine(loadAssetsFromUrl(url, assetsType, callback, userData));
-	}
 	//-------------------------------------------------------------------------------------------------------------------------------------
-	protected IEnumerator loadAssetsFromUrl(string url, Type assetsType, AssetLoadDoneCallback callback, object userData)
-	{
-		WWW www = new WWW(url);
-		yield return www;
-		if (www.error != null)
-		{
-			// 下载失败
-			logInfo("下载失败 : " + url + ", info : " + www.error, LOG_LEVEL.LL_FORCE);
-			callback(null, userData);
-		}
-		else
-		{
-			UnityEngine.Object obj = null;
-			if(assetsType == typeof(AudioClip))
-			{
-#if UNITY_5_3_5
-				obj = www.audioClip;
-#elif UNITY_2018_2 || UNITY_2018_1
-				obj = www.GetAudioClip();
-#else
-				obj = WWW.GetAudioClip(www);
-#endif
-			}
-			else if(assetsType == typeof(Texture2D) || assetsType == typeof(Texture))
-			{
-				obj = www.texture;
-			}
-			else if(assetsType == typeof(AssetBundle))
-			{
-				obj = www.assetBundle;
-			}
-			obj.name = url;
-			callback(obj, userData);
-		}
-		www.Dispose();
-		www = null;
-	}
 	protected IEnumerator loadAssetBundleCoroutine(AssetBundleInfo bundleInfo, bool loadFromWWW)
 	{
 		++mAssetBundleCoroutineCount;

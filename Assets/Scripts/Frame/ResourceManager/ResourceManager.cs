@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ResourceManager : FrameComponent
@@ -153,7 +155,50 @@ public class ResourceManager : FrameComponent
 	}
 	public void loadAssetsFromUrl<T>(string url, AssetLoadDoneCallback callback, object userData) where T : UnityEngine.Object
 	{
-		// 只能通过AssetBundleLoader加载
-		mAssetBundleLoader.requestLoadAssetsFromUrl(url, typeof(T), callback, userData);
+		mGameFramework.StartCoroutine(loadAssetsUrl(url, typeof(T), callback, userData));
+	}
+	public void loadAssetsFromUrl(string url, AssetLoadDoneCallback callback, object userData)
+	{
+		mGameFramework.StartCoroutine(loadAssetsUrl(url, null, callback, userData));
+	}
+	protected IEnumerator loadAssetsUrl(string url, Type assetsType, AssetLoadDoneCallback callback, object userData)
+	{
+		WWW www = new WWW(url);
+		yield return www;
+		if (www.error != null)
+		{
+			// 下载失败
+			logInfo("下载失败 : " + url + ", info : " + www.error, LOG_LEVEL.LL_FORCE);
+			callback(null, null, userData);
+		}
+		else
+		{
+			UnityEngine.Object obj = null;
+			if (assetsType == typeof(AudioClip))
+			{
+#if UNITY_5_3_5
+				obj = www.audioClip;
+#elif UNITY_2018_2 || UNITY_2018_1
+				obj = www.GetAudioClip();
+#else
+				obj = WWW.GetAudioClip(www);
+#endif
+			}
+			else if (assetsType == typeof(Texture2D) || assetsType == typeof(Texture))
+			{
+				obj = www.texture;
+			}
+			else if (assetsType == typeof(AssetBundle))
+			{
+				obj = www.assetBundle;
+			}
+			if (obj != null)
+			{
+				obj.name = url;
+			}
+			callback(obj, www.bytes, userData);
+		}
+		www.Dispose();
+		www = null;
 	}
 }

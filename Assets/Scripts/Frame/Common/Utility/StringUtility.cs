@@ -216,6 +216,17 @@ public class StringUtility : GameBase
 		}
 		return str;
 	}
+	public static string getFirstFolderName(string str)
+	{
+		rightToLeft(ref str);
+		string ret = "";
+		int firstPos = str.IndexOf('/');
+		if(firstPos != -1)
+		{
+			ret = str.Substring(0, firstPos);
+		}
+		return ret;
+	}
 	// 从文件路径中得到最后一级的文件夹名
 	public static string getFolderName(string str)
 	{

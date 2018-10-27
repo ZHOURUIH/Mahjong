@@ -16,6 +16,7 @@ public class FrameBase
 	public static GlobalTouchSystem			mGlobalTouchSystem		= null;
 	public static ShaderManager				mShaderManager			= null;
 	public static SQLite					mSQLite					= null;
+	public static DataBase					mDataBase				= null;
 	public static CameraManager				mCameraManager			= null;
 	public static ResourceManager			mResourceManager		= null;
 	public static LayoutSubPrefabManager	mLayoutSubPrefabManager	= null;
@@ -45,6 +46,7 @@ public class FrameBase
 			mGlobalTouchSystem = mGameFramework.getSystem<GlobalTouchSystem>();
 			mShaderManager = mGameFramework.getSystem<ShaderManager>();
 			mSQLite = mGameFramework.getSystem<SQLite>();
+			mDataBase = mGameFramework.getSystem<DataBase>();
 			mCameraManager = mGameFramework.getSystem<CameraManager>();
 			mResourceManager = mGameFramework.getSystem<ResourceManager>();
 			mLayoutSubPrefabManager = mGameFramework.getSystem<LayoutSubPrefabManager>();

@@ -27,21 +27,44 @@ public class AudioManager : FrameComponent
 	}
 	public override void init()
 	{
-		List<SoundData> soundDataList;
-		mSQLiteSound.queryAll(out soundDataList);
-		int dataCount = soundDataList.Count;
-		for (int i = 0; i < dataCount; ++i)
+		// 从SQlite数据库中查询音效信息
+		if(mSQLiteSound != null)
 		{
-			SoundData soundData = soundDataList[i];
-			string audioName = StringUtility.getFileNameNoSuffix(soundData.mFileName, true);
-			SOUND_DEFINE soundID = (SOUND_DEFINE)(soundData.mID);
-			mSoundDefineMap.Add(soundID, audioName);
-			if (!mVolumeScale.ContainsKey(soundID))
+			List<SoundData> soundDataList;
+			mSQLiteSound.queryAll(out soundDataList);
+			int dataCount = soundDataList.Count;
+			for (int i = 0; i < dataCount; ++i)
 			{
-				mVolumeScale.Add(soundID, soundData.mVolumeScale);
+				SoundData soundData = soundDataList[i];
+				string audioName = StringUtility.getFileNameNoSuffix(soundData.mFileName, true);
+				SOUND_DEFINE soundID = (SOUND_DEFINE)(soundData.mID);
+				mSoundDefineMap.Add(soundID, audioName);
+				if (!mVolumeScale.ContainsKey(soundID))
+				{
+					mVolumeScale.Add(soundID, soundData.mVolumeScale);
+				}
+				registeAudio(soundData.mFileName);
 			}
-			registeAudio(soundData.mFileName);
 		}
+		// 数据库中查不到,则从自定义的数据表格中查询
+		else
+		{
+			int dataCount = mDataBase.getDataCount(DATA_TYPE.DT_GAME_SOUND);
+			for (int i = 0; i < dataCount; ++i)
+			{
+				DataGameSound soundData = mDataBase.queryData(DATA_TYPE.DT_GAME_SOUND, i) as DataGameSound;
+				string soundName = BinaryUtility.bytesToString(soundData.mSoundFileName);
+				string audioName = StringUtility.getFileNameNoSuffix(soundName, true);
+				SOUND_DEFINE soundID = (SOUND_DEFINE)(soundData.mSoundID);
+				mSoundDefineMap.Add(soundID, audioName);
+				if (!mVolumeScale.ContainsKey(soundID))
+				{
+					mVolumeScale.Add(soundID, soundData.mVolumeScale);
+				}
+				registeAudio(soundName);
+			}
+		}
+		
 	}
 	public override void destroy()
 	{
@@ -221,7 +244,7 @@ public class AudioManager : FrameComponent
 			mAudioClipList.Add(audioName, newInfo);
 		}
 	}
-	protected void onAudioLoaded(UnityEngine.Object res, object userData)
+	protected void onAudioLoaded(UnityEngine.Object res, byte[] bytes, object userData)
 	{
 		if (res != null)
 		{

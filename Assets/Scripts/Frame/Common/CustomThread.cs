@@ -78,6 +78,11 @@ public class CustomThread : GameBase
 		mPause = false;
 		logInfo("线程退出完成! 线程名 : " + mName, LOG_LEVEL.LL_FORCE);
 	}
+
+    public bool isFinish()
+    {
+        return mFinish;
+    }
 	protected void run()
 	{
 		mFinish = false;

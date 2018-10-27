@@ -29,6 +29,8 @@ public class Game : GameFramework
 	{
 		LayoutRegister.registeAllLayout();
 		GameSceneRegister.registerAllGameScene();
+		SQLiteRegister.registeAllTable();
+		DataRegister.registeAllData();
 		CharacterRegister.registeAllCharacter();
 	}
 	protected override void launch()

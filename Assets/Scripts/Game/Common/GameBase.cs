@@ -12,6 +12,8 @@ public class GameBase : FrameBase
 	public static SocketManager mSocketManager;
 	public static LogSystem mLogSystem;
 	public static RoomSystem mRoomSystem;
+	// SQLiteTable
+	public static SQLiteLog mSQLiteLog;
 	// 以下是用于快速访问的布局脚本
 	public static ScriptGlobalTouch mScriptGlobalTouch;
 	public static ScriptLogin mScriptLogin;

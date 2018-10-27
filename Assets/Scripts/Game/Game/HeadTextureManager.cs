@@ -39,7 +39,7 @@ public class HeadTextureManager : FrameComponent
 		}
 	}
 	//--------------------------------------------------------------------------------------------------------------------------------------------------
-	protected void onLoadWeChatHead(UnityEngine.Object tex, object userData)
+	protected void onLoadWeChatHead(UnityEngine.Object tex, byte[] bytes, object userData)
 	{
 		string openID = userData as string;
 		mHeadTextureList[openID] = tex as Texture;

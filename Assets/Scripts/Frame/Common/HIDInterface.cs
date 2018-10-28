@@ -36,52 +36,46 @@ public class HIDDevice : GameBase
 
         //Create structs to hold interface information
         SP_DEVINFO_DATA devInfo = new SP_DEVINFO_DATA();
-        SP_DEVICE_INTERFACE_DATA devIface = new SP_DEVICE_INTERFACE_DATA();
-        devInfo.cbSize = (uint)Marshal.SizeOf(devInfo);
+		devInfo.cbSize = (uint)Marshal.SizeOf(devInfo);
+		SP_DEVICE_INTERFACE_DATA devIface = new SP_DEVICE_INTERFACE_DATA();
         devIface.cbSize = (uint)(Marshal.SizeOf(devIface));
 
         Guid G = new Guid();
         HID.HidD_GetHidGuid(ref G); //Get the guid of the HID device class
 
-        IntPtr i = SetupAPI.SetupDiGetClassDevs(ref G, IntPtr.Zero, IntPtr.Zero, SetupAPI.DIGCF_DEVICEINTERFACE | SetupAPI.DIGCF_PRESENT);
-
+        IntPtr deviceInfo = SetupAPI.SetupDiGetClassDevs(ref G, IntPtr.Zero, IntPtr.Zero, SetupAPI.DIGCF_DEVICEINTERFACE | SetupAPI.DIGCF_PRESENT);
         //Loop through all available entries in the device list, until false
-        SP_DEVICE_INTERFACE_DETAIL_DATA didd = new SP_DEVICE_INTERFACE_DETAIL_DATA();
-        if (IntPtr.Size == 8) // for 64 bit operating systems
-		{
-			didd.cbSize = 8;
-		}
-        else
-		{
-			didd.cbSize = 4 + Marshal.SystemDefaultCharSize; // for 32 bit systems
-		}
-
-        int j = -1;
-        bool b = true;
-        SafeFileHandle tempHandle;
-        while (b)
+        int j = 0;
+        while (true)
         {
-			++j;
-            b = SetupAPI.SetupDiEnumDeviceInterfaces(i, IntPtr.Zero, ref G, (uint)j, ref devIface);
-            if (b == false)
+            if (!SetupAPI.SetupDiEnumDeviceInterfaces(deviceInfo, IntPtr.Zero, ref G, (uint)j, ref devIface))
 			{
 				break;
 			}
-
             uint requiredSize = 0;
-            SetupAPI.SetupDiGetDeviceInterfaceDetail(i, ref devIface, ref didd, 256, out requiredSize, ref devInfo);
-            string devicePath = didd.DevicePath;
+			IntPtr detailMemory = Marshal.AllocHGlobal((int)requiredSize);
+			SP_DEVICE_INTERFACE_DETAIL_DATA functionClassDeviceData = (SP_DEVICE_INTERFACE_DETAIL_DATA)Marshal.PtrToStructure(detailMemory, typeof(SP_DEVICE_INTERFACE_DETAIL_DATA));
+			functionClassDeviceData.cbSize = Marshal.SizeOf(functionClassDeviceData);
+			if (!SetupAPI.SetupDiGetDeviceInterfaceDetail(deviceInfo, ref devIface, ref functionClassDeviceData, requiredSize, out requiredSize, ref devInfo))
+			{
+				Marshal.FreeHGlobal(detailMemory);
+				break;
+			}
+			string devicePath = functionClassDeviceData.DevicePath;
+			Marshal.FreeHGlobal(detailMemory);
 
-            //create file handles using CT_CreateFile
-            tempHandle = Kernel32.CreateFile(devicePath, Kernel32.GENERIC_READ | Kernel32.GENERIC_WRITE, Kernel32.FILE_SHARE_READ | Kernel32.FILE_SHARE_WRITE,
+			//create file handles using CT_CreateFile
+			SafeFileHandle tempHandle = Kernel32.CreateFile(devicePath, Kernel32.GENERIC_READ | Kernel32.GENERIC_WRITE, Kernel32.FILE_SHARE_READ | Kernel32.FILE_SHARE_WRITE,
                 IntPtr.Zero, Kernel32.OPEN_EXISTING, 0, IntPtr.Zero);
 
             //get capabilites - use getPreParsedData, and getCaps
             //store the reportlengths
             IntPtr ptrToPreParsedData = new IntPtr();
             bool ppdSucsess = HID.HidD_GetPreparsedData(tempHandle, ref ptrToPreParsedData);
-            if (ppdSucsess == false)
-                continue;
+            if (!ppdSucsess)
+			{
+				continue;
+			}
 
             HIDP_CAPS capabilities = new HIDP_CAPS();
             HID.HidP_GetCaps(ptrToPreParsedData, ref capabilities);
@@ -92,10 +86,20 @@ public class HIDDevice : GameBase
             string productName = "";
             string SN = "";
             string manfString = "";
-            IntPtr buffer = Marshal.AllocHGlobal(126);//max alloc for string; 
-            if (HID.HidD_GetProductString(tempHandle, buffer, 126)) productName = Marshal.PtrToStringAuto(buffer);
-            if (HID.HidD_GetSerialNumberString(tempHandle, buffer, 126)) SN = Marshal.PtrToStringAuto(buffer);
-            if (HID.HidD_GetManufacturerString(tempHandle, buffer, 126)) manfString = Marshal.PtrToStringAuto(buffer);
+			const int bufferLen = 128;
+            IntPtr buffer = Marshal.AllocHGlobal(bufferLen);
+            if (HID.HidD_GetProductString(tempHandle, buffer, bufferLen))
+			{
+				productName = Marshal.PtrToStringAuto(buffer);
+			}
+			if (HID.HidD_GetSerialNumberString(tempHandle, buffer, bufferLen))
+			{
+				SN = Marshal.PtrToStringAuto(buffer);
+			}
+			if (HID.HidD_GetManufacturerString(tempHandle, buffer, bufferLen))
+			{
+				manfString = Marshal.PtrToStringAuto(buffer);
+			}
             Marshal.FreeHGlobal(buffer);
 
 			//Call freePreParsedData to release some stuff
@@ -116,8 +120,9 @@ public class HIDDevice : GameBase
             int newSize = devices.Length + 1;
             Array.Resize(ref devices, newSize);
             devices[newSize - 1] = productInfo;
-        }
-        SetupAPI.SetupDiDestroyDeviceInfoList(i);
+			++j;
+		}
+        SetupAPI.SetupDiDestroyDeviceInfoList(deviceInfo);
 
         return devices;
     }

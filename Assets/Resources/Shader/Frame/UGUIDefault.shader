@@ -65,6 +65,7 @@ Shader "UGUIDefault"
 			{
 				fixed4 srcColor = tex2D(_MainTex, i.uv).rgba;
 				srcColor.a *= i.color.a;
+				srcColor.rgb *= i.color.rgb * i.color.a;
 				return srcColor;
 			}
 			ENDCG

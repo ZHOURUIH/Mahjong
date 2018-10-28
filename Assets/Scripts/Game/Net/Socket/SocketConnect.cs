@@ -13,36 +13,20 @@ public class SocketConnect : CommandReceiver
 	protected Socket mServerSocket;
 	protected CustomThread mReceiveThread;
 	protected CustomThread mSendThread;
-	protected ThreadLock mOutputLock;
-	protected ThreadLock mReceiveLock;
-	protected List<byte[]>[] mOutputList;	// 使用双缓冲提高发送消息的效率
-	protected int mOutputWriteIndex;
-	protected int mOutputReadIndex;
-	protected List<INPUT_ELEMENT>[] mRecieveList;
-	protected int mReceiveWriteIndex;
-	protected int mReceiveReadIndex;
+	protected DoubleBuffer<byte[]> mOutputList; // 使用双缓冲提高发送消息的效率
+	protected DoubleBuffer<INPUT_ELEMENT> mRecieveList;
 	protected int mHeartBeatTimes;
 	protected float mHeartBeatTimeCount = 0.0f;
 	protected float mHeartBeatMaxTime = 0.0f;
 	protected byte[] mRecvBuff;
 	public SocketConnect(string name)
-		:base(name)
+		: base(name)
 	{
 		mMaxReceiveCount = 8 * 1024;
-		mOutputList = new List<byte[]>[2];
-		mOutputList[0] = new List<byte[]>();
-		mOutputList[1] = new List<byte[]>();
-		mOutputWriteIndex = 0;
-		mOutputReadIndex = 1;
-		mRecieveList = new List<INPUT_ELEMENT>[2];
-		mRecieveList[0] = new List<INPUT_ELEMENT>();
-		mRecieveList[1] = new List<INPUT_ELEMENT>();
-		mReceiveWriteIndex = 0;
-		mOutputReadIndex = 1;
+		mOutputList = new DoubleBuffer<byte[]>();
+		mRecieveList = new DoubleBuffer<INPUT_ELEMENT>();
 		mReceiveThread = new CustomThread("SocketReceive");
 		mSendThread = new CustomThread("SocketSend");
-		mReceiveLock = new ThreadLock();
-		mOutputLock = new ThreadLock();
 		mRecvBuff = new byte[mMaxReceiveCount];
 	}
 	public void init(IPAddress ip, int port)
@@ -54,7 +38,7 @@ public class SocketConnect : CommandReceiver
 			mServerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 			mServerSocket.Connect(ip, port);
 		}
-		catch(Exception e)
+		catch (Exception e)
 		{
 			logInfo("init socket exception : " + e.Message + ", stack : " + e.StackTrace, LOG_LEVEL.LL_FORCE);
 			mServerSocket = null;
@@ -104,19 +88,14 @@ public class SocketConnect : CommandReceiver
 		// 前四个字节分别是两个short,代表消息类型和消息内容长度
 		byte[] packetData = new byte[GameDefine.PACKET_HEADER_SIZE + packet.getSize()];
 		int index = 0;
-		// 消息类型
 		writeInt(packetData, ref index, (int)(packet.getPacketType()));
-		// 消息长度
 		writeInt(packetData, ref index, packet.getSize());
 		if (packet.getSize() > 0)
 		{
-			// 消息内容
 			packet.write(packetData, GameDefine.PACKET_HEADER_SIZE);
 		}
-		mOutputLock.waitForUnlock();
-		// 添加到写缓冲中
-		mOutputList[mOutputWriteIndex].Add(packetData);
-		mOutputLock.unlock();
+		// 添加到输出缓冲区
+		mOutputList.addToBuffer(packetData);
 	}
 	public void notifyHeartBeatRet(int heartBeatTimes)
 	{
@@ -135,21 +114,16 @@ public class SocketConnect : CommandReceiver
 	// 处理接收到的所有消息
 	protected void processInput()
 	{
-		// 交换读写缓冲区
-		mReceiveLock.waitForUnlock();
-		swap(ref mReceiveWriteIndex, ref mReceiveReadIndex);
-		mReceiveLock.unlock();
 		// 解析所有已经收到的消息包
-		int receiveCount = mRecieveList[mReceiveReadIndex].Count;
-		for (int i = 0; i < receiveCount; ++i)
+		var readList = mRecieveList.getReadList();
+		foreach (var item in readList)
 		{
-			INPUT_ELEMENT element = mRecieveList[mReceiveReadIndex][i];
-			SocketPacket packetReply = mSocketManager.createPacket(element.mType);
+			SocketPacket packetReply = mSocketManager.createPacket(item.mType);
 			packetReply.setConnect(this);
-			packetReply.read(element.mData);
+			packetReply.read(item.mData);
 			packetReply.execute();
 		}
-		mRecieveList[mReceiveReadIndex].Clear();
+		readList.Clear();
 	}
 	// 发送Socket消息
 	protected void sendSocket(ref bool run)
@@ -159,24 +133,21 @@ public class SocketConnect : CommandReceiver
 			run = false;
 			return;
 		}
-		// 交换读写缓冲区
-		mOutputLock.waitForUnlock();
-		swap(ref mOutputWriteIndex, ref mOutputReadIndex);
-		mOutputLock.unlock();
+
 		try
 		{
-			int dataCount = mOutputList[mOutputReadIndex].Count;
-			for (int i = 0; i < dataCount; ++i)
+			var readList = mOutputList.getReadList();
+			foreach (var item in readList)
 			{
-				int sendCount = mServerSocket.Send(mOutputList[mOutputReadIndex][i], mOutputList[mOutputReadIndex][i].Length, SocketFlags.None);
-				if(sendCount != mOutputList[mOutputReadIndex][i].Length)
+				int sendCount = mServerSocket.Send(item, item.Length, SocketFlags.None);
+				if (sendCount != item.Length)
 				{
 					logError("发送失败");
 				}
 			}
-			mOutputList[mOutputReadIndex].Clear();
+			readList.Clear();
 		}
-		catch(SocketException)
+		catch (SocketException)
 		{
 			run = false;
 			return;
@@ -185,7 +156,7 @@ public class SocketConnect : CommandReceiver
 	// 接收Socket消息
 	protected void receiveSocket(ref bool run)
 	{
-		if(mServerSocket == null)
+		if (mServerSocket == null)
 		{
 			run = false;
 			return;
@@ -198,7 +169,7 @@ public class SocketConnect : CommandReceiver
 			if (nRecv <= 0)
 			{
 				CommandSocketConnectNetState cmd = newCmd(out cmd, true, true);
-				if(cmd != null)
+				if (cmd != null)
 				{
 					cmd.mNetState = NET_STATE.NS_NET_CLOSE;
 					pushDelayCommand(cmd, this);
@@ -242,19 +213,17 @@ public class SocketConnect : CommandReceiver
 						UnityUtility.logError(info, false);
 						break;
 					}
-					mReceiveLock.waitForUnlock();
 					if (packetSize != 0)
 					{
 						byte[] recvData = new byte[packetSize];
 						// 读取消息内容(byte[])
 						readBytes(mRecvBuff, ref index, recvData);
-						mRecieveList[mReceiveWriteIndex].Add(new INPUT_ELEMENT(type, recvData));
+						mRecieveList.addToBuffer(new INPUT_ELEMENT(type, recvData));
 					}
 					else
 					{
-						mRecieveList[mReceiveWriteIndex].Add(new INPUT_ELEMENT(type, null));
+						mRecieveList.addToBuffer(new INPUT_ELEMENT(type, null));
 					}
-					mReceiveLock.unlock();
 					// 该段消息内存已经解析完了
 					if (index == nRecv)
 					{

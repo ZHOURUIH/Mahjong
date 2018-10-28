@@ -49,8 +49,8 @@ public class CommandCameraLinkTarget : Command
 		if (mTarget != null)
 		{
 			// 停止正在进行的摄像机运动
-			ObjectTools.MOVE_OBJECT(camera, camera.getPosition());
-			ObjectTools.ROTATE_OBJECT(camera, camera.getRotation());
+			OT.MOVE_OBJECT(camera, camera.getPosition());
+			OT.ROTATE_OBJECT(camera, camera.getRotation());
 			CameraLinker linker = camera.getComponent(mLinkerName) as CameraLinker;
 			if (linker != null)
 			{

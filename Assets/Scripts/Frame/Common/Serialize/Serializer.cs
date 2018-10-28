@@ -33,7 +33,7 @@ public class Serializer : GameBase
 		{
 			return;
 		}
-		BinaryUtility.memcpy(mBuffer, BinaryUtility.toBytes(value), mIndex, 0, writeLen);
+		memcpy(mBuffer, toBytes(value), mIndex, 0, writeLen);
 		mIndex += writeLen;
 	}
 	public void write(short value)
@@ -43,7 +43,7 @@ public class Serializer : GameBase
 		{
 			return;
 		}
-		BinaryUtility.memcpy(mBuffer, BinaryUtility.toBytes(value), mIndex, 0, writeLen);
+		memcpy(mBuffer, toBytes(value), mIndex, 0, writeLen);
 		mIndex += writeLen;
 	}
 	public void write(int value)
@@ -53,7 +53,7 @@ public class Serializer : GameBase
 		{
 			return;
 		}
-		BinaryUtility.memcpy(mBuffer, BinaryUtility.toBytes(value), mIndex, 0, writeLen);
+		memcpy(mBuffer, toBytes(value), mIndex, 0, writeLen);
 		mIndex += writeLen;
 	}
 	public void write(float value)
@@ -63,7 +63,7 @@ public class Serializer : GameBase
 		{
 			return;
 		}
-		BinaryUtility.memcpy(mBuffer, BinaryUtility.toBytes(value), mIndex, 0, writeLen);
+		memcpy(mBuffer, toBytes(value), mIndex, 0, writeLen);
 		mIndex += writeLen;
 	}
 	public void read(ref byte value, bool inverse = false)
@@ -73,7 +73,7 @@ public class Serializer : GameBase
 		{
 			return;
 		}
-		value = BinaryUtility.readByte(mBuffer, ref mIndex);
+		value = readByte(mBuffer, ref mIndex);
 	}
 	public void read(ref short value, bool inverse = false)
 	{
@@ -82,7 +82,7 @@ public class Serializer : GameBase
 		{
 			return;
 		}
-		value = BinaryUtility.readShort(mBuffer, ref mIndex, inverse);
+		value = readShort(mBuffer, ref mIndex, inverse);
 	}
 	public void read(ref ushort value, bool inverse = false)
 	{
@@ -91,7 +91,7 @@ public class Serializer : GameBase
 		{
 			return;
 		}
-		value = BinaryUtility.readUShort(mBuffer, ref mIndex, inverse);
+		value = readUShort(mBuffer, ref mIndex, inverse);
 	}
 	public void read(ref int value, bool inverse = false)
 	{
@@ -100,7 +100,7 @@ public class Serializer : GameBase
 		{
 			return;
 		}
-		value = BinaryUtility.readInt(mBuffer, ref mIndex, inverse);
+		value = readInt(mBuffer, ref mIndex, inverse);
 	}
 	public void read(ref float value, bool inverse = false)
 	{
@@ -109,7 +109,7 @@ public class Serializer : GameBase
 		{
 			return;
 		}
-		value = BinaryUtility.readFloat(mBuffer, ref mIndex, inverse);
+		value = readFloat(mBuffer, ref mIndex, inverse);
 	}
 	public void writeBuffer(byte[] buffer, int bufferSize)
 	{
@@ -117,15 +117,15 @@ public class Serializer : GameBase
 		{
 			return;
 		}
-		BinaryUtility.writeBytes(mBuffer, ref mIndex, buffer, -1, -1, bufferSize);
+		writeBytes(mBuffer, ref mIndex, buffer, -1, -1, bufferSize);
 	}
-	public void readBuffer(byte[] buffer, int bufferSize, int readLen)
+	public void readBuffer(byte[] buffer, int readLen, int bufferSize = -1)
 	{
 		if (!readCheck(readLen))
 		{
 			return;
 		}
-		BinaryUtility.readBytes(mBuffer, ref mIndex, buffer, -1, bufferSize, readLen);
+		readBytes(mBuffer, ref mIndex, buffer, -1, bufferSize, readLen);
 	}
 	public void readBuffer(byte[] buffer)
 	{
@@ -140,7 +140,7 @@ public class Serializer : GameBase
 		}
 		// 先写入字符串长度
 		write(strLen);
-		writeBuffer(BinaryUtility.stringToBytes(str), strLen);
+		writeBuffer(stringToBytes(str), strLen);
 	}
 	public void readString(byte[] str, int strBufferSize)
 	{
@@ -158,14 +158,14 @@ public class Serializer : GameBase
 		// 如果存放字符串的空间大小不足以放入当前要读取的字符串,则只拷贝能容纳的长度,但是下标应该正常跳转
 		if (strBufferSize <= readLen)
 		{
-			BinaryUtility.memcpy(str, mBuffer, 0, mIndex, strBufferSize - 1);
+			memcpy(str, mBuffer, 0, mIndex, strBufferSize - 1);
 			mIndex += readLen;
 			// 加上结束符
 			str[strBufferSize - 1] = 0;
 		}
 		else
 		{
-			BinaryUtility.memcpy(str, mBuffer, 0, mIndex, readLen);
+			memcpy(str, mBuffer, 0, mIndex, readLen);
 			mIndex += readLen;
 			// 加上结束符
 			str[readLen] = 0;
@@ -174,6 +174,8 @@ public class Serializer : GameBase
 	public byte[] getBuffer() { return mBuffer; }
 	public int getBufferSize() { return mBufferSize; }
 	public int getDataSize() { return mIndex; }
+	public int getIndex() { return mIndex; }
+	public void setIndex(int index) { mIndex = index; }
 	//-------------------------------------------------------------------------------------------------------------------------------------------
 	protected bool writeCheck(int writeLen)
 	{

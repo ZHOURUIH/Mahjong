@@ -13,7 +13,7 @@ public class ApplicationConfig : ConfigBase
 	{ }
 	public override void writeConfig()
 	{
-		FileUtility.writeTxtFile(CommonDefine.F_CONFIG_PATH + "ApplicationSetting.txt", generateFloatFile());
+		writeTxtFile(CommonDefine.F_CONFIG_PATH + "ApplicationSetting.txt", generateFloatFile());
 	}
 	//---------------------------------------------------------------------------------------------------------------------------------
 	protected override void addFloat()

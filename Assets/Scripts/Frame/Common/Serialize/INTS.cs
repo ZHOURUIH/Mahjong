@@ -26,19 +26,19 @@ public class INTS : OBJECT
 	}
 	public override void zero()
 	{
-		BinaryUtility.memset(mValue, 0);
+		memset(mValue, 0);
 	}
 	public override void readFromBuffer(byte[] buffer, ref int index)
 	{
-		BinaryUtility.readInts(buffer, ref index, mValue);
+		readInts(buffer, ref index, mValue);
 	}
 	public override void writeToBuffer(byte[] buffer, ref int index)
 	{
-		BinaryUtility.writeInts(buffer, ref index, mValue);
+		writeInts(buffer, ref index, mValue);
 	}
 	public void setValue(int[] value)
 	{
 		int minCount = value.Length < mValue.Length ? value.Length : mValue.Length;
-		BinaryUtility.memcpy(mValue, value, 0, 0, minCount);
+		memcpy(mValue, value, 0, 0, minCount);
 	}
 }

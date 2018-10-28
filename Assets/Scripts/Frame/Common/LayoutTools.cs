@@ -2,7 +2,8 @@
 using System.Collections;
 using System;
 
-public class LayoutTools : GameBase
+// LayoutTools
+public class LT : GameBase
 {
 	public static bool checkStaticPanel(txUIObject obj)
 	{
@@ -249,7 +250,7 @@ public class LayoutTools : GameBase
 		{
 			return;
 		}
-		if (keyframe == "" || MathUtility.isFloatZero(onceLength))
+		if (keyframe == "" || isFloatZero(onceLength))
 		{
 			logError("时间或关键帧不能为空,如果要停止组件,请使用void ROTATE_WINDOW(txUIObject obj, Vector3 rotation)");
 		}
@@ -297,7 +298,7 @@ public class LayoutTools : GameBase
 		{
 			return null;
 		}
-		if (keyframe == "" || MathUtility.isFloatZero(onceLength))
+		if (keyframe == "" || isFloatZero(onceLength))
 		{
 			logError("时间或关键帧不能为空,如果要停止组件,请使用CommandWindowKeyFrameRotate ROTATE_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, Vector3 rotation)");
 		}
@@ -424,7 +425,7 @@ public class LayoutTools : GameBase
 		{
 			return;
 		}
-		if (fileName == "" || MathUtility.isFloatZero(onceLength))
+		if (fileName == "" || isFloatZero(onceLength))
 		{
 			logError("时间或关键帧不能为空,如果要停止组件,请使用void MOVE_WINDOW(txUIObject obj, Vector3 pos)");
 		}
@@ -484,7 +485,7 @@ public class LayoutTools : GameBase
 		{
 			return null;
 		}
-		if (keyframe == "" || MathUtility.isFloatZero(onceLength))
+		if (keyframe == "" || isFloatZero(onceLength))
 		{
 			logError("时间或关键帧不能为空,如果要停止组件,请使用CommandWindowKeyFrameMove MOVE_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, Vector3 pos)");
 		}
@@ -606,7 +607,7 @@ public class LayoutTools : GameBase
 		{
 			return;
 		}
-		if (fileName == "" || MathUtility.isFloatZero(onceLength))
+		if (fileName == "" || isFloatZero(onceLength))
 		{
 			logError("时间或关键帧不能为空,如果要停止组件,请使用void SCALE_WINDOW(txUIObject obj, Vector2 scale)");
 		}
@@ -670,7 +671,7 @@ public class LayoutTools : GameBase
 		{
 			return null;
 		}
-		if (keyframe == "" || MathUtility.isFloatZero(onceLength))
+		if (keyframe == "" || isFloatZero(onceLength))
 		{
 			logError("时间或关键帧不能为空,如果要停止组件,CommandWindowScale SCALE_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, Vector2 scale)");
 		}
@@ -804,7 +805,7 @@ public class LayoutTools : GameBase
 	}
 	public static void ALPHA_KEYFRAME_WINDOW_EX(txUIObject obj, string name, float start, float target, float onceLength, bool loop, float offset, KeyFrameCallback tremblingCallback, KeyFrameCallback trembleDoneCallback)
 	{
-		if (name == "" || MathUtility.isFloatZero(onceLength))
+		if (name == "" || isFloatZero(onceLength))
 		{
 			logError("时间或关键帧不能为空,如果要停止组件,请使用void ALPHA_WINDOW(txUIObject obj, float alpha)");
 		}
@@ -860,7 +861,7 @@ public class LayoutTools : GameBase
 	}
 	public static CommandWindowAlpha ALPHA_KEYFRAME_WINDOW_DELAY_EX(LayoutScript script, txUIObject obj, float delayTime, string keyframe, float start, float target, float onceLength, bool loop, float offset, KeyFrameCallback tremblingCallback, KeyFrameCallback trembleDoneCallback)
 	{
-		if (keyframe == "" || MathUtility.isFloatZero(onceLength))
+		if (keyframe == "" || isFloatZero(onceLength))
 		{
 			logError("时间或关键帧不能为空,如果要停止组件,请使用CommandWindowAlphaTremble ALPHA_WINDOW_DELAY(LayoutScript script, txUIObject obj, float delayTime, float alpha)");
 		}
@@ -898,7 +899,7 @@ public class LayoutTools : GameBase
 	}
 	public static void HSL_KEYFRAME_WINDOW(txUIObject obj, string keyframe, Vector3 start, Vector3 target, float onceLength, bool loop, float offset)
 	{
-		if (keyframe == "" || MathUtility.isFloatZero(onceLength))
+		if (keyframe == "" || isFloatZero(onceLength))
 		{
 			logError("时间或关键帧不能为空,如果要停止组件,请使用void HSL_WINDOW(txUIObject obj, Vector3 hsl)");
 		}
@@ -932,7 +933,7 @@ public class LayoutTools : GameBase
 	}
 	public static void LUM_KEYFRAME_WINDOW(txUIObject obj, string keyframe, float start, float target, float onceLength, bool loop, float offset)
 	{
-		if (keyframe == "" || MathUtility.isFloatZero(onceLength))
+		if (keyframe == "" || isFloatZero(onceLength))
 		{
 			logError("时间或关键帧不能为空,如果要停止组件,请使用void LUM_WINDOW(txUIObject obj, Vector3 hsl)");
 		}

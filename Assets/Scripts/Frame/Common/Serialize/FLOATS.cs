@@ -26,19 +26,19 @@ public class FLOATS : OBJECT
 	}
 	public override void zero()
 	{
-		BinaryUtility.memset(mValue, 0.0f);
+		memset(mValue, 0.0f);
 	}
 	public override void readFromBuffer(byte[] buffer, ref int index)
 	{
-		BinaryUtility.readFloats(buffer, ref index, mValue);
+		readFloats(buffer, ref index, mValue);
 	}
 	public override void writeToBuffer(byte[] buffer, ref int index)
 	{
-		BinaryUtility.writeFloats(buffer, ref index, mValue);
+		writeFloats(buffer, ref index, mValue);
 	}
 	public void setValue(float[] value)
 	{
 		int minCount = value.Length < mValue.Length ? value.Length : mValue.Length;
-		BinaryUtility.memcpy(mValue, value, 0, 0, minCount);
+		memcpy(mValue, value, 0, 0, minCount);
 	}
 }

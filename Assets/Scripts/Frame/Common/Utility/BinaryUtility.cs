@@ -479,7 +479,7 @@ public class BinaryUtility
 		}
 		return data;
 	}
-	public static void memcpy<T>(T[] dest, T[] src, int destOffset, int srcOffset, int count)
+	public static void memcpy(Array dest, Array src, int destOffset, int srcOffset, int count)
 	{
 		Buffer.BlockCopy(src, srcOffset, dest, destOffset, count);
 	}
@@ -632,5 +632,50 @@ public class BinaryUtility
 			}
 		}
 		return true;
+	}
+	public static int getHightestBit(byte value)
+	{
+		return (value & ~0x7F) >> (8 * sizeof(byte) - 1) & 1;
+	}
+	public static int getHightestBit(short value)
+	{
+		return (value & ~0x7FFF) >> (8 * sizeof(short) - 1) & 1;
+	}
+	public static int getHightestBit(int value)
+	{
+		return (value & ~0x7FFFFFFF) >> (8 * sizeof(int) - 1) & 1;
+	}
+	public static void setHighestBit(ref byte value, int bit)
+	{
+		if (bit == 0)
+		{
+			value = (byte)(value & 0x7F);
+		}
+		else
+		{
+			value = (byte)(value & 0x7F | 0x80);
+		}
+	}
+	public static void setHighestBit(ref short value, int bit)
+	{
+		if (bit == 0)
+		{
+			value = (short)(value & 0x7FFF);
+		}
+		else
+		{
+			value = (short)(value & 0x7FFF | 0x8000);
+		}
+	}
+	public static void setHighestBit(ref int value, int bit)
+	{
+		if (bit == 0)
+		{
+			value = value & 0x7FFFFFFF;
+		}
+		else
+		{
+			value = value & 0x7FFFFFFF | 0x80;
+		}
 	}
 }

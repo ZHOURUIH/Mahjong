@@ -45,7 +45,7 @@ public class CommandMovableObjectRotate : Command
 			component.setActive(true);
 			if (mRandomOffset)
 			{
-				mOffset = MathUtility.randomFloat(0.0f, mOnceLength);
+				mOffset = randomFloat(0.0f, mOnceLength);
 			}
 			component.setTargetRotation(mTargetRotation);
 			component.setStartRotation(mStartRotation);

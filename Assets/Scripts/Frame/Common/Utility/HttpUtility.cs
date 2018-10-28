@@ -47,7 +47,7 @@ public class HttpUtility : FrameComponent
 	public static JsonData httpWebRequestPost(string url, string param, OnHttpWebRequestCallback callback = null, object callbakcUserData = null, bool logError = true)
 	{
 		// 转换输入参数的编码类型，获取byte[]数组 
-		byte[] byteArray = BinaryUtility.stringToBytes(param, Encoding.UTF8);
+		byte[] byteArray = stringToBytes(param, Encoding.UTF8);
 		// 初始化新的webRequst
 		// 1． 创建httpWebRequest对象
 		HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(new Uri(url));
@@ -110,7 +110,7 @@ public class HttpUtility : FrameComponent
 			{
 				Parameters += post_arg.Key + "=" + post_arg.Value + "&";
 			}
-			StringUtility.removeLast(ref Parameters, '&');
+			removeLast(ref Parameters, '&');
 		}
 		return url + Parameters;
 	}

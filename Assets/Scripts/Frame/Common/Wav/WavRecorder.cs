@@ -120,14 +120,14 @@ public class WavRecorder : GameBase
 		// 缓冲区还能直接放下数据
 		if(mCurDataCount + dataCount <= mBufferSize)
 		{
-			BinaryUtility.memcpy(mReceivedData, data, mCurDataCount, 0, dataCount);
+			memcpy(mReceivedData, data, mCurDataCount, 0, dataCount);
 			mCurDataCount += dataCount;
 		}
 		// 数据量超出缓冲区
 		else
 		{
 			int copyDataCount = mBufferSize - mCurDataCount;
-			BinaryUtility.memcpy(mReceivedData, data, mCurDataCount, 0, copyDataCount);
+			memcpy(mReceivedData, data, mCurDataCount, 0, copyDataCount);
 			// 数据存满后通知回调
 			mRecordCallback(mReceivedData, mBufferSize);
 			// 清空缓冲区,存储新的数据
@@ -135,12 +135,12 @@ public class WavRecorder : GameBase
 			// 缓冲区无法存放剩下的数据,则将多余的数据丢弃
 			if (remainCount > mBufferSize)
 			{
-				BinaryUtility.memcpy(mReceivedData, data, 0, copyDataCount, mBufferSize - copyDataCount);
+				memcpy(mReceivedData, data, 0, copyDataCount, mBufferSize - copyDataCount);
 				mCurDataCount = mBufferSize - copyDataCount;
 			}
 			else
 			{
-				BinaryUtility.memcpy(mReceivedData, data, 0, copyDataCount, remainCount);
+				memcpy(mReceivedData, data, 0, copyDataCount, remainCount);
 				mCurDataCount = remainCount;
 			}
 		}

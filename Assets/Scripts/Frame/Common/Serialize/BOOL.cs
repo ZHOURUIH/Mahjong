@@ -24,10 +24,10 @@ public class BOOL : OBJECT
 	}
 	public override void readFromBuffer(byte[] buffer, ref int index)
 	{
-		mValue = BinaryUtility.readBool(buffer, ref index);
+		mValue = readBool(buffer, ref index);
 	}
 	public override void writeToBuffer(byte[] buffer, ref int index)
 	{
-		BinaryUtility.writeBool(buffer, ref index, mValue);
+		writeBool(buffer, ref index, mValue);
 	}
 }

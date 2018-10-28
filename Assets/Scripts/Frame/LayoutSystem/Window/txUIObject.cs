@@ -79,7 +79,7 @@ public class txUIObject : ComponentOwner
 				logError("UIWidget's autoResizeBoxCollider must be true! Otherwise can not adapt to the screen sometimes! name : " + mName + ", layout : " + layoutName);
 			}
 			// BoxCollider的中心必须为0,因为UIWidget会自动调整BoxCollider的大小和位置,而且调整后位置为0,所以在制作时BoxCollider的位置必须为0
-			if(!MathUtility.isFloatZero(mBoxCollider.center.sqrMagnitude))
+			if(!isFloatZero(mBoxCollider.center.sqrMagnitude))
 			{
 				logError("BoxCollider's center must be zero! Otherwise can not adapt to the screen sometimes! name : " + mName + ", layout : " + layoutName);
 			}
@@ -112,6 +112,13 @@ public class txUIObject : ComponentOwner
 			mChildList.Add(child);
 		}
 	}
+	public void removeChild(txUIObject child)
+	{
+		if (mChildList.Contains(child))
+		{
+			mChildList.Remove(child);
+		}
+	}
 	public AudioSource createAudioSource()
 	{
 		mAudioSource = mObject.AddComponent<AudioSource>();
@@ -127,19 +134,26 @@ public class txUIObject : ComponentOwner
 	public txUIObject getParent() { return mParent; }
 	public UI_TYPE getUIType() { return mType; }
 	public Transform getTransform() { return mTransform; }
-	public BoxCollider getBoxCollider() { return mBoxCollider; }
 	public AudioSource getAudioSource() { return mAudioSource; }
 	public bool isActive() { return mObject.activeSelf; }
+	public BoxCollider getBoxCollider(bool addIfNull = false)
+	{
+		if (mBoxCollider == null && addIfNull)
+		{
+			mBoxCollider = mObject.AddComponent<BoxCollider>();
+		}
+		return mBoxCollider;
+	}
 	public Vector3 getRotationEuler()
 	{
 		Vector3 vector3 = mTransform.localEulerAngles;
-		MathUtility.adjustAngle180(ref vector3.z);
+		adjustAngle180(ref vector3.z);
 		return vector3;
 	}
 	public Vector3 getRotationRadian()
 	{
 		Vector3 vector3 = mTransform.localEulerAngles * 0.0055f;
-		MathUtility.adjustRadian180(ref vector3.z);
+		adjustRadian180(ref vector3.z);
 		return vector3;
 	}
 	public virtual Vector3 getPosition() { return mTransform.localPosition; }
@@ -147,7 +161,7 @@ public class txUIObject : ComponentOwner
 	public Vector2 getScale() { return new Vector2(mTransform.localScale.x, mTransform.localScale.y); }
 	public Vector2 getWorldScale()
 	{
-		Vector3 scale = MathUtility.getMatrixScale(mTransform.localToWorldMatrix);
+		Vector3 scale = getMatrixScale(mTransform.localToWorldMatrix);
 		txUIObject root = mLayout.isNGUI() ? mLayoutManager.getNGUIRoot() : mLayoutManager.getUGUIRoot();
 		Vector3 uiRootScale = root.getTransform().localScale;
 		return new Vector2(scale.x / uiRootScale.x, scale.y / uiRootScale.y);
@@ -164,6 +178,16 @@ public class txUIObject : ComponentOwner
 	//-------------------------------------------------------------------------------------------------------------------------------------
 	public void setParent(txUIObject parent)
 	{
+		if (mParent == parent)
+		{
+			return;
+		}
+		// 从原来的父节点上移除
+		if (mParent != null)
+		{
+			mParent.removeChild(this);
+		}
+		// 设置新的父节点
 		mParent = parent;
 		if (parent != null)
 		{
@@ -179,6 +203,14 @@ public class txUIObject : ComponentOwner
 		setName(go.name);
 		mObject = go;
 		mTransform = mObject.transform;
+	}
+	public override void setName(string name)
+	{
+		base.setName(name);
+		if (mObject != null && mObject.name != name)
+		{
+			mObject.name = name;
+		}
 	}
 	public virtual void setDepth(int depth)
 	{

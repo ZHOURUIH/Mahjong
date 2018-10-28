@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class CharacterBaseData
+public class CharacterBaseData : GameBase
 {
 	public CharacterBaseData()
 	{

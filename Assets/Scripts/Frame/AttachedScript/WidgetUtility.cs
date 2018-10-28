@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class WidgetUtility
+public class WidgetUtility : GameBase
 {
 	protected static Vector2 mRootSize = new Vector2(CommonDefine.STANDARD_WIDTH, CommonDefine.STANDARD_HEIGHT);
 	protected static void getRootSize()
@@ -27,8 +27,8 @@ public class WidgetUtility
 	public static Vector2 getRectSize(UIRect rect)
 	{
 		Vector3[] sides = getRectLocalSide(rect);
-		float width = MathUtility.getLength(sides[0] - sides[2]);
-		float height = MathUtility.getLength(sides[1] - sides[3]);
+		float width = getLength(sides[0] - sides[2]);
+		float height = getLength(sides[1] - sides[3]);
 		return new Vector2(width, height);
 	}
 	public static Vector3[] getRectLocalSide(UIRect rect)

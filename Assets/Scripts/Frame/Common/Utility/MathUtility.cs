@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class MathUtility : GameBase
+public class MathUtility : StringUtility
 {
 	protected static float[] sin_tb = null;
 	protected static float[] cos_tb = null;
@@ -40,7 +40,7 @@ public class MathUtility : GameBase
 	public static float calculateFloat(string str)
 	{
 		// 判断字符串是否含有非法字符,也就是除数字,小数点,运算符以外的字符
-		str = StringUtility.checkFloatString(str, "+-*/()");
+		str = checkFloatString(str, "+-*/()");
 		// 判断左右括号数量是否相等
 		int leftBracketCount = 0;
 		int rightBracketCount = 0;
@@ -81,8 +81,8 @@ public class MathUtility : GameBase
 				}
 				// 将括号中的计算结果替换原来的表达式,包括括号也一起替换
 				string floatStr = (Math.Round(ret, 4)).ToString();
-				str = StringUtility.strReplace(str, curpos, curpos + strInBracket.Length + 2, floatStr);
-				byte[] strchar = BinaryUtility.stringToBytes(str, Encoding.ASCII);
+				str = strReplace(str, curpos, curpos + strInBracket.Length + 2, floatStr);
+				byte[] strchar = stringToBytes(str, Encoding.ASCII);
 				if (isMinus)
 				{
 					// 如果括号中计算出来是负数,则将负号提取出来,将左边的第一个加减号改为相反的符号
@@ -93,7 +93,7 @@ public class MathUtility : GameBase
 						if (strchar[i] == '+')
 						{
 							strchar[i] = (byte)'-';
-							str = BinaryUtility.bytesToString(strchar, Encoding.ASCII);
+							str = bytesToString(strchar, Encoding.ASCII);
 							changeMark = true;
 							break;
 						}
@@ -104,11 +104,11 @@ public class MathUtility : GameBase
 							if (strchar[i - 1] >= '0' && strchar[i - 1] <= '9')
 							{
 								strchar[i] = (byte)'+';
-								str = BinaryUtility.bytesToString(strchar, Encoding.ASCII);
+								str = bytesToString(strchar, Encoding.ASCII);
 							}
 							else
 							{
-								str = StringUtility.strReplace(str, i, i + 1, "");
+								str = strReplace(str, i, i + 1, "");
 							}
 							changeMark = true;
 							break;
@@ -669,13 +669,13 @@ public class MathUtility : GameBase
 	// 计算点到线的距离
 	public static float getDistanceToLine(Vector3 point, Vector3 start, Vector3 end)
 	{
-		return MathUtility.getLength(point - getProjectPoint(point, start, end));
+		return getLength(point - getProjectPoint(point, start, end));
 	}
 	// 计算点在线上的投影
 	public static Vector3 getProjectPoint(Vector3 point, Vector3 start, Vector3 end)
 	{
 		// 计算出点到线一段的向量在线上的投影
-		Vector3 projectOnLine = MathUtility.getProjection(point - start, end - start);
+		Vector3 projectOnLine = getProjection(point - start, end - start);
 		// 点到线垂线的交点
 		return start + projectOnLine;
 	}
@@ -831,7 +831,7 @@ public class MathUtility : GameBase
 		clamp(ref t, 0.0f, 1.0f);
 		Vector3 value = start + (end - start) * t;
 		// 如果值已经在end的一定范围内了,则直接设置为end
-		if (Mathf.Abs(MathUtility.getSquaredLength(value - end)) <= minAbsDelta * minAbsDelta)
+		if (Mathf.Abs(getSquaredLength(value - end)) <= minAbsDelta * minAbsDelta)
 		{
 			value = end;
 		}
@@ -843,7 +843,7 @@ public class MathUtility : GameBase
 		Color value = start + (end - start) * t;
 		// 如果值已经在end的一定范围内了,则直接设置为end
 		Color curDelta = value - end;
-		if (Mathf.Abs(MathUtility.getSquaredLength(new Vector4(curDelta.r, curDelta.g, curDelta.b, curDelta.a))) <= minAbsDelta * minAbsDelta)
+		if (Mathf.Abs(getSquaredLength(new Vector4(curDelta.r, curDelta.g, curDelta.b, curDelta.a))) <= minAbsDelta * minAbsDelta)
 		{
 			value = end;
 		}
@@ -1067,7 +1067,7 @@ public class MathUtility : GameBase
 	{
 		if (dataCount > mMaxFFTCount)
 		{
-			logError("pcm data count is too many, data count : " + dataCount + ", max count : " + mMaxFFTCount);
+			UnityUtility.logError("pcm data count is too many, data count : " + dataCount + ", max count : " + mMaxFFTCount);
 			return;
 		}
 		if(mComplexList == null)

@@ -27,8 +27,8 @@ public class CameraLinkerAcceleration : CameraLinker
 		// 获得加速度
 		Vector3 acceleration = mLinkObject.getAcceleration();
 		Vector3 curRelative = (mComponentOwner as GameCamera).getPosition() - mLinkObject.getPosition();
-		float relativeAngle = MathUtility.getAngleFromVector(curRelative);
-		acceleration = MathUtility.rotateVector3(acceleration, relativeAngle) * -1.0f;
+		float relativeAngle = getAngleFromVector(curRelative);
+		acceleration = rotateVector3(acceleration, relativeAngle) * -1.0f;
 		mSpringX.setCurLength(Mathf.Abs(curRelative.x));
 		mSpringX.setForce(acceleration.x);
 		mSpringY.setCurLength(Mathf.Abs(curRelative.y));
@@ -74,7 +74,7 @@ public class CameraLinkerAcceleration : CameraLinker
 		Vector3 relative = mRelativePosition;
 		if (mUseTargetYaw)
 		{
-			relative = MathUtility.rotateVector3(relative, mLinkObject.getRotation().y * Mathf.Deg2Rad);
+			relative = rotateVector3(relative, mLinkObject.getRotation().y * Mathf.Deg2Rad);
 		}
 		//判断是否为零
 		Vector3 acceleration = mLinkObject.getAcceleration();
@@ -87,13 +87,13 @@ public class CameraLinkerAcceleration : CameraLinker
 	protected override bool isType(Type type) { return base.isType(type) || type == typeof(CameraLinkerAcceleration); }
 	protected static void processRelative(Spring spring, float relative, float acceleration, ref float curRelative)
 	{
-		if (!MathUtility.isFloatZero(relative))
+		if (!isFloatZero(relative))
 		{
 			curRelative = spring.getLength() * relative / Mathf.Abs(relative);
 		}
 		else
 		{
-			if (!MathUtility.isFloatZero(acceleration))
+			if (!isFloatZero(acceleration))
 			{
 				curRelative = spring.getLength() * acceleration / Mathf.Abs(acceleration);
 			}

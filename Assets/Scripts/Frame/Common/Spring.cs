@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public class Spring
+public class Spring : GameBase
 {
 	protected float mNormalLength;
 	protected float mCurLength;
@@ -30,7 +30,7 @@ public class Spring
 
 		// 加速度
 		float acceleration = (mForce + elasticForce) / mObjectMass;
-		if (MathUtility.isFloatZero(acceleration) || (acceleration < 0.0f && mPreAcce > 0.0f) || (acceleration > 0.0f && mPreAcce < 0.0f))
+		if (isFloatZero(acceleration) || (acceleration < 0.0f && mPreAcce > 0.0f) || (acceleration > 0.0f && mPreAcce < 0.0f))
 		{
 			mObjectSpeed = 0.0f;
 			acceleration = 0.0f;

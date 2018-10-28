@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 
 // 基础数据类型再包装基类
-public abstract class OBJECT
+public abstract class OBJECT : GameBase
 {
 	public Type mType;
 	public int mSize;

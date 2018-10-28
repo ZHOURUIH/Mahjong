@@ -15,7 +15,7 @@ public class WindowComponentDrag : ComponentDrag
 	//--------------------------------------------------------------------------------------------------------------
 	public override void setActive(bool active)
 	{
-		if (active && !LayoutTools.checkStaticPanel(mComponentOwner as txUIObject))
+		if (active && !LT.checkStaticPanel(mComponentOwner as txUIObject))
 		{
 			return;
 		}

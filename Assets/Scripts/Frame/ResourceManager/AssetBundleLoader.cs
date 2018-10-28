@@ -40,12 +40,12 @@ public class AssetBundleLoader : GameBase
 	public bool init()
 	{
 		string path = CommonDefine.F_STREAMING_ASSETS_PATH + "StreamingAssets.xml";
-		if (!FileUtility.isFileExist(path))
+		if (!isFileExist(path))
 		{
 			return false;
 		}
 		byte[] fileBuffer = null;
-		FileUtility.openFile(path, ref fileBuffer);
+		openFile(path, ref fileBuffer);
 		MemoryStream stream = new MemoryStream(fileBuffer);
 		XmlDocument doc = new XmlDocument();
 		doc.Load(stream);
@@ -54,7 +54,7 @@ public class AssetBundleLoader : GameBase
 		{
 			AssetBundleInfo bundleInfo = null;
 			string bundleName = xe.SelectSingleNode("bundleName").InnerText;		// 资源所在的AssetBundle名
-			bundleName = StringUtility.getFileNameNoSuffix(bundleName);				// 移除后缀名
+			bundleName = getFileNameNoSuffix(bundleName);				// 移除后缀名
 			string assetName = xe.SelectSingleNode("assetName").InnerText;			// 资源文件名,带后缀,没有重复
 			string fileNameWithSuffix = assetName.Substring(CommonDefine.P_RESOURCE_PATH.Length);	// 需要移除前缀
 			if (mAssetBundleInfoList.ContainsKey(bundleName))
@@ -77,7 +77,7 @@ public class AssetBundleLoader : GameBase
 				{
 					// _xe.InnerText已经是相对于StreamingAssets的相对路径了,只需要去除后缀名
 					string depName = _xe.InnerText;
-					depName = StringUtility.getFileNameNoSuffix(depName);
+					depName = getFileNameNoSuffix(depName);
 					bundleInfo.addParent(depName);
 				}
 			}
@@ -150,7 +150,7 @@ public class AssetBundleLoader : GameBase
 		{
 			foreach (var item in mAssetBundleInfoList[path].mAssetList)
 			{
-				fileList.Add(StringUtility.getFileNameNoSuffix(item.Key, true));
+				fileList.Add(getFileNameNoSuffix(item.Key, true));
 			}
 		}
 		// 判断文件夹中是否包含预设(因为预设在列表中也是跟文件夹一样的打成一个AssetBundle,所以需要另外判断)
@@ -158,7 +158,7 @@ public class AssetBundleLoader : GameBase
 		{
 			if (item.Key.StartsWith(path) && item.Key != path)
 			{
-				string fileName = StringUtility.getFileNameNoSuffix(item.Key, true);
+				string fileName = getFileNameNoSuffix(item.Key, true);
 				if(!fileList.Contains(fileName))
 				{
 					fileList.Add(fileName);
@@ -367,7 +367,7 @@ public class AssetBundleLoader : GameBase
 	protected List<string> adjustResourceName<T>(string fileName) where T : UnityEngine.Object
 	{
 		// 将\\转为/,加上后缀名,转为小写
-		StringUtility.rightToLeft(ref fileName);
+		rightToLeft(ref fileName);
 		List<string> fileNameList = addSuffix(fileName, typeof(T));
 		int count = fileNameList.Count;
 		for (int i = 0; i < count; ++i)

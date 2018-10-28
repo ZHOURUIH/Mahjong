@@ -238,13 +238,13 @@ public class UnityUtility : FrameComponent
 	// prefabName为Resource下的相对路径
 	public static GameObject instantiatePrefab(GameObject parent, string prefabName)
 	{
-		string name = StringUtility.getFileName(prefabName);
+		string name = getFileName(prefabName);
 		return instantiatePrefab(parent, prefabName, name, Vector3.one, Vector3.zero, Vector3.zero);
 	}
 	// 根据预设对象实例化
 	public static GameObject instantiatePrefab(GameObject parent, GameObject prefab)
 	{
-		string name = StringUtility.getFileName(prefab.name);
+		string name = getFileName(prefab.name);
 		return instantiatePrefab(parent, prefab, name, Vector3.one, Vector3.zero, Vector3.zero);
 	}
 	public static GameObject instantiatePrefab(GameObject parent, GameObject prefab, string name)

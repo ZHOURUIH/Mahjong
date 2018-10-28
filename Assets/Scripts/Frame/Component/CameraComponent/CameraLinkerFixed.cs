@@ -22,7 +22,7 @@ public class CameraLinkerFixed : CameraLinker
 		Vector3 relative = mRelativePosition;
 		if (mUseTargetYaw)
 		{
-			relative = MathUtility.rotateVector3(relative, mLinkObject.getRotation().y * Mathf.Deg2Rad);
+			relative = rotateVector3(relative, mLinkObject.getRotation().y * Mathf.Deg2Rad);
 		}
 		applyRelativePosition(relative);
 	}

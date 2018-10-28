@@ -75,7 +75,7 @@ public class txNGUITextureAnim : txNGUITexture, INGUIAnimation
 		string preName = path + "/" + mTextureSetName + "_";
 		for (int i = 0; ; ++i)
 		{
-			string name = preName + StringUtility.intToString(i);
+			string name = preName + intToString(i);
 			Texture tex = mResourceManager.loadResource<Texture>(name, false);
 			if (tex == null)
 			{

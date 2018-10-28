@@ -31,7 +31,7 @@ public class txNGUISlider : txUIObject
 		{
 			return;
 		}
-		MathUtility.clamp(ref value, 0.0f, 1.0f);
+		clamp(ref value, 0.0f, 1.0f);
 		mSlider.value = value;
 	}
 	public void setSliderValueChange(EventDelegate.Callback mUislider) 

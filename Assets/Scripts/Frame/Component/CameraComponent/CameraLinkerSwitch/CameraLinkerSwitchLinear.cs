@@ -21,8 +21,8 @@ public class CameraLinkerSwitchLinear : CameraLinkerSwitch
 	{
 		base.init(origin, target, speed);
 		mMovedDistance = 0.0f;
-		mDistance = MathUtility.getLength(mOriginRelative - mTargetRelative);
-		mDirection = MathUtility.normalize(mTargetRelative - mOriginRelative);
+		mDistance = getLength(mOriginRelative - mTargetRelative);
+		mDirection = normalize(mTargetRelative - mOriginRelative);
 	}
 	public override void update(float elapsedTime)
 	{

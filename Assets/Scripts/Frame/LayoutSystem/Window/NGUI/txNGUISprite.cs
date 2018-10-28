@@ -35,11 +35,20 @@ public class txNGUISprite : txUIObject
 	public void setSpriteName(string name, bool useSize = false)
 	{
 		mSprite.spriteName = name;
-		if(useSize && name != "")
+		if (useSize && name != "")
 		{
 			UISpriteData spriteData = mSprite.GetAtlasSprite();
 			setWindowSize(new Vector2(spriteData.width, spriteData.height));
 		}
+	}
+	public Vector2 getSpriteSize()
+	{
+		UISpriteData spriteData = mSprite.GetAtlasSprite();
+		if (spriteData != null)
+		{
+			return new Vector2(spriteData.width, spriteData.height);
+		}
+		return Vector2.zero;
 	}
 	public Vector2 getWindowSize()
 	{
@@ -70,4 +79,5 @@ public class txNGUISprite : txUIObject
 	{
 		mSprite.fillAmount = percent;
 	}
+	public UISprite getSprite() { return mSprite; }
 }

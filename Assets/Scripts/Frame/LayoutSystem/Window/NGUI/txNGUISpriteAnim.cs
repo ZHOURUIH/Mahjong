@@ -25,11 +25,14 @@ public class txNGUISpriteAnim : txNGUISprite, INGUIAnimation
 	{
 		base.init(layout, go, parent);
 		string spriteName = getSpriteName();
-		int index = spriteName.LastIndexOf('_');
-		if (index >= 0)
+		if(spriteName != null && spriteName != "")
 		{
-			string textureSetName = spriteName.Substring(0, index);
-			setTextureSet(textureSetName);
+			int index = spriteName.LastIndexOf('_');
+			if (index >= 0)
+			{
+				string textureSetName = spriteName.Substring(0, index);
+				setTextureSet(textureSetName);
+			}
 		}
 		mControl.setPlayEndCallback(onPlayEnd);
 		mControl.setPlayingCallback(onPlaying);
@@ -75,7 +78,7 @@ public class txNGUISpriteAnim : txNGUISprite, INGUIAnimation
 			int index = 0;
 			while(true)
 			{
-				string name = mTextureSetName + "_" + StringUtility.intToString(index++);
+				string name = mTextureSetName + "_" + intToString(index++);
 				if(nameList.ContainsKey(name))
 				{
 					mTextureNameList.Add(name);

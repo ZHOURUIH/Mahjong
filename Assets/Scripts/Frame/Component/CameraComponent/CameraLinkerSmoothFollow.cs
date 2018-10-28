@@ -114,12 +114,12 @@ public class CameraLinkerSmoothFollow : CameraLinker
 	protected override bool isType(Type type) { return base.isType(type) || type == typeof(CameraLinkerSmoothFollow); }
 	protected override void updateLinker(float elapsedTime)
 	{
-		if (!MathUtility.isFloatEqual(mNormalSpeed, mFollowPositionSpeed))
+		if (!isFloatEqual(mNormalSpeed, mFollowPositionSpeed))
 		{
-			mFollowPositionSpeed = MathUtility.lerp(mFollowPositionSpeed, mNormalSpeed, mSpeedRecover * elapsedTime);
+			mFollowPositionSpeed = lerp(mFollowPositionSpeed, mNormalSpeed, mSpeedRecover * elapsedTime);
 		}
 		Vector3 targetPos = mLinkObject.getWorldPosition();
-		Vector3 relative = MathUtility.rotateVector3(mRelativePosition, mLinkObject.getRotation().y * Mathf.Deg2Rad);
+		Vector3 relative = rotateVector3(mRelativePosition, mLinkObject.getRotation().y * Mathf.Deg2Rad);
 		Vector3 nextPos = targetPos + relative;
 		// 判断与地面的交点,使摄像机始终位于地面上方
 		if (mCheckLayer != null && mCheckLayer.Count > 0)
@@ -140,7 +140,7 @@ public class CameraLinkerSmoothFollow : CameraLinker
 					{
 						// 如果有碰撞到物体,交点距离在一定范围内
 						Vector3 hitPoint = ray.origin + ray.direction * hit.distance;
-						if (MathUtility.getLength(nextPos - hitPoint) < layerList[i].mMinDistance)
+						if (getLength(nextPos - hitPoint) < layerList[i].mMinDistance)
 						{
 							nextPos = hitPoint - layerList[i].mDirectionVector * layerList[i].mMinDistance;
 						}
@@ -149,7 +149,7 @@ public class CameraLinkerSmoothFollow : CameraLinker
 			}
 		}
 		// 得到摄像机当前位置
-		Vector3 cameraNewPos = MathUtility.lerp(mCamera.getPosition(), nextPos, mFollowPositionSpeed * elapsedTime, 0.01f);
+		Vector3 cameraNewPos = lerp(mCamera.getPosition(), nextPos, mFollowPositionSpeed * elapsedTime, 0.01f);
 		applyRelativePosition(cameraNewPos - targetPos);
 	}
 };

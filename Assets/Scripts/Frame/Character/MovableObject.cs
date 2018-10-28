@@ -184,7 +184,7 @@ public class MovableObject : ComponentOwner
 	{
 		if (space == Space.Self)
 		{
-			moveDelta = MathUtility.rotateVector3(moveDelta, getQuaternionRotation());
+			moveDelta = rotateVector3(moveDelta, getQuaternionRotation());
 		}
 		setPosition(getPosition() + moveDelta);
 	}
@@ -244,8 +244,8 @@ public class MovableObject : ComponentOwner
 	public void copyObjectTransform(GameObject obj)
 	{
 		Transform objTrans = obj.transform;
-		ObjectTools.MOVE_OBJECT(this, objTrans.localPosition);
-		ObjectTools.ROTATE_OBJECT(this, objTrans.localEulerAngles);
-		ObjectTools.SCALE_OBJECT(this, objTrans.localScale);
+		OT.MOVE_OBJECT(this, objTrans.localPosition);
+		OT.ROTATE_OBJECT(this, objTrans.localEulerAngles);
+		OT.SCALE_OBJECT(this, objTrans.localScale);
 	}
 }

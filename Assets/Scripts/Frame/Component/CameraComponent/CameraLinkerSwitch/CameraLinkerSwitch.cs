@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public abstract class CameraLinkerSwitch
+public abstract class CameraLinkerSwitch : GameBase
 {
 	public readonly CAMERA_LINKER_SWITCH mType;
 	protected CameraLinker mParentLinker;

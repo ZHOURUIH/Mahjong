@@ -27,7 +27,7 @@ public class ResourceLoader : GameBase
 	public List<string> getFileList(string path)
 	{
 		List<string> fileList = new List<string>();
-		FileUtility.findResourcesFiles(path, ref fileList);
+		findResourcesFiles(path, ref fileList);
 		// 去除meta文件
 		List<string> newFileList = new List<string>();
 		int fileCount = fileList.Count;
@@ -35,14 +35,14 @@ public class ResourceLoader : GameBase
 		{
 			if(!fileList[i].EndsWith(".meta"))
 			{
-				newFileList.Add(StringUtility.getFileNameNoSuffix(fileList[i], true));
+				newFileList.Add(getFileNameNoSuffix(fileList[i], true));
 			}
 		}
 		return newFileList;
 	}
 	public bool isResourceLoaded(string name)
 	{
-		string path = StringUtility.getFilePath(name);
+		string path = getFilePath(name);
 		if (!mLoadedPath.ContainsKey(path))
 		{
 			return mLoadedPath[path].ContainsKey(name);
@@ -51,7 +51,7 @@ public class ResourceLoader : GameBase
 	}
 	public UnityEngine.Object getResource(string name)
 	{
-		string path = StringUtility.getFilePath(name);
+		string path = getFilePath(name);
 		if (!mLoadedPath.ContainsKey(path))
 		{
 			return null;
@@ -68,7 +68,7 @@ public class ResourceLoader : GameBase
 	// 同步加载资源,name为Resources下的相对路径,不带后缀
 	public T loadResource<T>(string name) where T : UnityEngine.Object
 	{
-		string path = StringUtility.getFilePath(name);
+		string path = getFilePath(name);
 		// 如果文件夹还未加载,则先加载文件夹
 		if (!mLoadedPath.ContainsKey(path))
 		{
@@ -84,7 +84,7 @@ public class ResourceLoader : GameBase
 	// 异步加载资源,name为Resources下的相对路径,不带后缀
 	public bool loadResourcesAsync<T>(string name, AssetLoadDoneCallback doneCallback, object userData) where T : UnityEngine.Object
 	{
-		string path = StringUtility.getFilePath(name);
+		string path = getFilePath(name);
 		// 如果文件夹还未加载,则先加载文件夹
 		if (!mLoadedPath.ContainsKey(path))
 		{
@@ -152,7 +152,7 @@ public class ResourceLoader : GameBase
 		logInfo(resName + " start load!", LOG_LEVEL.LL_NORMAL);
 		ResourceRequest request = Resources.LoadAsync<T>(resName);
 		yield return request;
-		string path = StringUtility.getFilePath(resName);
+		string path = getFilePath(resName);
 		mLoadedPath[path][resName] = request.asset;
 		doneCallback(request.asset, null, userData);
 		logInfo(resName + " load done!", LOG_LEVEL.LL_NORMAL);
@@ -161,7 +161,7 @@ public class ResourceLoader : GameBase
 	{
 		// 查找文件夹
 		List<string> fileList = new List<string>();
-		FileUtility.findResourcesFiles(path, ref fileList);
+		findResourcesFiles(path, ref fileList);
 		int fileCount = fileList.Count;
 		List<UnityEngine.Object> resList = new List<UnityEngine.Object>();
 		for (int i = 0; i < fileCount; ++i)

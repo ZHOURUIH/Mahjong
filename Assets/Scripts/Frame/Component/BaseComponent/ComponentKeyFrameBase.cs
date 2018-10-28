@@ -44,7 +44,7 @@ public class ComponentKeyFrameBase : GameComponent
 	{
 		setTrembling(name);
 		mKeyFrame = mKeyFrameManager.getKeyFrame(mTremblingName);
-		if (mKeyFrame == null || MathUtility.isFloatZero(onceLength))
+		if (mKeyFrame == null || isFloatZero(onceLength))
 		{
 			mStopValue = 0.0f;
 			// 停止并禁用组件

@@ -27,7 +27,7 @@ public class LocalLog
 		mWriteLogThread = new CustomThread("WriteLocalLog");
 		mLogFilePath = CommonDefine.F_ASSETS_PATH + "log.txt";
 		// 清空已经存在的日志文件
-		FileUtility.writeTxtFile(mLogFilePath, "");
+		writeTxtFile(mLogFilePath, "");
 	}
 	public void init()
 	{
@@ -56,7 +56,7 @@ public class LocalLog
 	{
 		// 切换缓冲区
 		mLogListLock.waitForUnlock();
-		MathUtility.swap(ref mLogIndex, ref mWriteIndex);
+		swap(ref mLogIndex, ref mWriteIndex);
 		mLogListLock.unlock();
 		string totalString = "";
 		int count = mLogBufferList[mWriteIndex].Count;
@@ -66,7 +66,7 @@ public class LocalLog
 			{
 				totalString += mLogBufferList[mWriteIndex][i] + "\r\n";
 			}
-			FileUtility.writeTxtFile(mLogFilePath, totalString, true);
+			writeTxtFile(mLogFilePath, totalString, true);
 			mLogBufferList[mWriteIndex].Clear();
 		}
 	}

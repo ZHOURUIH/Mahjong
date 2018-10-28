@@ -46,7 +46,7 @@ public class txNGUINumber : txNGUISprite
 		mNumberStyle = spriteName.Substring(0, lastPos);
 		for (int i = 0; i < 10; ++i)
 		{
-			mSpriteNameList[i] = mNumberStyle + "_" + StringUtility.intToString(i);
+			mSpriteNameList[i] = mNumberStyle + "_" + intToString(i);
 			// 在atlas中查找对应名字的图片
 			if (spriteMap.ContainsKey(mSpriteNameList[i]))
 			{
@@ -183,7 +183,7 @@ public class txNGUINumber : txNGUISprite
 		mNumberList.Clear();
 		for (int i = 0; i < mMaxCount + 1; ++i)
 		{
-			string name = mName + "_" + StringUtility.intToString(i);
+			string name = mName + "_" + intToString(i);
 			// 由于所有数字的大小和位置都是由数字窗口自动计算的,所以不需要为子窗口添加自适应组件
 			mNumberList.Add(mLayout.getScript().createObject<txNGUISprite>(this, name, false));
 			mNumberList[i].setAtlas(mSprite.atlas);
@@ -193,11 +193,11 @@ public class txNGUINumber : txNGUISprite
 	}
 	public void setNumber(int num, int limitLen = 0)
 	{
-		setNumber(StringUtility.intToString(num, limitLen));
+		setNumber(intToString(num, limitLen));
 	}
 	public void setNumber(string num)
 	{
-		mNumber = StringUtility.checkString(num, "0123456789.");
+		mNumber = checkString(num, "0123456789.");
 		// 设置的数字字符串不能超过最大数量
 		if (mNumber.Length > mMaxCount)
 		{

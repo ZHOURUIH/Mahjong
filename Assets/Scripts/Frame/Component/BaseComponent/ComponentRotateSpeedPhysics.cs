@@ -11,11 +11,11 @@ public class ComponentRotateSpeedPhysics : ComponentRotateSpeedBase
 	public override void fixedUpdate(float elapsedTime) 
 	{
 		if (mPlayState == PLAY_STATE.PS_PLAY && 
-			(!MathUtility.isFloatZero(MathUtility.getLength(mRotateSpeed)) || 
-			!MathUtility.isFloatZero(MathUtility.getLength(mRotateAcceleration))))
+			(!isFloatZero(getLength(mRotateSpeed)) || 
+			!isFloatZero(getLength(mRotateAcceleration))))
 		{
 			mCurRotation += mRotateSpeed * elapsedTime;
-			MathUtility.adjustAngle360(ref mCurRotation);
+			adjustAngle360(ref mCurRotation);
 			applyRotation(mCurRotation, false);
 			mRotateSpeed += mRotateAcceleration * elapsedTime;
 		}

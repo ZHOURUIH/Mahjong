@@ -15,7 +15,7 @@ public class SQLite : FrameComponent
 	{
 		mTableList = new Dictionary<Type, SQLiteTable>();
 		string fullPath = CommonDefine.F_DATA_BASE_PATH + CommonDefine.DATA_BASE_FILE_NAME;
-		if(FileUtility.isFileExist(fullPath))
+		if(isFileExist(fullPath))
 		{
 			mConnection = new SqliteConnection("DATA SOURCE = " + fullPath);   // 创建SQLite对象的同时，创建SqliteConnection对象  
 			mConnection.Open();                         // 打开数据库链接	
@@ -25,7 +25,6 @@ public class SQLite : FrameComponent
 	public T registeTable<T>() where T : SQLiteTable, new()
 	{
 		T table = new T();
-		table.init(this);
 		mTableList.Add(typeof(T), table);
 		return table;
 	}

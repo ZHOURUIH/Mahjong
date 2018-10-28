@@ -181,7 +181,7 @@ public abstract class ConfigBase : FrameComponent
 			fileString += "\r\n";
 			fileString += info.Value.mTypeString;
 			fileString += " = ";
-			fileString += StringUtility.floatToString(info.Value.mValue, 2);
+			fileString += floatToString(info.Value.mValue, 2);
 			fileString += nextLineStr;
 		}
 		// 移除最后的\r\n\r\n
@@ -209,8 +209,8 @@ public abstract class ConfigBase : FrameComponent
 	}
 	protected void readFile(string fileName, bool floatParam)
 	{
-		string text = FileUtility.openTxtFile(fileName);
-		string[] lineList = StringUtility.split(text, true, "\r\n");
+		string text = openTxtFile(fileName);
+		string[] lineList = split(text, true, "\r\n");
 		Dictionary<string, ConfigInfo> valueList = new Dictionary<string, ConfigInfo>();
 		string comment = "";
 		// 前4行需要被丢弃
@@ -233,7 +233,7 @@ public abstract class ConfigBase : FrameComponent
 				}
 				else
 				{
-					string[] value = StringUtility.split(line, false, "=");
+					string[] value = split(line, false, "=");
 					if(value.Length != 2)
 					{
 						logError("配置文件错误 : line : " + line);
@@ -260,7 +260,7 @@ public abstract class ConfigBase : FrameComponent
 				GAME_DEFINE_FLOAT def = floatNameToType(keys[i]);
 				if (def != GAME_DEFINE_FLOAT.GDF_NONE)
 				{
-					setFloatParam(def, StringUtility.stringToFloat(values[i].mValue), values[i].mComment);
+					setFloatParam(def, stringToFloat(values[i].mValue), values[i].mComment);
 				}
 			}
 			else

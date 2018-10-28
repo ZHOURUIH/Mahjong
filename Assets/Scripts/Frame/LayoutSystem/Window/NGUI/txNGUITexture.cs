@@ -53,7 +53,7 @@ public class txNGUITexture : txUIObject
 		mTexture.mainTexture = tex;
 		if (useTextureSize && tex != null)
 		{
-			setWindowSize(new Vector2(tex.width, tex.height));
+			setWindowSize(getTextureSize());
 		}
 	}
 	public Texture getTexture()
@@ -113,6 +113,14 @@ public class txNGUITexture : txUIObject
 			return "";
 		}
 		return mTexture.mainTexture.name;
+	}
+	public Vector2 getTextureSize()
+	{
+		if (mTexture.mainTexture == null)
+		{
+			return Vector2.zero;
+		}
+		return new Vector2(mTexture.mainTexture.width, mTexture.mainTexture.height);
 	}
 	public string getMaterialName()
 	{
@@ -199,7 +207,15 @@ public class txNGUITexture : txUIObject
 		mTexture.depth = depth;
 		base.setDepth(depth);
 	}
-    public string getOriginTextureName() { return mOriginTextureName; }
+	public void setColor(Color color)
+	{
+		mTexture.color = color;
+	}
+	public UITexture getUITexture()
+	{
+		return mTexture;
+	}
+	public string getOriginTextureName() { return mOriginTextureName; }
     public void setOriginTextureName(string textureName) { mOriginTextureName = textureName; }
 	// 自动计算图片的原始名称,也就是不带后缀的名称,后缀默认以_分隔
 	public void generateOriginTextureName(string key = "_")

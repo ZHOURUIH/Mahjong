@@ -54,7 +54,7 @@ public class GameCamera : MovableObject
 		if (mCurLinker == null && mKeyProcess)
 		{
 			float cameraSpeed = mMoveSpeed;
-			if (!MathUtility.isFloatZero(cameraSpeed))
+			if (!isFloatZero(cameraSpeed))
 			{
 				// 键盘移动摄像机
 				if (Input.GetKey(KeyCode.LeftShift))
@@ -96,14 +96,14 @@ public class GameCamera : MovableObject
 			if (mInputManager.getMouseKeepDown(MOUSE_BUTTON.MB_RIGHT) || mInputManager.getMouseCurrentDown(MOUSE_BUTTON.MB_RIGHT))
 			{
 				Vector2 moveDelta = mInputManager.getMouseDelta();
-				if (!MathUtility.isFloatZero(moveDelta.x) || !MathUtility.isFloatZero(moveDelta.y))
+				if (!isFloatZero(moveDelta.x) || !isFloatZero(moveDelta.y))
 				{
 					yawpitch(moveDelta.x * mMouseSpeed, -moveDelta.y * mMouseSpeed);
 				}
 			}
 			// 鼠标滚轮移动摄像机
 			float mouseWheelDelta = mInputManager.getMouseWheelDelta();
-			if (!MathUtility.isFloatZero(mouseWheelDelta))
+			if (!isFloatZero(mouseWheelDelta))
 			{
 				move(Vector3.forward * mouseWheelDelta / 120.0f * 10.0f);
 			}

@@ -48,7 +48,7 @@ public abstract class LayoutScriptAutoHide : LayoutScript
 			mCurTime += elapsedTime;
 			if (mCurTime >= mAutoHideTime)
 			{
-				LayoutTools.HIDE_LAYOUT(mLayout.getType());
+				LT.HIDE_LAYOUT(mLayout.getType());
 			}
 		}
 	}
@@ -87,6 +87,6 @@ public abstract class LayoutScriptAutoHide : LayoutScript
 	{
 		mHideDone = true;
 		mShowDone = false;
-		LayoutTools.HIDE_LAYOUT_FORCE(mType);
+		LT.HIDE_LAYOUT_FORCE(mType);
 	}
 }

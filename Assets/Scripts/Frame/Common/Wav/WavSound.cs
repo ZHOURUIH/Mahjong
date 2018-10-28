@@ -2,7 +2,7 @@
 using System.Collections;
 using System.IO;
 
-public class WavSound
+public class WavSound : GameBase
 {
 	protected string mFileName;
 	protected int mRiffMark;					// riff标记
@@ -49,7 +49,7 @@ public class WavSound
 		mBlockAlign = 0;
 		mBitsPerSample = 0;
 		mOtherSize = 0;
-		BinaryUtility.memset(mDataMark, (byte)0, 4);
+		memset(mDataMark, (byte)0, 4);
 		mDataSize = 0;
 		mDataBuffer = null;
 		mMixPCMData = null;
@@ -64,7 +64,7 @@ public class WavSound
 	public bool readFile(string file)
 	{
 		byte[] fileData = null;
-		FileUtility.openFile(file, ref fileData);
+		openFile(file, ref fileData);
 		mFileName = file;
 		Serializer serializer = new Serializer(fileData);
 		serializer.read(ref mRiffMark);
@@ -90,7 +90,7 @@ public class WavSound
 			serializer.read(ref mDataSize);
 			mDataBuffer = new byte[mDataSize];
 			serializer.readBuffer(mDataBuffer, mDataSize, mDataSize);
-		} while (BinaryUtility.bytesToString(mDataMark) != "data");
+		} while (bytesToString(mDataMark) != "data");
 		refreshFileSize();
 
 		int mixDataCount = getMixPCMDataCount();
@@ -108,7 +108,7 @@ public class WavSound
 				byte[] byteData0 = new byte[2];
 				byteData0[0] = (byte)dataBuffer[2 * i + 0];
 				byteData0[1] = (byte)dataBuffer[2 * i + 1];
-				mixPCMData[i] = BinaryUtility.bytesToShort(byteData0);
+				mixPCMData[i] = bytesToShort(byteData0);
 			}
 		}
 		// 如果有两个声道,则将左右两个声道的平均值赋值到mMixPCMData中
@@ -117,13 +117,13 @@ public class WavSound
 			for (int i = 0; i < mixDataCount; ++i)
 			{
 				byte[] byteData0 = new byte[2];
-				byteData0[0] = (byte)dataBuffer[4 * i + 0];
-				byteData0[1] = (byte)dataBuffer[4 * i + 1];
-				short shortData0 = BinaryUtility.bytesToShort(byteData0);
+				byteData0[0] = dataBuffer[4 * i + 0];
+				byteData0[1] = dataBuffer[4 * i + 1];
+				short shortData0 = bytesToShort(byteData0);
 				byte[] byteData1 = new byte[2];
-				byteData1[0] = (byte)dataBuffer[4 * i + 2];
-				byteData1[1] = (byte)dataBuffer[4 * i + 3];
-				short shortData1 = BinaryUtility.bytesToShort(byteData1);
+				byteData1[0] = dataBuffer[4 * i + 2];
+				byteData1[1] = dataBuffer[4 * i + 3];
+				short shortData1 = bytesToShort(byteData1);
 				mixPCMData[i] = (short)((shortData0 + shortData1) * 0.5f);
 			}
 		}
@@ -133,7 +133,7 @@ public class WavSound
 		// 如果单声道,则直接将mDataBuffer的数据拷贝到mMixPCMData中
 		if (channelCount == 1)
 		{
-			BinaryUtility.memcpy(mixPCMData, dataBuffer, 0, 0, MathUtility.getMin(bufferSize, mixDataCount));
+			memcpy(mixPCMData, dataBuffer, 0, 0, getMin(bufferSize, mixDataCount));
 		}
 		// 如果有两个声道,则将左右两个声道的平均值赋值到mMixPCMData中
 		else if (channelCount == 2)
@@ -154,12 +154,12 @@ public class WavSound
 	{
 		mWaveDataSerializer = new Serializer();
 		byte[] riffByte = new byte[4] { (byte)'R', (byte)'I', (byte)'F', (byte)'F' };
-		mRiffMark = BinaryUtility.bytesToInt(riffByte);
+		mRiffMark = bytesToInt(riffByte);
 		mFileSize = 0;
 		byte[] waveByte = new byte[4] { (byte)'W', (byte)'A', (byte)'V', (byte)'E' };
-		mWaveMark = BinaryUtility.bytesToInt(waveByte);
+		mWaveMark = bytesToInt(waveByte);
 		byte[] fmtByte = new byte[4] { (byte)'f', (byte)'m', (byte)'t', (byte)' ' };
-		mFmtMark = BinaryUtility.bytesToInt(fmtByte);
+		mFmtMark = bytesToInt(fmtByte);
 		mFmtChunkSize = 16;
 		mFormatType = waveHeader.wFormatTag;
 		mSoundChannels = waveHeader.nChannels;
@@ -179,7 +179,7 @@ public class WavSound
 	{
 		mDataSize = mWaveDataSerializer.getDataSize();
 		mDataBuffer = new byte[mDataSize];
-		BinaryUtility.memcpy(mDataBuffer, mWaveDataSerializer.getBuffer(), 0, 0, mDataSize);
+		memcpy(mDataBuffer, mWaveDataSerializer.getBuffer(), 0, 0, mDataSize);
 		mWaveDataSerializer = null;
 		int mixDataCount = getMixPCMDataCount();
 		mMixPCMData = new short[mixDataCount];

@@ -108,7 +108,7 @@ public class ObjectPool : FrameBase
 	}
 	public string createUniqueName(string preName)
 	{
-		return preName + StringUtility.intToString(mNameIDSeed++);
+		return preName + intToString(mNameIDSeed++);
 	}
 	//-------------------------------------------------------------------------------------------------------------------------
 	protected ObjectInfo getUnusedObject(string fileWithPath)

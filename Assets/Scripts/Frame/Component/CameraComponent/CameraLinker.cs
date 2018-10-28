@@ -137,7 +137,7 @@ public class CameraLinker : GameComponent
 	public bool getLookAtTarget() { return mLookAtTarget; }
 	public virtual Vector3 getNormalRelativePosition()
 	{
-		return MathUtility.rotateVector3(mRelativePosition, mLinkObject.getRotation().y * Mathf.Deg2Rad);
+		return rotateVector3(mRelativePosition, mLinkObject.getRotation().y * Mathf.Deg2Rad);
 	}
 	//------------------------------------------------------------------------------------------------------------------------------------------------
 	protected virtual void updateLinker(float elapsedTime) { }

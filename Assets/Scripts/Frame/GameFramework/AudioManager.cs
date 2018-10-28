@@ -36,7 +36,7 @@ public class AudioManager : FrameComponent
 			for (int i = 0; i < dataCount; ++i)
 			{
 				SoundData soundData = soundDataList[i];
-				string audioName = StringUtility.getFileNameNoSuffix(soundData.mFileName, true);
+				string audioName = getFileNameNoSuffix(soundData.mFileName, true);
 				SOUND_DEFINE soundID = (SOUND_DEFINE)(soundData.mID);
 				mSoundDefineMap.Add(soundID, audioName);
 				if (!mVolumeScale.ContainsKey(soundID))
@@ -53,8 +53,8 @@ public class AudioManager : FrameComponent
 			for (int i = 0; i < dataCount; ++i)
 			{
 				DataGameSound soundData = mDataBase.queryData(DATA_TYPE.DT_GAME_SOUND, i) as DataGameSound;
-				string soundName = BinaryUtility.bytesToString(soundData.mSoundFileName);
-				string audioName = StringUtility.getFileNameNoSuffix(soundName, true);
+				string soundName = bytesToString(soundData.mSoundFileName);
+				string audioName = getFileNameNoSuffix(soundName, true);
 				SOUND_DEFINE soundID = (SOUND_DEFINE)(soundData.mSoundID);
 				mSoundDefineMap.Add(soundID, audioName);
 				if (!mVolumeScale.ContainsKey(soundID))
@@ -83,16 +83,16 @@ public class AudioManager : FrameComponent
 	{ }
 	public void createStreamingAudio(string url, bool load = true)
 	{
-		string audioName = StringUtility.getFileNameNoSuffix(url, true);
+		string audioName = getFileNameNoSuffix(url, true);
 		if (!mAudioClipList.ContainsKey(audioName))
 		{
 			AudioInfo newInfo = new AudioInfo();
 			newInfo.mAudioName = audioName;
-			newInfo.mAudioPath = StringUtility.getFilePath(url);
+			newInfo.mAudioPath = getFilePath(url);
 			newInfo.mClip = null;
 			newInfo.mState = LOAD_STATE.LS_UNLOAD;
 			newInfo.mIsResource = false;
-			newInfo.mSuffix = StringUtility.getFileSuffix(url);
+			newInfo.mSuffix = getFileSuffix(url);
 			mAudioClipList.Add(audioName, newInfo);
 		}
 		AudioInfo info = mAudioClipList[audioName];
@@ -114,7 +114,7 @@ public class AudioManager : FrameComponent
 	}
 	public void loadAudio(string fileName, bool async = true)
 	{
-		string audioName = StringUtility.getFileNameNoSuffix(fileName, true);
+		string audioName = getFileNameNoSuffix(fileName, true);
 		if (mAudioClipList.ContainsKey(audioName))
 		{
 			loadAudio(mAudioClipList[audioName], async);
@@ -231,12 +231,12 @@ public class AudioManager : FrameComponent
 	// 参数为Sound下的相对路径,并且不带后缀
 	public void registeAudio(string fileName)
 	{
-		string audioName = StringUtility.getFileNameNoSuffix(fileName, true);
+		string audioName = getFileNameNoSuffix(fileName, true);
 		if (!mAudioClipList.ContainsKey(audioName))
 		{
 			AudioInfo newInfo = new AudioInfo();
 			newInfo.mAudioName = audioName;
-			newInfo.mAudioPath = StringUtility.getFilePath(fileName);
+			newInfo.mAudioPath = getFilePath(fileName);
 			newInfo.mClip = null;
 			newInfo.mState = LOAD_STATE.LS_UNLOAD;
 			newInfo.mIsResource = true;
@@ -248,7 +248,7 @@ public class AudioManager : FrameComponent
 	{
 		if (res != null)
 		{
-			string name = StringUtility.getFileNameNoSuffix(res.name, true);
+			string name = getFileNameNoSuffix(res.name, true);
 			mAudioClipList[name].mClip = res as AudioClip;
 			mAudioClipList[name].mState = LOAD_STATE.LS_LOADED;
 		}

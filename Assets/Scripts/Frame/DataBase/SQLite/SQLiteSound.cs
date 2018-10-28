@@ -16,17 +16,10 @@ public class SoundData : TableData
 	public float mVolumeScale;
 	public override void parse(SqliteDataReader reader)
 	{
-		if (reader != null)
-		{
-			if(!reader.Read())
-			{
-				return;
-			}
-			mID = StringUtility.stringToInt(reader[COL_ID].ToString());
-			mFileName = reader[COL_FILE_NAME].ToString();
-			mDescribe = reader[COL_DESC].ToString();
-			mVolumeScale = StringUtility.stringToFloat(reader[COL_VOLUME_SCALE].ToString());
-		}
+		mID = stringToInt(reader[COL_ID].ToString());
+		mFileName = reader[COL_FILE_NAME].ToString();
+		mDescribe = reader[COL_DESC].ToString();
+		mVolumeScale = stringToFloat(reader[COL_VOLUME_SCALE].ToString());
 	}
 }
 

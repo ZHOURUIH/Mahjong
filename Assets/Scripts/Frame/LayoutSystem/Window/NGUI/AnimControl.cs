@@ -10,7 +10,7 @@ using UnityEngine;
 public delegate void onPlayingCallback(AnimControl control, int frame, bool isPlaying);
 public delegate void onPlayEndCallback(AnimControl control, bool callback, bool isBreak);
 
-public class AnimControl
+public class AnimControl : GameBase
 {
 	protected int mTextureCount;
 	protected int mStartIndex = 0;          // 序列帧的起始帧下标,默认为0,即从头开始
@@ -126,7 +126,7 @@ public class AnimControl
 	{
 		if (mEndIndex < 0)
 		{
-			return MathUtility.getMax(getTextureFrameCount() - 1, 0);
+			return getMax(getTextureFrameCount() - 1, 0);
 		}
 		else
 		{
@@ -149,10 +149,10 @@ public class AnimControl
 	{
 		mTextureCount = count;
 		// 重新判断起始下标和终止下标,确保下标不会越界
-		MathUtility.clamp(ref mStartIndex, 0, getTextureFrameCount() - 1);
+		clamp(ref mStartIndex, 0, getTextureFrameCount() - 1);
 		if (mEndIndex >= 0)
 		{
-			MathUtility.clamp(ref mEndIndex, 0, getTextureFrameCount() - 1);
+			clamp(ref mEndIndex, 0, getTextureFrameCount() - 1);
 		}
 		if (getTextureFrameCount() > 0 && mStartIndex >= 0 && mStartIndex < getTextureFrameCount())
 		{
@@ -168,14 +168,14 @@ public class AnimControl
 	public void setStartIndex(int startIndex)
 	{
 		mStartIndex = startIndex;
-		MathUtility.clamp(ref mStartIndex, 0, getTextureFrameCount() - 1);
+		clamp(ref mStartIndex, 0, getTextureFrameCount() - 1);
 	}
 	public void setEndIndex(int endIndex)
 	{
 		mEndIndex = endIndex;
 		if (mEndIndex >= 0)
 		{
-			MathUtility.clamp(ref mEndIndex, 0, getTextureFrameCount() - 1);
+			clamp(ref mEndIndex, 0, getTextureFrameCount() - 1);
 		}
 	}
 	public void stop(bool resetStartIndex = true, bool callback = true, bool isBreak = true)
@@ -206,7 +206,7 @@ public class AnimControl
 	{
 		mCurTextureIndex = index;
 		mCurTimeCount = 0.0f;
-		MathUtility.clamp(ref mCurTextureIndex, mStartIndex, getRealEndIndex());
+		clamp(ref mCurTextureIndex, mStartIndex, getRealEndIndex());
 		if (mPlayingCallback != null)
 		{
 			mPlayingCallback(this, mCurTextureIndex, false);

@@ -39,7 +39,7 @@ public class txUGUINumber : txUGUIStaticImage
 		List<string> fileList = mResourceManager.getFileList(path, true);
 		for (int i = 0; i < 10; ++i)
 		{
-			mSpriteNameList[i] = mNumberStyle + "_" + StringUtility.intToString(i);
+			mSpriteNameList[i] = mNumberStyle + "_" + intToString(i);
 			// 在atlas中查找对应名字的图片
 			if (fileList.Contains(mSpriteNameList[i].ToLower()))
 			{
@@ -176,7 +176,7 @@ public class txUGUINumber : txUGUIStaticImage
 		mNumberList.Clear();
 		for (int i = 0; i < mMaxCount + 1; ++i)
 		{
-			string name = mName + "_" + StringUtility.intToString(i);
+			string name = mName + "_" + intToString(i);
 			mNumberList.Add(mLayout.getScript().createObject<txUGUIStaticImage>(this, name, false));
 			mNumberList[i].mObject.AddComponent<ScaleAnchor>();
 		}
@@ -184,11 +184,11 @@ public class txUGUINumber : txUGUIStaticImage
 	}
 	public void setNumber(int num, int limitLen = 0)
 	{
-		setNumber(StringUtility.intToString(num, limitLen));
+		setNumber(intToString(num, limitLen));
 	}
 	public void setNumber(string num)
 	{
-		mNumber = StringUtility.checkString(num, "0123456789.");
+		mNumber = checkString(num, "0123456789.");
 		// 设置的数字字符串不能超过最大数量
 		if (mNumber.Length > mMaxCount)
 		{

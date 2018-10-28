@@ -38,17 +38,17 @@ public class GamePluginManager : FrameComponent
 	protected void loadAllPlugin()
 	{
 #if UNITY_STANDALONE_WIN
-		if(!FileUtility.isDirExist(CommonDefine.F_GAME_PLUGIN_PATH))
+		if(!isDirExist(CommonDefine.F_GAME_PLUGIN_PATH))
 		{
 			return;
 		}
 		List<string> fileList = new List<string>();
-		FileUtility.findFiles(CommonDefine.F_GAME_PLUGIN_PATH, ref fileList, CommonDefine.DLL_PLUGIN_SUFFIX);
+		findFiles(CommonDefine.F_GAME_PLUGIN_PATH, ref fileList, CommonDefine.DLL_PLUGIN_SUFFIX);
 		int count = fileList.Count;
 		for(int i = 0; i < count; ++i)
 		{
 			byte[] fileBuffer = null;
-			FileUtility.openFile(fileList[i], ref fileBuffer);
+			openFile(fileList[i], ref fileBuffer);
 			loadPlugin(fileBuffer);
 		}
 #endif

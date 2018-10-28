@@ -40,7 +40,7 @@ public class DataBase : FrameComponent
 		{
 			string filePath = CommonDefine.F_GAME_DATA_FILE_PATH + item.Key + CommonDefine.DATA_SUFFIX;
 			byte[] file = null;
-			FileUtility.openFile(filePath, ref file);
+			openFile(filePath, ref file);
 			if (file != null && file.Length != 0)
 			{
 				parseFile(file, item.Value);
@@ -156,10 +156,10 @@ public class DataBase : FrameComponent
 			Data newData = createData(type);
 			if (newData == null)
 			{
-				UnityUtility.logError("error : can not create data ,type : " + type);
+				logError("error : can not create data ,type : " + type);
 				return;
 			}
-			BinaryUtility.memcpy(dataBuffer, file, 0, i * dataSize, dataSize);
+			memcpy(dataBuffer, file, 0, i * dataSize, dataSize);
 			newData.read(dataBuffer);
 			dataList.Add(newData);
 		}

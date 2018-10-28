@@ -30,7 +30,7 @@ public class ComponentRotateSpeedBase : GameComponent
 		mRotateAcceleration = rotateAcceleration;
 		applyRotation(mCurRotation, false, true);
 		// 如果速度和加速度都为0,则停止旋转
-		if (MathUtility.isFloatZero(MathUtility.getLength(rotateSpeed)) && MathUtility.isFloatZero(MathUtility.getLength(rotateAcceleration)))
+		if (isFloatZero(getLength(rotateSpeed)) && isFloatZero(getLength(rotateAcceleration)))
 		{
 			setActive(false);
 		}

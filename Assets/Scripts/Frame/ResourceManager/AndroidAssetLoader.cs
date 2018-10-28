@@ -76,35 +76,35 @@ public class AndroidAssetLoader : FrameComponent
 		string str = mCurrentActivity.Call<string>("loadTxtFile", path);
 		return str;
 	}
-	public static void writeFile(string path, byte[] buffer, int writeCount, bool appendData)
+	public static new void writeFile(string path, byte[] buffer, int writeCount, bool appendData)
 	{
 		checkPersistenDataPath(path);
 		mCurrentActivity.Call("writeFile", path, buffer, writeCount, appendData);
 	}
-	public static void writeTxtFile(string path, string str, bool appendData)
+	public static new void writeTxtFile(string path, string str, bool appendData)
 	{
 		checkPersistenDataPath(path);
 		mCurrentActivity.Call("writeTxtFile", path, str, appendData);
 	}
-	public static bool isDirExist(string path)
+	public static new bool isDirExist(string path)
 	{
 		checkPersistenDataPath(path);
 		bool exist = mCurrentActivity.Call<bool>("isDirExist", path);
 		return exist;
 	}
-	public static bool isFileExist(string path)
+	public static new bool isFileExist(string path)
 	{
 		checkPersistenDataPath(path);
 		bool exist = mCurrentActivity.Call<bool>("isFileExist", path);
 		return exist;
 	}
-	public static int getFileSize(string path)
+	public static new int getFileSize(string path)
 	{
 		checkPersistenDataPath(path);
 		int size = mCurrentActivity.Call<int>("getFileSize", path);
 		return size;
 	}
-	public static void findFiles(string path, ref List<string> fileList, List<string> patterns, bool recursive)
+	public static new void findFiles(string path, ref List<string> fileList, List<string> patterns, bool recursive)
 	{
 		checkPersistenDataPath(path);
 		string pattern = "";
@@ -137,8 +137,8 @@ public class AndroidAssetLoader : FrameComponent
 	//------------------------------------------------------------------------------------------------------------------------------------------------
 	protected static void checkPersistenDataPath(string path)
 	{
-		if (!StringUtility.startWith(path, CommonDefine.F_PERSISTENT_DATA_PATH)
-			&& !StringUtility.startWith(path + "/", CommonDefine.F_PERSISTENT_DATA_PATH))
+		if (!startWith(path, CommonDefine.F_PERSISTENT_DATA_PATH)
+			&& !startWith(path + "/", CommonDefine.F_PERSISTENT_DATA_PATH))
 		{
 			logError("path must start with " + CommonDefine.F_PERSISTENT_DATA_PATH + ", path : " + path);
 		}

@@ -48,7 +48,7 @@ public class txNGUIDragView : txNGUITexture
 			// 只有鼠标未按下时才衰减速度
 			if(!mMouseDown)
 			{
-				mMoveSpeed = MathUtility.lerp(mMoveSpeed, 0.0f, elapsedTime * 5.0f, 0.01f);
+				mMoveSpeed = lerp(mMoveSpeed, 0.0f, elapsedTime * 5.0f, 0.01f);
 			}
 			Vector3 curPosition = getPosition();
 			curPosition += mMoveNormal * mMoveSpeed * mMoveSpeedScale * elapsedTime;
@@ -56,7 +56,7 @@ public class txNGUIDragView : txNGUITexture
 			UIRect rect = WidgetUtility.findParentRect(mObject);
 			Vector2 parentWidgetSize = WidgetUtility.getRectSize(rect);
 			// 计算父节点的世界缩放
-			Vector3 worldScale = MathUtility.getMatrixScale(mTransform.parent.localToWorldMatrix);
+			Vector3 worldScale = getMatrixScale(mTransform.parent.localToWorldMatrix);
 			txUIObject root = mLayout.isNGUI() ? mLayoutManager.getNGUIRoot() : mLayoutManager.getUGUIRoot();
 			Vector3 uiRootScale = root.getTransform().localScale;
 			Vector2 parentScale = new Vector2(worldScale.x / uiRootScale.x, worldScale.y / uiRootScale.y);
@@ -73,7 +73,7 @@ public class txNGUIDragView : txNGUITexture
 				// 有可以滑动范围时需要限定在一定范围
 				if(minX <= maxX)
 				{
-					MathUtility.clamp(ref curPosition.x, minX, maxX);
+					clamp(ref curPosition.x, minX, maxX);
 				}
 				// 不能滑动时,固定位置
 				else
@@ -86,7 +86,7 @@ public class txNGUIDragView : txNGUITexture
 				// 有可以滑动范围时需要限定在一定范围
 				if (minY <= maxY)
 				{
-					MathUtility.clamp(ref curPosition.y, minY, maxY);
+					clamp(ref curPosition.y, minY, maxY);
 				}
 				// 不能滑动时,固定位置
 				else
@@ -127,7 +127,7 @@ public class txNGUIDragView : txNGUITexture
 		{
 			moveDelta.x = 0.0f;
 		}
-		mMoveNormal = MathUtility.normalize(moveDelta);
+		mMoveNormal = normalize(moveDelta);
 	}
 	public override void onMouseStay(Vector2 mousePos)
 	{

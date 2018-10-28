@@ -4,22 +4,17 @@ using Mono.Data.Sqlite;
 using System.Data;
 using System.Collections.Generic;
 
-public class TableData
+public class TableData : GameBase
 {
 	public virtual void parse(SqliteDataReader reader) { }
 }
 
-public class SQLiteTable
+public class SQLiteTable : GameBase
 {
 	protected string mTableName;
-	protected SQLite mSQLite;
 	public SQLiteTable(string name)
 	{
 		mTableName = name;
-	}
-	public virtual void init(SQLite sqlite)
-	{
-		mSQLite = sqlite;
 	}
 	public SqliteDataReader doQuery()
 	{
@@ -55,7 +50,7 @@ public class SQLiteTable
 	}
 	public void appendValueInt(ref string queryStr, int value, bool isEnd = false)
 	{
-		queryStr += StringUtility.intToString(value);
+		queryStr += intToString(value);
 		if (!isEnd)
 		{
 			queryStr += ",";
@@ -63,7 +58,7 @@ public class SQLiteTable
 	}
 	public void appendValueFloat(ref string queryStr, float value, bool isEnd = false)
 	{
-		queryStr += StringUtility.floatToString(value);
+		queryStr += floatToString(value);
 		if (!isEnd)
 		{
 			queryStr += ",";
@@ -71,11 +66,11 @@ public class SQLiteTable
 	}
 	public void appendValueFloatArray(ref string queryStr, List<float> floatArray, bool isEnd = false)
 	{
-		appendValueString(ref queryStr, StringUtility.floatArrayToString(floatArray), isEnd);
+		appendValueString(ref queryStr, floatArrayToString(floatArray), isEnd);
 	}
 	public void appendValueIntArray(ref string queryStr, List<int> intArray, bool isEnd = false)
 	{
-		appendValueString(ref queryStr, StringUtility.intArrayToString(intArray), isEnd);
+		appendValueString(ref queryStr, intArrayToString(intArray), isEnd);
 	}
 	public void appendConditionString(ref string condition, string col, string str, string operate)
 	{
@@ -83,7 +78,7 @@ public class SQLiteTable
 	}
 	public void appendConditionInt(ref string condition, string col, int value, string operate)
 	{
-		condition += col + " = " + StringUtility.intToString(value) + operate;
+		condition += col + " = " + intToString(value) + operate;
 	}
 	public void appendUpdateString(ref string updateInfo, string col, string str, bool isEnd = false)
 	{
@@ -95,7 +90,7 @@ public class SQLiteTable
 	}
 	public void appendUpdateInt(ref string updateInfo, string col, int value, bool isEnd = false)
 	{
-		updateInfo += col + " = " + StringUtility.intToString(value);
+		updateInfo += col + " = " + intToString(value);
 		if (!isEnd)
 		{
 			updateInfo += ",";
@@ -103,18 +98,22 @@ public class SQLiteTable
 	}
 	public void appendUpdateIntArray(ref string updateInfo, string col, List<int> intArray, bool isEnd = false)
 	{
-		appendUpdateString(ref updateInfo, col, StringUtility.intArrayToString(intArray), isEnd);
+		appendUpdateString(ref updateInfo, col, intArrayToString(intArray), isEnd);
 	}
 	public void appendUpdateFloatArray(ref string updateInfo, string col, List<float> floatArray, bool isEnd = false)
 	{
-		appendUpdateString(ref updateInfo, col, StringUtility.floatArrayToString(floatArray), isEnd);
+		appendUpdateString(ref updateInfo, col, floatArrayToString(floatArray), isEnd);
 	}
 	//---------------------------------------------------------------------------------------------------------------------------
 	protected void parseReader<T>(SqliteDataReader reader, out T data) where T : TableData, new()
 	{
-		data = new T();
-		data.parse(reader);
-		if (reader != null)
+		data = null;
+		if (reader != null && reader.Read())
+		{
+			data = new T();
+			data.parse(reader);
+		}
+		if(reader != null)
 		{
 			reader.Close();
 		}

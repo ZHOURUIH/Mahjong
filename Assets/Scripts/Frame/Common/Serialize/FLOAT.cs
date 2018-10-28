@@ -24,10 +24,10 @@ public class FLOAT : OBJECT
 	}
 	public override void readFromBuffer(byte[] buffer, ref int index)
 	{
-		mValue = BinaryUtility.readFloat(buffer, ref index);
+		mValue = readFloat(buffer, ref index);
 	}
 	public override void writeToBuffer(byte[] buffer, ref int index)
 	{
-		BinaryUtility.writeFloat(buffer, ref index, mValue);
+		writeFloat(buffer, ref index, mValue);
 	}
 }

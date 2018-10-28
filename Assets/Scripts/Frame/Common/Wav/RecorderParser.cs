@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public class RecorderParser
+public class RecorderParser : GameBase
 {
 	protected short[]			mFrequencyData;			// 转换后的频域数据
 	protected int				mFrequencyDataCount;	// 频域数据数量
@@ -72,13 +72,13 @@ public class RecorderParser
 		// 将已有的数据移到缓冲区头部,然后将新的数据加入尾部
 		if (mAllPCMCount > 0)
 		{
-			BinaryUtility.memmove(ref mAllPCMData, 0, dataSize, mRecorderDataBlockSize - dataSize);
-			BinaryUtility.memcpy(mAllPCMData, data, mRecorderDataBlockSize - dataSize, 0, dataSize);
+			memmove(ref mAllPCMData, 0, dataSize, mRecorderDataBlockSize - dataSize);
+			memcpy(mAllPCMData, data, mRecorderDataBlockSize - dataSize, 0, dataSize);
 		}
 		else
 		{
-			BinaryUtility.memset(mAllPCMData, (short)0, mRecorderDataBlockSize);
-			BinaryUtility.memcpy(mAllPCMData, data, 0, 0, dataSize);
+			memset(mAllPCMData, (short)0, mRecorderDataBlockSize);
+			memcpy(mAllPCMData, data, 0, 0, dataSize);
 			mAllPCMCount = dataSize;
 		}
 	}
@@ -89,6 +89,6 @@ public class RecorderParser
 	public void updateDBFrequency()
 	{
 		// 计算音量大小和频域
-		mCurDB = MathUtility.pcm_db_count(mAllPCMData, mRecorderDataBlockSize);
+		mCurDB = pcm_db_count(mAllPCMData, mRecorderDataBlockSize);
 	}
 };

@@ -24,10 +24,10 @@ public class BYTE : OBJECT
 	}
 	public override void readFromBuffer(byte[] buffer, ref int index)
 	{
-		mValue = BinaryUtility.readByte(buffer, ref index);
+		mValue = readByte(buffer, ref index);
 	}
 	public override void writeToBuffer(byte[] buffer, ref int index)
 	{
-		BinaryUtility.writeByte(buffer, ref index, mValue);
+		writeByte(buffer, ref index, mValue);
 	}
 }

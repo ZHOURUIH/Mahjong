@@ -24,10 +24,10 @@ public class SHORT : OBJECT
 	}
 	public override void readFromBuffer(byte[] buffer, ref int index)
 	{
-		mValue = BinaryUtility.readShort(buffer, ref index);
+		mValue = readShort(buffer, ref index);
 	}
 	public override void writeToBuffer(byte[] buffer, ref int index)
 	{
-		BinaryUtility.writeShort(buffer, ref index, mValue);
+		writeShort(buffer, ref index, mValue);
 	}
 }

@@ -2,7 +2,8 @@
 using System.Collections;
 using System;
 
-public class ObjectTools : GameBase
+// ObjectTools
+public class OT : GameBase
 {
 	//--------------------------------------------------------------------------------------------------------------------------------------------
 	// 旋转
@@ -51,7 +52,7 @@ public class ObjectTools : GameBase
 	}
 	public static void ROTATE_OBJECT_EX(MovableObject obj, string keyframe, Vector3 start, Vector3 target, float onceLength, bool loop, float offset, KeyFrameCallback rotatingCallback, KeyFrameCallback doneCallback)
 	{
-		if(keyframe == "" || MathUtility.isFloatZero(onceLength))
+		if(keyframe == "" || isFloatZero(onceLength))
 		{
 			logError("时间或关键帧不能为空,如果要停止组件,请使用void ROTATE_OBJECT(txUIObject obj, Vector3 rotation)");
 		}
@@ -90,7 +91,7 @@ public class ObjectTools : GameBase
 	}
 	public static CommandMovableObjectRotate ROTATE_OBJECT_DELAY(MovableObject obj, float delayTime, string keyframe, Vector3 start, Vector3 target, float onceLength, bool loop, float offset)
 	{
-		if (keyframe == "" || MathUtility.isFloatZero(onceLength))
+		if (keyframe == "" || isFloatZero(onceLength))
 		{
 			logError("时间或关键帧不能为空,如果要停止组件,请使用CommandMovableObjectRotate ROTATE_OBJECT_DELAY(MovableObject obj, float delayTime, Vector3 rotation)");
 		}
@@ -187,7 +188,7 @@ public class ObjectTools : GameBase
 	}
 	public static void ROTATE_OBJECT_PHY_EX(MovableObject obj, string keyframe, Vector3 start, Vector3 target, float onceLength, bool loop, float offset, KeyFrameCallback rotatingCallback, KeyFrameCallback doneCallback)
 	{
-		if (keyframe == "" || MathUtility.isFloatZero(onceLength))
+		if (keyframe == "" || isFloatZero(onceLength))
 		{
 			logError("时间或关键帧不能为空,如果要停止组件,请使用void ROTATE_OBJECT_PHY(txUIObject obj, Vector3 rotation)");
 		}
@@ -226,7 +227,7 @@ public class ObjectTools : GameBase
 	}
 	public static CommandMovableObjectRotatePhysics ROTATE_OBJECT_PHY_DELAY(MovableObject obj, float delayTime, string keyframe, Vector3 start, Vector3 target, float onceLength, bool loop, float offset)
 	{
-		if (keyframe == "" || MathUtility.isFloatZero(onceLength))
+		if (keyframe == "" || isFloatZero(onceLength))
 		{
 			logError("时间或关键帧不能为空,如果要停止组件,请使用CommandMovableObjectRotatePhysics ROTATE_OBJECT_PHY_DELAY(MovableObject obj, float delayTime, Vector3 rotation)");
 		}
@@ -332,7 +333,7 @@ public class ObjectTools : GameBase
 	}
 	public static void MOVE_OBJECT_EX(MovableObject obj, string fileName, Vector3 startPos, Vector3 targetPos, float onceLength, bool loop, float offset, KeyFrameCallback TremblingCallBack, KeyFrameCallback TrembleDoneCallBack)
 	{
-		if (fileName == "" || MathUtility.isFloatZero(onceLength))
+		if (fileName == "" || isFloatZero(onceLength))
 		{
 			logError("时间或关键帧不能为空,如果要停止组件,请使用void MOVE_OBJECT(MovableObject obj, Vector3 pos)");
 		}
@@ -383,7 +384,7 @@ public class ObjectTools : GameBase
 	}
 	public static CommandMovableObjectMove MOVE_OBJECT_DELAY_EX(MovableObject obj, float delayTime, string keyframe, Vector3 startPos, Vector3 targetPos, float onceLength, bool loop, float offset, KeyFrameCallback movingCallback, KeyFrameCallback moveDoneCallback)
 	{
-		if (keyframe == "" || MathUtility.isFloatZero(onceLength))
+		if (keyframe == "" || isFloatZero(onceLength))
 		{
 			logError("时间或关键帧不能为空,如果要停止组件,请使用CommandMovableObjectMove MOVE_OBJECT_DELAY(MovableObject obj, float delayTime, Vector3 pos)");
 		}
@@ -452,7 +453,7 @@ public class ObjectTools : GameBase
 	}
 	public static void MOVE_OBJECT_PHY_EX(MovableObject obj, string fileName, Vector3 startPos, Vector3 targetPos, float onceLength, bool loop, float offset, KeyFrameCallback TremblingCallBack, KeyFrameCallback TrembleDoneCallBack)
 	{
-		if (fileName == "" || MathUtility.isFloatZero(onceLength))
+		if (fileName == "" || isFloatZero(onceLength))
 		{
 			logError("时间或关键帧不能为空,如果要停止组件,请使用void MOVE_OBJECT_PHY(MovableObject obj, Vector3 pos)");
 		}
@@ -503,7 +504,7 @@ public class ObjectTools : GameBase
 	}
 	public static CommandMovableObjectMovePhysics MOVE_OBJECT_PHY_DELAY_EX(MovableObject obj, float delayTime, string keyframe, Vector3 startPos, Vector3 targetPos, float onceLength, bool loop, float offset, KeyFrameCallback movingCallback, KeyFrameCallback moveDoneCallback)
 	{
-		if (keyframe == "" || MathUtility.isFloatZero(onceLength))
+		if (keyframe == "" || isFloatZero(onceLength))
 		{
 			logError("时间或关键帧不能为空,如果要停止组件,CommandMovableObjectMovePhysics MOVE_OBJECT_PHY_DELAY(MovableObject obj, float delayTime, Vector3 pos)");
 		}
@@ -625,7 +626,7 @@ public class ObjectTools : GameBase
 	}
 	public static void SCALE_OBJECT_EX(MovableObject obj, string fileName, Vector2 start, Vector2 target, float onceLength, bool loop, float offset, KeyFrameCallback scaleTremblingCallback, KeyFrameCallback scaleTrembleDoneCallback)
 	{
-		if (fileName == "" || MathUtility.isFloatZero(onceLength))
+		if (fileName == "" || isFloatZero(onceLength))
 		{
 			logError("时间或关键帧不能为空,如果要停止组件,请使用void SCALE_OBJECT(MovableObject obj, Vector2 scale)");
 		}
@@ -680,7 +681,7 @@ public class ObjectTools : GameBase
 	}
 	public static CommandMovableObjectScale SCALE_OBJECT_DELAY_EX(MovableObject obj, float delayTime, string keyframe, Vector2 start, Vector2 target, float onceLength, bool loop, float offset, KeyFrameCallback scaleTremblingCallback, KeyFrameCallback scaleTrembleDoneCallback)
 	{
-		if (keyframe == "" || MathUtility.isFloatZero(onceLength))
+		if (keyframe == "" || isFloatZero(onceLength))
 		{
 			logError("时间或关键帧不能为空,如果要停止组件,请使用CommandMovableObjectScale SCALE_OBJECT_DELAY(MovableObject obj, float delayTime, Vector2 scale)");
 		}

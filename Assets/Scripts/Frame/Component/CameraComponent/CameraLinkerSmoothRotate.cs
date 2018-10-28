@@ -21,20 +21,20 @@ public class CameraLinkerSmoothRotate : CameraLinker
 		// 如果使用目标物体的航向角,则对相对位置进行旋转
 		float targetRadianYaw = mLinkObject.getRotation().y * Mathf.Deg2Rad;
 		// 使用摄像机自身的航向角计算相对位置的航向角
-		float curYaw = MathUtility.getVectorYaw(-mCurRelative);
-		MathUtility.adjustRadian360(ref targetRadianYaw);
-		MathUtility.adjustRadian360(ref curYaw);
+		float curYaw = getVectorYaw(-mCurRelative);
+		adjustRadian360(ref targetRadianYaw);
+		adjustRadian360(ref curYaw);
 		// 调整角度范围
 		if (Mathf.Abs(curYaw - targetRadianYaw) > Mathf.PI)
 		{
-			MathUtility.adjustRadian180(ref targetRadianYaw);
-			MathUtility.adjustRadian180(ref curYaw);
+			adjustRadian180(ref targetRadianYaw);
+			adjustRadian180(ref curYaw);
 		}
-		curYaw = MathUtility.lerp(curYaw, targetRadianYaw, elapsedTime * mSmoothRotateSpeed, 0.01f);
-		MathUtility.adjustRadian360(ref targetRadianYaw);
-		MathUtility.adjustRadian360(ref curYaw);
-		float curPitch = MathUtility.getVectorPitch(-mRelativePosition);
-		Vector3 newRelative = -MathUtility.getDirectionFromRadianYawPitch(curYaw, curPitch) * MathUtility.getLength(mRelativePosition);
+		curYaw = lerp(curYaw, targetRadianYaw, elapsedTime * mSmoothRotateSpeed, 0.01f);
+		adjustRadian360(ref targetRadianYaw);
+		adjustRadian360(ref curYaw);
+		float curPitch = getVectorPitch(-mRelativePosition);
+		Vector3 newRelative = -getDirectionFromRadianYawPitch(curYaw, curPitch) * getLength(mRelativePosition);
 		applyRelativePosition(newRelative);
 	}
 	public override void applyRelativePosition(Vector3 relative)

@@ -27,17 +27,17 @@ public class CameraLinkerSwitchAroundTarget : CameraLinkerSwitch
 		base.init(origin, target, speed);
 		if (mClockwise)
 		{
-			mTotalAngle = MathUtility.getAngleFromVector(mTargetRelative) - MathUtility.getAngleFromVector(mOriginRelative);
-			MathUtility.adjustRadian360(ref mTotalAngle);
+			mTotalAngle = getAngleFromVector(mTargetRelative) - getAngleFromVector(mOriginRelative);
+			adjustRadian360(ref mTotalAngle);
 			mSpeed = Mathf.Abs(mSpeed);
 		}
 		else
 		{
-			mTotalAngle = MathUtility.getAngleFromVector(mOriginRelative) - MathUtility.getAngleFromVector(mTargetRelative);
-			MathUtility.adjustRadian360(ref mTotalAngle);
+			mTotalAngle = getAngleFromVector(mOriginRelative) - getAngleFromVector(mTargetRelative);
+			adjustRadian360(ref mTotalAngle);
 			mSpeed = -Mathf.Abs(mSpeed);
 		}
-		mDistanceDelta = MathUtility.getLength(mTargetRelative) - MathUtility.getLength(mOriginRelative);
+		mDistanceDelta = getLength(mTargetRelative) - getLength(mOriginRelative);
 		mDistanceCurrent = 0.0f;
 		mRotatedAngle = 0.0f;
 	}
@@ -67,12 +67,12 @@ public class CameraLinkerSwitchAroundTarget : CameraLinkerSwitch
 			else
 			{
 				// z方向上旋转后的轴
-				Vector3 rotateAxis = MathUtility.rotateVector3(mOriginRelative, mRotatedAngle);
+				Vector3 rotateAxis = rotateVector3(mOriginRelative, mRotatedAngle);
 				// 距离变化
 				Vector3 projectVec = rotateAxis;
 				projectVec.y = 0;
-				projectVec = MathUtility.normalize(projectVec);
-				projectVec = projectVec * (MathUtility.getLength(mOriginRelative) + mDistanceCurrent);
+				projectVec = normalize(projectVec);
+				projectVec = projectVec * (getLength(mOriginRelative) + mDistanceCurrent);
 				// 高度变化
 				rotateAxis.y = (mTargetRelative.y - mOriginRelative.y) * (mRotatedAngle / mTotalAngle) + mOriginRelative.y;
 				//最终值
@@ -94,11 +94,11 @@ public class CameraLinkerSwitchAroundTarget : CameraLinkerSwitch
 			}
 			else
 			{
-				Vector3 rotateAxis = MathUtility.rotateVector3(mOriginRelative, mRotatedAngle);
+				Vector3 rotateAxis = rotateVector3(mOriginRelative, mRotatedAngle);
 				Vector3 projectVec = rotateAxis;
 				projectVec.y = 0;
-				projectVec = MathUtility.normalize(projectVec);
-				projectVec = projectVec * (MathUtility.getLength(mOriginRelative) + mDistanceCurrent);
+				projectVec = normalize(projectVec);
+				projectVec = projectVec * (getLength(mOriginRelative) + mDistanceCurrent);
 
 				rotateAxis.y = (mTargetRelative.y - mOriginRelative.y) * (mRotatedAngle / mTotalAngle) + mOriginRelative.y;
 				rotateAxis.x = projectVec.x;

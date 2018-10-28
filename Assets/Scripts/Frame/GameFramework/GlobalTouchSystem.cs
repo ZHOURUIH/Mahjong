@@ -155,7 +155,7 @@ public class GlobalTouchSystem : FrameComponent
 			if(mHoverButton != null)
 			{
 				Vector2 moveDelta = curMousePosition - mLastMousePosition;
-				mHoverButton.onMouseMove(curMousePosition, moveDelta, MathUtility.getLength(moveDelta) / elapsedTime);
+				mHoverButton.onMouseMove(curMousePosition, moveDelta, getLength(moveDelta) / elapsedTime);
 			}
 			mLastMousePosition = curMousePosition;
 			mCurStayTime = 0.0f;
@@ -273,7 +273,7 @@ public class GlobalTouchSystem : FrameComponent
 		}
 		if(!press)
 		{
-			if(MathUtility.getSquaredLength(mPressMousePosition - mousePosition) <= mSquaredClickThreshhold)
+			if(getSquaredLength(mPressMousePosition - mousePosition) <= mSquaredClickThreshhold)
 			{
 				// 检测所有拣选到的盒子
 				foreach (var button in raycast)

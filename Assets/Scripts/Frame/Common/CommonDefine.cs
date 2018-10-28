@@ -146,6 +146,7 @@ public class CommonDefine
 	// 相对路径,相对于项目,以P_开头,表示Project
 	public const string P_ASSETS_PATH = ASSETS + "/";
 	public const string P_RESOURCE_PATH = P_ASSETS_PATH + RESOURCES + "/";
+	public const string P_ATLAS_PATH = P_RESOURCE_PATH + ATLAS + "/";
 	// 相对路径,相对于StreamingAssets,以SA_开头,表示StreamingAssets
 	// 由于Android下的StreamingAssets路径不完全以Assets路径开头,与其他平台不一致,所以不定义相对于Asstes的路径
 	public const string SA_CONFIG_PATH = CONFIG + "/";
@@ -194,6 +195,7 @@ public class CommonDefine
 	public static string F_GAME_ATLAS_PATH = F_ATLAS_PATH + GAME_ATLAS + "/";
 	public static string F_ATLAS_TEXTURE_ANIM_PATH = F_ATLAS_PATH + TEXTURE_ANIM + "/";
 	public static string F_TEXTURE_PATH = F_RESOURCES_PATH + TEXTURE + "/";
+	public static string F_TEXTURE_GAME_TEXTURE_PATH = F_TEXTURE_PATH + GAME_TEXTURE + "/";
 	public static string F_TEXTURE_ANIM_PATH = F_TEXTURE_PATH + TEXTURE_ANIM + "/";
 	//-----------------------------------------------------------------------------------------------------------------
 	// 常量定义

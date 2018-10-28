@@ -10,7 +10,7 @@ public class MahjongSceneRunningDice : SceneProcedure
 	{ }
 	protected override void onInit(SceneProcedure lastProcedure, string intent)
 	{
-		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_DICE);
+		LT.SHOW_LAYOUT(LAYOUT_TYPE.LT_DICE);
 		// 通知全部角色信息布局全部准备完毕
 		mScriptAllCharacterInfo.notifyStartGame();
 		mScriptMahjongFrame.notifyStartGame();
@@ -25,7 +25,7 @@ public class MahjongSceneRunningDice : SceneProcedure
 	}
 	protected override void onExit(SceneProcedure nextProcedure)
 	{
-		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_DICE);
+		LT.HIDE_LAYOUT(LAYOUT_TYPE.LT_DICE);
 	}
 	protected override void onKeyProcess(float elapsedTime)
 	{

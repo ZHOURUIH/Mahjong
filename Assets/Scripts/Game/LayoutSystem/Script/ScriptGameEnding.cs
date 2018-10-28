@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class EndingCharacter
+public class EndingCharacter : GameBase
 {
 	public txUIObject mRoot;
 	public txNGUITexture mHead;
@@ -44,12 +44,12 @@ public class EndingCharacter
 	}
 	public void setMoneyDelta(int moneyDelta)
 	{
-		string deltaStr = StringUtility.intToString(Mathf.Abs(moneyDelta));
+		string deltaStr = intToString(Mathf.Abs(moneyDelta));
 		deltaStr = moneyDelta > 0 ? ("+" + deltaStr) : ("-" + deltaStr);
 		mMoneyDelta.setLabel(deltaStr);
 	}
 }
-public class Multiple
+public class Multiple : GameBase
 {
 	public txUIObject mRoot;
 	public txNGUIText mDescribe;
@@ -75,7 +75,7 @@ public class Multiple
 	}
 	public void setVisible(bool show)
 	{
-		LayoutTools.ACTIVE_WINDOW(mRoot, show);
+		LT.ACTIVE_WINDOW(mRoot, show);
 	}
 	public void setDescribe(string describe)
 	{
@@ -83,7 +83,7 @@ public class Multiple
 	}
 	public void setMultiple(int multiple)
 	{
-		mMultipleCount.setLabel(StringUtility.intToString(multiple) + " 番");
+		mMultipleCount.setLabel(intToString(multiple) + " 番");
 	}
 }
 
@@ -154,8 +154,8 @@ public class ScriptGameEnding : LayoutScript
 	}
 	public override void onReset()
 	{
-		LayoutTools.SCALE_WINDOW(mContinueButton, Vector2.one);
-		LayoutTools.SCALE_WINDOW(mReturnButton, Vector2.one);
+		LT.SCALE_WINDOW(mContinueButton, Vector2.one);
+		LT.SCALE_WINDOW(mReturnButton, Vector2.one);
 		int charCount = mEndingCharacterList.Count;
 		for (int i = 0; i < charCount; ++i)
 		{
@@ -169,9 +169,9 @@ public class ScriptGameEnding : LayoutScript
 	}
 	public override void onShow(bool immediately, string param)
 	{
-		LayoutTools.ACTIVE_WINDOW(mMoneyResultRoot);
-		LayoutTools.ACTIVE_WINDOW(mDetailRoot);
-		LayoutTools.ACTIVE_WINDOW(mButtonRoot);
+		LT.ACTIVE_WINDOW(mMoneyResultRoot);
+		LT.ACTIVE_WINDOW(mDetailRoot);
+		LT.ACTIVE_WINDOW(mButtonRoot);
 	}
 	public override void onHide(bool immediately, string param)
 	{
@@ -187,8 +187,8 @@ public class ScriptGameEnding : LayoutScript
 	}
 	public void setDetail(List<ResultInfo> resultList)
 	{
-		LayoutTools.ACTIVE_WINDOW(mHu, resultList.Count > 0);
-		LayoutTools.ACTIVE_WINDOW(mPingJu, resultList.Count == 0);
+		LT.ACTIVE_WINDOW(mHu, resultList.Count > 0);
+		LT.ACTIVE_WINDOW(mPingJu, resultList.Count == 0);
 		// 显示番数
 		if (resultList.Count == 0)
 		{
@@ -210,7 +210,7 @@ public class ScriptGameEnding : LayoutScript
 	}
 	public void setPlayerInfo(Dictionary<Character, int> moneyDelta)
 	{
-		int count = MathUtility.getMin(mEndingCharacterList.Count, moneyDelta.Count);
+		int count = getMin(mEndingCharacterList.Count, moneyDelta.Count);
 		List<Character> keys = new List<Character>(moneyDelta.Keys);
 		for(int i = 0; i < count; ++i)
 		{
@@ -238,6 +238,6 @@ public class ScriptGameEnding : LayoutScript
 	protected void onButtonPress(GameObject go, bool press)
 	{
 		txUIObject obj = mLayout.getUIObject(go);
-		LayoutTools.SCALE_WINDOW(obj, obj.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
+		LT.SCALE_WINDOW(obj, obj.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
 	}
 }

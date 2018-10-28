@@ -9,7 +9,7 @@ public class LogoSceneRegister : SceneProcedure
 	{}
 	protected override void onInit(SceneProcedure lastProcedure, string intent)
     {
-		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_REGISTER);
+		LT.SHOW_LAYOUT(LAYOUT_TYPE.LT_REGISTER);
 	}
 	protected override void onUpdate(float elapsedTime)
     {
@@ -17,7 +17,7 @@ public class LogoSceneRegister : SceneProcedure
     }
 	protected override void onExit(SceneProcedure nextProcedure)
     {
-		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_REGISTER);
+		LT.HIDE_LAYOUT(LAYOUT_TYPE.LT_REGISTER);
 	}
 	protected override void onKeyProcess(float elapsedTime)
 	{

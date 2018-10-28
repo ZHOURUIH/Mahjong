@@ -32,17 +32,17 @@ public class ShowHuMahjong
 	}
 	public void onReset()
 	{
-		LayoutTools.ACTIVE_WINDOW(mShowRoot, false);
+		LT.ACTIVE_WINDOW(mShowRoot, false);
 	}
 	public void showCurMahjong(List<MAHJONG> mahList)
 	{
-		LayoutTools.ACTIVE_WINDOW(mShowRoot);
+		LT.ACTIVE_WINDOW(mShowRoot);
 		int curCount = mahList.Count;
 		int maxCount = mShowMahjong.Count;
 		for (int i = 0; i < maxCount; ++i)
 		{
 			bool show = i < curCount;
-			LayoutTools.ACTIVE_WINDOW(mShowMahjong[i], show);
+			LT.ACTIVE_WINDOW(mShowMahjong[i], show);
 			if (show)
 			{
 				mShowMahjong[i].setSpriteName(mMahjongPreName + GameDefine.MAHJONG_NAME[(int)mahList[i]]);

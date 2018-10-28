@@ -68,11 +68,11 @@ public class PengGangMahjong
 	//----------------------------------------------------------------------------------------------------------
 	protected void resetPengGang(int index)
 	{
-		LayoutTools.ACTIVE_WINDOW(mPengGangSingleRoot[index], false);
+		LT.ACTIVE_WINDOW(mPengGangSingleRoot[index], false);
 		int maxCount = mMahjongWindows[index].Count;
 		for (int i = 0; i < maxCount; ++i)
 		{
-			LayoutTools.ACTIVE_WINDOW(mMahjongWindows[index][i], false);
+			LT.ACTIVE_WINDOW(mMahjongWindows[index][i], false);
 		}
 	}
 	protected void showPengGang(int index, ACTION_TYPE type, MAHJONG mah)
@@ -90,12 +90,12 @@ public class PengGangMahjong
 		{
 			return;
 		}
-		LayoutTools.ACTIVE_WINDOW(mPengGangSingleRoot[index]);
+		LT.ACTIVE_WINDOW(mPengGangSingleRoot[index]);
 		int maxCount = mMahjongWindows[index].Count;
 		string mahjongSpriteName = mMahjongPreName + GameDefine.MAHJONG_NAME[(int)mah];
 		for (int i = 0; i < maxCount; ++i)
 		{
-			LayoutTools.ACTIVE_WINDOW(mMahjongWindows[index][i], i < count);
+			LT.ACTIVE_WINDOW(mMahjongWindows[index][i], i < count);
 			if (i < count)
 			{
 				mMahjongWindows[index][i].setSpriteName(mahjongSpriteName);

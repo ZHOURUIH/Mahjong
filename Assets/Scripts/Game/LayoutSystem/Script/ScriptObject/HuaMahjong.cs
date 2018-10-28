@@ -36,13 +36,13 @@ public class HuaMahjong
 	}
 	public void getHua(List<MAHJONG> huaList)
 	{
-		LayoutTools.ACTIVE_WINDOW(mHuaRoot);
+		LT.ACTIVE_WINDOW(mHuaRoot);
 		int curCount = huaList.Count;
 		int maxCount = mHuaMahjong.Count;
 		for (int i = 0; i < maxCount; ++i)
 		{
 			bool show = i < curCount;
-			LayoutTools.ACTIVE_WINDOW(mHuaMahjong[i], show);
+			LT.ACTIVE_WINDOW(mHuaMahjong[i], show);
 			if (show)
 			{
 				mHuaMahjong[i].setSpriteName(mMahjongPreName + GameDefine.MAHJONG_NAME[(int)huaList[i]]);

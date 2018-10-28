@@ -26,7 +26,7 @@ public class SCOtherPlayerJoinRoom : SocketPacket
 	}
 	public override void execute()
 	{
-		string name = BinaryUtility.bytesToString(mName.mValue, BinaryUtility.getGB2312());
+		string name = bytesToString(mName.mValue, getGB2312());
 		UnityUtility.logInfo("获得玩家数据 : " + mPlayerGUID.mValue + ", 名字 : " + name);
 		// 创建该玩家的实例
 		CommandCharacterManagerCreateCharacter cmdCreate = newCmd(out cmdCreate);

@@ -25,9 +25,9 @@ public class ScriptDice : LayoutScript
 	}
 	public override void onReset()
 	{
-		LayoutTools.ACTIVE_WINDOW(mDiceAnim);
-		LayoutTools.ACTIVE_WINDOW(mDice0, false);
-		LayoutTools.ACTIVE_WINDOW(mDice1, false);
+		LT.ACTIVE_WINDOW(mDiceAnim);
+		LT.ACTIVE_WINDOW(mDice0, false);
+		LT.ACTIVE_WINDOW(mDice1, false);
 	}
 	public override void onGameState()
 	{
@@ -57,7 +57,7 @@ public class ScriptDice : LayoutScript
 	//-----------------------------------------------------------------------------------
 	protected void onDiceAnimDone(INGUIAnimation window, bool isBreak)
 	{
-		LayoutTools.ACTIVE_WINDOW(mDice0);
-		LayoutTools.ACTIVE_WINDOW(mDice1);
+		LT.ACTIVE_WINDOW(mDice0);
+		LT.ACTIVE_WINDOW(mDice1);
 	}
 }

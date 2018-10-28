@@ -41,12 +41,12 @@ public class ScriptRegister : LayoutScript
 	}
 	public override void onReset()
 	{
-		LayoutTools.SCALE_WINDOW(mRegisterButton);
-		LayoutTools.SCALE_WINDOW(mCancelButton);
-		LayoutTools.SCALE_WINDOW(mCheckNameButton);
-		LayoutTools.ACTIVE_WINDOW(mCheckNameButton);
-		LayoutTools.ACTIVE_WINDOW(mValidNameTip, false);
-		LayoutTools.ACTIVE_WINDOW(mInvalidNameTip, false);
+		LT.SCALE_WINDOW(mRegisterButton);
+		LT.SCALE_WINDOW(mCancelButton);
+		LT.SCALE_WINDOW(mCheckNameButton);
+		LT.ACTIVE_WINDOW(mCheckNameButton);
+		LT.ACTIVE_WINDOW(mValidNameTip, false);
+		LT.ACTIVE_WINDOW(mInvalidNameTip, false);
 		mRegisterButton.setHandleInput(false);
 	}
 	public override void onShow(bool immediately, string param)
@@ -65,9 +65,9 @@ public class ScriptRegister : LayoutScript
 	{
 		mRegisterButton.setHandleInput(available);
 		mCheckNameButton.setHandleInput(!available);
-		LayoutTools.ACTIVE_WINDOW(mCheckNameButton, !available);
-		LayoutTools.ACTIVE_WINDOW(mValidNameTip, available);
-		LayoutTools.ACTIVE_WINDOW(mInvalidNameTip, !available);
+		LT.ACTIVE_WINDOW(mCheckNameButton, !available);
+		LT.ACTIVE_WINDOW(mValidNameTip, available);
+		LT.ACTIVE_WINDOW(mInvalidNameTip, !available);
 	}
 	//-------------------------------------------------------------------------------------------------------
 	protected void onRegisterClick(GameObject button)
@@ -93,7 +93,7 @@ public class ScriptRegister : LayoutScript
 		if(nameText != "")
 		{
 			CSCheckName checkName = mSocketManager.createPacket<CSCheckName>();
-			byte[] nameBytes = BinaryUtility.stringToBytes(nameText, BinaryUtility.getGB2312());
+			byte[] nameBytes = stringToBytes(nameText, BinaryUtility.getGB2312());
 			checkName.setName(nameBytes);
 			mSocketManager.sendMessage(checkName);
 			// 检测按钮点击后就禁用该按钮
@@ -103,6 +103,6 @@ public class ScriptRegister : LayoutScript
 	protected void onButtonPress(GameObject button, bool press)
 	{
 		txUIObject obj = mLayout.getUIObject(button);
-		LayoutTools.SCALE_WINDOW(obj, obj.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
+		LT.SCALE_WINDOW(obj, obj.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
 	}
 }

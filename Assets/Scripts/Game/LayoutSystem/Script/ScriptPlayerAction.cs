@@ -38,7 +38,7 @@ public class ScriptPlayerAction : LayoutScript
 		int count = mAction.Length;
 		for (int i = 0; i < count; ++i)
 		{
-			LayoutTools.SCALE_WINDOW(mAction[i], Vector2.one);
+			LT.SCALE_WINDOW(mAction[i], Vector2.one);
 		}
 	}
 	public override void onHide(bool immediately, string param)
@@ -55,7 +55,7 @@ public class ScriptPlayerAction : LayoutScript
 		int count = mAction.Length;
 		for (int i = 0; i < count; ++i)
 		{
-			LayoutTools.ACTIVE_WINDOW(mAction[i], false);
+			LT.ACTIVE_WINDOW(mAction[i], false);
 		}
 		// 显示可以操作的行为
 		if(actionList != null)
@@ -63,7 +63,7 @@ public class ScriptPlayerAction : LayoutScript
 			int actionCount = actionList.Count;
 			for (int i = 0; i < actionCount; ++i)
 			{
-				LayoutTools.ACTIVE_WINDOW(mAction[(int)actionList[i].mType]);
+				LT.ACTIVE_WINDOW(mAction[(int)actionList[i].mType]);
 			}
 		}
 	}

@@ -3,7 +3,7 @@ using System.Collections;
 
 // 管理类初始化完成调用
 // 这个父类的添加是方便代码的书写
-// 继承StringUtility是为了在调用工具函数时方便,把四个完全独立的工具函数类串起来继承,所有继承自FrameBase的类都可以直接访问四大工具类中的函数
+// 继承FileUtility是为了在调用工具函数时方便,把四个完全独立的工具函数类串起来继承,所有继承自FrameBase的类都可以直接访问四大工具类中的函数
 public class FrameBase : FileUtility
 {
 	// FrameComponent

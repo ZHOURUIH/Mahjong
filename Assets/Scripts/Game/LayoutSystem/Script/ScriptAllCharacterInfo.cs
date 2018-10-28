@@ -35,11 +35,11 @@ public class CharacterInfoPanel
 	public void onReset()
 	{
 		notifyLeave();
-		LayoutTools.ACTIVE_WINDOW(mReady, false);
+		LT.ACTIVE_WINDOW(mReady, false);
 	}
 	public void notifyJoin(Character player)
 	{
-		LayoutTools.ACTIVE_WINDOW(mRoot);
+		LT.ACTIVE_WINDOW(mRoot);
 		CharacterData data = player.getCharacterData();
 		setHead(data.mHead);
 		setName(data.mName);
@@ -49,15 +49,15 @@ public class CharacterInfoPanel
 	}
 	public void notifyLeave()
 	{
-		LayoutTools.ACTIVE_WINDOW(mRoot, false);
+		LT.ACTIVE_WINDOW(mRoot, false);
 	}
 	public void notifyReady(bool ready)
 	{
-		LayoutTools.ACTIVE_WINDOW(mReady, ready);
+		LT.ACTIVE_WINDOW(mReady, ready);
 	}
 	public void notifyStartGame()
 	{
-		LayoutTools.ACTIVE_WINDOW(mReady, false);
+		LT.ACTIVE_WINDOW(mReady, false);
 	}
 	public void setHead(int index)
 	{
@@ -73,7 +73,7 @@ public class CharacterInfoPanel
 	}
 	public void setBanker(bool banker)
 	{
-		LayoutTools.ACTIVE_WINDOW(mBanker, banker);
+		LT.ACTIVE_WINDOW(mBanker, banker);
 	}
 }
 

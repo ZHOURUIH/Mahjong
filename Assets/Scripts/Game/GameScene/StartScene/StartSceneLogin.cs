@@ -9,7 +9,7 @@ public class LogoSceneLogin : SceneProcedure
 	{}
 	protected override void onInit(SceneProcedure lastProcedure, string intent)
     {
-		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_LOGIN);
+		LT.SHOW_LAYOUT(LAYOUT_TYPE.LT_LOGIN);
 	}
 	protected override void onUpdate(float elapsedTime)
     {
@@ -17,7 +17,7 @@ public class LogoSceneLogin : SceneProcedure
     }
 	protected override void onExit(SceneProcedure nextProcedure)
     {
-		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_LOGIN);
+		LT.HIDE_LAYOUT(LAYOUT_TYPE.LT_LOGIN);
 	}
 	protected override void onKeyProcess(float elapsedTime)
 	{

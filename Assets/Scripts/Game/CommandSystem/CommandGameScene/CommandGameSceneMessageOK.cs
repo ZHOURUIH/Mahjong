@@ -13,7 +13,7 @@ public class CommandGameSceneMessageOK : Command
 	}
 	public override void execute()
 	{
-		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_MESSAGE_OK);
+		LT.SHOW_LAYOUT(LAYOUT_TYPE.LT_MESSAGE_OK);
 		mScriptMessageOK.setMessage(mMessage);
 		if(mButtonLabel != "")
 		{

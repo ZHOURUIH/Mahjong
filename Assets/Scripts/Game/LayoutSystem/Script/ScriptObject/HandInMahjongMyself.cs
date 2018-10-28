@@ -72,7 +72,7 @@ public class HandInMahjongMyself : HandInMahjong
 	{
 		for (int i = 0; i < mHandInMahjong.Count; ++i)
 		{
-			LayoutTools.ACTIVE_WINDOW(mHandInMahjong[i].mSelectMask, mah != MAHJONG.M_MAX && mah == mHandInMahjong[i].mMahjong);
+			LT.ACTIVE_WINDOW(mHandInMahjong[i].mSelectMask, mah != MAHJONG.M_MAX && mah == mHandInMahjong[i].mMahjong);
 		}
 	}
 }

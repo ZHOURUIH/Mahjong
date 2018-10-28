@@ -44,7 +44,7 @@ public class ScriptMahjongDrop : LayoutScript
 			int count = mDropList[i].Count;
 			for(int j = 0; j < count; ++j)
 			{
-				LayoutTools.ACTIVE_WINDOW(mDropList[i][j], false);
+				LT.ACTIVE_WINDOW(mDropList[i][j], false);
 			}
 		}
 	}
@@ -68,7 +68,7 @@ public class ScriptMahjongDrop : LayoutScript
 		{
 			string mahjongSpriteName = GameDefine.mDropMahjongPreName[(int)pos] + GameDefine.MAHJONG_NAME[(int)mahjong];
 			mDropList[(int)pos][preCount].setSpriteName(mahjongSpriteName);
-			LayoutTools.ACTIVE_WINDOW(mDropList[(int)pos][preCount]);
+			LT.ACTIVE_WINDOW(mDropList[(int)pos][preCount]);
 		}
 		else
 		{
@@ -77,18 +77,18 @@ public class ScriptMahjongDrop : LayoutScript
 	}
 	public void notifyTakeDroppedMahjong(PLAYER_POSITION pos, int index)
 	{
-		int maxIndex = MathUtility.getMin(mMaxDropCount - 1, index);
-		LayoutTools.ACTIVE_WINDOW(mDropList[(int)pos][maxIndex], false);
+		int maxIndex = getMin(mMaxDropCount - 1, index);
+		LT.ACTIVE_WINDOW(mDropList[(int)pos][maxIndex], false);
 	}
 	//--------------------------------------------------------------------------------------------------------------------------------------
 	protected void refreshDropMahjong(PLAYER_POSITION pos, List<MAHJONG> droppedMahjong)
 	{
 		int droppedCount = droppedMahjong.Count;
-		int showCount = MathUtility.getMin(mMaxDropCount, droppedCount);
+		int showCount = getMin(mMaxDropCount, droppedCount);
 		int showStartIndex = droppedCount - showCount;
 		for (int i = 0; i < mMaxDropCount; ++i)
 		{
-			LayoutTools.ACTIVE_WINDOW(mDropList[(int)pos][i], i < showCount);
+			LT.ACTIVE_WINDOW(mDropList[(int)pos][i], i < showCount);
 			if(i < showCount)
 			{
 				mDropList[(int)pos][i].setSpriteName(GameDefine.mDropMahjongPreName[(int)pos] + GameDefine.MAHJONG_NAME[(int)droppedMahjong[showStartIndex + i]]);

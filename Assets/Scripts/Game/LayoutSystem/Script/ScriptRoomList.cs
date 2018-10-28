@@ -107,9 +107,9 @@ public class ScriptRoomList : LayoutScript
 	}
 	public override void onReset()
 	{
-		LayoutTools.SCALE_WINDOW(mLastPage);
-		LayoutTools.SCALE_WINDOW(mNextPage);
-		LayoutTools.SCALE_WINDOW(mManualRefresh);
+		LT.SCALE_WINDOW(mLastPage);
+		LT.SCALE_WINDOW(mNextPage);
+		LT.SCALE_WINDOW(mManualRefresh);
 		int count = mRoomItemList.Length;
 		for (int i = 0; i < count; ++i)
 		{
@@ -151,10 +151,10 @@ public class ScriptRoomList : LayoutScript
 	{
 		// 显示当前页房间信息
 		int maxCount = mRoomItemList.Length;
-		int showCount = MathUtility.getMin(roomList != null ? roomList.Count : 0, maxCount);
+		int showCount = getMin(roomList != null ? roomList.Count : 0, maxCount);
 		for(int i = 0; i < maxCount; ++i)
 		{
-			LayoutTools.ACTIVE_WINDOW(mRoomItemList[i].mItemParent, i < showCount);
+			LT.ACTIVE_WINDOW(mRoomItemList[i].mItemParent, i < showCount);
 			if(i < showCount)
 			{
 				mRoomItemList[i].setOwnerName(roomList[i].mOwnerName);
@@ -173,7 +173,7 @@ public class ScriptRoomList : LayoutScript
 	public void confirmAutoRequest(bool autoRequest, float autoRequestTime)
 	{
 		mAutoRefreshCheck.setChecked(autoRequest);
-		MathUtility.clampMin(ref autoRequestTime, 0.0f);
+		clampMin(ref autoRequestTime, 0.0f);
 		setRemainRequestTime((int)autoRequestTime);
 	}
 	public void setPageLabel(int curPage, int totalPage)
@@ -226,6 +226,6 @@ public class ScriptRoomList : LayoutScript
 	protected void onButtonPress(GameObject obj, bool press)
 	{
 		txUIObject window = mLayout.getUIObject(obj);
-		LayoutTools.SCALE_WINDOW(window, window.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
+		LT.SCALE_WINDOW(window, window.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
 	}
 }

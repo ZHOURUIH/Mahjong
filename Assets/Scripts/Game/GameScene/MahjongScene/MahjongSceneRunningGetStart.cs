@@ -10,7 +10,7 @@ public class MahjongSceneRunningGetStart : SceneProcedure
 	{ }
 	protected override void onInit(SceneProcedure lastProcedure, string intent)
 	{
-		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_MAHJONG_HAND_IN);
+		LT.SHOW_LAYOUT(LAYOUT_TYPE.LT_MAHJONG_HAND_IN);
 		mMahjongSystem.notifyGetStartMahjong();
 	}
 	protected override void onUpdate(float elapsedTime)

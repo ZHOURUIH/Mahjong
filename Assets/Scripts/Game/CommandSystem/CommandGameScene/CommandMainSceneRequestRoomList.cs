@@ -28,7 +28,7 @@ public class CommandMainSceneRequestRoomList : Command
 		{
 			return;
 		}
-		MathUtility.clampMin(ref mCurPageIndex, 0);
+		clampMin(ref mCurPageIndex, 0);
 		// 向服务器请求一页房间列表
 		CSRequestRoomList requestRoomList = mSocketManager.createPacket<CSRequestRoomList>();
 		requestRoomList.mMinIndex.mValue = (short)(mCurPageIndex * GameDefine.MAX_REQUEST_ROOM_COUNT);

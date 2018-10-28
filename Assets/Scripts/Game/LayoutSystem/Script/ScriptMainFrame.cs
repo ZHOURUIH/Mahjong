@@ -55,15 +55,15 @@ public class ScriptMainFrame : LayoutScript
 	}
 	public override void onReset()
 	{
-		LayoutTools.SCALE_WINDOW(mMailButton);
-		LayoutTools.SCALE_WINDOW(mCompetitionButton);
-		LayoutTools.SCALE_WINDOW(mShareButton);
-		LayoutTools.SCALE_WINDOW(mStandingButton);
-		LayoutTools.SCALE_WINDOW(mRuleButton);
-		LayoutTools.SCALE_WINDOW(mContactButton);
-		LayoutTools.SCALE_WINDOW(mRechargeButton);
-		LayoutTools.SCALE_WINDOW(mSettingButton);
-		LayoutTools.SCALE_WINDOW(mQuitButton);
+		LT.SCALE_WINDOW(mMailButton);
+		LT.SCALE_WINDOW(mCompetitionButton);
+		LT.SCALE_WINDOW(mShareButton);
+		LT.SCALE_WINDOW(mStandingButton);
+		LT.SCALE_WINDOW(mRuleButton);
+		LT.SCALE_WINDOW(mContactButton);
+		LT.SCALE_WINDOW(mRechargeButton);
+		LT.SCALE_WINDOW(mSettingButton);
+		LT.SCALE_WINDOW(mQuitButton);
 	}
 	public override void onShow(bool immediately, string param)
 	{
@@ -117,6 +117,6 @@ public class ScriptMainFrame : LayoutScript
 	protected void onButtonPress(GameObject obj, bool press)
 	{
 		txUIObject window = mLayout.getUIObject(obj);
-		LayoutTools.SCALE_WINDOW(window, window.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
+		LT.SCALE_WINDOW(window, window.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
 	}
 }

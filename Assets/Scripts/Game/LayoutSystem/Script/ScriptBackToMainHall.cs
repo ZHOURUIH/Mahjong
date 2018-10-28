@@ -25,7 +25,7 @@ public class ScriptBackToMainHall : LayoutScript
 	}
 	public override void onReset()
 	{
-		LayoutTools.SCALE_WINDOW(mBackButton);
+		LT.SCALE_WINDOW(mBackButton);
 	}
 	public override void onShow(bool immediately, string param)
 	{
@@ -50,6 +50,6 @@ public class ScriptBackToMainHall : LayoutScript
 	protected void onButtonPress(GameObject obj, bool press)
 	{
 		txUIObject window = mLayout.getUIObject(obj);
-		LayoutTools.SCALE_WINDOW(window, window.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
+		LT.SCALE_WINDOW(window, window.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
 	}
 }

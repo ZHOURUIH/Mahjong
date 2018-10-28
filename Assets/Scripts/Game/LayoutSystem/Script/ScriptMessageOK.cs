@@ -27,7 +27,7 @@ public class ScriptMessageOK : LayoutScript
 	}
 	public override void onReset()
 	{
-		LayoutTools.SCALE_WINDOW(mOKButton);
+		LT.SCALE_WINDOW(mOKButton);
 	}
 	public override void onShow(bool immediately, string param)
 	{
@@ -52,11 +52,11 @@ public class ScriptMessageOK : LayoutScript
 	//-------------------------------------------------------------------------------------------------------
 	protected void onOKClick(GameObject button)
 	{
-		LayoutTools.HIDE_LAYOUT(mType);
+		LT.HIDE_LAYOUT(mType);
 	}
 	protected void onButtonPress(GameObject button, bool press)
 	{
 		txUIObject obj = mLayout.getUIObject(button);
-		LayoutTools.SCALE_WINDOW(obj, obj.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
+		LT.SCALE_WINDOW(obj, obj.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
 	}
 }

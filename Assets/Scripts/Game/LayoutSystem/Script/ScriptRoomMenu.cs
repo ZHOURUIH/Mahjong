@@ -42,10 +42,10 @@ public class ScriptRoomMenu : LayoutScript
 	}
 	public override void onReset()
 	{
-		LayoutTools.SCALE_WINDOW(mCreateRoomButton);
-		LayoutTools.SCALE_WINDOW(mJoinRoomButton);
-		LayoutTools.SCALE_WINDOW(mFreeMatchButton);
-		LayoutTools.SCALE_WINDOW(mRoomListButton);
+		LT.SCALE_WINDOW(mCreateRoomButton);
+		LT.SCALE_WINDOW(mJoinRoomButton);
+		LT.SCALE_WINDOW(mFreeMatchButton);
+		LT.SCALE_WINDOW(mRoomListButton);
 	}
 	public override void onShow(bool immediately, string param)
 	{
@@ -68,12 +68,12 @@ public class ScriptRoomMenu : LayoutScript
 	protected void onJoinClicked(GameObject obj)
 	{
 		// 显示加入房间对话框
-		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_JOIN_ROOM_DIALOG);
+		LT.SHOW_LAYOUT(LAYOUT_TYPE.LT_JOIN_ROOM_DIALOG);
 	}
 	protected void onFreeMatchClicked(GameObject obj)
 	{
 		// 显示正在自由匹配的提示界面
-		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_FREE_MATCH_TIP);
+		LT.SHOW_LAYOUT(LAYOUT_TYPE.LT_FREE_MATCH_TIP);
 		// 发送消息自由匹配
 		mSocketManager.sendMessage<CSFreeMatch>();
 	}
@@ -87,6 +87,6 @@ public class ScriptRoomMenu : LayoutScript
 	protected void onButtonPress(GameObject obj, bool press)
 	{
 		txUIObject window = mLayout.getUIObject(obj);
-		LayoutTools.SCALE_WINDOW(window, window.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
+		LT.SCALE_WINDOW(window, window.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
 	}
 }

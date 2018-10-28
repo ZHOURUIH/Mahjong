@@ -31,7 +31,7 @@ public class ScriptFreeMatchTip : LayoutScript
 	}
 	public override void onReset()
 	{
-		LayoutTools.SCALE_WINDOW(mCancelMatchButton);
+		LT.SCALE_WINDOW(mCancelMatchButton);
 	}
 	public override void onShow(bool immediately, string param)
 	{
@@ -53,6 +53,6 @@ public class ScriptFreeMatchTip : LayoutScript
 	protected void onButtonPress(GameObject obj, bool press)
 	{
 		txUIObject window = mLayout.getUIObject(obj);
-		LayoutTools.SCALE_WINDOW(window, window.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
+		LT.SCALE_WINDOW(window, window.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
 	}
 }

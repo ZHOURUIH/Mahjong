@@ -15,8 +15,8 @@ public class GameConfig : ConfigBase
 	}
 	public override void writeConfig()
 	{
-		FileUtility.writeTxtFile(CommonDefine.F_CONFIG_PATH + "GameFloatConfig.txt", generateFloatFile());
-		FileUtility.writeTxtFile(CommonDefine.F_CONFIG_PATH + "GameStringConfig.txt", generateStringFile());
+		writeTxtFile(CommonDefine.F_CONFIG_PATH + "GameFloatConfig.txt", generateFloatFile());
+		writeTxtFile(CommonDefine.F_CONFIG_PATH + "GameStringConfig.txt", generateStringFile());
 	}
 	//-----------------------------------------------------------------------------------------------------------------------
 	protected override void addFloat()

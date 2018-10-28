@@ -61,13 +61,13 @@ public class HandInMahjong : GameBase
 	{
 		// 开局拿了一张牌
 		HandInMahjongInfo info = mHandInMahjong[mCurHandInCount];
-		LayoutTools.ACTIVE_WINDOW(info.mMahjongWindow);
+		LT.ACTIVE_WINDOW(info.mMahjongWindow);
 		++mCurHandInCount;
 	}
 	// 摸牌
 	public virtual void notifyGet(MAHJONG mah)
 	{
-		LayoutTools.ACTIVE_WINDOW(mHandInMahjong[mCurHandInCount].mMahjongWindow);
+		LT.ACTIVE_WINDOW(mHandInMahjong[mCurHandInCount].mMahjongWindow);
 		++mCurHandInCount;
 	}
 	// 打出一张牌
@@ -75,7 +75,7 @@ public class HandInMahjong : GameBase
 	{
 		if (index >= 0 && index < mHandInMahjong.Count)
 		{
-			LayoutTools.ACTIVE_WINDOW(mHandInMahjong[index].mMahjongWindow, false);
+			LT.ACTIVE_WINDOW(mHandInMahjong[index].mMahjongWindow, false);
 		}
 	}
 	//通知重新排列麻将
@@ -97,7 +97,7 @@ public class HandInMahjong : GameBase
 		int maxCount = mHandInMahjong.Count;
 		for (int i = 0; i < maxCount; ++i)
 		{
-			LayoutTools.ACTIVE_WINDOW(mHandInMahjong[i].mMahjongWindow, i < mCurHandInCount);
+			LT.ACTIVE_WINDOW(mHandInMahjong[i].mMahjongWindow, i < mCurHandInCount);
 		}
 	}
 	// 刷新麻将的数量和显示
@@ -107,7 +107,7 @@ public class HandInMahjong : GameBase
 		int maxCount = mHandInMahjong.Count;
 		for (int i = 0; i < maxCount; ++i)
 		{
-			LayoutTools.ACTIVE_WINDOW(mHandInMahjong[i].mMahjongWindow, i < mCurHandInCount);
+			LT.ACTIVE_WINDOW(mHandInMahjong[i].mMahjongWindow, i < mCurHandInCount);
 			if (i < mCurHandInCount)
 			{
 				mHandInMahjong[i].mMahjong = handIn[i];
@@ -132,7 +132,7 @@ public class HandInMahjong : GameBase
 			return;
 		}
 		txUIObject button = mScript.getLayout().getUIObject(go);
-		int index = StringUtility.getLastNumber(button.getName());
+		int index = getLastNumber(button.getName());
 		// 点击手里的牌,则将牌设置为准备打出的状态
 		if (mHandInMahjong[index].mState == HANDIN_STATE.HS_SAVED)
 		{
@@ -164,11 +164,11 @@ public class HandInMahjong : GameBase
 		mHandInMahjong[index].mState = state;
 		if (state == HANDIN_STATE.HS_PREPARE_DROP)
 		{
-			LayoutTools.MOVE_WINDOW(mHandInMahjong[index].mMahjongWindow, mHandInMahjong[index].mMahjongWindow.getPosition(), mHandInTargetPosition[index], 0.1f);
+			LT.MOVE_WINDOW(mHandInMahjong[index].mMahjongWindow, mHandInMahjong[index].mMahjongWindow.getPosition(), mHandInTargetPosition[index], 0.1f);
 		}
 		else
 		{
-			LayoutTools.MOVE_WINDOW(mHandInMahjong[index].mMahjongWindow, mHandInMahjong[index].mMahjongWindow.getPosition(), mHandInPosition[index], 0.1f);
+			LT.MOVE_WINDOW(mHandInMahjong[index].mMahjongWindow, mHandInMahjong[index].mMahjongWindow.getPosition(), mHandInPosition[index], 0.1f);
 		}
 	}
 }

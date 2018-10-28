@@ -20,19 +20,12 @@ public class SQLiteLogData : TableData
 	public int mUploaded;
 	public override void parse(SqliteDataReader reader)
 	{
-		if (reader != null)
-		{
-			if(!reader.Read())
-			{
-				return;
-			}
-			mUserID = reader[COL_USER_ID].ToString();
-			mLogType = reader[COL_LOG_TYPE].ToString();
-			mTime = reader[COL_TIME].ToString();
-			mLogInfo = reader[COL_LOG_INFO].ToString();
-			mGUID = reader[COL_GUID].ToString();
-			mUploaded = StringUtility.stringToInt(reader[COL_UPLOADED].ToString());
-		}
+		mUserID = reader[COL_USER_ID].ToString();
+		mLogType = reader[COL_LOG_TYPE].ToString();
+		mTime = reader[COL_TIME].ToString();
+		mLogInfo = reader[COL_LOG_INFO].ToString();
+		mGUID = reader[COL_GUID].ToString();
+		mUploaded = stringToInt(reader[COL_UPLOADED].ToString());
 	}
 }
 

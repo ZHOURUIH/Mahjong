@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using LitJson;
 
 public enum LOG_TYPE
 {
@@ -188,15 +189,15 @@ public class LogSystem : FrameComponent, IFrameLogSystem
 		}
 		str = string.Empty;
 		int type = (int)logData.mType;
-		StringUtility.jsonStartStruct(ref str, 0, true);
-		StringUtility.jsonAddPair(ref str, "UserID", mUserID, 1, true);
-		StringUtility.jsonAddPair(ref str, "logtype", StringUtility.intToString(type), 1, true);
-		StringUtility.jsonAddPair(ref str, "date", logData.mTime.ToString("G"), 1, true);
-		StringUtility.jsonAddPair(ref str, "info", logData.mInfo, 1, true);
-		StringUtility.jsonEndStruct(ref str, 0, true);
-		StringUtility.removeLastComma(ref str);
+		jsonStartStruct(ref str, 0, true);
+		jsonAddPair(ref str, "UserID", mUserID, 1, true);
+		jsonAddPair(ref str, "logtype", intToString(type), 1, true);
+		jsonAddPair(ref str, "date", logData.mTime.ToString("G"), 1, true);
+		jsonAddPair(ref str, "info", logData.mInfo, 1, true);
+		jsonEndStruct(ref str, 0, true);
+		removeLastComma(ref str);
 	}
-	protected void onDataUploadResult(LitJson.JsonData data, object userData)
+	protected void onDataUploadResult(JsonData data, object userData)
 	{
 		if (data == null || data.ToJson() == "")
 		{

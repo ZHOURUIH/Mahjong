@@ -24,7 +24,7 @@ class AssetBuildBundleInfo
 	}
 }
 
-public class AssetBundlePack
+public class AssetBundlePack : GameBase
 {
 	// 清理时需要保留的目录和目录的meta
 	protected static string[] mKeepFolder = new string[] { "Config", "GameDataFile", "GamePlugin", "DataBase", "Video", "DataTemplate", "HelperExe", "CustomSound" };
@@ -89,11 +89,11 @@ public class AssetBundlePack
 		{
 			string bundleName = bundle;
 			string[] deps = mainfest.GetAllDependencies(bundleName);
-			StringUtility.rightToLeft(ref bundleName);
+			rightToLeft(ref bundleName);
 			foreach (string dep in deps)
 			{
 				string depName = dep;
-				StringUtility.rightToLeft(ref depName);
+				rightToLeft(ref depName);
 				if (bundleMap.ContainsKey(dep))
 				{
 					List<AssetBuildBundleInfo> infoList = bundleMap[bundleName];
@@ -149,7 +149,7 @@ public class AssetBundlePack
 		for (int i = 0; i < unpackCount; ++i)
 		{
 			// 如果该文件夹是不打包的文件夹,则直接返回
-			if (StringUtility.startWith(pathUnderResources, mUnPackFolder[i], false))
+			if (startWith(pathUnderResources, mUnPackFolder[i], false))
 			{
 				return;
 			}
@@ -182,15 +182,14 @@ public class AssetBundlePack
 						bundleName += ASSET_BUNDLE_SUFFIX;
 					}
 				}
-				StringUtility.rightToLeft(ref bundleName);
+				rightToLeft(ref bundleName);
 				bundleName = bundleName.ToLower();
-				Debug.LogFormat("Set AssetName Succ, File:{0}, AssetName:{1}", file, bundleName);
 				importer.assetBundleName = bundleName;
 				EditorUtility.UnloadUnusedAssetsImmediate();
 
 				string fileName = file;
 				fileName = fileName.ToLower();
-				StringUtility.rightToLeft(ref fileName);
+				rightToLeft(ref fileName);
 				// 存储bundleInfo
 				AssetBuildBundleInfo info = new AssetBuildBundleInfo();
 				info.assetName = fileName;
@@ -255,7 +254,7 @@ public class AssetBundlePack
 			for (int i = 0; i < dirCount; ++i)
 			{
 				// 只删除不需要保留的目录
-				if (!isKeepFolderOrMeta(StringUtility.getFolderName(dirList[i])))
+				if (!isKeepFolderOrMeta(getFolderName(dirList[i])))
 				{
 					Directory.Delete(dirList[i], true);
 				}
@@ -265,7 +264,7 @@ public class AssetBundlePack
 			int fileCount = files.Length;
 			for (int i = 0; i < fileCount; ++i)
 			{
-				if (!isKeepFolderOrMeta(StringUtility.getFileName(files[i])))
+				if (!isKeepFolderOrMeta(getFileName(files[i])))
 				{
 					File.Delete(files[i]);
 				}

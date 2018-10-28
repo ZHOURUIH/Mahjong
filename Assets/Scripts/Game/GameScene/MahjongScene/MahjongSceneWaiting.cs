@@ -11,9 +11,9 @@ public class MahjongSceneWaiting : SceneProcedure
 	protected override void onInit(SceneProcedure lastProcedure, string intent)
 	{
 		// 显示布局
-		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_ALL_CHARACTER_INFO);
-		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_MAHJONG_BACK_FRAME);
-		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_MAHJONG_FRAME);
+		LT.SHOW_LAYOUT(LAYOUT_TYPE.LT_ALL_CHARACTER_INFO);
+		LT.SHOW_LAYOUT(LAYOUT_TYPE.LT_MAHJONG_BACK_FRAME);
+		LT.SHOW_LAYOUT(LAYOUT_TYPE.LT_MAHJONG_FRAME);
 
 		// 通知房间开始等待玩家加入
 		MahjongScene mahjongScene = mGameScene as MahjongScene;

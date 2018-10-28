@@ -23,10 +23,10 @@ public class GameUtility : GameBase
 	protected static int mIDMaker;
 	public static float calcuteConfigExpression(GAME_DEFINE_STRING CommonDefine, float variableValue)
 	{
-		string variableStr = "(" + StringUtility.floatToString(variableValue, 2) + ")";
+		string variableStr = "(" + floatToString(variableValue, 2) + ")";
 		string expression = mGameConfig.getStringParam(CommonDefine);
 		expression = expression.Replace("i", variableStr);
-		float expressionValue = MathUtility.calculateFloat(expression);
+		float expressionValue = calculateFloat(expression);
 		return expressionValue;
 	}
 	public static int makeID() { return ++mIDMaker; }

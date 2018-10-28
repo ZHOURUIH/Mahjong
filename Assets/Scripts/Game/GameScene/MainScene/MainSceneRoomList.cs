@@ -14,9 +14,9 @@ public class MainSceneRoomList : SceneProcedure
 	{ }
 	protected override void onInit(SceneProcedure lastProcedure, string intent)
 	{
-		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_MAIN_FRAME_BACK);
-		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_BACK_TO_MAIN_HALL);
-		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_ROOM_LIST);
+		LT.SHOW_LAYOUT(LAYOUT_TYPE.LT_MAIN_FRAME_BACK);
+		LT.SHOW_LAYOUT(LAYOUT_TYPE.LT_BACK_TO_MAIN_HALL);
+		LT.SHOW_LAYOUT(LAYOUT_TYPE.LT_ROOM_LIST);
 		// 只重置当前页的下标
 		mCurPage = 0;
 	}
@@ -53,9 +53,9 @@ public class MainSceneRoomList : SceneProcedure
 	}
 	protected override void onExit(SceneProcedure nextProcedure)
 	{
-		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_MAIN_FRAME_BACK);
-		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_BACK_TO_MAIN_HALL);
-		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_ROOM_LIST);
+		LT.HIDE_LAYOUT(LAYOUT_TYPE.LT_MAIN_FRAME_BACK);
+		LT.HIDE_LAYOUT(LAYOUT_TYPE.LT_BACK_TO_MAIN_HALL);
+		LT.HIDE_LAYOUT(LAYOUT_TYPE.LT_ROOM_LIST);
 	}
 	protected override void onKeyProcess(float elapsedTime)
 	{

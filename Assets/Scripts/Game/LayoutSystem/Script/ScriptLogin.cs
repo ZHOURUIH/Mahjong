@@ -46,10 +46,10 @@ public class ScriptLogin : LayoutScript
 	}
 	public override void onReset()
 	{
-		LayoutTools.SCALE_WINDOW(mLoginButton);
-		LayoutTools.SCALE_WINDOW(mRegisterButton);
-		LayoutTools.SCALE_WINDOW(mQuitButton);
-		LayoutTools.SCALE_WINDOW(mCancelButton);
+		LT.SCALE_WINDOW(mLoginButton);
+		LT.SCALE_WINDOW(mRegisterButton);
+		LT.SCALE_WINDOW(mQuitButton);
+		LT.SCALE_WINDOW(mCancelButton);
 		mCurTime = 0.0f;
 	}
 	public override void onShow(bool immediately, string param)
@@ -91,7 +91,7 @@ public class ScriptLogin : LayoutScript
 			login.setPassword(mPasswordEdit.getText());
 			mSocketManager.sendMessage(login);
 			// 发送登录消息后显示正在登录的提示框
-			LayoutTools.ACTIVE_WINDOW(mTipMask);
+			LT.ACTIVE_WINDOW(mTipMask);
 			mCurTime = 0.0f;
 		}
 		else
@@ -117,7 +117,7 @@ public class ScriptLogin : LayoutScript
 	protected void onButtonPress(GameObject button, bool press)
 	{
 		txUIObject obj = mLayout.getUIObject(button);
-		LayoutTools.SCALE_WINDOW(obj, obj.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
+		LT.SCALE_WINDOW(obj, obj.getScale(), press ? new Vector2(1.2f, 1.2f) : Vector2.one, 0.2f);
 	}
 	protected void onRegisterClick(GameObject button)
 	{
@@ -132,7 +132,7 @@ public class ScriptLogin : LayoutScript
 	protected void onCancelClick(GameObject button)
 	{
 		// 关闭登录提示框,然后发送消息取消登录
-		LayoutTools.ACTIVE_WINDOW(mTipMask, false);
+		LT.ACTIVE_WINDOW(mTipMask, false);
 		mSocketManager.sendMessage<CSCancelLogin>();
 	}
 }

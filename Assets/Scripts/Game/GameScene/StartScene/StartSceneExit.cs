@@ -10,8 +10,8 @@ public class LogoSceneExit : SceneProcedure
 	protected override void onInit(SceneProcedure lastProcedure, string intent)
     {
 		// 隐藏该场景的所有布局
-		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_LOGIN, true);
-		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_REGISTER, true);
+		LT.HIDE_LAYOUT(LAYOUT_TYPE.LT_LOGIN, true);
+		LT.HIDE_LAYOUT(LAYOUT_TYPE.LT_REGISTER, true);
 	}
 	protected override void onUpdate(float elapsedTime)
     {

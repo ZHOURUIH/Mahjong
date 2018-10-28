@@ -28,8 +28,8 @@ public class ScriptJoinRoomDialog : LayoutScript
 	}
 	public override void onReset()
 	{
-		LayoutTools.SCALE_WINDOW(mJoinButton, Vector2.one);
-		LayoutTools.SCALE_WINDOW(mCancelButton, Vector2.one);
+		LT.SCALE_WINDOW(mJoinButton, Vector2.one);
+		LT.SCALE_WINDOW(mCancelButton, Vector2.one);
 	}
 	public override void onShow(bool immediately, string param)
 	{
@@ -47,11 +47,11 @@ public class ScriptJoinRoomDialog : LayoutScript
 	protected void onJoinRoom(GameObject go)
 	{
 		CSJoinRoom join = mSocketManager.createPacket<CSJoinRoom>();
-		join.mRoomID.mValue = StringUtility.stringToInt(mRoomIDEditbox.getText());
+		join.mRoomID.mValue = stringToInt(mRoomIDEditbox.getText());
 		mSocketManager.sendMessage(join);
 	}
 	protected void onCancel(GameObject go)
 	{
-		LayoutTools.HIDE_LAYOUT(mType);
+		LT.HIDE_LAYOUT(mType);
 	}
 }

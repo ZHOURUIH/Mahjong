@@ -10,12 +10,12 @@ public class CSLogin : SocketPacket
 		: base(type) { }
 	public void setAccount(string account)
 	{
-		byte[] accountBytes = BinaryUtility.stringToBytes(account);
+		byte[] accountBytes = stringToBytes(account);
 		mAccount.setValue(accountBytes);
 	}
 	public void setPassword(string password)
 	{
-		byte[] passwordBytes = BinaryUtility.stringToBytes(password);
+		byte[] passwordBytes = stringToBytes(password);
 		mPassword.setValue(passwordBytes);
 	}
 	protected override void fillParams()

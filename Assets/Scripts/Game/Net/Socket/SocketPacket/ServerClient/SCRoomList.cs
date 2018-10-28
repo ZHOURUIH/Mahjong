@@ -30,8 +30,8 @@ public class SCRoomList : SocketPacket
 		{
 			RoomInfo info = new RoomInfo();
 			info.mID = mRoomID.mValue[i];
-			BinaryUtility.memcpy(nameBytes, mOwnerName.mValue, 0, i * GameDefine.MAX_NAME_LENGTH, GameDefine.MAX_NAME_LENGTH);
-			info.mOwnerName = BinaryUtility.bytesToString(nameBytes, BinaryUtility.getGB2312());
+			memcpy(nameBytes, mOwnerName.mValue, 0, i * GameDefine.MAX_NAME_LENGTH, GameDefine.MAX_NAME_LENGTH);
+			info.mOwnerName = bytesToString(nameBytes, getGB2312());
 			info.mCurCount = mCurCount.mValue[i];
 			info.mMaxCount = mMaxCount.mValue[i];
 			roomInfoList.Add(info);

@@ -105,9 +105,9 @@ public class SocketConnect : CommandReceiver
 		byte[] packetData = new byte[GameDefine.PACKET_HEADER_SIZE + packet.getSize()];
 		int index = 0;
 		// 消息类型
-		BinaryUtility.writeInt(packetData, ref index, (int)(packet.getPacketType()));
+		writeInt(packetData, ref index, (int)(packet.getPacketType()));
 		// 消息长度
-		BinaryUtility.writeInt(packetData, ref index, packet.getSize());
+		writeInt(packetData, ref index, packet.getSize());
 		if (packet.getSize() > 0)
 		{
 			// 消息内容
@@ -137,7 +137,7 @@ public class SocketConnect : CommandReceiver
 	{
 		// 交换读写缓冲区
 		mReceiveLock.waitForUnlock();
-		MathUtility.swap(ref mReceiveWriteIndex, ref mReceiveReadIndex);
+		swap(ref mReceiveWriteIndex, ref mReceiveReadIndex);
 		mReceiveLock.unlock();
 		// 解析所有已经收到的消息包
 		int receiveCount = mRecieveList[mReceiveReadIndex].Count;
@@ -161,7 +161,7 @@ public class SocketConnect : CommandReceiver
 		}
 		// 交换读写缓冲区
 		mOutputLock.waitForUnlock();
-		MathUtility.swap(ref mOutputWriteIndex, ref mOutputReadIndex);
+		swap(ref mOutputWriteIndex, ref mOutputReadIndex);
 		mOutputLock.unlock();
 		try
 		{
@@ -214,7 +214,7 @@ public class SocketConnect : CommandReceiver
 					break;
 				}
 				// 读取包类型
-				PACKET_TYPE type = (PACKET_TYPE)BinaryUtility.readInt(mRecvBuff, ref index);
+				PACKET_TYPE type = (PACKET_TYPE)readInt(mRecvBuff, ref index);
 				// 客户端接收到的必须是SC类型的
 				if (type <= PACKET_TYPE.PT_SC_MIN || type >= PACKET_TYPE.PT_SC_MAX)
 				{
@@ -227,7 +227,7 @@ public class SocketConnect : CommandReceiver
 				if (packetSize >= 0)
 				{
 					// 读取消息长度
-					int realDataSize = BinaryUtility.readInt(mRecvBuff, ref index);
+					int realDataSize = readInt(mRecvBuff, ref index);
 					if (realDataSize != packetSize)
 					{
 						string info = "wrong packet size! type : " + type + ", readed : " + realDataSize + ", packet size : " + packetSize;
@@ -247,7 +247,7 @@ public class SocketConnect : CommandReceiver
 					{
 						byte[] recvData = new byte[packetSize];
 						// 读取消息内容(byte[])
-						BinaryUtility.readBytes(mRecvBuff, ref index, recvData);
+						readBytes(mRecvBuff, ref index, recvData);
 						mRecieveList[mReceiveWriteIndex].Add(new INPUT_ELEMENT(type, recvData));
 					}
 					else

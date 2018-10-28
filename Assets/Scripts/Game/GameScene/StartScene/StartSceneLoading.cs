@@ -16,11 +16,11 @@ public class LogoSceneLoading : SceneProcedure
 		QualitySettings.vSyncCount = 0;
 		Application.targetFrameRate = 30;
 		// 用于显示信息的界面需要预先加载
-		LayoutTools.LOAD_NGUI_HIDE(LAYOUT_TYPE.LT_MESSAGE_OK, 20);
-		LayoutTools.LOAD_NGUI_SHOW(LAYOUT_TYPE.LT_LOGIN, 0);
-		LayoutTools.LOAD_NGUI_HIDE(LAYOUT_TYPE.LT_REGISTER, 0);
+		LT.LOAD_NGUI_HIDE(LAYOUT_TYPE.LT_MESSAGE_OK, 20);
+		LT.LOAD_NGUI_SHOW(LAYOUT_TYPE.LT_LOGIN, 0);
+		LT.LOAD_NGUI_HIDE(LAYOUT_TYPE.LT_REGISTER, 0);
 		// 由于使用了较多的NGUI控件,所以禁用全局触摸检测,只加载不显示
-		LayoutTools.LOAD_NGUI_HIDE(LAYOUT_TYPE.LT_GLOBAL_TOUCH, 100);
+		LT.LOAD_NGUI_HIDE(LAYOUT_TYPE.LT_GLOBAL_TOUCH, 100);
 		// 开始加载关键帧资源,音效资源,布局使用预设资源
 		mKeyFrameManager.loadAll(true);
 		mAudioManager.loadAll(true);

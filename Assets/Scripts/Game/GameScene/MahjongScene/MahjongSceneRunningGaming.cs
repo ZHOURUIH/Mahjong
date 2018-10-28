@@ -10,8 +10,8 @@ public class MahjongSceneRunningGaming : SceneProcedure
 	{ }
 	protected override void onInit(SceneProcedure lastProcedure, string intent)
 	{
-		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_MAHJONG_DROP);
-		LayoutTools.SHOW_LAYOUT(LAYOUT_TYPE.LT_PLAYER_ACTION);
+		LT.SHOW_LAYOUT(LAYOUT_TYPE.LT_MAHJONG_DROP);
+		LT.SHOW_LAYOUT(LAYOUT_TYPE.LT_PLAYER_ACTION);
 	}
 	protected override void onUpdate(float elapsedTime)
 	{
@@ -19,9 +19,9 @@ public class MahjongSceneRunningGaming : SceneProcedure
 	}
 	protected override void onExit(SceneProcedure nextProcedure)
 	{
-		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_MAHJONG_DROP);
-		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_PLAYER_ACTION);
-		LayoutTools.HIDE_LAYOUT(LAYOUT_TYPE.LT_MAHJONG_HAND_IN);
+		LT.HIDE_LAYOUT(LAYOUT_TYPE.LT_MAHJONG_DROP);
+		LT.HIDE_LAYOUT(LAYOUT_TYPE.LT_PLAYER_ACTION);
+		LT.HIDE_LAYOUT(LAYOUT_TYPE.LT_MAHJONG_HAND_IN);
 	}
 	protected override void onKeyProcess(float elapsedTime)
 	{

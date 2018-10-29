@@ -18,6 +18,12 @@ public class Game : GameFramework
 		registeComponent<LogSystem>();
 		registeComponent<RoomSystem>();
 	}
+	protected override void init()
+	{
+		base.init();
+		// 当前项目默认禁止使用NGUIButton的颜色自动变化
+		txNGUIButton.mFadeColor = false;
+	}
 	protected override void notifyBase()
 	{
 		base.notifyBase();

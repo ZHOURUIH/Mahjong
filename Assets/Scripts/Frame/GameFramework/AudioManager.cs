@@ -28,6 +28,7 @@ public class AudioManager : FrameComponent
 	public override void init()
 	{
 		// 从SQlite数据库中查询音效信息
+		bool findInSQLite = false;
 		if(mSQLiteSound != null)
 		{
 			List<SoundData> soundDataList;
@@ -45,9 +46,10 @@ public class AudioManager : FrameComponent
 				}
 				registeAudio(soundData.mFileName);
 			}
+			findInSQLite = dataCount > 0;
 		}
 		// 数据库中查不到,则从自定义的数据表格中查询
-		else
+		if(!findInSQLite)
 		{
 			int dataCount = mDataBase.getDataCount(DATA_TYPE.DT_GAME_SOUND);
 			for (int i = 0; i < dataCount; ++i)

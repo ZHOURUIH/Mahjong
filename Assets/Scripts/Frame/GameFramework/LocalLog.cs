@@ -7,7 +7,7 @@ using System.Threading;
 using System.Net;
 using UnityEngine.SceneManagement;
 
-public class LocalLog
+public class LocalLog : GameBase
 {
 	protected CustomThread mWriteLogThread;
 	// 日志双缓冲,使用双缓冲可以快速进行前后台切换,避免数据同步时出现耗时操作

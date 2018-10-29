@@ -5,6 +5,7 @@ using System.Collections;
 public class txNGUIButton : txUIObject
 {
 	protected UIButton	  mButton;
+	public static bool mFadeColor = true;
 	public txNGUIButton()
 	{
 		mType = UI_TYPE.UT_NGUI_BUTTON;
@@ -13,7 +14,7 @@ public class txNGUIButton : txUIObject
 	{
 		base.init(layout, go, parent);
 		mButton = mObject.GetComponent<UIButton>();
-		setFadeColour(true);
+		setFadeColour(mFadeColor);
 	}
 	// 当按钮需要改变透明度或者附加颜色变化时,需要禁用按钮的颜色渐变
 	public void setFadeColour(bool fade)

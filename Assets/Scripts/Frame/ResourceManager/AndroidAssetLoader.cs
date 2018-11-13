@@ -22,6 +22,7 @@ public class AndroidAssetLoader : FrameComponent
 #endif
 		base.destroy();
 	}
+	public static AndroidJavaObject getCurrentActivity() { return mCurrentActivity; }
 	// 相对于StreamingAssets的路径
 	public static byte[] loadAsset(string path)
 	{

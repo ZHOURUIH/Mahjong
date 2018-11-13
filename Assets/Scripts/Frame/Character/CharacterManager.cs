@@ -191,16 +191,11 @@ public class CharacterManager : FrameComponent
 		// 加入到全部角色列表
 		mCharacterList.Add(character.getName(), character);
 		// 加入到角色分类列表
-		if (mCharacterTypeList.ContainsKey(character.getType()))
+		if (!mCharacterTypeList.ContainsKey(character.getType()))
 		{
-			mCharacterTypeList[character.getType()].Add(character.getName(), character);
+			mCharacterTypeList.Add(character.getType(), new Dictionary<string, Character>());
 		}
-		else
-		{
-			Dictionary<string, Character> characterMap = new Dictionary<string, Character>();
-			characterMap.Add(character.getName(), character);
-			mCharacterTypeList.Add(character.getType(), characterMap);
-		}
+		mCharacterTypeList[character.getType()].Add(character.getName(), character);
 		// 加入ID索引表
 		int characterID = character.getCharacterData().mGUID;
 		if (!mCharacterGUIDList.ContainsKey(characterID))

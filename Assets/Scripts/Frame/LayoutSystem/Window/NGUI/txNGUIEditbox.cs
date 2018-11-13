@@ -25,8 +25,16 @@ public class txNGUIEditbox : txNGUISprite
 	{
 		return mInput.value;
 	}
-	public void setInputChangedCallback(EventDelegate.Callback callback)
+	public void setInputSubmitCallback(EventDelegate.Callback callback)
 	{
 		EventDelegate.Add(mInput.onSubmit, callback);
+	}
+	public void setOnValidateCallback(UIInput.OnValidate validate)
+	{
+		mInput.onValidate = validate;
+	}
+	public void setOnTabCallback(UIInput.OnKeyDelegate onTabDelegate)
+	{
+		mInput.onTabCallback = onTabDelegate;
 	}
 }

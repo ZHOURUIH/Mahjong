@@ -10,6 +10,7 @@ public class DoubleBuffer<T> : GameBase
 	protected int mWriteIndex;
 	protected int mReadIndex;
 	protected ThreadLock mBufferLock;
+	protected int mWriteListLimit;
 	public DoubleBuffer()
 	{
 		mBufferList = new List<T>[2];
@@ -17,6 +18,7 @@ public class DoubleBuffer<T> : GameBase
 		mBufferList[1] = new List<T>();
 		mWriteIndex = 0;
 		mReadIndex = 1;
+		mWriteListLimit = 0;
 		mBufferLock = new ThreadLock();
 	}
 	// 切换缓冲区,获得可读列表,在遍历可读列表期间,不能再次调用getReadList,否则会出现不可预知的错误,并且该函数只能在一个线程中调用
@@ -31,7 +33,14 @@ public class DoubleBuffer<T> : GameBase
 	public void addToBuffer(T value)
 	{
 		mBufferLock.waitForUnlock();
-		mBufferList[mWriteIndex].Add(value);
+		if(mWriteListLimit == 0 || mBufferList[mWriteIndex].Count < mWriteListLimit)
+		{
+			mBufferList[mWriteIndex].Add(value);
+		}
 		mBufferLock.unlock();
+	}
+	public void setWriteListLimit(int limit)
+	{
+		mWriteListLimit = limit;
 	}
 }

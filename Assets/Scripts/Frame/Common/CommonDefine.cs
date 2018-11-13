@@ -64,6 +64,7 @@ public enum SOUND_OWNER
 public enum CHARACTER_TYPE
 {
 	CT_NORMAL,
+	CT_NPC,
 	CT_AI,
 	CT_OTHER,
 	CT_MYSELF,
@@ -163,6 +164,7 @@ public class CommonDefine
 	public const string SA_NGUI_SUB_PREFAB_PATH = SA_LAYOUT_PATH + NGUI_SUB_PREFAB + "/";
 	// 相对路径,相对于Resources,R_开头,表示Resources
 	public const string R_ATLAS_PATH = ATLAS + "/";
+	public const string R_ATLAS_GAME_ATLAS_PATH = R_ATLAS_PATH + GAME_ATLAS + "/";
 	public const string R_ATLAS_TEXTURE_ANIM_PATH = R_ATLAS_PATH + TEXTURE_ANIM + "/";
 	public const string R_SOUND_PATH = SOUND + "/";
 	public const string R_LAYOUT_PATH = LAYOUT + "/";

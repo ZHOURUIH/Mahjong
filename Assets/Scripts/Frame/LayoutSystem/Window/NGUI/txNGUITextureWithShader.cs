@@ -93,3 +93,12 @@ public class txNGUITextureMaskCut : txNGUITexture
 		setWindowShader<WindowShaderMaskCut>();
 	}
 }
+//---------------------------------------------------------------------------------------------------------------------------
+public class txNGUITexturePixelMaskCut : txNGUITexture
+{
+	public override void init(GameLayout layout, GameObject go, txUIObject parent)
+	{
+		base.init(layout, go, parent);
+		setWindowShader<WindowShaderPixelMaskCut>();
+	}
+}

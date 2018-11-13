@@ -70,6 +70,7 @@ public class UIInput : MonoBehaviour
 	}
 
 	public delegate char OnValidate (string text, int charIndex, char addedChar);
+	public delegate void OnKeyDelegate();
 
 	/// <summary>
 	/// Currently active input field. Only valid during callbacks.
@@ -185,6 +186,7 @@ public class UIInput : MonoBehaviour
 	/// </summary>
 
 	public OnValidate onValidate;
+	public OnKeyDelegate onTabCallback;
 
 	/// <summary>
 	/// Input field's value.
@@ -850,6 +852,11 @@ public class UIInput : MonoBehaviour
 
 			if (!mCam.useKeyboard && UICamera.GetKeyUp(KeyCode.Tab))
 				OnKey(KeyCode.Tab);
+
+			if (onTabCallback != null && UICamera.GetKeyUp(KeyCode.Tab))
+			{
+				onTabCallback();
+			}
 		}
 	}
 

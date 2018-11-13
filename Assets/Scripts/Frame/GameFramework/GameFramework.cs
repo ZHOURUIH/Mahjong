@@ -30,6 +30,7 @@ public class GameFramework : MonoBehaviour
 		FrameBase.mLocalLog = new LocalLog();
 		FrameBase.mLocalLog.init();
 #endif
+		UnityUtility.mOnLog = getLogCallback();
 		if (instance != null)
 		{
 			UnityUtility.logError("game framework can not start again!");
@@ -162,14 +163,14 @@ public class GameFramework : MonoBehaviour
 			UnityUtility.setLogLevel((LOG_LEVEL)newLevel);
 		}
 	}
-	public T getSystem<T>()where T : FrameComponent
+	public void getSystem<T>(out T component) where T : FrameComponent
 	{
+		component = null;
 		string name = typeof(T).ToString();
 		if(mFrameComponentMap.ContainsKey(name))
 		{
-			return mFrameComponentMap[name] as T;
+			component = mFrameComponentMap[name] as T;
 		}
-		return null;
 	}
 	public void setPasueFrame(bool value) { mPauseFrame = value; }
 	public bool getPasueFrame() { return mPauseFrame; }
@@ -203,6 +204,7 @@ public class GameFramework : MonoBehaviour
 			mFrameComponentList[i].lateUpdate(elapsedTime);
 		}
 	}
+	protected virtual UnityUtility.onLog getLogCallback() { return null; }
 	protected virtual void notifyBase()
 	{
 		// 所有类都构造完成后通知FrameBase
@@ -328,6 +330,7 @@ public class GameFramework : MonoBehaviour
 		height = CommonDefine.STANDARD_HEIGHT;
 #endif
 		Screen.SetResolution(width, height, fullScreen == 1 || fullScreen == 3);
+#if UNITY_EDITOR || (!UNITY_ANDROID && !UNITY_IOS)
 		// 设置为无边框窗口
 		if (fullScreen == 2)
 		{
@@ -338,6 +341,7 @@ public class GameFramework : MonoBehaviour
 			curStyle &= ~CommonDefine.WS_DLGFRAME;
 			User32.SetWindowLong(User32.GetForegroundWindow(), CommonDefine.GWL_STYLE, curStyle);
 		}
+#endif
 		GameObject uiRootObj = UnityUtility.getGameObject(null, "NGUIRoot");
 		GameObject rootMultiScreen = UnityUtility.getGameObject(null, "NGUIRootMultiScreen");
 		GameObject rootStretch = UnityUtility.getGameObject(null, "NGUIRootStretch");

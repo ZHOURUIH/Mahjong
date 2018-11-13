@@ -93,12 +93,12 @@ public class SQLite : FrameComponent
 		}
 		catch(Exception){}
 	}
-	public T getTable<T>()where T : SQLiteTable
+	public void getTable<T>(out T table) where T : SQLiteTable
 	{
-		if(mTableList.ContainsKey(typeof(T)))
+		table = null;
+		if (mTableList.ContainsKey(typeof(T)))
 		{
-			return mTableList[typeof(T)] as T;
+			table = mTableList[typeof(T)] as T;
 		}
-		return null;
 	}
 }

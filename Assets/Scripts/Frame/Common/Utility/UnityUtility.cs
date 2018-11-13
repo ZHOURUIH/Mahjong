@@ -25,11 +25,13 @@ public enum LOG_LEVEL
 
 public class UnityUtility : FrameComponent
 {
+	public delegate void onLog(string time, string info, LOG_LEVEL level, bool isError);
 	protected static GameCamera mForeEffectCamera;
 	protected static GameCamera mBackEffectCamera;
 	protected static LOG_LEVEL mLogLevel;
 	protected static bool mShowMessageBox = true;
 	protected static int mIDMaker;
+	public static onLog mOnLog;
 	public UnityUtility(string name)
 		:base(name)
 	{
@@ -65,26 +67,32 @@ public class UnityUtility : FrameComponent
 			// 运行一次只显示一次提示框,避免在循环中报错时一直弹窗
 			mShowMessageBox = false;
 		}
+		string time = getTime();
 		string trackStr = new StackTrace().ToString();
 #if UNITY_STANDALONE_WIN && !UNITY_EDITOR
 		// windows平台打包后使用LocalLog打印日志
 		if (mLocalLog != null)
 		{
-			mLocalLog.log("error : " + info + ", stack : " + trackStr);
+			mLocalLog.log(time + "error : " + info + ", stack : " + trackStr);
 		}
 #else
-		UnityEngine.Debug.LogError("error : " + info + ", stack : " + trackStr);
+		UnityEngine.Debug.LogError(time + "error : " + info + ", stack : " + trackStr);
 #endif
 		// 游戏中的错误日志
 		if (mFrameLogSystem != null)
 		{
 			mFrameLogSystem.logGameError(info);
-		}	
+		}
+		if (mOnLog != null)
+		{
+			mOnLog(time, "error : " + info + ", stack : " + trackStr, LOG_LEVEL.LL_FORCE, true);
+		}
 	}
 	public static new void logInfo(string info, LOG_LEVEL level = LOG_LEVEL.LL_NORMAL)
 	{
 		if ((int)level <= (int)mLogLevel)
 		{
+			string time = getTime();
 #if UNITY_STANDALONE_WIN && !UNITY_EDITOR
 			// windows平台打包后使用LocalLog打印日志
 			if(mLocalLog != null)
@@ -92,8 +100,12 @@ public class UnityUtility : FrameComponent
 				mLocalLog.log(getTime() + " : " + info);
 			}
 #else
-			UnityEngine.Debug.Log(getTime() + " : " + info);
+			UnityEngine.Debug.Log(time + " : " + info);
 #endif
+			if(mOnLog != null)
+			{
+				mOnLog(time, info, level, false);
+			}
 		}
 	}
 	public static string getTime()

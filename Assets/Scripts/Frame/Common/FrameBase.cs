@@ -28,6 +28,7 @@ public class FrameBase : FileUtility
 	public static SceneSystem				mSceneSystem			= null;
 	public static IFrameLogSystem			mFrameLogSystem			= null;
 	public static ClassObjectPool			mClassObjectPool		= null;
+	public static AndroidAssetLoader		mAndroidAssetLoader		= null;
 #if UNITY_STANDALONE_WIN && !UNITY_EDITOR
 	public static LocalLog					mLocalLog				= null;
 #endif
@@ -38,26 +39,27 @@ public class FrameBase : FileUtility
 		if (mGameFramework == null)
 		{
 			mGameFramework = GameFramework.instance;
-			mCommandSystem = mGameFramework.getSystem<CommandSystem>();
-			mAudioManager = mGameFramework.getSystem<AudioManager>();
-			mGameSceneManager = mGameFramework.getSystem<GameSceneManager>();
-			mCharacterManager = mGameFramework.getSystem<CharacterManager>();
-			mLayoutManager = mGameFramework.getSystem<GameLayoutManager>();
-			mKeyFrameManager = mGameFramework.getSystem<KeyFrameManager>();
-			mGlobalTouchSystem = mGameFramework.getSystem<GlobalTouchSystem>();
-			mShaderManager = mGameFramework.getSystem<ShaderManager>();
-			mSQLite = mGameFramework.getSystem<SQLite>();
-			mDataBase = mGameFramework.getSystem<DataBase>();
-			mCameraManager = mGameFramework.getSystem<CameraManager>();
-			mResourceManager = mGameFramework.getSystem<ResourceManager>();
-			mLayoutSubPrefabManager = mGameFramework.getSystem<LayoutSubPrefabManager>();
-			mApplicationConfig = mGameFramework.getSystem<ApplicationConfig>();
-			mFrameConfig = mGameFramework.getSystem<FrameConfig>();
-			mObjectManager = mGameFramework.getSystem<ObjectManager>();
-			mInputManager = mGameFramework.getSystem<InputManager>();
-			mSceneSystem = mGameFramework.getSystem<SceneSystem>();
-			mClassObjectPool = mGameFramework.getSystem<ClassObjectPool>();
-			mSQLiteSound = mSQLite.getTable<SQLiteSound>();
+			mGameFramework.getSystem(out mCommandSystem);
+			mGameFramework.getSystem(out mAudioManager);
+			mGameFramework.getSystem(out mGameSceneManager);
+			mGameFramework.getSystem(out mCharacterManager);
+			mGameFramework.getSystem(out mLayoutManager);
+			mGameFramework.getSystem(out mKeyFrameManager);
+			mGameFramework.getSystem(out mGlobalTouchSystem);
+			mGameFramework.getSystem(out mShaderManager);
+			mGameFramework.getSystem(out mSQLite);
+			mGameFramework.getSystem(out mDataBase);
+			mGameFramework.getSystem(out mCameraManager);
+			mGameFramework.getSystem(out mResourceManager);
+			mGameFramework.getSystem(out mLayoutSubPrefabManager);
+			mGameFramework.getSystem(out mApplicationConfig);
+			mGameFramework.getSystem(out mFrameConfig);
+			mGameFramework.getSystem(out mObjectManager);
+			mGameFramework.getSystem(out mInputManager);
+			mGameFramework.getSystem(out mSceneSystem);
+			mGameFramework.getSystem(out mClassObjectPool);
+			mGameFramework.getSystem(out mAndroidAssetLoader);
+			mSQLite.getTable(out mSQLiteSound);
 		}
 	}
 	// 方便书写代码添加的命令相关函数

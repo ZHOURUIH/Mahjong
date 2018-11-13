@@ -486,6 +486,28 @@ public class StringUtility : BinaryUtility
 		}
 		return str;
 	}
+	// 给数字字符串以千为单位添加逗号
+	public static void insertNumberComma(ref string str)
+	{
+		int length = str.Length;
+		int commaCount = length / 3;
+		if(length > 0 && length % 3 == 0)
+		{
+			commaCount -= 1;
+		}
+		int insertStart = length % 3;
+		if(insertStart == 0)
+		{
+			insertStart = 3;
+		}
+		insertStart += 3 * (commaCount - 1);
+		// 从后往前插入
+		for (int i = 0; i < commaCount; ++i)
+		{
+			str = str.Insert(insertStart, ",");
+			insertStart -= 3;
+		}
+	}
 	public static string intToString(int value, int limitLen = 0)
 	{
 		string retString = value.ToString();

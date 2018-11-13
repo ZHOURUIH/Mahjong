@@ -63,6 +63,10 @@ public abstract class SerializedData : GameBase
 	}
 	protected void pushParam(OBJECT param)
 	{
+		if(param == null)
+		{
+			logError("param is null!");
+		}
 		mParameterInfoList.Add(param);
 	}
 };

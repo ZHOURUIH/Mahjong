@@ -32,6 +32,7 @@ public abstract class LayoutScript : CommandReceiver
 		LayoutRegister.onScriptChanged(this, false);
 		base.destroy();
 	}
+	public bool isVisible() { return mLayout.isVisible(); }
 	public LAYOUT_TYPE getType() { return mType; }
 	public GameLayout getLayout() { return mLayout; }
 	public void setRoot(txUIObject root) { mRoot = root; }

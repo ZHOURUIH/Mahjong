@@ -270,19 +270,29 @@ public class BinaryUtility
 	}
 	public static bool writeShort(byte[] buffer, ref int index, short value, bool inverse = false)
 	{
-		if (buffer.Length < index + sizeof(short))
+		int typeSize = sizeof(short);
+		if (buffer.Length < index + typeSize)
 		{
 			return false;
 		}
-		if(inverse)
+		for (int i = 0; i < typeSize; ++i)
 		{
-			buffer[index++] = (byte)((0xff00 & value) >> 8);
-			buffer[index++] = (byte)((0x00ff & value) >> 0);	
+			int bitsOffset = inverse ? 8 * (typeSize - i - 1) : 8 * i;
+			buffer[index++] = (byte)(((0xFF << bitsOffset) & value) >> bitsOffset);
 		}
-		else
+		return true;
+	}
+	public static bool writeUShort(byte[] buffer, ref int index, ushort value, bool inverse = false)
+	{
+		int typeSize = sizeof(ushort);
+		if (buffer.Length < index + typeSize)
 		{
-			buffer[index++] = (byte)((0x00ff & value) >> 0);
-			buffer[index++] = (byte)((0xff00 & value) >> 8);
+			return false;
+		}
+		for (int i = 0; i < typeSize; ++i)
+		{
+			int bitsOffset = inverse ? 8 * (typeSize - i - 1) : 8 * i;
+			buffer[index++] = (byte)(((0xFF << bitsOffset) & value) >> bitsOffset);
 		}
 		return true;
 	}

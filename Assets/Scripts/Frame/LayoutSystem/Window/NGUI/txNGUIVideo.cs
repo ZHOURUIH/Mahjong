@@ -115,9 +115,9 @@ public class txNGUIVideo : txNGUITexture
 		mFileName = getFileName(url);
 		mMediaPlayer.Events.RemoveAllListeners();
 		mTexture.mainTexture = null;
-		mMediaPlayer.OpenVideoFromFile(MediaPlayer.FileLocation.AbsolutePathOrURL, url, false);
+		bool ret = mMediaPlayer.OpenVideoFromFile(MediaPlayer.FileLocation.AbsolutePathOrURL, url, false);
 		mMediaPlayer.Events.AddListener(onVideoEvent);
-		return true;
+		return ret;
 	}
 	public string getFileName()
 	{
@@ -227,6 +227,7 @@ public class txNGUIVideo : txNGUITexture
 	}
 	protected void onVideoEvent(MediaPlayer player, MediaPlayerEvent.EventType eventType, ErrorCode errorCode)
 	{
+		logInfo("video event : " + eventType, LOG_LEVEL.LL_HIGH);
 		if (eventType == MediaPlayerEvent.EventType.FinishedPlaying)
 		{
 			// 播放完后设置为停止状态

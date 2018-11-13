@@ -30,7 +30,10 @@ public class txNGUISprite : txUIObject
 	}
 	public virtual void setAtlas(UIAtlas atlas)
 	{
-		mSprite.atlas = atlas;
+		if(mSprite.atlas != atlas)
+		{
+			mSprite.atlas = atlas;
+		}
 	}
 	public void setSpriteName(string name, bool useSize = false)
 	{

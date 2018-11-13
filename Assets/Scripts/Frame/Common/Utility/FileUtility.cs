@@ -46,7 +46,7 @@ public class FileUtility : MathUtility
 			}
 			else
 			{
-				logError("openFile invalid path : " + fileName);
+				UnityUtility.logError("openFile invalid path : " + fileName);
 			}
 #endif
 		}
@@ -86,7 +86,7 @@ public class FileUtility : MathUtility
 			}
 			else
 			{
-				logError("openTxtFile invalid path : " + fileName);
+				UnityUtility.logError("openTxtFile invalid path : " + fileName);
 			}
 			return "";
 #endif
@@ -134,7 +134,7 @@ public class FileUtility : MathUtility
 	public static bool renameFile(string fileName, string newName)
 	{
 #if UNITY_ANDROID && !UNITY_EDITOR
-		logError("can not rename file on android!");
+		UnityUtility.logError("can not rename file on android!");
 		return false;
 #endif
 		if (isFileExist(fileName) || isFileExist(newName))
@@ -147,7 +147,7 @@ public class FileUtility : MathUtility
 	public static void deleteFolder(string path)
 	{
 #if UNITY_ANDROID && !UNITY_EDITOR
-		logError("can not delete dir on android!");
+		UnityUtility.logError("can not delete dir on android!");
 		return;
 #endif
 		validPath(ref path);
@@ -169,7 +169,7 @@ public class FileUtility : MathUtility
 	public static bool deleteEmptyFolder(string path, bool deleteSelfIfEmpty = true)
 	{
 #if UNITY_ANDROID && !UNITY_EDITOR
-		logError("can not delete empty dir on android!");
+		UnityUtility.logError("can not delete empty dir on android!");
 		return false;
 #endif
 		validPath(ref path);
@@ -190,7 +190,7 @@ public class FileUtility : MathUtility
 	public static void moveFile(string source, string dest, bool overwrite = true)
 	{
 #if UNITY_ANDROID && !UNITY_EDITOR
-		logError("can not copy file on android!");
+		UnityUtility.logError("can not copy file on android!");
 		return;
 #endif
 		if (isFileExist(dest))
@@ -216,7 +216,7 @@ public class FileUtility : MathUtility
 	public static void copyFile(string source, string dest, bool overwrite = true)
 	{
 #if UNITY_ANDROID && !UNITY_EDITOR
-		logError("can not copy file on android!");
+		UnityUtility.logError("can not copy file on android!");
 		return;
 #endif
 		// 如果目标文件所在的目录不存在,则先创建目录
@@ -259,7 +259,7 @@ public class FileUtility : MathUtility
 		}
 		else
 		{
-			logError("isDirExist invalid path : " + dir);
+			UnityUtility.logError("isDirExist invalid path : " + dir);
 		}
 		return false;
 #endif
@@ -283,7 +283,7 @@ public class FileUtility : MathUtility
 		}
 		else
 		{
-			logError("isFileExist invalid path : " + fileName);
+			UnityUtility.logError("isFileExist invalid path : " + fileName);
 		}
 		return false;
 #endif
@@ -311,7 +311,7 @@ public class FileUtility : MathUtility
 	public static void findResourcesFiles(string path, ref List<string> fileList, string pattern, bool recursive = true)
 	{
 #if UNITY_ANDROID && !UNITY_EDITOR
-		logError("can not find resouces files on android!");
+		UnityUtility.logError("can not find resouces files on android!");
 		return;
 #endif
 		List<string> patternList = new List<string>();
@@ -322,7 +322,7 @@ public class FileUtility : MathUtility
 	public static void findResourcesFiles(string path, ref List<string> fileList, List<string> patterns = null, bool recursive = true)
 	{
 #if UNITY_ANDROID && !UNITY_EDITOR
-		logError("can not find resouces files on android!");
+		UnityUtility.logError("can not find resouces files on android!");
 		return;
 #endif
 		validPath(ref path);
@@ -366,7 +366,7 @@ public class FileUtility : MathUtility
 	public static void findFiles(string path, ref List<string> fileList, List<string> patterns = null, bool recursive = true)
 	{
 #if UNITY_ANDROID && !UNITY_EDITOR
-		logError("can not findFiles on android!");
+		UnityUtility.logError("can not findFiles on android!");
 		return;
 #endif
 		validPath(ref path);
@@ -431,7 +431,7 @@ public class FileUtility : MathUtility
 	public static void deleteFile(string path)
 	{
 #if UNITY_ANDROID && !UNITY_EDITOR
-		logError("can not delete file on android!");
+		UnityUtility.logError("can not delete file on android!");
 		return;
 #endif
 		File.Delete(path);
@@ -439,7 +439,7 @@ public class FileUtility : MathUtility
 	public static string generateFileMD5(string fileName, bool upperOrLower = true)
 	{
 #if UNITY_ANDROID && !UNITY_EDITOR
-		logError("can not generate file md5 on android!");
+		UnityUtility.logError("can not generate file md5 on android!");
 		return "";
 #endif
 		FileStream file = new FileStream(fileName, FileMode.Open);

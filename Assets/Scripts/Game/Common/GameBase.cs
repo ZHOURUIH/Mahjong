@@ -44,13 +44,13 @@ public class GameBase : FrameBase
 		base.notifyConstructDone();
 		if (mGame == null)
 		{
-			mGame = Game.instance as Game;
-			mGameConfig = mGame.getSystem<GameConfig>();
-			mMahjongSystem = mGame.getSystem<MahjongSystem>();
-			mHeadTextureManager = mGame.getSystem<HeadTextureManager>();
-			mSocketManager = mGame.getSystem<SocketManager>();
-			mLogSystem = mGame.getSystem<LogSystem>();
-			mRoomSystem = mGame.getSystem<RoomSystem>();
+			mGame = GameFramework.instance as Game;
+			mGame.getSystem(out mGameConfig);
+			mGame.getSystem(out mMahjongSystem);
+			mGame.getSystem(out mHeadTextureManager);
+			mGame.getSystem(out mSocketManager);
+			mGame.getSystem(out mLogSystem);
+			mGame.getSystem(out mRoomSystem);
 		}
 	}
 }

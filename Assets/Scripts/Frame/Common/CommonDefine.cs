@@ -54,12 +54,7 @@ public enum PLAY_STATE
 	PS_PAUSE,
 	PS_STOP,
 }
-// 音效所有者类型
-public enum SOUND_OWNER
-{
-	SO_WINDOW,
-	SO_SCENE,
-}
+
 // 屏幕适配方式
 public enum ADAPT_SCREEN
 {
@@ -136,6 +131,7 @@ public class CommonDefine
 	// 相对路径,相对于项目,以P_开头,表示Project
 	public const string P_ASSETS_PATH = ASSETS + "/";
 	public const string P_RESOURCE_PATH = P_ASSETS_PATH + RESOURCES + "/";
+	public const string P_STREAMING_ASSETS_PATH = P_ASSETS_PATH + STREAMING_ASSETS + "/";
 	public const string P_ATLAS_PATH = P_RESOURCE_PATH + ATLAS + "/";
 	// 相对路径,相对于StreamingAssets,以SA_开头,表示StreamingAssets
 	// 由于Android下的StreamingAssets路径不完全以Assets路径开头,与其他平台不一致,所以不定义相对于Asstes的路径

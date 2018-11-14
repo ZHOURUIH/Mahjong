@@ -2,18 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
+// 插件后缀为bytes,插件依赖的库在编辑器模式下需要放到Plugins中,打包后放到Managed中
 public class GamePluginManager : FrameComponent
 {
 	protected Dictionary<string, IGamePlugin> mPluginList;
 	public GamePluginManager(string name)
-		:base(name)
+		: base(name)
 	{
 		mPluginList = new Dictionary<string, IGamePlugin>();
 	}
 	public override void init()
 	{
 		loadAllPlugin();
-		foreach(var item in mPluginList)
+		foreach (var item in mPluginList)
 		{
 			item.Value.init();
 		}
@@ -45,15 +46,15 @@ public class GamePluginManager : FrameComponent
 		List<string> fileList = new List<string>();
 		findFiles(CommonDefine.F_GAME_PLUGIN_PATH, ref fileList, CommonDefine.DLL_PLUGIN_SUFFIX);
 		int count = fileList.Count;
-		for(int i = 0; i < count; ++i)
+		for (int i = 0; i < count; ++i)
 		{
 			byte[] fileBuffer = null;
 			openFile(fileList[i], ref fileBuffer);
-			loadPlugin(fileBuffer);
+			loadPlugin(fileBuffer, StringUtility.getFileName(fileList[i]));
 		}
 #endif
 	}
-	protected bool loadPlugin(byte[] rawDll)
+	protected bool loadPlugin(byte[] rawDll, string fileName)
 	{
 		try
 		{
@@ -67,12 +68,14 @@ public class GamePluginManager : FrameComponent
 					if (instance != null)
 					{
 						mPluginList.Add(instance.getPluginName(), instance);
+						logInfo("game plugin " + instance.getPluginName() + " load success!");
 					}
 				}
 			}
 		}
-		catch
+		catch (Exception e)
 		{
+			logInfo("load game plugin failed! file name : " + fileName + ", info : " + e.Message);
 			return false;
 		}
 		return true;

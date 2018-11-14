@@ -326,8 +326,8 @@ public class GameFramework : MonoBehaviour
 			height = Screen.height;
 		}
 #if UNITY_EDITOR
-		width = CommonDefine.STANDARD_WIDTH;
-		height = CommonDefine.STANDARD_HEIGHT;
+		width = GameDefine.STANDARD_WIDTH;
+		height = GameDefine.STANDARD_HEIGHT;
 #endif
 		Screen.SetResolution(width, height, fullScreen == 1 || fullScreen == 3);
 #if UNITY_EDITOR || (!UNITY_ANDROID && !UNITY_IOS)

@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class WidgetUtility : GameBase
 {
-	protected static Vector2 mRootSize = new Vector2(CommonDefine.STANDARD_WIDTH, CommonDefine.STANDARD_HEIGHT);
+	protected static Vector2 mRootSize = new Vector2(GameDefine.STANDARD_WIDTH, GameDefine.STANDARD_HEIGHT);
 	protected static void getRootSize()
 	{
 		// 实际运行时根节点大小需要实际获取

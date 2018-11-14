@@ -14,7 +14,7 @@ public class SQLite : FrameComponent
 		:base(name)
 	{
 		mTableList = new Dictionary<Type, SQLiteTable>();
-		string fullPath = CommonDefine.F_DATA_BASE_PATH + CommonDefine.DATA_BASE_FILE_NAME;
+		string fullPath = CommonDefine.F_DATA_BASE_PATH + GameDefine.DATA_BASE_FILE_NAME;
 		if(isFileExist(fullPath))
 		{
 			mConnection = new SqliteConnection("DATA SOURCE = " + fullPath);   // 创建SQLite对象的同时，创建SqliteConnection对象  
@@ -55,7 +55,7 @@ public class SQLite : FrameComponent
 	{
 		if(mConnection == null)
 		{
-			string fullPath = CommonDefine.F_DATA_BASE_PATH + CommonDefine.DATA_BASE_FILE_NAME;
+			string fullPath = CommonDefine.F_DATA_BASE_PATH + GameDefine.DATA_BASE_FILE_NAME;
 			mConnection = new SqliteConnection("DATA SOURCE = " + fullPath);   // 创建SQLite对象的同时，创建SqliteConnection对象  
 			mConnection.Open();                         // 打开数据库链接
 			mCommand = mConnection.CreateCommand();

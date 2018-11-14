@@ -46,16 +46,16 @@ public class ScaleAnchor : MonoBehaviour
 	public float mVerticalRelativePos = 0.0f;
 	public void Awake()
 	{
-		if (GameBase.mLayoutManager != null && mRoot == null)
+		if (FrameBase.mLayoutManager != null && mRoot == null)
 		{
-			mRoot = GameBase.mLayoutManager.getNGUIRootObject().GetComponent<UIRoot>();
+			mRoot = FrameBase.mLayoutManager.getNGUIRootObject().GetComponent<UIRoot>();
 			UIWidget widget = WidgetUtility.getGameObjectWidget(gameObject);
 			if (widget != null)
 			{
 				widget.keepAspectRatio = UIWidget.AspectRatioSource.Free;
 			}
-			mHorizontalScale = mRoot.activeHeight * GameBase.mCameraManager.getUICamera().getCamera().aspect / (float)CommonDefine.STANDARD_WIDTH;
-			mVerticalScale = mRoot.activeHeight / (float)CommonDefine.STANDARD_HEIGHT;
+			mHorizontalScale = mRoot.activeHeight * FrameBase.mCameraManager.getUICamera().getCamera().aspect / (float)GameDefine.STANDARD_WIDTH;
+			mVerticalScale = mRoot.activeHeight / (float)GameDefine.STANDARD_HEIGHT;
 		}
 		// 由于初始位置是在Awake中记录的,所以在动态实例化预设后挂接到父节点下时,坐标必须为0,也就是与预设初始状态保持一致
 		mOriginPos = transform.localPosition;

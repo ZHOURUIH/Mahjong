@@ -60,17 +60,6 @@ public enum SOUND_OWNER
 	SO_WINDOW,
 	SO_SCENE,
 }
-// character 类型
-public enum CHARACTER_TYPE
-{
-	CT_NORMAL,
-	CT_NPC,
-	CT_AI,
-	CT_OTHER,
-	CT_MYSELF,
-	CT_MAX,
-}
-
 // 屏幕适配方式
 public enum ADAPT_SCREEN
 {
@@ -223,9 +212,6 @@ public class CommonDefine
 	public const long WS_MINIMIZEBOX = 0x00020000;
 	public const long WS_MAXIMIZEBOX = 0x00010000;
 	public const int GWL_STYLE = -16;
-	// UI的制作标准,所有UI都是按1920*1080标准分辨率制作的
-	public const int STANDARD_WIDTH = 1920;
-	public const int STANDARD_HEIGHT = 1080;
 	// 无效ID值
 	public const int INVALID_ID = ~0;
 	//-----------------------------------------------------------------------------------------------------------------
@@ -247,6 +233,4 @@ public class CommonDefine
 	public static string[] SOUND_OWNER_NAME = new string[] { "Window", "Scene" };
 	public const string NGUI_DEFAULT_MATERIAL = "NGUIDefault";
 	public const string UGUI_DEFAULT_MATERIAL = "UGUIDefault";
-	// 数据库文件名
-	public const string DATA_BASE_FILE_NAME = "DataBase.db";
 }

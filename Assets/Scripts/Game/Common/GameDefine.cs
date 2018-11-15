@@ -258,6 +258,10 @@ public class GameDefine : CommonDefine
 	public const int STANDARD_HEIGHT = 1080;
 	// 数据库文件名
 	public const string DATA_BASE_FILE_NAME = "DataBase.db";
+	// 清理时需要保留的目录和目录的meta
+	public static string[] mKeepFolder = new string[] { "Config", "GameDataFile", "GamePlugin", "DataBase", "Video", "DataTemplate", "HelperExe", "CustomSound", "Map" };
+	// Resources下的目录,带相对路径,且如果前缀符合,也会认为是不打包的目录
+	public static string[] mUnPackFolder = new string[] { "Scene" };
 	// 常量定义
 	//-----------------------------------------------------------------------------------------------------------------
 	public const int PACKET_HEADER_SIZE = sizeof(int) + sizeof(int);

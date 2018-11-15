@@ -190,7 +190,7 @@ public class AssetBundleInfo : GameBase
 			info.Value.loadAssetBundle();
 		}
 		// 然后加载AssetBundle
-#if UNITY_ANDROID && UNITY_EDITOR
+#if UNITY_ANDROID && !UNITY_EDITOR
 		byte[] assetBundleBuffer = AndroidAssetLoader.loadAsset(mBundleName + CommonDefine.ASSET_BUNDLE_SUFFIX);
 		mAssetBundle = AssetBundle.LoadFromMemory(assetBundleBuffer);
 #else

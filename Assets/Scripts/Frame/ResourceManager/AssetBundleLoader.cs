@@ -52,22 +52,15 @@ public class AssetBundleLoader : GameBase
 		XmlNodeList nodeList = doc.SelectSingleNode("files").ChildNodes;
 		foreach (XmlElement xe in nodeList)
 		{
-			AssetBundleInfo bundleInfo = null;
-			string bundleName = xe.SelectSingleNode("bundleName").InnerText;		// 资源所在的AssetBundle名
-			bundleName = getFileNameNoSuffix(bundleName);				// 移除后缀名
-			string assetName = xe.SelectSingleNode("assetName").InnerText;			// 资源文件名,带后缀,没有重复
-			string fileNameWithSuffix = assetName.Substring(CommonDefine.P_RESOURCE_PATH.Length);	// 需要移除前缀
-			if (mAssetBundleInfoList.ContainsKey(bundleName))
+			string bundleName = xe.SelectSingleNode("bundleName").InnerText;        // 资源所在的AssetBundle名
+			bundleName = getFileNameNoSuffix(bundleName);                           // 移除后缀名
+			string assetName = xe.SelectSingleNode("assetName").InnerText;          // 相对于Resources的资源文件名,带后缀,没有重复,
+			if (!mAssetBundleInfoList.ContainsKey(bundleName))
 			{
-				bundleInfo = mAssetBundleInfoList[bundleName];
+				mAssetBundleInfoList.Add(bundleName, new AssetBundleInfo(bundleName));
 			}
-			else
-			{
-				bundleInfo = new AssetBundleInfo(bundleName);
-				mAssetBundleInfoList.Add(bundleName, bundleInfo);
-			}
-			
-			bundleInfo.addAssetName(fileNameWithSuffix);
+			AssetBundleInfo bundleInfo = mAssetBundleInfoList[bundleName];
+			bundleInfo.addAssetName(assetName);
 			// 为AssetBundle添加依赖项
 			XmlNode deps = xe.SelectSingleNode("deps");
 			if (null != deps)
@@ -81,7 +74,7 @@ public class AssetBundleLoader : GameBase
 					bundleInfo.addParent(depName);
 				}
 			}
-			mAssetToBundleInfo.Add(fileNameWithSuffix, bundleInfo.getAssetInfo(fileNameWithSuffix));
+			mAssetToBundleInfo.Add(assetName, bundleInfo.getAssetInfo(assetName));
 		}
 		// 配置清单解析完毕后,为每个AssetBundleInfo查找对应的依赖项
 		foreach (var info in mAssetBundleInfoList)

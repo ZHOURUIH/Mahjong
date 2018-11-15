@@ -117,7 +117,7 @@ public class CommonDefine
 	public const string UGUI_PREFAB = "UGUIPrefab";
 #if UNITY_IPHONE
 	public const string STREAMING_ASSETS = "Raw";
-#elif !UNITY_ANDROID
+#elif !UNITY_ANDROID || UNITY_EDITOR
 	public const string STREAMING_ASSETS = "StreamingAssets";
 #endif
 	public const string CONFIG = "Config";

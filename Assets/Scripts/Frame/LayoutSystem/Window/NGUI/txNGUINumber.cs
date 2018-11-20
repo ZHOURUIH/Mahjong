@@ -96,16 +96,16 @@ public class txNGUINumber : txNGUISprite
 		string intPart = dotPos != -1 ? mNumber.Substring(0, dotPos) : mNumber;
 		for (int i = 0; i < intPart.Length; ++i)
 		{
-			mNumberList[i].setSpriteName(mSpriteNameList[intPart[i] - '0']);
+			mNumberList[i].setSpriteName(mSpriteNameList[intPart[i] - '0'], false, false);
 		}
 		// 小数点和小数部分
 		if (dotPos != -1)
 		{
-			mNumberList[dotPos].setSpriteName(mSpriteNameList[10]);
+			mNumberList[dotPos].setSpriteName(mSpriteNameList[10], false, false);
 			string floatPart = mNumber.Substring(dotPos + 1, mNumber.Length - dotPos - 1);
 			for (int i = 0; i < floatPart.Length; ++i)
 			{
-				mNumberList[i + dotPos + 1].setSpriteName(mSpriteNameList[floatPart[i] - '0']);
+				mNumberList[i + dotPos + 1].setSpriteName(mSpriteNameList[floatPart[i] - '0'], false, false);
 			}
 		}
 		// 调整所有数字的大小,此处的aspectRatio可能没有更新

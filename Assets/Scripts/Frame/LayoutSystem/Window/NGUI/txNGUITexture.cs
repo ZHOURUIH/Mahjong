@@ -44,7 +44,7 @@ public class txNGUITexture : txUIObject
 		UnityUtility.destroyGameObject(mTexture.material);
 		base.destroy();
 	}
-	public virtual void setTexture(Texture tex, bool useTextureSize = false)
+	public virtual void setTexture(Texture tex, bool useTextureSize, bool makeEvenSize = false)
 	{
 		if (mTexture == null)
 		{
@@ -53,7 +53,7 @@ public class txNGUITexture : txUIObject
 		mTexture.mainTexture = tex;
 		if (useTextureSize && tex != null)
 		{
-			setWindowSize(getTextureSize());
+			setWindowSize(getTextureSize(makeEvenSize));
 		}
 	}
 	public Texture getTexture()
@@ -94,16 +94,16 @@ public class txNGUITexture : txUIObject
 			mTexture.shader = shader;
 		}
 	}
-	public void setTextureName(string name, bool useTextureSize = false)
+	public void setTextureName(string name, bool useTextureSize, bool makeEvenHeight = false)
 	{
 		if (name != "")
 		{
 			Texture tex = mResourceManager.loadResource<Texture>(name, true);
-			setTexture(tex, useTextureSize);
+			setTexture(tex, useTextureSize, makeEvenHeight);
 		}
 		else
 		{
-			setTexture(null, useTextureSize);
+			setTexture(null, useTextureSize, makeEvenHeight);
 		}
 	}
 	public string getTextureName()
@@ -114,13 +114,20 @@ public class txNGUITexture : txUIObject
 		}
 		return mTexture.mainTexture.name;
 	}
-	public Vector2 getTextureSize()
+	public Vector2 getTextureSize(bool makeEvenSize = false)
 	{
 		if (mTexture.mainTexture == null)
 		{
 			return Vector2.zero;
 		}
-		return new Vector2(mTexture.mainTexture.width, mTexture.mainTexture.height);
+		int width = mTexture.mainTexture.width;
+		int height = mTexture.mainTexture.height;
+		if(makeEvenSize)
+		{
+			width += width % 2;
+			height += height % 2;
+		}
+		return new Vector2(width, height);
 	}
 	public string getMaterialName()
 	{

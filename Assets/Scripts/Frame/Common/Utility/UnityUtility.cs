@@ -403,4 +403,9 @@ public class UnityUtility : FrameComponent
 		key.Close();
 #endif
 	}
+	// name为Resource下相对路径,不带后缀名
+	public static UIAtlas loadAtlas(string name)
+	{
+		return mResourceManager.loadResource<GameObject>(name, true).GetComponent<UIAtlas>();
+	}
 }

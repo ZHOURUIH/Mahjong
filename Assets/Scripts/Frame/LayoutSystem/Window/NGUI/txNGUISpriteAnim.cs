@@ -10,6 +10,7 @@ public class txNGUISpriteAnim : txNGUISprite, INGUIAnimation
 	protected List<Vector2> mTexturePosList;
 	protected string mTextureSetName;
 	protected bool mUseTextureSize;
+	protected bool mMakeEvenSize;		// 是否将尺寸调整为2的倍数
 	protected List<TextureAnimCallBack> mPlayEndCallback;  // 一个序列播放完时的回调函数,只在非循环播放状态下有效
 	protected List<TextureAnimCallBack> mPlayingCallback;  // 一个序列正在播放时的回调函数
 	protected AnimControl mControl;
@@ -20,6 +21,8 @@ public class txNGUISpriteAnim : txNGUISprite, INGUIAnimation
 		mTextureNameList = new List<string>();
 		mPlayEndCallback = new List<TextureAnimCallBack>();
 		mPlayingCallback = new List<TextureAnimCallBack>();
+		mMakeEvenSize = false;
+		mUseTextureSize = false;
 	}
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{
@@ -42,7 +45,7 @@ public class txNGUISpriteAnim : txNGUISprite, INGUIAnimation
 		base.update(elapsedTime);
 		if (mTextureNameList.Count == 0)
 		{
-			setSpriteName("", false);
+			setSpriteName("", false, false);
 		}
 		mControl.update(elapsedTime);
 	}
@@ -54,7 +57,11 @@ public class txNGUISpriteAnim : txNGUISprite, INGUIAnimation
 	}
 	public string getTextureSet() { return mTextureSetName; }
 	public int getTextureFrameCount() { return mTextureNameList.Count; }
-	public void setUseTextureSize(bool useSize) { mUseTextureSize = useSize; }
+	public void setUseTextureSize(bool useSize, bool makeEvenSize = false)
+	{
+		mUseTextureSize = useSize;
+		mMakeEvenSize = makeEvenSize;
+	}
 	public void setTexturePosList(List<Vector2> posList) { mTexturePosList = posList; }
 	public void setTextureSet(string textureSetName)
 	{
@@ -142,7 +149,7 @@ public class txNGUISpriteAnim : txNGUISprite, INGUIAnimation
 		{
 			return;
 		}
-		setSpriteName(mTextureNameList[mControl.getCurFrameIndex()], mUseTextureSize);
+		setSpriteName(mTextureNameList[mControl.getCurFrameIndex()], mUseTextureSize, mMakeEvenSize);
 		if (mTexturePosList != null)
 		{
 			int positionIndex = (int)(frame / (float)mTextureNameList.Count * mTexturePosList.Count + 0.5f);

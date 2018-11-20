@@ -11,7 +11,7 @@ public interface INGUIAnimation
 	string getTextureSet();
 	int getTextureFrameCount();
 	void setTexturePosList(List<Vector2> posList);
-	void setUseTextureSize(bool useSize);
+	void setUseTextureSize(bool useSize, bool makeEvenSize);
 	void setTextureSet(string textureSetName);
 	void setTextureSet(string textureSetName, string subPath);
 	LOOP_MODE getLoop();

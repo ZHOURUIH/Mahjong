@@ -13,6 +13,7 @@ public class txNGUITextureAnim : txNGUITexture, INGUIAnimation
 	protected string mTextureSetName;
 	protected string mSubPath;
 	protected bool mUseTextureSize;
+	protected bool mMakeEvenSize;
 	protected List<TextureAnimCallBack> mPlayEndCallback;  // 一个序列播放完时的回调函数,只在非循环播放状态下有效
 	protected List<TextureAnimCallBack> mPlayingCallback;  // 一个序列正在播放时的回调函数
 	protected AnimControl mControl;
@@ -22,6 +23,7 @@ public class txNGUITextureAnim : txNGUITexture, INGUIAnimation
 		mTextureNameList = new List<Texture>();
 		mControl = new AnimControl();
 		mUseTextureSize = false;
+		mMakeEvenSize = false;
 		mPlayEndCallback = new List<TextureAnimCallBack>();
 		mPlayingCallback = new List<TextureAnimCallBack>();
 	}
@@ -44,13 +46,17 @@ public class txNGUITextureAnim : txNGUITexture, INGUIAnimation
 		base.update(elapsedTime);
 		if (mTextureNameList.Count == 0)
 		{
-			setTexture(null, false);
+			setTexture(null, false, false);
 		}
 		mControl.update(elapsedTime);
 	}
 	public string getTextureSet() { return mTextureSetName; }
 	public int getTextureFrameCount() { return mTextureNameList.Count; }
-	public void setUseTextureSize(bool useSize) { mUseTextureSize = useSize; }
+	public void setUseTextureSize(bool useSize, bool makeEvenSize = false)
+	{
+		mUseTextureSize = useSize;
+		mMakeEvenSize = makeEvenSize;
+	}
 	public void setSubPath(string subPath) { mSubPath = subPath; }
 	public string getSubPath() { return mSubPath; }
 	public void setTexturePosList(List<Vector2> posList) { mTexturePosList = posList; }
@@ -137,7 +143,7 @@ public class txNGUITextureAnim : txNGUITexture, INGUIAnimation
 		{
 			return;
 		}
-		setTexture(mTextureNameList[mControl.getCurFrameIndex()], mUseTextureSize);
+		setTexture(mTextureNameList[mControl.getCurFrameIndex()], mUseTextureSize, mMakeEvenSize);
 		if(mTexturePosList != null)
 		{
 			int positionIndex = (int)(frame / (float)mTextureNameList.Count * mTexturePosList.Count + 0.5f);

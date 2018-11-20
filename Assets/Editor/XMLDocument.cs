@@ -20,7 +20,7 @@ public class XMLDocument
 	public void endObject(string name, bool nextLine = false)
 	{
 		builder.AppendFormat("</{0}>", name);
-		if (nextLine)
+		if(nextLine)
 		{
 			builder.Append("\r\n");
 		}

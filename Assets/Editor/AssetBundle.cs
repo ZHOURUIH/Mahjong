@@ -9,9 +9,9 @@ using UnityEditor;
 
 class AssetBuildBundleInfo
 {
-	public string assetName;            // 带Resources下相对路径,带后缀
-	public string bundleName;           // 所属AssetBundle
-	public List<string> dependencies;   // 所有依赖的AssetBundle
+	public string assetName;			// 带Resources下相对路径,带后缀
+	public string bundleName;			// 所属AssetBundle
+	public List<string> dependencies;	// 所有依赖的AssetBundle
 	public void AddDependence(string dep)
 	{
 		if (dependencies == null)
@@ -27,6 +27,7 @@ public class AssetBundlePack : GameBase
 	protected const string mAssetMenuRoot = "AssetBundle/";
 	// key为AssetBundle名,带Resources下相对路径,带后缀,Value是该AssetBundle中包含的所有Asset
 	private static Dictionary<string, List<AssetBuildBundleInfo>> mAssetBundleMap = new Dictionary<string, List<AssetBuildBundleInfo>>();
+
 	[MenuItem(mAssetMenuRoot + "pack/Android")]
 	public static void packAssetBundleAndroid()
 	{
@@ -48,108 +49,159 @@ public class AssetBundlePack : GameBase
 		packAssetBundle(BuildTarget.StandaloneLinux);
 	}
 	// subPath为以Asset开头的相对路径
-	public static void packAssetBundle(BuildTarget target)
+	public static void packAssetBundle(BuildTarget target, string subPath = "")
 	{
-		DateTime time0 = DateTime.Now;
-		// 清理输出目录
-		createOrClearOutPath();
-		// 清理之前设置过的bundleName
-		clearAssetBundleName();
-		// 设置bunderName
-		mAssetBundleMap.Clear();
-		List<string> resList = new List<string>();
-		getAllSubResDirs(CommonDefine.P_RESOURCE_PATH, resList);
-		foreach (string dir in resList)
+		if (subPath == "")
 		{
-			setAssetBundleName(dir);
+			subPath = AssetDatabase.GetAssetPath(Selection.activeObject);
 		}
-		// 打包
-		BuildPipeline.BuildAssetBundles(CommonDefine.P_STREAMING_ASSETS_PATH, BuildAssetBundleOptions.ChunkBasedCompression, target);
-		AssetDatabase.Refresh();
-
-		// 构建依赖关系
-		AssetBundle assetBundle = AssetBundle.LoadFromFile(CommonDefine.F_STREAMING_ASSETS_PATH + "StreamingAssets");
-		AssetBundleManifest manifest = assetBundle.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
-		string[] assetBundleNameList = manifest.GetAllAssetBundles();
-		// 遍历所有AB
-		foreach (string bundle in assetBundleNameList)
+		string[] files = Directory.GetFiles(CommonDefine.P_RESOURCE_PATH);
+		AssetBundleBuild[] buildList = null;
+		if (subPath != "")
 		{
-			string bundleName = bundle;
-			string[] deps = manifest.GetAllDependencies(bundleName);
-			if (mAssetBundleMap.ContainsKey(bundleName))
+			bool isPack = EditorUtility.DisplayDialog("打包", "确认打包" + subPath + "?", "确认", "取消");
+			if (!isPack)
 			{
-				rightToLeft(ref bundleName);
-				// 遍历当前AB的所有依赖项
-				foreach (string dep in deps)
-				{
-					string depName = dep;
-					rightToLeft(ref depName);
-					List<AssetBuildBundleInfo> infoList = mAssetBundleMap[bundleName];
-					foreach (AssetBuildBundleInfo info in infoList)
-					{
-						info.AddDependence(depName);
-					}
-				}
+				return;
 			}
+			findAssetBundleBuild(subPath, ref buildList);
 		}
-
-		// 生成XML
-		XMLDocument doc = new XMLDocument();
-		doc.startObject("files", true);
-		foreach (var item in mAssetBundleMap)
+		else
 		{
-			int count = item.Value.Count;
+			logInfo("打包全部AssetBundle", LOG_LEVEL.LL_FORCE);
+		}
+		DateTime time0 = DateTime.Now;
+		if (buildList != null)
+		{
+			// 部分打包,仅重新生成资源包文件,清单文件也会一起生成,但是由于只是部分打包,所以依赖项可能没有打包,需要手动还原清单文件
+			int count = buildList.Length;
 			for (int i = 0; i < count; ++i)
 			{
-				AssetBuildBundleInfo info = item.Value[i];
-				doc.startObject("file");
-				doc.createElement("bundleName", info.bundleName);
-				doc.createElement("assetName", info.assetName);
-				if (info.dependencies != null)
+				string bundleFileName = CommonDefine.P_STREAMING_ASSETS_PATH + buildList[i].assetBundleName;
+				if (File.Exists(bundleFileName))
 				{
-					doc.startObject("deps");
-					foreach (string dep in info.dependencies)
-					{
-						doc.createElement("dep", dep);
-					}
-					doc.endObject("deps");
+					File.Delete(bundleFileName);
 				}
-				doc.endObject("file", true);
 			}
+			BuildPipeline.BuildAssetBundles(CommonDefine.P_STREAMING_ASSETS_PATH, buildList, BuildAssetBundleOptions.ChunkBasedCompression, target);
+			AssetDatabase.Refresh();
 		}
-		doc.endObject("files");
+		else
+		{
+			// 清理输出目录
+			createOrClearOutPath();
+			// 清理之前设置过的bundleName
+			clearAssetBundleName();
+			// 设置bunderName
+			mAssetBundleMap.Clear();
+			List<string> resList = new List<string>();
+			getAllSubResDirs(CommonDefine.P_RESOURCE_PATH, resList);
+			foreach (string dir in resList)
+			{
+				setAssetBundleName(dir);
+			}
+			// 打包
+			BuildPipeline.BuildAssetBundles(CommonDefine.P_STREAMING_ASSETS_PATH, BuildAssetBundleOptions.ChunkBasedCompression, target);
+			AssetDatabase.Refresh();
 
-		FileStream fs = new FileStream(CommonDefine.P_STREAMING_ASSETS_PATH + "StreamingAssets.xml", FileMode.Create);
-		byte[] data = Encoding.UTF8.GetBytes(doc.ToString());
-		fs.Write(data, 0, data.Length);
-		fs.Flush();
-		fs.Close();
+			// 构建依赖关系
+			AssetBundle assetBundle = AssetBundle.LoadFromFile(CommonDefine.F_STREAMING_ASSETS_PATH + "StreamingAssets");
+			AssetBundleManifest manifest = assetBundle.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
+			string[] assetBundleNameList = manifest.GetAllAssetBundles();
+			// 遍历所有AB
+			foreach (string bundle in assetBundleNameList)
+			{
+				string bundleName = bundle;
+				string[] deps = manifest.GetAllDependencies(bundleName);
+				if (mAssetBundleMap.ContainsKey(bundleName))
+				{
+					rightToLeft(ref bundleName);
+					// 遍历当前AB的所有依赖项
+					foreach (string dep in deps)
+					{
+						string depName = dep;
+						rightToLeft(ref depName);
+						List<AssetBuildBundleInfo> infoList = mAssetBundleMap[bundleName];
+						foreach (AssetBuildBundleInfo info in infoList)
+						{
+							info.AddDependence(depName);
+						}
+					}
+				}
+			}
 
+			// 生成XML
+			XMLDocument doc = new XMLDocument();
+			doc.startObject("files", true);
+			foreach (var item in mAssetBundleMap)
+			{
+				int count = item.Value.Count;
+				for (int i = 0; i < count; ++i)
+				{
+					AssetBuildBundleInfo info = item.Value[i];
+					doc.startObject("file");
+					doc.createElement("bundleName", info.bundleName);
+					doc.createElement("assetName", info.assetName);
+					if (info.dependencies != null)
+					{
+						doc.startObject("deps");
+						foreach (string dep in info.dependencies)
+						{
+							doc.createElement("dep", dep);
+						}
+						doc.endObject("deps");
+					}
+					doc.endObject("file", true);
+				}
+			}
+			doc.endObject("files");
+
+			FileStream fs = new FileStream(CommonDefine.P_STREAMING_ASSETS_PATH + "StreamingAssets.xml", FileMode.Create);
+			byte[] data = Encoding.UTF8.GetBytes(doc.ToString());
+			fs.Write(data, 0, data.Length);
+			fs.Flush();
+			fs.Close();
+		}
 		UnityUtility.messageBox("资源打包结束! 耗时 : " + (DateTime.Now - time0), false);
 	}
 	protected static void findAssetBundleBuild(string path, ref AssetBundleBuild[] list)
 	{
 		Dictionary<string, List<string>> assetBundleList = new Dictionary<string, List<string>>();
-		List<string> dirList = new List<string>();
-		getAllSubResDirs(path, dirList);
-		int dirCount = dirList.Count;
-		for (int i = 0; i < dirCount; ++i)
+		// path是文件
+		if (getFileSuffix(path) != "")
 		{
-			string[] files = Directory.GetFiles(dirList[i]);
-			int fileCount = files.Length;
-			for (int j = 0; j < fileCount; ++j)
+			string bundleName = setFileAssetBundleName(path);
+			if (bundleName != "")
 			{
-				// .asset文件和.meta不打包
-				if (endWith(files[j], ".meta", false) || endWith(files[j], ".asset", false))
-				{
-					continue;
-				}
-				string bundleName = getFileAssetBundleName(files[j]);
 				if (!assetBundleList.ContainsKey(bundleName))
 				{
 					assetBundleList.Add(bundleName, new List<string>());
 				}
-				assetBundleList[bundleName].Add(files[j]);
+				assetBundleList[bundleName].Add(path);
+			}
+		}
+		// path是目录
+		else
+		{
+			List<string> dirList = new List<string>();
+			getAllSubResDirs(path, dirList);
+			int dirCount = dirList.Count;
+			for (int i = 0; i < dirCount; ++i)
+			{
+				string[] files = Directory.GetFiles(dirList[i]);
+				int fileCount = files.Length;
+				for (int j = 0; j < fileCount; ++j)
+				{
+					string bundleName = setFileAssetBundleName(files[j]);
+					if (bundleName != "")
+					{
+						if (!assetBundleList.ContainsKey(bundleName))
+						{
+							assetBundleList.Add(bundleName, new List<string>());
+						}
+						assetBundleList[bundleName].Add(files[j]);
+					}
+				}
 			}
 		}
 		list = new AssetBundleBuild[assetBundleList.Count];
@@ -168,11 +220,11 @@ public class AssetBundlePack : GameBase
 		}
 	}
 	// 获得一个文件的所属AssetBundle名,file是以Assets开头的相对路径
-	protected static string getFileAssetBundleName(string file)
+	protected static string getFileAssetBundleName(string file, bool forceSingle = false)
 	{
 		string bundleName = "";
-		// prefab和unity(但是一般情况下unity场景文件不打包)单个文件打包,就是直接替换后缀名
-		if (endWith(file, ".prefab") || endWith(file, ".unity"))
+		// prefab和unity(但是一般情况下unity场景文件不打包)单个文件打包,就是直接替换后缀名,或者强制为单独一个包的
+		if (endWith(file, ".prefab") || endWith(file, ".unity") || forceSingle)
 		{
 			bundleName = file.Substring(CommonDefine.P_RESOURCE_PATH.Length);
 			bundleName = getFileNameNoSuffix(bundleName) + CommonDefine.ASSET_BUNDLE_SUFFIX;
@@ -201,6 +253,39 @@ public class AssetBundlePack : GameBase
 		}
 		return false;
 	}
+	protected static string setFileAssetBundleName(string file, bool forceSingle = false)
+	{
+		// .asset文件和.meta不打包
+		if (file.EndsWith(".meta") || file.EndsWith(".asset"))
+		{
+			return "";
+		}
+		string bundleName = "";
+		AssetImporter importer = AssetImporter.GetAtPath(file);
+		if (importer != null)
+		{
+			string fileName = file.ToLower();
+			rightToLeft(ref fileName);
+			bundleName = getFileAssetBundleName(fileName, forceSingle);
+			importer.assetBundleName = bundleName;
+			EditorUtility.UnloadUnusedAssetsImmediate();
+
+			// 存储bundleInfo
+			AssetBuildBundleInfo info = new AssetBuildBundleInfo();
+			info.assetName = fileName.Substring(CommonDefine.P_RESOURCE_PATH.Length);   // 去除Asset/Resources/前缀,只保留Resources下相对路径
+			info.bundleName = bundleName;
+			if (!mAssetBundleMap.ContainsKey(info.bundleName))
+			{
+				mAssetBundleMap.Add(info.bundleName, new List<AssetBuildBundleInfo>());
+			}
+			mAssetBundleMap[info.bundleName].Add(info);
+		}
+		else
+		{
+			Debug.LogFormat("Set AssetName Fail, File:{0}, Msg:Importer is null", file);
+		}
+		return bundleName;
+	}
 	// fullPath是以Asset开头的路径
 	protected static void setAssetBundleName(string fullPath)
 	{
@@ -215,40 +300,13 @@ public class AssetBundlePack : GameBase
 		}
 		foreach (string file in files)
 		{
-			// .asset文件和.meta不打包
-			if (file.EndsWith(".meta") || file.EndsWith(".asset"))
-			{
-				continue;
-			}
-			AssetImporter importer = AssetImporter.GetAtPath(file);
-			if (importer != null)
-			{
-				string fileName = file.ToLower();
-				rightToLeft(ref fileName);
-				string bundleName = getFileAssetBundleName(fileName);
-				importer.assetBundleName = bundleName;
-				EditorUtility.UnloadUnusedAssetsImmediate();
-
-				// 存储bundleInfo
-				AssetBuildBundleInfo info = new AssetBuildBundleInfo();
-				info.assetName = fileName.Substring(CommonDefine.P_RESOURCE_PATH.Length);   // 去除Asset/Resources/前缀,只保留Resources下相对路径
-				info.bundleName = bundleName;
-				if (!mAssetBundleMap.ContainsKey(info.bundleName))
-				{
-					mAssetBundleMap.Add(info.bundleName, new List<AssetBuildBundleInfo>());
-				}
-				mAssetBundleMap[info.bundleName].Add(info);
-			}
-			else
-			{
-				Debug.LogFormat("Set AssetName Fail, File:{0}, Msg:Importer is null", file);
-			}
+			setFileAssetBundleName(file);
 		}
 	}
 	// 递归获取所有子目录文件夹
 	protected static void getAllSubResDirs(string fullPath, List<string> dirList)
 	{
-		if ((dirList == null) || (string.IsNullOrEmpty(fullPath)))
+		if (dirList == null || string.IsNullOrEmpty(fullPath))
 		{
 			return;
 		}

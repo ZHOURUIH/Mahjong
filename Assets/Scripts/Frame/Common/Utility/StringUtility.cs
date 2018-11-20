@@ -242,7 +242,7 @@ public class StringUtility : BinaryUtility
 		namePos = ret.LastIndexOf('/');
 		if (namePos != -1)
 		{
-			ret = ret.Substring(namePos + 1, ret.Length - namePos - 1);
+			ret = ret.Substring(namePos + 1);
 		}
 		return ret;
 	}
@@ -269,10 +269,11 @@ public class StringUtility : BinaryUtility
 	}
 	public static string getFileSuffix(string file)
 	{
-		int dotPos = file.LastIndexOf('.');
+		int filePos = file.LastIndexOf('/');
+		int dotPos = file.IndexOf('.', filePos);
 		if(dotPos != -1)
 		{
-			return file.Substring(dotPos, file.Length - dotPos);
+			return file.Substring(dotPos);
 		}
 		return "";
 	}
@@ -284,7 +285,7 @@ public class StringUtility : BinaryUtility
 		// 先判断是否移除目录
 		if(removeDir && namePos != -1)
 		{
-			ret = str.Substring(namePos + 1, str.Length - namePos - 1);
+			ret = str.Substring(namePos + 1);
 		}
 		// 移除后缀
 		int dotPos = ret.LastIndexOf('.');

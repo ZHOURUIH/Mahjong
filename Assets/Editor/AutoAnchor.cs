@@ -68,9 +68,9 @@ public class AnchorMenu
 		// 所选择的物体必须在同一个父节点下
 		Transform parent = Selection.transforms[0].parent;
 		int count = Selection.gameObjects.Length;
-		for(int i = 1; i < count; ++i)
+		for (int i = 1; i < count; ++i)
 		{
-			if(parent != Selection.transforms[i].parent)
+			if (parent != Selection.transforms[i].parent)
 			{
 				UnityUtility.logError("objects must have the same parent!");
 				return;
@@ -112,7 +112,7 @@ public class AnchorMenu
 			return;
 		}
 		ScaleAnchor anchor = Selection.activeGameObject.GetComponent<ScaleAnchor>();
-		if(anchor == null)
+		if (anchor == null)
 		{
 			return;
 		}
@@ -131,7 +131,7 @@ public class AnchorMenu
 	[MenuItem(mAutoAnchorMenuName + mScaleAnchorMenuName + "DefaultRelativePos")]
 	static void ClaerCalculation()
 	{
-		if(Selection.activeGameObject == null)
+		if (Selection.activeGameObject == null)
 		{
 			return;
 		}
@@ -148,7 +148,7 @@ public class AnchorMenu
 		{
 			// 只要有Rect就可以添加该组件,panel也可以添加
 			UIRect rect = WidgetUtility.getGameObjectRect(obj);
-			if(rect != null)
+			if (rect != null)
 			{
 				PaddingAnchor anchor = obj.AddComponent<PaddingAnchor>();
 				anchor.setAnchorMode(ANCHOR_MODE.AM_NEAR_PARENT_SIDE);
@@ -156,7 +156,7 @@ public class AnchorMenu
 		}
 		// 再设置子节点的Anchor
 		int childCount = obj.transform.childCount;
-		for(int i = 0; i < childCount; ++i)
+		for (int i = 0; i < childCount; ++i)
 		{
 			addPaddingAnchor(obj.transform.GetChild(i).gameObject);
 		}

@@ -9,7 +9,7 @@ public class txNGUISprite : txUIObject
 	protected UISprite mSprite;
 	public txNGUISprite()
 	{
-		mType = UI_TYPE.UT_NGUI_SPRITE;
+		;
 	}
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{
@@ -35,7 +35,7 @@ public class txNGUISprite : txUIObject
 			mSprite.atlas = atlas;
 		}
 	}
-	public void setSpriteName(string name, bool useSize, bool makeEvenSize = false)
+	public void setSpriteName(string name, bool useSize = false, bool makeEvenSize = false)
 	{
 		mSprite.spriteName = name;
 		if (useSize && name != "")
@@ -75,6 +75,10 @@ public class txNGUISprite : txUIObject
 	public override int getDepth()
 	{
 		return mSprite.depth;
+	}
+	public void setColor(Color color)
+	{
+		mSprite.color = color;
 	}
 	public override void setAlpha(float alpha)
 	{

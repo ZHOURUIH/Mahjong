@@ -12,6 +12,7 @@ public class CommandLayoutManagerLoadLayout : Command
 	public string		mParam = "";
 	public bool			mImmediatelyShow = false;
 	public bool			mIsNGUI = true;
+	public bool			mIsScene = false;
 	public override void init()
 	{
 		base.init();
@@ -24,11 +25,12 @@ public class CommandLayoutManagerLoadLayout : Command
 		mParam = "";
 		mImmediatelyShow = false;
 		mIsNGUI = true;
+		mIsScene = false;
 	}
 	public override void execute()
 	{
 		GameLayoutManager layoutManager = mReceiver as GameLayoutManager;
-		mResultLayout = layoutManager.createLayout(mLayoutType, mRenderOrder, mAsync, mCallback, mIsNGUI);
+		mResultLayout = layoutManager.createLayout(mLayoutType, mRenderOrder, mAsync, mCallback, mIsNGUI, mIsScene);
 		// 只有同步加载时才能立即设置布局的显示
 		if (mResultLayout != null && !mAsync)
 		{

@@ -81,6 +81,7 @@ public class ComponentKeyFrameBase : GameComponent
 				mPlayLength = mOnceLength - offset;
 			}
 		}
+		update(0.0f);
 	}
 	public virtual void stop(bool force = false)
 	{

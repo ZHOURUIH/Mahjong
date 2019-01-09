@@ -215,7 +215,7 @@ public class AssetBundleLoader : GameBase
 			// 如果还未加载,则加载资源包
 			if (bundleInfo.mLoaded == LOAD_STATE.LS_UNLOAD)
 			{
-				bundleInfo.loadAssetBundle();
+				bundleInfo.loadAssetBundle(mResourceManager.isPersistentFirst());
 			}
 			// 加载完毕,返回资源列表
 			if (bundleInfo.mLoaded == LOAD_STATE.LS_LOADED)
@@ -260,7 +260,7 @@ public class AssetBundleLoader : GameBase
 			if (mAssetToBundleInfo.ContainsKey(fileNameWithSuffix))
 			{
 				AssetBundleInfo bundleInfo = mAssetToBundleInfo[fileNameWithSuffix].mParentAssetBundle;
-				res = bundleInfo.loadAsset<T>(ref fileNameWithSuffix);
+				res = bundleInfo.loadAsset<T>(ref fileNameWithSuffix, mResourceManager.isPersistentFirst());
 				if(res != null)
 				{
 					break;
@@ -312,21 +312,53 @@ public class AssetBundleLoader : GameBase
 		// 通过www加载
 		if (loadFromWWW)
 		{
-#if UNITY_EDITOR || UNITY_STANDALONE_WIN || UNITY_IPHONE || UNITY_IOS || UNITY_STANDALONE_LINUX
-			string path = "file:\\" + CommonDefine.F_STREAMING_ASSETS_PATH + bundleInfo.mBundleName + CommonDefine.ASSET_BUNDLE_SUFFIX;
-#elif UNITY_ANDROID
-			string path = CommonDefine.F_STREAMING_ASSETS_PATH + bundleInfo.mBundleName + CommonDefine.ASSET_BUNDLE_SUFFIX;
+			// 先从persistentDataPath中查找资源
+			if (mResourceManager.isPersistentFirst())
+			{
+#if UNITY_ANDROID && !UNITY_EDITOR
+				string path = CommonDefine.F_PERSISTENT_DATA_PATH + bundleInfo.mBundleName + CommonDefine.ASSET_BUNDLE_SUFFIX;
+#else
+				string path = "file:\\" + CommonDefine.F_PERSISTENT_DATA_PATH + bundleInfo.mBundleName + CommonDefine.ASSET_BUNDLE_SUFFIX;
 #endif
-			WWW www = new WWW(path);
-			yield return www;
-			assetBundle = www.assetBundle;
-			www.Dispose();
-			www = null;
+				WWW www = new WWW(path);
+				yield return www;
+				if (www.error == null)
+				{
+					assetBundle = www.assetBundle;
+				}
+				www.Dispose();
+				www = null;
+			}
+			// 找不到再从StreamingAssets中查找
+			if(assetBundle == null)
+			{
+#if UNITY_ANDROID && !UNITY_EDITOR
+				string path = CommonDefine.F_STREAMING_ASSETS_PATH + bundleInfo.mBundleName + CommonDefine.ASSET_BUNDLE_SUFFIX;
+#else
+				string path = "file:\\" + CommonDefine.F_STREAMING_ASSETS_PATH + bundleInfo.mBundleName + CommonDefine.ASSET_BUNDLE_SUFFIX;
+#endif
+				WWW www = new WWW(path);
+				yield return www;
+				if (www.error == null)
+				{
+					assetBundle = www.assetBundle;
+				}	
+				www.Dispose();
+				www = null;
+			}
 		}
 		// 直接从文件加载
 		else
 		{
-			AssetBundleCreateRequest request = AssetBundle.LoadFromFileAsync(CommonDefine.F_STREAMING_ASSETS_PATH + bundleInfo.mBundleName + CommonDefine.ASSET_BUNDLE_SUFFIX);
+			AssetBundleCreateRequest request = null;
+			if(mResourceManager.isPersistentFirst())
+			{
+				request = AssetBundle.LoadFromFileAsync(CommonDefine.F_PERSISTENT_DATA_PATH + bundleInfo.mBundleName + CommonDefine.ASSET_BUNDLE_SUFFIX);
+			}
+			if(request == null)
+			{
+				request = AssetBundle.LoadFromFileAsync(CommonDefine.F_STREAMING_ASSETS_PATH + bundleInfo.mBundleName + CommonDefine.ASSET_BUNDLE_SUFFIX);
+			}
 			if (request == null)
 			{
 				logError("can not load asset bundle async : " + bundleInfo.mBundleName);

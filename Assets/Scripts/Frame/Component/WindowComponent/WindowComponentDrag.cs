@@ -4,6 +4,7 @@ using System.Collections;
 
 public class WindowComponentDrag : ComponentDrag
 {
+	protected txUIObject mDragHoverWindow;
 	public WindowComponentDrag(Type type, string name)
 		:
 		base(type, name)
@@ -25,8 +26,8 @@ public class WindowComponentDrag : ComponentDrag
 	protected override void applyScreenPosition(Vector3 screenPos)
 	{
 		txUIObject window = mComponentOwner as txUIObject;
-		window.setLocalPosition(UnityUtility.screenPosToWindowPos(screenPos, window.getParent()) - 
-			new Vector2(Screen.currentResolution.width / 2.0f, Screen.currentResolution.height / 2.0f));
+		Vector2 rootSize = WidgetUtility.getRootSize();
+		window.setLocalPosition(UnityUtility.screenPosToWindowPos(screenPos, window.getParent()) - rootSize / 2);
 	}
 	protected override Vector3 getScreenPosition()
 	{
@@ -37,6 +38,41 @@ public class WindowComponentDrag : ComponentDrag
 	{
 		// 使用当前鼠标位置判断是否悬停,暂时忽略被其他窗口覆盖的情况
 		RaycastHit hit;
-		return (mComponentOwner as txUIObject).getBoxCollider().Raycast(UnityUtility.getRay(mousePosition), out hit, 10000.0f);
+		BoxCollider collider = (mComponentOwner as txUIObject).getBoxCollider();
+		if(collider == null)
+		{
+			logError("not find collider, can not drag!");
+			return false;
+		}
+		return collider.Raycast(UnityUtility.getRay(mousePosition), out hit, 10000.0f);
+	}
+	protected override void onDragEnd()
+	{
+		// 判断当前鼠标所在位置是否有窗口
+		Vector3 curMousePosition = mGlobalTouchSystem.getCurMousePosition();
+		txUIObject receiveWindow = mGlobalTouchSystem.getHoverWindow(curMousePosition, mComponentOwner as txUIObject);
+		if(receiveWindow != null)
+		{
+			receiveWindow.onReceiveDrag(mComponentOwner as txUIObject);
+		}
+		mDragHoverWindow = null;
+	}
+	protected override void onDraging()
+	{
+		Vector3 curMousePosition = mGlobalTouchSystem.getCurMousePosition();
+		txUIObject curHover = mGlobalTouchSystem.getHoverWindow(curMousePosition, mComponentOwner as txUIObject);
+		// 悬停的窗口改变了
+		if (curHover != mDragHoverWindow)
+		{
+			if(mDragHoverWindow != null)
+			{
+				mDragHoverWindow.onDragHoverd(mComponentOwner as txUIObject, false);
+			}
+			mDragHoverWindow = curHover;
+			if (mDragHoverWindow != null)
+			{
+				mDragHoverWindow.onDragHoverd(mComponentOwner as txUIObject, true);
+			}
+		}
 	}
 }

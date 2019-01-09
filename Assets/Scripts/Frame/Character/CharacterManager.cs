@@ -157,7 +157,7 @@ public class CharacterManager : FrameComponent
 		{
 			Character character = mCharacterGUIDList[oldID];
 			mCharacterGUIDList.Remove(oldID);
-			mCharacterGUIDList.Add(character.getCharacterData().mGUID, character);
+			mCharacterGUIDList.Add(character.getData().mGUID, character);
 		}
 	}
 	public void notifyCharacterNameChanged(string oldName)
@@ -197,7 +197,7 @@ public class CharacterManager : FrameComponent
 		}
 		mCharacterTypeList[character.getType()].Add(character.getName(), character);
 		// 加入ID索引表
-		int characterID = character.getCharacterData().mGUID;
+		int characterID = character.getData().mGUID;
 		if (!mCharacterGUIDList.ContainsKey(characterID))
 		{
 			mCharacterGUIDList.Add(characterID, character);
@@ -228,9 +228,9 @@ public class CharacterManager : FrameComponent
 			}
 		}
 		// 从ID索引表中移除
-		if (mCharacterGUIDList.ContainsKey(character.getCharacterData().mGUID))
+		if (mCharacterGUIDList.ContainsKey(character.getData().mGUID))
 		{
-			mCharacterGUIDList.Remove(character.getCharacterData().mGUID);
+			mCharacterGUIDList.Remove(character.getData().mGUID);
 		}
 	}
 	protected void destroyCharacter(Character character)

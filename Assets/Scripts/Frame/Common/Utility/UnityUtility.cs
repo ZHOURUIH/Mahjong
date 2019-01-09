@@ -316,15 +316,17 @@ public class UnityUtility : FrameComponent
 	public static bool whetherGameObjectInScreen(Vector3 worldPos)
 	{
 		Vector3 screenPos = worldPosToScreenPos(worldPos);
+		Vector2 rootSize = WidgetUtility.getRootSize();
 		return screenPos.z >= 0.0f && 
-			(screenPos.x > 0 && screenPos.x < UnityEngine.Screen.currentResolution.width) && 
-			(screenPos.y > 0 && screenPos.y < UnityEngine.Screen.currentResolution.height);
+			(screenPos.x > 0 && screenPos.x < rootSize.x) && 
+			(screenPos.y > 0 && screenPos.y < rootSize.y);
 	}
-	public static Vector2 screenPosToWindowPos(Vector2 screenPos, txUIObject parent, bool screenCenterOsZero = false, bool isNGUI = true)
+	public static Vector2 screenPosToWindowPos(Vector2 screenPos, txUIObject parent, bool screenCenterAsZero = false, bool isNGUI = true)
 	{
 		Camera camera = mCameraManager.getUICamera().getCamera();
-		screenPos.x = screenPos.x / camera.pixelWidth * UnityEngine.Screen.currentResolution.width;
-		screenPos.y = screenPos.y / camera.pixelHeight * UnityEngine.Screen.currentResolution.height;
+		Vector2 rootSize = WidgetUtility.getRootSize();
+		screenPos.x = screenPos.x / camera.pixelWidth * rootSize.x;
+		screenPos.y = screenPos.y / camera.pixelHeight * rootSize.y;
 		Vector3 parentWorldPosition = parent != null ? parent.getWorldPosition() : Vector3.zero;
 		txUIObject root = isNGUI ? mLayoutManager.getNGUIRoot() : mLayoutManager.getUGUIRoot();
 		Vector3 scale = root.getScale();
@@ -333,9 +335,9 @@ public class UnityUtility : FrameComponent
 		Vector2 parentWorldScale = parent != null ? parent.getWorldScale() : Vector2.one;
 		Vector2 pos = new Vector2(screenPos.x - parentWorldPosition.x, screenPos.y - parentWorldPosition.y);
 		Vector2 windowPos = new Vector2(pos.x / parentWorldScale.x, pos.y / parentWorldScale.y);
-		if(screenCenterOsZero)
+		if(screenCenterAsZero)
 		{
-			windowPos -= new Vector2(UnityEngine.Screen.currentResolution.width / 2.0f, UnityEngine.Screen.currentResolution.height / 2.0f);
+			windowPos -= rootSize / 2;
 		}
 		return windowPos;
 	}
@@ -350,7 +352,7 @@ public class UnityUtility : FrameComponent
 	}
 	public static void setGameObjectLayer(txUIObject obj, int layer)
 	{
-		GameObject go = obj.mObject;
+		GameObject go = obj.getObject();
 		go.layer = layer;
 		Transform[] childTransformList = go.transform.GetComponentsInChildren<Transform>(true);
 		foreach (Transform t in childTransformList)

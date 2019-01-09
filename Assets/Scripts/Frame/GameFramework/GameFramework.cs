@@ -152,11 +152,7 @@ public class GameFramework : MonoBehaviour
 	}
 	public virtual void keyProcess()
 	{
-		if(Input.GetKeyDown(KeyCode.Escape))
-		{
-			stop();
-		}
-		else if(Input.GetKeyDown(KeyCode.D))
+		if(Input.GetKeyDown(KeyCode.D))
 		{
 			LOG_LEVEL level = UnityUtility.getLogLevel();
 			int newLevel = ((int)level + 1) % (int)LOG_LEVEL.LL_MAX;
@@ -217,6 +213,8 @@ public class GameFramework : MonoBehaviour
 		instance = this;
 		mGameFrameObject = gameObject;
 		initComponent();
+		// 布局管理器也需要在最后更新,确保所有游戏逻辑都更新完毕后,再更新界面
+		registeComponent<GameLayoutManager>();
 		// 物体管理器和资源管理器必须最后注册,以便最后销毁,作为最后的资源清理
 		registeComponent<ObjectManager>();
 		registeComponent<ResourceManager>();
@@ -253,7 +251,9 @@ public class GameFramework : MonoBehaviour
 	protected virtual void launch() { }
 	protected virtual void initComponent()
 	{
+		registeComponent<AndroidPluginManager>();
 		registeComponent<AndroidAssetLoader>();
+		registeComponent<XLuaManager>();
 		registeComponent<ApplicationConfig>();
 		registeComponent<FrameConfig>();
 		registeComponent<UnityUtility>();
@@ -262,7 +262,6 @@ public class GameFramework : MonoBehaviour
 		registeComponent<DataBase>();
 		registeComponent<CommandSystem>();
 		registeComponent<CharacterManager>();
-		registeComponent<GameLayoutManager>();
 		registeComponent<AudioManager>();
 		registeComponent<GameSceneManager>();
 		registeComponent<KeyFrameManager>();
@@ -355,7 +354,7 @@ public class GameFramework : MonoBehaviour
 			rootStretch.SetActive(false);
 		}
 		// 简单拉伸自适应分辨率,将所有画面都渲染到NGUIRootStretch中的UICameraTexture上,然后拉伸显示UICameraTexture
-		if (adaptScreen == ADAPT_SCREEN.AS_SIMPLE_STRETCH)
+		if (adaptScreen == ADAPT_SCREEN.AS_SIMPLE_STRETCH && rootStretch != null)
 		{
 			rootStretch.SetActive(true);
 			GameObject camera = UnityUtility.getGameObject(rootStretch, "Camera");
@@ -379,7 +378,7 @@ public class GameFramework : MonoBehaviour
 		else
 		{
 			// 多屏横向组合为高分辨率屏幕
-			if(adaptScreen == ADAPT_SCREEN.AS_MULTI_SCREEN && screenCount > 1)
+			if(adaptScreen == ADAPT_SCREEN.AS_MULTI_SCREEN && screenCount > 1 && rootMultiScreen != null)
 			{
 				// 激活渲染目标
 				rootMultiScreen.SetActive(true);

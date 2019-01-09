@@ -40,7 +40,7 @@ public class SQLiteTable : GameBase
 	{
 		return mSQLite.queryReader(queryString);
 	}
-	public void appendValueString(ref string queryStr, string str, bool isEnd = false)
+	public static void appendValueString(ref string queryStr, string str, bool isEnd = false)
 	{
 		queryStr += "\"" + str + "\"";
 		if (!isEnd)
@@ -48,7 +48,7 @@ public class SQLiteTable : GameBase
 			queryStr += ",";
 		}
 	}
-	public void appendValueInt(ref string queryStr, int value, bool isEnd = false)
+	public static void appendValueInt(ref string queryStr, int value, bool isEnd = false)
 	{
 		queryStr += intToString(value);
 		if (!isEnd)
@@ -56,7 +56,15 @@ public class SQLiteTable : GameBase
 			queryStr += ",";
 		}
 	}
-	public void appendValueFloat(ref string queryStr, float value, bool isEnd = false)
+	public static void appendValueUInt(ref string queryStr, uint value, bool isEnd = false)
+	{
+		queryStr += uintToString(value);
+		if (!isEnd)
+		{
+			queryStr += ",";
+		}
+	}
+	public static void appendValueFloat(ref string queryStr, float value, bool isEnd = false)
 	{
 		queryStr += floatToString(value);
 		if (!isEnd)
@@ -64,23 +72,23 @@ public class SQLiteTable : GameBase
 			queryStr += ",";
 		}
 	}
-	public void appendValueFloatArray(ref string queryStr, List<float> floatArray, bool isEnd = false)
+	public static void appendValueFloatArray(ref string queryStr, List<float> floatArray, bool isEnd = false)
 	{
 		appendValueString(ref queryStr, floatArrayToString(floatArray), isEnd);
 	}
-	public void appendValueIntArray(ref string queryStr, List<int> intArray, bool isEnd = false)
+	public static void appendValueIntArray(ref string queryStr, List<int> intArray, bool isEnd = false)
 	{
 		appendValueString(ref queryStr, intArrayToString(intArray), isEnd);
 	}
-	public void appendConditionString(ref string condition, string col, string str, string operate)
+	public static void appendConditionString(ref string condition, string col, string str, string operate)
 	{
 		condition += col + " = " + "\"" + str + "\"" + operate;
 	}
-	public void appendConditionInt(ref string condition, string col, int value, string operate)
+	public static void appendConditionInt(ref string condition, string col, int value, string operate)
 	{
 		condition += col + " = " + intToString(value) + operate;
 	}
-	public void appendUpdateString(ref string updateInfo, string col, string str, bool isEnd = false)
+	public static void appendUpdateString(ref string updateInfo, string col, string str, bool isEnd = false)
 	{
 		updateInfo += col + " = " + "\"" + str + "\"";
 		if (!isEnd)
@@ -88,7 +96,7 @@ public class SQLiteTable : GameBase
 			updateInfo += ",";
 		}
 	}
-	public void appendUpdateInt(ref string updateInfo, string col, int value, bool isEnd = false)
+	public static void appendUpdateInt(ref string updateInfo, string col, int value, bool isEnd = false)
 	{
 		updateInfo += col + " = " + intToString(value);
 		if (!isEnd)
@@ -96,11 +104,11 @@ public class SQLiteTable : GameBase
 			updateInfo += ",";
 		}
 	}
-	public void appendUpdateIntArray(ref string updateInfo, string col, List<int> intArray, bool isEnd = false)
+	public static void appendUpdateIntArray(ref string updateInfo, string col, List<int> intArray, bool isEnd = false)
 	{
 		appendUpdateString(ref updateInfo, col, intArrayToString(intArray), isEnd);
 	}
-	public void appendUpdateFloatArray(ref string updateInfo, string col, List<float> floatArray, bool isEnd = false)
+	public static void appendUpdateFloatArray(ref string updateInfo, string col, List<float> floatArray, bool isEnd = false)
 	{
 		appendUpdateString(ref updateInfo, col, floatArrayToString(floatArray), isEnd);
 	}

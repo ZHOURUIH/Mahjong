@@ -10,7 +10,7 @@ public class txUIParticle : txUIObject
 	protected PLAY_STATE mState;
 	public txUIParticle()
 	{
-		mType = UI_TYPE.UT_PARTICLE;
+		;
 	}
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{

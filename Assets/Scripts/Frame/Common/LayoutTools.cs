@@ -7,10 +7,10 @@ public class LT : GameBase
 {
 	public static bool checkStaticPanel(txUIObject obj)
 	{
-		txUIObject panel = obj.mLayout.getLayoutPanel();
+		txUIObject panel = obj.getLayout().getLayoutPanel();
 		if (panel is txNGUIPanel && (panel as txNGUIPanel).getStatic())
 		{
-			logError("layout is static! can not move/rotate/scale window! layout : " + obj.mLayout.getName());
+			logError("layout is static! can not move/rotate/scale window! layout : " + obj.getLayout().getName());
 			return false;
 		}
 		return true;
@@ -27,6 +27,7 @@ public class LT : GameBase
 		cmd.mImmediatelyShow = immediately;
 		cmd.mParam = param;
 		cmd.mIsNGUI = true;
+		cmd.mIsScene = false;
 		pushCommand(cmd, mLayoutManager);
 	}
 	public static void LOAD_NGUI_ASYNC(LAYOUT_TYPE type, int renderOrder, LayoutAsyncDone callback)
@@ -37,6 +38,7 @@ public class LT : GameBase
 		cmd.mAsync = true;
 		cmd.mCallback = callback;
 		cmd.mIsNGUI = true;
+		cmd.mIsScene = false;
 		pushCommand(cmd, mLayoutManager);
 	}
 	public static void LOAD_UGUI(LAYOUT_TYPE type, int renderOrder, bool visible, bool immediately, string param)
@@ -49,6 +51,31 @@ public class LT : GameBase
 		cmd.mImmediatelyShow = immediately;
 		cmd.mParam = param;
 		cmd.mIsNGUI = false;
+		cmd.mIsScene = false;
+		pushCommand(cmd, mLayoutManager);
+	}
+	public static void LOAD_NGUI_SCENE(LAYOUT_TYPE type, int renderOrder, bool visible, bool immediately, string param)
+	{
+		CommandLayoutManagerLoadLayout cmd = newCmd(out cmd, true, false);
+		cmd.mLayoutType = type;
+		cmd.mVisible = visible;
+		cmd.mRenderOrder = renderOrder;
+		cmd.mAsync = false;
+		cmd.mImmediatelyShow = immediately;
+		cmd.mParam = param;
+		cmd.mIsNGUI = true;
+		cmd.mIsScene = true;
+		pushCommand(cmd, mLayoutManager);
+	}
+	public static void LOAD_NGUI_SCENE_ASYNC(LAYOUT_TYPE type, int renderOrder, LayoutAsyncDone callback)
+	{
+		CommandLayoutManagerLoadLayout cmd = newCmd(out cmd, true, false);
+		cmd.mLayoutType = type;
+		cmd.mRenderOrder = renderOrder;
+		cmd.mAsync = true;
+		cmd.mCallback = callback;
+		cmd.mIsNGUI = true;
+		cmd.mIsScene = true;
 		pushCommand(cmd, mLayoutManager);
 	}
 	public static void LOAD_UGUI_ASYNC(LAYOUT_TYPE type, int renderOrder, LayoutAsyncDone callback)
@@ -59,6 +86,7 @@ public class LT : GameBase
 		cmd.mAsync = true;
 		cmd.mCallback = callback;
 		cmd.mIsNGUI = false;
+		cmd.mIsScene = false;
 		pushCommand(cmd, mLayoutManager);
 	}
 	public static void UNLOAD_LAYOUT(LAYOUT_TYPE type)
@@ -83,9 +111,13 @@ public class LT : GameBase
 	{
 		LOAD_NGUI(type, renderOrder, true, false, "");
 	}
-	public static void LOAD_NGUI_SHOW(LAYOUT_TYPE type, int renderOrder, bool immediately, string param = "")
+	public static void LOAD_NGUI_SCENE_HIDE(LAYOUT_TYPE type, int renderOrder)
 	{
-		LOAD_NGUI(type, renderOrder, true, immediately, param);
+		LOAD_NGUI_SCENE(type, renderOrder, false, false, "");
+	}
+	public static void LOAD_NGUI_SCENE_SHOW(LAYOUT_TYPE type, int renderOrder)
+	{
+		LOAD_NGUI_SCENE(type, renderOrder, true, false, "");
 	}
 	public static void LOAD_UGUI_HIDE(LAYOUT_TYPE type, int renderOrder)
 	{

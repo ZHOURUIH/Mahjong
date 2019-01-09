@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class DelayCommand
 {
@@ -84,14 +85,14 @@ public class CommandSystem : FrameComponent
 		mExecuteList.Clear();
 	}
 	// 创建命令
-	public T newCmd<T>(bool show = true, bool delay = false) where T : Command, new()
+	public Command newCmd(Type type, bool show = true, bool delay = false)
 	{
 		// 如果命令系统已经销毁了,则不能再创建命令
 		if (mSystemDestroy)
 		{
 			return null;
 		}
-		T cmd = mCommandPool.newCmd<T>(show, delay);
+		Command cmd = mCommandPool.newCmd(type, show, delay);
 #if UNITY_EDITOR
 		if (mTraceCommand)
 		{
@@ -113,6 +114,11 @@ public class CommandSystem : FrameComponent
 		}
 #endif
 		return cmd;
+	}
+	// 创建命令
+	public T newCmd<T>(bool show = true, bool delay = false) where T : Command, new()
+	{
+		return newCmd(typeof(T), show, delay) as T;
 	}
 	// 中断命令
 	public bool interruptCommand(int assignID)

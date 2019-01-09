@@ -18,7 +18,7 @@ public class txNGUIVideo : txNGUITexture
 	protected bool mAutoShowOrHide = true;
 	public txNGUIVideo()
 	{
-		mType = UI_TYPE.UT_NGUI_VIDEO;
+		;
 	}
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{

@@ -79,6 +79,15 @@ public class StringUtility : BinaryUtility
 		}
 		return int.Parse(str);
 	}
+	public static uint stringToUInt(string str)
+	{
+		str = checkUIntString(str);
+		if (str == "")
+		{
+			return 0;
+		}
+		return uint.Parse(str);
+	}
 	public static Vector2 stringToVector2(string value, string seperate = ",")
 	{
 		string[] spitList = split(value, true, seperate);
@@ -509,7 +518,36 @@ public class StringUtility : BinaryUtility
 			insertStart -= 3;
 		}
 	}
+	public static string boolToString(bool value, bool firstUpper = false, bool fullUpper = false)
+	{
+		if(fullUpper)
+		{
+			return value ? "TRUE" : "FALSE";
+		}
+		if (firstUpper)
+		{
+			return value ? "True" : "False";
+		}
+		return value ? "true" : "false";
+	}
+	public static bool stringToBool(string str)
+	{
+		return str == "true" || str == "True" || str == "TRUE";
+	}
 	public static string intToString(int value, int limitLen = 0)
+	{
+		string retString = value.ToString();
+		int addLen = limitLen - retString.Length;
+		if (addLen > 0)
+		{
+			for (int i = 0; i < addLen; ++i)
+			{
+				retString = "0" + retString;
+			}
+		}
+		return retString;
+	}
+	public static string uintToString(uint value, int limitLen = 0)
 	{
 		string retString = value.ToString();
 		int addLen = limitLen - retString.Length;
@@ -543,7 +581,7 @@ public class StringUtility : BinaryUtility
 		while (true)
 		{
 			INT pos = new INT();
-			if (!findSubstr(str, key, false, pos, startPos))
+			if (!findSubString(str, key, false, pos, startPos))
 			{
 				break;
 			}
@@ -604,90 +642,151 @@ public class StringUtility : BinaryUtility
 	{
 		return checkString(str, "-0123456789" + valid);
 	}
-	public static string charToHex(byte b)
+	public static string checkUIntString(string str, string valid = "")
 	{
-		char[] byteHex = new char[3];
-		char[] charPool = new char[]{ 'A', 'B', 'C', 'D', 'E', 'F' };
-		byte highBit = (byte)(b >> 4);
-		// 高字节的十六进制
-		if (highBit < (byte)10)
+		return checkString(str, "0123456789" + valid);
+	}
+	public static string bytesToHEXString(byte[] byteList, bool addSpace = true, bool upperOrLower = true, int count = 0)
+	{
+		string byteString = "";
+		int byteCount = count > 0 ? count : byteList.Length;
+		byteCount = MathUtility.getMin(byteList.Length, byteCount);
+		for (int i = 0; i < byteCount; ++i)
 		{
-			byteHex[0] = (char)('0' + highBit);
+			if (addSpace)
+			{
+				byteString += byteToHEXString(byteList[i], upperOrLower) + " ";
+			}
+			else
+			{
+				byteString += byteToHEXString(byteList[i], upperOrLower);
+			}
+		}
+		if (addSpace)
+		{
+			byteString = byteString.Substring(0, byteString.Length - 1);
+		}
+		return byteString;
+	}
+	public static string byteToHEXString(byte value, bool upperOrLower = true)
+	{
+		string hexString = "";
+		char[] hexChar = null;
+		if (upperOrLower)
+		{
+			hexChar = new char[] { 'A', 'B', 'C', 'D', 'E', 'F' };
 		}
 		else
 		{
-			byteHex[0] = charPool[highBit - 10];
+			hexChar = new char[] { 'a', 'b', 'c', 'd', 'e', 'f' };
 		}
-		// 低字节的十六进制
-		byte lowBit = (byte)(b & 0x0F);
-		if (lowBit < (byte)10)
+		int high = value / 16;
+		int low = value % 16;
+		if (high < 10)
 		{
-			byteHex[1] = (char)('0' + lowBit);
+			hexString += (char)('0' + high);
 		}
 		else
 		{
-			byteHex[1] = charPool[lowBit - 10];
+			hexString += hexChar[high - 10];
 		}
-		return new string(byteHex);
-	}
-	public static string charArrayToHexString(byte[] data, int count)
-	{
-		int dataCount = Mathf.Min(data.Length, count);
-		int showCount = dataCount * 3 + 1;
-		char[] byteData = new char[showCount];
-		for (int j = 0; j < dataCount; ++j)
+		if (low < 10)
 		{
-			byte curByte = data[j];
-			string byteStr = charToHex(curByte);
-			byteData[j * 3 + 0] = byteStr[0];
-			byteData[j * 3 + 1] = byteStr[1];
-			byteData[j * 3 + 2] = ' ';
+			hexString += (char)('0' + low);
 		}
-		string str = new string(byteData);
-		return str;
+		else
+		{
+			hexString += hexChar[low - 10];
+		}
+		return hexString;
 	}
-	public static bool findSubstr(string res, string dst, bool sensitive, INT pos = null, int startPos = 0, bool firstOrLast = true)
+	public static byte hexStringToByte(string str, int start = 0)
 	{
+		byte highBit = 0;
+		byte lowBit = 0;
+		byte[] strBytes = stringToBytes(str);
+		byte highBitChar = strBytes[start];
+		byte lowBitChar = strBytes[start + 1];
+		if (highBitChar >= 'A' && highBitChar <= 'F')
+		{
+			highBit = (byte)(10 + highBitChar - 'A');
+		}
+		else if (highBitChar >= 'a' && highBitChar <= 'f')
+		{
+			highBit = (byte)(10 + highBitChar - 'a');
+		}
+		else if (highBitChar >= '0' && highBitChar <= '9')
+		{
+			highBit = (byte)(highBitChar - '0');
+		}
+		if (lowBitChar >= 'A' && lowBitChar <= 'F')
+		{
+			lowBit = (byte)(10 + lowBitChar - 'A');
+		}
+		else if (lowBitChar >= 'a' && lowBitChar <= 'f')
+		{
+			lowBit = (byte)(10 + lowBitChar - 'a');
+		}
+		else if (lowBitChar >= '0' && lowBitChar <= '9')
+		{
+			lowBit = (byte)(lowBitChar - '0');
+		}
+		return (byte)(highBit << 4 | lowBit);
+	}
+	public static byte[] hexStringToBytes(string str)
+	{
+		str = checkString(str, "ABCDEFabcdef0123456789");
+		if (str == "" || str.Length % 2 != 0)
+		{
+			return null;
+		}
+		int dataCount = str.Length / 2;
+		byte[] data = new byte[dataCount];
+		for (int i = 0; i < dataCount; ++i)
+		{
+			data[i] = hexStringToByte(str, i * 2);
+		}
+		return data;
+	}
+	public static bool findSubString(string source, string subStr, bool sensitive, INT pos = null, int startPos = 0)
+	{
+		if (source.Length < subStr.Length)
+		{
+			return false;
+		}
 		// 如果不区分大小写
 		if (!sensitive)
 		{
 			// 全转换为小写
-			res = res.ToLower();
-			dst = dst.ToLower();
+			source = source.ToLower();
+			subStr = subStr.ToLower();
 		}
-		int posFind = -1;
-		int subLen = dst.Length;
-		int sourceLength = res.Length;
-		int searchLength = sourceLength - subLen;
-		int start = firstOrLast ? startPos : searchLength;
-		int end = firstOrLast ? searchLength : startPos;
-		int delta = firstOrLast ? 1 : -1;
-		for (int i = start; i != end; i += delta)
+		int findPos = -1;
+		for (int i = startPos; i < source.Length; ++i)
 		{
-			if (Math.Max(start, end) - i < subLen)
+			// 剩余长度不足子字符串,则没找到
+			if (source.Length - i < subStr.Length)
 			{
 				continue;
 			}
 			int j = 0;
-			for (j = 0; j < subLen; ++j)
+			for (j = 0; j < subStr.Length; ++j)
 			{
-				if (i + j >= 0 && i + j < sourceLength)
+				if (i + j >= 0 && i + j < source.Length && source[i + j] != subStr[j])
 				{
-					if (res[i + j] != dst[j])
-					{
-						break;
-					}
+					break;
 				}
 			}
-			if (j == subLen)
+			if (j == subStr.Length)
 			{
-				posFind = i;
+				findPos = i;
+				break;
 			}
 		}
 		if (pos != null)
 		{
-			pos.mValue = posFind;
+			pos.mValue = findPos;
 		}
-		return posFind != -1;
+		return findPos != -1;
 	}
 }

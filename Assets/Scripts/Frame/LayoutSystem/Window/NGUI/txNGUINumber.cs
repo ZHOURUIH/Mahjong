@@ -16,7 +16,6 @@ public class txNGUINumber : txNGUISprite
 	protected string				 mNumber = "";
 	public txNGUINumber()
 	{
-		mType = UI_TYPE.UT_NGUI_NUMBER;
 		mSpriteNameList = new string[11];
 		mSpriteDataList = new UISpriteData[11];
 		mNumberList = new List<txNGUISprite>();

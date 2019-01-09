@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using UnityEngine;
 
@@ -34,9 +35,24 @@ public class MathUtility : StringUtility
 			mComplexList[i] = new Complex();
 		}
 	}
-	public static float KMHtoMS(float kmh) { return kmh / 3.6f; }		// km/h转m/s
+	public static float KMHtoMS(float kmh) { return kmh / 3.6f; }       // km/h转m/s
 	public static float MStoKMH(float ms) { return ms * 3.6f; }
 	public static float MtoKM(float m) { return m / 1000.0f; }
+	public static int sign(float value)
+	{
+		if (value < 0.0f)
+		{
+			return -1;
+		}
+		else if (value > 0.0f)
+		{
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
+	}
 	public static float calculateFloat(string str)
 	{
 		// 判断字符串是否含有非法字符,也就是除数字,小数点,运算符以外的字符
@@ -323,7 +339,7 @@ public class MathUtility : StringUtility
 	}
 	public static int randomInt(int min, int max)
 	{
-		if(min == max)
+		if (min == max)
 		{
 			return min;
 		}
@@ -422,15 +438,29 @@ public class MathUtility : StringUtility
 		}
 		return angle;
 	}
-	public static float getAngleFromVectorToVector(Vector3 from, Vector3 to)
+	// baseY为true表示将点当成X-Z平面上的点,忽略Y值,false表示将点当成X-Y平面的点
+	public static float getAngleFromVectorToVector(Vector3 from, Vector3 to, bool baseY)
 	{
-		from.y = 0.0f;
-		to.y = 0.0f;
+		if(baseY)
+		{
+			from.y = 0.0f;
+			to.y = 0.0f;
+		}
 		float angle = getAngleBetweenVector(from, to);
 		Vector3 crossVec = Vector3.Cross(from, to);
-		if (crossVec.y < 0.0f)
+		if(baseY)
 		{
-			angle = -angle;
+			if (crossVec.y < 0.0f)
+			{
+				angle = -angle;
+			}
+		}
+		else
+		{
+			if (crossVec.z > 0.0f)
+			{
+				angle = -angle;
+			}
 		}
 		return angle;
 	}
@@ -490,6 +520,14 @@ public class MathUtility : StringUtility
 		normal = normalize(normal);
 		Vector3 outRay = inRay - 2 * (Vector3.Dot(inRay, normal)) * normal;
 		return outRay;
+	}
+	public static bool isVectorEqual(Vector2 vec0, Vector2 vec1)
+	{
+		return isVectorZero(vec0 - vec1);
+	}
+	public static bool isVectorEqual(Vector3 vec0, Vector3 vec1)
+	{
+		return isVectorZero(vec0 - vec1);
 	}
 	public static bool isVectorZero(Vector2 vec)
 	{
@@ -703,7 +741,7 @@ public class MathUtility : StringUtility
 		{
 			return Vector3.zero;
 		}
-		if(isFloatEqual(length, 1.0f))
+		if (isFloatEqual(length, 1.0f))
 		{
 			return vec3;
 		}
@@ -820,7 +858,7 @@ public class MathUtility : StringUtility
 		clamp(ref t, 0.0f, 1.0f);
 		float value = start + (end - start) * t;
 		// 如果值已经在end的一定范围内了,则直接设置为end
-		if(Mathf.Abs(value - end) <= minAbsDelta)
+		if (Mathf.Abs(value - end) <= minAbsDelta)
 		{
 			value = end;
 		}
@@ -849,6 +887,25 @@ public class MathUtility : StringUtility
 		}
 		return value;
 	}
+	public static void perfectRotationDelta(ref float start, ref float target)
+	{
+		// 先都调整到-180~180的范围
+		adjustAngle180(ref start);
+		adjustAngle180(ref target);
+		float dirDelta = target - start;
+		// 如果目标方向与当前方向的差值超过180,则转换到0~360再计算
+		if (Mathf.Abs(dirDelta) > 180.0f)
+		{
+			adjustAngle360(ref start);
+			adjustAngle360(ref target);
+		}
+	}
+	public static void perfectRotationDelta(ref Vector3 start, ref Vector3 target)
+	{
+		perfectRotationDelta(ref start.x, ref target.x);
+		perfectRotationDelta(ref start.y, ref target.y);
+		perfectRotationDelta(ref start.z, ref target.z);
+	}
 	public static void clamp(ref float value, float min, float max)
 	{
 		if (min > max || isFloatEqual(min, max))
@@ -867,7 +924,7 @@ public class MathUtility : StringUtility
 	}
 	public static void clamp(ref int value, int min, int max)
 	{
-		if(min > max)
+		if (min > max)
 		{
 			return;
 		}
@@ -894,7 +951,7 @@ public class MathUtility : StringUtility
 	}
 	public static void clampMax(ref int value, int max)
 	{
-		if(value > max)
+		if (value > max)
 		{
 			value = max;
 		}
@@ -943,13 +1000,21 @@ public class MathUtility : StringUtility
 			value -= cycle;
 		}
 	}
-	public static bool isInRange(float value, float range0, float range1)
+	// fixedRangeOrder表示是否范围是从range0到range1,如果range0大于range1,则返回false
+	public static bool isInRange(float value, float range0, float range1, bool fixedRangeOrder = false)
 	{
-		return value >= getMin(range0, range1) && value <= getMax(range0, range1);
+		if (fixedRangeOrder)
+		{
+			return value >= range0 && value <= range1;
+		}
+		else
+		{
+			return value >= getMin(range0, range1) && value <= getMax(range0, range1);
+		}
 	}
 	public static bool isInRange(Vector3 value, Vector3 point0, Vector3 point1, bool ignoreY = true)
 	{
-		return isInRange(value.x, point0.x, point1.x) && isInRange(value.z, point0.z, point1.z) && 
+		return isInRange(value.x, point0.x, point1.x) && isInRange(value.z, point0.z, point1.z) &&
 			(ignoreY || isInRange(value.y, point0.y, point1.y));
 	}
 	public static void swap<T>(ref T value0, ref T value1)
@@ -1070,7 +1135,7 @@ public class MathUtility : StringUtility
 			UnityUtility.logError("pcm data count is too many, data count : " + dataCount + ", max count : " + mMaxFFTCount);
 			return;
 		}
-		if(mComplexList == null)
+		if (mComplexList == null)
 		{
 			initParam();
 		}
@@ -1096,7 +1161,7 @@ public class MathUtility : StringUtility
 	*/
 	protected static void fft(Complex[] x, int count)
 	{
-		if(sin_tb == null)
+		if (sin_tb == null)
 		{
 			initParam();
 		}
@@ -1202,7 +1267,7 @@ public class MathUtility : StringUtility
 		outSec = seconds - outHour * 3600 - outMin * 60;
 	}
 	//将时间转化成时间戳
-	public static long convertDateTimeUnixTime(System.DateTime dateTime) 
+	public static long convertDateTimeUnixTime(System.DateTime dateTime)
 	{
 		System.DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1)); // 当地时区
 		long timeStamp = (long)(dateTime - startTime).TotalSeconds; // 相差秒数
@@ -1214,5 +1279,347 @@ public class MathUtility : StringUtility
 		System.DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1)); // 当地时区
 		DateTime dt = startTime.AddSeconds(unixTimeStamp);
 		return dt;
+	}
+	// 递归计算贝塞尔曲线的点
+	public static Vector3 getBezier(List<Vector3> points, bool loop, float t)
+	{
+		int pointCount = points.Count;
+		if (pointCount == 2)
+		{
+			return lerp(points[0], points[1], t);
+		}
+		int tempCount = loop ? pointCount : pointCount - 1;
+		Vector3[] temp = new Vector3[tempCount];
+		for (int i = 0; i < tempCount; ++i)
+		{
+			temp[i] = lerp(points[i], points[(i + 1) % pointCount], t);
+		}
+		return getBezier(temp, loop, t);
+	}
+	// 递归计算贝塞尔曲线的点
+	public static Vector3 getBezier(Vector3[] points, bool loop, float t)
+	{
+		int pointCount = points.Length;
+		if (pointCount == 2)
+		{
+			return lerp(points[0], points[1], t);
+		}
+		int tempCount = loop ? pointCount : pointCount - 1;
+		Vector3[] temp = new Vector3[tempCount];
+		for (int i = 0; i < tempCount; ++i)
+		{
+			temp[i] = lerp(points[i], points[(i + 1) % pointCount], t);
+		}
+		return getBezier(temp, loop, t);
+	}
+	public static List<Vector3> getBezierPoints(List<Vector3> points, bool loop, int bezierDetail = 20)
+	{
+		if (points.Count == 1)
+		{
+			return new List<Vector3>(points);
+		}
+		List<Vector3> bezierPoints = new List<Vector3>();
+		for (int i = 0; i < bezierDetail; ++i)
+		{
+			bezierPoints.Add(getBezier(points, loop, i / (float)(bezierDetail - 1)));
+		}
+		return bezierPoints;
+	}
+	public static Vector3[] getBezierPoints(Vector3[] points, bool loop, int bezierDetail = 20)
+	{
+		if(points.Length == 1)
+		{
+			return new Vector3[1] { points[0] };
+		}
+		Vector3[] bezierPoints = new Vector3[bezierDetail];
+		for (int i = 0; i < bezierDetail; ++i)
+		{
+			bezierPoints[i] = getBezier(points, loop, i / (float)(bezierDetail - 1));
+		}
+		return bezierPoints;
+	}
+	// 得到经过所有点的平滑曲线的点列表,detail是曲线平滑度,越大越平滑,scale是曲线接近折线的程度,越小越接近于折线
+	public static Vector3[] getCurvePoints(Vector3[] originPoint, bool loop, int detail = 10, float scale = 0.6f)
+	{
+		if(originPoint.Length == 1)
+		{
+			return new Vector3[1] { originPoint[0]};
+		}
+		int originCount = originPoint.Length;
+		int middleCount = loop ? originCount : originCount - 1;
+		Vector3[] midpoints = new Vector3[middleCount];
+		// 生成中点       
+		for (int i = 0; i < middleCount; ++i)
+		{
+			midpoints[i] = (originPoint[i] + originPoint[(i + 1) % originCount]) / 2.0f;
+		}
+
+		// 平移中点,计算每个顶点的两个控制点
+		Vector3[] extrapoints = new Vector3[2 * originCount];
+		for (int i = 0; i < originCount; ++i)
+		{
+			if (!loop)
+			{
+				if (i == 0)
+				{
+					extrapoints[0] = originPoint[0];
+					extrapoints[1] = originPoint[0];
+				}
+				else if (i == originCount - 1)
+				{
+					extrapoints[i * 2 + 0] = originPoint[originCount - 1];
+					extrapoints[i * 2 + 1] = originPoint[originCount - 1];
+				}
+				else
+				{
+
+					int nexti = i + 1;
+					int backi = i - 1;
+					Vector3 midinmid = (midpoints[i] + midpoints[backi]) / 2.0f;
+					Vector3 offset = originPoint[i] - midinmid;
+					//朝 originPoint[i]方向收缩
+					extrapoints[2 * i + 0] = originPoint[i] + (midpoints[backi] + offset - originPoint[i]) * scale;
+					//朝 originPoint[i]方向收缩
+					extrapoints[2 * i + 1] = originPoint[i] + (midpoints[i] + offset - originPoint[i]) * scale;
+
+				}
+			}
+			else
+			{
+				int nexti = (i + 1) % originCount;
+				int backi = (i + originCount - 1) % originCount;
+				Vector3 midinmid = (midpoints[i] + midpoints[backi]) / 2.0f;
+				Vector3 offset = originPoint[i] - midinmid;
+				//朝 originPoint[i]方向收缩
+				extrapoints[2 * i + 0] = originPoint[i] + (midpoints[backi] + offset - originPoint[i]) * scale;
+				//朝 originPoint[i]方向收缩
+				extrapoints[2 * i + 1] = originPoint[i] + (midpoints[i] + offset - originPoint[i]) * scale;
+			}
+		}
+
+		int bezierCount = loop ? originCount : originCount - 1;
+		Vector3[] curvePoint = new Vector3[bezierCount * detail];
+		Vector3[] controlPoint = new Vector3[4];
+		float step = 1 / (float)(detail - 1);
+		// 生成4控制点，产生贝塞尔曲线
+		for (int i = 0; i < bezierCount; ++i)
+		{
+			controlPoint[0] = originPoint[i];
+			controlPoint[1] = extrapoints[2 * i + 1];
+			controlPoint[2] = extrapoints[2 * (i + 1)];
+			controlPoint[3] = originPoint[(i + 1) % originCount];
+			for (int j = 0; j < detail; ++j)
+			{
+				curvePoint[i * detail + j] = getBezier(controlPoint, false, j * step);
+			}
+		}
+		return curvePoint;
+	}
+	// 得到经过所有点的平滑曲线的点列表,detail是曲线平滑度,越大越平滑,scale是曲线接近折线的程度,越小越接近于折线
+	public static List<Vector3> getCurvePoints(List<Vector3> originPoint, bool loop, int detail = 10, float scale = 0.6f)
+	{
+		if(originPoint.Count == 1)
+		{
+			return new List<Vector3>(originPoint);
+		}
+		int originCount = originPoint.Count;
+		int middleCount = loop ? originCount : originCount - 1;
+		Vector3[] midpoints = new Vector3[middleCount];
+		// 生成中点       
+		for (int i = 0; i < middleCount; ++i)
+		{
+			midpoints[i] = (originPoint[i] + originPoint[(i + 1) % originCount]) / 2.0f;
+		}
+
+		// 平移中点,计算每个顶点的两个控制点
+		Vector3[] extrapoints = new Vector3[2 * originCount];
+		for (int i = 0; i < originCount; ++i)
+		{
+			if (!loop)
+			{
+				if (i == 0)
+				{
+					extrapoints[0] = originPoint[0];
+					extrapoints[1] = originPoint[0];
+				}
+				else if (i == originCount - 1)
+				{
+					extrapoints[i * 2 + 0] = originPoint[originCount - 1];
+					extrapoints[i * 2 + 1] = originPoint[originCount - 1];
+				}
+				else
+				{
+
+					int nexti = i + 1;
+					int backi = i - 1;
+					Vector3 midinmid = (midpoints[i] + midpoints[backi]) / 2.0f;
+					Vector3 offset = originPoint[i] - midinmid;
+					//朝 originPoint[i]方向收缩
+					extrapoints[2 * i + 0] = originPoint[i] + (midpoints[backi] + offset - originPoint[i]) * scale;
+					//朝 originPoint[i]方向收缩
+					extrapoints[2 * i + 1] = originPoint[i] + (midpoints[i] + offset - originPoint[i]) * scale;
+
+				}
+			}
+			else
+			{
+				int nexti = (i + 1) % originCount;
+				int backi = (i + originCount - 1) % originCount;
+				Vector3 midinmid = (midpoints[i] + midpoints[backi]) / 2.0f;
+				Vector3 offset = originPoint[i] - midinmid;
+				//朝 originPoint[i]方向收缩
+				extrapoints[2 * i + 0] = originPoint[i] + (midpoints[backi] + offset - originPoint[i]) * scale;
+				//朝 originPoint[i]方向收缩
+				extrapoints[2 * i + 1] = originPoint[i] + (midpoints[i] + offset - originPoint[i]) * scale;
+			}
+		}
+
+		int bezierCount = loop ? originCount : originCount - 1;
+		List<Vector3> curvePoint = new List<Vector3>();
+		Vector3[] controlPoint = new Vector3[4];
+		float step = 1 / (float)(detail - 1);
+		// 生成4控制点，产生贝塞尔曲线
+		for (int i = 0; i < bezierCount; ++i)
+		{
+			controlPoint[0] = originPoint[i];
+			controlPoint[1] = extrapoints[2 * i + 1];
+			controlPoint[2] = extrapoints[2 * (i + 1)];
+			controlPoint[3] = originPoint[(i + 1) % originCount];
+			for (int j = 0; j < detail; ++j)
+			{
+				curvePoint.Add(getBezier(controlPoint, false, j * step));
+			}
+		}
+		return curvePoint;
+	}
+
+	public static uint generateGUID()
+	{
+		// 获得当前时间
+		TimeSpan timeForm19700101 = DateTime.Now - DateTime.Parse("1970-1-1");
+		ulong ulongMS = (ulong)timeForm19700101.TotalMilliseconds;
+		uint halfIntMS = (uint)(ulongMS % 0x7FFFFFFF);
+		// 获取当前系统信息生成的随机数
+		byte[] randomNumber = new byte[4]; 
+		RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
+		rng.GetBytes(randomNumber);
+		uint uintRand = bytesToUInt(randomNumber);
+		uint halfIntRand = uintRand % 0x7FFFFFFF;
+		return halfIntMS + halfIntRand;
+	}
+	protected static float HueToRGB(float v1, float v2, float vH)
+	{
+		if (vH < 0.0f)
+		{
+			vH += 1.0f;
+		}
+		if (vH > 1.0f)
+		{
+			vH -= 1.0f;
+		}
+		if (6.0f * vH < 1.0f)
+		{
+			return v1 + (v2 - v1) * 6.0f * vH;
+		}
+		else if (2.0f * vH < 1.0f)
+		{
+			return v2;
+		}
+		else if (3.0f * vH < 2.0f)
+		{
+			return v1 + (v2 - v1) * (0.667f - vH) * 6.0f;
+		}
+		else
+		{
+			return v1;
+		}
+	}
+
+	// rgb转换为色相(H),饱和度(S),亮度(L)
+	// HSL和RGB的范围都是0-1
+	public static Vector3 RGBtoHSL(Vector3 rgb)
+	{
+		float minRGB = getMin(getMin(rgb.x, rgb.y), rgb.z);
+		float maxRGB = getMax(getMax(rgb.x, rgb.y), rgb.z);
+		float delta = maxRGB - minRGB;
+
+		float H = 0.0f;
+		float S = 0.0f;
+		float L = (maxRGB + minRGB) * 0.5f;
+		// 如果三个分量的最大和最小相等,则说明该颜色是灰色的,灰色的色相和饱和度都为0
+		if (delta > 0.0f)                                //Chromatic data...
+		{
+			if (L < 0.5f)
+			{
+				S = delta / (maxRGB + minRGB);
+			}
+			else
+			{
+				S = delta / (2.0f - maxRGB - minRGB);
+			}
+
+			float inverseDelta = 1.0f / delta;
+			float halfDelta = delta * 0.5f;
+			float delR = ((maxRGB - rgb.x) * 0.167f + halfDelta) * inverseDelta;
+			float delG = ((maxRGB - rgb.y) * 0.167f + halfDelta) * inverseDelta;
+			float delB = ((maxRGB - rgb.z) * 0.167f + halfDelta) * inverseDelta;
+
+			if (rgb.x == maxRGB)
+			{
+				H = delB - delG;
+			}
+			else if (rgb.y == maxRGB)
+			{
+				H = 0.33f + delR - delB;
+			}
+			else if (rgb.z == maxRGB)
+			{
+				H = 0.667f + delG - delR;
+			}
+
+			if (H < 0.0f)
+			{
+				H += 1.0f;
+			}
+			else if (H > 1.0f)
+			{
+				H -= 1.0f;
+			}
+		}
+		return new Vector3(H, S, L);
+	}
+
+	// 色相(H),饱和度(S),亮度(L),转换为rgb
+	// HSL和RGB的范围都是0-1
+	public static Vector3 HSLtoRGB(Vector3 hsl)
+	{
+		Vector3 rgb = Vector3.zero;
+		float H = hsl.x;
+		float S = hsl.y;
+		float L = hsl.z;
+		if (S == 0.0)                       //HSL from 0 to 1
+		{
+			rgb.x = L;              //RGB results from 0 to 255
+			rgb.y = L;
+			rgb.z = L;
+		}
+		else
+		{
+			float var2;
+			if (L < 0.5f)
+			{
+				var2 = L * (1.0f + S);
+			}
+			else
+			{
+				var2 = L + S - (S * L);
+			}
+
+			float var1 = 2.0f * L - var2;
+			rgb.x = HueToRGB(var1, var2, H + 0.33f);
+			rgb.y = HueToRGB(var1, var2, H);
+			rgb.z = HueToRGB(var1, var2, H - 0.33f);
+		}
+		return rgb;
 	}
 }

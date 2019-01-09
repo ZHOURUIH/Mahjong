@@ -128,7 +128,7 @@ public class AssetBundleInfo : GameBase
 		return mAssetList[fileNameWithSuffix].mAssetObject as T;
 	}
 	// 同步加载资源
-	public T loadAsset<T>(ref string fileNameWithSuffix) where T : UnityEngine.Object
+	public T loadAsset<T>(ref string fileNameWithSuffix, bool persistentFirst) where T : UnityEngine.Object
 	{
 		if (!mAssetList.ContainsKey(fileNameWithSuffix))
 		{
@@ -137,7 +137,7 @@ public class AssetBundleInfo : GameBase
 		// 如果AssetBundle还没有加载,则先加载AssetBundle
 		if (mLoaded != LOAD_STATE.LS_LOADED)
 		{
-			loadAssetBundle();
+			loadAssetBundle(persistentFirst);
 		}
 		return mAssetList[fileNameWithSuffix].mAssetObject as T;
 	}
@@ -178,7 +178,7 @@ public class AssetBundleInfo : GameBase
 		return true;
 	}
 	// 同步加载资源包
-	public void loadAssetBundle()
+	public void loadAssetBundle(bool persistentFirst)
 	{
 		if (mLoaded != LOAD_STATE.LS_UNLOAD)
 		{
@@ -187,16 +187,34 @@ public class AssetBundleInfo : GameBase
 		// 先确保所有依赖项已经加载
 		foreach (var info in mParents)
 		{
-			info.Value.loadAssetBundle();
+			info.Value.loadAssetBundle(persistentFirst);
 		}
 		// 然后加载AssetBundle
 #if UNITY_ANDROID && !UNITY_EDITOR
-		byte[] assetBundleBuffer = AndroidAssetLoader.loadAsset(mBundleName + CommonDefine.ASSET_BUNDLE_SUFFIX);
+		byte[] assetBundleBuffer = null;
+		// 先去persistentDataPath中查找资源
+		if (persistentFirst)
+		{
+			assetBundleBuffer = AndroidAssetLoader.loadFile(CommonDefine.F_PERSISTENT_DATA_PATH + mBundleName + CommonDefine.ASSET_BUNDLE_SUFFIX);
+		}
+		// 找不到再去StreamingAssets下查找
+		if(assetBundleBuffer == null)
+		{
+			assetBundleBuffer = AndroidAssetLoader.loadAsset(mBundleName + CommonDefine.ASSET_BUNDLE_SUFFIX);
+		}
 		mAssetBundle = AssetBundle.LoadFromMemory(assetBundleBuffer);
 #else
-		mAssetBundle = AssetBundle.LoadFromFile(CommonDefine.F_STREAMING_ASSETS_PATH + mBundleName + CommonDefine.ASSET_BUNDLE_SUFFIX);
+		// 先去persistentDataPath中查找资源
+		if (persistentFirst && isFileExist(CommonDefine.F_PERSISTENT_DATA_PATH + mBundleName + CommonDefine.ASSET_BUNDLE_SUFFIX))
+		{
+			mAssetBundle = AssetBundle.LoadFromFile(CommonDefine.F_PERSISTENT_DATA_PATH + mBundleName + CommonDefine.ASSET_BUNDLE_SUFFIX);
+		}
+		// 找不到再去StreamingAssets下查找
+		if (mAssetBundle == null && isFileExist(CommonDefine.F_STREAMING_ASSETS_PATH + mBundleName + CommonDefine.ASSET_BUNDLE_SUFFIX))
+		{
+			mAssetBundle = AssetBundle.LoadFromFile(CommonDefine.F_STREAMING_ASSETS_PATH + mBundleName + CommonDefine.ASSET_BUNDLE_SUFFIX);
+		}
 #endif
-
 		if (mAssetBundle == null)
 		{
 			logError("can not load asset bundle : " + mBundleName);

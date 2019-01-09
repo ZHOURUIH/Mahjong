@@ -6,7 +6,7 @@ public class txNGUIEditbox : txNGUISprite
 	protected UIInput mInput;
 	public txNGUIEditbox()
 	{
-		mType = UI_TYPE.UT_NGUI_EDITBOX;
+		;
 	}
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{
@@ -25,6 +25,11 @@ public class txNGUIEditbox : txNGUISprite
 	{
 		return mInput.value;
 	}
+	public void cleanUp()
+	{
+		mInput.RemoveFocus();
+		setText("");
+	}
 	public void setInputSubmitCallback(EventDelegate.Callback callback)
 	{
 		EventDelegate.Add(mInput.onSubmit, callback);
@@ -33,8 +38,20 @@ public class txNGUIEditbox : txNGUISprite
 	{
 		mInput.onValidate = validate;
 	}
-	public void setOnTabCallback(UIInput.OnKeyDelegate onTabDelegate)
+	public void setOnKeyUpCallback(UIInput.OnKeyDelegate onKeyDelegate)
 	{
-		mInput.onTabCallback = onTabDelegate;
+		mInput.onKeyUpCallback = onKeyDelegate;
+	}
+	public void setOnKeyDownUpCallback(UIInput.OnKeyDelegate onKeyDelegate)
+	{
+		mInput.onKeyDownCallback = onKeyDelegate;
+	}
+	public void setOnKeyKeepDownCallback(UIInput.OnKeyDelegate onKeyDelegate)
+	{
+		mInput.onKeyKeepDownCallback = onKeyDelegate;
+	}
+	public void setOnInputEventCallback(UIInput.OnInputEvent onInputEvent)
+	{
+		mInput.onInputEvent = onInputEvent;
 	}
 }

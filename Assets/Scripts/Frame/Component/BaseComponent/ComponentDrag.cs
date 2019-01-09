@@ -12,7 +12,7 @@ public class ComponentDrag : GameComponent
 	public override void update(float elapsedTime)
 	{
 		// 左键按下时,鼠标悬停在物体上,则开始拖动
-		Vector3 mousePosition = Input.mousePosition;
+		Vector3 mousePosition = mGlobalTouchSystem.getCurMousePosition();
 		if(Input.GetMouseButtonDown(0) && mouseHovered(mousePosition))
 		{
 			onMouseDown(mousePosition);
@@ -33,10 +33,12 @@ public class ComponentDrag : GameComponent
 	protected void onMouseUp(Vector3 mousePosition)
 	{
 		mDrag = false;
+		onDragEnd();
 	}
 	protected void onMouseMove(Vector3 mousePosition)
 	{
 		applyScreenPosition(mousePosition);
+		onDraging();
 	}
 	//--------------------------------------------------------------------------------------------------------------
 	protected override bool isType(Type type) { return type == typeof(ComponentDrag); }
@@ -44,4 +46,6 @@ public class ComponentDrag : GameComponent
 	protected virtual void applyScreenPosition(Vector3 screenPos) { }
 	protected virtual Vector3 getScreenPosition() { return Vector3.zero; }
 	protected virtual bool mouseHovered(Vector3 mousePosition) { return false; }
+	protected virtual void onDragEnd() { }
+	protected virtual void onDraging() { }
 }

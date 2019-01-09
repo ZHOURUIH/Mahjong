@@ -32,33 +32,32 @@ public class CommandPool : GameBase
 		mInusedList = null;
 		mUnusedList = null;
 	}
-	public T newCmd<T>(bool show = true, bool delay = false) where T : Command, new()
+	public Command newCmd(Type type, bool show = true, bool delay = false)
 	{
 		mNewCmdLock.waitForUnlock();
 		// 首先从未使用的列表中获取,获取不到再重新创建一个
-		T cmd = null;
-		Type t = typeof(T);
-		if(mUnusedList.ContainsKey(t))
+		Command cmd = null;
+		if (mUnusedList.ContainsKey(type))
 		{
-			if(mUnusedList[t].Count > 0)
+			if (mUnusedList[type].Count > 0)
 			{
-				cmd = mUnusedList[t][0] as T;
+				cmd = mUnusedList[type][0];
 				// 从未使用列表中移除
 				removeUnuse(cmd);
 			}
 		}
 		// 没有找到可以用的,则创建一个
-		if(cmd == null)
+		if (cmd == null)
 		{
-			cmd = new T();
+			cmd = UnityUtility.createInstance<Command>(type);
 			cmd.setID(mIDSeed++);
 			cmd.init();
-			cmd.setType(typeof(T));
+			cmd.setType(type);
 			++mNewCount;
 		}
 		// 设置为可用命令
 		cmd.setValid(true);
-		if(delay)
+		if (delay)
 		{
 			cmd.setAssignID(mAssignIDSeed++);
 		}
@@ -72,6 +71,10 @@ public class CommandPool : GameBase
 		addInuse(cmd);
 		mNewCmdLock.unlock();
 		return cmd;
+	}
+	public T newCmd<T>(bool show = true, bool delay = false) where T : Command, new()
+	{
+		return newCmd(typeof(T), show, delay) as T;
 	}
 	public void destroyCmd(Command cmd) 
 	{

@@ -4,34 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 
 // 游戏枚举定义-----------------------------------------------------------------------------------------------
-// UI物体类型
-public enum UI_TYPE
-{
-	UT_BASE,                // 窗口基类
-	UT_PARTICLE,            // 粒子特效窗口
-							// NGUI
-	UT_NGUI_SPRITE,         // 静态图片窗口,需要图集
-	UT_NGUI_SPRITE_ANIM,    // 序列帧图片窗口,需要图集
-	UT_NGUI_TEXTURE,        // 静态图片窗口,不需要图集
-	UT_NGUI_TEXTURE_ANIM,   // 序列帧图片窗口,不需要图集
-	UT_NGUI_NUMBER,         // 数字窗口
-	UT_NGUI_BUTTON,         // 按钮窗口
-	UT_NGUI_POPUP_LIST,     // 下拉列表窗口
-	UT_NGUI_CHECK_BOX,      // 勾选框
-	UT_NGUI_SLIDER,         // 滑动条
-	UT_NGUI_SCROLL_VIEW,    // 包含多个按钮的滚动条
-	UT_NGUI_VIDEO,          // 用于播放视频的窗口
-	UT_NGUI_TEXT,           // 文本
-	UT_NGUI_EDITBOX,        // 文本编辑框
-	UT_NGUI_PANEL,          // 面板
-	UI_NGUI_DRAG_VIEW,      // 可拖动的窗口
-							// UGUI
-	UT_UGUI_STATIC_IMAGE,   // 静态图片
-	UT_UGUI_CANVAS,         // 画布
-	UT_UGUI_NUMBER,         // 数字
-	UT_UGUI_TEXT,           // 文本
-
-}
 // 停靠位置
 public enum DOCKING_POSITION
 {
@@ -74,9 +46,9 @@ public enum LOAD_STATE
 public delegate void TextureAnimCallBack(INGUIAnimation window, bool isBreak);
 public delegate void KeyFrameCallback(ComponentKeyFrameBase component, object userdata, bool breakTremling, bool done);
 public delegate void CommandCallback(object user_data, Command cmd);
-public delegate void BoxColliderClickCallback(txUIObject obj);
-public delegate void BoxColliderHoverCallback(txUIObject obj, bool hover);
-public delegate void BoxColliderPressCallback(txUIObject obj, bool press);
+public delegate void UIClickCallback(txUIObject obj);
+public delegate void UIHoverCallback(txUIObject obj, bool hover);
+public delegate void UIPressCallback(txUIObject obj, bool press);
 public delegate void AssetLoadDoneCallback(UnityEngine.Object res, byte[] bytes, object userData);
 public delegate void SceneLoadCallback(float progress, bool done, object userData);
 public delegate void SceneActiveCallback(object userData);
@@ -85,6 +57,16 @@ public delegate void LayoutAsyncDone(GameLayout layout);
 public delegate void VideoCallback(string videoName, bool isBreak);
 public delegate void TrackDoneCallback(ComponentTrackTargetBase component);
 public delegate Vector3 CheckPosition(txUIObject obj);
+public delegate void OnReceiveDragCallback(txUIObject dragObj);
+public delegate void OnDragHoverCallback(txUIObject dragObj, bool hover);
+public delegate void OnMouseEnter(Vector2 mousePos);
+public delegate void OnMouseLeave(Vector2 mousePos);
+public delegate void OnMouseDown(Vector2 mousePos);
+public delegate void OnMouseUp(Vector2 mousePos);
+public delegate void OnMouseMove(Vector2 mousePos, Vector2 moveDelta, float moveSpeed);
+public delegate void OnMouseStay(Vector2 mousePos);
+public delegate void OnScreenMouseUp(Vector2 mousePos);
+public delegate void OnLongPress();
 
 // 游戏常量定义-------------------------------------------------------------------------------------------------------------
 public class CommonDefine
@@ -131,7 +113,9 @@ public class CommonDefine
 	// 相对路径,相对于项目,以P_开头,表示Project
 	public const string P_ASSETS_PATH = ASSETS + "/";
 	public const string P_RESOURCE_PATH = P_ASSETS_PATH + RESOURCES + "/";
+#if !UNITY_ANDROID || UNITY_EDITOR
 	public const string P_STREAMING_ASSETS_PATH = P_ASSETS_PATH + STREAMING_ASSETS + "/";
+#endif
 	public const string P_ATLAS_PATH = P_RESOURCE_PATH + ATLAS + "/";
 	// 相对路径,相对于StreamingAssets,以SA_开头,表示StreamingAssets
 	// 由于Android下的StreamingAssets路径不完全以Assets路径开头,与其他平台不一致,所以不定义相对于Asstes的路径
@@ -171,7 +155,8 @@ public class CommonDefine
 	public static string F_PERSISTENT_DATA_PATH = Application.persistentDataPath + "/";
 	public static string F_TEMPORARY_CACHE_PATH = Application.temporaryCachePath + "/";
 	public static string F_STREAMING_ASSETS_PATH = Application.streamingAssetsPath + "/";
-	public static string F_DATA_BASE_PATH = F_STREAMING_ASSETS_PATH + DATA_BASE + "/";
+	public static string F_ASSETS_DATA_BASE_PATH = F_STREAMING_ASSETS_PATH + DATA_BASE + "/";
+	public static string F_PERSIS_DATA_BASE_PATH = F_PERSISTENT_DATA_PATH + DATA_BASE + "/";
 	public static string F_VIDEO_PATH = F_STREAMING_ASSETS_PATH + VIDEO + "/";
 	public static string F_CONFIG_PATH = F_STREAMING_ASSETS_PATH + CONFIG + "/";
 	public static string F_GAME_DATA_FILE_PATH = F_STREAMING_ASSETS_PATH + GAME_DATA_FILE + "/";

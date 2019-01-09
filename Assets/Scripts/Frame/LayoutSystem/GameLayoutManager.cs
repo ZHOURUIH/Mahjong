@@ -10,6 +10,7 @@ public class LayoutAsyncInfo
 	public string			mName;
 	public int				mRenderOrder;
 	public bool				mIsNGUI;
+	public bool				mIsScene;
 	public LAYOUT_TYPE		mType;
 	public GameLayout		mLayout;
 	public GameObject		mLayoutObject;
@@ -36,15 +37,17 @@ public class GameLayoutManager : FrameComponent
 		mLayoutNameToType = new Dictionary<string, LAYOUT_TYPE>();
 		mLayoutTypeList = new Dictionary<LAYOUT_TYPE, GameLayout>();
 		mLayoutAsyncList = new Dictionary<string, LayoutAsyncInfo>();
-	}
-	public override void init()
-	{
+		// 在构造中获取UI根节点,确保其他组件能在任意时刻正常访问
 		mNGUIRoot = LayoutScript.newUIObject<txUIObject>("NGUIRoot", null, null, getGameObject(null, "NGUIRoot", true));
 		mUGUIRoot = LayoutScript.newUIObject<txUIObject>("UGUIRoot", null, null, getGameObject(null, "UGUIRoot", true));
 	}
+	public override void init()
+	{
+		;
+	}
 	public GameObject getNGUIRootObject()
 	{
-		return mNGUIRoot.mObject;
+		return mNGUIRoot.getObject();
 	}
 	public txUIObject getNGUIRoot()
 	{
@@ -52,7 +55,7 @@ public class GameLayoutManager : FrameComponent
 	}
 	public GameObject getUGUIRootObject()
 	{
-		return mUGUIRoot.mObject;
+		return mUGUIRoot.getObject();
 	}
 	public txUIObject getUGUIRoot()
 	{
@@ -124,7 +127,7 @@ public class GameLayoutManager : FrameComponent
 	{
 		return mScriptMappingList[classType].Count;
 	}
-	public GameLayout createLayout(LAYOUT_TYPE type, int renderOrder, bool async, LayoutAsyncDone callback, bool isNGUI)
+	public GameLayout createLayout(LAYOUT_TYPE type, int renderOrder, bool async, LayoutAsyncDone callback, bool isNGUI, bool isScene)
 	{
 		if (mLayoutTypeList.ContainsKey(type))
 		{
@@ -140,7 +143,11 @@ public class GameLayoutManager : FrameComponent
 		}
 		string name = getLayoutNameByType(type);
 		string path = isNGUI ? CommonDefine.R_NGUI_PREFAB_PATH : CommonDefine.R_UGUI_PREFAB_PATH;
-		GameObject layoutParent = isNGUI ? mNGUIRoot.mObject : mUGUIRoot.mObject;
+		GameObject layoutParent = isNGUI ? getNGUIRootObject() : getUGUIRootObject();
+		if(isScene)
+		{
+			layoutParent = null;
+		}
 		// 如果是异步加载则,则先加入列表中
 		if (async)
 		{
@@ -151,6 +158,7 @@ public class GameLayoutManager : FrameComponent
 			info.mLayout = null;
 			info.mLayoutObject = null;
 			info.mIsNGUI = isNGUI;
+			info.mIsScene = isScene;
 			info.mCallback = callback;
 			mLayoutAsyncList.Add(info.mName, info);
 			bool ret = mResourceManager.loadResourceAsync<GameObject>(path + name, onLayoutPrefabAsyncDone, null, true);
@@ -165,7 +173,7 @@ public class GameLayoutManager : FrameComponent
 			UnityUtility.instantiatePrefab(layoutParent, path + name);
 			GameLayout layout = new GameLayout();
 			addLayoutToList(layout, name, type);
-			layout.init(type, name, renderOrder, isNGUI);
+			layout.init(type, name, renderOrder, isNGUI, isScene);
 			return layout;
 		}
 	}
@@ -231,9 +239,13 @@ public class GameLayoutManager : FrameComponent
 		info.mLayoutObject = UnityUtility.instantiatePrefab(null, (GameObject)res);
 		info.mLayout = new GameLayout();
 		addLayoutToList(info.mLayout, info.mName, info.mType);
-		GameObject layoutParent = info.mIsNGUI ? mNGUIRoot.mObject : mUGUIRoot.mObject;
+		GameObject layoutParent = info.mIsNGUI ? getNGUIRootObject() : getUGUIRootObject();
+		if (info.mIsScene)
+		{
+			layoutParent = null;
+		}
 		UnityUtility.setNormalProperty(ref info.mLayoutObject, layoutParent, info.mName, Vector3.one, Vector3.zero, Vector3.zero);
-		info.mLayout.init(info.mType, info.mName, info.mRenderOrder, info.mIsNGUI);
+		info.mLayout.init(info.mType, info.mName, info.mRenderOrder, info.mIsNGUI, info.mIsScene);
 		if(info.mCallback != null)
 		{
 			info.mCallback(info.mLayout);

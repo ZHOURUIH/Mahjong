@@ -152,6 +152,26 @@ public class BinaryUtility
 		}
 		return finalInt;
 	}
+	public static uint readUInt(byte[] buffer, ref int index, bool inverse = false)
+	{
+		int typeSize = sizeof(int);
+		if (buffer.Length < index + typeSize)
+		{
+			return 0;
+		}
+		int[] bytes = new int[typeSize];
+		for (int i = 0; i < typeSize; ++i)
+		{
+			bytes[i] = (0xFF & buffer[index++]);
+		}
+		uint finalInt = 0;
+		for (int i = 0; i < typeSize; ++i)
+		{
+			int bitsOffset = inverse ? 8 * i : 8 * (typeSize - i - 1);
+			finalInt |= (uint)bytes[typeSize - i - 1] << bitsOffset;
+		}
+		return finalInt;
+	}
 	public static ulong readULong(byte[] buffer, ref int index, bool inverse = false)
 	{
 		int typeSize = sizeof(ulong);
@@ -234,12 +254,28 @@ public class BinaryUtility
 			destBuffer[i] = readShort(buffer, ref index);
 		}
 	}
+	public static void readUShorts(byte[] buffer, ref int index, ushort[] destBuffer)
+	{
+		int shortCount = destBuffer.Length;
+		for (int i = 0; i < shortCount; ++i)
+		{
+			destBuffer[i] = readUShort(buffer, ref index);
+		}
+	}
 	public static void readInts(byte[] buffer, ref int index, int[] destBuffer)
 	{
 		int shortCount = destBuffer.Length;
 		for (int i = 0; i < shortCount; ++i)
 		{
 			destBuffer[i] = readInt(buffer, ref index);
+		}
+	}
+	public static void readUInts(byte[] buffer, ref int index, uint[] destBuffer)
+	{
+		int shortCount = destBuffer.Length;
+		for (int i = 0; i < shortCount; ++i)
+		{
+			destBuffer[i] = readUInt(buffer, ref index);
 		}
 	}
 	public static void readFloats(byte[] buffer, ref int index, float[] destBuffer)
@@ -304,6 +340,20 @@ public class BinaryUtility
 			return false;
 		}
 		for(int i = 0; i < typeSize; ++i)
+		{
+			int bitsOffset = inverse ? 8 * (typeSize - i - 1) : 8 * i;
+			buffer[index++] = (byte)(((0xFF << bitsOffset) & value) >> bitsOffset);
+		}
+		return true;
+	}
+	public static bool writeUInt(byte[] buffer, ref int index, uint value, bool inverse = false)
+	{
+		int typeSize = sizeof(uint);
+		if (buffer.Length < index + typeSize)
+		{
+			return false;
+		}
+		for (int i = 0; i < typeSize; ++i)
 		{
 			int bitsOffset = inverse ? 8 * (typeSize - i - 1) : 8 * i;
 			buffer[index++] = (byte)(((0xFF << bitsOffset) & value) >> bitsOffset);
@@ -379,6 +429,16 @@ public class BinaryUtility
 		}
 		return ret;
 	}
+	public static bool writeUShorts(byte[] buffer, ref int index, ushort[] sourceBuffer)
+	{
+		bool ret = true;
+		int floatCount = sourceBuffer.Length;
+		for (int i = 0; i < floatCount; ++i)
+		{
+			ret = writeUShort(buffer, ref index, sourceBuffer[i]) && ret;
+		}
+		return ret;
+	}
 	public static bool writeInts(byte[] buffer, ref int index, int[] sourceBuffer)
 	{
 		bool ret = true;
@@ -386,6 +446,16 @@ public class BinaryUtility
 		for (int i = 0; i < floatCount; ++i)
 		{
 			ret = writeInt(buffer, ref index, sourceBuffer[i]) && ret;
+		}
+		return ret;
+	}
+	public static bool writeUInts(byte[] buffer, ref int index, uint[] sourceBuffer)
+	{
+		bool ret = true;
+		int floatCount = sourceBuffer.Length;
+		for (int i = 0; i < floatCount; ++i)
+		{
+			ret = writeUInt(buffer, ref index, sourceBuffer[i]) && ret;
 		}
 		return ret;
 	}
@@ -399,95 +469,12 @@ public class BinaryUtility
 		}
 		return ret;
 	}
-	public static string bytesToHEXString(byte[] byteList, bool addSpace = true, bool upperOrLower = true, int count = 0)
+	public static void memcpyObject<T>(T[] dest, T[] src, int destOffset, int srcOffset, int count)
 	{
-		string byteString = "";
-		int byteCount = count > 0 ? count : byteList.Length;
-		byteCount = MathUtility.getMin(byteList.Length, byteCount);
-		for (int i = 0; i < byteCount; ++i)
+		for(int i = 0; i < count; ++i)
 		{
-			if (addSpace)
-			{
-				byteString += byteToHEXString(byteList[i], upperOrLower) + " ";
-			}
-			else
-			{
-				byteString += byteToHEXString(byteList[i], upperOrLower);
-			}
+			dest[destOffset + i] = src[srcOffset + i];
 		}
-		if (addSpace)
-		{
-			byteString = byteString.Substring(0, byteString.Length - 1);
-		}
-		return byteString;
-	}
-	public static string byteToHEXString(byte value, bool upperOrLower = true)
-	{
-		string hexString = "";
-		char[] hexChar = null;
-		if (upperOrLower)
-		{
-			hexChar = new char[] { 'A', 'B', 'C', 'D', 'E', 'F' };
-		}
-		else
-		{
-			hexChar = new char[] { 'a', 'b', 'c', 'd', 'e', 'f' };
-		}
-		int high = value / 16;
-		int low = value % 16;
-		if (high < 10)
-		{
-			hexString += (char)('0' + high);
-		}
-		else
-		{
-			hexString += hexChar[high - 10];
-		}
-		if (low < 10)
-		{
-			hexString += (char)('0' + low);
-		}
-		else
-		{
-			hexString += hexChar[low - 10];
-		}
-		return hexString;
-	}
-	public static byte hexStringToByte(string str)
-	{
-		byte highBit = 0;
-		byte lowBit = 0;
-		byte[] strBytes = stringToBytes(str);
-		byte highBitChar = strBytes[0];
-		byte lowBitChar = strBytes[1];
-		if (highBitChar >= 'A' && highBitChar <= 'F')
-		{
-			highBit = (byte)(10 + highBitChar - 'A');
-		}
-		else
-		{
-			highBit = (byte)(highBitChar - '0');
-		}
-		if (lowBitChar >= 'A' && lowBitChar <= 'F')
-		{
-			lowBit = (byte)(10 + lowBitChar - 'A');
-		}
-		else
-		{
-			lowBit = (byte)(lowBitChar - '0');
-		}
-		return (byte)(highBit << 4 | lowBit);
-	}
-	public static byte[] hexStringToBytes(string str)
-	{
-		string newStr = StringUtility.strReplaceAll(str, " ", "");
-		int dataCount = newStr.Length / 2;
-		byte[] data = new byte[dataCount];
-		for (int i = 0; i < dataCount; ++i)
-		{
-			data[i] = hexStringToByte(newStr.Substring(i * 2, 2));
-		}
-		return data;
 	}
 	public static void memcpy(Array dest, Array src, int destOffset, int srcOffset, int count)
 	{
@@ -547,6 +534,10 @@ public class BinaryUtility
 	{
 		return BitConverter.GetBytes(value);
 	}
+	public static byte[] toBytes(uint value)
+	{
+		return BitConverter.GetBytes(value);
+	}
 	public static byte[] toBytes(float value)
 	{
 		return BitConverter.GetBytes(value);
@@ -559,9 +550,17 @@ public class BinaryUtility
 	{
 		return BitConverter.ToInt16(array, 0);
 	}
+	public static ushort bytesToUShort(byte[] array)
+	{
+		return BitConverter.ToUInt16(array, 0);
+	}
 	public static int bytesToInt(byte[] array)
 	{
 		return BitConverter.ToInt32(array, 0);
+	}
+	public static uint bytesToUInt(byte[] array)
+	{
+		return BitConverter.ToUInt32(array, 0);
 	}
 	public static float bytesToFloat(byte[] array)
 	{
@@ -578,6 +577,16 @@ public class BinaryUtility
 	public static string bytesToString(byte[] bytes)
 	{
 		return bytesToString(bytes, Encoding.Default);
+	}
+	public static string bytesToString(byte[] bytes, int startIndex, int length, byte[] destBytes = null)
+	{
+		byte[] dest = destBytes;
+		if(dest == null || dest.Length < length)
+		{
+			dest = new byte[length];
+		}
+		memcpy(dest, bytes, 0, startIndex, length);
+		return bytesToString(dest, Encoding.Default);
 	}
 	public static string bytesToString(byte[] bytes, Encoding encoding)
 	{
@@ -687,5 +696,10 @@ public class BinaryUtility
 		{
 			value = value & 0x7FFFFFFF | 0x80;
 		}
+	}
+	public static void setString(BYTES param, string value, int destOffset = 0)
+	{
+		byte[] bytes = stringToBytes(value);
+		memcpy(param.mValue, bytes, destOffset, 0, bytes.Length);
 	}
 }

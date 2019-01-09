@@ -16,7 +16,6 @@ public class txNGUISpriteAnim : txNGUISprite, INGUIAnimation
 	protected AnimControl mControl;
 	public txNGUISpriteAnim()
 	{
-		mType = UI_TYPE.UT_NGUI_SPRITE_ANIM;
 		mControl = new AnimControl();
 		mTextureNameList = new List<string>();
 		mPlayEndCallback = new List<TextureAnimCallBack>();

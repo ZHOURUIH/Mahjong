@@ -6,13 +6,15 @@ using UnityEngine;
 public class ResourceManager : FrameComponent
 {
 	public AssetBundleLoader mAssetBundleLoader;
-	public ResourceLoader mResourceLoader;
-	public int mLoadSource;
+	protected ResourceLoader mResourceLoader;
+	protected int mLoadSource;
+	protected bool mPersistentFirst;		// 当从AssetBundle加载资源时,是否先去persistentDataPath中查找资源,找不到再去StreamingAssets中查找
 	public ResourceManager(string name)
 		:base(name)
 	{
 		mAssetBundleLoader = new AssetBundleLoader();
 		mResourceLoader = new ResourceLoader();
+		mPersistentFirst = true;
 	}
 	public override void init()
 	{
@@ -23,6 +25,7 @@ public class ResourceManager : FrameComponent
 #else
 		mLoadSource = 1;
 #endif
+		mPersistentFirst = (int)mFrameConfig.getFloatParam(GAME_DEFINE_FLOAT.GDF_PERSISTEN_DATA_FIRST) != 0;
 	}
 	public override void update(float elapsedTime)
 	{
@@ -41,6 +44,7 @@ public class ResourceManager : FrameComponent
 		}
 		base.destroy();
 	}
+	public bool isPersistentFirst() { return mPersistentFirst; }
 	public void unload(string name)
 	{
 		// 只能用AssetBundleLoader卸载
@@ -157,7 +161,7 @@ public class ResourceManager : FrameComponent
 	{
 		mGameFramework.StartCoroutine(loadAssetsUrl(url, typeof(T), callback, userData));
 	}
-	public void loadAssetsFromUrl(string url, AssetLoadDoneCallback callback, object userData)
+	public void loadAssetsFromUrl(string url, AssetLoadDoneCallback callback, object userData = null)
 	{
 		mGameFramework.StartCoroutine(loadAssetsUrl(url, null, callback, userData));
 	}

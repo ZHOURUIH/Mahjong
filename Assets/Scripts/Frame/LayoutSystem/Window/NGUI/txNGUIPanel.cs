@@ -6,7 +6,7 @@ public class txNGUIPanel : txUIObject
 	protected UIPanel mPanel;
 	public txNGUIPanel()
 	{
-		mType = UI_TYPE.UT_NGUI_PANEL;
+		;
 	}
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{

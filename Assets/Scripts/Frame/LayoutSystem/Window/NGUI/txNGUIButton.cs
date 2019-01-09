@@ -8,7 +8,7 @@ public class txNGUIButton : txUIObject
 	public static bool mFadeColor = true;
 	public txNGUIButton()
 	{
-		mType = UI_TYPE.UT_NGUI_BUTTON;
+		;
 	}
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{

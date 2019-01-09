@@ -206,15 +206,23 @@ abstract public class GameScene : ComponentOwner
 		T procedure = UnityUtility.createInstance<T>(typeof(T), type, gameScene);
 		return procedure;
 	}
-	public T addProcedure<T>(PROCEDURE_TYPE type, SceneProcedure parent = null) where T : SceneProcedure
-    {
+	public T addProcedure<T>(PROCEDURE_TYPE type, PROCEDURE_TYPE parent = PROCEDURE_TYPE.PT_NONE) where T : SceneProcedure
+	{
 		SceneProcedure procedure = createProcedure<T>(this, type);
-		if (parent != null)
+		if (parent != PROCEDURE_TYPE.PT_NONE)
 		{
-			parent.addChildProcedure(procedure);
+			SceneProcedure parentProcedure = getSceneProcedure(parent);
+			if(parentProcedure != null)
+			{
+				parentProcedure.addChildProcedure(procedure);
+			}
+			else
+			{
+				logError("invalid parent procedure, procedure:" + type);
+			}
 		}
 		mSceneProcedureList.Add(procedure.getProcedureType(), procedure);
 		return procedure as T;
-    }
+	}
 	public virtual void notifyScreenActived() { }
 }

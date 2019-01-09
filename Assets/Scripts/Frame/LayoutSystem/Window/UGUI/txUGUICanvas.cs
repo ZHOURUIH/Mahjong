@@ -11,7 +11,7 @@ public class txUGUICanvas : txUIObject
 	protected RectTransform mRectTransform;
 	public txUGUICanvas()
 	{
-		mType = UI_TYPE.UT_UGUI_CANVAS;
+		;
 	}
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{

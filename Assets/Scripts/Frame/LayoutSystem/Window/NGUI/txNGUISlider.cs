@@ -6,7 +6,7 @@ public class txNGUISlider : txUIObject
 	protected UISlider mSlider;
 	public txNGUISlider()
 	{
-		mType = UI_TYPE.UT_NGUI_SLIDER;
+		;
 	}
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{

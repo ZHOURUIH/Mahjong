@@ -16,7 +16,6 @@ public class txUGUINumber : txUGUIStaticImage
 	protected string mNumber = "";
 	public txUGUINumber()
 	{
-		mType = UI_TYPE.UT_UGUI_NUMBER;
 		mSpriteNameList = new string[11];
 		mSpriteList = new Sprite[11];
 		mNumberList = new List<txUGUIStaticImage>();
@@ -178,7 +177,7 @@ public class txUGUINumber : txUGUIStaticImage
 		{
 			string name = mName + "_" + intToString(i);
 			mNumberList.Add(mLayout.getScript().createObject<txUGUIStaticImage>(this, name, false));
-			mNumberList[i].mObject.AddComponent<ScaleAnchor>();
+			mNumberList[i].getObject().AddComponent<ScaleAnchor>();
 		}
 		refreshNumber();
 	}

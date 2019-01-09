@@ -20,7 +20,7 @@ public class CameraManager : FrameComponent
 	public override void init()
 	{
 		findMainCamera();
-		GameObject parent = mLayoutManager.getNGUIRoot().mObject;
+		GameObject parent = mLayoutManager.getNGUIRoot().getObject();
 		mUICamera = getCamera("UICamera", parent);
 		mUIForeEffectCamera = getCamera("UIForeEffectCamera", parent, false);
 		mUIBackEffectCamera = getCamera("UIBackEffectCamera", parent, false);

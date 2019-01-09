@@ -19,7 +19,6 @@ public class txNGUITextureAnim : txNGUITexture, INGUIAnimation
 	protected AnimControl mControl;
 	public txNGUITextureAnim()
 	{
-		mType = UI_TYPE.UT_NGUI_TEXTURE_ANIM;
 		mTextureNameList = new List<Texture>();
 		mControl = new AnimControl();
 		mUseTextureSize = false;

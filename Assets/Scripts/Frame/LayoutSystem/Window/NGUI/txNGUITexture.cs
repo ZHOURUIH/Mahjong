@@ -11,7 +11,7 @@ public class txNGUITexture : txUIObject
     protected string mOriginTextureName;    // 初始图片的名字,用于外部根据初始名字设置其他效果的图片
 	public txNGUITexture()
 	{
-		mType = UI_TYPE.UT_NGUI_TEXTURE;
+		;
 	}
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{
@@ -44,7 +44,7 @@ public class txNGUITexture : txUIObject
 		UnityUtility.destroyGameObject(mTexture.material);
 		base.destroy();
 	}
-	public virtual void setTexture(Texture tex, bool useTextureSize, bool makeEvenSize = false)
+	public virtual void setTexture(Texture tex, bool useTextureSize = false, bool makeEvenSize = false)
 	{
 		if (mTexture == null)
 		{
@@ -94,7 +94,7 @@ public class txNGUITexture : txUIObject
 			mTexture.shader = shader;
 		}
 	}
-	public void setTextureName(string name, bool useTextureSize, bool makeEvenHeight = false)
+	public void setTextureName(string name, bool useTextureSize = false, bool makeEvenHeight = false)
 	{
 		if (name != "")
 		{

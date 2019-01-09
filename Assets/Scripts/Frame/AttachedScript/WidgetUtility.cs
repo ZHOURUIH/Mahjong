@@ -6,13 +6,17 @@ using UnityEngine;
 
 public class WidgetUtility : GameBase
 {
-	protected static Vector2 mRootSize = new Vector2(GameDefine.STANDARD_WIDTH, GameDefine.STANDARD_HEIGHT);
-	protected static void getRootSize()
+	protected static Vector2 mRootSize = Vector2.zero;
+	public static Vector2 getRootSize()
 	{
-		// 实际运行时根节点大小需要实际获取
-		UIRoot mRoot = UnityUtility.getGameObject(null, "NGUIRoot").GetComponent<UIRoot>();
-		Camera camera = UnityUtility.getGameObject(mRoot.gameObject, "UICamera").GetComponent<Camera>();
-		mRootSize = new Vector2(mRoot.activeHeight * camera.aspect, mRoot.activeHeight);
+		if(isVectorZero(mRootSize))
+		{
+			// 实际运行时根节点大小需要实际获取
+			UIRoot mRoot = UnityUtility.getGameObject(null, "NGUIRoot").GetComponent<UIRoot>();
+			Camera camera = UnityUtility.getGameObject(mRoot.gameObject, "UICamera").GetComponent<Camera>();
+			mRootSize = new Vector2(mRoot.activeHeight * camera.aspect, mRoot.activeHeight);
+		}
+		return mRootSize;
 	}
 	// 父节点在父节点坐标系下的各条边
 	public static Vector3[] getParentSides(GameObject parent)
@@ -42,13 +46,13 @@ public class WidgetUtility : GameBase
 		// rect是UIRoot节点的
 		else
 		{
-			getRootSize();
+			Vector2 rootSize = getRootSize();
 			localCorners = new Vector3[4]
 			{
-				new Vector3(-mRootSize.x / 2.0f, -mRootSize.y / 2.0f),
-				new Vector3(-mRootSize.x / 2.0f, mRootSize.y / 2.0f),
-				new Vector3(mRootSize.x / 2.0f, mRootSize.y / 2.0f),
-				new Vector3(mRootSize.x / 2.0f, -mRootSize.y / 2.0f),
+				new Vector3(-rootSize.x / 2.0f, -rootSize.y / 2.0f),
+				new Vector3(-rootSize.x / 2.0f, rootSize.y / 2.0f),
+				new Vector3(rootSize.x / 2.0f, rootSize.y / 2.0f),
+				new Vector3(rootSize.x / 2.0f, -rootSize.y / 2.0f),
 			};
 		}
 		for (int i = 0; i < 4; ++i)

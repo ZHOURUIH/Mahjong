@@ -38,8 +38,7 @@ public abstract class LayoutScript : CommandReceiver
 	public void setRoot(txUIObject root) { mRoot = root; }
 	public txUIObject getRoot() { return mRoot; }
 	// 用于接收GlobalTouchSystem处理的输入事件
-	public void registeBoxCollider(txUIObject obj, BoxColliderClickCallback clickCallback = null,
-		BoxColliderHoverCallback hoverCallback = null, BoxColliderPressCallback pressCallback = null)
+	public void registeBoxCollider(txUIObject obj, UIClickCallback clickCallback = null, UIHoverCallback hoverCallback = null, UIPressCallback pressCallback = null)
 	{
 		mGlobalTouchSystem.registeBoxCollider(obj, clickCallback, pressCallback, hoverCallback);
 	}
@@ -89,21 +88,21 @@ public abstract class LayoutScript : CommandReceiver
 		{
 			parent = mRoot;
 		}
-		GameObject gameObject = getGameObject(parent.mObject, name);
+		GameObject gameObject = getGameObject(parent.getObject(), name);
 		return gameObject != null;
 	}
-	public T cloneObject<T>(txUIObject parent, txUIObject oriObj, string name, bool active = true) where T : txUIObject, new()
+	public T cloneObject<T>(txUIObject parent, T oriObj, string name, bool active = true) where T : txUIObject, new()
 	{
 		if (parent == null)
 		{
 			parent = mRoot;
 		}
-		GameObject obj = UnityUtility.cloneObject(oriObj.mObject, name);
+		GameObject obj = UnityUtility.cloneObject(oriObj.getObject(), name);
 		T window = newUIObject<T>(name, parent, mLayout, obj);
 		window.setActive(active);
-		obj.transform.localPosition = oriObj.mObject.transform.localPosition;
-		obj.transform.localEulerAngles = oriObj.mObject.transform.localEulerAngles;
-		obj.transform.localScale = oriObj.mObject.transform.localScale;
+		window.setLocalPosition(oriObj.getPosition());
+		window.setLocalRotation(oriObj.getRotationEuler());
+		window.setLocalScale(oriObj.getScale());
 		return window;
 	}
 	// 创建txUIObject,并且新建GameObject,分配到txUIObject中
@@ -114,7 +113,7 @@ public abstract class LayoutScript : CommandReceiver
 		{
 			parent = mRoot;
 		}
-		go.layer = parent.mObject.layer;
+		go.layer = parent.getObject().layer;
 		T obj = newUIObject<T>(name, parent, mLayout, go);
 		obj.setActive(active);
 		go.transform.localScale = Vector3.one;
@@ -131,7 +130,7 @@ public abstract class LayoutScript : CommandReceiver
 	public T newObject<T>(out T obj, txUIObject parent, string name, int active = -1) where T : txUIObject, new()
 	{
 		obj = null;
-		GameObject parentObj = (parent != null) ? parent.mObject : null;
+		GameObject parentObj = (parent != null) ? parent.getObject (): null;
 		GameObject gameObject = getGameObject(parentObj, name);
 		if (gameObject == null)
 		{
@@ -161,25 +160,25 @@ public abstract class LayoutScript : CommandReceiver
 	}
 	public void instantiateObject(txUIObject parent, string prefabName, string name)
 	{
-		GameObject gameObject = mLayoutSubPrefabManager.instantiate(prefabName, parent.mObject, name);
+		GameObject gameObject = mLayoutSubPrefabManager.instantiate(prefabName, parent.getObject(), name);
 		gameObject.SetActive(false);
 	}
 	public void instantiateObject(txUIObject parent, string name)
 	{
-		GameObject gameObject = mLayoutSubPrefabManager.instantiate(name, parent.mObject, name);
+		GameObject gameObject = mLayoutSubPrefabManager.instantiate(name, parent.getObject(), name);
 		gameObject.SetActive(false);
 	}
 	public void destroyObject(txUIObject obj, bool immediately = false)
 	{
 		// 查找该节点下的所有窗口,从布局中注销
 		List<GameObject> children = new List<GameObject>();
-		findAllChild(obj.mObject, children);
+		findAllChild(obj.getObject(), children);
 		int count = children.Count;
 		for(int i = 0; i < count; ++i)
 		{
 			mLayout.unregisterUIObject(mLayout.getUIObject(children[i]));
 		}
-		UnityUtility.destroyGameObject(obj.mObject, immediately);
+		UnityUtility.destroyGameObject(obj.getObject(), immediately);
 	}
 	public void interruptCommand(int assignID)
 	{

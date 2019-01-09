@@ -10,7 +10,7 @@ public class txUGUIStaticImage : txUIObject
 	protected WindowShader mWindowShader;
 	public txUGUIStaticImage()
 	{
-		mType = UI_TYPE.UT_UGUI_STATIC_IMAGE;
+		;
 	}
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{
@@ -185,5 +185,13 @@ public class txUGUIStaticImage : txUIObject
 	public void setWindowSize(Vector2 size)
 	{
 		mRectTransform.sizeDelta = size;
+	}
+	public void setColor(Color color)
+	{
+		mImage.color = color;
+	}
+	public void setColor(Vector3 color)
+	{
+		mImage.color = new Color(color.x, color.y, color.z);
 	}
 }

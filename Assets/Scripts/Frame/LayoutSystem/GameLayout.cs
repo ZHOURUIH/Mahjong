@@ -15,6 +15,7 @@ public class GameLayout : GameBase
 	protected bool			mScriptInited;		// 脚本是否已经初始化
 	protected bool			mScriptControlHide;	// 是否由脚本来控制隐藏
 	protected bool			mIsNGUI;			// 是否为NGUI布局,true为NGUI,false为UGUI
+	protected bool			mIsScene;
 	protected bool			mCheckBoxAnchor;	// 是否检查布局中所有带碰撞盒的窗口是否自适应分辨率
 	protected Dictionary<int, txUIObject> mObjectList;
 	protected Dictionary<GameObject, txUIObject> mGameObjectSearchList;
@@ -43,39 +44,54 @@ public class GameLayout : GameBase
 		}
 		return null;
 	}
-	public void init(LAYOUT_TYPE type, string name, int renderOrder, bool isNGUI)
+	public void init(LAYOUT_TYPE type, string name, int renderOrder, bool isNGUI, bool isScene)
 	{	
 		mName = name;
 		mType = type;
 		mIsNGUI = isNGUI;
+		mIsScene = isScene;
 		mScript = mLayoutManager.createScript(mName, this);
 		if (mScript == null)
 		{
 			logError("can not create layout script! type : " + mType);
 		}
 		// 初始化布局脚本
-		if (mIsNGUI)
+		if(!mIsScene)
 		{
-			mScript.newObject(out mLayoutPanel, mLayoutManager.getNGUIRoot(), mName);
+			if (mIsNGUI)
+			{
+				mScript.newObject(out mLayoutPanel, mLayoutManager.getNGUIRoot(), mName);
+			}
+			else
+			{
+				mScript.newObject(out mLayoutCanvas, mLayoutManager.getUGUIRoot(), mName);
+			}
 		}
 		else
 		{
-			mScript.newObject(out mLayoutCanvas, mLayoutManager.getUGUIRoot(), mName);
+			if (mIsNGUI)
+			{
+				mScript.newObject(out mLayoutPanel, null, mName);
+			}
+			else
+			{
+				mScript.newObject(out mLayoutCanvas, null, mName);
+			}
 		}
 		mScript.newObject(out mRoot, getLayoutPanel(), "Root");
 		setRenderOrder(renderOrder);
 		mScript.setRoot(mRoot);
 		mScript.assignWindow();
 		// 布局实例化完成,初始化之前,需要调用自适应组件的更新
-		ScaleAnchor scaleAnchor = getLayoutPanel().mObject.GetComponent<ScaleAnchor>();
-		PaddingAnchor customAnchor = getLayoutPanel().mObject.GetComponent<PaddingAnchor>();
+		ScaleAnchor scaleAnchor = getLayoutPanel().getObject().GetComponent<ScaleAnchor>();
+		PaddingAnchor customAnchor = getLayoutPanel().getObject().GetComponent<PaddingAnchor>();
 		if (scaleAnchor != null)
 		{
-			ScaleAnchor.forceUpdateChildren(getLayoutPanel().mObject);
+			ScaleAnchor.forceUpdateChildren(getLayoutPanel().getObject());
 		}
 		if (customAnchor != null)
 		{
-			PaddingAnchor.forceUpdateChildren(getLayoutPanel().mObject);
+			PaddingAnchor.forceUpdateChildren(getLayoutPanel().getObject());
 		}
 		mScript.init();
 		mScriptInited = true;
@@ -120,7 +136,7 @@ public class GameLayout : GameBase
 		List<BoxCollider> boxList = new List<BoxCollider>();
 		foreach(var obj in mObjectList)
 		{
-			BoxCollider collider = obj.Value.mObject.GetComponent<BoxCollider>();
+			BoxCollider collider = obj.Value.getBoxCollider();
 			if(collider != null)
 			{
 				boxList.Add(collider);
@@ -178,8 +194,8 @@ public class GameLayout : GameBase
 	public bool isCheckBoxAnchor() { return mCheckBoxAnchor; }
 	public void registerUIObject(txUIObject uiObj)
 	{
-		mObjectList.Add(uiObj.mID, uiObj);
-		mGameObjectSearchList.Add(uiObj.mObject, uiObj);
+		mObjectList.Add(uiObj.getID(), uiObj);
+		mGameObjectSearchList.Add(uiObj.getObject(), uiObj);
 	}
 	public void unregisterUIObject(txUIObject uiObj)
 	{
@@ -187,8 +203,8 @@ public class GameLayout : GameBase
 		{
 			return;
 		}
-		mObjectList.Remove(uiObj.mID);
-		mGameObjectSearchList.Remove(uiObj.mObject);
+		mObjectList.Remove(uiObj.getID());
+		mGameObjectSearchList.Remove(uiObj.getObject());
 	}
 	public void setLayer(string layer)
 	{

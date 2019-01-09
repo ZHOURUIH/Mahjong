@@ -216,13 +216,18 @@ public class FileUtility : MathUtility
 	public static void copyFile(string source, string dest, bool overwrite = true)
 	{
 #if UNITY_ANDROID && !UNITY_EDITOR
-		UnityUtility.logError("can not copy file on android!");
-		return;
-#endif
+		byte[] fileBuffer = null;
+		openFile(source, ref fileBuffer);
+		if(!isFileExist(dest) || overwrite)
+		{
+			writeFile(dest, fileBuffer, fileBuffer.Length);
+		}
+#else
 		// 如果目标文件所在的目录不存在,则先创建目录
 		string parentDir = getFilePath(dest);
 		createDir(parentDir);
 		File.Copy(source, dest, overwrite);
+#endif
 	}
 	public static int getFileSize(string file)
 	{
@@ -366,11 +371,10 @@ public class FileUtility : MathUtility
 	public static void findFiles(string path, ref List<string> fileList, List<string> patterns = null, bool recursive = true)
 	{
 #if UNITY_ANDROID && !UNITY_EDITOR
-		UnityUtility.logError("can not findFiles on android!");
-		return;
-#endif
+		AndroidAssetLoader.findFiles(path, ref fileList, patterns, recursive);
+#else
 		validPath(ref path);
-		if(!isDirExist(path))
+		if (!isDirExist(path))
 		{
 			return;
 		}
@@ -407,6 +411,7 @@ public class FileUtility : MathUtility
 				findFiles(item, ref fileList, patterns, recursive);
 			}
 		}
+#endif
 	}
 	// 得到指定目录下的所有第一级子目录
 	// path为绝对路径

@@ -8,7 +8,7 @@ public class txNGUIPopupList : txUIObject
 	protected UIPopupList mPopupList;
 	public txNGUIPopupList()
 	{
-		mType = UI_TYPE.UT_NGUI_BUTTON;
+		;
 	}
 	public override void init(GameLayout layout, GameObject go, txUIObject parent)
 	{

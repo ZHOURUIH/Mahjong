@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 // 管理类初始化完成调用
 // 这个父类的添加是方便代码的书写
@@ -8,6 +9,7 @@ public class FrameBase : FileUtility
 {
 	// FrameComponent
 	public static GameFramework				mGameFramework			= null;
+	public static XLuaManager				mXLuaManager			= null;
 	public static CommandSystem				mCommandSystem			= null;
 	public static AudioManager				mAudioManager			= null;
 	public static GameSceneManager			mGameSceneManager		= null;
@@ -28,7 +30,7 @@ public class FrameBase : FileUtility
 	public static SceneSystem				mSceneSystem			= null;
 	public static IFrameLogSystem			mFrameLogSystem			= null;
 	public static ClassObjectPool			mClassObjectPool		= null;
-	public static AndroidAssetLoader		mAndroidAssetLoader		= null;
+	public static AndroidPluginManager		mAndroidPluginManager	= null;
 #if UNITY_STANDALONE_WIN && !UNITY_EDITOR
 	public static LocalLog					mLocalLog				= null;
 #endif
@@ -39,6 +41,7 @@ public class FrameBase : FileUtility
 		if (mGameFramework == null)
 		{
 			mGameFramework = GameFramework.instance;
+			mGameFramework.getSystem(out mXLuaManager);
 			mGameFramework.getSystem(out mCommandSystem);
 			mGameFramework.getSystem(out mAudioManager);
 			mGameFramework.getSystem(out mGameSceneManager);
@@ -58,7 +61,7 @@ public class FrameBase : FileUtility
 			mGameFramework.getSystem(out mInputManager);
 			mGameFramework.getSystem(out mSceneSystem);
 			mGameFramework.getSystem(out mClassObjectPool);
-			mGameFramework.getSystem(out mAndroidAssetLoader);
+			mGameFramework.getSystem(out mAndroidPluginManager);
 			mSQLite.getTable(out mSQLiteSound);
 		}
 	}
@@ -66,7 +69,12 @@ public class FrameBase : FileUtility
 	public static T newCmd<T>(out T cmd, bool show = true, bool delay = false) where T : Command, new()
 	{
 		cmd = null;
-		return mCommandSystem.newCmd<T>(show, delay);
+		return cmd = mCommandSystem.newCmd<T>(show, delay);
+	}
+	public static Command newCmd(out Command cmd, Type type, bool show = true, bool delay = false)
+	{
+		cmd = null;
+		return cmd = mCommandSystem.newCmd(type, show, delay);
 	}
 	public static void pushCommand<T>(CommandReceiver cmdReceiver, bool show = true) where T : Command, new()
 	{
@@ -96,21 +104,21 @@ public class FrameBase : FileUtility
 	{
 		return UnityUtility.getGameObject(parent, name, errorIfNull);
 	}
-	public static bool getKeyCurrentDown(KeyCode key)
+	public static bool getKeyCurrentDown(KeyCode key, FOCUS_MASK mask = FOCUS_MASK.FM_NONE)
 	{
-		return mInputManager.getKeyCurrentDown(key);
+		return mInputManager.getKeyCurrentDown(key, mask);
 	}
-	public static bool getKeyCurrentUp(KeyCode key)
+	public static bool getKeyCurrentUp(KeyCode key, FOCUS_MASK mask = FOCUS_MASK.FM_NONE)
 	{
-		return mInputManager.getKeyCurrentUp(key);
+		return mInputManager.getKeyCurrentUp(key, mask);
 	}
-	public static bool getKeyDown(KeyCode key)
+	public static bool getKeyDown(KeyCode key, FOCUS_MASK mask = FOCUS_MASK.FM_NONE)
 	{
-		return mInputManager.getKeyDown(key);
+		return mInputManager.getKeyDown(key, mask);
 	}
-	public static bool getKeyUp(KeyCode key)
+	public static bool getKeyUp(KeyCode key, FOCUS_MASK mask = FOCUS_MASK.FM_NONE)
 	{
-		return mInputManager.getKeyUp(key);
+		return mInputManager.getKeyUp(key, mask);
 	}
 	public static Vector2 getMousePosition()
 	{
